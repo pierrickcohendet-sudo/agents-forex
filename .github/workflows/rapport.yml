@@ -1,0 +1,82 @@
+# Rapport FX quotidien : exécute le pipeline puis committe les données
+# (docs/data pour GitHub Pages, data/rapports + data/cache + data/hebdo comme
+# mémoire entre exécutions — GitHub Actions est sans état).
+#
+# 4 déclenchements par jour ouvré :
+# - 05:15 UTC : run COMPLET (collecte + analyse des 9 devises). --type reste
+#   "auto" (défaut de orchestrateur.py) pour laisser l'auto-détection hebdo
+#   (lundi) / mensuel (le 1er) fonctionner normalement.
+# - 13:15 / 17:15 / 21:15 UTC : passages de COMPLÉMENT (--completer) —
+#   rattrapent AUTOMATIQUEMENT, sans intervention manuelle, les devises/
+#   sections encore "analyse indisponible" après le run du matin. --type
+#   reste volontairement "auto" (pas "quotidien" forcé) : un lundi ou le 1er
+#   du mois, le run du matin est hebdomadaire/mensuel — forcer "quotidien" sur
+#   les passages de l'après-midi écraserait ce type dans meta.type_rapport au
+#   moment de la sauvegarde. "auto" redétecte le MÊME type de façon déterministe
+#   (fonction du jour du calendrier, pas de l'heure), donc reste cohérent avec
+#   le matin sans risque. Ne relancent jamais le scraping des 6 sites ni
+#   Twelve Data/FRED/RSS (cache du jour déjà garanti, voir core/scraping.py et
+#   core/collecte_cache.py), ne retentent que ce qui a échoué. S'il n'y a rien
+#   à compléter, le run s'arrête immédiatement (aucune publication inutile).
+#   Le dernier passage (21:15) tombe juste après completer.heure_limite
+#   (21:00 dans config.yaml, informatif) — dernière chance de la journée.
+# Ajuster ces heures UTC à vos horaires de marché si besoin (rappel : l'heure
+# de déclenchement des cron GitHub Actions peut glisser de quelques minutes
+# aux heures de forte charge, c'est normal et sans conséquence ici).
+name: rapport-fx
+
+on:
+  schedule:
+    - cron: "15 5 * * 1-5"    # run complet (matin)
+    - cron: "15 13 * * 1-5"   # complément (début d'après-midi)
+    - cron: "15 17 * * 1-5"   # complément (fin d'après-midi)
+    - cron: "15 21 * * 1-5"   # dernier complément (soir — juste après completer.heure_limite)
+  workflow_dispatch:
+    inputs:
+      completer:
+        description: "Passage de complément (--completer) plutôt qu'un run complet"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write             # nécessaire pour pousser docs/data et data/rapports
+
+concurrency:
+  group: rapport-fx
+  cancel-in-progress: false
+
+jobs:
+  rapport:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45       # collecte lente par construction (délais aléatoires 5-90 s)
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Installer les dépendances
+        run: pip install -r requirements.txt
+
+      - name: Générer le rapport
+        env:
+          TWELVE_DATA_API_KEY: ${{ secrets.TWELVE_DATA_API_KEY }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          ARGS=""
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "${{ github.event.schedule }}" != "15 5 * * 1-5" ]; then
+            ARGS="--completer"
+          elif [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ github.event.inputs.completer }}" = "true" ]; then
+            ARGS="--completer"
+          fi
+          echo "Lancement : python orchestrateur.py $ARGS"
+          python orchestrateur.py $ARGS
+        # Le commit + push de docs/data, data/rapports, data/cache et data/hebdo
+        # est fait par le pipeline lui-même (core/publication_web.py) quand
+        # GITHUB_ACTIONS=true et publication_web.git_push = auto.

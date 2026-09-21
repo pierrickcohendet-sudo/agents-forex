@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FX Desk — Rapport de marché</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <header class="entete">
+    <div class="entete-titre">
+      <span class="logo">▮Fx</span>
+      <div>
+        <h1>FX DESK</h1>
+        <p class="sous-titre">Analyse macro &amp; technique — 8 devises</p>
+      </div>
+    </div>
+    <div class="entete-controles">
+      <span id="badge-type" class="badge-type"></span>
+      <div class="calendrier-conteneur">
+        <button id="btn-calendrier" class="btn-calendrier"
+                aria-haspopup="true" aria-expanded="false">📅 —</button>
+        <div id="panneau-calendrier" class="panneau-calendrier" hidden></div>
+      </div>
+    </div>
+  </header>
+
+  <main id="contenu">
+    <p class="chargement">Chargement du rapport…</p>
+  </main>
+
+  <footer class="pied">
+    <p>Aide à la décision uniquement — ce rapport ne contient <strong>aucun signal
+    d'achat/vente</strong> et ne constitue pas un conseil en investissement.</p>
+    <p id="pied-meta" class="pied-meta"></p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

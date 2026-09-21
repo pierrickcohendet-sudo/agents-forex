@@ -1,0 +1,218 @@
+# ============================================================
+# Configuration centrale du pipeline FX.
+# Tout ce qui évolue (devise, source, indicateur, pondération,
+# modèle LLM) se règle ICI, jamais dans le code.
+# ============================================================
+
+llm:
+  fournisseur: gemini            # principal ; "gemini" et "groq" implémentés — nouveau fournisseur = 1 classe dans core/llm.py
+  modele: gemini-flash-latest
+  temperature: 0.2
+  max_tentatives_json: 2         # tentatives de parsing JSON par appel LLM
+  pause_entre_appels_s: 7        # tier gratuit Gemini : espace TOUS les appels (9 devises + synthèses)
+  backoff_429_s: 30              # attente réelle avant nouvel essai après un 429 (Retry-After respecté si plus long)
+
+  # Fournisseur de SECOURS : câblé, testé, DÉSACTIVÉ PAR DÉFAUT (2026-08-24).
+  # Verdict après mesure réelle : le prompt par devise (mémoire 7j + news +
+  # catalogue de sources) fait 70-90K car. (~17,5-22,5K tokens) et celui de
+  # l'agent critique 88K+ car. — même avec la réduction générique ci-dessous
+  # (_reduire_message dans core/llm.py), redescendre sous les 8 000 TPM
+  # gratuits de Groq exige de tronquer si fort (mémoire à 1 jour, catalogue à
+  # 1-2 sources) que le résultat n'a plus la richesse d'une analyse tracée.
+  # Le tier gratuit Groq n'est structurellement PAS dimensionné pour les
+  # appels lourds de ce pipeline. Gemini seul (avec sa dégradation propre —
+  # retries, --completer, statuts "analyse indisponible"/"non_evalue" jamais
+  # menteurs) reste le filet de sécurité recommandé. Repasser actif: true
+  # pour réessayer (tier payant Groq, usage ponctuel, ou si le volume de
+  # contexte envoyé baisse structurellement) — GROQ_API_KEY requise dans .env.
+  secours:
+    actif: false
+    fournisseur: groq
+    # llama-3.3-70b-versatile a été RETIRÉ des modèles Groq actifs (constaté
+    # le 2026-08-23) -> openai/gpt-oss-20b : même limite gratuite (8 000 TPM),
+    # plus rapide, JSON mode confirmé compatible (doc officielle Groq).
+    # Vérifier sur console.groq.com/docs/models si ce nom change à son tour.
+    modele: openai/gpt-oss-20b
+    temperature: 0.2
+    # Tier gratuit Groq confirmé (console.groq.com/docs/rate-limits, vérifié
+    # le 2026-08-23) : 8 000 TPM en fenêtre GLISSANTE, pas juste "par appel" —
+    # deux appels rapprochés se cumulent dans la même fenêtre. 40 s laisse la
+    # fenêtre se vider entre deux appels plutôt que les 3 s d'origine.
+    pause_entre_appels_s: 40
+    backoff_429_s: 30
+    # Budgets en TOKENS (l'unité réellement limitée par Groq — plus de
+    # mélange caractères/tokens dans les logs). systeme+message réduits
+    # visent ~5 000 tokens à eux deux, sous les 8 000 TPM réels, en laissant
+    # de la marge pour la réponse ET le cumul de la fenêtre glissante.
+    budget_tokens_systeme: 2000     # connaissances/ réduit à ~8 000 car.
+    budget_tokens_message: 3000     # contexte par devise réduit à ~12 000 car.
+    budget_tokens_total_max: 5500   # garde-fou : refus AVANT envoi si encore dépassé après réduction
+    # Ordre de priorité si budget_tokens_systeme oblige à omettre des
+    # fichiers connaissances/ : les plus directement utiles au score d'abord,
+    # les plus accessoires (exemples illustratifs, définitions) sacrifiés en premier.
+    connaissances_prioritaires:
+      - banques_centrales.md
+      - indicateurs_fondamentaux.md
+      - indicateurs_techniques.md
+      - cas_particuliers.md
+      - exemples_annotes.md
+      - glossaire.md
+
+# --- Devises suivies ---------------------------------------------------------
+# paire        : symbole Twelve Data (null pour USD -> indice synthétique calculé).
+# inverse      : true si la devise est au dénominateur de la paire
+#                (USD/JPY : le JPY monte quand la paire baisse).
+# ratio_rr     : ratio risque/récompense propre à l'actif — à ajuster par backtest.
+# profil_risque: risque | refuge | neutre — détermine le biais Risk On/Off
+#                structurel affiché (calculé en Python, plus jamais par le LLM).
+devises:
+  USD: { drapeau: "🇺🇸", banque_centrale: FED,  paire: null,     inverse: false, ratio_rr: 2.0, profil_risque: refuge }
+  EUR: { drapeau: "🇪🇺", banque_centrale: BCE,  paire: EUR/USD,  inverse: false, ratio_rr: 2.0, profil_risque: neutre }
+  GBP: { drapeau: "🇬🇧", banque_centrale: BOE,  paire: GBP/USD,  inverse: false, ratio_rr: 1.8, profil_risque: neutre }
+  JPY: { drapeau: "🇯🇵", banque_centrale: BOJ,  paire: USD/JPY,  inverse: true,  ratio_rr: 2.2, profil_risque: refuge }
+  CHF: { drapeau: "🇨🇭", banque_centrale: BNS,  paire: USD/CHF,  inverse: true,  ratio_rr: 2.0, profil_risque: refuge }
+  CAD: { drapeau: "🇨🇦", banque_centrale: BoC,  paire: USD/CAD,  inverse: true,  ratio_rr: 1.8, profil_risque: risque }
+  AUD: { drapeau: "🇦🇺", banque_centrale: RBA,  paire: AUD/USD,  inverse: false, ratio_rr: 2.0, profil_risque: risque }
+  NZD: { drapeau: "🇳🇿", banque_centrale: RBNZ, paire: NZD/USD,  inverse: false, ratio_rr: 2.0, profil_risque: risque }
+  # CNY : flottement dirigé (fixing quotidien PBoC + bande étroite). Paire
+  # offshore USD/CNH utilisée (le CNH échange librement, le CNY onshore non).
+  # Technique classique sous-pondérée -> voir ponderations_par_devise et
+  # connaissances/cas_particuliers.md.
+  CNY: { drapeau: "🇨🇳", banque_centrale: PBoC, paire: USD/CNH,  inverse: true,  ratio_rr: 1.5, profil_risque: neutre }
+
+# --- Score de confluence (calculé en Python, JAMAIS choisi par le LLM) -------
+ponderations:
+  taux_directeur: 20
+  cpi_surprise: 15
+  yield_curve: 12
+  vix: 10
+  dxy: 10
+  pmi_surprise: 10
+  differentiel_taux: 8
+  rsi: 8
+  trendline: 7
+
+# Pondérations spécifiques par devise (remplacent ENTIÈREMENT le bloc ci-dessus
+# pour la devise concernée). CNY : le fixing et la politique PBoC dominent,
+# la technique classique (RSI, trendline) est marginalisée — la PBoC borne le prix.
+ponderations_par_devise:
+  CNY:
+    fixing_pboc: 22
+    taux_directeur: 15
+    cpi_surprise: 12
+    pmi_surprise: 12
+    dxy: 12
+    differentiel_taux: 8
+    yield_curve: 6
+    vix: 6
+    rsi: 4
+    trendline: 3
+
+# Biais macro global : écart de score moyen entre bloc risque et bloc refuge.
+biais_global:
+  devises_risque: [AUD, NZD, CAD]
+  devises_refuge: [JPY, CHF, USD]
+  seuil_points: 5
+
+tracabilite:
+  mode: marquer          # marquer -> affiché "non sourcée" ; rejeter -> retiré du rapport
+
+evaluation:
+  seuil_neutre_pct: 0.15 # |variation hebdo| sous ce seuil = prévision "neutre" correcte
+
+memoire:
+  # Fenêtre glissante STRICTE (en JOURS calendaires, jamais en nombre de
+  # fichiers) pour tout ce qui part dans le prompt LLM : mémoire des rapports
+  # précédents ET événements calendrier injectés au contexte par devise.
+  # AUCUN rapport avec l'archive complète (data/rapports/, Notion), qui reste
+  # 100 % conservée sans limite quel que soit ce réglage — cette fenêtre ne
+  # gouverne QUE ce qui est envoyé au LLM. Avant le 2026-08-29, "nb_rapports"
+  # comptait des FICHIERS (les 7 plus récents), pas des jours : avec des
+  # trous dans l'historique de génération, ça pouvait injecter jusqu'à 14
+  # jours de données en croyant se limiter à 7 — corrigé.
+  fenetre_jours: 7
+
+technique:
+  outputsize: 200
+  rsi_periode: 14
+  moyennes_mobiles: [100, 200]
+  fenetre_correlation: 60
+  pause_entre_appels_s: 8.5   # tier gratuit Twelve Data : 8 crédits/minute
+  graphique_nb_points: 90
+
+fred:
+  series:                # nom logique -> identifiant de série FRED
+    cpi_us:        CPIAUCSL
+    core_pce:      PCEPILFE
+    pib_us:        GDP
+    nfp:           PAYEMS
+    taux_fed:      FEDFUNDS
+    rendement_10y: DGS10
+    rendement_2y:  DGS2
+    vix:           VIXCLS
+    petrole_wti:   DCOILWTICO
+    petrole_brent: DCOILBRENTEU
+    sp500:         SP500
+
+# Taux directeurs de repli, mis à jour À LA MAIN (date obligatoire).
+# L'USD est rafraîchi automatiquement via FRED (FEDFUNDS).
+taux_directeurs:
+  USD: { taux: 3.75, date: "2026-01-15" }
+  EUR: { taux: 2.40, date: "2026-01-15" }
+  GBP: { taux: 3.75, date: "2026-01-15" }
+  JPY: { taux: 1.00, date: "2026-01-15" }
+  CHF: { taux: 0.00, date: "2026-01-15" }
+  CAD: { taux: 2.25, date: "2026-01-15" }
+  AUD: { taux: 4.35, date: "2026-01-15" }
+  NZD: { taux: 2.50, date: "2026-01-15" }
+  CNY: { taux: 3.00, date: "2026-01-15" }   # LPR 1 an — À VÉRIFIER
+
+# --- Scraping faible empreinte ----------------------------------------------
+# Les garanties (1 requête/jour, robots.txt, 1 seul retry, blacklist 403,
+# délais aléatoires, jamais de parallèle) sont codées dans core/scraping.py.
+# selecteurs (optionnel) : sélecteurs CSS d'extraction des titres pour ce site ;
+# à défaut, heuristique générique.
+scraping:
+  delai_min_s: 5
+  delai_max_s: 90
+  seuil_blacklist_403: 2
+  user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
+  sites:
+    forexfactory:    { url: "https://nfs.faireconomy.media/ff_calendar_thisweek.json", type: json, actif: true }
+    tradingview:     { url: "https://www.tradingview.com/markets/currencies/cross-rates-overview-heat-map/", type: html, actif: true }
+    mataf:           { url: "https://www.mataf.net/fr/forex/tools/correlation", type: html, actif: true }
+    # Sources news / géopolitique / décisions économiques (état du monde) :
+    financialjuice:  { url: "https://www.financialjuice.com/home", type: html, actif: true,
+                       selecteurs: '[class*="headline"]' }
+    finviz:          { url: "https://finviz.com/", type: html, actif: true,
+                       selecteurs: "a.nn-tab-link, a.tab-link-nw" }
+    financialsource: { url: "https://financialsource.co/", type: html, actif: true }
+
+rss:
+  cnbc_world:    "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100727362"
+  investinglive: "https://www.forexlive.com/feed/news"   # InvestingLive (ex-ForexLive)
+
+notion:
+  actif: true
+  page_parent_id: "https://www.notion.so/Rapports-FX-3ba65bc6466180128632c6715c31fc4a?source=copy_link"     # URL ou ID de la page parente (l'ID est extrait automatiquement)
+  # ID de la base de données "Rapports FX" (une entrée par jour, vue Calendrier
+  # à créer à la main dans Notion). Laisser vide : créée au premier run et l'ID
+  # est écrit ici automatiquement, puis committé par le workflow.
+  database_id: "f55a99e090404d419c8f594a96610fb7"
+
+publication_web:
+  actif: true
+  dossier_docs: docs
+  git_push: auto         # auto = pousse uniquement sous GitHub Actions ; toujours | jamais
+
+# Mode --completer (remplissage progressif intra-journée) : ne relance jamais
+# le scraping des 6 sites (cache 1 req/jour déjà garanti par core/scraping.py),
+# ne retente que les devises/sections encore "analyse indisponible".
+completer:
+  # Dernier passage de la journée à ne pas dépasser — INFORMATIF seulement
+  # (log une mention "dernier passage" au-delà), jamais un blocage : un lancement
+  # manuel de test doit toujours pouvoir tourner, quelle que soit l'heure.
+  heure_limite: "21:00"
+
+chemins:
+  donnees: data

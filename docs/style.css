@@ -1,0 +1,261 @@
+/* Thème sombre "terminal de trading" — dense, net, sans fioritures. */
+:root {
+  --fond: #0b0e14;
+  --panneau: #11151d;
+  --panneau-2: #161b25;
+  --bordure: #232a36;
+  --encre: #dbe2ec;
+  --encre-2: #8b95a5;
+  --encre-3: #5c6575;
+  --vert: #22c55e;
+  --rouge: #ef4444;
+  --jaune: #eab308;
+  --orange: #f59e0b;
+  --bleu: #38bdf8;
+  --mono: "SF Mono", "Cascadia Code", Consolas, "Roboto Mono", monospace;
+  --sans: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; }
+body {
+  background: var(--fond); color: var(--encre); font-family: var(--sans);
+  font-size: 14px; line-height: 1.45;
+  max-width: 1060px; margin: 0 auto; padding: 0 16px 40px;
+}
+
+/* ---------------------------------------------------------------- entête */
+.entete {
+  display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  flex-wrap: wrap; padding: 18px 0 14px; border-bottom: 1px solid var(--bordure);
+}
+.entete-titre { display: flex; align-items: center; gap: 12px; }
+.logo {
+  font-family: var(--mono); font-size: 22px; font-weight: 700; color: var(--bleu);
+  background: var(--panneau); border: 1px solid var(--bordure);
+  border-radius: 6px; padding: 6px 10px;
+}
+h1 { font-size: 18px; letter-spacing: 3px; font-family: var(--mono); }
+.sous-titre { color: var(--encre-2); font-size: 12px; }
+.entete-controles { display: flex; align-items: center; gap: 12px; }
+.badge-type {
+  font-family: var(--mono); font-size: 11px; text-transform: uppercase;
+  letter-spacing: 1px; color: var(--bleu); border: 1px solid var(--bleu);
+  border-radius: 4px; padding: 3px 8px;
+}
+/* --------------------------------------------------------- vue calendrier */
+.calendrier-conteneur { position: relative; }
+.btn-calendrier {
+  background: var(--panneau); color: var(--encre); border: 1px solid var(--bordure);
+  border-radius: 6px; padding: 7px 12px; font-family: var(--mono); font-size: 13px;
+  cursor: pointer;
+}
+.btn-calendrier:hover { background: var(--panneau-2); }
+.panneau-calendrier {
+  position: absolute; right: 0; top: calc(100% + 6px); z-index: 50;
+  background: var(--panneau); border: 1px solid var(--bordure); border-radius: 10px;
+  padding: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.5); min-width: 320px;
+}
+.cal-entete { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.cal-mois { font-family: var(--mono); font-size: 13px; text-transform: capitalize; color: var(--encre); }
+.cal-nav {
+  background: var(--panneau-2); color: var(--encre); border: 1px solid var(--bordure);
+  border-radius: 5px; width: 28px; height: 26px; cursor: pointer; font-size: 14px;
+}
+.cal-nav:hover { background: var(--bordure); }
+.cal-grille { display: grid; grid-template-columns: 38px repeat(7, 36px); gap: 3px; }
+.cal-jour-entete, .cal-semaine {
+  font-family: var(--mono); font-size: 10px; color: var(--encre-3);
+  display: flex; align-items: center; justify-content: center;
+  text-transform: uppercase; letter-spacing: .5px;
+}
+.cal-semaine { border-right: 1px solid var(--bordure); }
+.cal-jour {
+  position: relative; height: 34px; display: flex; align-items: center;
+  justify-content: center; font-family: var(--mono); font-size: 12px;
+  color: var(--encre-3); border-radius: 6px; border: 1px solid transparent;
+}
+button.cal-jour {
+  color: var(--encre); background: var(--panneau-2); border-color: var(--bordure);
+  cursor: pointer;
+}
+button.cal-jour:hover { background: var(--bordure); }
+.cal-hors-mois { opacity: .35; }
+.cal-actif { outline: 2px solid var(--bleu); }
+.cal-pastille {
+  position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%);
+  width: 6px; height: 6px; border-radius: 3px;
+}
+
+/* -------------------------------------------------------------- bandeaux */
+.bandeau {
+  margin: 14px 0 0; padding: 10px 14px; border-radius: 8px;
+  border: 1px solid var(--bordure); font-size: 13px;
+}
+.bandeau-vigilance { border-color: var(--orange); background: rgba(245,158,11,.08); }
+.bandeau-donnees { background: var(--panneau); color: var(--encre-2); }
+.bandeau strong { color: var(--encre); }
+
+/* ------------------------------------------------------------- mosaïque */
+.mosaique-devises { margin-top: 18px; }
+.mosaique-grille {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 8px; margin-top: 8px;
+}
+.tuile-devise {
+  --couleur-biais: var(--encre-3);
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  background: var(--panneau); border: 1px solid var(--bordure);
+  border-top: 3px solid var(--couleur-biais); border-radius: 8px;
+  padding: 10px 6px 8px; cursor: pointer; font-family: var(--mono);
+  color: var(--encre); transition: background .12s, transform .12s;
+}
+.tuile-devise:hover { background: var(--panneau-2); transform: translateY(-1px); }
+.tuile-devise:focus-visible { outline: 1px solid var(--bleu); }
+.tuile-drapeau { font-size: 18px; line-height: 1; }
+.tuile-code { font-size: 12px; font-weight: 700; letter-spacing: 1px; }
+.tuile-score { font-size: 18px; font-weight: 700; color: var(--couleur-biais); }
+.tuile-sparkline { width: 100%; height: 20px; }
+.tuile-statut { font-size: 9.5px; color: var(--encre-3); text-align: center; line-height: 1.3; }
+.tuile-indisponible { opacity: .6; }
+
+/* -------------------------------------------------------------- synthèse */
+.carte-synthese {
+  margin-top: 18px; background: var(--panneau); border: 1px solid var(--bordure);
+  border-radius: 10px; padding: 18px;
+}
+.carte-synthese h2 {
+  font-size: 12px; text-transform: uppercase; letter-spacing: 2px;
+  color: var(--encre-2); margin-bottom: 12px; font-family: var(--mono);
+}
+.ligne-biais { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+.puce-biais {
+  font-family: var(--mono); font-weight: 700; font-size: 15px;
+  padding: 4px 12px; border-radius: 5px; color: var(--fond);
+}
+.commentaire-global { color: var(--encre); }
+
+.etat-du-monde {
+  margin: 0 0 14px; padding: 12px 14px; background: var(--panneau-2);
+  border: 1px solid var(--bordure); border-radius: 8px;
+}
+.rubrique-etat { margin: 6px 0; font-size: 13.5px; }
+.rubrique-etat b { color: var(--encre); }
+.etat-du-monde .titre-section { margin-top: 12px; }
+.liste-briefing { margin: 4px 0 0; padding-left: 22px; }
+.liste-briefing li { margin: 5px 0; font-size: 13.5px; }
+.conclusion-briefing {
+  margin-top: 6px; padding: 10px 12px; font-size: 13.5px; line-height: 1.55;
+  background: var(--panneau); border-left: 3px solid var(--bleu); border-radius: 6px;
+}
+
+table.classement, table.donnees {
+  width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 13px;
+}
+.classement th, .classement td, .donnees th, .donnees td {
+  text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--bordure);
+}
+.classement th, .donnees th {
+  color: var(--encre-3); font-size: 11px; text-transform: uppercase;
+  letter-spacing: 1px; font-weight: 600;
+}
+.classement tbody tr { cursor: pointer; }
+.classement tbody tr:hover { background: var(--panneau-2); }
+.barre-score { display: inline-block; height: 6px; border-radius: 3px; vertical-align: middle; }
+
+/* --------------------------------------------------------- cartes devise */
+.carte-devise {
+  margin-top: 12px; background: var(--panneau); border: 1px solid var(--bordure);
+  border-radius: 10px; overflow: hidden;
+}
+.carte-devise summary {
+  list-style: none; cursor: pointer; display: flex; align-items: center;
+  gap: 14px; padding: 12px 16px; font-family: var(--mono);
+}
+.carte-devise summary::-webkit-details-marker { display: none; }
+.carte-devise summary:hover { background: var(--panneau-2); }
+.carte-devise[open] summary { border-bottom: 1px solid var(--bordure); }
+.chevron { color: var(--encre-3); transition: transform .15s; }
+.carte-devise[open] .chevron { transform: rotate(90deg); }
+.drapeau { font-size: 20px; }
+.code-devise { font-size: 16px; font-weight: 700; letter-spacing: 1px; min-width: 44px; }
+.badge-biais {
+  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+  padding: 3px 8px; border-radius: 4px; color: var(--fond);
+}
+.score-resume { margin-left: auto; display: flex; align-items: center; gap: 10px; color: var(--encre-2); font-size: 13px; }
+
+.corps-devise { padding: 16px; display: grid; gap: 16px; }
+.rangee-haut { display: grid; grid-template-columns: 180px 1fr; gap: 16px; align-items: center; }
+@media (max-width: 640px) { .rangee-haut { grid-template-columns: 1fr; } }
+
+.bloc-jauge { position: relative; width: 170px; height: 150px; margin: 0 auto; }
+.jauge-centre {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; pointer-events: none;
+  font-family: var(--mono); padding-top: 14px;
+}
+.jauge-valeur { font-size: 26px; font-weight: 700; }
+.jauge-libelle { font-size: 10px; color: var(--encre-3); text-transform: uppercase; letter-spacing: 1px; }
+
+.callout {
+  border-left: 3px solid; border-radius: 6px; padding: 12px 14px;
+  background: var(--panneau-2); font-weight: 600;
+}
+.meta-devise { color: var(--encre-2); font-size: 12.5px; font-family: var(--mono); }
+.meta-devise b { color: var(--encre); font-weight: 600; }
+
+.titre-section {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 2px;
+  color: var(--encre-3); font-family: var(--mono); margin-bottom: 6px;
+}
+.bloc-graphique { background: var(--panneau-2); border: 1px solid var(--bordure); border-radius: 8px; padding: 10px; }
+.bloc-graphique canvas { max-height: 240px; }
+.bloc-graphique-marche { border-left: 3px solid var(--bleu); }
+
+.contexte-geo {
+  padding: 4px 0 0;
+}
+.contexte-geo .titre-section { margin-bottom: 8px; }
+
+details.sous-toggle {
+  border: 1px solid var(--bordure); border-radius: 8px; background: var(--panneau-2);
+}
+details.sous-toggle summary {
+  cursor: pointer; padding: 9px 12px; font-weight: 600; font-size: 13px;
+  list-style: none; display: flex; gap: 8px; align-items: center;
+}
+details.sous-toggle summary::-webkit-details-marker { display: none; }
+details.sous-toggle ul { margin: 0; padding: 4px 16px 12px 28px; }
+details.sous-toggle li { margin: 6px 0; }
+.ref-source { color: var(--encre-3); font-size: 11.5px; font-family: var(--mono); }
+.tag-non-source { color: var(--orange); font-size: 11.5px; font-family: var(--mono); }
+
+.sens-plus { color: var(--vert); font-weight: 700; }
+.sens-moins { color: var(--rouge); font-weight: 700; }
+.sens-zero { color: var(--encre-3); font-weight: 700; }
+
+.pied-carte { color: var(--encre-3); font-size: 11px; border-top: 1px solid var(--bordure); padding-top: 10px; }
+
+/* ------------------------------------------------------- auto-évaluation */
+.carte-eval { border-left: 3px solid var(--bleu); }
+.chiffre-eval { font-family: var(--mono); font-size: 22px; font-weight: 700; color: var(--bleu); }
+
+/* ------------------------------------------- notes, suggestions, weekly */
+.carte-notes { border-left: 3px solid var(--encre-3); }
+.zone-notes {
+  width: 100%; min-height: 110px; margin-top: 10px; resize: vertical;
+  background: var(--panneau-2); color: var(--encre); border: 1px solid var(--bordure);
+  border-radius: 8px; padding: 10px 12px; font-family: var(--sans); font-size: 13.5px;
+}
+.zone-notes:focus { outline: 1px solid var(--bleu); }
+.carte-suggestions { border-left: 3px solid var(--jaune); }
+.liste-suggestions { margin: 10px 0 0; padding-left: 20px; }
+.liste-suggestions li { margin: 6px 0; }
+.liste-suggestions b { color: var(--bleu); font-family: var(--mono); font-size: 12px; }
+.contenu-weekly { padding: 4px 14px 12px; }
+.enveloppe-table { overflow-x: auto; }
+.date-ancienne { color: var(--orange); }
+
+/* ------------------------------------------------------------------ pied */
+.pied { margin-top: 28px; border-top: 1px solid var(--bordure); padding-top: 14px; color: var(--encre-3); font-size: 12px; }
+.pied-meta { margin-top: 4px; font-family: var(--mono); font-size: 11px; }
+.chargement, .erreur-chargement { margin-top: 24px; color: var(--encre-2); font-family: var(--mono); }

@@ -1,0 +1,174 @@
+{
+ "meta": {"date_rapport": "2026-08-09", "type_rapport": "quotidien", "version_schema": "1.0",
+          "modele_llm": "gemini-flash-latest (EXEMPLE — données fictives)", "genere_le": "2026-08-09T06:30:00+00:00"},
+ "synthese_globale": {
+  "biais_macro_global": "risk_off",
+  "commentaire": "EXEMPLE FICTIF : VIX 21.4 (+3.1), indice USD +0.6 % sur 5 séances : le marché paie la protection, biais Risk Off.",
+  "etat_du_monde": {
+   "situation_economique": {"texte": "EXEMPLE FICTIF — CPI US 3.4 % vs 3.1 % attendu : l'inflation réaccélère aux US pendant que les PMI zone euro repassent tout juste en expansion (50.8). Croissance résiliente mais désynchronisée entre blocs.", "source_ids": ["src_001", "src_021"], "non_source": false},
+   "politique_monetaire_budgetaire": {"texte": "EXEMPLE FICTIF — Le repricing Fed domine : le marché repousse la première baisse de taux après le CPI. La BOJ reste sous pression avec un CPI Tokyo à 2.9 % vs 2.6 % attendu.", "source_ids": ["src_001", "src_022"], "non_source": false},
+   "geopolitique": {"texte": "EXEMPLE FICTIF — Pas d'escalade majeure signalée dans les flux du jour ; le pétrole reste porté par les tensions d'offre, à surveiller pour le CAD et l'inflation globale.", "source_ids": [], "non_source": true}
+  },
+  "classement_devises": [
+   {"rang": 1, "devise": "USD", "score_confluence": 74, "risk_on_off": "off"},
+   {"rang": 2, "devise": "CHF", "score_confluence": 66, "risk_on_off": "off"},
+   {"rang": 3, "devise": "JPY", "score_confluence": 61, "risk_on_off": "off"},
+   {"rang": 4, "devise": "EUR", "score_confluence": 52, "risk_on_off": "neutre"},
+   {"rang": 5, "devise": "GBP", "score_confluence": 47, "risk_on_off": "neutre"},
+   {"rang": 6, "devise": "CAD", "score_confluence": 44, "risk_on_off": "neutre"},
+   {"rang": 7, "devise": "AUD", "score_confluence": 38, "risk_on_off": "on"},
+   {"rang": 8, "devise": "NZD", "score_confluence": 35, "risk_on_off": "on"}
+  ]
+ },
+ "devises": [
+  {
+   "devise": "USD", "risk_on_off": "off", "score_confluence": 74,
+   "biais_banque_centrale": "hawkish",
+   "tendance_fond": {"unite_temps": "weekly", "sens": "haussier", "commentaire": "Dow : hauts et bas successivement plus hauts", "source_id": "src_010"},
+   "carry": {"taux_directeur": 4.0, "differentiel_vs_mediane_g8": 1.13, "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."},
+   "detail_score": [
+    {"indicateur": "taux_directeur", "sens": 1, "poids": 20, "justification": "Fed funds 4.00 % vs médiane G8 2.87 %.", "source_id": "src_004"},
+    {"indicateur": "cpi_surprise", "sens": 1, "poids": 15, "justification": "CPI 3.4 % vs 3.1 % attendu, précédent 3.2 % : double surprise hawkish.", "source_id": "src_001"},
+    {"indicateur": "yield_curve", "sens": 1, "poids": 12, "justification": "Bear steepening : spread 10Y-2Y +0.09 sur un mois, 10Y en hausse.", "source_id": "src_002"},
+    {"indicateur": "vix", "sens": 1, "poids": 10, "justification": "VIX 21.4 en hausse : flux refuge vers l'USD.", "source_id": "src_003"},
+    {"indicateur": "dxy", "sens": 1, "poids": 10, "justification": "Indice USD +0.6 % sur 5 séances.", "source_id": "src_010"},
+    {"indicateur": "pmi_surprise", "sens": 0, "poids": 10, "justification": "Pas de publication PMI aujourd'hui.", "source_id": null},
+    {"indicateur": "differentiel_taux", "sens": 1, "poids": 8, "justification": "Carry +1.13 pt vs médiane : flux structurels porteurs.", "source_id": "src_004"},
+    {"indicateur": "rsi", "sens": 0, "poids": 8, "justification": "RSI daily 63 : momentum haussier mais proche de la zone de surachat.", "source_id": "src_010"},
+    {"indicateur": "trendline", "sens": 1, "poids": 7, "justification": "Trendline haussière validée (3 contacts) toujours support.", "source_id": "src_010"}
+   ],
+   "opportunites": [
+    {"texte": "Zone 101.80 (3 impacts) sous surveillance : une clôture daily au-dessus, dans le sens de la tendance weekly haussière, validerait la structure.", "source_id": "src_010", "non_sourcee": false}
+   ],
+   "menaces": [
+    {"texte": "Indice USD en hausse alors que le 10Y se stabilise : divergence naissante avec la corrélation attendue, à surveiller.", "source_id": "src_002", "non_sourcee": false},
+    {"texte": "Exemple d'affirmation dont la source a été invalidée par le contrôle de traçabilité.", "source_id": null, "non_sourcee": true}
+   ],
+   "synthese_une_phrase": "CPI au-dessus des attentes + bear steepening : USD soutenu, biais Risk Off.",
+   "indicateurs_tableau": [
+    {"indicateur": "taux_directeur", "nom": "Taux directeur", "valeur": "4.00 %", "prevision": null, "precedent": null, "source": "FRED (FEDFUNDS)", "date": "2026-08-01", "anciennete_jours": 8, "note": ""},
+    {"indicateur": "cpi_surprise", "nom": "Inflation (CPI) — CPI y/y", "valeur": "3.4%", "prevision": "3.1%", "precedent": "3.2%", "source": "ForexFactory", "date": "2026-08-08", "anciennete_jours": 1, "note": ""},
+    {"indicateur": "yield_curve", "nom": "Yield curve US (10Y-2Y)", "valeur": "0.42 (bear steepening)", "prevision": null, "precedent": null, "source": "FRED (DGS10/DGS2)", "date": "2026-08-08", "anciennete_jours": 1, "note": ""},
+    {"indicateur": "vix", "nom": "VIX", "valeur": 21.4, "prevision": null, "precedent": 18.3, "source": "FRED (VIXCLS)", "date": "2026-08-08", "anciennete_jours": 1, "note": ""},
+    {"indicateur": "dxy", "nom": "Indice USD (5 j)", "valeur": "+0.60 %", "prevision": null, "precedent": null, "source": "calcul local (Twelve Data)", "date": "2026-08-09", "anciennete_jours": 0, "note": ""},
+    {"indicateur": "pmi_surprise", "nom": "PMI", "valeur": null, "prevision": null, "precedent": null, "source": "ForexFactory", "date": null, "anciennete_jours": null, "note": "aucune publication < 7 j"},
+    {"indicateur": "differentiel_taux", "nom": "Différentiel vs médiane G8", "valeur": "+1.13 pt", "prevision": null, "precedent": null, "source": "calcul (FRED + config)", "date": "2026-08-09", "anciennete_jours": 0, "note": ""},
+    {"indicateur": "rsi", "nom": "RSI (daily)", "valeur": "63 (momentum haussier)", "prevision": null, "precedent": null, "source": "calcul local (Twelve Data)", "date": "2026-08-09", "anciennete_jours": 0, "note": ""},
+    {"indicateur": "trendline", "nom": "Structure de tendance", "valeur": "haussier weekly, 2 zone(s)", "prevision": null, "precedent": null, "source": "calcul local (Twelve Data)", "date": "2026-08-09", "anciennete_jours": 0, "note": ""}
+   ]
+  },
+  {
+   "devise": "EUR", "risk_on_off": "neutre", "score_confluence": 52,
+   "biais_banque_centrale": "data_dependent",
+   "tendance_fond": {"unite_temps": "weekly", "sens": "range", "commentaire": "Dow : pivots non alignés (structure mixte)", "source_id": "src_011"},
+   "carry": {"taux_directeur": 2.15, "differentiel_vs_mediane_g8": -0.72, "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."},
+   "detail_score": [
+    {"indicateur": "taux_directeur", "sens": -1, "poids": 20, "justification": "2.15 % sous la médiane G8 : différentiel défavorable.", "source_id": "src_004"},
+    {"indicateur": "cpi_surprise", "sens": 0, "poids": 15, "justification": "CPI zone euro conforme aux attentes (2.1 % vs 2.1 %).", "source_id": "src_020"},
+    {"indicateur": "yield_curve", "sens": 0, "poids": 12, "justification": "Effet neutre sur l'EUR au niveau actuel du spread US.", "source_id": "src_002"},
+    {"indicateur": "vix", "sens": 0, "poids": 10, "justification": "EUR peu sensible au régime VIX actuel.", "source_id": "src_003"},
+    {"indicateur": "dxy", "sens": -1, "poids": 10, "justification": "Force USD généralisée : vent contraire mécanique pour l'EUR.", "source_id": "src_010"},
+    {"indicateur": "pmi_surprise", "sens": 1, "poids": 10, "justification": "PMI composite 50.8 vs 50.1 attendu : retour en zone d'expansion.", "source_id": "src_021"},
+    {"indicateur": "differentiel_taux", "sens": -1, "poids": 8, "justification": "Carry -0.72 pt vs médiane.", "source_id": "src_004"},
+    {"indicateur": "rsi", "sens": 1, "poids": 8, "justification": "RSI 54, au-dessus du pivot 50, prix > MM200 : confluence modérée.", "source_id": "src_011"},
+    {"indicateur": "trendline", "sens": 0, "poids": 7, "justification": "Aucune structure à 3 contacts valide dans le range actuel.", "source_id": null}
+   ],
+   "opportunites": [
+    {"texte": "PMI en expansion + RSI > 50 : scénario de sortie de range par le haut à ne considérer qu'à la clôture au-dessus de 1.0950 (2 impacts).", "source_id": "src_021", "non_sourcee": false}
+   ],
+   "menaces": [
+    {"texte": "Différentiel de taux défavorable : tout rebond reste contre le flux structurel de carry.", "source_id": "src_004", "non_sourcee": false}
+   ],
+   "synthese_une_phrase": "PMI mieux qu'attendu mais carry défavorable : EUR neutre, range weekly.",
+   "indicateurs_tableau": [
+    {"nom": "PMI composite", "valeur": "50.8", "prevision": "50.1", "precedent": "49.7", "source": "ForexFactory", "date": "2026-08-07"}
+   ]
+  },
+  {
+   "devise": "JPY", "risk_on_off": "off", "score_confluence": 61,
+   "biais_banque_centrale": "hawkish",
+   "tendance_fond": {"unite_temps": "weekly", "sens": "haussier", "commentaire": "Dow : bas plus hauts depuis juin sur la force JPY", "source_id": "src_012"},
+   "carry": {"taux_directeur": 0.75, "differentiel_vs_mediane_g8": -2.12, "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."},
+   "detail_score": [
+    {"indicateur": "taux_directeur", "sens": -1, "poids": 20, "justification": "0.75 % : taux le plus bas du G8 malgré la normalisation BOJ.", "source_id": "src_004"},
+    {"indicateur": "cpi_surprise", "sens": 1, "poids": 15, "justification": "CPI Tokyo 2.9 % vs 2.6 % attendu : pression sur la BOJ.", "source_id": "src_022"},
+    {"indicateur": "yield_curve", "sens": 0, "poids": 12, "justification": "Effet ambigu du régime US sur le JPY aujourd'hui.", "source_id": "src_002"},
+    {"indicateur": "vix", "sens": 1, "poids": 10, "justification": "VIX en hausse : flux refuge classiques vers le JPY.", "source_id": "src_003"},
+    {"indicateur": "dxy", "sens": -1, "poids": 10, "justification": "Force USD : USD/JPY soutenu, frein à l'appréciation du yen.", "source_id": "src_010"},
+    {"indicateur": "pmi_surprise", "sens": 0, "poids": 10, "justification": "Pas de publication.", "source_id": null},
+    {"indicateur": "differentiel_taux", "sens": -1, "poids": 8, "justification": "Carry -2.12 pt : le yen reste la jambe de financement.", "source_id": "src_004"},
+    {"indicateur": "rsi", "sens": 1, "poids": 8, "justification": "RSI force JPY 57, au-dessus du pivot 50.", "source_id": "src_012"},
+    {"indicateur": "trendline", "sens": 1, "poids": 7, "justification": "Trendline haussière (3 contacts) sur la force JPY weekly.", "source_id": "src_012"}
+   ],
+   "opportunites": [
+    {"texte": "Risk Off + CPI Tokyo au-dessus des attentes : scénario de renforcement du yen si le VIX reste au-dessus de 20.", "source_id": "src_022", "non_sourcee": false}
+   ],
+   "menaces": [
+    {"texte": "Carry très défavorable : un retour du Risk On déclencherait un débouclage rapide des positions longues JPY.", "source_id": "src_004", "non_sourcee": false}
+   ],
+   "synthese_une_phrase": "Refuge recherché et BOJ sous pression : JPY porté par le régime Risk Off.",
+   "indicateurs_tableau": [
+    {"nom": "CPI Tokyo y/y", "valeur": "2.9%", "prevision": "2.6%", "precedent": "2.7%", "source": "ForexFactory", "date": "2026-08-08"}
+   ]
+  }
+ ],
+ "sources_citees": [
+  {"id": "src_001", "source": "FRED", "detail": "cpi_us (CPIAUCSL)", "date": "2026-07-01", "url": "https://fred.stlouisfed.org/series/CPIAUCSL"},
+  {"id": "src_002", "source": "FRED", "detail": "yield curve US 10Y-2Y (DGS10/DGS2)", "date": "2026-08-08", "url": null},
+  {"id": "src_003", "source": "FRED", "detail": "vix (VIXCLS)", "date": "2026-08-08", "url": null},
+  {"id": "src_004", "source": "FRED + config", "detail": "taux directeurs des 8 devises", "date": "2026-08-09", "url": null},
+  {"id": "src_010", "source": "Twelve Data (calculs locaux)", "detail": "technique USD — indice synthétique", "date": "2026-08-09", "url": null},
+  {"id": "src_011", "source": "Twelve Data (calculs locaux)", "detail": "technique EUR — EUR/USD", "date": "2026-08-09", "url": null},
+  {"id": "src_012", "source": "Twelve Data (calculs locaux)", "detail": "technique JPY — USD/JPY", "date": "2026-08-09", "url": null},
+  {"id": "src_020", "source": "ForexFactory", "detail": "CPI zone euro y/y", "date": "2026-08-06", "url": null},
+  {"id": "src_021", "source": "ForexFactory", "detail": "PMI composite zone euro", "date": "2026-08-07", "url": null},
+  {"id": "src_022", "source": "ForexFactory", "detail": "CPI Tokyo y/y", "date": "2026-08-08", "url": null}
+ ],
+ "donnees_non_rafraichies": [
+  {"source": "financialjuice", "derniere_donnee_du": "2026-08-08", "raison": "HTTP 403 ×2 — tentatives arrêtées sur ce site"}
+ ],
+ "critique": {
+  "incoherences": ["EXEMPLE FICTIF — Synthèse EUR légèrement haussière alors que le score 52 est neutre"],
+  "affirmations_non_sourcees": ["Une menace USD sans source_id valide"],
+  "suggestions_connaissances": [
+   {"theme": "Bear steepening et devises refuge", "suggestion": "EXEMPLE FICTIF — Documenter le cas où le bear steepening US coïncide avec un JPY fort : lequel des deux signaux prime pour le biais Risk Off.", "fichier_cible": "cas_particuliers.md"}
+  ],
+  "validation": "a_revoir"
+ },
+ "controle_qualite": {
+  "conforme": false,
+  "nb_anomalies": 1,
+  "anomalies": ["EXEMPLE FICTIF — GBP : tableau d'indicateurs incomplet (pmi_surprise)"]
+ },
+ "analyse_weekly": {
+  "USD": {
+   "semaine_iso": "2026-W32",
+   "metriques": {"nb_jours": 5, "score_debut": 66, "score_fin": 74, "variation_score": 8,
+                 "ecart_type_score": 3.1, "coherence_directionnelle_pct": 100.0,
+                 "indicateurs_instables": {"rsi": 1},
+                 "trajectoire": [{"date": "2026-08-03", "score": 66}, {"date": "2026-08-04", "score": 69}, {"date": "2026-08-05", "score": 68}, {"date": "2026-08-06", "score": 71}, {"date": "2026-08-07", "score": 74}]},
+   "commentaire": "EXEMPLE FICTIF — Biais USD monotone toute la semaine (66→74, σ 3.1) : la conviction s'est renforcée sans à-coup, seul le RSI a changé de camp une fois."
+  }
+ },
+ "tracabilite": {"mode": "marquer", "marquees": 1, "rejetees": 0},
+ "graphiques": {
+  "USD": {"libelle": "Force USD (indice synthétique)", "dates": ["2026-06-29","2026-06-30","2026-07-01","2026-07-02","2026-07-03","2026-07-06","2026-07-07","2026-07-08","2026-07-09","2026-07-10","2026-07-13","2026-07-14","2026-07-15","2026-07-16","2026-07-17","2026-07-20","2026-07-21","2026-07-22","2026-07-23","2026-07-24","2026-07-27","2026-07-28","2026-07-29","2026-07-30","2026-07-31","2026-08-03","2026-08-04","2026-08-05","2026-08-06","2026-08-07"],
+          "clotures": [100.0,100.2,100.1,100.4,100.3,100.6,100.5,100.8,100.7,100.9,101.0,100.8,101.1,101.3,101.2,101.0,101.4,101.5,101.3,101.6,101.5,101.8,101.7,101.9,102.0,101.8,102.1,102.3,102.2,102.4]},
+  "EUR": {"libelle": "Force EUR (EUR/USD)", "dates": ["2026-06-29","2026-06-30","2026-07-01","2026-07-02","2026-07-03","2026-07-06","2026-07-07","2026-07-08","2026-07-09","2026-07-10","2026-07-13","2026-07-14","2026-07-15","2026-07-16","2026-07-17","2026-07-20","2026-07-21","2026-07-22","2026-07-23","2026-07-24","2026-07-27","2026-07-28","2026-07-29","2026-07-30","2026-07-31","2026-08-03","2026-08-04","2026-08-05","2026-08-06","2026-08-07"],
+          "clotures": [1.089,1.0885,1.09,1.0872,1.088,1.0865,1.0878,1.0855,1.0862,1.0848,1.0851,1.0867,1.0842,1.0838,1.0851,1.0862,1.0845,1.0839,1.0852,1.0841,1.0848,1.0832,1.0839,1.0827,1.0821,1.0834,1.0819,1.0812,1.0822,1.0815]},
+  "JPY": {"libelle": "Force JPY (1/USDJPY)", "dates": ["2026-06-29","2026-06-30","2026-07-01","2026-07-02","2026-07-03","2026-07-06","2026-07-07","2026-07-08","2026-07-09","2026-07-10","2026-07-13","2026-07-14","2026-07-15","2026-07-16","2026-07-17","2026-07-20","2026-07-21","2026-07-22","2026-07-23","2026-07-24","2026-07-27","2026-07-28","2026-07-29","2026-07-30","2026-07-31","2026-08-03","2026-08-04","2026-08-05","2026-08-06","2026-08-07"],
+          "clotures": [0.00654,0.00655,0.00653,0.00656,0.00655,0.00657,0.00656,0.00658,0.00657,0.00659,0.00658,0.0066,0.00659,0.00661,0.0066,0.00662,0.00661,0.00663,0.00662,0.00664,0.00663,0.00665,0.00664,0.00666,0.00665,0.00667,0.00666,0.00668,0.00667,0.00669]}
+ },
+ "prix_cloture": {"USD": 102.4, "EUR": 1.0815, "JPY": 0.00669},
+ "auto_evaluation": {
+  "periode": {"du": "2026-08-02", "au": "2026-08-09"},
+  "par_devise": [
+   {"devise": "USD", "score_prevu": 71, "prevu": "hausse", "variation_reelle_pct": 0.8, "correct": true},
+   {"devise": "EUR", "score_prevu": 49, "prevu": "neutre", "variation_reelle_pct": -0.4, "correct": false},
+   {"devise": "JPY", "score_prevu": 58, "prevu": "hausse", "variation_reelle_pct": 1.1, "correct": true}
+  ],
+  "taux_reussite_biais_pct": 66.7,
+  "correlation_classement_spearman": 0.5,
+  "commentaire_llm": "2 biais sur 3 corrects ; l'EUR annoncé neutre a décroché de 0.4 % — la lecture du carry avait été sous-pondérée."
+ }
+}

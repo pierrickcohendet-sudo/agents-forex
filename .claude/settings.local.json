@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(if \\(Test-Path data\\\\logs\\\\2026-08-15.log\\) { Select-String -Path data\\\\logs\\\\2026-08-15.log -Pattern \"monde|WARNING|ERROR\" | Select-Object -First 15 | ForEach-Object Line } else { \"pas de log 2026-08-15\" })",
+      "PowerShell(Select-String -Path data\\\\logs\\\\2026-08-14.log -Pattern \"monde|22:0|22:1\" | Select-Object -Last 12 | ForEach-Object Line)",
+      "PowerShell(.venv\\\\Scripts\\\\python.exe \"C:\\\\Users\\\\pcohe\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-pcohe-Desktop-agents-forex\\\\0e21098c-2e72-481b-b6c2-d5a18e48380b\\\\scratchpad\\\\test_url_graphique.py\")",
+      "PowerShell(.venv\\\\Scripts\\\\python.exe \"C:\\\\Users\\\\pcohe\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-pcohe-Desktop-agents-forex\\\\0e21098c-2e72-481b-b6c2-d5a18e48380b\\\\scratchpad\\\\test_axes_1_2_3.py\")",
+      "Bash(.venv/Scripts/python.exe -c ' *)"
+    ]
+  }
+}

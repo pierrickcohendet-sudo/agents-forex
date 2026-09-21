@@ -1,0 +1,3732 @@
+{
+ "meta": {
+  "date_rapport": "2026-08-12",
+  "type_rapport": "quotidien",
+  "version_schema": "1.0",
+  "modele_llm": "gemini-flash-latest",
+  "genere_le": "2026-08-12T13:52:21+00:00"
+ },
+ "synthese_globale": {
+  "biais_macro_global": "risk_on",
+  "commentaire": "GBP (78) et AUD (72) dominent nettement le tableau face à un JPY (24) et un CHF (29) distancés, confirmant la parfaite exécution du biais macro risk-on sur l'ensemble du complexe FX.",
+  "classement_devises": [
+   {
+    "rang": 1,
+    "devise": "GBP",
+    "score_confluence": 78,
+    "risk_on_off": "on"
+   },
+   {
+    "rang": 2,
+    "devise": "AUD",
+    "score_confluence": 72,
+    "risk_on_off": "on"
+   },
+   {
+    "rang": 3,
+    "devise": "USD",
+    "score_confluence": 61,
+    "risk_on_off": "on"
+   },
+   {
+    "rang": 4,
+    "devise": "NZD",
+    "score_confluence": 58,
+    "risk_on_off": "on"
+   },
+   {
+    "rang": 5,
+    "devise": "CAD",
+    "score_confluence": 40,
+    "risk_on_off": "on"
+   },
+   {
+    "rang": 6,
+    "devise": "EUR",
+    "score_confluence": 39,
+    "risk_on_off": "neutre"
+   },
+   {
+    "rang": 7,
+    "devise": "CHF",
+    "score_confluence": 29,
+    "risk_on_off": "neutre"
+   },
+   {
+    "rang": 8,
+    "devise": "JPY",
+    "score_confluence": 24,
+    "risk_on_off": "on"
+   }
+  ]
+ },
+ "devises": [
+  {
+   "devise": "USD",
+   "risk_on_off": "on",
+   "score_confluence": 61,
+   "detail_score": [
+    {
+     "indicateur": "taux_directeur",
+     "sens": 1,
+     "poids": 20,
+     "justification": "Taux Fed Funds à 3,63% nettement supérieur à la médiane G8 de 2,45%, offrant un soutien structurel.",
+     "source_id": "src_005"
+    },
+    {
+     "indicateur": "cpi_surprise",
+     "sens": 0,
+     "poids": 15,
+     "justification": "CPI y/y ressorti à 3,4% exactement conforme aux attentes du marché, confirmant la désinflation progressive.",
+     "source_id": "src_051"
+    },
+    {
+     "indicateur": "yield_curve",
+     "sens": 1,
+     "poids": 12,
+     "justification": "Pentification 'bear steepening' avec un spread 10Y-2Y à +0,47% tiré par la hausse du 10Y à 4,72%.",
+     "source_id": "src_012"
+    },
+    {
+     "indicateur": "vix",
+     "sens": -1,
+     "poids": 10,
+     "justification": "VIX modéré à 15,28 (-1,16%), traduisant un appétit pour le risque défavorable au biais refuge du dollar.",
+     "source_id": "src_008"
+    },
+    {
+     "indicateur": "dxy",
+     "sens": 0,
+     "poids": 10,
+     "justification": "Indice USD synthétique stabilisé à 101,32 (+0,13% sur 5j), évoluant sous la MM100 sans catalyseur net.",
+     "source_id": "src_021"
+    },
+    {
+     "indicateur": "pmi_surprise",
+     "sens": 0,
+     "poids": 10,
+     "justification": "Aucune publication PMI récente disponible dans le calendrier pour l'USD aujourd'hui.",
+     "source_id": null
+    },
+    {
+     "indicateur": "differentiel_taux",
+     "sens": 1,
+     "poids": 8,
+     "justification": "Différentiel de carry de +1,18% par rapport à la médiane G8, soutenant l'attractivité des flux de portage.",
+     "source_id": "src_013"
+    },
+    {
+     "indicateur": "rsi",
+     "sens": -1,
+     "poids": 8,
+     "justification": "RSI daily s'inscrivant à 39,1 sous la ligne pivot de 50, signalant un momentum technique baissier.",
+     "source_id": "src_021"
+    },
+    {
+     "indicateur": "trendline",
+     "sens": 0,
+     "poids": 7,
+     "justification": "Absence de trendline validée à 3 points de contact identifiée sur la structure actuelle.",
+     "source_id": "src_021"
+    }
+   ],
+   "biais_banque_centrale": "data_dependent",
+   "tendance_fond": {
+    "unite_temps": "weekly",
+    "sens": "range",
+    "commentaire": "Pivots Dow non alignés sur l'indice synthétique, matérialisant une structure neutre à moyen terme.",
+    "source_id": "src_021"
+   },
+   "carry": {
+    "taux_directeur": 3.63,
+    "differentiel_vs_mediane_g8": 1.18,
+    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   },
+   "opportunites": [
+    {
+     "texte": "Une clôture daily nette au-dessus de la résistance des 101,36 (4 impacts) franchissant la MM100 à 101,73 validerait une reprise du mouvement haussier avec un niveau d'invalidation sous le support à 100,94.",
+     "source_id": "src_021",
+     "non_sourcee": false
+    }
+   ],
+   "menaces": [
+    {
+     "texte": "Divergence entre la hausse du rendement obligataire 10Y à 4,72% et la faiblesse relative de l'indice USD synthétique, signalant une corrélation temporairement suspecte.",
+     "source_id": "src_006",
+     "non_sourcee": false
+    },
+    {
+     "texte": "Risque géopolitique au Moyen-Orient et pressions sur le détroit d'Hormuz susceptibles d'engendrer un choc d'offre pétrolier stagflationniste.",
+     "source_id": "src_105",
+     "non_sourcee": false
+    }
+   ],
+   "synthese_une_phrase": "L'USD reste pris dans un range technique avec un momentum baissier, mais conserve un soutien fondamental via son différentiel de taux et la hausse des rendements obligataires longs.",
+   "indicateurs_tableau": [
+    {
+     "nom": "Cleveland Fed Inflation Expectations",
+     "valeur": null,
+     "prevision": null,
+     "precedent": "3.7%",
+     "source": "ForexFactory",
+     "date": "2026-08-10"
+    },
+    {
+     "nom": "FOMC Member Hammack Speaks",
+     "valeur": null,
+     "prevision": null,
+     "precedent": null,
+     "source": "ForexFactory",
+     "date": "2026-08-10"
+    },
+    {
+     "nom": "NFIB Small Business Index",
+     "valeur": null,
+     "prevision": "97.5",
+     "precedent": "97.4",
+     "source": "ForexFactory",
+     "date": "2026-08-11"
+    },
+    {
+     "nom": "ADP Weekly Employment Change",
+     "valeur": null,
+     "prevision": null,
+     "precedent": "15.0K",
+     "source": "ForexFactory",
+     "date": "2026-08-11"
+    },
+    {
+     "nom": "ADP Weekly Employment Change",
+     "valeur": null,
+     "prevision": null,
+     "precedent": "11.0K",
+     "source": "ForexFactory",
+     "date": "2026-08-11"
+    },
+    {
+     "nom": "Existing Home Sales",
+     "valeur": null,
+     "prevision": "4.05M",
+     "precedent": "4.09M",
+     "source": "ForexFactory",
+     "date": "2026-08-11"
+    },
+    {
+     "nom": "API Weekly Statistical Bulletin",
+     "valeur": null,
+     "prevision": null,
+     "precedent": null,
+     "source": "ForexFactory",
+     "date": "2026-08-11"
+    },
+    {
+     "nom": "Core CPI m/m",
+     "valeur": null,
+     "prevision": "0.2%",
+     "precedent": "0.0%",
+     "source": "ForexFactory",
+     "date": "2026-08-12"
+    }
+   ]
+  },
+  {
+   "devise": "EUR",
+   "risk_on_off": "neutre",
+   "score_confluence": 39,
+   "detail_score": [
+    {
+     "indicateur": "taux_directeur",
+     "sens": 0,
+     "poids": 20,
+     "justification": "Le taux directeur de la BCE est à 2.40 %, très proche de la médiane G8 de 2.45 %.",
+     "source_id": "src_013"
+    },
+    {
+     "indicateur": "cpi_surprise",
+     "sens": 0,
+     "poids": 15,
+     "justification": "Les publications d'inflation allemandes (0.8 %) et françaises (0.6 %) sont en ligne avec les attentes sans surprise notable.",
+     "source_id": "src_044"
+    },
+    {
+     "indicateur": "yield_curve",
+     "sens": -1,
+     "poids": 12,
+     "justification": "Le régimé de bear steepening de la courbe US (spread 10Y-2Y à 0.47 %) soutient le dollar au détriment de l'euro.",
+     "source_id": "src_012"
+    },
+    {
+     "indicateur": "vix",
+     "sens": 0,
+     "poids": 10,
+     "justification": "Le VIX replie à 15.28 (-1.16 %), traduisant une volatilité contenue neutre pour l'euro.",
+     "source_id": "src_008"
+    },
+    {
+     "indicateur": "dxy",
+     "sens": -1,
+     "poids": 10,
+     "justification": "L'indice USD synthétique avance modérément à 101.32 (+0.13 %), exerçant une pression sur l'euro.",
+     "source_id": "src_021"
+    },
+    {
+     "indicateur": "pmi_surprise",
+     "sens": 0,
+     "poids": 10,
+     "justification": "Aucune donnée de PMI n'est répertoriée aujourd'hui au calendrier pour la zone euro.",
+     "source_id": null
+    },
+    {
+     "indicateur": "differentiel_taux",
+     "sens": -1,
+     "poids": 8,
+     "justification": "Le différentiel de taux de l'EUR ressort à -0.05 % sous la médiane G8 et subit un désavantage de -1.23 % face au dollar.",
+     "source_id": "src_013"
+    },
+    {
+     "indicateur": "rsi",
+     "sens": 1,
+     "poids": 8,
+     "justification": "Le RSI sur EUR/USD s'affiche à 61.8, indiquant la présence d'un momentum haussier à court terme.",
+     "source_id": "src_014"
+    },
+    {
+     "indicateur": "trendline",
+     "sens": 0,
+     "poids": 7,
+     "justification": "Aucune structure de trendline à 3 points de contact n'est confirmée dans le cadre technique actuel.",
+     "source_id": "src_014"
+    }
+   ],
+   "biais_banque_centrale": "data_dependent",
+   "tendance_fond": {
+    "unite_temps": "weekly",
+    "sens": "baissier",
+    "commentaire": "Dow : hauts et bas successivement plus bas",
+    "source_id": "src_014"
+   },
+   "carry": {
+    "taux_directeur": 2.4,
+    "differentiel_vs_mediane_g8": -0.05,
+    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   },
+   "opportunites": [
+    {
+     "texte": "Une clôture daily au-dessus de la résistance à 1.15938 (2 impacts) ouvrirait la voix vers la MM200 située à 1.16156, avec invalidation sous le support des 1.15243 (MM100).",
+     "source_id": "src_014",
+     "non_sourcee": false
+    }
+   ],
+   "menaces": [
+    {
+     "texte": "La tendance de fond weekly demeure baissière sous la MM200 (1.16156), exposant le prix à un rejet baissier sous la zone de résistance 1.15938.",
+     "source_id": "src_014",
+     "non_sourcee": false
+    },
+    {
+     "texte": "Le bear steepening de la courbe des taux US (10Y à 4.72 %) renforce l'attrait du dollar et pénalise structurellement la paire EUR/USD.",
+     "source_id": "src_012",
+     "non_sourcee": false
+    }
+   ],
+   "synthese_une_phrase": "Malgré un rebond de momentum à court terme matérialisé par un RSI à 61.8, l'EUR/USD reste contraint par sa tendance weekly baissière et un différentiel de taux défavorable face à l'USD.",
+   "indicateurs_tableau": [
+    {
+     "nom": "Sentix Investor Confidence",
+     "valeur": null,
+     "prevision": "-0.7",
+     "precedent": "-3.1",
+     "source": "ForexFactory",
+     "date": "2026-08-10"
+    },
+    {
+     "nom": "Italian Trade Balance",
+     "valeur": null,
+     "prevision": "4.74B",
+     "precedent": "4.79B",
+     "source": "ForexFactory",
+     "date": "2026-08-11"
+    },
+    {
+     "nom": "German Final CPI m/m",
+     "valeur": null,
+     "prevision": "0.8%",
+     "precedent": "0.8%",
+     "source": "ForexFactory",
+     "date": "2026-08-12"
+    },
+    {
+     "nom": "German 30-y Bond Auction",
+     "valeur": null,
+     "prevision": null,
+     "precedent": "3.64|2.9",
+     "source": "ForexFactory",
+     "date": "2026-08-12"
+    },
+    {
+     "nom": "Industrial Production m/m",
+     "valeur": null,
+     "prevision": "-0.1%",
+     "precedent": "-0.2%",
+     "source": "ForexFactory",
+     "date": "2026-08-13"
+    },
+    {
+     "nom": "German WPI m/m",
+     "valeur": null,
+     "prevision": "-0.2%",
+     "precedent": "-0.7%",
+     "source": "ForexFactory",
+     "date": "2026-08-14"
+    },
+    {
+     "nom": "French Final CPI m/m",
+     "valeur": null,
+     "prevision": "0.6%",
+     "precedent": "0.6%",
+     "source": "ForexFactory",
+     "date": "2026-08-14"
+    },
+    {
+     "nom": "Flash Employment Change q/q",
+     "valeur": null,
+     "prevision": "0.1%",
+     "precedent": "0.1%",
+     "source": "ForexFactory",
+     "date": "2026-08-14"
+    }
+   ]
+  },
+  {
+   "devise": "GBP",
+   "risk_on_off": "on",
+   "score_confluence": 78,
+   "detail_score": [
+    {
+     "indicateur": "taux_directeur",
+     "sens": 1,
+     "poids": 20,
+     "justification": "Taux directeur à 3.75 % supérieur à la médiane G8 de 2.45 %, offrant un soutien structurel.",
+     "source_id": "src_013"
+    },
+    {
+     "indicateur": "cpi_surprise",
+     "sens": 0,
+     "poids": 15,
+     "justification": "Aucune publication récente de CPI britannique dans le calendrier du jour.",
+     "source_id": null
+    },
+    {
+     "indicateur": "yield_curve",
+     "sens": 0,
+     "poids": 12,
+     "justification": "Spread US 10Y-2Y à +0.47 % en bear steepening, impact neutre sur la livre.",
+     "source_id": "src_012"
+    },
+    {
+     "indicateur": "vix",
+     "sens": 1,
+     "poids": 10,
+     "justification": "VIX modéré à 15.28 (-1.16 %), environnement favorable aux devises cycliques comme la livre.",
+     "source_id": "src_008"
+    },
+    {
+     "indicateur": "dxy",
+     "sens": 1,
+     "poids": 10,
+     "justification": "Indice USD à 101.32 avec un RSI à 39.1 en zone baissière, soulageant la pression sur le GBP/USD.",
+     "source_id": "src_021"
+    },
+    {
+     "indicateur": "pmi_surprise",
+     "sens": 0,
+     "poids": 10,
+     "justification": "Pas de chiffre PMI publié aujourd'hui pour le Royaume-Uni.",
+     "source_id": null
+    },
+    {
+     "indicateur": "differentiel_taux",
+     "sens": 1,
+     "poids": 8,
+     "justification": "Différentiel de taux de +1.30 % par rapport au panier G8, générateur de flux acheteurs de carry.",
+     "source_id": "src_013"
+    },
+    {
+     "indicateur": "rsi",
+     "sens": 1,
+     "poids": 8,
+     "justification": "RSI GBP/USD à 64.3 confirmant un momentum haussier au-dessus de la ligne pivot 50.",
+     "source_id": "src_015"
+    },
+    {
+     "indicateur": "trendline",
+     "sens": 0,
+     "poids": 7,
+     "justification": "Aucune ligne de tendance à 3 points d'appui identifiée dans la structure actuelle.",
+     "source_id": null
+    }
+   ],
+   "biais_banque_centrale": "data_dependent",
+   "tendance_fond": {
+    "unite_temps": "weekly",
+    "sens": "range",
+    "commentaire": "Dow : pivots non alignés (structure mixte sur le GBP/USD).",
+    "source_id": "src_015"
+   },
+   "carry": {
+    "taux_directeur": 3.75,
+    "differentiel_vs_mediane_g8": 1.3,
+    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   },
+   "opportunites": [
+    {
+     "texte": "Zone de résistance à 1.35346 (4 impacts) sous surveillance : une clôture daily supérieure validerait une sortie de range haussière, soutenue par le prix au-dessus de la MM200 à 1.34362.",
+     "source_id": "src_015",
+     "non_sourcee": false
+    }
+   ],
+   "menaces": [
+    {
+     "texte": "Publication imminente du PIB mensuel britannique (attendu à 0.0 % contre 0.1 % précédent) pouvant fragiliser la livre en cas de déception.",
+     "source_id": "src_059",
+     "non_sourcee": false
+    }
+   ],
+   "synthese_une_phrase": "La livre sterling bénéficie d'un portage attrayant et de la faiblesse du dollar, mais reste bloquée sous sa résistance clé de 1.35346 avant les chiffres du PIB britannique.",
+   "indicateurs_tableau": [
+    {
+     "nom": "BRC Retail Sales Monitor y/y",
+     "valeur": null,
+     "prevision": "1.6%",
+     "precedent": "1.7%",
+     "source": "ForexFactory",
+     "date": "2026-08-10"
+    },
+    {
+     "nom": "RICS House Price Balance",
+     "valeur": null,
+     "prevision": "-30%",
+     "precedent": "-33%",
+     "source": "ForexFactory",
+     "date": "2026-08-12"
+    },
+    {
+     "nom": "GDP m/m",
+     "valeur": null,
+     "prevision": "0.0%",
+     "precedent": "0.1%",
+     "source": "ForexFactory",
+     "date": "2026-08-13"
+    },
+    {
+     "nom": "Prelim GDP q/q",
+     "valeur": null,
+     "prevision": "0.4%",
+     "precedent": "0.6%",
+     "source": "ForexFactory",
+     "date": "2026-08-13"
+    },
+    {
+     "nom": "Construction Output m/m",
+     "valeur": null,
+     "prevision": "-0.3%",
+     "precedent": "-0.8%",
+     "source": "ForexFactory",
+     "date": "2026-08-13"
+    },
+    {
+     "nom": "Goods Trade Balance",
+     "valeur": null,
+     "prevision": "-20.6B",
+     "precedent": "-18.7B",
+     "source": "ForexFactory",
+     "date": "2026-08-13"
+    },
+    {
+     "nom": "Index of Services 3m/3m",
+     "valeur": null,
+     "prevision": "0.5%",
+     "precedent": "0.7%",
+     "source": "ForexFactory",
+     "date": "2026-08-13"
+    },
+    {
+     "nom": "Industrial Production m/m",
+     "valeur": null,
+     "prevision": "0.1%",
+     "precedent": "-0.5%",
+     "source": "ForexFactory",
+     "date": "2026-08-13"
+    }
+   ]
+  },
+  {
+   "devise": "JPY",
+   "risk_on_off": "on",
+   "score_confluence": 24,
+   "detail_score": [
+    {
+     "indicateur": "taux_directeur",
+     "sens": -1,
+     "poids": 20,
+     "justification": "Taux directeur fixé à 1.0% nettement sous la médiane G8 de 2.45%, pèsant sur la devise.",
+     "source_id": "src_013"
+    },
+    {
+     "indicateur": "cpi_surprise",
+     "sens": 0,
+     "poids": 15,
+     "justification": "Aucune donnée d'inflation CPI avec chiffre réel et prévision enregistrée aujourd'hui pour le JPY.",
+     "source_id": null
+    },
+    {
+     "indicateur": "yield_curve",
+     "sens": -1,
+     "poids": 12,
+     "justification": "Régime US en bear steepening avec le 10Y à 4.72% (+1.51%), ce qui élargit le différentiel de rendement au détriment du JPY.",
+     "source_id": "src_012"
+    },
+    {
+     "indicateur": "vix",
+     "sens": -1,
+     "poids": 10,
+     "justification": "VIX à 15.28 en baisse de 1.16%, reflétant un climat de volatilité contenue défavorable aux flux refuges.",
+     "source_id": "src_008"
+    },
+    {
+     "indicateur": "dxy",
+     "sens": -1,
+     "poids": 10,
+     "justification": "Indice USD synthétique à 101.32 (+0.13% sur 5j), maintenant une ferme pression face au yen.",
+     "source_id": "src_021"
+    },
+    {
+     "indicateur": "pmi_surprise",
+     "sens": 0,
+     "poids": 10,
+     "justification": "Aucune publication de PMI avec écart prévision/réel disponible aujourd'hui pour le Japon.",
+     "source_id": null
+    },
+    {
+     "indicateur": "differentiel_taux",
+     "sens": -1,
+     "poids": 8,
+     "justification": "Différentiel de carry de -1.45% par rapport à la médiane G8, entretenant un flux vendeur structurel.",
+     "source_id": "src_013"
+    },
+    {
+     "indicateur": "rsi",
+     "sens": 1,
+     "poids": 8,
+     "justification": "RSI à 56.6 au-dessus du pivot 50, confirmant un momentum tactique haussier sur l'instrument.",
+     "source_id": "src_016"
+    },
+    {
+     "indicateur": "trendline",
+     "sens": 0,
+     "poids": 7,
+     "justification": "Aucune structure de trendline à au moins 3 points de contact validée dans les données techniques.",
+     "source_id": "src_016"
+    }
+   ],
+   "biais_banque_centrale": "data_dependent",
+   "tendance_fond": {
+    "unite_temps": "weekly",
+    "sens": "baissier",
+    "commentaire": "Théorie de Dow : succession de hauts et de bas plus bas confirmant une tendance baissière de fond sur la devise.",
+    "source_id": "src_016"
+   },
+   "carry": {
+    "taux_directeur": 1.0,
+    "differentiel_vs_mediane_g8": -1.45,
+    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   },
+   "opportunites": [
+    {
+     "texte": "Zone de support à 0.00628 (3 impacts) : une réaction positive au-dessus de ce niveau avec RSI > 50 pourrait valider un rebond technique vers la résistance 0.00630.",
+     "source_id": "src_016",
+     "non_sourcee": false
+    },
+    {
+     "texte": "La hausse des rendements obligataires japonais alimentée par les tensions inflationnistes offre un soutien potentiel à la monnaie nippone.",
+     "source_id": "src_125",
+     "non_sourcee": false
+    }
+   ],
+   "menaces": [
+    {
+     "texte": "Le régime de bear steepening américain porté par un 10Y US à 4.72% accroît l'écart de rendement et pèse directement sur le JPY.",
+     "source_id": "src_012",
+     "non_sourcee": false
+    },
+    {
+     "texte": "Le différentiel de carry très défavorable de -1.45% continue d'encourager des positions vendeuses sur le yen en environnement de faible volatilité.",
+     "source_id": "src_013",
+     "non_sourcee": false
+    }
+   ],
+   "synthese_une_phrase": "Malgré un momentum technique à court terme modérément haussier (RSI à 56.6), le JPY demeure plombé par un différentiel de taux très défavorable (-1.45%) et la remontée des taux longs américains.",
+   "indicateurs_tableau": [
+    {
+     "nom": "Bank Lending y/y",
+     "valeur": null,
+     "prevision": "5.7%",
+     "precedent": "5.7%",
+     "source": "ForexFactory",
+     "date": "2026-08-09"
+    },
+    {
+     "nom": "BOJ Summary of Opinions",
+     "valeur": null,
+     "prevision": null,
+     "precedent": null,
+     "source": "ForexFactory",
+     "date": "2026-08-09"
+    },
+    {
+     "nom": "Current Account",
+     "valeur": null,
+     "prevision": "2.50T",
+     "precedent": "3.06T",
+     "source": "ForexFactory",
+     "date": "2026-08-09"
+    },
+    {
+     "nom": "Economy Watchers Sentiment",
+     "valeur": null,
+     "prevision": "44.6",
+     "precedent": "44.0",
+     "source": "ForexFactory",
+     "date": "2026-08-10"
+    },
+    {
+     "nom": "Bank Holiday",
+     "valeur": null,
+     "prevision": null,
+     "precedent": null,
+     "source": "ForexFactory",
+     "date": "2026-08-10"
+    },
+    {
+     "nom": "M2 Money Stock y/y",
+     "valeur": null,
+     "prevision": "2.1%",
+     "precedent": "2.2%",
+     "source": "ForexFactory",
+     "date": "2026-08-11"
+    },
+    {
+     "nom": "Prelim Machine Tool Orders y/y",
+     "valeur": null,
+     "prevision": null,
+     "precedent": "52.8%",
+     "source": "ForexFactory",
+     "date": "2026-08-12"
+    },
+    {
+     "nom": "PPI y/y",
+     "valeur": null,
+     "prevision": "7.4%",
+     "precedent": "7.1%",
+     "source": "ForexFactory",
+     "date": "2026-08-12"
+    }
+   ]
+  },
+  {
+   "devise": "CHF",
+   "risk_on_off": "neutre",
+   "score_confluence": 29,
+   "detail_score": [
+    {
+     "indicateur": "taux_directeur",
+     "sens": -1,
+     "poids": 20,
+     "justification": "Taux BNS à 0.0% contre une médiane G8 à 2.45%, limitant fortement la rémunération de la devise.",
+     "source_id": "src_013"
+    },
+    {
+     "indicateur": "cpi_surprise",
+     "sens": 0,
+     "poids": 15,
+     "justification": "Aucune publication de CPI suisse au calendrier aujourd'hui.",
+     "source_id": "src_068"
+    },
+    {
+     "indicateur": "yield_curve",
+     "sens": -1,
+     "poids": 12,
+     "justification": "Spread 10Y-2Y US à 0.47 en bear steepening (+0.11 en 1m), drainant les flux vers le dollar au détriment des devises à faible rendement.",
+     "source_id": "src_012"
+    },
+    {
+     "indicateur": "vix",
+     "sens": -1,
+     "poids": 10,
+     "justification": "VIX modéré à 15.28 (-1.16%), la faible volatilité réduisant la demande pour le franc suisse comme valeur refuge.",
+     "source_id": "src_008"
+    },
+    {
+     "indicateur": "dxy",
+     "sens": 0,
+     "poids": 10,
+     "justification": "Indice USD synthétique à 101.32 (+0.13% sur 5j) bloqué sous sa MM100 à 101.73, traduisant une neutralité du dollar.",
+     "source_id": "src_021"
+    },
+    {
+     "indicateur": "pmi_surprise",
+     "sens": 0,
+     "poids": 10,
+     "justification": "Aucun PMI suisse programmé au calendrier.",
+     "source_id": null
+    },
+    {
+     "indicateur": "differentiel_taux",
+     "sens": -1,
+     "poids": 8,
+     "justification": "Différentiel de taux CHF de -2.45 points par rapport à la médiane G8, créant un flux vendeur structurel via le carry trade.",
+     "source_id": "src_013"
+    },
+    {
+     "indicateur": "rsi",
+     "sens": 1,
+     "poids": 8,
+     "justification": "RSI USD/CHF à 48.1 sous le niveau pivot de 50, confirmant un momentum baissier sur la paire et donc favorable au CHF.",
+     "source_id": "src_017"
+    },
+    {
+     "indicateur": "trendline",
+     "sens": 0,
+     "poids": 7,
+     "justification": "Aucune structure de trendline à au moins 3 points de contact identifiée sur USD/CHF.",
+     "source_id": "src_017"
+    }
+   ],
+   "biais_banque_centrale": "data_dependent",
+   "tendance_fond": {
+    "unite_temps": "weekly",
+    "sens": "haussier",
+    "commentaire": "Paire USD/CHF sous sa MM200 weekly avec hauts et bas successivement plus bas, confirmant la tendance de fond haussière du CHF.",
+    "source_id": "src_017"
+   },
+   "carry": {
+    "taux_directeur": 0.0,
+    "differentiel_vs_mediane_g8": -2.45,
+    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   },
+   "opportunites": [
+    {
+     "texte": "Une clôture daily sous le support USD/CHF à 1.22976 (3 impacts) validerait la poursuite de la dynamique haussière hebdomadaire du CHF, avec invalidation au-dessus de la MM100 à 1.25042.",
+     "source_id": "src_017",
+     "non_sourcee": false
+    },
+    {
+     "texte": "Un choc géopolitique ou une remontée du VIX au-dessus de 15.28 raviverait les flux de valeur refuge vers le CHF compte tenu de sa forte corrélation inverse avec le risque global.",
+     "source_id": "src_008",
+     "non_sourcee": false
+    }
+   ],
+   "menaces": [
+    {
+     "texte": "Désavantage de carry trade majeur (-2.45 points vs médiane G8) incitant les intervenants à vendre le CHF pour financer des positions à plus fort rendement.",
+     "source_id": "src_013",
+     "non_sourcee": false
+    },
+    {
+     "texte": "Pression exercée par la hausse des rendements longs américains (10Y US à 4.72%), creusant l'écart de rendement avec la Suisse.",
+     "source_id": "src_006",
+     "non_sourcee": false
+    }
+   ],
+   "synthese_une_phrase": "Bien que la structure technique hebdomadaire demeure favorable au franc suisse, la devise subit d'importants vents contraires fondamentaux dus à son rendement nul et au coût de portage défavorable.",
+   "indicateurs_tableau": [
+    {
+     "nom": "PPI m/m",
+     "valeur": null,
+     "prevision": "-0.2%",
+     "precedent": "-0.3%",
+     "source": "ForexFactory",
+     "date": "2026-08-13"
+    }
+   ]
+  },
+  {
+   "devise": "CAD",
+   "risk_on_off": "on",
+   "score_confluence": 40,
+   "detail_score": [
+    {
+     "indicateur": "taux_directeur",
+     "sens": 0,
+     "poids": 20,
+     "justification": "Taux directeur à 2,25 %, proche de la médiane G8 de 2,45 %.",
+     "source_id": "src_013"
+    },
+    {
+     "indicateur": "cpi_surprise",
+     "sens": 0,
+     "poids": 15,
+     "justification": "Aucune publication de CPI canadien figurant dans les données du jour.",
+     "source_id": null
+    },
+    {
+     "indicateur": "yield_curve",
+     "sens": -1,
+     "poids": 12,
+     "justification": "Spread US 10Y-2Y à 0,47 % en bear steepening, favorisant les rendements américains au détriment du CAD.",
+     "source_id": "src_012"
+    },
+    {
+     "indicateur": "vix",
+     "sens": 1,
+     "poids": 10,
+     "justification": "VIX en baisse à 15,28 (-1,16 %), signalant un contexte Risk On favorable aux devises cycliques.",
+     "source_id": "src_008"
+    },
+    {
+     "indicateur": "dxy",
+     "sens": -1,
+     "poids": 10,
+     "justification": "Indice USD synthétique en légère hausse à 101,32 (+0,13 %), pesant mécaniquement sur le CAD.",
+     "source_id": "src_021"
+    },
+    {
+     "indicateur": "pmi_surprise",
+     "sens": 0,
+     "poids": 10,
+     "justification": "Aucun indicateur PMI canadien disponible dans le calendrier du jour.",
+     "source_id": null
+    },
+    {
+     "indicateur": "differentiel_taux",
+     "sens": -1,
+     "poids": 8,
+     "justification": "Différentiel de taux du CAD négatif à -0,20 % par rapport à la médiane G8, limitant l'attrait du carry.",
+     "source_id": "src_013"
+    },
+    {
+     "indicateur": "rsi",
+     "sens": 0,
+     "poids": 8,
+     "justification": "RSI à 71,4 en zone de surachat mais sans confirmation au-dessus de la MM200 (0,72264).",
+     "source_id": "src_018"
+    },
+    {
+     "indicateur": "trendline",
+     "sens": 0,
+     "poids": 7,
+     "justification": "Aucune trendline validée avec au moins 3 points de contact identifiée sur le CAD.",
+     "source_id": "src_018"
+    }
+   ],
+   "biais_banque_centrale": "data_dependent",
+   "tendance_fond": {
+    "unite_temps": "weekly",
+    "sens": "baissier",
+    "commentaire": "Théorie de Dow : hauts et bas successivement plus bas sur la valeur du CAD.",
+    "source_id": "src_018"
+   },
+   "carry": {
+    "taux_directeur": 2.25,
+    "differentiel_vs_mediane_g8": -0.2,
+    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   },
+   "opportunites": [
+    {
+     "texte": "Permis de construire au Canada en forte hausse à 18,5 % vs 0,8 % attendu en juin, apportant un soutien macroéconomique ponctuel.",
+     "source_id": "src_112",
+     "non_sourcee": false
+    },
+    {
+     "texte": "Zone de support à 0,71728 testée avec 3 impacts : une réaction acheteuse maintenue au-dessus de ce niveau préserverait la consolidation daily.",
+     "source_id": "src_018",
+     "non_sourcee": false
+    }
+   ],
+   "menaces": [
+    {
+     "texte": "Chute marquée des cours du pétrole WTI à 81,96 $ (-4,87 %) et Brent à 88,90 $ (-8,30 %), pesant directement sur la devise exportatrice de brut.",
+     "source_id": "src_009",
+     "non_sourcee": false
+    },
+    {
+     "texte": "Prix évoluant sous la moyenne mobile 200 (0,72264) et aligné sur une structure weekly baissière.",
+     "source_id": "src_018",
+     "non_sourcee": false
+    }
+   ],
+   "synthese_une_phrase": "Malgré un climat Risk On et des chiffres de permis de construire solides, le CAD reste sous pression en raison du repli appuyé du pétrole et d'une tendance de fond weekly orientée à la baisse.",
+   "indicateurs_tableau": [
+    {
+     "nom": "Building Permits m/m",
+     "valeur": null,
+     "prevision": "0.8%",
+     "precedent": "-1.7%",
+     "source": "ForexFactory",
+     "date": "2026-08-12"
+    },
+    {
+     "nom": "Manufacturing Sales m/m",
+     "valeur": null,
+     "prevision": "-0.1%",
+     "precedent": "1.3%",
+     "source": "ForexFactory",
+     "date": "2026-08-14"
+    },
+    {
+     "nom": "Wholesale Sales m/m",
+     "valeur": null,
+     "prevision": "2.7%",
+     "precedent": "0.0%",
+     "source": "ForexFactory",
+     "date": "2026-08-14"
+    }
+   ]
+  },
+  {
+   "devise": "AUD",
+   "risk_on_off": "on",
+   "score_confluence": 72,
+   "detail_score": [
+    {
+     "indicateur": "taux_directeur",
+     "sens": 1,
+     "poids": 20,
+     "justification": "Taux RBA à 4,35 %, nettement supérieur à la médiane G8 de 2,45 %.",
+     "source_id": "src_013"
+    },
+    {
+     "indicateur": "cpi_surprise",
+     "sens": 0,
+     "poids": 15,
+     "justification": "Aucune publication de surprise CPI disponible pour l'Australie dans le calendrier du jour.",
+     "source_id": null
+    },
+    {
+     "indicateur": "yield_curve",
+     "sens": -1,
+     "poids": 12,
+     "justification": "Pentification bear steepening de la courbe US (spread +0,47), pesant modérément sur l'appétit pour le risque global.",
+     "source_id": "src_012"
+    },
+    {
+     "indicateur": "vix",
+     "sens": 1,
+     "poids": 10,
+     "justification": "VIX en repli de 1,16 % à 15,28, reflétant une faible aversion au risque propice aux devises cycliques.",
+     "source_id": "src_008"
+    },
+    {
+     "indicateur": "dxy",
+     "sens": 1,
+     "poids": 10,
+     "justification": "Indice USD synthétique orienté à la baisse sous sa MM100 avec un RSI à 39,1, ce qui offre un soutien mécanique à l'AUD/USD.",
+     "source_id": "src_021"
+    },
+    {
+     "indicateur": "pmi_surprise",
+     "sens": 0,
+     "poids": 10,
+     "justification": "Aucun chiffre de PMI publié aujourd'hui pour l'Australie ou la Chine.",
+     "source_id": null
+    },
+    {
+     "indicateur": "differentiel_taux",
+     "sens": 1,
+     "poids": 8,
+     "justification": "Différentiel de carry très attractif de +1,90 % par rapport au panier G8.",
+     "source_id": "src_013"
+    },
+    {
+     "indicateur": "rsi",
+     "sens": 1,
+     "poids": 8,
+     "justification": "RSI journalier à 62,7 au-dessus du pivot 50, confirmant la dynamique haussière à court terme.",
+     "source_id": "src_019"
+    },
+    {
+     "indicateur": "trendline",
+     "sens": 0,
+     "poids": 7,
+     "justification": "Pas de structure de trendline à 3 points de contact identifiée dans les données actuelles.",
+     "source_id": "src_019"
+    }
+   ],
+   "biais_banque_centrale": "data_dependent",
+   "tendance_fond": {
+    "unite_temps": "weekly",
+    "sens": "baissier",
+    "commentaire": "Dow : hauts et bas successivement plus bas",
+    "source_id": "src_019"
+   },
+   "carry": {
+    "taux_directeur": 4.35,
+    "differentiel_vs_mediane_g8": 1.9,
+    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   },
+   "opportunites": [
+    {
+     "texte": "Zone de résistance à 0,71211 (5 impacts) sous surveillance : une clôture journalière au-dessus validerait un franchissement technique, avec invalidation sous les moyennes mobiles MM100/MM200 situées vers 0,7049.",
+     "source_id": "src_019",
+     "non_sourcee": false
+    }
+   ],
+   "menaces": [
+    {
+     "texte": "Tendance de fond weekly baissière selon la théorie de Dow, ce qui augmente le risque de rejet sous la résistance daily à 0,71211.",
+     "source_id": "src_019",
+     "non_sourcee": false
+    },
+    {
+     "texte": "Chute marquée des cours du pétrole Brent (-8,30 % à 88,90 USD), un signal d'affaiblissement de la demande globale qui pèse sur les devises liées aux matières premières.",
+     "source_id": "src_010",
+     "non_sourcee": false
+    }
+   ],
+   "synthese_une_phrase": "L'AUD bénéficie d'un puissant soutien de carry (+1,90 %) et d'un momentum court terme favorable, mais se heurte à une tendance weekly toujours baissière et à un repli des matières premières.",
+   "indicateurs_tableau": [
+    {
+     "nom": "NAB Business Confidence",
+     "valeur": null,
+     "prevision": null,
+     "precedent": "-5",
+     "source": "ForexFactory",
+     "date": "2026-08-10"
+    },
+    {
+     "nom": "Cash Rate",
+     "valeur": null,
+     "prevision": "4.35%",
+     "precedent": "4.35%",
+     "source": "ForexFactory",
+     "date": "2026-08-11"
+    },
+    {
+     "nom": "RBA Monetary Policy Statement",
+     "valeur": null,
+     "prevision": null,
+     "precedent": null,
+     "source": "ForexFactory",
+     "date": "2026-08-11"
+    },
+    {
+     "nom": "RBA Rate Statement",
+     "valeur": null,
+     "prevision": null,
+     "precedent": null,
+     "source": "ForexFactory",
+     "date": "2026-08-11"
+    },
+    {
+     "nom": "RBA Press Conference",
+     "valeur": null,
+     "prevision": null,
+     "precedent": null,
+     "source": "ForexFactory",
+     "date": "2026-08-11"
+    },
+    {
+     "nom": "RBA Assist Gov Kent Speaks",
+     "valeur": null,
+     "prevision": null,
+     "precedent": null,
+     "source": "ForexFactory",
+     "date": "2026-08-12"
+    },
+    {
+     "nom": "Foreign Direct Investment ytd/y",
+     "valeur": null,
+     "prevision": null,
+     "precedent": "-5.0%",
+     "source": "ForexFactory",
+     "date": "2026-08-13"
+    },
+    {
+     "nom": "M2 Money Supply y/y",
+     "valeur": null,
+     "prevision": "7.9%",
+     "precedent": "8.0%",
+     "source": "ForexFactory",
+     "date": "2026-08-13"
+    }
+   ]
+  },
+  {
+   "devise": "NZD",
+   "risk_on_off": "on",
+   "score_confluence": 58,
+   "detail_score": [
+    {
+     "indicateur": "taux_directeur",
+     "sens": 0,
+     "poids": 20,
+     "justification": "Taux directeur RBNZ à 2.50% proche de la médiane G8 de 2.45%, apportant un soutien monétaire neutre.",
+     "source_id": "src_013"
+    },
+    {
+     "indicateur": "cpi_surprise",
+     "sens": 0,
+     "poids": 15,
+     "justification": "Aucune publication récente d'inflation NZD enregistrée avec surprise vs prévision dans le calendrier du jour.",
+     "source_id": null
+    },
+    {
+     "indicateur": "yield_curve",
+     "sens": -1,
+     "poids": 12,
+     "justification": "Spread US 10Y-2Y à 0.47% en bear steepening, ce qui tend à durcir les conditions financières globales défavorables aux devises bêta.",
+     "source_id": "src_012"
+    },
+    {
+     "indicateur": "vix",
+     "sens": 1,
+     "poids": 10,
+     "justification": "VIX à 15.28 en baisse de 1.16%, signalant un environnement d'appétit pour le risque porteur pour le NZD.",
+     "source_id": "src_008"
+    },
+    {
+     "indicateur": "dxy",
+     "sens": 1,
+     "poids": 10,
+     "justification": "Indice USD synthétique à 101.32 avec RSI à 39.1 en momentum baissier, réduisant la pression vendeuse sur NZD/USD.",
+     "source_id": "src_021"
+    },
+    {
+     "indicateur": "pmi_surprise",
+     "sens": 0,
+     "poids": 10,
+     "justification": "Aucune donnée de PMI manufacturier néo-zélandais disponible avec chiffre publié par rapport au consensus.",
+     "source_id": null
+    },
+    {
+     "indicateur": "differentiel_taux",
+     "sens": 0,
+     "poids": 8,
+     "justification": "Différentiel de carry NZD vs médiane G8 à +0.05%, niveau neutre qui ne génère pas de flux d'attraction particuliers.",
+     "source_id": "src_013"
+    },
+    {
+     "indicateur": "rsi",
+     "sens": 1,
+     "poids": 8,
+     "justification": "RSI NZD/USD à 57.8 au-dessus de 50 avec un prix au-dessus de la MM200 (0.5862), confirmant le momentum haussier court terme.",
+     "source_id": "src_020"
+    },
+    {
+     "indicateur": "trendline",
+     "sens": 0,
+     "poids": 7,
+     "justification": "Aucune droite de tendance à 3 points de contact minimum n'est répertoriée dans la structure actuelle.",
+     "source_id": null
+    }
+   ],
+   "biais_banque_centrale": "data_dependent",
+   "tendance_fond": {
+    "unite_temps": "weekly",
+    "sens": "baissier",
+    "commentaire": "Théorie de Dow : succession de hauts et de bas plus bas validant la baisse de fond",
+    "source_id": "src_020"
+   },
+   "carry": {
+    "taux_directeur": 2.5,
+    "differentiel_vs_mediane_g8": 0.05,
+    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   },
+   "opportunites": [
+    {
+     "texte": "Zone de résistance NZD/USD à 0.58815 (3 impacts) : une clôture daily au-dessus ouvrirait la voie vers la résistance supérieure à 0.59034, appuyée par un RSI court terme à 57.8.",
+     "source_id": "src_020",
+     "non_sourcee": false
+    },
+    {
+     "texte": "Repli du VIX à 15.28 (-1.16%) conjugué au momentum baissier de l'USD (RSI synthétique à 39.1), créant un contexte temporairement favorable aux devises liées aux matières premières.",
+     "source_id": "src_008",
+     "non_sourcee": false
+    }
+   ],
+   "menaces": [
+    {
+     "texte": "Tendance de fond weekly baissière sur NZD/USD selon la théorie de Dow, limitant la pérennité de tout rebond technique contre la tendance majeure.",
+     "source_id": "src_020",
+     "non_sourcee": false
+    },
+    {
+     "texte": "Escalade des tensions géopolitiques au Moyen-Orient et fermetures de voies maritimes clés, risquant de raviver brutalement l'aversion au risque au détriment du NZD.",
+     "source_id": "src_105",
+     "non_sourcee": false
+    }
+   ],
+   "synthese_une_phrase": "Le NZD bénéficie d'un momentum haussier à court terme soutenu par un VIX modéré et la faiblesse relative du dollar américain, mais reste coiffé par une tendance de fond weekly baissière et un carry neutre.",
+   "indicateurs_tableau": [
+    {
+     "nom": "Inflation Expectations q/q",
+     "valeur": null,
+     "prevision": null,
+     "precedent": "2.53%",
+     "source": "ForexFactory",
+     "date": "2026-08-12"
+    },
+    {
+     "nom": "Foreign Direct Investment ytd/y",
+     "valeur": null,
+     "prevision": null,
+     "precedent": "-5.0%",
+     "source": "ForexFactory",
+     "date": "2026-08-13"
+    },
+    {
+     "nom": "M2 Money Supply y/y",
+     "valeur": null,
+     "prevision": "7.9%",
+     "precedent": "8.0%",
+     "source": "ForexFactory",
+     "date": "2026-08-13"
+    },
+    {
+     "nom": "New Loans",
+     "valeur": null,
+     "prevision": "-50B",
+     "precedent": "1610B",
+     "source": "ForexFactory",
+     "date": "2026-08-13"
+    },
+    {
+     "nom": "BusinessNZ Manufacturing Index",
+     "valeur": null,
+     "prevision": null,
+     "precedent": "59.7",
+     "source": "ForexFactory",
+     "date": "2026-08-13"
+    },
+    {
+     "nom": "Visitor Arrivals m/m",
+     "valeur": null,
+     "prevision": null,
+     "precedent": "-2.4%",
+     "source": "ForexFactory",
+     "date": "2026-08-13"
+    }
+   ]
+  }
+ ],
+ "sources_citees": [
+  {
+   "id": "src_001",
+   "source": "FRED",
+   "detail": "cpi_us (CPIAUCSL)",
+   "date": "2026-06-01",
+   "url": "https://fred.stlouisfed.org/series/CPIAUCSL"
+  },
+  {
+   "id": "src_002",
+   "source": "FRED",
+   "detail": "core_pce (PCEPILFE)",
+   "date": "2026-06-01",
+   "url": "https://fred.stlouisfed.org/series/PCEPILFE"
+  },
+  {
+   "id": "src_003",
+   "source": "FRED",
+   "detail": "pib_us (GDP)",
+   "date": "2026-04-01",
+   "url": "https://fred.stlouisfed.org/series/GDP"
+  },
+  {
+   "id": "src_004",
+   "source": "FRED",
+   "detail": "nfp (PAYEMS)",
+   "date": "2026-07-01",
+   "url": "https://fred.stlouisfed.org/series/PAYEMS"
+  },
+  {
+   "id": "src_005",
+   "source": "FRED",
+   "detail": "taux_fed (FEDFUNDS)",
+   "date": "2026-07-01",
+   "url": "https://fred.stlouisfed.org/series/FEDFUNDS"
+  },
+  {
+   "id": "src_006",
+   "source": "FRED",
+   "detail": "rendement_10y (DGS10)",
+   "date": "2026-08-10",
+   "url": "https://fred.stlouisfed.org/series/DGS10"
+  },
+  {
+   "id": "src_007",
+   "source": "FRED",
+   "detail": "rendement_2y (DGS2)",
+   "date": "2026-08-10",
+   "url": "https://fred.stlouisfed.org/series/DGS2"
+  },
+  {
+   "id": "src_008",
+   "source": "FRED",
+   "detail": "vix (VIXCLS)",
+   "date": "2026-08-11",
+   "url": "https://fred.stlouisfed.org/series/VIXCLS"
+  },
+  {
+   "id": "src_009",
+   "source": "FRED",
+   "detail": "petrole_wti (DCOILWTICO)",
+   "date": "2026-08-03",
+   "url": "https://fred.stlouisfed.org/series/DCOILWTICO"
+  },
+  {
+   "id": "src_010",
+   "source": "FRED",
+   "detail": "petrole_brent (DCOILBRENTEU)",
+   "date": "2026-08-03",
+   "url": "https://fred.stlouisfed.org/series/DCOILBRENTEU"
+  },
+  {
+   "id": "src_011",
+   "source": "FRED",
+   "detail": "sp500 (SP500)",
+   "date": "2026-08-11",
+   "url": "https://fred.stlouisfed.org/series/SP500"
+  },
+  {
+   "id": "src_012",
+   "source": "FRED",
+   "detail": "yield curve US 10Y-2Y (DGS10/DGS2)",
+   "date": "2026-08-10",
+   "url": null
+  },
+  {
+   "id": "src_013",
+   "source": "FRED + config",
+   "detail": "taux directeurs des 8 devises",
+   "date": "2026-08-12",
+   "url": null
+  },
+  {
+   "id": "src_014",
+   "source": "Twelve Data (calculs locaux)",
+   "detail": "technique EUR — EUR/USD",
+   "date": "2026-08-12",
+   "url": null
+  },
+  {
+   "id": "src_015",
+   "source": "Twelve Data (calculs locaux)",
+   "detail": "technique GBP — GBP/USD",
+   "date": "2026-08-12",
+   "url": null
+  },
+  {
+   "id": "src_016",
+   "source": "Twelve Data (calculs locaux)",
+   "detail": "technique JPY — USD/JPY",
+   "date": "2026-08-12",
+   "url": null
+  },
+  {
+   "id": "src_017",
+   "source": "Twelve Data (calculs locaux)",
+   "detail": "technique CHF — USD/CHF",
+   "date": "2026-08-12",
+   "url": null
+  },
+  {
+   "id": "src_018",
+   "source": "Twelve Data (calculs locaux)",
+   "detail": "technique CAD — USD/CAD",
+   "date": "2026-08-12",
+   "url": null
+  },
+  {
+   "id": "src_019",
+   "source": "Twelve Data (calculs locaux)",
+   "detail": "technique AUD — AUD/USD",
+   "date": "2026-08-12",
+   "url": null
+  },
+  {
+   "id": "src_020",
+   "source": "Twelve Data (calculs locaux)",
+   "detail": "technique NZD — NZD/USD",
+   "date": "2026-08-12",
+   "url": null
+  },
+  {
+   "id": "src_021",
+   "source": "Twelve Data (calculs locaux)",
+   "detail": "technique USD — indice USD synthétique (calcul local)",
+   "date": "2026-08-12",
+   "url": null
+  },
+  {
+   "id": "src_022",
+   "source": "Calcul local (Pearson, rendements Twelve Data)",
+   "detail": "matrice de corrélations 8 devises",
+   "date": "2026-08-12",
+   "url": null
+  },
+  {
+   "id": "src_023",
+   "source": "ForexFactory",
+   "detail": "Bank Lending y/y",
+   "date": "2026-08-09",
+   "url": null
+  },
+  {
+   "id": "src_024",
+   "source": "ForexFactory",
+   "detail": "BOJ Summary of Opinions",
+   "date": "2026-08-09",
+   "url": null
+  },
+  {
+   "id": "src_025",
+   "source": "ForexFactory",
+   "detail": "Current Account",
+   "date": "2026-08-09",
+   "url": null
+  },
+  {
+   "id": "src_026",
+   "source": "ForexFactory",
+   "detail": "Economy Watchers Sentiment",
+   "date": "2026-08-10",
+   "url": null
+  },
+  {
+   "id": "src_027",
+   "source": "ForexFactory",
+   "detail": "Sentix Investor Confidence",
+   "date": "2026-08-10",
+   "url": null
+  },
+  {
+   "id": "src_028",
+   "source": "ForexFactory",
+   "detail": "Cleveland Fed Inflation Expectations",
+   "date": "2026-08-10",
+   "url": null
+  },
+  {
+   "id": "src_029",
+   "source": "ForexFactory",
+   "detail": "FOMC Member Hammack Speaks",
+   "date": "2026-08-10",
+   "url": null
+  },
+  {
+   "id": "src_030",
+   "source": "ForexFactory",
+   "detail": "Bank Holiday",
+   "date": "2026-08-10",
+   "url": null
+  },
+  {
+   "id": "src_031",
+   "source": "ForexFactory",
+   "detail": "BRC Retail Sales Monitor y/y",
+   "date": "2026-08-10",
+   "url": null
+  },
+  {
+   "id": "src_032",
+   "source": "ForexFactory",
+   "detail": "NAB Business Confidence",
+   "date": "2026-08-10",
+   "url": null
+  },
+  {
+   "id": "src_033",
+   "source": "ForexFactory",
+   "detail": "Cash Rate",
+   "date": "2026-08-11",
+   "url": null
+  },
+  {
+   "id": "src_034",
+   "source": "ForexFactory",
+   "detail": "RBA Monetary Policy Statement",
+   "date": "2026-08-11",
+   "url": null
+  },
+  {
+   "id": "src_035",
+   "source": "ForexFactory",
+   "detail": "RBA Rate Statement",
+   "date": "2026-08-11",
+   "url": null
+  },
+  {
+   "id": "src_036",
+   "source": "ForexFactory",
+   "detail": "RBA Press Conference",
+   "date": "2026-08-11",
+   "url": null
+  },
+  {
+   "id": "src_037",
+   "source": "ForexFactory",
+   "detail": "Italian Trade Balance",
+   "date": "2026-08-11",
+   "url": null
+  },
+  {
+   "id": "src_038",
+   "source": "ForexFactory",
+   "detail": "NFIB Small Business Index",
+   "date": "2026-08-11",
+   "url": null
+  },
+  {
+   "id": "src_039",
+   "source": "ForexFactory",
+   "detail": "ADP Weekly Employment Change",
+   "date": "2026-08-11",
+   "url": null
+  },
+  {
+   "id": "src_040",
+   "source": "ForexFactory",
+   "detail": "ADP Weekly Employment Change",
+   "date": "2026-08-11",
+   "url": null
+  },
+  {
+   "id": "src_041",
+   "source": "ForexFactory",
+   "detail": "Existing Home Sales",
+   "date": "2026-08-11",
+   "url": null
+  },
+  {
+   "id": "src_042",
+   "source": "ForexFactory",
+   "detail": "API Weekly Statistical Bulletin",
+   "date": "2026-08-11",
+   "url": null
+  },
+  {
+   "id": "src_043",
+   "source": "ForexFactory",
+   "detail": "M2 Money Stock y/y",
+   "date": "2026-08-11",
+   "url": null
+  },
+  {
+   "id": "src_044",
+   "source": "ForexFactory",
+   "detail": "German Final CPI m/m",
+   "date": "2026-08-12",
+   "url": null
+  },
+  {
+   "id": "src_045",
+   "source": "ForexFactory",
+   "detail": "Prelim Machine Tool Orders y/y",
+   "date": "2026-08-12",
+   "url": null
+  },
+  {
+   "id": "src_046",
+   "source": "ForexFactory",
+   "detail": "German 30-y Bond Auction",
+   "date": "2026-08-12",
+   "url": null
+  },
+  {
+   "id": "src_047",
+   "source": "ForexFactory",
+   "detail": "Building Permits m/m",
+   "date": "2026-08-12",
+   "url": null
+  },
+  {
+   "id": "src_048",
+   "source": "ForexFactory",
+   "detail": "Core CPI m/m",
+   "date": "2026-08-12",
+   "url": null
+  },
+  {
+   "id": "src_049",
+   "source": "ForexFactory",
+   "detail": "Core CPI y/y",
+   "date": "2026-08-12",
+   "url": null
+  },
+  {
+   "id": "src_050",
+   "source": "ForexFactory",
+   "detail": "CPI m/m",
+   "date": "2026-08-12",
+   "url": null
+  },
+  {
+   "id": "src_051",
+   "source": "ForexFactory",
+   "detail": "CPI y/y",
+   "date": "2026-08-12",
+   "url": null
+  },
+  {
+   "id": "src_052",
+   "source": "ForexFactory",
+   "detail": "Crude Oil Inventories",
+   "date": "2026-08-12",
+   "url": null
+  },
+  {
+   "id": "src_053",
+   "source": "ForexFactory",
+   "detail": "10-y Bond Auction",
+   "date": "2026-08-12",
+   "url": null
+  },
+  {
+   "id": "src_054",
+   "source": "ForexFactory",
+   "detail": "Federal Budget Balance",
+   "date": "2026-08-12",
+   "url": null
+  },
+  {
+   "id": "src_055",
+   "source": "ForexFactory",
+   "detail": "RICS House Price Balance",
+   "date": "2026-08-12",
+   "url": null
+  },
+  {
+   "id": "src_056",
+   "source": "ForexFactory",
+   "detail": "PPI y/y",
+   "date": "2026-08-12",
+   "url": null
+  },
+  {
+   "id": "src_057",
+   "source": "ForexFactory",
+   "detail": "RBA Assist Gov Kent Speaks",
+   "date": "2026-08-12",
+   "url": null
+  },
+  {
+   "id": "src_058",
+   "source": "ForexFactory",
+   "detail": "Inflation Expectations q/q",
+   "date": "2026-08-12",
+   "url": null
+  },
+  {
+   "id": "src_059",
+   "source": "ForexFactory",
+   "detail": "GDP m/m",
+   "date": "2026-08-13",
+   "url": null
+  },
+  {
+   "id": "src_060",
+   "source": "ForexFactory",
+   "detail": "Prelim GDP q/q",
+   "date": "2026-08-13",
+   "url": null
+  },
+  {
+   "id": "src_061",
+   "source": "ForexFactory",
+   "detail": "Construction Output m/m",
+   "date": "2026-08-13",
+   "url": null
+  },
+  {
+   "id": "src_062",
+   "source": "ForexFactory",
+   "detail": "Goods Trade Balance",
+   "date": "2026-08-13",
+   "url": null
+  },
+  {
+   "id": "src_063",
+   "source": "ForexFactory",
+   "detail": "Index of Services 3m/3m",
+   "date": "2026-08-13",
+   "url": null
+  },
+  {
+   "id": "src_064",
+   "source": "ForexFactory",
+   "detail": "Industrial Production m/m",
+   "date": "2026-08-13",
+   "url": null
+  },
+  {
+   "id": "src_065",
+   "source": "ForexFactory",
+   "detail": "Manufacturing Production m/m",
+   "date": "2026-08-13",
+   "url": null
+  },
+  {
+   "id": "src_066",
+   "source": "ForexFactory",
+   "detail": "Prelim Business Investment q/q",
+   "date": "2026-08-13",
+   "url": null
+  },
+  {
+   "id": "src_067",
+   "source": "ForexFactory",
+   "detail": "Foreign Direct Investment ytd/y",
+   "date": "2026-08-13",
+   "url": null
+  },
+  {
+   "id": "src_068",
+   "source": "ForexFactory",
+   "detail": "PPI m/m",
+   "date": "2026-08-13",
+   "url": null
+  },
+  {
+   "id": "src_069",
+   "source": "ForexFactory",
+   "detail": "M2 Money Supply y/y",
+   "date": "2026-08-13",
+   "url": null
+  },
+  {
+   "id": "src_070",
+   "source": "ForexFactory",
+   "detail": "New Loans",
+   "date": "2026-08-13",
+   "url": null
+  },
+  {
+   "id": "src_071",
+   "source": "ForexFactory",
+   "detail": "Industrial Production m/m",
+   "date": "2026-08-13",
+   "url": null
+  },
+  {
+   "id": "src_072",
+   "source": "ForexFactory",
+   "detail": "FOMC Member Hammack Speaks",
+   "date": "2026-08-13",
+   "url": null
+  },
+  {
+   "id": "src_073",
+   "source": "ForexFactory",
+   "detail": "Core PPI m/m",
+   "date": "2026-08-13",
+   "url": null
+  },
+  {
+   "id": "src_074",
+   "source": "ForexFactory",
+   "detail": "PPI m/m",
+   "date": "2026-08-13",
+   "url": null
+  },
+  {
+   "id": "src_075",
+   "source": "ForexFactory",
+   "detail": "Unemployment Claims",
+   "date": "2026-08-13",
+   "url": null
+  },
+  {
+   "id": "src_076",
+   "source": "ForexFactory",
+   "detail": "FOMC Member Barkin Speaks",
+   "date": "2026-08-13",
+   "url": null
+  },
+  {
+   "id": "src_077",
+   "source": "ForexFactory",
+   "detail": "CB Leading Index m/m",
+   "date": "2026-08-13",
+   "url": null
+  },
+  {
+   "id": "src_078",
+   "source": "ForexFactory",
+   "detail": "Mortgage Delinquencies",
+   "date": "2026-08-13",
+   "url": null
+  },
+  {
+   "id": "src_079",
+   "source": "ForexFactory",
+   "detail": "CB Leading Index m/m",
+   "date": "2026-08-13",
+   "url": null
+  },
+  {
+   "id": "src_080",
+   "source": "ForexFactory",
+   "detail": "Natural Gas Storage",
+   "date": "2026-08-13",
+   "url": null
+  },
+  {
+   "id": "src_081",
+   "source": "ForexFactory",
+   "detail": "30-y Bond Auction",
+   "date": "2026-08-13",
+   "url": null
+  },
+  {
+   "id": "src_082",
+   "source": "ForexFactory",
+   "detail": "BusinessNZ Manufacturing Index",
+   "date": "2026-08-13",
+   "url": null
+  },
+  {
+   "id": "src_083",
+   "source": "ForexFactory",
+   "detail": "Visitor Arrivals m/m",
+   "date": "2026-08-13",
+   "url": null
+  },
+  {
+   "id": "src_084",
+   "source": "ForexFactory",
+   "detail": "RBA Gov Bullock Speaks",
+   "date": "2026-08-13",
+   "url": null
+  },
+  {
+   "id": "src_085",
+   "source": "ForexFactory",
+   "detail": "German WPI m/m",
+   "date": "2026-08-14",
+   "url": null
+  },
+  {
+   "id": "src_086",
+   "source": "ForexFactory",
+   "detail": "French Final CPI m/m",
+   "date": "2026-08-14",
+   "url": null
+  },
+  {
+   "id": "src_087",
+   "source": "ForexFactory",
+   "detail": "Flash Employment Change q/q",
+   "date": "2026-08-14",
+   "url": null
+  },
+  {
+   "id": "src_088",
+   "source": "ForexFactory",
+   "detail": "Flash GDP q/q",
+   "date": "2026-08-14",
+   "url": null
+  },
+  {
+   "id": "src_089",
+   "source": "ForexFactory",
+   "detail": "Trade Balance",
+   "date": "2026-08-14",
+   "url": null
+  },
+  {
+   "id": "src_090",
+   "source": "ForexFactory",
+   "detail": "Manufacturing Sales m/m",
+   "date": "2026-08-14",
+   "url": null
+  },
+  {
+   "id": "src_091",
+   "source": "ForexFactory",
+   "detail": "Wholesale Sales m/m",
+   "date": "2026-08-14",
+   "url": null
+  },
+  {
+   "id": "src_092",
+   "source": "ForexFactory",
+   "detail": "Core Retail Sales m/m",
+   "date": "2026-08-14",
+   "url": null
+  },
+  {
+   "id": "src_093",
+   "source": "ForexFactory",
+   "detail": "Retail Sales m/m",
+   "date": "2026-08-14",
+   "url": null
+  },
+  {
+   "id": "src_094",
+   "source": "ForexFactory",
+   "detail": "Prelim UoM Consumer Sentiment",
+   "date": "2026-08-14",
+   "url": null
+  },
+  {
+   "id": "src_095",
+   "source": "ForexFactory",
+   "detail": "Prelim UoM Inflation Expectations",
+   "date": "2026-08-14",
+   "url": null
+  },
+  {
+   "id": "src_096",
+   "source": "ForexFactory",
+   "detail": "Business Inventories m/m",
+   "date": "2026-08-14",
+   "url": null
+  },
+  {
+   "id": "src_097",
+   "source": "RSS cnbc_world",
+   "detail": "Stocks rise after tame inflation data; AI-related shares jump: Live updates",
+   "date": "2026-08-12T12:34:04+00:00",
+   "url": "https://www.cnbc.com/2026/08/11/stock-market-today-live-updates.html"
+  },
+  {
+   "id": "src_098",
+   "source": "RSS cnbc_world",
+   "detail": "Consumer prices rose 0.1% in July, as expected, putting the annual rate at 3.4%",
+   "date": "2026-08-12T12:29:29+00:00",
+   "url": "https://www.cnbc.com/2026/08/12/cpi-inflation-report-july-2026.html"
+  },
+  {
+   "id": "src_099",
+   "source": "RSS cnbc_world",
+   "detail": "Solar eclipse drives Europe hotel prices to over $1,000 a night",
+   "date": "2026-08-12T12:40:40+00:00",
+   "url": "https://www.cnbc.com/2026/08/12/solar-eclipse-europe-hotel-prices.html"
+  },
+  {
+   "id": "src_100",
+   "source": "RSS cnbc_world",
+   "detail": "World's largest sovereign wealth fund posts record $184 billion profit as it reveals SpaceX stake for the first time",
+   "date": "2026-08-12T07:45:20+00:00",
+   "url": "https://www.cnbc.com/2026/08/12/norway-sovereign-wealth-fund-spacex-nvidia-apple-nbim.html"
+  },
+  {
+   "id": "src_101",
+   "source": "RSS cnbc_world",
+   "detail": "Scorching heat is straining Europe's nuclear power supplies — and prompting drastic measures",
+   "date": "2026-08-12T10:55:43+00:00",
+   "url": "https://www.cnbc.com/2026/08/12/europe-heat-drought-nuclear-power.html"
+  },
+  {
+   "id": "src_102",
+   "source": "RSS cnbc_world",
+   "detail": "AI’s costly buildout complicates the Fed’s inflation fight",
+   "date": "2026-08-12T11:44:40+00:00",
+   "url": "https://www.cnbc.com/2026/08/12/ais-costly-buildout-complicates-the-feds-inflation-fight.html"
+  },
+  {
+   "id": "src_103",
+   "source": "RSS cnbc_world",
+   "detail": "CoreWeave just reported strong second-quarter results. Here's what Wall Street is saying",
+   "date": "2026-08-12T10:12:31+00:00",
+   "url": "https://www.cnbc.com/2026/08/12/coreweave-just-reported-strong-second-quarter-results-heres-what-wall-street-is-saying.html"
+  },
+  {
+   "id": "src_104",
+   "source": "RSS cnbc_world",
+   "detail": "CoreWeave surges 23% after a 'cleaner quarter.' Here's what's happening",
+   "date": "2026-08-12T12:40:53+00:00",
+   "url": "https://www.cnbc.com/2026/08/12/coreweave-q2-earnings-ai-demand.html"
+  },
+  {
+   "id": "src_105",
+   "source": "RSS cnbc_world",
+   "detail": "Hormuz closure squeezes global economy as oil demand destruction intensifies, IEA says",
+   "date": "2026-08-12T09:47:20+00:00",
+   "url": "https://www.cnbc.com/2026/08/12/iea-oil-demand-hormuz.html"
+  },
+  {
+   "id": "src_106",
+   "source": "RSS cnbc_world",
+   "detail": "'Tougher times ahead': Don't expect blowout returns to continue, CEO of $2.3 trillion fund warns after record first half",
+   "date": "2026-08-12T11:23:06+00:00",
+   "url": "https://www.cnbc.com/2026/08/12/norway-sovereign-wealth-tangen-nbim.html"
+  },
+  {
+   "id": "src_107",
+   "source": "RSS cnbc_world",
+   "detail": "EVs dominate China’s car market: 5 takeaways from the country's latest auto sales data",
+   "date": "2026-08-12T00:20:13+00:00",
+   "url": "https://www.cnbc.com/2026/08/12/china-car-sales-data-byd-tesla-geely-vw.html"
+  },
+  {
+   "id": "src_108",
+   "source": "RSS cnbc_world",
+   "detail": "FIFA World Cup 'will never be as profitable' if Infantino is ousted, Trump warns amid global soccer revolt",
+   "date": "2026-08-11T09:17:53+00:00",
+   "url": "https://www.cnbc.com/2026/08/11/trump-world-cup-infantino-profit.html"
+  },
+  {
+   "id": "src_109",
+   "source": "RSS cnbc_world",
+   "detail": "Houthi attack kills six in first fatalities in Red Sea in over a year; U.S. strikes container ship",
+   "date": "2026-08-12T11:28:39+00:00",
+   "url": "https://www.cnbc.com/2026/08/12/us-iran-war-trump-hormuz-houthi-attack-blockade-.html"
+  },
+  {
+   "id": "src_110",
+   "source": "RSS cnbc_world",
+   "detail": "China’s answer to Boeing and Airbus makes first international flight — could COMAC challenge the aviation duopoly?",
+   "date": "2026-08-12T12:15:36+00:00",
+   "url": "https://www.cnbc.com/2026/08/12/china-comac-boeing-airbus.html"
+  },
+  {
+   "id": "src_111",
+   "source": "RSS cnbc_world",
+   "detail": "New York City Council announces probe into prediction market platforms’ marketing strategies",
+   "date": "2026-08-12T11:08:39+00:00",
+   "url": "https://www.cnbc.com/2026/08/12/new-york-city-council-probes-prediction-markets-marketing-strategies.html"
+  },
+  {
+   "id": "src_112",
+   "source": "RSS investinglive",
+   "detail": "Canada Building Permits for June 18.5% vs 0.8% estimate",
+   "date": "2026-08-12T11:33:14+00:00",
+   "url": "https://investinglive.com/news/canada-building-permits-for-june-18-5-vs-0-8-estimate/"
+  },
+  {
+   "id": "src_113",
+   "source": "RSS investinglive",
+   "detail": "US July CPI 3.4% y/y vs 3.4% expected",
+   "date": "2026-08-12T11:30:17+00:00",
+   "url": "https://investinglive.com/news/us-july-cpi-y-y-vs-3-4-expected/"
+  },
+  {
+   "id": "src_114",
+   "source": "RSS investinglive",
+   "detail": "investingLive European markets wrap: Gold stays poised, dollar tentative awaiting US CPI report",
+   "date": "2026-08-12T10:58:02+00:00",
+   "url": "https://investinglive.com/news/investinglive-european-markets-wrap-gold-stays-poised-dollar-tentative-awaiting-us-cpi-report/"
+  },
+  {
+   "id": "src_115",
+   "source": "RSS investinglive",
+   "detail": "Iran reportedly maintains that there are no discussions over ceasefire extension as the pact doesn't exist anymore",
+   "date": "2026-08-12T09:57:08+00:00",
+   "url": "https://investinglive.com/news/iran-reportedly-maintains-that-there-are-no-discussions-over-ceasefire-extension-as-the-pact-doesn-t-exist-anymore/"
+  },
+  {
+   "id": "src_116",
+   "source": "RSS investinglive",
+   "detail": "India’s CPI rises further to 4.45% in July as food prices accelerate",
+   "date": "2026-08-12T09:54:36+00:00",
+   "url": "https://investinglive.com/news/india-s-cpi-rises-further-to-4-45-in-july-as-food-prices-accelerate/"
+  },
+  {
+   "id": "src_117",
+   "source": "RSS investinglive",
+   "detail": "What to expect from the US CPI report later today?",
+   "date": "2026-08-12T09:05:14+00:00",
+   "url": "https://investinglive.com/news/what-to-expect-from-the-us-cpi-report-later-today/"
+  },
+  {
+   "id": "src_118",
+   "source": "RSS investinglive",
+   "detail": "Italy inflation eases just a touch in July, core price keep steady though",
+   "date": "2026-08-12T07:01:34+00:00",
+   "url": "https://investinglive.com/news/italy-july-final-cpi-2-9-vs-2-8-y-y-prelim/"
+  },
+  {
+   "id": "src_119",
+   "source": "RSS investinglive",
+   "detail": "What is the distribution of forecasts for the US CPI?",
+   "date": "2026-08-12T06:45:58+00:00",
+   "url": "https://investinglive.com/news/what-is-the-distribution-of-forecasts-for-the-us-cpi-0/"
+  },
+  {
+   "id": "src_120",
+   "source": "RSS investinglive",
+   "detail": "What are the main events for today?",
+   "date": "2026-08-12T05:20:46+00:00",
+   "url": "https://investinglive.com/news/what-are-the-main-events-for-today-23/"
+  },
+  {
+   "id": "src_121",
+   "source": "RSS investinglive",
+   "detail": "Germany inflation confirmed to accelerate in July but core prices remain steadier",
+   "date": "2026-08-12T05:01:23+00:00",
+   "url": "https://investinglive.com/news/germany-july-final-cpi-vs-2-8-y-y-prelim/"
+  },
+  {
+   "id": "src_122",
+   "source": "RSS investinglive",
+   "detail": "investingLive Asia-Pacific Financial Market news: Oil edges higher",
+   "date": "2026-08-12T02:50:27+00:00",
+   "url": "https://investinglive.com/news/investinglive-asia-pacific-financial-market-news-oil-edges-higher/"
+  },
+  {
+   "id": "src_123",
+   "source": "RSS investinglive",
+   "detail": "Australia sets world leading pay floor for 250,000 gig delivery workers",
+   "date": "2026-08-12T02:34:13+00:00",
+   "url": "https://investinglive.com/news/australia-sets-world-leading-pay-floor-for-250-000-gig-delivery-workers/"
+  },
+  {
+   "id": "src_124",
+   "source": "RSS investinglive",
+   "detail": "Goldman chief economist Hatzius expects a benign July US CPI print",
+   "date": "2026-08-12T00:07:46+00:00",
+   "url": "https://investinglive.com/news/goldman-chief-economist-hatzius-expects-a-benign-july-us-cpi-print/"
+  },
+  {
+   "id": "src_125",
+   "source": "RSS investinglive",
+   "detail": "Japan bond yields rise as oil gains stoke fresh inflation concerns",
+   "date": "2026-08-11T23:40:56+00:00",
+   "url": "https://investinglive.com/news/japan-bond-yields-rise-as-oil-gains-stoke-fresh-inflation-concerns/"
+  },
+  {
+   "id": "src_126",
+   "source": "RSS investinglive",
+   "detail": "Reuters Tankan hits highest manufacturing reading since March on chip boom",
+   "date": "2026-08-11T22:12:19+00:00",
+   "url": "https://investinglive.com/news/reuters-tankan-hits-highest-manufacturing-reading-since-march-on-chip-boom/"
+  }
+ ],
+ "donnees_non_rafraichies": [
+  {
+   "source": "tradingview",
+   "derniere_donnee_du": null,
+   "raison": "échec (404 Client Error: Not Found for url: https://www.tradingview.com/markets/currencies/cross-rates/)"
+  },
+  {
+   "source": "mataf",
+   "derniere_donnee_du": null,
+   "raison": "échec (HTTP 403)"
+  }
+ ],
+ "graphiques": {
+  "EUR": {
+   "libelle": "Force EUR (EUR/USD)",
+   "dates": [
+    "2026-05-15",
+    "2026-05-16",
+    "2026-05-17",
+    "2026-05-18",
+    "2026-05-19",
+    "2026-05-20",
+    "2026-05-21",
+    "2026-05-22",
+    "2026-05-23",
+    "2026-05-24",
+    "2026-05-25",
+    "2026-05-26",
+    "2026-05-27",
+    "2026-05-28",
+    "2026-05-29",
+    "2026-05-30",
+    "2026-05-31",
+    "2026-06-01",
+    "2026-06-02",
+    "2026-06-03",
+    "2026-06-04",
+    "2026-06-05",
+    "2026-06-06",
+    "2026-06-07",
+    "2026-06-08",
+    "2026-06-09",
+    "2026-06-10",
+    "2026-06-11",
+    "2026-06-12",
+    "2026-06-13",
+    "2026-06-14",
+    "2026-06-15",
+    "2026-06-16",
+    "2026-06-17",
+    "2026-06-18",
+    "2026-06-19",
+    "2026-06-20",
+    "2026-06-21",
+    "2026-06-22",
+    "2026-06-23",
+    "2026-06-24",
+    "2026-06-25",
+    "2026-06-26",
+    "2026-06-27",
+    "2026-06-28",
+    "2026-06-29",
+    "2026-06-30",
+    "2026-07-01",
+    "2026-07-02",
+    "2026-07-03",
+    "2026-07-04",
+    "2026-07-05",
+    "2026-07-06",
+    "2026-07-07",
+    "2026-07-08",
+    "2026-07-09",
+    "2026-07-10",
+    "2026-07-11",
+    "2026-07-12",
+    "2026-07-13",
+    "2026-07-14",
+    "2026-07-15",
+    "2026-07-16",
+    "2026-07-17",
+    "2026-07-18",
+    "2026-07-19",
+    "2026-07-20",
+    "2026-07-21",
+    "2026-07-22",
+    "2026-07-23",
+    "2026-07-24",
+    "2026-07-25",
+    "2026-07-26",
+    "2026-07-27",
+    "2026-07-28",
+    "2026-07-29",
+    "2026-07-30",
+    "2026-07-31",
+    "2026-08-01",
+    "2026-08-02",
+    "2026-08-03",
+    "2026-08-04",
+    "2026-08-05",
+    "2026-08-06",
+    "2026-08-07",
+    "2026-08-08",
+    "2026-08-09",
+    "2026-08-10",
+    "2026-08-11",
+    "2026-08-12"
+   ],
+   "clotures": [
+    1.16254,
+    1.16244,
+    1.16245,
+    1.16564,
+    1.16071,
+    1.1626,
+    1.16179,
+    1.16031,
+    1.16024,
+    1.1616,
+    1.16434,
+    1.16322,
+    1.16258,
+    1.16501,
+    1.16613,
+    1.16595,
+    1.16593,
+    1.16325,
+    1.16318,
+    1.15984,
+    1.16109,
+    1.15226,
+    1.15217,
+    1.1521,
+    1.15328,
+    1.15442,
+    1.15361,
+    1.1579,
+    1.15676,
+    1.15698,
+    1.15582,
+    1.15898,
+    1.16087,
+    1.15021,
+    1.14578,
+    1.1471,
+    1.14764,
+    1.14687,
+    1.14291,
+    1.13822,
+    1.13586,
+    1.13709,
+    1.13864,
+    1.13892,
+    1.13951,
+    1.14248,
+    1.14218,
+    1.13786,
+    1.14342,
+    1.14363,
+    1.14383,
+    1.14428,
+    1.14412,
+    1.14121,
+    1.14169,
+    1.14307,
+    1.14156,
+    1.14176,
+    1.14108,
+    1.13805,
+    1.14211,
+    1.14633,
+    1.14431,
+    1.14377,
+    1.14387,
+    1.14316,
+    1.14146,
+    1.13979,
+    1.14128,
+    1.13779,
+    1.13723,
+    1.13742,
+    1.13902,
+    1.13681,
+    1.13866,
+    1.1467,
+    1.15276,
+    1.15304,
+    1.15332,
+    1.15318,
+    1.15085,
+    1.15332,
+    1.15542,
+    1.15244,
+    1.15596,
+    1.15587,
+    1.15588,
+    1.15432,
+    1.15432,
+    1.15495
+   ]
+  },
+  "GBP": {
+   "libelle": "Force GBP (GBP/USD)",
+   "dates": [
+    "2026-05-15",
+    "2026-05-16",
+    "2026-05-17",
+    "2026-05-18",
+    "2026-05-19",
+    "2026-05-20",
+    "2026-05-21",
+    "2026-05-22",
+    "2026-05-23",
+    "2026-05-24",
+    "2026-05-25",
+    "2026-05-26",
+    "2026-05-27",
+    "2026-05-28",
+    "2026-05-29",
+    "2026-05-30",
+    "2026-05-31",
+    "2026-06-01",
+    "2026-06-02",
+    "2026-06-03",
+    "2026-06-04",
+    "2026-06-05",
+    "2026-06-06",
+    "2026-06-07",
+    "2026-06-08",
+    "2026-06-09",
+    "2026-06-10",
+    "2026-06-11",
+    "2026-06-12",
+    "2026-06-13",
+    "2026-06-14",
+    "2026-06-15",
+    "2026-06-16",
+    "2026-06-17",
+    "2026-06-18",
+    "2026-06-19",
+    "2026-06-20",
+    "2026-06-21",
+    "2026-06-22",
+    "2026-06-23",
+    "2026-06-24",
+    "2026-06-25",
+    "2026-06-26",
+    "2026-06-27",
+    "2026-06-28",
+    "2026-06-29",
+    "2026-06-30",
+    "2026-07-01",
+    "2026-07-02",
+    "2026-07-03",
+    "2026-07-04",
+    "2026-07-05",
+    "2026-07-06",
+    "2026-07-07",
+    "2026-07-08",
+    "2026-07-09",
+    "2026-07-10",
+    "2026-07-11",
+    "2026-07-12",
+    "2026-07-13",
+    "2026-07-14",
+    "2026-07-15",
+    "2026-07-16",
+    "2026-07-17",
+    "2026-07-18",
+    "2026-07-19",
+    "2026-07-20",
+    "2026-07-21",
+    "2026-07-22",
+    "2026-07-23",
+    "2026-07-24",
+    "2026-07-25",
+    "2026-07-26",
+    "2026-07-27",
+    "2026-07-28",
+    "2026-07-29",
+    "2026-07-30",
+    "2026-07-31",
+    "2026-08-01",
+    "2026-08-02",
+    "2026-08-03",
+    "2026-08-04",
+    "2026-08-05",
+    "2026-08-06",
+    "2026-08-07",
+    "2026-08-08",
+    "2026-08-09",
+    "2026-08-10",
+    "2026-08-11",
+    "2026-08-12"
+   ],
+   "clotures": [
+    1.33248,
+    1.33266,
+    1.33255,
+    1.34344,
+    1.33954,
+    1.3435,
+    1.34293,
+    1.34309,
+    1.34313,
+    1.34513,
+    1.35074,
+    1.34474,
+    1.34272,
+    1.3444,
+    1.34567,
+    1.34572,
+    1.34578,
+    1.34552,
+    1.34643,
+    1.34173,
+    1.34241,
+    1.33401,
+    1.33404,
+    1.3338,
+    1.33387,
+    1.33789,
+    1.33684,
+    1.34165,
+    1.34049,
+    1.34066,
+    1.33991,
+    1.34128,
+    1.34268,
+    1.32961,
+    1.3205,
+    1.32368,
+    1.32314,
+    1.31969,
+    1.32509,
+    1.32034,
+    1.31703,
+    1.31909,
+    1.31979,
+    1.31979,
+    1.32074,
+    1.32599,
+    1.32608,
+    1.32761,
+    1.33475,
+    1.33493,
+    1.33513,
+    1.33469,
+    1.33899,
+    1.33592,
+    1.33896,
+    1.34092,
+    1.34021,
+    1.34025,
+    1.33965,
+    1.33464,
+    1.33916,
+    1.35393,
+    1.34802,
+    1.34523,
+    1.34507,
+    1.34514,
+    1.34313,
+    1.3374,
+    1.33761,
+    1.3315,
+    1.33245,
+    1.33237,
+    1.33313,
+    1.32889,
+    1.32906,
+    1.33686,
+    1.34637,
+    1.34804,
+    1.34787,
+    1.34808,
+    1.34339,
+    1.34542,
+    1.34688,
+    1.34541,
+    1.34936,
+    1.34916,
+    1.34964,
+    1.35078,
+    1.35084,
+    1.35211
+   ]
+  },
+  "JPY": {
+   "libelle": "Force JPY (USD/JPY inversée)",
+   "dates": [
+    "2026-05-15",
+    "2026-05-16",
+    "2026-05-17",
+    "2026-05-18",
+    "2026-05-19",
+    "2026-05-20",
+    "2026-05-21",
+    "2026-05-22",
+    "2026-05-23",
+    "2026-05-24",
+    "2026-05-25",
+    "2026-05-26",
+    "2026-05-27",
+    "2026-05-28",
+    "2026-05-29",
+    "2026-05-30",
+    "2026-05-31",
+    "2026-06-01",
+    "2026-06-02",
+    "2026-06-03",
+    "2026-06-04",
+    "2026-06-05",
+    "2026-06-06",
+    "2026-06-07",
+    "2026-06-08",
+    "2026-06-09",
+    "2026-06-10",
+    "2026-06-11",
+    "2026-06-12",
+    "2026-06-13",
+    "2026-06-14",
+    "2026-06-15",
+    "2026-06-16",
+    "2026-06-17",
+    "2026-06-18",
+    "2026-06-19",
+    "2026-06-20",
+    "2026-06-21",
+    "2026-06-22",
+    "2026-06-23",
+    "2026-06-24",
+    "2026-06-25",
+    "2026-06-26",
+    "2026-06-27",
+    "2026-06-28",
+    "2026-06-29",
+    "2026-06-30",
+    "2026-07-01",
+    "2026-07-02",
+    "2026-07-03",
+    "2026-07-04",
+    "2026-07-05",
+    "2026-07-06",
+    "2026-07-07",
+    "2026-07-08",
+    "2026-07-09",
+    "2026-07-10",
+    "2026-07-11",
+    "2026-07-12",
+    "2026-07-13",
+    "2026-07-14",
+    "2026-07-15",
+    "2026-07-16",
+    "2026-07-17",
+    "2026-07-18",
+    "2026-07-19",
+    "2026-07-20",
+    "2026-07-21",
+    "2026-07-22",
+    "2026-07-23",
+    "2026-07-24",
+    "2026-07-25",
+    "2026-07-26",
+    "2026-07-27",
+    "2026-07-28",
+    "2026-07-29",
+    "2026-07-30",
+    "2026-07-31",
+    "2026-08-01",
+    "2026-08-02",
+    "2026-08-03",
+    "2026-08-04",
+    "2026-08-05",
+    "2026-08-06",
+    "2026-08-07",
+    "2026-08-08",
+    "2026-08-09",
+    "2026-08-10",
+    "2026-08-11",
+    "2026-08-12"
+   ],
+   "clotures": [
+    0.0063,
+    0.0063,
+    0.0063,
+    0.0063,
+    0.00629,
+    0.00629,
+    0.00629,
+    0.00628,
+    0.00628,
+    0.00629,
+    0.00629,
+    0.00628,
+    0.00627,
+    0.00628,
+    0.00628,
+    0.00628,
+    0.00628,
+    0.00626,
+    0.00625,
+    0.00625,
+    0.00625,
+    0.00624,
+    0.00624,
+    0.00624,
+    0.00624,
+    0.00624,
+    0.00623,
+    0.00625,
+    0.00624,
+    0.00624,
+    0.00624,
+    0.00624,
+    0.00623,
+    0.00622,
+    0.0062,
+    0.0062,
+    0.0062,
+    0.0062,
+    0.00619,
+    0.00619,
+    0.00618,
+    0.00618,
+    0.00618,
+    0.00618,
+    0.00618,
+    0.00617,
+    0.00615,
+    0.00615,
+    0.00621,
+    0.0062,
+    0.0062,
+    0.0062,
+    0.00617,
+    0.00617,
+    0.00615,
+    0.00616,
+    0.00618,
+    0.00618,
+    0.00618,
+    0.00616,
+    0.00616,
+    0.00617,
+    0.00616,
+    0.00616,
+    0.00616,
+    0.00616,
+    0.00615,
+    0.00613,
+    0.00613,
+    0.0061,
+    0.0061,
+    0.0061,
+    0.00611,
+    0.00611,
+    0.0061,
+    0.00612,
+    0.00627,
+    0.00635,
+    0.00634,
+    0.00636,
+    0.00636,
+    0.00634,
+    0.00634,
+    0.00631,
+    0.00634,
+    0.00634,
+    0.00634,
+    0.00628,
+    0.00628,
+    0.00629
+   ]
+  },
+  "CHF": {
+   "libelle": "Force CHF (USD/CHF inversée)",
+   "dates": [
+    "2026-05-15",
+    "2026-05-16",
+    "2026-05-17",
+    "2026-05-18",
+    "2026-05-19",
+    "2026-05-20",
+    "2026-05-21",
+    "2026-05-22",
+    "2026-05-23",
+    "2026-05-24",
+    "2026-05-25",
+    "2026-05-26",
+    "2026-05-27",
+    "2026-05-28",
+    "2026-05-29",
+    "2026-05-30",
+    "2026-05-31",
+    "2026-06-01",
+    "2026-06-02",
+    "2026-06-03",
+    "2026-06-04",
+    "2026-06-05",
+    "2026-06-06",
+    "2026-06-07",
+    "2026-06-08",
+    "2026-06-09",
+    "2026-06-10",
+    "2026-06-11",
+    "2026-06-12",
+    "2026-06-13",
+    "2026-06-14",
+    "2026-06-15",
+    "2026-06-16",
+    "2026-06-17",
+    "2026-06-18",
+    "2026-06-19",
+    "2026-06-20",
+    "2026-06-21",
+    "2026-06-22",
+    "2026-06-23",
+    "2026-06-24",
+    "2026-06-25",
+    "2026-06-26",
+    "2026-06-27",
+    "2026-06-28",
+    "2026-06-29",
+    "2026-06-30",
+    "2026-07-01",
+    "2026-07-02",
+    "2026-07-03",
+    "2026-07-04",
+    "2026-07-05",
+    "2026-07-06",
+    "2026-07-07",
+    "2026-07-08",
+    "2026-07-09",
+    "2026-07-10",
+    "2026-07-11",
+    "2026-07-12",
+    "2026-07-13",
+    "2026-07-14",
+    "2026-07-15",
+    "2026-07-16",
+    "2026-07-17",
+    "2026-07-18",
+    "2026-07-19",
+    "2026-07-20",
+    "2026-07-21",
+    "2026-07-22",
+    "2026-07-23",
+    "2026-07-24",
+    "2026-07-25",
+    "2026-07-26",
+    "2026-07-27",
+    "2026-07-28",
+    "2026-07-29",
+    "2026-07-30",
+    "2026-07-31",
+    "2026-08-01",
+    "2026-08-02",
+    "2026-08-03",
+    "2026-08-04",
+    "2026-08-05",
+    "2026-08-06",
+    "2026-08-07",
+    "2026-08-08",
+    "2026-08-09",
+    "2026-08-10",
+    "2026-08-11",
+    "2026-08-12"
+   ],
+   "clotures": [
+    1.27074,
+    1.27003,
+    1.27121,
+    1.27473,
+    1.26743,
+    1.27026,
+    1.27108,
+    1.27367,
+    1.27403,
+    1.27505,
+    1.27776,
+    1.27272,
+    1.27044,
+    1.27556,
+    1.28036,
+    1.28044,
+    1.28011,
+    1.27112,
+    1.27005,
+    1.2624,
+    1.2665,
+    1.25578,
+    1.25636,
+    1.25581,
+    1.25324,
+    1.25271,
+    1.24991,
+    1.25816,
+    1.25456,
+    1.25445,
+    1.25437,
+    1.25827,
+    1.26062,
+    1.25028,
+    1.24275,
+    1.2392,
+    1.23902,
+    1.23847,
+    1.23654,
+    1.23518,
+    1.23104,
+    1.23428,
+    1.23466,
+    1.23521,
+    1.2341,
+    1.23825,
+    1.23698,
+    1.2353,
+    1.24451,
+    1.24409,
+    1.24536,
+    1.24485,
+    1.24185,
+    1.23684,
+    1.23678,
+    1.23905,
+    1.23684,
+    1.23707,
+    1.23747,
+    1.22731,
+    1.23564,
+    1.24165,
+    1.23654,
+    1.23841,
+    1.23804,
+    1.23681,
+    1.23413,
+    1.23013,
+    1.22788,
+    1.22413,
+    1.22217,
+    1.22212,
+    1.22519,
+    1.22052,
+    1.22043,
+    1.22912,
+    1.2421,
+    1.23868,
+    1.23787,
+    1.23985,
+    1.23388,
+    1.23623,
+    1.23905,
+    1.23092,
+    1.23758,
+    1.23784,
+    1.23788,
+    1.23413,
+    1.23311,
+    1.23317
+   ]
+  },
+  "CAD": {
+   "libelle": "Force CAD (USD/CAD inversée)",
+   "dates": [
+    "2026-05-15",
+    "2026-05-16",
+    "2026-05-17",
+    "2026-05-18",
+    "2026-05-19",
+    "2026-05-20",
+    "2026-05-21",
+    "2026-05-22",
+    "2026-05-23",
+    "2026-05-24",
+    "2026-05-25",
+    "2026-05-26",
+    "2026-05-27",
+    "2026-05-28",
+    "2026-05-29",
+    "2026-05-30",
+    "2026-05-31",
+    "2026-06-01",
+    "2026-06-02",
+    "2026-06-03",
+    "2026-06-04",
+    "2026-06-05",
+    "2026-06-06",
+    "2026-06-07",
+    "2026-06-08",
+    "2026-06-09",
+    "2026-06-10",
+    "2026-06-11",
+    "2026-06-12",
+    "2026-06-13",
+    "2026-06-14",
+    "2026-06-15",
+    "2026-06-16",
+    "2026-06-17",
+    "2026-06-18",
+    "2026-06-19",
+    "2026-06-20",
+    "2026-06-21",
+    "2026-06-22",
+    "2026-06-23",
+    "2026-06-24",
+    "2026-06-25",
+    "2026-06-26",
+    "2026-06-27",
+    "2026-06-28",
+    "2026-06-29",
+    "2026-06-30",
+    "2026-07-01",
+    "2026-07-02",
+    "2026-07-03",
+    "2026-07-04",
+    "2026-07-05",
+    "2026-07-06",
+    "2026-07-07",
+    "2026-07-08",
+    "2026-07-09",
+    "2026-07-10",
+    "2026-07-11",
+    "2026-07-12",
+    "2026-07-13",
+    "2026-07-14",
+    "2026-07-15",
+    "2026-07-16",
+    "2026-07-17",
+    "2026-07-18",
+    "2026-07-19",
+    "2026-07-20",
+    "2026-07-21",
+    "2026-07-22",
+    "2026-07-23",
+    "2026-07-24",
+    "2026-07-25",
+    "2026-07-26",
+    "2026-07-27",
+    "2026-07-28",
+    "2026-07-29",
+    "2026-07-30",
+    "2026-07-31",
+    "2026-08-01",
+    "2026-08-02",
+    "2026-08-03",
+    "2026-08-04",
+    "2026-08-05",
+    "2026-08-06",
+    "2026-08-07",
+    "2026-08-08",
+    "2026-08-09",
+    "2026-08-10",
+    "2026-08-11",
+    "2026-08-12"
+   ],
+   "clotures": [
+    0.72735,
+    0.7272,
+    0.72734,
+    0.72779,
+    0.72756,
+    0.72751,
+    0.72576,
+    0.72362,
+    0.72358,
+    0.72348,
+    0.72453,
+    0.72389,
+    0.7225,
+    0.72547,
+    0.7248,
+    0.72485,
+    0.72467,
+    0.72248,
+    0.72256,
+    0.71954,
+    0.71888,
+    0.71722,
+    0.7174,
+    0.7174,
+    0.71662,
+    0.71686,
+    0.71713,
+    0.71606,
+    0.71482,
+    0.71479,
+    0.71434,
+    0.71473,
+    0.71453,
+    0.70914,
+    0.70735,
+    0.70643,
+    0.70595,
+    0.70593,
+    0.70618,
+    0.70373,
+    0.70255,
+    0.70417,
+    0.70451,
+    0.70457,
+    0.70458,
+    0.70363,
+    0.70429,
+    0.70343,
+    0.70516,
+    0.70413,
+    0.70412,
+    0.70438,
+    0.70389,
+    0.7042,
+    0.70549,
+    0.7058,
+    0.70644,
+    0.7063,
+    0.70638,
+    0.7064,
+    0.7112,
+    0.71217,
+    0.71214,
+    0.7132,
+    0.71355,
+    0.71342,
+    0.7107,
+    0.70866,
+    0.70981,
+    0.70998,
+    0.70952,
+    0.70947,
+    0.70976,
+    0.70798,
+    0.7088,
+    0.71185,
+    0.71374,
+    0.71358,
+    0.71324,
+    0.71342,
+    0.71197,
+    0.71116,
+    0.71368,
+    0.71361,
+    0.71731,
+    0.71729,
+    0.71706,
+    0.71731,
+    0.71809,
+    0.71867
+   ]
+  },
+  "AUD": {
+   "libelle": "Force AUD (AUD/USD)",
+   "dates": [
+    "2026-05-15",
+    "2026-05-16",
+    "2026-05-17",
+    "2026-05-18",
+    "2026-05-19",
+    "2026-05-20",
+    "2026-05-21",
+    "2026-05-22",
+    "2026-05-23",
+    "2026-05-24",
+    "2026-05-25",
+    "2026-05-26",
+    "2026-05-27",
+    "2026-05-28",
+    "2026-05-29",
+    "2026-05-30",
+    "2026-05-31",
+    "2026-06-01",
+    "2026-06-02",
+    "2026-06-03",
+    "2026-06-04",
+    "2026-06-05",
+    "2026-06-06",
+    "2026-06-07",
+    "2026-06-08",
+    "2026-06-09",
+    "2026-06-10",
+    "2026-06-11",
+    "2026-06-12",
+    "2026-06-13",
+    "2026-06-14",
+    "2026-06-15",
+    "2026-06-16",
+    "2026-06-17",
+    "2026-06-18",
+    "2026-06-19",
+    "2026-06-20",
+    "2026-06-21",
+    "2026-06-22",
+    "2026-06-23",
+    "2026-06-24",
+    "2026-06-25",
+    "2026-06-26",
+    "2026-06-27",
+    "2026-06-28",
+    "2026-06-29",
+    "2026-06-30",
+    "2026-07-01",
+    "2026-07-02",
+    "2026-07-03",
+    "2026-07-04",
+    "2026-07-05",
+    "2026-07-06",
+    "2026-07-07",
+    "2026-07-08",
+    "2026-07-09",
+    "2026-07-10",
+    "2026-07-11",
+    "2026-07-12",
+    "2026-07-13",
+    "2026-07-14",
+    "2026-07-15",
+    "2026-07-16",
+    "2026-07-17",
+    "2026-07-18",
+    "2026-07-19",
+    "2026-07-20",
+    "2026-07-21",
+    "2026-07-22",
+    "2026-07-23",
+    "2026-07-24",
+    "2026-07-25",
+    "2026-07-26",
+    "2026-07-27",
+    "2026-07-28",
+    "2026-07-29",
+    "2026-07-30",
+    "2026-07-31",
+    "2026-08-01",
+    "2026-08-02",
+    "2026-08-03",
+    "2026-08-04",
+    "2026-08-05",
+    "2026-08-06",
+    "2026-08-07",
+    "2026-08-08",
+    "2026-08-09",
+    "2026-08-10",
+    "2026-08-11",
+    "2026-08-12"
+   ],
+   "clotures": [
+    0.71471,
+    0.71489,
+    0.71489,
+    0.71691,
+    0.71069,
+    0.7153,
+    0.71492,
+    0.71288,
+    0.71282,
+    0.71499,
+    0.71758,
+    0.7167,
+    0.71416,
+    0.7163,
+    0.71835,
+    0.71858,
+    0.71793,
+    0.71605,
+    0.71802,
+    0.71275,
+    0.71332,
+    0.70434,
+    0.7042,
+    0.70276,
+    0.70451,
+    0.70277,
+    0.6997,
+    0.70518,
+    0.70442,
+    0.70444,
+    0.7039,
+    0.70706,
+    0.70671,
+    0.70144,
+    0.70138,
+    0.70112,
+    0.701,
+    0.70155,
+    0.70009,
+    0.69165,
+    0.69011,
+    0.69108,
+    0.68952,
+    0.6894,
+    0.68881,
+    0.68869,
+    0.69198,
+    0.68937,
+    0.69227,
+    0.69398,
+    0.69374,
+    0.6937,
+    0.69566,
+    0.69292,
+    0.6931,
+    0.69421,
+    0.69539,
+    0.69532,
+    0.69491,
+    0.69176,
+    0.69744,
+    0.70069,
+    0.69981,
+    0.69811,
+    0.69818,
+    0.69726,
+    0.69992,
+    0.69981,
+    0.69978,
+    0.69681,
+    0.69836,
+    0.69829,
+    0.69922,
+    0.69898,
+    0.6974,
+    0.6955,
+    0.70298,
+    0.7028,
+    0.70215,
+    0.70404,
+    0.70009,
+    0.70466,
+    0.70575,
+    0.70322,
+    0.70675,
+    0.70672,
+    0.70669,
+    0.7054,
+    0.70621,
+    0.70824
+   ]
+  },
+  "NZD": {
+   "libelle": "Force NZD (NZD/USD)",
+   "dates": [
+    "2026-05-15",
+    "2026-05-16",
+    "2026-05-17",
+    "2026-05-18",
+    "2026-05-19",
+    "2026-05-20",
+    "2026-05-21",
+    "2026-05-22",
+    "2026-05-23",
+    "2026-05-24",
+    "2026-05-25",
+    "2026-05-26",
+    "2026-05-27",
+    "2026-05-28",
+    "2026-05-29",
+    "2026-05-30",
+    "2026-05-31",
+    "2026-06-01",
+    "2026-06-02",
+    "2026-06-03",
+    "2026-06-04",
+    "2026-06-05",
+    "2026-06-06",
+    "2026-06-07",
+    "2026-06-08",
+    "2026-06-09",
+    "2026-06-10",
+    "2026-06-11",
+    "2026-06-12",
+    "2026-06-13",
+    "2026-06-14",
+    "2026-06-15",
+    "2026-06-16",
+    "2026-06-17",
+    "2026-06-18",
+    "2026-06-19",
+    "2026-06-20",
+    "2026-06-21",
+    "2026-06-22",
+    "2026-06-23",
+    "2026-06-24",
+    "2026-06-25",
+    "2026-06-26",
+    "2026-06-27",
+    "2026-06-28",
+    "2026-06-29",
+    "2026-06-30",
+    "2026-07-01",
+    "2026-07-02",
+    "2026-07-03",
+    "2026-07-04",
+    "2026-07-05",
+    "2026-07-06",
+    "2026-07-07",
+    "2026-07-08",
+    "2026-07-09",
+    "2026-07-10",
+    "2026-07-11",
+    "2026-07-12",
+    "2026-07-13",
+    "2026-07-14",
+    "2026-07-15",
+    "2026-07-16",
+    "2026-07-17",
+    "2026-07-18",
+    "2026-07-19",
+    "2026-07-20",
+    "2026-07-21",
+    "2026-07-22",
+    "2026-07-23",
+    "2026-07-24",
+    "2026-07-25",
+    "2026-07-26",
+    "2026-07-27",
+    "2026-07-28",
+    "2026-07-29",
+    "2026-07-30",
+    "2026-07-31",
+    "2026-08-01",
+    "2026-08-02",
+    "2026-08-03",
+    "2026-08-04",
+    "2026-08-05",
+    "2026-08-06",
+    "2026-08-07",
+    "2026-08-08",
+    "2026-08-09",
+    "2026-08-10",
+    "2026-08-11",
+    "2026-08-12"
+   ],
+   "clotures": [
+    0.58393,
+    0.58404,
+    0.58424,
+    0.58753,
+    0.58355,
+    0.587,
+    0.58744,
+    0.58496,
+    0.58494,
+    0.58614,
+    0.58732,
+    0.58367,
+    0.59025,
+    0.59347,
+    0.59884,
+    0.5988,
+    0.59777,
+    0.59333,
+    0.59252,
+    0.58592,
+    0.58671,
+    0.57953,
+    0.57964,
+    0.57871,
+    0.58093,
+    0.58169,
+    0.57963,
+    0.58371,
+    0.58307,
+    0.58308,
+    0.58315,
+    0.58221,
+    0.58313,
+    0.57676,
+    0.57538,
+    0.57401,
+    0.57389,
+    0.57386,
+    0.57134,
+    0.5668,
+    0.56508,
+    0.56478,
+    0.56387,
+    0.56421,
+    0.56445,
+    0.56508,
+    0.56764,
+    0.56725,
+    0.5699,
+    0.57118,
+    0.57088,
+    0.57102,
+    0.57018,
+    0.5678,
+    0.57,
+    0.57561,
+    0.57638,
+    0.57631,
+    0.57633,
+    0.57501,
+    0.58112,
+    0.58499,
+    0.58431,
+    0.58422,
+    0.58425,
+    0.58359,
+    0.58388,
+    0.58271,
+    0.58165,
+    0.57712,
+    0.57898,
+    0.5789,
+    0.5796,
+    0.57746,
+    0.57866,
+    0.57961,
+    0.58797,
+    0.58882,
+    0.58782,
+    0.58957,
+    0.58709,
+    0.58955,
+    0.58875,
+    0.58696,
+    0.58947,
+    0.58943,
+    0.5894,
+    0.58821,
+    0.58805,
+    0.58776
+   ]
+  },
+  "USD": {
+   "libelle": "Force USD (indice synthétique)",
+   "dates": [
+    "2026-05-15",
+    "2026-05-16",
+    "2026-05-17",
+    "2026-05-18",
+    "2026-05-19",
+    "2026-05-20",
+    "2026-05-21",
+    "2026-05-22",
+    "2026-05-23",
+    "2026-05-24",
+    "2026-05-25",
+    "2026-05-26",
+    "2026-05-27",
+    "2026-05-28",
+    "2026-05-29",
+    "2026-05-30",
+    "2026-05-31",
+    "2026-06-01",
+    "2026-06-02",
+    "2026-06-03",
+    "2026-06-04",
+    "2026-06-05",
+    "2026-06-06",
+    "2026-06-07",
+    "2026-06-08",
+    "2026-06-09",
+    "2026-06-10",
+    "2026-06-11",
+    "2026-06-12",
+    "2026-06-13",
+    "2026-06-14",
+    "2026-06-15",
+    "2026-06-16",
+    "2026-06-17",
+    "2026-06-18",
+    "2026-06-19",
+    "2026-06-20",
+    "2026-06-21",
+    "2026-06-22",
+    "2026-06-23",
+    "2026-06-24",
+    "2026-06-25",
+    "2026-06-26",
+    "2026-06-27",
+    "2026-06-28",
+    "2026-06-29",
+    "2026-06-30",
+    "2026-07-01",
+    "2026-07-02",
+    "2026-07-03",
+    "2026-07-04",
+    "2026-07-05",
+    "2026-07-06",
+    "2026-07-07",
+    "2026-07-08",
+    "2026-07-09",
+    "2026-07-10",
+    "2026-07-11",
+    "2026-07-12",
+    "2026-07-13",
+    "2026-07-14",
+    "2026-07-15",
+    "2026-07-16",
+    "2026-07-17",
+    "2026-07-18",
+    "2026-07-19",
+    "2026-07-20",
+    "2026-07-21",
+    "2026-07-22",
+    "2026-07-23",
+    "2026-07-24",
+    "2026-07-25",
+    "2026-07-26",
+    "2026-07-27",
+    "2026-07-28",
+    "2026-07-29",
+    "2026-07-30",
+    "2026-07-31",
+    "2026-08-01",
+    "2026-08-02",
+    "2026-08-03",
+    "2026-08-04",
+    "2026-08-05",
+    "2026-08-06",
+    "2026-08-07",
+    "2026-08-08",
+    "2026-08-09",
+    "2026-08-10",
+    "2026-08-11",
+    "2026-08-12"
+   ],
+   "clotures": [
+    100.85998,
+    100.85788,
+    100.8357,
+    100.52305,
+    100.95514,
+    100.66536,
+    100.70911,
+    100.85929,
+    100.85872,
+    100.71358,
+    100.48593,
+    100.77372,
+    100.76482,
+    100.45268,
+    100.21471,
+    100.21308,
+    100.26312,
+    100.61633,
+    100.62117,
+    101.13912,
+    101.04562,
+    101.78691,
+    101.77773,
+    101.83259,
+    101.76431,
+    101.74153,
+    101.92344,
+    101.47165,
+    101.61878,
+    101.61559,
+    101.66469,
+    101.52041,
+    101.45365,
+    102.23889,
+    102.6243,
+    102.66466,
+    102.68025,
+    102.72153,
+    102.85607,
+    103.32771,
+    103.56821,
+    103.44227,
+    103.4549,
+    103.43679,
+    103.43816,
+    103.31469,
+    103.23962,
+    103.38423,
+    102.81895,
+    102.79407,
+    102.78828,
+    102.78125,
+    102.83048,
+    103.07539,
+    102.99592,
+    102.73276,
+    102.66459,
+    102.66364,
+    102.68387,
+    103.06461,
+    102.46804,
+    101.98866,
+    102.19029,
+    102.22415,
+    102.221,
+    102.28363,
+    102.35748,
+    102.62488,
+    102.62945,
+    103.02264,
+    102.9707,
+    102.97425,
+    102.84557,
+    103.08254,
+    103.05443,
+    102.673,
+    101.57012,
+    101.38242,
+    101.44985,
+    101.30382,
+    101.6224,
+    101.45168,
+    101.3257,
+    101.63506,
+    101.197,
+    101.20176,
+    101.19521,
+    101.43925,
+    101.42086,
+    101.32405
+   ]
+  }
+ },
+ "prix_cloture": {
+  "EUR": 1.15495,
+  "GBP": 1.35211,
+  "JPY": 0.00629,
+  "CHF": 1.23317,
+  "CAD": 0.71867,
+  "AUD": 0.70824,
+  "NZD": 0.58776,
+  "USD": 101.32405
+ },
+ "tracabilite": {
+  "mode": "marquer",
+  "marquees": 0,
+  "rejetees": 0
+ },
+ "critique": {
+  "incoherences": [
+   "Incohérence sur le statut 'risk_on_off' du JPY : classé à 'on' dans le classement et dans sa fiche devise malgré un score de confluence minimal (24) et un indicateur VIX (sens -1) qualifié de défavorable à son statut de valeur refuge, alors que CHF (29) et EUR (39) sont classés 'neutre'.",
+   "Incohérence de lecture de l'indice DXY entre les devises : décrit comme baissier/orienté à la baisse pour GBP et AUD, mais qualifié de stabilisé ou en légère hausse (+0,13%) pour USD et EUR."
+  ],
+  "affirmations_non_sourcees": [
+   "Champs 'source_id' nulls sur plusieurs indicateurs du detail_score (pmi_surprise pour USD, EUR, GBP, JPY, CHF, CAD, AUD, NZD ; cpi_surprise pour GBP, JPY, CAD, AUD, NZD ; trendline pour GBP, NZD).",
+   "Chiffres précis de baisse du pétrole dans les menaces du CAD et de l'AUD (WTI à 81,96 $ / -4,87 % et Brent à 88,90 $ / -8,30 %) rattachés aux sources src_009 et src_010 mais introuvables dans le catalogue de sources."
+  ],
+  "validation": "a_revoir"
+ }
+}
