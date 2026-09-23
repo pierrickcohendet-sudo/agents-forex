@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-flash-latest",
-  "genere_le": "2026-09-23T10:05:58+00:00"
+  "genere_le": "2026-09-23T17:54:38+00:00"
  },
  "synthese_globale": {
   "biais_macro_global": "neutre",
@@ -3207,11 +3207,32 @@
   ]
  },
  "critique": {
-  "incoherences": [],
-  "affirmations_non_sourcees": [],
-  "suggestions_connaissances": [],
-  "validation": "non_evalue",
-  "indisponible": true,
-  "note": "relecture non effectuée (503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent)"
+  "incoherences": [
+   "Complétude critique du panel compromise (anomalie QC majeure) : Trois devises de premier plan (EUR, JPY, AUD) ont échoué lors de la génération suite à des erreurs 503 de l'API LLM et sont exclues. Un tiers du panel FX manque à l'appel, ce qui altère gravement la fiabilité du classement de confluence",
+   "Défaillance systématique du flux technique (Twelve Data 401 Unauthorized) : Toutes les devises affichent des graphiques de prix manquants et une indisponibilité totale des indicateurs de momentum et de structure (RSI, Trendline, DXY). Cette absence aplatit artificiellement les scores de confluence v",
+   "Données pétrolières obsolètes présentées comme des mouvements de marché du jour : L'état du monde et la fiche CAD décrivent une envolée du WTI à 107.02 $ (+4.49 %) et du Brent à 130.80 $ (+7.88 %) comme un catalyseur actuel, alors que ces cours datent du 15/09/2026 (8 jours d'ancienneté selon FRED/Q"
+  ],
+  "affirmations_non_sourcees": [
+   "CAD - Contexte géopolitique / Événements : L'affirmation selon laquelle les chiffres des ventes au détail sont prévus le 24 septembre est rattachée à src_081 (qui ne référence que le discours du gouverneur Macklem du 21/09). Les publications de ventes au détail du 24/09 présentes au calendrier (src_",
+   "CHF - Contexte géopolitique : L'explication 'La BNS maintient un taux directeur à 0.00 % pour décourager les flux spéculatifs excessifs et surveille de près la surévaluation du franc' est rattachée à src_028, qui n'est qu'une entrée calendaire pour la décision future du 24/09 sans compte-rendu textu"
+  ],
+  "suggestions_connaissances": [
+   {
+    "theme": "Seuil de complétude du panel de devises en cas d'erreur API LLM",
+    "suggestion": "Définir un seuil minimal de devises traitées avec succès (ex. 7/9) en deçà duquel la publication de la note est bloquée. Si des devises majeures comme EUR ou JPY échouent (erreur 503), imposer une reprise sur repli ou suspendre le classement de confluence.",
+    "fichier_cible": "cas_particuliers.md"
+   },
+   {
+    "theme": "Panne d'authentification ou coupure globale du flux technique",
+    "suggestion": "Prévoir un mode dégradé lorsque le flux technique (Twelve Data) renvoie une erreur globale (401/403) : neutraliser ou redistribuer explicitement le poids des composantes RSI/Trendline/DXY sur les facteurs macro et carry pour éviter un biais de tassement systématique des scores vers la neutralité.",
+    "fichier_cible": "cas_particuliers.md"
+   },
+   {
+    "theme": "Obsolescence des séries matières premières quotidiennes",
+    "suggestion": "Fixer un seuil d'obsolescence strict (maximum 3 jours ouvrés) pour les séries pétrolières issues de FRED avant de les qualifier de mouvements de marché du jour, et exiger la confrontation avec le flux d'actualités RSS afin d'éviter d'opposer des prix vieux d'une semaine à des catalyseurs intrajournaliers inverses.",
+    "fichier_cible": "cas_particuliers.md"
+   }
+  ],
+  "validation": "a_revoir"
  }
 }
