@@ -4,11 +4,11 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-flash-latest",
-  "genere_le": "2026-09-23T20:26:02+00:00"
+  "genere_le": "2026-09-23T23:44:43+00:00"
  },
  "synthese_globale": {
-  "biais_macro_global": "neutre",
-  "commentaire": "Biais neutre ; GBP en tête du classement de confluence.",
+  "biais_macro_global": "risk_on",
+  "commentaire": "Biais Risk On ; GBP en tête du classement de confluence.",
   "etat_du_monde": {
    "situation_economique": {
     "texte": "L'indice VIX oscille à un niveau modéré de 14.87 tandis que le S&P 500 consolide à 7 764.64 points après les records du Nasdaq. La courbe des taux US 10Y-2Y demeure comprimée à 20 points de base, traduisant un aplatissement persistant du spread dans un contexte de rendements obligataires élevés (10Y à 4.96 % et 2Y à 4.76 %). Le choc sur les cours du pétrole maintient le Brent à 130.80 $ et le WTI à 107.02 $, pesant sur les perspectives de croissance manufacturière globale, notamment en Asie et en Europe.",
@@ -113,11 +113,16 @@
     "devise": "CHF",
     "score_confluence": 31,
     "risk_on_off": "off"
+   },
+   {
+    "rang": 7,
+    "devise": "JPY",
+    "score_confluence": 25,
+    "risk_on_off": "off"
    }
   ],
   "devises_indisponibles": [
    "EUR",
-   "JPY",
    "AUD"
   ]
  },
@@ -723,20 +728,104 @@
   {
    "devise": "JPY",
    "risk_on_off": "off",
-   "score_confluence": null,
-   "analyse_indisponible": true,
-   "raison_indisponibilite": "Analyse JPY impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene",
+   "score_confluence": 25,
+   "detail_score": [
+    {
+     "indicateur": "taux_directeur",
+     "sens": -1,
+     "poids": 20,
+     "justification": "Taux directeur à 1.00 % contre une médiane G8 à 2.50 %, maintenant le statut de taux le plus bas du G8 hors Suisse.",
+     "source_id": "src_013"
+    },
+    {
+     "indicateur": "cpi_surprise",
+     "sens": 0,
+     "poids": 15,
+     "justification": "Publication du BOJ Core CPI attendue le 25 septembre (1.5 % attendu vs 1.6 % précédent), aucune donnée publiée ce jour.",
+     "source_id": "src_015"
+    },
+    {
+     "indicateur": "yield_curve",
+     "sens": -1,
+     "poids": 12,
+     "justification": "Spread 10Y-2Y US à 0.20 % avec un 10 ans à 4.96 %, l'aplatissement sans détente marquée des taux US pèse sur l'écart de rendement bilatéral.",
+     "source_id": "src_012"
+    },
+    {
+     "indicateur": "vix",
+     "sens": -1,
+     "poids": 10,
+     "justification": "VIX à 14.87 (+0.41 % vs 14.81), maintenant un régime de basse volatilité défavorable aux flux de couverture sur le JPY.",
+     "source_id": "src_008"
+    },
+    {
+     "indicateur": "dxy",
+     "sens": 0,
+     "poids": 10,
+     "justification": "Données de référence de l'indice USD synthétique non disponibles ce jour.",
+     "source_id": null
+    },
+    {
+     "indicateur": "pmi_surprise",
+     "sens": 0,
+     "poids": 10,
+     "justification": "Flash Manufacturing PMI attendu à 55.0 vs 55.1 précédent, aucun chiffre réel disponible dans les données du jour.",
+     "source_id": "src_054"
+    },
+    {
+     "indicateur": "differentiel_taux",
+     "sens": -1,
+     "poids": 8,
+     "justification": "Différentiel de portage défavorable de -1.50 point face à la médiane G8, entretenant les flux d'arbitrage de carry trade contre le yen.",
+     "source_id": "src_013"
+    },
+    {
+     "indicateur": "rsi",
+     "sens": 0,
+     "poids": 8,
+     "justification": "Données techniques non disponibles ce jour pour évaluer le momentum.",
+     "source_id": null
+    },
+    {
+     "indicateur": "trendline",
+     "sens": 0,
+     "poids": 7,
+     "justification": "Données techniques non disponibles ce jour pour valider une structure graphique.",
+     "source_id": null
+    }
+   ],
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (Analyse JPY impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene)",
+    "commentaire": "Historique technique indisponible ce jour ; l'orientation reste sous l'arbitrage macro entre portage négatif et potentiel refuge.",
     "source_id": null
    },
-   "detail_score": [],
-   "opportunites": [],
-   "menaces": [],
-   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse JPY impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene.",
+   "carry": {
+    "taux_directeur": 1.0,
+    "differentiel_vs_mediane_g8": -1.5,
+    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   },
+   "opportunites": [
+    {
+     "texte": "Une résurgence des tensions géopolitiques dans le détroit d'Ormuz provoquerait un sursaut de volatilité propice au débouclage brutal de carry trade au profit du yen.",
+     "source_id": "src_088",
+     "non_sourcee": false
+    }
+   ],
+   "menaces": [
+    {
+     "texte": "Le maintien d'un VIX comprimé à 14.87 et d'un portage négatif de -1.50 point incite les flux de marché à utiliser le yen comme devise de financement d'actifs à meilleur rendement.",
+     "source_id": "src_008",
+     "non_sourcee": false
+    },
+    {
+     "texte": "Le rendement US 10 ans élevé à 4.96 % pénalise mécaniquement le différentiel de taux bilatéral en l'absence de resserrement anticipé rapide de la BOJ.",
+     "source_id": "src_006",
+     "non_sourcee": false
+    }
+   ],
+   "synthese_une_phrase": "Handicapé par un portage de -1.50 point et un environnement de faible volatilité globale (VIX à 14.87), le yen reste exposé aux flux vendeurs de portage tant qu'aucun choc Risk Off ne déclenche de débouclage.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -840,19 +929,24 @@
    ],
    "contexte_geopolitique": {
     "banque_centrale_pourquoi": {
-     "texte": "",
-     "source_id": null
+     "texte": "La BOJ surveille la persistance de l'inflation sous-jacente (prévue en léger tassement à 1.5 % y/y) et les hausses de salaires avant de procéder à une nouvelle remontée graduelle de son taux directeur de 1.00 %.",
+     "source_id": "src_015"
     },
-    "evenements": []
-   },
-   "carry": {
-    "taux_directeur": 1.0,
-    "differentiel_vs_mediane_g8": -1.5,
-    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+    "evenements": [
+     {
+      "texte": "Succession de jours fériés bancaires au Japon du 20 au 22 septembre réduisant la liquidité domestique avant la reprise des échanges et la publication des PMI.",
+      "source_id": "src_076",
+      "non_sourcee": false
+     }
+    ]
    },
    "historique_score_7j": [
     {
      "date": "2026-09-21",
+     "score": 25
+    },
+    {
+     "date": "2026-09-23",
      "score": 25
     }
    ]
@@ -3198,7 +3292,7 @@
    "USD : graphique de prix manquant",
    "EUR : analyse indisponible aujourd'hui (Analyse EUR impossible : 503 Server Error: Service Unavailable for url: https://) — exclue du classement",
    "GBP : graphique de prix manquant",
-   "JPY : analyse indisponible aujourd'hui (Analyse JPY impossible : 429 Client Error: Too Many Requests for url: https://ge) — exclue du classement",
+   "JPY : graphique de prix manquant",
    "CHF : graphique de prix manquant",
    "CAD : graphique de prix manquant",
    "AUD : analyse indisponible aujourd'hui (Analyse AUD impossible : 429 Client Error: Too Many Requests for url: https://ge) — exclue du classement",
@@ -3212,6 +3306,6 @@
   "suggestions_connaissances": [],
   "validation": "non_evalue",
   "indisponible": true,
-  "note": "relecture non effectuée (429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent)"
+  "note": "relecture non effectuée (503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent)"
  }
 }
