@@ -4,30 +4,83 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-flash-latest",
-  "genere_le": "2026-09-29T01:09:31+00:00"
+  "genere_le": "2026-09-29T11:30:00+00:00"
  },
  "synthese_globale": {
   "biais_macro_global": "neutre",
-  "commentaire": "Biais neutre ; USD en tête du classement de confluence.",
-  "etat_du_monde": null,
+  "commentaire": "Biais neutre ; CHF en tête du classement de confluence.",
+  "etat_du_monde": {
+   "situation_economique": {
+    "texte": "Le S&P 500 cède -0.77 % à 7683.69 points, pénalisé par des rendements souverains toujours élevés (src_011). Les taux obligataires américains amorcent une légère détente avec un 10 ans à 5.17 % et un 2 ans à 4.81 %, maintenant le spread 10Y-2Y en aplatissement à +0.36 point (src_006, src_007, src_012). En zone euro, le sentiment économique recule en septembre face à la remontée des anticipations d'inflation, tandis que les cours pétroliers demeurent fermes avec un Brent au-dessus des 114 $ le baril (src_010, src_104).",
+    "source_ids": [
+     "src_006",
+     "src_007",
+     "src_010",
+     "src_011",
+     "src_012",
+     "src_104"
+    ],
+    "non_source": false
+   },
+   "politique_monetaire_budgetaire": {
+    "texte": "La dispersion des cycles monétaires du G8 persiste autour d'une médiane de taux à 2.50 % (src_013). Alors que la Fed maintient ses taux directeurs à 3.63 % dans l'attente des chiffres d'inflation Core PCE, l'Australie n'exclut pas de nouveaux resserrements après avoir hissé son taux à 4.35 % (src_005, src_013, src_102). Au Japon, les autorités accentuent la pression verbale contre la sous-évaluation du yen et recherchent une concertation bilatérale avec Washington (src_108).",
+    "source_ids": [
+     "src_005",
+     "src_013",
+     "src_102",
+     "src_108"
+    ],
+    "non_source": false
+   },
+   "geopolitique": {
+    "texte": "Les tensions commerciales se concrétisent avec l'entrée en vigueur de restrictions américaines sur plusieurs importations canadiennes (src_091). Au Moyen-Orient, des pourparlers indirects entre Washington et Téhéran tentent de contenir l'escalade militaire alors que les exportations de brut régional atteignent des niveaux inédits en période de guerre (src_098, src_117). En Europe orientale, le conflit ukrainien demeure sous tension extrême avec l'annonce d'une nouvelle extension des effectifs de l'armée russe (src_089).",
+    "source_ids": [
+     "src_089",
+     "src_091",
+     "src_098",
+     "src_117"
+    ],
+    "non_source": false
+   },
+   "indicateurs_du_jour": [],
+   "actualite": [
+    {
+     "texte": "America's Canadian import restrictions come into force. Here are the products barred from entry — Entrée en vigueur de barrières tarifaires américaines contre le Canada, pesant sur les relations commerciales bilatérales.",
+     "source_id": "src_091",
+     "non_sourcee": false
+    },
+    {
+     "texte": "U.S., Iran hold separate mediator talks as Mideast oil exports hit war-time high — Négociations indirectes engagées autour de propositions d'apaisement alors que la prime de risque géopolitique soutient les cours du brut.",
+     "source_id": "src_098",
+     "non_sourcee": false
+    },
+    {
+     "texte": "Australia says more hikes not off the table after raising rates to 15-year high — Ton résolument hawkish des autorités australiennes face à la persistance de l'inflation domestique.",
+     "source_id": "src_102",
+     "non_sourcee": false
+    },
+    {
+     "texte": "Japan's Katayama says undervalued yen is problematic, agrees with Bessent on cooperation — Multiplication des déclarations officielles japonaises signalant l'inconfort de Tokyo face à la faiblesse du yen.",
+     "source_id": "src_108",
+     "non_sourcee": false
+    }
+   ],
+   "conclusion": "Le contexte macroéconomique mondial reflète un équilibre fragile entre résilience de l'activité et résurgence des craintes inflationnistes. Les niveaux de rendements obligataires élevés freinent l'appétit pour le risque sans déclencher de débouclage désordonné, tandis que les banques centrales continuent d'ajuster leur posture de manière asynchrone. Les frictions douanières entre Washington et Ottawa ainsi que l'incertitude au Moyen-Orient constituent des vents contraires pour le commerce international. Dans cette configuration de signaux divergents, le biais macro global demeure strictement neutre, suspendu aux prochaines publications d'inflation sous-jacente et d'emploi américain.",
+   "incoherence_biais_detectee": false
+  },
   "classement_devises": [
    {
     "rang": 1,
-    "devise": "USD",
-    "score_confluence": 65,
+    "devise": "CHF",
+    "score_confluence": 31,
     "risk_on_off": "off"
-   },
-   {
-    "rang": 2,
-    "devise": "EUR",
-    "score_confluence": 44,
-    "risk_on_off": "neutre"
    }
   ],
   "devises_indisponibles": [
+   "USD",
+   "EUR",
    "GBP",
    "JPY",
-   "CHF",
    "CAD",
    "AUD",
    "NZD",
@@ -38,109 +91,20 @@
   {
    "devise": "USD",
    "risk_on_off": "off",
-   "score_confluence": 65,
-   "detail_score": [
-    {
-     "indicateur": "taux_directeur",
-     "sens": 1,
-     "poids": 20,
-     "justification": "Taux effectif à 3.63% supérieur à la médiane G8 de 2.50%, maintenant des conditions financières restrictives.",
-     "source_id": "src_005"
-    },
-    {
-     "indicateur": "cpi_surprise",
-     "sens": 0,
-     "poids": 15,
-     "justification": "Aucune publication d'inflation US ce jour, le dernier CPI mensuel affichant une progression de 0.4%.",
-     "source_id": "src_001"
-    },
-    {
-     "indicateur": "yield_curve",
-     "sens": 1,
-     "poids": 12,
-     "justification": "Spread 10Y-2Y positif à 0.36 avec des rendements à 5.17% sur le 10Y et 4.81% sur le 2Y soutenant l'USD.",
-     "source_id": "src_012"
-    },
-    {
-     "indicateur": "vix",
-     "sens": -1,
-     "poids": 10,
-     "justification": "VIX en repli de -4.44% à 14.21 points, reflétant un appétit pour le risque défavorable au dollar refuge.",
-     "source_id": "src_008"
-    },
-    {
-     "indicateur": "dxy",
-     "sens": 0,
-     "poids": 10,
-     "justification": "Données de l'indice synthétique USD indisponibles ce jour.",
-     "source_id": null
-    },
-    {
-     "indicateur": "pmi_surprise",
-     "sens": 0,
-     "poids": 10,
-     "justification": "Indice Dallas Fed à 9.8 contre 11.6 précédent sans prévision consensuelle, ISM attendu plus tard dans la semaine.",
-     "source_id": "src_111"
-    },
-    {
-     "indicateur": "differentiel_taux",
-     "sens": 1,
-     "poids": 8,
-     "justification": "Portage positif de +1.13 point par rapport à la médiane G8, attirant structurellement les flux de carry.",
-     "source_id": "src_013"
-    },
-    {
-     "indicateur": "rsi",
-     "sens": 0,
-     "poids": 8,
-     "justification": "Donnée RSI non disponible dans le flux technique du jour.",
-     "source_id": null
-    },
-    {
-     "indicateur": "trendline",
-     "sens": 0,
-     "poids": 7,
-     "justification": "Aucune structure technique ou contact de droite de tendance identifiable dans les données transmises.",
-     "source_id": null
-    }
-   ],
+   "score_confluence": null,
+   "analyse_indisponible": true,
+   "raison_indisponibilite": "Analyse USD impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "Historique technique weekly non disponible ce jour pour établir une structure de Dow exploitable.",
+    "commentaire": "analyse indisponible (Analyse USD impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge)",
     "source_id": null
    },
-   "carry": {
-    "taux_directeur": 3.63,
-    "differentiel_vs_mediane_g8": 1.13,
-    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
-   },
-   "opportunites": [
-    {
-     "texte": "Le rendement US 10Y reste campé à 5.17% et le 2Y à 4.81%, offrant un soutien de taux robuste face aux devises faiblement rémunérées.",
-     "source_id": "src_006",
-     "non_sourcee": false
-    },
-    {
-     "texte": "Le différentiel de carry de +1.13 point face à la médiane G8 maintient des flux porteurs en faveur de l'USD en l'absence de choc macroéconomique.",
-     "source_id": "src_013",
-     "non_sourcee": false
-    }
-   ],
-   "menaces": [
-    {
-     "texte": "Détente du VIX à 14.21 points (-4.44%) affaiblissant l'attrait pour le dollar au profit des devises cycliques.",
-     "source_id": "src_008",
-     "non_sourcee": false
-    },
-    {
-     "texte": "Ralentissement de l'activité manufacturière régionale avec l'indice Dallas Fed tombé à 9.8 contre 11.6 précédemment.",
-     "source_id": "src_111",
-     "non_sourcee": false
-    }
-   ],
-   "synthese_une_phrase": "L'USD reste solidement ancré par ses rendements obligataires élevés et un portage supérieur à la médiane G8, mais subit la compression du VIX et la prudence avant les publications de l'emploi.",
+   "detail_score": [],
+   "opportunites": [],
+   "menaces": [],
+   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse USD impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -244,21 +208,15 @@
    ],
    "contexte_geopolitique": {
     "banque_centrale_pourquoi": {
-     "texte": "La Réserve fédérale maintient son taux à 3.63% en posture data dependent, jaugeant la résistance de l'économie avant les chiffres de l'emploi NFP et du Core PCE de la semaine.",
-     "source_id": "src_005"
+     "texte": "",
+     "source_id": null
     },
-    "evenements": [
-     {
-      "texte": "Washington et Pékin préparent un abaissement tarifaire sur 60 milliards de dollars de marchandises à la suite du sommet bilatéral.",
-      "source_id": "src_100",
-      "non_sourcee": false
-     },
-     {
-      "texte": "Négociations signalées entre Washington et Téhéran autour d'une proposition d'accord pouvant détendre les cours pétroliers.",
-      "source_id": "src_112",
-      "non_sourcee": false
-     }
-    ]
+    "evenements": []
+   },
+   "carry": {
+    "taux_directeur": 3.63,
+    "differentiel_vs_mediane_g8": 1.13,
+    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
    },
    "historique_score_7j": [
     {
@@ -274,104 +232,20 @@
   {
    "devise": "EUR",
    "risk_on_off": "neutre",
-   "score_confluence": 44,
-   "detail_score": [
-    {
-     "indicateur": "taux_directeur",
-     "sens": 0,
-     "poids": 20,
-     "justification": "Taux directeur à 2.40 % proche de la médiane G8 de 2.50 %, sans écart significatif de politique monétaire.",
-     "source_id": "src_013"
-    },
-    {
-     "indicateur": "cpi_surprise",
-     "sens": 0,
-     "poids": 15,
-     "justification": "Aucune publication d'inflation publiée ce jour, l'estimation préliminaire étant attendue plus tard dans la semaine.",
-     "source_id": "src_018"
-    },
-    {
-     "indicateur": "yield_curve",
-     "sens": -1,
-     "poids": 12,
-     "justification": "Spread US 10Y-2Y à +0.36 point en aplatissement mensuel (-0.11 point) et rendement US 10 ans à 5.17 % soutenant le dollar au détriment de l'euro.",
-     "source_id": "src_012"
-    },
-    {
-     "indicateur": "vix",
-     "sens": 0,
-     "poids": 10,
-     "justification": "VIX en baisse à 14.21 points (-4.44 %), traduisant un appétit pour le risque modéré sans impact directionnel sur l'euro au statut neutre.",
-     "source_id": "src_008"
-    },
-    {
-     "indicateur": "dxy",
-     "sens": 0,
-     "poids": 10,
-     "justification": "Indice USD synthétique indisponible dans les flux techniques du jour.",
-     "source_id": null
-    },
-    {
-     "indicateur": "pmi_surprise",
-     "sens": 0,
-     "poids": 10,
-     "justification": "Indicateurs PMI manufacturiers de la zone euro non encore publiés, prévus le 1er octobre.",
-     "source_id": "src_034"
-    },
-    {
-     "indicateur": "differentiel_taux",
-     "sens": 0,
-     "poids": 8,
-     "justification": "Écart de taux de portage de -0.10 point vis-à-vis de la médiane G8, n'offrant aucun attrait de flux particulier.",
-     "source_id": "src_013"
-    },
-    {
-     "indicateur": "rsi",
-     "sens": 0,
-     "poids": 8,
-     "justification": "Données graphiques de la devise absentes du flux de cotation aujourd'hui.",
-     "source_id": null
-    },
-    {
-     "indicateur": "trendline",
-     "sens": 0,
-     "poids": 7,
-     "justification": "Aucune structure technique disponible en raison de l'absence de série de cours du jour.",
-     "source_id": null
-    }
-   ],
+   "score_confluence": null,
+   "analyse_indisponible": true,
+   "raison_indisponibilite": "Analyse EUR impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "Données techniques non disponibles ce jour, tendance neutre par défaut dans l'attente des catalyseurs macroéconomiques.",
+    "commentaire": "analyse indisponible (Analyse EUR impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge)",
     "source_id": null
    },
-   "carry": {
-    "taux_directeur": 2.4,
-    "differentiel_vs_mediane_g8": -0.1,
-    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
-   },
-   "opportunites": [
-    {
-     "texte": "Une accélération surprise de l'inflation préliminaire européenne (prévision attendue à 3.7 % vs 3.3 % précédent) forcerait la BCE à durcir son ton.",
-     "source_id": "src_018",
-     "non_sourcee": false
-    }
-   ],
-   "menaces": [
-    {
-     "texte": "Les rendements obligataires américains élevés (10 ans US à 5.17 %) maintiennent une pression baissière sur la devise par arbitrage de taux.",
-     "source_id": "src_006",
-     "non_sourcee": false
-    },
-    {
-     "texte": "L'intervention programmée de Christine Lagarde pourrait rappeler la prudence face à l'activité économique atone.",
-     "source_id": "src_047",
-     "non_sourcee": false
-    }
-   ],
-   "synthese_une_phrase": "L'euro évolue sans catalyseur propre face à un différentiel de portage neutre de -0.10 point, bridé par des rendements obligataires américains au-dessus de 5.10 %.",
+   "detail_score": [],
+   "opportunites": [],
+   "menaces": [],
+   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse EUR impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -475,21 +349,15 @@
    ],
    "contexte_geopolitique": {
     "banque_centrale_pourquoi": {
-     "texte": "La BCE adopte une approche dépendante des données, jaugeant le repli de la croissance face à un rebond anticipé de l'inflation préliminaire.",
-     "source_id": "src_018"
+     "texte": "",
+     "source_id": null
     },
-    "evenements": [
-     {
-      "texte": "Allocution de Christine Lagarde attendue pour préciser la trajectoire des taux européens.",
-      "source_id": "src_047",
-      "non_sourcee": false
-     },
-     {
-      "texte": "Prise de parole de Joachim Nagel surveillée pour jauger la fermeté de l'aile dure de la Bundesbank.",
-      "source_id": "src_041",
-      "non_sourcee": false
-     }
-    ]
+    "evenements": []
+   },
+   "carry": {
+    "taux_directeur": 2.4,
+    "differentiel_vs_mediane_g8": -0.1,
+    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
    },
    "historique_score_7j": [
     {
@@ -648,18 +516,18 @@
    "risk_on_off": "off",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "Analyse JPY impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene",
+   "raison_indisponibilite": "Analyse JPY impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (Analyse JPY impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene)",
+    "commentaire": "analyse indisponible (Analyse JPY impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge)",
     "source_id": null
    },
    "detail_score": [],
    "opportunites": [],
    "menaces": [],
-   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse JPY impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene.",
+   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse JPY impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -787,20 +655,104 @@
   {
    "devise": "CHF",
    "risk_on_off": "off",
-   "score_confluence": null,
-   "analyse_indisponible": true,
-   "raison_indisponibilite": "Analyse CHF impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene",
-   "biais_banque_centrale": "data_dependent",
+   "score_confluence": 31,
+   "detail_score": [
+    {
+     "indicateur": "taux_directeur",
+     "sens": -1,
+     "poids": 20,
+     "justification": "Taux directeur à 0.00 % contre une médiane G8 de 2.50 %, niveau le plus bas du panier.",
+     "source_id": "src_013"
+    },
+    {
+     "indicateur": "cpi_surprise",
+     "sens": 0,
+     "poids": 15,
+     "justification": "Aucune publication d'inflation aujourd'hui, publication du CPI mensuel attendue le 1er octobre à 0.0 % contre 0.4 % précédemment.",
+     "source_id": "src_027"
+    },
+    {
+     "indicateur": "yield_curve",
+     "sens": 0,
+     "poids": 12,
+     "justification": "Spread US 10Y-2Y à 0.36 en léger aplatissement de -0.11 point sur un mois, sans impulsion Risk Off nette pour les actifs refuges.",
+     "source_id": "src_012"
+    },
+    {
+     "indicateur": "vix",
+     "sens": -1,
+     "poids": 10,
+     "justification": "VIX en baisse de 4.44 % à 14.21 points, traduisant un appétit pour le risque défavorable au franc suisse.",
+     "source_id": "src_008"
+    },
+    {
+     "indicateur": "dxy",
+     "sens": 0,
+     "poids": 10,
+     "justification": "Série de référence USD synthétique non disponible pour ce point de marché.",
+     "source_id": null
+    },
+    {
+     "indicateur": "pmi_surprise",
+     "sens": 0,
+     "poids": 10,
+     "justification": "Aucune publication PMI suisse ce jour, parution manufacturière programmée le 1er octobre avec un consensus à 56.4.",
+     "source_id": "src_030"
+    },
+    {
+     "indicateur": "differentiel_taux",
+     "sens": -1,
+     "poids": 8,
+     "justification": "Écart de portage le plus défavorable du G8 à -2.50 points face à la médiane, pénalisant les flux longs CHF.",
+     "source_id": "src_013"
+    },
+    {
+     "indicateur": "rsi",
+     "sens": 0,
+     "poids": 8,
+     "justification": "Indicateur technique indisponible en raison de données de prix manquantes.",
+     "source_id": null
+    },
+    {
+     "indicateur": "trendline",
+     "sens": 0,
+     "poids": 7,
+     "justification": "Configuration graphique non renseignée sur la séance.",
+     "source_id": null
+    }
+   ],
+   "biais_banque_centrale": "dovish",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (Analyse CHF impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene)",
+    "commentaire": "Données techniques non disponibles ce jour, lecture de fond bornée par l'absence de catalyseur directionnel propre.",
     "source_id": null
    },
-   "detail_score": [],
-   "opportunites": [],
-   "menaces": [],
-   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse CHF impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene.",
+   "carry": {
+    "taux_directeur": 0.0,
+    "differentiel_vs_mediane_g8": -2.5,
+    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   },
+   "opportunites": [
+    {
+     "texte": "Une résurgence brutale de l'aversion au risque liée aux tensions géopolitiques en Europe de l'Est soutiendrait mécaniquement le statut de valeur refuge du franc.",
+     "source_id": "src_089",
+     "non_sourcee": false
+    }
+   ],
+   "menaces": [
+    {
+     "texte": "Un portage structurel lourd de -2.50 points expose le franc suisse aux flux vendeurs dans un contexte de volatilité comprimée sous 15 points sur le VIX.",
+     "source_id": "src_013",
+     "non_sourcee": false
+    },
+    {
+     "texte": "Le discours à venir du président de la BNS Martin Schlegel présente un risque de rhétorique accommodante ou d'avertissement contre un franc trop vigoureux.",
+     "source_id": "src_054",
+     "non_sourcee": false
+    }
+   ],
+   "synthese_une_phrase": "Pénalisé par le portage le plus bas du G8 à 0.00 % et un VIX détendu à 14.21, le franc suisse reste sous pression de vente de portage tant que les tensions géopolitiques ne déclenchent pas de réflexe refuge.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -904,19 +856,24 @@
    ],
    "contexte_geopolitique": {
     "banque_centrale_pourquoi": {
-     "texte": "",
-     "source_id": null
+     "texte": "La BNS conserve un taux à 0.00 % pour freiner l'appréciation mécanique du franc suisse et maintenir des conditions monétaires adaptées à une inflation modérée.",
+     "source_id": "src_013"
     },
-    "evenements": []
-   },
-   "carry": {
-    "taux_directeur": 0.0,
-    "differentiel_vs_mediane_g8": -2.5,
-    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+    "evenements": [
+     {
+      "texte": "Intervention publique attendue du président de la BNS Martin Schlegel le 1er octobre, au lendemain de la publication du bulletin trimestriel de politique monétaire.",
+      "source_id": "src_054",
+      "non_sourcee": false
+     }
+    ]
    },
    "historique_score_7j": [
     {
      "date": "2026-09-23",
+     "score": 31
+    },
+    {
+     "date": "2026-09-29",
      "score": 31
     }
    ]
@@ -926,18 +883,18 @@
    "risk_on_off": "on",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "Analyse CAD impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene",
+   "raison_indisponibilite": "Analyse CAD impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (Analyse CAD impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene)",
+    "commentaire": "analyse indisponible (Analyse CAD impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge)",
     "source_id": null
    },
    "detail_score": [],
    "opportunites": [],
    "menaces": [],
-   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse CAD impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene.",
+   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse CAD impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -1074,18 +1031,18 @@
    "risk_on_off": "on",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "Analyse AUD impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene",
+   "raison_indisponibilite": "Analyse AUD impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (Analyse AUD impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene)",
+    "commentaire": "analyse indisponible (Analyse AUD impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge)",
     "source_id": null
    },
    "detail_score": [],
    "opportunites": [],
    "menaces": [],
-   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse AUD impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene.",
+   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse AUD impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -1206,18 +1163,18 @@
    "risk_on_off": "on",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "Analyse NZD impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene",
+   "raison_indisponibilite": "Analyse NZD impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (Analyse NZD impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene)",
+    "commentaire": "analyse indisponible (Analyse NZD impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge)",
     "source_id": null
    },
    "detail_score": [],
    "opportunites": [],
    "menaces": [],
-   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse NZD impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene.",
+   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse NZD impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -1343,18 +1300,18 @@
    "risk_on_off": "neutre",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "Analyse CNY impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene",
+   "raison_indisponibilite": "Analyse CNY impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (Analyse CNY impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene)",
+    "commentaire": "analyse indisponible (Analyse CNY impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge)",
     "source_id": null
    },
    "detail_score": [],
    "opportunites": [],
    "menaces": [],
-   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse CNY impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene.",
+   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse CNY impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge.",
    "indicateurs_tableau": [
     {
      "indicateur": "fixing_pboc",
@@ -2107,72 +2064,72 @@
   {
    "id": "src_089",
    "source": "RSS cnbc_world",
-   "detail": "Nvidia releases software platform to stop AI agents from misbehaving",
-   "date": "2026-09-28T15:55:50+00:00",
-   "url": "https://www.cnbc.com/2026/09/28/nvidia-releases.html"
+   "detail": "Putin orders army expansion as Zelenskyy warns Russia preparing to deploy 10,000 North Korean troops",
+   "date": "2026-09-29T08:44:42+00:00",
+   "url": "https://www.cnbc.com/2026/09/29/putin-russia-army-ukraine-zelenskyy-north-korea.html"
   },
   {
    "id": "src_090",
    "source": "RSS cnbc_world",
-   "detail": "Samsung to inject $1 billion into Nvidia- and KKR-backed AI infrastructure firm",
-   "date": "2026-09-29T00:00:10+00:00",
-   "url": "https://www.cnbc.com/2026/09/29/samsung-investment-nvidia-kkr-ai-helix-digital.html"
+   "detail": "Mistral CEO says U.S. AI safety debate masks competitors’ 'negligence'",
+   "date": "2026-09-29T08:20:04+00:00",
+   "url": "https://www.cnbc.com/2026/09/29/mistral-ai-safety-openai-anthropic.html"
   },
   {
    "id": "src_091",
    "source": "RSS cnbc_world",
-   "detail": "Luckin Coffee, flush with Persian Gulf cash, weighs entry into Middle East markets",
-   "date": "2026-09-29T00:33:48+00:00",
-   "url": "https://www.cnbc.com/2026/09/29/luckin-coffee-mubadala-middle-east-temasek-centurium-capital.html"
+   "detail": "America's Canadian import restrictions come into force. Here are the products barred from entry",
+   "date": "2026-09-29T10:47:40+00:00",
+   "url": "https://www.cnbc.com/2026/09/29/canada-import-ban-trade-war.html"
   },
   {
    "id": "src_092",
    "source": "RSS cnbc_world",
-   "detail": "Stock futures are little changed after higher yields lead to losing session: Live updates",
-   "date": "2026-09-29T00:17:15+00:00",
-   "url": "https://www.cnbc.com/2026/09/28/stock-market-today-live-updates.html"
+   "detail": "Smart ring maker Oura postpones IPO due to market 'uncertainty'",
+   "date": "2026-09-29T10:54:12+00:00",
+   "url": "https://www.cnbc.com/2026/09/29/smart-ring-maker-oura-postpones-ipo-due-to-market-uncertainty.html"
   },
   {
    "id": "src_093",
    "source": "RSS cnbc_world",
-   "detail": "Anthropic's IPO prospectus shows sweeping AI vision, surging costs: Reuters",
-   "date": "2026-09-28T23:55:07+00:00",
-   "url": "https://www.cnbc.com/2026/09/28/anthropics-ipo-prospectus-shows-sweeping-ai-vision-surging-costs-reuters.html"
+   "detail": "Anthropic warns investors of AI’s 'existential risk to humanity' in IPO prospectus, reports say",
+   "date": "2026-09-29T08:43:59+00:00",
+   "url": "https://www.cnbc.com/2026/09/29/anthropic-warns-ai-existential-risks-ipo-filing-reuters.html"
   },
   {
    "id": "src_094",
+   "source": "RSS cnbc_world",
+   "detail": "Hurricane Polo lashes Mexico's Baja California Sur, carries on toward mainland",
+   "date": "2026-09-29T10:53:23+00:00",
+   "url": "https://www.cnbc.com/2026/09/29/hurricane-polo-mexico-baja-california-sur.html"
+  },
+  {
+   "id": "src_095",
+   "source": "RSS cnbc_world",
+   "detail": "Forget relying on long-dated Treasurys for protection, strategist says. 4 alternatives he likes",
+   "date": "2026-09-29T06:34:02+00:00",
+   "url": "https://www.cnbc.com/2026/09/29/portfolio-diversification-treasurys-bonds.html"
+  },
+  {
+   "id": "src_096",
+   "source": "RSS cnbc_world",
+   "detail": "Meta launches Muse for Small Business as Zuckerberg pushes beyond consumer AI market",
+   "date": "2026-09-29T09:30:01+00:00",
+   "url": "https://www.cnbc.com/2026/09/29/meta-launches-muse-for-small-business-zuckerberg-pushes-enterprise-ai.html"
+  },
+  {
+   "id": "src_097",
    "source": "RSS cnbc_world",
    "detail": "CNBC's The China Connection newsletter: Spectacle-heavy Trump-Xi summit was more about domestic messaging",
    "date": "2026-09-28T23:00:01+00:00",
    "url": "https://www.cnbc.com/2026/09/28/cnbcs-the-china-connection-trump-xi-summit-about-domestic-messaging.html"
   },
   {
-   "id": "src_095",
-   "source": "RSS cnbc_world",
-   "detail": "AMD acquiring Fei-Fei Li's World Labs AI firm in deal worth $8.2 billion",
-   "date": "2026-09-28T22:21:22+00:00",
-   "url": "https://www.cnbc.com/2026/09/28/amd-fei-fei-li-world-labs.html"
-  },
-  {
-   "id": "src_096",
-   "source": "RSS cnbc_world",
-   "detail": "Trump announces plan for $15 billion steel plant, would be largest in U.S. history",
-   "date": "2026-09-28T21:20:00+00:00",
-   "url": "https://www.cnbc.com/2026/09/28/trump-steel-plant-iowa.html"
-  },
-  {
-   "id": "src_097",
-   "source": "RSS cnbc_world",
-   "detail": "Zuckerberg, Amodei among tech executives set to meet Trump Tuesday",
-   "date": "2026-09-28T20:00:45+00:00",
-   "url": "https://www.cnbc.com/2026/09/28/trump-ai-tech-lunch.html"
-  },
-  {
    "id": "src_098",
    "source": "RSS cnbc_world",
-   "detail": "Trump-Xi summit analysis: 'Tangible outcomes' needed for U.S.-China truce to hold",
-   "date": "2026-09-28T07:22:06+00:00",
-   "url": "https://www.cnbc.com/2026/09/28/trump-xi-summit-tangible-outcomes-us-china-truce.html"
+   "detail": "U.S., Iran hold separate mediator talks as Mideast oil exports hit war-time high",
+   "date": "2026-09-29T04:02:47+00:00",
+   "url": "https://www.cnbc.com/2026/09/29/us-iran-war-trump-hormuz-.html"
   },
   {
    "id": "src_099",
@@ -2184,135 +2141,135 @@
   {
    "id": "src_100",
    "source": "RSS cnbc_world",
-   "detail": "U.S., China to lower tariffs on $60 billion of goods. Here's what qualifies",
-   "date": "2026-09-28T08:31:33+00:00",
-   "url": "https://www.cnbc.com/2026/09/28/us-china-lower-tariffs-trump-xi-meeting.html"
+   "detail": "State Street CEO Ron O’Hanley on why the right opportunity can come at the wrong time",
+   "date": "2026-09-29T04:00:01+00:00",
+   "url": "https://www.cnbc.com/video/2026/09/29/state-street-ceo-ron-ohanley-on-the-career-move-he-nearly-missed.html"
   },
   {
    "id": "src_101",
    "source": "RSS cnbc_world",
-   "detail": "OpenAI abandons plan to release upcoming model as safety concerns escalate",
-   "date": "2026-09-28T23:19:46+00:00",
-   "url": "https://www.cnbc.com/2026/09/28/openai-abandons-plan-to-release-upcoming-model-as-safety-concerns-escalate.html"
+   "detail": "Treasury yields ease as inflation concerns persist",
+   "date": "2026-09-29T08:17:15+00:00",
+   "url": "https://www.cnbc.com/2026/09/29/treasury-yields-bonds.html"
   },
   {
    "id": "src_102",
    "source": "RSS cnbc_world",
-   "detail": "'Take or pay': AI companies are taking a risky page from the energy sector's playbook",
-   "date": "2026-09-28T16:44:39+00:00",
-   "url": "https://www.cnbc.com/2026/09/28/ai-companies-take-a-page-from-the-energy-sectors-finance-playbook.html"
+   "detail": "Australia says more hikes not off the table after raising rates to 15-year high",
+   "date": "2026-09-29T05:00:58+00:00",
+   "url": "https://www.cnbc.com/2026/09/29/australia-rates-inflation-monetary-policy.html"
   },
   {
    "id": "src_103",
    "source": "RSS cnbc_world",
-   "detail": "Why OCBC sees an undervalued yen nearing a turning point",
-   "date": "2026-09-28T05:07:53+00:00",
-   "url": "https://www.cnbc.com/2026/09/28/yen-undervalued-turning-point-ocbc.html"
+   "detail": "There's still room for rotation into tech, Deutsche Bank says. Here's why",
+   "date": "2026-09-29T05:36:59+00:00",
+   "url": "https://www.cnbc.com/2026/09/29/theres-still-room-for-rotation-into-tech-deutsche-bank-says.html"
   },
   {
    "id": "src_104",
+   "source": "RSS investinglive",
+   "detail": "Euro area economic sentiment slips in September as inflation expectations rise",
+   "date": "2026-09-29T09:19:44+00:00",
+   "url": "https://investinglive.com/news/euro-area-economic-sentiment-slips-in-september-as-inflation-expectations-rise/"
+  },
+  {
+   "id": "src_105",
+   "source": "RSS investinglive",
+   "detail": "Spain inflation climbs to near 5%, the highest in over three years",
+   "date": "2026-09-29T07:01:43+00:00",
+   "url": "https://investinglive.com/news/spain-inflation-climbs-to-near-5-the-highest-in-over-three-years/"
+  },
+  {
+   "id": "src_106",
+   "source": "RSS investinglive",
+   "detail": "What are the main events for today?",
+   "date": "2026-09-29T06:39:04+00:00",
+   "url": "https://investinglive.com/news/what-are-the-main-events-for-today-52/"
+  },
+  {
+   "id": "src_107",
+   "source": "RSS investinglive",
+   "detail": "investingLive Asia-Pacific market news: Asia stocks slip",
+   "date": "2026-09-29T03:33:28+00:00",
+   "url": "https://investinglive.com/news/investinglive-asia-pacific-market-news-asia-stocks-slip/"
+  },
+  {
+   "id": "src_108",
+   "source": "RSS investinglive",
+   "detail": "Japan's Katayama says undervalued yen is problematic, agrees with Bessent on cooperation",
+   "date": "2026-09-29T02:16:41+00:00",
+   "url": "https://investinglive.com/news/japan-s-katayama-says-undervalued-yen-is-problematic-agrees-with-bessent-on-cooperation/"
+  },
+  {
+   "id": "src_109",
    "source": "RSS investinglive",
    "detail": "UK shop price inflation slows to 1.4% in September as BRC urges business rates help",
    "date": "2026-09-29T00:08:02+00:00",
    "url": "https://investinglive.com/news/uk-shop-price-inflation-slows-to-1-4-in-september-as-brc-urges-business-rates-help/"
   },
   {
-   "id": "src_105",
+   "id": "src_110",
    "source": "RSS investinglive",
    "detail": "investingLive Americas market news wrap: Oil prices bounce around on Iran headlines, yields rise",
    "date": "2026-09-28T20:14:07+00:00",
    "url": "https://investinglive.com/news/investinglive-americas-market-news-wrap-oil-prices-bounce-around-on-iran-headlines-yields-rise/"
   },
   {
-   "id": "src_106",
+   "id": "src_111",
    "source": "RSS investinglive",
    "detail": "Economic and event calendar in Asia Tuesday, September 29, 2026: RBA rate hike expected",
    "date": "2026-09-28T20:27:19+00:00",
    "url": "https://investinglive.com/news/economic-and-event-calendar-in-asia-tuesday-september-29-2026-rba-rate-hike-expected/"
   },
   {
-   "id": "src_107",
+   "id": "src_112",
    "source": "RSS investinglive",
    "detail": "Trump: We will win the Iran war very soon and gas prices will come tumbling down",
    "date": "2026-09-28T18:51:12+00:00",
    "url": "https://investinglive.com/news/trump-we-will-win-the-iran-war-very-soon-and-gas-prices-will-come-tumbling-down/"
   },
   {
-   "id": "src_108",
+   "id": "src_113",
    "source": "RSS investinglive",
    "detail": "Trump set to speak in the Oval Office",
    "date": "2026-09-28T17:51:30+00:00",
    "url": "https://investinglive.com/news/trump-set-to-speak-in-the-oval-office/"
   },
   {
-   "id": "src_109",
+   "id": "src_114",
    "source": "RSS investinglive",
    "detail": "Trump prepared to ease sanctions and release frozen funds for nuclear progress - report",
    "date": "2026-09-28T16:18:38+00:00",
    "url": "https://investinglive.com/news/trump-prepared-to-ease-sanctions-and-release-frozen-funds-for-nuclear-progress-report/"
   },
   {
-   "id": "src_110",
+   "id": "src_115",
    "source": "RSS investinglive",
    "detail": "Iran foreign minister's stay in NY has not been extended",
    "date": "2026-09-28T15:02:47+00:00",
    "url": "https://investinglive.com/news/iran-foreign-minister-s-stay-in-ny-has-not-been-extended/"
   },
   {
-   "id": "src_111",
+   "id": "src_116",
    "source": "RSS investinglive",
    "detail": "September Dallas Fed manufacturing business index 9.8 vs 11.6 prior",
    "date": "2026-09-28T14:32:19+00:00",
    "url": "https://investinglive.com/news/september-dallas-fed-manufacturing-business-index-9-8-vs-11-6-prior/"
   },
   {
-   "id": "src_112",
+   "id": "src_117",
    "source": "RSS investinglive",
    "detail": "Oil falls on reports of renewed US-Iran talks focused on amended version of Iran's seven-day proposal",
    "date": "2026-09-28T12:27:27+00:00",
    "url": "https://investinglive.com/news/oil-falls-on-reports-of-renewed-us-iran-talks-focused-on-amended-version-of-iran-s-seven-day-proposal/"
   },
   {
-   "id": "src_113",
+   "id": "src_118",
    "source": "RSS investinglive",
    "detail": "investingLive European session wrap: Higher yields hit gold as oil rallies and tech futures fall",
    "date": "2026-09-28T11:55:49+00:00",
    "url": "https://investinglive.com/news/investinglive-european-session-wrap-higher-yields-hit-gold-as-oil-rallies-and-tech-futures-fall/"
-  },
-  {
-   "id": "src_114",
-   "source": "RSS investinglive",
-   "detail": "Best Broker or Prop Firm? Vote in the Finance Magnates Awards 2026",
-   "date": "2026-09-28T10:14:00+00:00",
-   "url": "https://investinglive.com/news/best-broker-or-prop-firm-vote-in-the-finance-magnates-awards-2026/"
-  },
-  {
-   "id": "src_115",
-   "source": "RSS investinglive",
-   "detail": "Japanese yen jumps as top currency diplomat Mimura reiterates strong currency alliance with the US",
-   "date": "2026-09-28T08:17:49+00:00",
-   "url": "https://investinglive.com/news/japanese-yen-jumps-as-top-currency-diplomat-mimura-reiterates-strong-currency-alliance-with-the-us/"
-  },
-  {
-   "id": "src_116",
-   "source": "RSS investinglive",
-   "detail": "US jobs report could decide how much higher Treasury yields can go",
-   "date": "2026-09-28T06:27:41+00:00",
-   "url": "https://investinglive.com/news/us-jobs-report-could-decide-how-much-higher-treasury-yields-can-go/"
-  },
-  {
-   "id": "src_117",
-   "source": "RSS investinglive",
-   "detail": "What are the main events for today?",
-   "date": "2026-09-28T06:22:26+00:00",
-   "url": "https://investinglive.com/news/what-are-the-main-events-for-today-51/"
-  },
-  {
-   "id": "src_118",
-   "source": "RSS investinglive",
-   "detail": "investingLive Asia-Pacific market news: Gold hit hard, under $4200 again",
-   "date": "2026-09-28T03:44:22+00:00",
-   "url": "https://investinglive.com/news/investinglive-asia-pacific-market-news-gold-hit-hard-under-4200-again/"
   },
   {
    "id": "src_119",
@@ -2752,18 +2709,17 @@
  },
  "controle_qualite": {
   "conforme": false,
-  "nb_anomalies": 10,
+  "nb_anomalies": 9,
   "anomalies": [
-   "USD : graphique de prix manquant",
-   "EUR : graphique de prix manquant",
+   "USD : analyse indisponible aujourd'hui (Analyse USD impossible : 503 Server Error: Service Unavailable for url: https://) — exclue du classement",
+   "EUR : analyse indisponible aujourd'hui (Analyse EUR impossible : 503 Server Error: Service Unavailable for url: https://) — exclue du classement",
    "GBP : analyse indisponible aujourd'hui (Analyse GBP impossible : 503 Server Error: Service Unavailable for url: https://) — exclue du classement",
-   "JPY : analyse indisponible aujourd'hui (Analyse JPY impossible : 429 Client Error: Too Many Requests for url: https://ge) — exclue du classement",
-   "CHF : analyse indisponible aujourd'hui (Analyse CHF impossible : 429 Client Error: Too Many Requests for url: https://ge) — exclue du classement",
-   "CAD : analyse indisponible aujourd'hui (Analyse CAD impossible : 429 Client Error: Too Many Requests for url: https://ge) — exclue du classement",
-   "AUD : analyse indisponible aujourd'hui (Analyse AUD impossible : 429 Client Error: Too Many Requests for url: https://ge) — exclue du classement",
-   "NZD : analyse indisponible aujourd'hui (Analyse NZD impossible : 429 Client Error: Too Many Requests for url: https://ge) — exclue du classement",
-   "CNY : analyse indisponible aujourd'hui (Analyse CNY impossible : 429 Client Error: Too Many Requests for url: https://ge) — exclue du classement",
-   "état du monde absent de la synthèse globale"
+   "JPY : analyse indisponible aujourd'hui (Analyse JPY impossible : 503 Server Error: Service Unavailable for url: https://) — exclue du classement",
+   "CHF : graphique de prix manquant",
+   "CAD : analyse indisponible aujourd'hui (Analyse CAD impossible : 503 Server Error: Service Unavailable for url: https://) — exclue du classement",
+   "AUD : analyse indisponible aujourd'hui (Analyse AUD impossible : 503 Server Error: Service Unavailable for url: https://) — exclue du classement",
+   "NZD : analyse indisponible aujourd'hui (Analyse NZD impossible : 503 Server Error: Service Unavailable for url: https://) — exclue du classement",
+   "CNY : analyse indisponible aujourd'hui (Analyse CNY impossible : 503 Server Error: Service Unavailable for url: https://) — exclue du classement"
   ]
  },
  "critique": {
@@ -2772,6 +2728,6 @@
   "suggestions_connaissances": [],
   "validation": "non_evalue",
   "indisponible": true,
-  "note": "relecture non effectuée (429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent)"
+  "note": "relecture non effectuée (503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent)"
  }
 }
