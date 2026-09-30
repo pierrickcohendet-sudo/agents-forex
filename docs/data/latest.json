@@ -4,21 +4,15 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-flash-latest",
-  "genere_le": "2026-09-30T00:39:24+00:00"
+  "genere_le": "2026-09-30T11:19:22+00:00"
  },
  "synthese_globale": {
   "biais_macro_global": "neutre",
-  "commentaire": "Biais neutre ; USD en tête du classement de confluence.",
+  "commentaire": "Biais neutre ; ? en tête du classement de confluence.",
   "etat_du_monde": null,
-  "classement_devises": [
-   {
-    "rang": 1,
-    "devise": "USD",
-    "score_confluence": 75,
-    "risk_on_off": "off"
-   }
-  ],
+  "classement_devises": [],
   "devises_indisponibles": [
+   "USD",
    "EUR",
    "GBP",
    "JPY",
@@ -33,109 +27,20 @@
   {
    "devise": "USD",
    "risk_on_off": "off",
-   "score_confluence": 75,
-   "detail_score": [
-    {
-     "indicateur": "taux_directeur",
-     "sens": 1,
-     "poids": 20,
-     "justification": "Taux effectif de la Fed à 3.63 % supérieur à la médiane G8 fixée à 2.50 %, maintenant un biais monétaire restrictif.",
-     "source_id": "src_005"
-    },
-    {
-     "indicateur": "cpi_surprise",
-     "sens": 0,
-     "poids": 15,
-     "justification": "Aucune publication d'inflation avec chiffre réel disponible aujourd'hui sur le calendrier.",
-     "source_id": "src_080"
-    },
-    {
-     "indicateur": "yield_curve",
-     "sens": 1,
-     "poids": 12,
-     "justification": "Spread 10Y-2Y positif à 0.32 point avec un rendement 10 ans à 5.24 %, canalisant les flux de capitaux vers les obligations en USD.",
-     "source_id": "src_012"
-    },
-    {
-     "indicateur": "vix",
-     "sens": 1,
-     "poids": 10,
-     "justification": "VIX en progression de 8.07 % à 16.07 points, signalant une remontée de l'aversion au risque favorable au dollar comme valeur refuge.",
-     "source_id": "src_008"
-    },
-    {
-     "indicateur": "dxy",
-     "sens": 0,
-     "poids": 10,
-     "justification": "Données de prix et d'indice synthétique non fournies dans le flux technique du jour.",
-     "source_id": null
-    },
-    {
-     "indicateur": "pmi_surprise",
-     "sens": 0,
-     "poids": 10,
-     "justification": "Publications PMI manufacturier et Chicago PMI en attente sans chiffre réel rapporté au calendrier.",
-     "source_id": "src_034"
-    },
-    {
-     "indicateur": "differentiel_taux",
-     "sens": 1,
-     "poids": 8,
-     "justification": "Différentiel de carry favorable de +1.13 point par rapport à la médiane G8 soutenant la devise sur les positions longues.",
-     "source_id": "src_013"
-    },
-    {
-     "indicateur": "rsi",
-     "sens": 0,
-     "poids": 8,
-     "justification": "Oscillateur RSI non disponible en raison de l'absence de série technique pour l'actif aujourd'hui.",
-     "source_id": null
-    },
-    {
-     "indicateur": "trendline",
-     "sens": 0,
-     "poids": 7,
-     "justification": "Aucune structure de trendline à 3 points de contact identifiable faute de données graphiques.",
-     "source_id": null
-    }
-   ],
+   "score_confluence": null,
+   "analyse_indisponible": true,
+   "raison_indisponibilite": "Analyse USD impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "Données graphiques non renseignées dans le flux du jour, maintenant une lecture neutre sans confirmation de tendance Dow.",
+    "commentaire": "analyse indisponible (Analyse USD impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge)",
     "source_id": null
    },
-   "carry": {
-    "taux_directeur": 3.63,
-    "differentiel_vs_mediane_g8": 1.13,
-    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
-   },
-   "opportunites": [
-    {
-     "texte": "Le différentiel de taux directeur favorable de +1.13 point face à la médiane G8 maintient des flux porteurs structurels vers le dollar, particulièrement contre les devises de financement à taux bas.",
-     "source_id": "src_013",
-     "non_sourcee": false
-    },
-    {
-     "texte": "La fermeté des rendements obligataires à long terme, avec des taux souverains américains sur des sommets pluriannuels, renforce l'attrait de la devise sur les marchés de capitaux.",
-     "source_id": "src_108",
-     "non_sourcee": false
-    }
-   ],
-   "menaces": [
-    {
-     "texte": "La baisse marquée de la confiance des consommateurs américains à 81.9 points contre 89.2 attendus signale un risque d'essoufflement de la demande intérieure pouvant freiner la Fed.",
-     "source_id": "src_110",
-     "non_sourcee": false
-    },
-    {
-     "texte": "L'entrée en vigueur de restrictions douanières américaines sur les importations canadiennes accroît les tensions commerciales transfrontalières et le risque de perturbations sectorielles.",
-     "source_id": "src_091",
-     "non_sourcee": false
-    }
-   ],
-   "synthese_une_phrase": "Porté par un différentiel de taux avantageux de +1.13 point et des rendements à 5.24 % sur le 10 ans, le dollar conserve l'avantage malgré une détérioration de la confiance des consommateurs à 81.9.",
+   "detail_score": [],
+   "opportunites": [],
+   "menaces": [],
+   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse USD impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -239,16 +144,15 @@
    ],
    "contexte_geopolitique": {
     "banque_centrale_pourquoi": {
-     "texte": "La Fed conserve son taux directeur à 3.63 % en mode de dépendance absolue aux données, attendant la publication imminente du Core PCE et du rapport sur l'emploi pour ajuster son calibrage monétaire.",
-     "source_id": "src_005"
+     "texte": "",
+     "source_id": null
     },
-    "evenements": [
-     {
-      "texte": "Entrée en vigueur effective de nouvelles restrictions américaines sur l'importation de biens canadiens, durcissant le différend commercial nord-américain.",
-      "source_id": "src_091",
-      "non_sourcee": false
-     }
-    ]
+    "evenements": []
+   },
+   "carry": {
+    "taux_directeur": 3.63,
+    "differentiel_vs_mediane_g8": 1.13,
+    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
    },
    "historique_score_7j": [
     {
@@ -411,18 +315,18 @@
    "risk_on_off": "neutre",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "Analyse GBP impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene",
+   "raison_indisponibilite": "Analyse GBP impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (Analyse GBP impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene)",
+    "commentaire": "analyse indisponible (Analyse GBP impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge)",
     "source_id": null
    },
    "detail_score": [],
    "opportunites": [],
    "menaces": [],
-   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse GBP impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene.",
+   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse GBP impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -543,18 +447,18 @@
    "risk_on_off": "off",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "Analyse JPY impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene",
+   "raison_indisponibilite": "Analyse JPY impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (Analyse JPY impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene)",
+    "commentaire": "analyse indisponible (Analyse JPY impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge)",
     "source_id": null
    },
    "detail_score": [],
    "opportunites": [],
    "menaces": [],
-   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse JPY impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene.",
+   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse JPY impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -680,18 +584,18 @@
    "risk_on_off": "off",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "Analyse CHF impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene",
+   "raison_indisponibilite": "Analyse CHF impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (Analyse CHF impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene)",
+    "commentaire": "analyse indisponible (Analyse CHF impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge)",
     "source_id": null
    },
    "detail_score": [],
    "opportunites": [],
    "menaces": [],
-   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse CHF impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene.",
+   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse CHF impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -817,18 +721,18 @@
    "risk_on_off": "on",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "Analyse CAD impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene",
+   "raison_indisponibilite": "Analyse CAD impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (Analyse CAD impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene)",
+    "commentaire": "analyse indisponible (Analyse CAD impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge)",
     "source_id": null
    },
    "detail_score": [],
    "opportunites": [],
    "menaces": [],
-   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse CAD impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene.",
+   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse CAD impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -960,18 +864,18 @@
    "risk_on_off": "on",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "Analyse AUD impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene",
+   "raison_indisponibilite": "Analyse AUD impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (Analyse AUD impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene)",
+    "commentaire": "analyse indisponible (Analyse AUD impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge)",
     "source_id": null
    },
    "detail_score": [],
    "opportunites": [],
    "menaces": [],
-   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse AUD impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene.",
+   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse AUD impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -1092,18 +996,18 @@
    "risk_on_off": "on",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "Analyse NZD impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene",
+   "raison_indisponibilite": "Analyse NZD impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (Analyse NZD impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene)",
+    "commentaire": "analyse indisponible (Analyse NZD impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge)",
     "source_id": null
    },
    "detail_score": [],
    "opportunites": [],
    "menaces": [],
-   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse NZD impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene.",
+   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse NZD impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -1224,18 +1128,18 @@
    "risk_on_off": "neutre",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "Analyse CNY impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene",
+   "raison_indisponibilite": "Analyse CNY impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (Analyse CNY impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene)",
+    "commentaire": "analyse indisponible (Analyse CNY impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge)",
     "source_id": null
    },
    "detail_score": [],
    "opportunites": [],
    "menaces": [],
-   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse CNY impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene.",
+   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse CNY impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge.",
    "indicateurs_tableau": [
     {
      "indicateur": "fixing_pboc",
@@ -1983,212 +1887,212 @@
   {
    "id": "src_089",
    "source": "RSS cnbc_world",
-   "detail": "Trump tries to rename AI 'super intelligence' as polls show him sinking on key issue",
-   "date": "2026-09-29T22:42:35+00:00",
-   "url": "https://www.cnbc.com/2026/09/29/trump-ai-super-intelligence.html"
+   "detail": "OpenAI is sued over rogue AI Hugging Face cyberattack",
+   "date": "2026-09-30T10:16:36+00:00",
+   "url": "https://www.cnbc.com/2026/09/30/openai-sued-cyberattack.html"
   },
   {
    "id": "src_090",
-   "source": "RSS cnbc_world",
-   "detail": "Hedge funds hold a record share of the $30 trillion Treasury market. What could go wrong?",
-   "date": "2026-09-30T00:19:09+00:00",
-   "url": "https://www.cnbc.com/2026/09/30/us-treasury-market-is-relying-more-on-hedge-funds.html"
-  },
-  {
-   "id": "src_091",
-   "source": "RSS cnbc_world",
-   "detail": "America's Canadian import restrictions come into force. Here are the products barred from entry",
-   "date": "2026-09-29T15:57:43+00:00",
-   "url": "https://www.cnbc.com/2026/09/29/canada-import-ban-trade-war.html"
-  },
-  {
-   "id": "src_092",
-   "source": "RSS cnbc_world",
-   "detail": "Stock futures inch higher as traders weather latest rise in Treasury yields: Live updates",
-   "date": "2026-09-30T00:15:36+00:00",
-   "url": "https://www.cnbc.com/2026/09/29/stock-market-today-live-updates.html"
-  },
-  {
-   "id": "src_093",
-   "source": "RSS cnbc_world",
-   "detail": "Clients said to be sticking with Morgan Stanley even after leaked deal pipeline",
-   "date": "2026-09-29T23:00:01+00:00",
-   "url": "https://www.cnbc.com/2026/09/29/morgan-stanleys-deal-leak-mandates-.html"
-  },
-  {
-   "id": "src_094",
-   "source": "RSS cnbc_world",
-   "detail": "Jamie Dimon has a plan to revive the West: A 'big, beautiful' deal with Europe",
-   "date": "2026-09-29T17:34:18+00:00",
-   "url": "https://www.cnbc.com/2026/09/29/jamie-dimon-europe-trade.html"
-  },
-  {
-   "id": "src_095",
    "source": "RSS cnbc_world",
    "detail": "The Fed's main inflation measure will be released Wednesday. Here's what to expect",
    "date": "2026-09-29T20:51:43+00:00",
    "url": "https://www.cnbc.com/2026/09/29/the-feds-main-inflation-measure-will-be-released-wednesday-heres-what-to-expect.html"
   },
   {
+   "id": "src_091",
+   "source": "RSS cnbc_world",
+   "detail": "Trump denies offering Iran sanctions relief; Tehran receives U.S. proposal following Qatar talks",
+   "date": "2026-09-30T09:45:54+00:00",
+   "url": "https://www.cnbc.com/2026/09/30/us-iran-war-trump-hormuz.html"
+  },
+  {
+   "id": "src_092",
+   "source": "RSS cnbc_world",
+   "detail": "Pressure on U.S. Treasurys eases after 30-year yield hits highest level since 2002",
+   "date": "2026-09-30T06:46:19+00:00",
+   "url": "https://www.cnbc.com/2026/09/30/treasury-yields-bonds-selloff.html"
+  },
+  {
+   "id": "src_093",
+   "source": "RSS cnbc_world",
+   "detail": "People switching to Novo's Wegovy pill from obesity injections kept losing weight in real-world study",
+   "date": "2026-09-30T09:45:01+00:00",
+   "url": "https://www.cnbc.com/2026/09/30/novo-wegovy-pill-weight-loss-injections.html"
+  },
+  {
+   "id": "src_094",
+   "source": "RSS cnbc_world",
+   "detail": "Hedge funds hold a record share of the $30 trillion Treasury market. What could go wrong?",
+   "date": "2026-09-30T00:19:09+00:00",
+   "url": "https://www.cnbc.com/2026/09/30/us-treasury-market-is-relying-more-on-hedge-funds.html"
+  },
+  {
+   "id": "src_095",
+   "source": "RSS cnbc_world",
+   "detail": "Gold prices have pulled back — but a Morgan Stanley strategist sees 3 key reasons to hold the precious metal",
+   "date": "2026-09-30T06:53:29+00:00",
+   "url": "https://www.cnbc.com/2026/09/30/gold-price-metal-bullion.html"
+  },
+  {
    "id": "src_096",
    "source": "RSS cnbc_world",
-   "detail": "Mistral CEO says U.S. AI safety debate masks competitors’ 'negligence'",
-   "date": "2026-09-29T11:52:46+00:00",
-   "url": "https://www.cnbc.com/2026/09/29/mistral-ai-safety-openai-anthropic.html"
+   "detail": "Dan Ives prepares to debut fund offering access to private companies fueling AI boom",
+   "date": "2026-09-30T10:21:38+00:00",
+   "url": "https://www.cnbc.com/2026/09/30/dan-ives-ai-private-companies-ivai.html"
   },
   {
    "id": "src_097",
-   "source": "RSS cnbc_world",
-   "detail": "India readies $25 billion for Deep Tech investment as U.S. and China race ahead",
-   "date": "2026-09-29T05:12:10+00:00",
-   "url": "https://www.cnbc.com/2026/09/29/india-investment-billions-tech-ai-us-china.html"
-  },
-  {
-   "id": "src_098",
-   "source": "RSS cnbc_world",
-   "detail": "CNBC's The China Connection newsletter: Spectacle-heavy Trump-Xi summit was more about domestic messaging",
-   "date": "2026-09-28T23:00:01+00:00",
-   "url": "https://www.cnbc.com/2026/09/28/cnbcs-the-china-connection-trump-xi-summit-about-domestic-messaging.html"
-  },
-  {
-   "id": "src_099",
-   "source": "RSS cnbc_world",
-   "detail": "China has three new criteria for humanoid robot IPOs. Few, if any, meet them",
-   "date": "2026-09-29T07:19:38+00:00",
-   "url": "https://www.cnbc.com/2026/09/29/china-criteria-humanoid-robot-ipos.html"
-  },
-  {
-   "id": "src_100",
    "source": "RSS cnbc_world",
    "detail": "State Street CEO Ron O’Hanley on why the right opportunity can come at the wrong time",
    "date": "2026-09-29T04:00:01+00:00",
    "url": "https://www.cnbc.com/video/2026/09/29/state-street-ceo-ron-ohanley-on-the-career-move-he-nearly-missed.html"
   },
   {
+   "id": "src_098",
+   "source": "RSS cnbc_world",
+   "detail": "AI broke the job application. What replaces it?",
+   "date": "2026-09-30T05:00:01+00:00",
+   "url": "https://www.cnbc.com/2026/09/30/ai-resume-cv-job-application-interview.html"
+  },
+  {
+   "id": "src_099",
+   "source": "RSS cnbc_world",
+   "detail": "Inside Man: How Chinese spies used lies, love and betrayal to target the Federal Reserve",
+   "date": "2026-09-30T10:55:49+00:00",
+   "url": "https://www.cnbc.com/2026/09/30/john-rogers-fed-china-espionage-case.html"
+  },
+  {
+   "id": "src_100",
+   "source": "RSS cnbc_world",
+   "detail": "Million-dollar question: Between S&P 500 bulls and bears, who would likely win?",
+   "date": "2026-09-30T05:11:53+00:00",
+   "url": "https://www.cnbc.com/2026/09/30/debate-spx500-bulls-bears-us-stocks.html"
+  },
+  {
    "id": "src_101",
    "source": "RSS cnbc_world",
-   "detail": "Forget relying on long-dated Treasurys for protection, strategist says. 4 alternatives he likes",
-   "date": "2026-09-29T06:34:02+00:00",
-   "url": "https://www.cnbc.com/2026/09/29/portfolio-diversification-treasurys-bonds.html"
+   "detail": "Russia targets data centers in Kyiv as NATO condemns Moscow’s ‘irresponsible nuclear rhetoric’",
+   "date": "2026-09-30T08:33:09+00:00",
+   "url": "https://www.cnbc.com/2026/09/30/ukraine-war-russia-nato-nuclear-kyiv.html"
   },
   {
    "id": "src_102",
    "source": "RSS cnbc_world",
-   "detail": "Supreme Court lets Trump resume third-country deportations",
-   "date": "2026-09-29T19:32:09+00:00",
-   "url": "https://www.cnbc.com/2026/09/29/supreme-court-lets-trump-resume-third-country-deportations.html"
+   "detail": "Boeing rises 3% after securing U.S. navy deal to develop next-generation fighter jet",
+   "date": "2026-09-30T08:51:44+00:00",
+   "url": "https://www.cnbc.com/2026/09/29/boeing-fighter-contract-pentagon.html"
   },
   {
    "id": "src_103",
    "source": "RSS cnbc_world",
-   "detail": "There's still room for rotation into tech, Deutsche Bank says. Here's why",
-   "date": "2026-09-29T05:36:59+00:00",
-   "url": "https://www.cnbc.com/2026/09/29/theres-still-room-for-rotation-into-tech-deutsche-bank-says.html"
+   "detail": "Israel-bound flight diverted to Saudi Arabia after brawl between pilots, Israeli official says",
+   "date": "2026-09-30T09:53:05+00:00",
+   "url": "https://www.cnbc.com/2026/09/30/israel-flight-diverted-saudi-arabia-brawl-pilots-flydubai.html"
   },
   {
    "id": "src_104",
    "source": "RSS investinglive",
-   "detail": "Japan August factory output falls 1.7% against forecast rise, retail sales slow",
-   "date": "2026-09-30T00:02:16+00:00",
-   "url": "https://investinglive.com/news/japan-august-factory-output-falls-1-7-against-forecast-rise-retail-sales-slow/"
+   "detail": "Italy September preliminary CPI +4.2% vs +3.8% y/y expected",
+   "date": "2026-09-30T09:00:55+00:00",
+   "url": "https://investinglive.com/news/italy-september-preliminary-cpi-4-2-vs-3-8-y-y-expected/"
   },
   {
    "id": "src_105",
    "source": "RSS investinglive",
-   "detail": "Australia CPI preview: headline inflation seen at 4.0% after RBA hike",
-   "date": "2026-09-29T20:44:06+00:00",
-   "url": "https://investinglive.com/news/australia-cpi-preview-headline-inflation-seen-at-4-0-after-rba-hike/"
+   "detail": "German state CPI readings point to inflation climbing back above 3% in September",
+   "date": "2026-09-30T08:08:45+00:00",
+   "url": "https://investinglive.com/news/german-state-cpi-readings-point-to-inflation-climbing-back-above-3-in-september/"
   },
   {
    "id": "src_106",
    "source": "RSS investinglive",
-   "detail": "China PMIs preview: official manufacturing seen back above 50 before holiday",
-   "date": "2026-09-29T20:34:09+00:00",
-   "url": "https://investinglive.com/news/china-pmis-preview-official-manufacturing-seen-back-above-50-before-holiday/"
+   "detail": "German labour market softens in September as autumn pickup fails to kick into gear",
+   "date": "2026-09-30T07:55:16+00:00",
+   "url": "https://investinglive.com/news/german-labour-market-softens-in-september-as-autumn-pickup-fails-to-kick-into-gear/"
   },
   {
    "id": "src_107",
    "source": "RSS investinglive",
-   "detail": "Economic and event calendar in Asia Wednesday, September 30, 2026: 6 PMIs from China and CPI from Australia.",
-   "date": "2026-09-29T20:32:47+00:00",
-   "url": "https://investinglive.com/news/economic-and-event-calendar-in-asia-wednesday-september-30-2026-6-pmis-from-china-and-cpi-from-australia/"
+   "detail": "French inflation jumps in September as HICP rises to 3.4%",
+   "date": "2026-09-30T06:46:39+00:00",
+   "url": "https://investinglive.com/news/french-inflation-jumps-in-september-as-hicp-rises-to-3-4/"
   },
   {
    "id": "src_108",
    "source": "RSS investinglive",
-   "detail": "investingLive Americas market news wrap: US 30-year yields hit the highest since 2002",
-   "date": "2026-09-29T20:14:53+00:00",
-   "url": "https://investinglive.com/news/investinglive-americas-market-news-wrap-us-30-year-yields-hit-the-highest-since-2002/"
+   "detail": "What are the main events for today?",
+   "date": "2026-09-30T06:33:44+00:00",
+   "url": "https://investinglive.com/news/what-are-the-main-events-for-today-53/"
   },
   {
    "id": "src_109",
    "source": "RSS investinglive",
-   "detail": "JOLTS job openings 7.079M vs 7.225M estimate",
-   "date": "2026-09-29T14:09:35+00:00",
-   "url": "https://investinglive.com/news/jolts-job-openings-7-079m-vs-7-225m-estimate/"
+   "detail": "Germany retail sales rebound 1.3% in August after July slump",
+   "date": "2026-09-30T06:05:05+00:00",
+   "url": "https://investinglive.com/news/germany-retail-sales-rebound-1-3-in-august-after-july-slump/"
   },
   {
    "id": "src_110",
    "source": "RSS investinglive",
-   "detail": "Sept US consumer confidence 81.9 vs 89.2 expected",
-   "date": "2026-09-29T14:00:23+00:00",
-   "url": "https://investinglive.com/news/sept-us-consumer-confidence-81-9-vs-89-2-expected/"
+   "detail": "German import prices jump 1.0% in August as cost pressures build",
+   "date": "2026-09-30T06:04:10+00:00",
+   "url": "https://investinglive.com/news/german-import-prices-jump-1-0-in-august-as-cost-pressures-build/"
   },
   {
    "id": "src_111",
    "source": "RSS investinglive",
-   "detail": "US July CaseShiller 20-city house price index +2.5% vs 2.2% expected",
-   "date": "2026-09-29T13:00:14+00:00",
-   "url": "https://investinglive.com/news/us-july-caseshiller-20-city-house-price-index-2-5-vs-2-2-expected/"
+   "detail": "UK Q2 GDP revised higher to 0.5% q/q from 0.4%",
+   "date": "2026-09-30T06:00:25+00:00",
+   "url": "https://investinglive.com/news/uk-q2-gdp-revised-higher-to-0-5-q-q-from-0-4/"
   },
   {
    "id": "src_112",
    "source": "RSS investinglive",
-   "detail": "Canada July GDP 0.0% vs 0.0% expected",
-   "date": "2026-09-29T12:30:04+00:00",
-   "url": "https://investinglive.com/news/canada-july-gdp-0-0-vs-0-0-expected/"
+   "detail": "Heads up: Germany September CPI expected to show inflation back above 3%",
+   "date": "2026-09-30T04:38:00+00:00",
+   "url": "https://investinglive.com/news/heads-up-germany-september-cpi-expected-to-show-inflation-back-above-3/"
   },
   {
    "id": "src_113",
    "source": "RSS investinglive",
-   "detail": "Oil prices dip as Trump backs potential Russia sanctions relief",
-   "date": "2026-09-29T12:04:56+00:00",
-   "url": "https://investinglive.com/news/oil-prices-dip-as-trump-backs-potential-russia-sanctions-relief/"
+   "detail": "investingLive Asia-Pacific market news: Yen, Nikkei firmer",
+   "date": "2026-09-30T03:40:41+00:00",
+   "url": "https://investinglive.com/news/investinglive-asia-pacific-market-news-yen-nikkei-firmer/"
   },
   {
    "id": "src_114",
    "source": "RSS investinglive",
-   "detail": "investingLive European news wrap: US-Iran talks keep markets tentatively optimistic",
-   "date": "2026-09-29T11:40:27+00:00",
-   "url": "https://investinglive.com/news/investinglive-european-news-wrap-us-iran-talks-keep-markets-tentatively-optimistic/"
+   "detail": "China official manufacturing PMI returns to growth at 50.1, non-manufacturing 50.2",
+   "date": "2026-09-30T02:19:15+00:00",
+   "url": "https://investinglive.com/news/china-official-manufacturing-pmi-returns-to-growth-at-50-1-non-manufacturing-50-2/"
   },
   {
    "id": "src_115",
    "source": "RSS investinglive",
-   "detail": "Euro area economic sentiment slips in September as inflation expectations rise",
-   "date": "2026-09-29T09:19:44+00:00",
-   "url": "https://investinglive.com/news/euro-area-economic-sentiment-slips-in-september-as-inflation-expectations-rise/"
+   "detail": "RatingDog China manufacturing PMI 52.1 tops forecast, services 51.6 also beats",
+   "date": "2026-09-30T02:02:20+00:00",
+   "url": "https://investinglive.com/news/ratingdog-china-manufacturing-pmi-52-1-tops-forecast-services-51-6-also-beats/"
   },
   {
    "id": "src_116",
    "source": "RSS investinglive",
-   "detail": "Spain inflation climbs to near 5%, the highest in over three years",
-   "date": "2026-09-29T07:01:43+00:00",
-   "url": "https://investinglive.com/news/spain-inflation-climbs-to-near-5-the-highest-in-over-three-years/"
+   "detail": "Australia August CPI 4.0% as fuel jumps, trimmed mean below forecast at 0.2% m/m",
+   "date": "2026-09-30T01:50:56+00:00",
+   "url": "https://investinglive.com/news/australia-august-cpi-4-0-as-fuel-jumps-trimmed-mean-below-forecast-at-0-2-m-m/"
   },
   {
    "id": "src_117",
    "source": "RSS investinglive",
-   "detail": "What are the main events for today?",
-   "date": "2026-09-29T06:39:04+00:00",
-   "url": "https://investinglive.com/news/what-are-the-main-events-for-today-52/"
+   "detail": "China private survey manufacturing PMI (September) 52.1 (vs. expected 51.6, prior 51.5)",
+   "date": "2026-09-30T01:45:09+00:00",
+   "url": "https://investinglive.com/news/china-private-survey-manufacturing-pmi-september-vs-expected-51-6-prior-51-5/"
   },
   {
    "id": "src_118",
    "source": "RSS investinglive",
-   "detail": "investingLive Asia-Pacific market news: Asia stocks slip",
-   "date": "2026-09-29T03:33:28+00:00",
-   "url": "https://investinglive.com/news/investinglive-asia-pacific-market-news-asia-stocks-slip/"
+   "detail": "China official manufacturing PMI (September): 50.1 (expected 50.1, prior 49.8)",
+   "date": "2026-09-30T01:31:22+00:00",
+   "url": "https://investinglive.com/news/china-official-manufacturing-pmi-september-expected-prior/"
   },
   {
    "id": "src_119",
@@ -2630,15 +2534,15 @@
   "conforme": false,
   "nb_anomalies": 10,
   "anomalies": [
-   "USD : graphique de prix manquant",
+   "USD : analyse indisponible aujourd'hui (Analyse USD impossible : 503 Server Error: Service Unavailable for url: https://) — exclue du classement",
    "EUR : analyse indisponible aujourd'hui (Analyse EUR impossible : 503 Server Error: Service Unavailable for url: https://) — exclue du classement",
-   "GBP : analyse indisponible aujourd'hui (Analyse GBP impossible : 429 Client Error: Too Many Requests for url: https://ge) — exclue du classement",
-   "JPY : analyse indisponible aujourd'hui (Analyse JPY impossible : 429 Client Error: Too Many Requests for url: https://ge) — exclue du classement",
-   "CHF : analyse indisponible aujourd'hui (Analyse CHF impossible : 429 Client Error: Too Many Requests for url: https://ge) — exclue du classement",
-   "CAD : analyse indisponible aujourd'hui (Analyse CAD impossible : 429 Client Error: Too Many Requests for url: https://ge) — exclue du classement",
-   "AUD : analyse indisponible aujourd'hui (Analyse AUD impossible : 429 Client Error: Too Many Requests for url: https://ge) — exclue du classement",
-   "NZD : analyse indisponible aujourd'hui (Analyse NZD impossible : 429 Client Error: Too Many Requests for url: https://ge) — exclue du classement",
-   "CNY : analyse indisponible aujourd'hui (Analyse CNY impossible : 429 Client Error: Too Many Requests for url: https://ge) — exclue du classement",
+   "GBP : analyse indisponible aujourd'hui (Analyse GBP impossible : 503 Server Error: Service Unavailable for url: https://) — exclue du classement",
+   "JPY : analyse indisponible aujourd'hui (Analyse JPY impossible : 503 Server Error: Service Unavailable for url: https://) — exclue du classement",
+   "CHF : analyse indisponible aujourd'hui (Analyse CHF impossible : 503 Server Error: Service Unavailable for url: https://) — exclue du classement",
+   "CAD : analyse indisponible aujourd'hui (Analyse CAD impossible : 503 Server Error: Service Unavailable for url: https://) — exclue du classement",
+   "AUD : analyse indisponible aujourd'hui (Analyse AUD impossible : 503 Server Error: Service Unavailable for url: https://) — exclue du classement",
+   "NZD : analyse indisponible aujourd'hui (Analyse NZD impossible : 503 Server Error: Service Unavailable for url: https://) — exclue du classement",
+   "CNY : analyse indisponible aujourd'hui (Analyse CNY impossible : 503 Server Error: Service Unavailable for url: https://) — exclue du classement",
    "état du monde absent de la synthèse globale"
   ]
  },
