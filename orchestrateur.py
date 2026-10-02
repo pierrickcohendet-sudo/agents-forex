@@ -151,11 +151,16 @@ def main() -> int:
             a_completer = [d["devise"] for d in rapport_existant.get("devises", [])
                           if d.get("score_confluence") is None]
             etat_manquant = not rapport_existant.get("synthese_globale", {}).get("etat_du_monde")
-            if not a_completer and not etat_manquant:
+            collectes_a_refaire = [n for n in ("technique", "macro", "news")
+                                   if collecte_cache.collecte_incomplete(
+                                       donnees_dir / "cache", n, date.today())]
+            if not a_completer and not etat_manquant and not collectes_a_refaire:
                 log.info("--completer : rien à compléter aujourd'hui (rapport déjà complet) — run ignoré")
                 return 0
-            log.info("--completer : %d devise(s) à retenter (%s)%s", len(a_completer),
-                     ", ".join(a_completer) or "—", " + état du monde" if etat_manquant else "")
+            log.info("--completer : %d devise(s) à retenter (%s)%s%s", len(a_completer),
+                     ", ".join(a_completer) or "—", " + état du monde" if etat_manquant else "",
+                     f" + collecte(s) en erreur : {', '.join(collectes_a_refaire)}"
+                     if collectes_a_refaire else "")
         heure_limite = str(config.get("completer", {}).get("heure_limite", "")).strip()
         if heure_limite:
             try:

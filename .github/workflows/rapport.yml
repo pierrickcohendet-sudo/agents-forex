@@ -2,35 +2,27 @@
 # (docs/data pour GitHub Pages, data/rapports + data/cache + data/hebdo comme
 # mémoire entre exécutions — GitHub Actions est sans état).
 #
-# 4 déclenchements par jour ouvré :
+# Déclenchements par jour ouvré :
 # - 05:15 UTC : run COMPLET (collecte + analyse des 9 devises). --type reste
 #   "auto" (défaut de orchestrateur.py) pour laisser l'auto-détection hebdo
 #   (lundi) / mensuel (le 1er) fonctionner normalement.
-# - 13:15 / 17:15 / 21:15 UTC : passages de COMPLÉMENT (--completer) —
-#   rattrapent AUTOMATIQUEMENT, sans intervention manuelle, les devises/
-#   sections encore "analyse indisponible" après le run du matin. --type
-#   reste volontairement "auto" (pas "quotidien" forcé) : un lundi ou le 1er
-#   du mois, le run du matin est hebdomadaire/mensuel — forcer "quotidien" sur
-#   les passages de l'après-midi écraserait ce type dans meta.type_rapport au
-#   moment de la sauvegarde. "auto" redétecte le MÊME type de façon déterministe
-#   (fonction du jour du calendrier, pas de l'heure), donc reste cohérent avec
-#   le matin sans risque. Ne relancent jamais le scraping des 6 sites ni
-#   Twelve Data/FRED/RSS (cache du jour déjà garanti, voir core/scraping.py et
-#   core/collecte_cache.py), ne retentent que ce qui a échoué. S'il n'y a rien
-#   à compléter, le run s'arrête immédiatement (aucune publication inutile).
-#   Le dernier passage (21:15) tombe juste après completer.heure_limite
-#   (21:00 dans config.yaml, informatif) — dernière chance de la journée.
-# Ajuster ces heures UTC à vos horaires de marché si besoin (rappel : l'heure
-# de déclenchement des cron GitHub Actions peut glisser de quelques minutes
-# aux heures de forte charge, c'est normal et sans conséquence ici).
+# - 06:15 -> 21:15 UTC, TOUTES LES HEURES (16 passages) : COMPLÉMENT
+#   (--completer). Les 503 Gemini étant transitoires, multiplier les essais
+#   étalés dans la journée est la parade gratuite. Chaque passage ne retente
+#   que ce qui est encore indisponible (devises "analyse indisponible", état du
+#   monde, collectes API restées en erreur) et s'arrête immédiatement s'il n'y
+#   a rien à faire (aucune publication inutile). Il ne relance jamais le
+#   scraping des 6 sites (cache du jour, core/scraping.py) ni une collecte API
+#   déjà complète (core/collecte_cache.py). --type reste "auto" : un lundi ou le
+#   1er du mois, forcer "quotidien" écraserait meta.type_rapport.
+# Heure de déclenchement des cron GitHub Actions : peut glisser de quelques
+# minutes (voire sauter une exécution) aux heures de forte charge.
 name: rapport-fx
 
 on:
   schedule:
     - cron: "15 5 * * 1-5"    # run complet (matin)
-    - cron: "15 13 * * 1-5"   # complément (début d'après-midi)
-    - cron: "15 17 * * 1-5"   # complément (fin d'après-midi)
-    - cron: "15 21 * * 1-5"   # dernier complément (soir — juste après completer.heure_limite)
+    - cron: "15 6-21 * * 1-5" # compléments horaires 06:15 -> 21:15 UTC
   workflow_dispatch:
     inputs:
       completer:

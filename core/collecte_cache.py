@@ -48,6 +48,13 @@ def _ecrire(dossier: str | Path, nom: str, jour: date, donnees: dict) -> None:
     _chemin(dossier, nom).write_text(contenu, encoding="utf-8")
 
 
+def collecte_incomplete(dossier: str | Path, nom: str, jour: date) -> bool:
+    """Vrai si la collecte du jour existe mais a enregistré des erreurs :
+    un passage --completer doit alors la retenter (et ne pas s'arrêter tôt)."""
+    cache = _lire(dossier, nom, jour)
+    return bool(cache and cache.get("erreurs"))
+
+
 def avec_cache(nom: str, dossier: str | Path, jour: date, reutiliser: bool,
               fonction_collecte: Callable, *args, **kwargs) -> dict:
     """reutiliser=True (--completer) : tente le cache du jour d'abord, retombe
@@ -56,10 +63,14 @@ def avec_cache(nom: str, dossier: str | Path, jour: date, reutiliser: bool,
     rafraîchit le cache pour les passages --completer suivants."""
     if reutiliser:
         cache = _lire(dossier, nom, jour)
-        if cache is not None:
+        if cache is not None and not cache.get("erreurs"):
             log.info("Collecte %s : cache du jour réutilisé (--completer, aucun nouvel appel API)", nom)
             return cache
-        log.info("Collecte %s : --completer sans cache du jour — collecte fraîche effectuée", nom)
+        if cache is not None:
+            log.info("Collecte %s : cache du jour contient %d erreur(s) — nouvelle tentative de collecte",
+                     nom, len(cache["erreurs"]))
+        else:
+            log.info("Collecte %s : --completer sans cache du jour — collecte fraîche effectuée", nom)
     resultat = fonction_collecte(*args, **kwargs)
     _ecrire(dossier, nom, jour, resultat)
     return resultat

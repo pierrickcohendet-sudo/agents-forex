@@ -96,7 +96,16 @@ contexte transmis au LLM (le sens +1/-1/0 se base dessus). Le pipeline **ne
 write jamais** dans ce dossier — vous l'écrivez vous-même, et un futur run ne
 l'écrase jamais, silencieusement ou non.
 
-## Fournisseur LLM de secours (Gemini → Groq) — désactivé par défaut
+## Fournisseur LLM de secours (actif : Gemini Flash-Lite, même clé)
+
+Depuis le 2026-10-02, `llm.secours` pointe sur un **second modèle Gemini**
+(`gemini-3.5-flash-lite`, même `GEMINI_API_KEY`, gratuit, contexte 1 M tokens —
+testé avec un prompt de ~36 000 tokens), sollicité seulement si le modèle
+principal échoue sur l'appel (après son retry 429/503). Les compléments
+horaires (`--completer`) et `llm.pause_entre_devises_s` (config.yaml) étalent
+la charge. Le mécanisme Groq décrit ci-dessous reste implémenté mais désactivé.
+
+### Historique : secours Groq — désactivé
 
 `core/llm.py` expose une seule interface `appeler_llm`, et `creer_fournisseur()`
 peut retourner soit Gemini seul, soit un `FournisseurAvecSecours` qui essaie
@@ -175,7 +184,7 @@ quelques passages l'après-midi/soir) :
   passage de la journée », mais rien n'empêche un lancement manuel plus tard.
 
 Le workflow GitHub Actions déclenche un run complet le matin (05:15 UTC) puis
-trois passages `--completer` dans la journée (13:15 / 17:15 / 21:15 UTC),
+un passage `--completer` toutes les heures de 06:15 à 21:15 UTC (jours ouvrés),
 automatiquement, sans intervention manuelle — voir
 `.github/workflows/rapport.yml`.
 
@@ -249,7 +258,7 @@ markdown dans ce dossier. **Aucun code à toucher.** Même logique pour :
    dossier `/docs`. C'est tout : le site est servi sur
    `https://<user>.github.io/<repo>/`.
 4. Le workflow `.github/workflows/rapport.yml` tourne à 05:15 UTC (run complet)
-   puis 13:15/17:15/21:15 UTC (passages `--completer` automatiques, jours
+   puis toutes les heures de 06:15 à 21:15 UTC (passages `--completer` automatiques, jours
    ouvrés, modifiable) — ces passages rattrapent seuls les devises encore
    « analyse indisponible » après le matin, aucune intervention manuelle
    requise. Le pipeline committe lui-même `docs/data/` (site), `data/rapports/`,

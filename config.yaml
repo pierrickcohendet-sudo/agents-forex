@@ -12,51 +12,73 @@ llm:
   pause_entre_appels_s: 7        # tier gratuit Gemini : espace TOUS les appels (9 devises + synthèses)
   backoff_429_s: 30              # attente réelle avant nouvel essai après un 429 (Retry-After respecté si plus long)
 
-  # Fournisseur de SECOURS : câblé, testé, DÉSACTIVÉ PAR DÉFAUT (2026-08-24).
-  # Verdict après mesure réelle : le prompt par devise (mémoire 7j + news +
-  # catalogue de sources) fait 70-90K car. (~17,5-22,5K tokens) et celui de
-  # l'agent critique 88K+ car. — même avec la réduction générique ci-dessous
-  # (_reduire_message dans core/llm.py), redescendre sous les 8 000 TPM
-  # gratuits de Groq exige de tronquer si fort (mémoire à 1 jour, catalogue à
-  # 1-2 sources) que le résultat n'a plus la richesse d'une analyse tracée.
-  # Le tier gratuit Groq n'est structurellement PAS dimensionné pour les
-  # appels lourds de ce pipeline. Gemini seul (avec sa dégradation propre —
-  # retries, --completer, statuts "analyse indisponible"/"non_evalue" jamais
-  # menteurs) reste le filet de sécurité recommandé. Repasser actif: true
-  # pour réessayer (tier payant Groq, usage ponctuel, ou si le volume de
-  # contexte envoyé baisse structurellement) — GROQ_API_KEY requise dans .env.
+  # Pause entre deux devises analysées (en plus de pause_entre_appels_s) :
+  # évite la rafale de 9 gros prompts consécutifs au run du matin. N'attend
+  # jamais pour une devise déjà réussie réutilisée par --completer.
+  pause_entre_devises_s: 20
+
+  # Fournisseur de SECOURS (2026-10-02) : MÊME clé GEMINI_API_KEY, modèle
+  # Flash-Lite (nom vérifié via l'API ListModels avec notre clé, appel réel
+  # réussi avec un prompt de ~36 000 tokens > nos ~22 000 ; contexte 1 M
+  # tokens). Sollicité UNIQUEMENT si le modèle principal échoue sur cet appel
+  # précis (après son propre retry 429/503). Limites gratuites appliquées par
+  # PROJET et par modèle : le secours a donc son propre quota.
   secours:
-    actif: false
-    fournisseur: groq
-    # llama-3.3-70b-versatile a été RETIRÉ des modèles Groq actifs (constaté
-    # le 2026-08-23) -> openai/gpt-oss-20b : même limite gratuite (8 000 TPM),
-    # plus rapide, JSON mode confirmé compatible (doc officielle Groq).
-    # Vérifier sur console.groq.com/docs/models si ce nom change à son tour.
-    modele: openai/gpt-oss-20b
+    actif: true
+    fournisseur: gemini
+    modele: gemini-3.5-flash-lite   # alternative stable : gemini-3.1-flash-lite
     temperature: 0.2
-    # Tier gratuit Groq confirmé (console.groq.com/docs/rate-limits, vérifié
-    # le 2026-08-23) : 8 000 TPM en fenêtre GLISSANTE, pas juste "par appel" —
-    # deux appels rapprochés se cumulent dans la même fenêtre. 40 s laisse la
-    # fenêtre se vider entre deux appels plutôt que les 3 s d'origine.
-    pause_entre_appels_s: 40
+    pause_entre_appels_s: 7
     backoff_429_s: 30
-    # Budgets en TOKENS (l'unité réellement limitée par Groq — plus de
-    # mélange caractères/tokens dans les logs). systeme+message réduits
-    # visent ~5 000 tokens à eux deux, sous les 8 000 TPM réels, en laissant
-    # de la marge pour la réponse ET le cumul de la fenêtre glissante.
-    budget_tokens_systeme: 2000     # connaissances/ réduit à ~8 000 car.
-    budget_tokens_message: 3000     # contexte par devise réduit à ~12 000 car.
-    budget_tokens_total_max: 5500   # garde-fou : refus AVANT envoi si encore dépassé après réduction
-    # Ordre de priorité si budget_tokens_systeme oblige à omettre des
-    # fichiers connaissances/ : les plus directement utiles au score d'abord,
-    # les plus accessoires (exemples illustratifs, définitions) sacrifiés en premier.
-    connaissances_prioritaires:
-      - banques_centrales.md
-      - indicateurs_fondamentaux.md
-      - indicateurs_techniques.md
-      - cas_particuliers.md
-      - exemples_annotes.md
-      - glossaire.md
+
+  # Ancienne config du secours Groq, DÉSACTIVÉE (tier gratuit 8 000 TPM
+  # structurellement trop petit pour nos prompts). Le code FournisseurGroq reste
+  # dans core/llm.py ; pour le réactiver, recopier ce bloc sous `secours:`.
+  # # Fournisseur de SECOURS : câblé, testé, DÉSACTIVÉ PAR DÉFAUT (2026-08-24).
+  # # Verdict après mesure réelle : le prompt par devise (mémoire 7j + news +
+  # # catalogue de sources) fait 70-90K car. (~17,5-22,5K tokens) et celui de
+  # # l'agent critique 88K+ car. — même avec la réduction générique ci-dessous
+  # # (_reduire_message dans core/llm.py), redescendre sous les 8 000 TPM
+  # # gratuits de Groq exige de tronquer si fort (mémoire à 1 jour, catalogue à
+  # # 1-2 sources) que le résultat n'a plus la richesse d'une analyse tracée.
+  # # Le tier gratuit Groq n'est structurellement PAS dimensionné pour les
+  # # appels lourds de ce pipeline. Gemini seul (avec sa dégradation propre —
+  # # retries, --completer, statuts "analyse indisponible"/"non_evalue" jamais
+  # # menteurs) reste le filet de sécurité recommandé. Repasser actif: true
+  # # pour réessayer (tier payant Groq, usage ponctuel, ou si le volume de
+  # # contexte envoyé baisse structurellement) — GROQ_API_KEY requise dans .env.
+  # secours:
+  #   actif: false
+  #   fournisseur: groq
+  #   # llama-3.3-70b-versatile a été RETIRÉ des modèles Groq actifs (constaté
+  #   # le 2026-08-23) -> openai/gpt-oss-20b : même limite gratuite (8 000 TPM),
+  #   # plus rapide, JSON mode confirmé compatible (doc officielle Groq).
+  #   # Vérifier sur console.groq.com/docs/models si ce nom change à son tour.
+  #   modele: openai/gpt-oss-20b
+  #   temperature: 0.2
+  #   # Tier gratuit Groq confirmé (console.groq.com/docs/rate-limits, vérifié
+  #   # le 2026-08-23) : 8 000 TPM en fenêtre GLISSANTE, pas juste "par appel" —
+  #   # deux appels rapprochés se cumulent dans la même fenêtre. 40 s laisse la
+  #   # fenêtre se vider entre deux appels plutôt que les 3 s d'origine.
+  #   pause_entre_appels_s: 40
+  #   backoff_429_s: 30
+  #   # Budgets en TOKENS (l'unité réellement limitée par Groq — plus de
+  #   # mélange caractères/tokens dans les logs). systeme+message réduits
+  #   # visent ~5 000 tokens à eux deux, sous les 8 000 TPM réels, en laissant
+  #   # de la marge pour la réponse ET le cumul de la fenêtre glissante.
+  #   budget_tokens_systeme: 2000     # connaissances/ réduit à ~8 000 car.
+  #   budget_tokens_message: 3000     # contexte par devise réduit à ~12 000 car.
+  #   budget_tokens_total_max: 5500   # garde-fou : refus AVANT envoi si encore dépassé après réduction
+  #   # Ordre de priorité si budget_tokens_systeme oblige à omettre des
+  #   # fichiers connaissances/ : les plus directement utiles au score d'abord,
+  #   # les plus accessoires (exemples illustratifs, définitions) sacrifiés en premier.
+  #   connaissances_prioritaires:
+  #     - banques_centrales.md
+  #     - indicateurs_fondamentaux.md
+  #     - indicateurs_techniques.md
+  #     - cas_particuliers.md
+  #     - exemples_annotes.md
+  #     - glossaire.md
 
 # --- Devises suivies ---------------------------------------------------------
 # paire        : symbole Twelve Data (null pour USD -> indice synthétique calculé).

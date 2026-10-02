@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import json
 import logging
+import time
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
@@ -786,11 +787,16 @@ def analyser(config: dict, llm: FournisseurLLM, technique: dict, macro: dict,
     taux = macro.get("taux_directeurs", {})
     ids_catalogue = {s["id"] for s in catalogue}
     devises_finales = []
+    pause_devises_s = float(config["llm"].get("pause_entre_devises_s", 0))
+    deja_appele = False
     for devise in config["devises"]:
         if devise in devises_deja_ok:
             # --completer : déjà réussie plus tôt aujourd'hui — jamais retraitée.
             devises_finales.append(devises_deja_ok[devise])
             continue
+        if deja_appele and pause_devises_s > 0:
+            time.sleep(pause_devises_s)  # évite la rafale de 9 gros prompts consécutifs
+        deja_appele = True
         overrides_devise = overrides_du_jour.get(devise)
         # Biais Risk On/Off structurel : dérivé du profil configuré, pas du LLM.
         biais = scoring.biais_structurel(config["devises"][devise].get("profil_risque", "neutre"))

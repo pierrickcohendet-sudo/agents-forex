@@ -429,11 +429,12 @@ def creer_fournisseur(config: dict) -> FournisseurLLM:
                    "aujourd'hui, %s seul sera utilisé",
                    cfg_secours.get("fournisseur", "?"), exc, cfg.get("fournisseur", "principal"))
         return principal
+    nom_principal = f"{cfg.get('fournisseur', 'principal')}/{cfg.get('modele', '?')}"
+    nom_secours = f"{cfg_secours.get('fournisseur', 'secours')}/{cfg_secours.get('modele', '?')}"
     log.info("Fournisseur de secours actif : %s -> repli sur %s en cas d'échec",
-             cfg.get("fournisseur"), cfg_secours.get("fournisseur"))
+             nom_principal, nom_secours)
     return FournisseurAvecSecours(principal, secours,
-                                  nom_principal=cfg.get("fournisseur", "principal"),
-                                  nom_secours=cfg_secours.get("fournisseur", "secours"))
+                                  nom_principal=nom_principal, nom_secours=nom_secours)
 
 
 def extraire_json(texte: str) -> dict | list:
