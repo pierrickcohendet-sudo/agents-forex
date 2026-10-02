@@ -1,29 +1,105 @@
 {
  "meta": {
-  "date_rapport": "2026-09-25",
-  "type_rapport": "quotidien",
+  "date_rapport": "2026-10-01",
+  "type_rapport": "mensuel",
   "version_schema": "1.0",
   "modele_llm": "gemini-flash-latest",
-  "genere_le": "2026-09-25T20:42:24+00:00"
+  "genere_le": "2026-10-01T22:00:25+00:00"
  },
  "synthese_globale": {
   "biais_macro_global": "neutre",
-  "commentaire": "Biais neutre ; EUR en tête du classement de confluence.",
-  "etat_du_monde": null,
+  "commentaire": "Biais neutre ; CAD en tête du classement de confluence.",
+  "etat_du_monde": {
+   "situation_economique": {
+    "texte": "L'activité manufacturière mondiale affiche des signaux divergents : rebond sur un plus haut de 52 mois en zone euro avec reprise en Italie et Espagne, tandis que le Royaume-Uni et le Japon marquent le pas. Aux États-Unis, les tensions sur les taux longs persistent avec un rendement à 10 ans au plus haut depuis 24 ans à 5.26 %, alors que le marché de l'emploi montre des licenciements modérés mais des embauches ralenties avant le rapport NFP.",
+    "source_ids": [
+     "src_006",
+     "src_105",
+     "src_107",
+     "src_109",
+     "src_118",
+     "src_119"
+    ],
+    "non_source": false
+   },
+   "politique_monetaire_budgetaire": {
+    "texte": "Les banques centrales évoluent en mode dépendant des données face à une désinflation fragile et des pressions sur les prix à la production en Europe. La courbe des taux US reste légèrement pentifiée à +37 bp, tandis que les hedge funds concentrent une part record de la dette américaine, accentuant la sensibilité des rendements aux prochaines communications de la Fed.",
+    "source_ids": [
+     "src_012",
+     "src_098",
+     "src_103",
+     "src_107"
+    ],
+    "non_source": false
+   },
+   "geopolitique": {
+    "texte": "Les tensions géopolitiques s'intensifient au Moyen-Orient avec les déclarations américaines sur d'éventuelles frappes renforcées contre l'Iran, propulsant le Brent au-dessus des 100 dollars le baril en parallèle des restrictions chinoises d'exportation de carburant. En Europe de l'Est, de nouvelles frappes massives russes contre les infrastructures énergétiques ukrainiennes renforcent l'incertitude énergétique à l'approche de l'hiver.",
+    "source_ids": [
+     "src_090",
+     "src_093",
+     "src_104"
+    ],
+    "non_source": false
+   },
+   "indicateurs_du_jour": [
+    {
+     "symbole": "✅",
+     "texte": "PMI manufacturier Italie : 50.4 vs 50.0 attendu (précédent non précisé) — retour en zone d'expansion au-dessus du consensus",
+     "source_id": "src_109",
+     "non_sourcee": false
+    },
+    {
+     "symbole": "❌",
+     "texte": "PMI manufacturier UK (définitif) : 51.9 vs 52.0 attendu (précédent préliminaire 52.0) — légère révision baissière mais maintien en zone d'expansion",
+     "source_id": "src_106",
+     "non_sourcee": false
+    },
+    {
+     "symbole": "➖",
+     "texte": "CPI Suisse a/a : 1.0 % vs 1.0 % attendu (précédent non précisé) — inflation stable et parfaitement alignée sur les prévisions",
+     "source_id": "src_111",
+     "non_sourcee": false
+    }
+   ],
+   "actualite": [
+    {
+     "texte": "Oil prices rise as Chinese refiners reportedly ban October fuel exports; Brent crude back above $100 : le pétrole franchit le seuil des 100 $ sous l'effet combiné des tensions au Moyen-Orient et des restrictions d'exportation chinoises.",
+     "source_id": "src_090",
+     "non_sourcee": false
+    },
+    {
+     "texte": "Trump tells TIME the U.S. could resume or intensify attacks against Iran after the midterm elections : la rhétorique belliqueuse de Washington accroît la prime de risque géopolitique sur l'énergie.",
+     "source_id": "src_104",
+     "non_sourcee": false
+    },
+    {
+     "texte": "US layoffs ease in September, but weak hiring keeps NFP in focus : le ralentissement des embauches maintient la pression sur la publication de l'emploi américain.",
+     "source_id": "src_105",
+     "non_sourcee": false
+    },
+    {
+     "texte": "Japan's prime minister says her policies will boost confidence in the yen after U.S. intervention falls short : les autorités japonaises tentent d'enrayer l'affaiblissement du JPY face à la vigueur persistante du dollar.",
+     "source_id": "src_094",
+     "non_sourcee": false
+    }
+   ],
+   "conclusion": "La séance s'articule autour d'un équilibre macroéconomique neutre et partagé. D'un côté, la résilience industrielle européenne et la modération des licenciements aux États-Unis soutiennent le sentiment de base ; de l'autre, la flambée du Brent au-dessus des 100 dollars et le pic des rendements obligataires souverains réactivent les craintes stagflationnistes. Les banques centrales restent contraintes par cette persistance des coûts de l'énergie, incitant les opérateurs à différer toute prise de position directionnelle tranchée avant les chiffres officiels de l'emploi américain.",
+   "incoherence_biais_detectee": false
+  },
   "classement_devises": [
    {
     "rang": 1,
-    "devise": "EUR",
+    "devise": "CAD",
     "score_confluence": 50,
-    "risk_on_off": "neutre"
+    "risk_on_off": "on"
    }
   ],
   "devises_indisponibles": [
    "USD",
+   "EUR",
    "GBP",
    "JPY",
    "CHF",
-   "CAD",
    "AUD",
    "NZD",
    "CNY"
@@ -35,18 +111,18 @@
    "risk_on_off": "off",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "Analyse USD impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge",
+   "raison_indisponibilite": "Analyse USD impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (Analyse USD impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge)",
+    "commentaire": "analyse indisponible (Analyse USD impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene)",
     "source_id": null
    },
    "detail_score": [],
    "opportunites": [],
    "menaces": [],
-   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse USD impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge.",
+   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse USD impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -56,40 +132,40 @@
      "precedent": null,
      "source": "FRED (FEDFUNDS)",
      "date": "2026-08-01",
-     "anciennete_jours": 55,
+     "anciennete_jours": 61,
      "note": ""
     },
     {
      "indicateur": "cpi_surprise",
-     "nom": "Inflation (CPI)",
+     "nom": "Inflation (CPI) — Core PCE Price Index m/m",
      "valeur": null,
-     "prevision": null,
-     "precedent": null,
+     "prevision": "0.3%",
+     "precedent": "0.2%",
      "source": "ForexFactory",
-     "date": null,
-     "anciennete_jours": null,
-     "note": "aucune publication < 7 j"
+     "date": "2026-09-30",
+     "anciennete_jours": 1,
+     "note": ""
     },
     {
      "indicateur": "yield_curve",
      "nom": "Yield curve US (10Y-2Y)",
-     "valeur": "0.26 (aplatissement)",
+     "valeur": "0.37 (stable)",
      "prevision": null,
      "precedent": null,
      "source": "FRED (DGS10/DGS2)",
-     "date": "2026-09-23",
+     "date": "2026-09-29",
      "anciennete_jours": 2,
      "note": ""
     },
     {
      "indicateur": "vix",
      "nom": "VIX",
-     "valeur": 14.21,
+     "valeur": 16.04,
      "prevision": null,
-     "precedent": 14.87,
+     "precedent": 16.07,
      "source": "FRED (VIXCLS)",
-     "date": "2026-09-22",
-     "anciennete_jours": 3,
+     "date": "2026-09-29",
+     "anciennete_jours": 2,
      "note": ""
     },
     {
@@ -99,19 +175,19 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul local (Twelve Data)",
-     "date": "2026-09-25",
+     "date": "2026-10-01",
      "anciennete_jours": 0,
      "note": ""
     },
     {
      "indicateur": "pmi_surprise",
-     "nom": "PMI — Flash Manufacturing PMI",
+     "nom": "PMI — Final Manufacturing PMI",
      "valeur": null,
-     "prevision": "53.6",
-     "precedent": "53.2",
+     "prevision": "56.9",
+     "precedent": "57.0",
      "source": "ForexFactory",
-     "date": "2026-09-23",
-     "anciennete_jours": 2,
+     "date": "2026-10-01",
+     "anciennete_jours": 0,
      "note": ""
     },
     {
@@ -121,7 +197,7 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul (FRED + config)",
-     "date": "2026-09-25",
+     "date": "2026-10-01",
      "anciennete_jours": 0,
      "note": ""
     },
@@ -162,116 +238,32 @@
    },
    "historique_score_7j": [
     {
-     "date": "2026-09-21",
+     "date": "2026-09-29",
      "score": 65
     },
     {
-     "date": "2026-09-23",
-     "score": 59
+     "date": "2026-09-30",
+     "score": 75
     }
    ]
   },
   {
    "devise": "EUR",
    "risk_on_off": "neutre",
-   "score_confluence": 50,
-   "detail_score": [
-    {
-     "indicateur": "taux_directeur",
-     "sens": 0,
-     "poids": 20,
-     "justification": "Taux directeur BCE fixé à 2.40% contre une médiane G8 de 2.50%, positionnement neutre sans écart significatif.",
-     "source_id": "src_013"
-    },
-    {
-     "indicateur": "cpi_surprise",
-     "sens": 0,
-     "poids": 15,
-     "justification": "Aucune publication d'inflation CPI zone euro répertoriée dans le calendrier de la séance.",
-     "source_id": null
-    },
-    {
-     "indicateur": "yield_curve",
-     "sens": 0,
-     "poids": 12,
-     "justification": "Spread US 10Y-2Y à 0.26 avec un aplatissement mensuel de -0.21, signal de fin de cycle mondial neutre pour l'euro.",
-     "source_id": "src_012"
-    },
-    {
-     "indicateur": "vix",
-     "sens": 0,
-     "poids": 10,
-     "justification": "VIX en repli à 14.21 (-4.44%), niveau de volatilité faible sans impact asymétrique sur le profil neutre de l'EUR.",
-     "source_id": "src_008"
-    },
-    {
-     "indicateur": "dxy",
-     "sens": 0,
-     "poids": 10,
-     "justification": "Série de référence technique du dollar non disponible ce jour.",
-     "source_id": null
-    },
-    {
-     "indicateur": "pmi_surprise",
-     "sens": 0,
-     "poids": 10,
-     "justification": "Résultats réels des PMI manufacturier et services zone euro non renseignés dans le calendrier collecté.",
-     "source_id": "src_055"
-    },
-    {
-     "indicateur": "differentiel_taux",
-     "sens": 0,
-     "poids": 8,
-     "justification": "Différentiel de taux à -0.10 point face à la médiane G8, absence de flux structurels de portage.",
-     "source_id": "src_013"
-    },
-    {
-     "indicateur": "rsi",
-     "sens": 0,
-     "poids": 8,
-     "justification": "Indicateurs techniques propres à la devise indisponibles dans le flux du jour.",
-     "source_id": null
-    },
-    {
-     "indicateur": "trendline",
-     "sens": 0,
-     "poids": 7,
-     "justification": "Données de configuration chartiste non renseignées ce jour.",
-     "source_id": null
-    }
-   ],
+   "score_confluence": null,
+   "analyse_indisponible": true,
+   "raison_indisponibilite": "Analyse EUR impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "Données graphiques non fournies ce jour, structure weekly réputée neutre en l'absence de cassure directionnelle documentée.",
+    "commentaire": "analyse indisponible (Analyse EUR impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene)",
     "source_id": null
    },
-   "carry": {
-    "taux_directeur": 2.4,
-    "differentiel_vs_mediane_g8": -0.1,
-    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
-   },
-   "opportunites": [
-    {
-     "texte": "PIB espagnol confirmé à 0.7% au T2 sous l'effet de la demande intérieure, offrant un point d'appui à l'activité en zone euro.",
-     "source_id": "src_104",
-     "non_sourcee": false
-    }
-   ],
-   "menaces": [
-    {
-     "texte": "Détérioration du moral des ménages allemands pour octobre sous le poids du renchérissement des coûts énergétiques.",
-     "source_id": "src_106",
-     "non_sourcee": false
-    },
-    {
-     "texte": "Mise en garde du renseignement danois quant au risque d'escalade russe contre l'OTAN, ravivant la prime de risque géopolitique européenne.",
-     "source_id": "src_090",
-     "non_sourcee": false
-    }
-   ],
-   "synthese_une_phrase": "L'euro reste neutre faute de catalyseur directionnel et d'écart de portage, équilibré entre la résilience de la croissance espagnole et les craintes géopolitiques régionales.",
+   "detail_score": [],
+   "opportunites": [],
+   "menaces": [],
+   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse EUR impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -281,40 +273,40 @@
      "precedent": null,
      "source": "config (repli manuel)",
      "date": "2026-01-15",
-     "anciennete_jours": 253,
+     "anciennete_jours": 259,
      "note": ""
     },
     {
      "indicateur": "cpi_surprise",
-     "nom": "Inflation (CPI)",
+     "nom": "Inflation (CPI) — German Prelim CPI m/m",
      "valeur": null,
-     "prevision": null,
-     "precedent": null,
+     "prevision": "0.5%",
+     "precedent": "0.2%",
      "source": "ForexFactory",
-     "date": null,
-     "anciennete_jours": null,
-     "note": "aucune publication < 7 j"
+     "date": "2026-09-30",
+     "anciennete_jours": 1,
+     "note": ""
     },
     {
      "indicateur": "yield_curve",
      "nom": "Yield curve US (10Y-2Y)",
-     "valeur": "0.26 (aplatissement)",
+     "valeur": "0.37 (stable)",
      "prevision": null,
      "precedent": null,
      "source": "FRED (DGS10/DGS2)",
-     "date": "2026-09-23",
+     "date": "2026-09-29",
      "anciennete_jours": 2,
      "note": ""
     },
     {
      "indicateur": "vix",
      "nom": "VIX",
-     "valeur": 14.21,
+     "valeur": 16.04,
      "prevision": null,
-     "precedent": 14.87,
+     "precedent": 16.07,
      "source": "FRED (VIXCLS)",
-     "date": "2026-09-22",
-     "anciennete_jours": 3,
+     "date": "2026-09-29",
+     "anciennete_jours": 2,
      "note": ""
     },
     {
@@ -324,19 +316,19 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul local (Twelve Data)",
-     "date": "2026-09-25",
+     "date": "2026-10-01",
      "anciennete_jours": 0,
      "note": ""
     },
     {
      "indicateur": "pmi_surprise",
-     "nom": "PMI — French Flash Manufacturing PMI",
+     "nom": "PMI — Spanish Manufacturing PMI",
      "valeur": null,
-     "prevision": "50.9",
-     "precedent": "51.5",
+     "prevision": "50.2",
+     "precedent": "49.5",
      "source": "ForexFactory",
-     "date": "2026-09-23",
-     "anciennete_jours": 2,
+     "date": "2026-10-01",
+     "anciennete_jours": 0,
      "note": ""
     },
     {
@@ -346,7 +338,7 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul (FRED + config)",
-     "date": "2026-09-25",
+     "date": "2026-10-01",
      "anciennete_jours": 0,
      "note": ""
     },
@@ -375,30 +367,28 @@
    ],
    "contexte_geopolitique": {
     "banque_centrale_pourquoi": {
-     "texte": "La BCE adopte une approche dépendante des données réunion par réunion, évaluant le rythme de reflux de l'inflation face aux signes d'essoufflement de la conjoncture européenne.",
-     "source_id": "src_030"
+     "texte": "",
+     "source_id": null
     },
-    "evenements": [
-     {
-      "texte": "Avertissement des services de renseignement danois sur les menaces russes envers les pays de l'OTAN d'ici quelques mois.",
-      "source_id": "src_090",
-      "non_sourcee": false
-     },
-     {
-      "texte": "Repli marqué du moral des consommateurs allemands en prévision d'octobre en raison des pressions sur les prix de l'énergie.",
-      "source_id": "src_106",
-      "non_sourcee": false
-     }
-    ]
+    "evenements": []
+   },
+   "carry": {
+    "taux_directeur": 2.4,
+    "differentiel_vs_mediane_g8": -0.1,
+    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
    },
    "historique_score_7j": [
     {
-     "date": "2026-09-21",
+     "date": "2026-09-25",
      "score": 50
     },
     {
-     "date": "2026-09-25",
+     "date": "2026-09-26",
      "score": 50
+    },
+    {
+     "date": "2026-09-29",
+     "score": 44
     }
    ]
   },
@@ -407,18 +397,18 @@
    "risk_on_off": "neutre",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "Analyse GBP impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge",
+   "raison_indisponibilite": "Analyse GBP impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (Analyse GBP impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge)",
+    "commentaire": "analyse indisponible (Analyse GBP impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene)",
     "source_id": null
    },
    "detail_score": [],
    "opportunites": [],
    "menaces": [],
-   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse GBP impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge.",
+   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse GBP impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -428,7 +418,7 @@
      "precedent": null,
      "source": "config (repli manuel)",
      "date": "2026-01-15",
-     "anciennete_jours": 253,
+     "anciennete_jours": 259,
      "note": ""
     },
     {
@@ -445,23 +435,23 @@
     {
      "indicateur": "yield_curve",
      "nom": "Yield curve US (10Y-2Y)",
-     "valeur": "0.26 (aplatissement)",
+     "valeur": "0.37 (stable)",
      "prevision": null,
      "precedent": null,
      "source": "FRED (DGS10/DGS2)",
-     "date": "2026-09-23",
+     "date": "2026-09-29",
      "anciennete_jours": 2,
      "note": ""
     },
     {
      "indicateur": "vix",
      "nom": "VIX",
-     "valeur": 14.21,
+     "valeur": 16.04,
      "prevision": null,
-     "precedent": 14.87,
+     "precedent": 16.07,
      "source": "FRED (VIXCLS)",
-     "date": "2026-09-22",
-     "anciennete_jours": 3,
+     "date": "2026-09-29",
+     "anciennete_jours": 2,
      "note": ""
     },
     {
@@ -471,19 +461,19 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul local (Twelve Data)",
-     "date": "2026-09-25",
+     "date": "2026-10-01",
      "anciennete_jours": 0,
      "note": ""
     },
     {
      "indicateur": "pmi_surprise",
-     "nom": "PMI — Flash Manufacturing PMI",
+     "nom": "PMI — Final Manufacturing PMI",
      "valeur": null,
-     "prevision": "51.5",
-     "precedent": "51.5",
+     "prevision": "52.0",
+     "precedent": "52.0",
      "source": "ForexFactory",
-     "date": "2026-09-23",
-     "anciennete_jours": 2,
+     "date": "2026-10-01",
+     "anciennete_jours": 0,
      "note": ""
     },
     {
@@ -493,7 +483,7 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul (FRED + config)",
-     "date": "2026-09-25",
+     "date": "2026-10-01",
      "anciennete_jours": 0,
      "note": ""
     },
@@ -532,38 +522,25 @@
     "differentiel_vs_mediane_g8": 1.25,
     "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
    },
-   "historique_score_7j": [
-    {
-     "date": "2026-09-21",
-     "score": 69
-    },
-    {
-     "date": "2026-09-22",
-     "score": 69
-    },
-    {
-     "date": "2026-09-23",
-     "score": 64
-    }
-   ]
+   "historique_score_7j": []
   },
   {
    "devise": "JPY",
    "risk_on_off": "off",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "Analyse JPY impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge",
+   "raison_indisponibilite": "Analyse JPY impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (Analyse JPY impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge)",
+    "commentaire": "analyse indisponible (Analyse JPY impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene)",
     "source_id": null
    },
    "detail_score": [],
    "opportunites": [],
    "menaces": [],
-   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse JPY impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge.",
+   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse JPY impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -573,40 +550,40 @@
      "precedent": null,
      "source": "config (repli manuel)",
      "date": "2026-01-15",
-     "anciennete_jours": 253,
+     "anciennete_jours": 259,
      "note": ""
     },
     {
      "indicateur": "cpi_surprise",
-     "nom": "Inflation (CPI) — BOJ Core CPI y/y",
+     "nom": "Inflation (CPI) — Tokyo Core CPI y/y",
      "valeur": null,
-     "prevision": "1.5%",
-     "precedent": "1.6%",
+     "prevision": "2.4%",
+     "precedent": "1.8%",
      "source": "ForexFactory",
-     "date": "2026-09-25",
+     "date": "2026-10-01",
      "anciennete_jours": 0,
      "note": ""
     },
     {
      "indicateur": "yield_curve",
      "nom": "Yield curve US (10Y-2Y)",
-     "valeur": "0.26 (aplatissement)",
+     "valeur": "0.37 (stable)",
      "prevision": null,
      "precedent": null,
      "source": "FRED (DGS10/DGS2)",
-     "date": "2026-09-23",
+     "date": "2026-09-29",
      "anciennete_jours": 2,
      "note": ""
     },
     {
      "indicateur": "vix",
      "nom": "VIX",
-     "valeur": 14.21,
+     "valeur": 16.04,
      "prevision": null,
-     "precedent": 14.87,
+     "precedent": 16.07,
      "source": "FRED (VIXCLS)",
-     "date": "2026-09-22",
-     "anciennete_jours": 3,
+     "date": "2026-09-29",
+     "anciennete_jours": 2,
      "note": ""
     },
     {
@@ -616,20 +593,20 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul local (Twelve Data)",
-     "date": "2026-09-25",
+     "date": "2026-10-01",
      "anciennete_jours": 0,
      "note": ""
     },
     {
      "indicateur": "pmi_surprise",
-     "nom": "PMI — Flash Manufacturing PMI",
+     "nom": "PMI",
      "valeur": null,
-     "prevision": "55.0",
-     "precedent": "55.1",
+     "prevision": null,
+     "precedent": null,
      "source": "ForexFactory",
-     "date": "2026-09-23",
-     "anciennete_jours": 2,
-     "note": ""
+     "date": null,
+     "anciennete_jours": null,
+     "note": "aucune publication < 7 j"
     },
     {
      "indicateur": "differentiel_taux",
@@ -638,7 +615,7 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul (FRED + config)",
-     "date": "2026-09-25",
+     "date": "2026-10-01",
      "anciennete_jours": 0,
      "note": ""
     },
@@ -679,11 +656,7 @@
    },
    "historique_score_7j": [
     {
-     "date": "2026-09-21",
-     "score": 25
-    },
-    {
-     "date": "2026-09-23",
+     "date": "2026-09-26",
      "score": 25
     }
    ]
@@ -714,40 +687,40 @@
      "precedent": null,
      "source": "config (repli manuel)",
      "date": "2026-01-15",
-     "anciennete_jours": 253,
+     "anciennete_jours": 259,
      "note": ""
     },
     {
      "indicateur": "cpi_surprise",
-     "nom": "Inflation (CPI)",
+     "nom": "Inflation (CPI) — CPI m/m",
      "valeur": null,
-     "prevision": null,
-     "precedent": null,
+     "prevision": "0.0%",
+     "precedent": "0.4%",
      "source": "ForexFactory",
-     "date": null,
-     "anciennete_jours": null,
-     "note": "aucune publication < 7 j"
+     "date": "2026-10-01",
+     "anciennete_jours": 0,
+     "note": ""
     },
     {
      "indicateur": "yield_curve",
      "nom": "Yield curve US (10Y-2Y)",
-     "valeur": "0.26 (aplatissement)",
+     "valeur": "0.37 (stable)",
      "prevision": null,
      "precedent": null,
      "source": "FRED (DGS10/DGS2)",
-     "date": "2026-09-23",
+     "date": "2026-09-29",
      "anciennete_jours": 2,
      "note": ""
     },
     {
      "indicateur": "vix",
      "nom": "VIX",
-     "valeur": 14.21,
+     "valeur": 16.04,
      "prevision": null,
-     "precedent": 14.87,
+     "precedent": 16.07,
      "source": "FRED (VIXCLS)",
-     "date": "2026-09-22",
-     "anciennete_jours": 3,
+     "date": "2026-09-29",
+     "anciennete_jours": 2,
      "note": ""
     },
     {
@@ -757,20 +730,20 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul local (Twelve Data)",
-     "date": "2026-09-25",
+     "date": "2026-10-01",
      "anciennete_jours": 0,
      "note": ""
     },
     {
      "indicateur": "pmi_surprise",
-     "nom": "PMI",
+     "nom": "PMI — Manufacturing PMI",
      "valeur": null,
-     "prevision": null,
-     "precedent": null,
+     "prevision": "56.3",
+     "precedent": "57.1",
      "source": "ForexFactory",
-     "date": null,
-     "anciennete_jours": null,
-     "note": "aucune publication < 7 j"
+     "date": "2026-10-01",
+     "anciennete_jours": 0,
+     "note": ""
     },
     {
      "indicateur": "differentiel_taux",
@@ -779,7 +752,7 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul (FRED + config)",
-     "date": "2026-09-25",
+     "date": "2026-10-01",
      "anciennete_jours": 0,
      "note": ""
     },
@@ -820,11 +793,7 @@
    },
    "historique_score_7j": [
     {
-     "date": "2026-09-22",
-     "score": 37
-    },
-    {
-     "date": "2026-09-23",
+     "date": "2026-09-29",
      "score": 31
     }
    ]
@@ -832,20 +801,104 @@
   {
    "devise": "CAD",
    "risk_on_off": "on",
-   "score_confluence": null,
-   "analyse_indisponible": true,
-   "raison_indisponibilite": "Analyse CAD impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene",
+   "score_confluence": 50,
+   "detail_score": [
+    {
+     "indicateur": "taux_directeur",
+     "sens": 0,
+     "poids": 20,
+     "justification": "Taux directeur BoC à 2.25 % proche de la médiane G8 à 2.50 %, sans divergence restrictive ou accommodante marquée.",
+     "source_id": "src_013"
+    },
+    {
+     "indicateur": "cpi_surprise",
+     "sens": 0,
+     "poids": 15,
+     "justification": "Aucune publication d'inflation canadienne au calendrier économique aujourd'hui.",
+     "source_id": null
+    },
+    {
+     "indicateur": "yield_curve",
+     "sens": 0,
+     "poids": 12,
+     "justification": "Spread 10Y-2Y américain stable à 0.37 point (delta mensuel de -0.04 point), sans impulsion macroéconomique nette sur le bloc nord-américain.",
+     "source_id": "src_012"
+    },
+    {
+     "indicateur": "vix",
+     "sens": 0,
+     "poids": 10,
+     "justification": "VIX à 16.04 (légère baisse de 0.19 % vs 16.07), indiquant un niveau de stress modéré sans catalyseur haussier pour les devises matières premières.",
+     "source_id": "src_008"
+    },
+    {
+     "indicateur": "dxy",
+     "sens": 0,
+     "poids": 10,
+     "justification": "Indice synthétique du dollar américain non disponible dans les données techniques du jour.",
+     "source_id": null
+    },
+    {
+     "indicateur": "pmi_surprise",
+     "sens": 0,
+     "poids": 10,
+     "justification": "PMI manufacturier canadien du jour en attente de publication (précédent à 53.0 sans consensus affiché).",
+     "source_id": "src_030"
+    },
+    {
+     "indicateur": "differentiel_taux",
+     "sens": 0,
+     "poids": 8,
+     "justification": "Différentiel de carry à -0.25 point face à la médiane G8 (taux à 2.25 % vs 2.50 %), écart insuffisant pour générer des flux directionnels.",
+     "source_id": "src_013"
+    },
+    {
+     "indicateur": "rsi",
+     "sens": 0,
+     "poids": 8,
+     "justification": "Données de momentum RSI indisponibles aujourd'hui pour le CAD.",
+     "source_id": null
+    },
+    {
+     "indicateur": "trendline",
+     "sens": 0,
+     "poids": 7,
+     "justification": "Historique graphique non fourni ne permettant pas de valider une ligne de tendance à 3 impacts.",
+     "source_id": null
+    }
+   ],
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (Analyse CAD impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene)",
+    "commentaire": "Données techniques weekly non disponibles ce jour ; lecture neutre par défaut.",
     "source_id": null
    },
-   "detail_score": [],
-   "opportunites": [],
-   "menaces": [],
-   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse CAD impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene.",
+   "carry": {
+    "taux_directeur": 2.25,
+    "differentiel_vs_mediane_g8": -0.25,
+    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   },
+   "opportunites": [
+    {
+     "texte": "Les tensions sur les approvisionnements en brut maintiennent le Brent au-dessus des 100 dollars le baril, un soutien structurel pour la balance commerciale canadienne.",
+     "source_id": "src_090",
+     "non_sourcee": false
+    }
+   ],
+   "menaces": [
+    {
+     "texte": "Le repli journalier des cours du pétrole brut WTI à 96.16 dollars (-3.23 %) pèse à court terme sur les termes de l'échange du Canada.",
+     "source_id": "src_009",
+     "non_sourcee": false
+    },
+    {
+     "texte": "Le rendement US 10 ans reste élevé à 5.26 % (+0.38 %), maintenant un différentiel de taux bilatéral défavorable au CAD face au dollar américain.",
+     "source_id": "src_006",
+     "non_sourcee": false
+    }
+   ],
+   "synthese_une_phrase": "En l'absence de catalyseur macroéconomique domestique et de repère technique, le dollar canadien évolue sans tendance nette, tiraillé entre des cours pétroliers volatils et des taux obligataires américains élevés.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -855,7 +908,7 @@
      "precedent": null,
      "source": "config (repli manuel)",
      "date": "2026-01-15",
-     "anciennete_jours": 253,
+     "anciennete_jours": 259,
      "note": ""
     },
     {
@@ -872,23 +925,23 @@
     {
      "indicateur": "yield_curve",
      "nom": "Yield curve US (10Y-2Y)",
-     "valeur": "0.26 (aplatissement)",
+     "valeur": "0.37 (stable)",
      "prevision": null,
      "precedent": null,
      "source": "FRED (DGS10/DGS2)",
-     "date": "2026-09-23",
+     "date": "2026-09-29",
      "anciennete_jours": 2,
      "note": ""
     },
     {
      "indicateur": "vix",
      "nom": "VIX",
-     "valeur": 14.21,
+     "valeur": 16.04,
      "prevision": null,
-     "precedent": 14.87,
+     "precedent": 16.07,
      "source": "FRED (VIXCLS)",
-     "date": "2026-09-22",
-     "anciennete_jours": 3,
+     "date": "2026-09-29",
+     "anciennete_jours": 2,
      "note": ""
     },
     {
@@ -898,7 +951,7 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul local (Twelve Data)",
-     "date": "2026-09-25",
+     "date": "2026-10-01",
      "anciennete_jours": 0,
      "note": ""
     },
@@ -920,7 +973,7 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul (FRED + config)",
-     "date": "2026-09-25",
+     "date": "2026-10-01",
      "anciennete_jours": 0,
      "note": ""
     },
@@ -949,35 +1002,32 @@
     {
      "indicateur": "petrole_contexte",
      "nom": "Pétrole WTI (contexte)",
-     "valeur": 96.41,
+     "valeur": 96.16,
      "prevision": null,
-     "precedent": 96.97,
+     "precedent": 99.37,
      "source": "FRED",
-     "date": "2026-09-22",
-     "anciennete_jours": 3,
+     "date": "2026-09-29",
+     "anciennete_jours": 2,
      "note": ""
     }
    ],
    "contexte_geopolitique": {
     "banque_centrale_pourquoi": {
-     "texte": "",
-     "source_id": null
+     "texte": "La Banque du Canada maintient son taux à 2.25 % dans une démarche dépendante des données, ajustant sa politique à l'évolution de la demande intérieure et de l'inflation.",
+     "source_id": "src_013"
     },
-    "evenements": []
-   },
-   "carry": {
-    "taux_directeur": 2.25,
-    "differentiel_vs_mediane_g8": -0.25,
-    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+    "evenements": [
+     {
+      "texte": "Discours de Carolyn Rogers, membre du Conseil des gouverneurs de la Banque du Canada, susceptible d'éclairer la trajectoire monétaire.",
+      "source_id": "src_057",
+      "non_sourcee": false
+     }
+    ]
    },
    "historique_score_7j": [
     {
-     "date": "2026-09-21",
-     "score": 35
-    },
-    {
-     "date": "2026-09-23",
-     "score": 49
+     "date": "2026-10-01",
+     "score": 50
     }
    ]
   },
@@ -1007,7 +1057,7 @@
      "precedent": null,
      "source": "config (repli manuel)",
      "date": "2026-01-15",
-     "anciennete_jours": 253,
+     "anciennete_jours": 259,
      "note": ""
     },
     {
@@ -1024,23 +1074,23 @@
     {
      "indicateur": "yield_curve",
      "nom": "Yield curve US (10Y-2Y)",
-     "valeur": "0.26 (aplatissement)",
+     "valeur": "0.37 (stable)",
      "prevision": null,
      "precedent": null,
      "source": "FRED (DGS10/DGS2)",
-     "date": "2026-09-23",
+     "date": "2026-09-29",
      "anciennete_jours": 2,
      "note": ""
     },
     {
      "indicateur": "vix",
      "nom": "VIX",
-     "valeur": 14.21,
+     "valeur": 16.04,
      "prevision": null,
-     "precedent": 14.87,
+     "precedent": 16.07,
      "source": "FRED (VIXCLS)",
-     "date": "2026-09-22",
-     "anciennete_jours": 3,
+     "date": "2026-09-29",
+     "anciennete_jours": 2,
      "note": ""
     },
     {
@@ -1050,7 +1100,7 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul local (Twelve Data)",
-     "date": "2026-09-25",
+     "date": "2026-10-01",
      "anciennete_jours": 0,
      "note": ""
     },
@@ -1072,7 +1122,7 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul (FRED + config)",
-     "date": "2026-09-25",
+     "date": "2026-10-01",
      "anciennete_jours": 0,
      "note": ""
     },
@@ -1139,7 +1189,7 @@
      "precedent": null,
      "source": "config (repli manuel)",
      "date": "2026-01-15",
-     "anciennete_jours": 253,
+     "anciennete_jours": 259,
      "note": ""
     },
     {
@@ -1156,23 +1206,23 @@
     {
      "indicateur": "yield_curve",
      "nom": "Yield curve US (10Y-2Y)",
-     "valeur": "0.26 (aplatissement)",
+     "valeur": "0.37 (stable)",
      "prevision": null,
      "precedent": null,
      "source": "FRED (DGS10/DGS2)",
-     "date": "2026-09-23",
+     "date": "2026-09-29",
      "anciennete_jours": 2,
      "note": ""
     },
     {
      "indicateur": "vix",
      "nom": "VIX",
-     "valeur": 14.21,
+     "valeur": 16.04,
      "prevision": null,
-     "precedent": 14.87,
+     "precedent": 16.07,
      "source": "FRED (VIXCLS)",
-     "date": "2026-09-22",
-     "anciennete_jours": 3,
+     "date": "2026-09-29",
+     "anciennete_jours": 2,
      "note": ""
     },
     {
@@ -1182,7 +1232,7 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul local (Twelve Data)",
-     "date": "2026-09-25",
+     "date": "2026-10-01",
      "anciennete_jours": 0,
      "note": ""
     },
@@ -1204,7 +1254,7 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul (FRED + config)",
-     "date": "2026-09-25",
+     "date": "2026-10-01",
      "anciennete_jours": 0,
      "note": ""
     },
@@ -1243,12 +1293,7 @@
     "differentiel_vs_mediane_g8": 0.0,
     "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
    },
-   "historique_score_7j": [
-    {
-     "date": "2026-09-23",
-     "score": 49
-    }
-   ]
+   "historique_score_7j": []
   },
   {
    "devise": "CNY",
@@ -1287,7 +1332,7 @@
      "precedent": null,
      "source": "config (repli manuel)",
      "date": "2026-01-15",
-     "anciennete_jours": 253,
+     "anciennete_jours": 259,
      "note": ""
     },
     {
@@ -1319,7 +1364,7 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul local (Twelve Data)",
-     "date": "2026-09-25",
+     "date": "2026-10-01",
      "anciennete_jours": 0,
      "note": ""
     },
@@ -1330,30 +1375,30 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul (FRED + config)",
-     "date": "2026-09-25",
+     "date": "2026-10-01",
      "anciennete_jours": 0,
      "note": ""
     },
     {
      "indicateur": "yield_curve",
      "nom": "Yield curve US (10Y-2Y)",
-     "valeur": "0.26 (aplatissement)",
+     "valeur": "0.37 (stable)",
      "prevision": null,
      "precedent": null,
      "source": "FRED (DGS10/DGS2)",
-     "date": "2026-09-23",
+     "date": "2026-09-29",
      "anciennete_jours": 2,
      "note": ""
     },
     {
      "indicateur": "vix",
      "nom": "VIX",
-     "valeur": 14.21,
+     "valeur": 16.04,
      "prevision": null,
-     "precedent": 14.87,
+     "precedent": 16.07,
      "source": "FRED (VIXCLS)",
-     "date": "2026-09-22",
-     "anciennete_jours": 3,
+     "date": "2026-09-29",
+     "anciennete_jours": 2,
      "note": ""
     },
     {
@@ -1391,12 +1436,7 @@
     "differentiel_vs_mediane_g8": 0.5,
     "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
    },
-   "historique_score_7j": [
-    {
-     "date": "2026-09-23",
-     "score": 54
-    }
-   ]
+   "historique_score_7j": []
   }
  ],
  "sources_citees": [
@@ -1411,7 +1451,7 @@
    "id": "src_002",
    "source": "FRED",
    "detail": "core_pce (PCEPILFE)",
-   "date": "2026-07-01",
+   "date": "2026-08-01",
    "url": "https://fred.stlouisfed.org/series/PCEPILFE"
   },
   {
@@ -1439,805 +1479,805 @@
    "id": "src_006",
    "source": "FRED",
    "detail": "rendement_10y (DGS10)",
-   "date": "2026-09-23",
+   "date": "2026-09-29",
    "url": "https://fred.stlouisfed.org/series/DGS10"
   },
   {
    "id": "src_007",
    "source": "FRED",
    "detail": "rendement_2y (DGS2)",
-   "date": "2026-09-23",
+   "date": "2026-09-29",
    "url": "https://fred.stlouisfed.org/series/DGS2"
   },
   {
    "id": "src_008",
    "source": "FRED",
    "detail": "vix (VIXCLS)",
-   "date": "2026-09-22",
+   "date": "2026-09-29",
    "url": "https://fred.stlouisfed.org/series/VIXCLS"
   },
   {
    "id": "src_009",
    "source": "FRED",
    "detail": "petrole_wti (DCOILWTICO)",
-   "date": "2026-09-22",
+   "date": "2026-09-29",
    "url": "https://fred.stlouisfed.org/series/DCOILWTICO"
   },
   {
    "id": "src_010",
    "source": "FRED",
    "detail": "petrole_brent (DCOILBRENTEU)",
-   "date": "2026-09-22",
+   "date": "2026-09-29",
    "url": "https://fred.stlouisfed.org/series/DCOILBRENTEU"
   },
   {
    "id": "src_011",
    "source": "FRED",
    "detail": "sp500 (SP500)",
-   "date": "2026-09-24",
+   "date": "2026-09-30",
    "url": "https://fred.stlouisfed.org/series/SP500"
   },
   {
    "id": "src_012",
    "source": "FRED",
    "detail": "yield curve US 10Y-2Y (DGS10/DGS2)",
-   "date": "2026-09-23",
+   "date": "2026-09-29",
    "url": null
   },
   {
    "id": "src_013",
    "source": "FRED + config",
    "detail": "taux directeurs des 8 devises",
-   "date": "2026-09-25",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_014",
    "source": "ForexFactory",
    "detail": "Daylight Saving Time Shift",
-   "date": "2026-09-26",
+   "date": "2026-10-03",
    "url": null
   },
   {
    "id": "src_015",
    "source": "ForexFactory",
-   "detail": "BOJ Core CPI y/y",
-   "date": "2026-09-25",
+   "detail": "Spanish Unemployment Change",
+   "date": "2026-10-02",
    "url": null
   },
   {
    "id": "src_016",
    "source": "ForexFactory",
-   "detail": "German GfK Consumer Climate",
-   "date": "2026-09-25",
+   "detail": "Italian Retail Sales m/m",
+   "date": "2026-10-02",
    "url": null
   },
   {
    "id": "src_017",
    "source": "ForexFactory",
-   "detail": "M3 Money Supply y/y",
-   "date": "2026-09-25",
+   "detail": "Core CPI Flash Estimate y/y",
+   "date": "2026-10-02",
    "url": null
   },
   {
    "id": "src_018",
    "source": "ForexFactory",
-   "detail": "Private Loans y/y",
-   "date": "2026-09-25",
+   "detail": "CPI Flash Estimate y/y",
+   "date": "2026-10-02",
    "url": null
   },
   {
    "id": "src_019",
    "source": "ForexFactory",
-   "detail": "BOE Gov Bailey Speaks",
-   "date": "2026-09-25",
+   "detail": "Average Hourly Earnings m/m",
+   "date": "2026-10-02",
    "url": null
   },
   {
    "id": "src_020",
    "source": "ForexFactory",
-   "detail": "FOMC Member Williams Speaks",
-   "date": "2026-09-25",
+   "detail": "Non-Farm Employment Change",
+   "date": "2026-10-02",
    "url": null
   },
   {
    "id": "src_021",
    "source": "ForexFactory",
-   "detail": "Core Durable Goods Orders m/m",
-   "date": "2026-09-25",
+   "detail": "Unemployment Rate",
+   "date": "2026-10-02",
    "url": null
   },
   {
    "id": "src_022",
    "source": "ForexFactory",
-   "detail": "Durable Goods Orders m/m",
-   "date": "2026-09-25",
+   "detail": "Factory Orders m/m",
+   "date": "2026-10-02",
    "url": null
   },
   {
    "id": "src_023",
    "source": "ForexFactory",
-   "detail": "Revised UoM Consumer Sentiment",
-   "date": "2026-09-25",
+   "detail": "FOMC Member Logan Speaks",
+   "date": "2026-10-02",
    "url": null
   },
   {
    "id": "src_024",
    "source": "ForexFactory",
-   "detail": "Revised UoM Inflation Expectations",
-   "date": "2026-09-25",
+   "detail": "German Buba President Nagel Speaks",
+   "date": "2026-10-02",
    "url": null
   },
   {
    "id": "src_025",
    "source": "ForexFactory",
-   "detail": "FOMC Member Hammack Speaks",
-   "date": "2026-09-25",
+   "detail": "Nationwide HPI m/m",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_026",
    "source": "ForexFactory",
-   "detail": "FOMC Member Schmid Speaks",
-   "date": "2026-09-25",
+   "detail": "Commodity Prices y/y",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_027",
    "source": "ForexFactory",
-   "detail": "SNB Monetary Policy Assessment",
-   "date": "2026-09-24",
+   "detail": "CPI m/m",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_028",
    "source": "ForexFactory",
-   "detail": "SNB Policy Rate",
-   "date": "2026-09-24",
+   "detail": "Retail Sales y/y",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_029",
    "source": "ForexFactory",
-   "detail": "SNB Press Conference",
-   "date": "2026-09-24",
+   "detail": "Spanish Manufacturing PMI",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_030",
    "source": "ForexFactory",
-   "detail": "ECB Economic Bulletin",
-   "date": "2026-09-24",
+   "detail": "Manufacturing PMI",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_031",
    "source": "ForexFactory",
-   "detail": "German ifo Business Climate",
-   "date": "2026-09-24",
+   "detail": "Italian Manufacturing PMI",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_032",
    "source": "ForexFactory",
-   "detail": "FOMC Member Williams Speaks",
-   "date": "2026-09-24",
+   "detail": "French Final Manufacturing PMI",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_033",
    "source": "ForexFactory",
-   "detail": "MPC Member Dhingra Speaks",
-   "date": "2026-09-24",
+   "detail": "German Final Manufacturing PMI",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_034",
    "source": "ForexFactory",
-   "detail": "CBI Realized Sales",
-   "date": "2026-09-24",
+   "detail": "Final Manufacturing PMI",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_035",
    "source": "ForexFactory",
-   "detail": "Core Retail Sales m/m",
-   "date": "2026-09-24",
+   "detail": "Italian Monthly Unemployment Rate",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_036",
    "source": "ForexFactory",
-   "detail": "Retail Sales m/m",
-   "date": "2026-09-24",
+   "detail": "BOE Gov Bailey Speaks",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_037",
    "source": "ForexFactory",
-   "detail": "Unemployment Claims",
-   "date": "2026-09-24",
+   "detail": "Unemployment Rate",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_038",
    "source": "ForexFactory",
-   "detail": "Current Account",
-   "date": "2026-09-24",
+   "detail": "Spanish 10-y Bond Auction",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_039",
    "source": "ForexFactory",
-   "detail": "FOMC Member Barkin Speaks",
-   "date": "2026-09-24",
+   "detail": "French 10-y Bond Auction",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_040",
    "source": "ForexFactory",
-   "detail": "FOMC Member Hammack Speaks",
-   "date": "2026-09-24",
+   "detail": "Challenger Job Cuts y/y",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_041",
    "source": "ForexFactory",
-   "detail": "CB Leading Index m/m",
-   "date": "2026-09-24",
+   "detail": "German Buba President Nagel Speaks",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_042",
    "source": "ForexFactory",
-   "detail": "Belgian NBB Business Climate",
-   "date": "2026-09-24",
+   "detail": "MPC Member Mann Speaks",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_043",
    "source": "ForexFactory",
-   "detail": "MPC Member Breeden Speaks",
-   "date": "2026-09-24",
+   "detail": "Unemployment Claims",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_044",
    "source": "ForexFactory",
-   "detail": "MPC Member Lombardelli Speaks",
-   "date": "2026-09-24",
+   "detail": "FOMC Member Barkin Speaks",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_045",
    "source": "ForexFactory",
-   "detail": "New Home Sales",
-   "date": "2026-09-24",
+   "detail": "FOMC Member Collins Speaks",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_046",
    "source": "ForexFactory",
-   "detail": "FOMC Member Paulson Speaks",
-   "date": "2026-09-24",
+   "detail": "FOMC Member Schmid Speaks",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_047",
    "source": "ForexFactory",
-   "detail": "Natural Gas Storage",
-   "date": "2026-09-24",
+   "detail": "ECB President Lagarde Speaks",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_048",
    "source": "ForexFactory",
-   "detail": "GfK Consumer Confidence",
-   "date": "2026-09-24",
+   "detail": "FOMC Member Waller Speaks",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_049",
    "source": "ForexFactory",
-   "detail": "Bank Holiday",
-   "date": "2026-09-24",
+   "detail": "ISM Manufacturing PMI",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_050",
    "source": "ForexFactory",
-   "detail": "President Trump Speaks",
-   "date": "2026-09-24",
+   "detail": "Construction Spending m/m",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_051",
    "source": "ForexFactory",
-   "detail": "French Flash Manufacturing PMI",
-   "date": "2026-09-23",
+   "detail": "ISM Manufacturing Prices",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_052",
    "source": "ForexFactory",
-   "detail": "French Flash Services PMI",
-   "date": "2026-09-23",
+   "detail": "Omdia Total Vehicle Sales",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_053",
    "source": "ForexFactory",
-   "detail": "German Flash Manufacturing PMI",
-   "date": "2026-09-23",
+   "detail": "Natural Gas Storage",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_054",
    "source": "ForexFactory",
-   "detail": "German Flash Services PMI",
-   "date": "2026-09-23",
+   "detail": "SNB Chairman Schlegel Speaks",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_055",
    "source": "ForexFactory",
-   "detail": "Flash Manufacturing PMI",
-   "date": "2026-09-23",
+   "detail": "FOMC Member Jefferson Speaks",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_056",
    "source": "ForexFactory",
-   "detail": "Flash Services PMI",
-   "date": "2026-09-23",
+   "detail": "FOMC Member Bowman Speaks",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_057",
    "source": "ForexFactory",
-   "detail": "German 30-y Bond Auction",
-   "date": "2026-09-23",
+   "detail": "Gov Council Member Rogers Speaks",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_058",
    "source": "ForexFactory",
-   "detail": "FOMC Member Barr Speaks",
-   "date": "2026-09-23",
+   "detail": "FOMC Member Cook Speaks",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_059",
    "source": "ForexFactory",
-   "detail": "Crude Oil Inventories",
-   "date": "2026-09-23",
+   "detail": "FOMC Member Logan Speaks",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_060",
    "source": "ForexFactory",
-   "detail": "NAB Quarterly Business Confidence",
-   "date": "2026-09-23",
+   "detail": "Bank Holiday",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_061",
    "source": "ForexFactory",
-   "detail": "Employment Change",
-   "date": "2026-09-23",
+   "detail": "Tokyo Core CPI y/y",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_062",
    "source": "ForexFactory",
-   "detail": "Unemployment Rate",
-   "date": "2026-09-23",
+   "detail": "Monetary Base y/y",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_063",
    "source": "ForexFactory",
-   "detail": "FOMC Member Goolsbee Speaks",
-   "date": "2026-09-23",
+   "detail": "Housing Starts y/y",
+   "date": "2026-09-30",
    "url": null
   },
   {
    "id": "src_064",
    "source": "ForexFactory",
-   "detail": "Public Sector Net Borrowing",
-   "date": "2026-09-22",
+   "detail": "German Import Prices m/m",
+   "date": "2026-09-30",
    "url": null
   },
   {
    "id": "src_065",
    "source": "ForexFactory",
-   "detail": "German Buba President Nagel Speaks",
-   "date": "2026-09-22",
+   "detail": "German Retail Sales m/m",
+   "date": "2026-09-30",
    "url": null
   },
   {
    "id": "src_066",
    "source": "ForexFactory",
-   "detail": "CBI Industrial Order Expectations",
-   "date": "2026-09-22",
+   "detail": "Current Account",
+   "date": "2026-09-30",
    "url": null
   },
   {
    "id": "src_067",
    "source": "ForexFactory",
-   "detail": "ECB President Lagarde Speaks",
-   "date": "2026-09-22",
+   "detail": "Final GDP q/q",
+   "date": "2026-09-30",
    "url": null
   },
   {
    "id": "src_068",
    "source": "ForexFactory",
-   "detail": "ADP Weekly Employment Change",
-   "date": "2026-09-22",
+   "detail": "Revised Business Investment q/q",
+   "date": "2026-09-30",
    "url": null
   },
   {
    "id": "src_069",
    "source": "ForexFactory",
-   "detail": "Consumer Confidence",
-   "date": "2026-09-22",
+   "detail": "German Prelim CPI m/m",
+   "date": "2026-09-30",
    "url": null
   },
   {
    "id": "src_070",
    "source": "ForexFactory",
-   "detail": "Richmond Manufacturing Index",
-   "date": "2026-09-22",
+   "detail": "French Consumer Spending m/m",
+   "date": "2026-09-30",
    "url": null
   },
   {
    "id": "src_071",
    "source": "ForexFactory",
-   "detail": "FOMC Member Williams Speaks",
-   "date": "2026-09-22",
+   "detail": "French Prelim CPI m/m",
+   "date": "2026-09-30",
    "url": null
   },
   {
    "id": "src_072",
    "source": "ForexFactory",
-   "detail": "FOMC Member Jefferson Speaks",
-   "date": "2026-09-22",
+   "detail": "German Unemployment Change",
+   "date": "2026-09-30",
    "url": null
   },
   {
    "id": "src_073",
    "source": "ForexFactory",
-   "detail": "FOMC Member Barkin Speaks",
-   "date": "2026-09-22",
+   "detail": "UBS Economic Expectations",
+   "date": "2026-09-30",
    "url": null
   },
   {
    "id": "src_074",
    "source": "ForexFactory",
-   "detail": "API Weekly Statistical Bulletin",
-   "date": "2026-09-22",
+   "detail": "Italian Prelim CPI m/m",
+   "date": "2026-09-30",
    "url": null
   },
   {
    "id": "src_075",
    "source": "ForexFactory",
-   "detail": "Flash Manufacturing PMI",
-   "date": "2026-09-22",
+   "detail": "FPC Meeting Minutes",
+   "date": "2026-09-30",
    "url": null
   },
   {
    "id": "src_076",
    "source": "ForexFactory",
-   "detail": "Flash Services PMI",
-   "date": "2026-09-22",
+   "detail": "FPC Statement",
+   "date": "2026-09-30",
    "url": null
   },
   {
    "id": "src_077",
    "source": "ForexFactory",
-   "detail": "Bank Holiday",
-   "date": "2026-09-22",
+   "detail": "German 10-y Bond Auction",
+   "date": "2026-09-30",
    "url": null
   },
   {
    "id": "src_078",
    "source": "ForexFactory",
-   "detail": "President Trump Speaks",
-   "date": "2026-09-22",
+   "detail": "Bank Holiday",
+   "date": "2026-09-30",
    "url": null
   },
   {
    "id": "src_079",
    "source": "ForexFactory",
-   "detail": "German Buba Monthly Report",
-   "date": "2026-09-21",
+   "detail": "ADP Non-Farm Employment Change",
+   "date": "2026-09-30",
    "url": null
   },
   {
    "id": "src_080",
    "source": "ForexFactory",
-   "detail": "FOMC Member Goolsbee Speaks",
-   "date": "2026-09-21",
+   "detail": "Core PCE Price Index m/m",
+   "date": "2026-09-30",
    "url": null
   },
   {
    "id": "src_081",
    "source": "ForexFactory",
-   "detail": "ECB President Lagarde Speaks",
-   "date": "2026-09-21",
+   "detail": "Final GDP Price Index q/q",
+   "date": "2026-09-30",
    "url": null
   },
   {
    "id": "src_082",
    "source": "ForexFactory",
-   "detail": "BOC Gov Macklem Speaks",
-   "date": "2026-09-21",
+   "detail": "Goods Trade Balance",
+   "date": "2026-09-30",
    "url": null
   },
   {
    "id": "src_083",
    "source": "ForexFactory",
-   "detail": "RBA Assist Gov Hunter Speaks",
-   "date": "2026-09-21",
+   "detail": "Personal Income m/m",
+   "date": "2026-09-30",
    "url": null
   },
   {
    "id": "src_084",
    "source": "ForexFactory",
-   "detail": "Bank Holiday",
-   "date": "2026-09-21",
+   "detail": "Personal Spending m/m",
+   "date": "2026-09-30",
    "url": null
   },
   {
    "id": "src_085",
    "source": "ForexFactory",
-   "detail": "RBA Gov Bullock Speaks",
-   "date": "2026-09-21",
+   "detail": "Prelim Wholesale Inventories m/m",
+   "date": "2026-09-30",
    "url": null
   },
   {
    "id": "src_086",
    "source": "ForexFactory",
-   "detail": "Bank Holiday",
-   "date": "2026-09-20",
+   "detail": "SNB Quarterly Bulletin",
+   "date": "2026-09-30",
    "url": null
   },
   {
    "id": "src_087",
    "source": "ForexFactory",
-   "detail": "Rightmove HPI m/m",
-   "date": "2026-09-20",
+   "detail": "Chicago PMI",
+   "date": "2026-09-30",
    "url": null
   },
   {
    "id": "src_088",
    "source": "ForexFactory",
-   "detail": "Credit Card Spending y/y",
-   "date": "2026-09-20",
+   "detail": "Crude Oil Inventories",
+   "date": "2026-09-30",
    "url": null
   },
   {
    "id": "src_089",
    "source": "RSS cnbc_world",
-   "detail": "Iran offers to reopen Strait of Hormuz within 7 days and restart nuclear talks",
-   "date": "2026-09-25T09:03:01+00:00",
-   "url": "https://www.cnbc.com/2026/09/25/us-iran-trump-hormuz-.html"
+   "detail": "These charts show how volatile the last quarter was for stocks and bonds",
+   "date": "2026-10-01T10:00:25+00:00",
+   "url": "https://www.cnbc.com/2026/10/01/q3-markets-stocks-oil-iran-war.html"
   },
   {
    "id": "src_090",
    "source": "RSS cnbc_world",
-   "detail": "Russia could attack a NATO country within months, Danish intelligence warns",
-   "date": "2026-09-25T08:26:07+00:00",
-   "url": "https://www.cnbc.com/2026/09/25/russia-ukraine-war-nato-denmark-putin.html"
+   "detail": "Oil prices rise as Chinese refiners reportedly ban October fuel exports; Brent crude back above $100",
+   "date": "2026-10-01T11:15:41+00:00",
+   "url": "https://www.cnbc.com/2026/10/01/oil-prices-today-wti-brent.html"
   },
   {
    "id": "src_091",
    "source": "RSS cnbc_world",
-   "detail": "CEO who posted 'Lake America' sweatshirt photos is no longer with the company",
-   "date": "2026-09-25T04:14:11+00:00",
-   "url": "https://www.cnbc.com/2026/09/25/ceo-who-posted-lake-america-sweatshirt-photos-has-left-the-company.html"
+   "detail": "Bargain Britain lures foreign buyers as hostile takeovers surge",
+   "date": "2026-10-01T10:53:11+00:00",
+   "url": "https://www.cnbc.com/2026/10/01/hostile-takeovers-mergers-acquisitions-uk.html"
   },
   {
    "id": "src_092",
    "source": "RSS cnbc_world",
-   "detail": "Stock futures are little changed as Dow heads for fourth straight losing week: Live updates",
-   "date": "2026-09-25T09:19:51+00:00",
-   "url": "https://www.cnbc.com/2026/09/24/stock-market-today-live-updates.html"
+   "detail": "The U.S. just made it much easier for retail investors to access private markets",
+   "date": "2026-10-01T08:30:55+00:00",
+   "url": "https://www.cnbc.com/2026/10/01/private-credit-sec-retail-investors.html"
   },
   {
    "id": "src_093",
    "source": "RSS cnbc_world",
-   "detail": "India's viral Cockroach Party calls election panel head 'biggest threat' to democracy. Here's why it matters",
-   "date": "2026-09-25T07:09:11+00:00",
-   "url": "https://www.cnbc.com/2026/09/25/india-cockroach-party-election-protest-democracy.html"
+   "detail": "Russia launches massive strikes on Ukraine’s energy grid, forcing power cuts ahead of winter",
+   "date": "2026-10-01T09:48:06+00:00",
+   "url": "https://www.cnbc.com/2026/10/01/russia-ukraine-war-energy-power-winter.html"
   },
   {
    "id": "src_094",
    "source": "RSS cnbc_world",
-   "detail": "Pharma stock soars 150% on injectables deal with Wegovy maker Novo",
-   "date": "2026-09-25T09:58:27+00:00",
-   "url": "https://www.cnbc.com/2026/09/25/wegovy-novo-nordisk-obesity-drugs.html"
+   "detail": "Japan's prime minister says her policies will boost confidence in the yen after U.S. intervention falls short",
+   "date": "2026-10-01T11:13:25+00:00",
+   "url": "https://www.cnbc.com/2026/10/01/japan-yen-dollar-trump-intervention.html"
   },
   {
    "id": "src_095",
    "source": "RSS cnbc_world",
-   "detail": "An absence of significant economic slowdown doesn't mean no signs of stagflation risks. Here's why",
-   "date": "2026-09-25T05:47:24+00:00",
-   "url": "https://www.cnbc.com/2026/09/25/an-absence-of-significant-economic-slowdown-doesnt-mean-no-signs-of-stagflation-risks-heres-why-.html"
+   "detail": "Portfolio adviser to the super-rich wanted a bigger stock market correction. Here's why",
+   "date": "2026-10-01T04:16:48+00:00",
+   "url": "https://www.cnbc.com/2026/10/01/citi-wealth-adviser-super-rich-wanted-bigger-stock-market-correctio.html"
   },
   {
    "id": "src_096",
    "source": "RSS cnbc_world",
-   "detail": "China saw 'surprise' jump in U.S. orders ahead of Trump-Xi summit, private survey shows",
-   "date": "2026-09-25T10:00:01+00:00",
-   "url": "https://www.cnbc.com/2026/09/25/china-exports-surplus-trade-tariffs-.html"
+   "detail": "South Korean President Lee pushes back on Alaska LNG project after Trump touts Seoul's participation",
+   "date": "2026-10-01T05:44:18+00:00",
+   "url": "https://www.cnbc.com/2026/10/01/trump-south-korea-investment-alaska-lng-nuclear-power.html"
   },
   {
    "id": "src_097",
    "source": "RSS cnbc_world",
-   "detail": "Atlanta is getting pandas: China's Xi revives a longtime diplomatic strategy at summit with U.S.",
-   "date": "2026-09-25T01:12:19+00:00",
-   "url": "https://www.cnbc.com/2026/09/25/china-us-xi-trump-visit-panda-student-visa-.html"
+   "detail": "Passengers and crew foil co-pilot's apparent attempt to crash FlyDubai flight to Israel",
+   "date": "2026-10-01T01:09:18+00:00",
+   "url": "https://www.cnbc.com/2026/10/01/dubai-israel-flight-pilot-crash-indian.html"
   },
   {
    "id": "src_098",
    "source": "RSS cnbc_world",
-   "detail": "Here's why South Korea wants more control over future regional wars",
-   "date": "2026-09-24T23:30:01+00:00",
-   "url": "https://www.cnbc.com/2026/09/24/heres-why-south-korea-wants-more-control-over-future-regional-wars.html"
+   "detail": "Hedge funds hold a record share of the $30 trillion Treasury market. What could go wrong?",
+   "date": "2026-09-30T00:19:09+00:00",
+   "url": "https://www.cnbc.com/2026/09/30/us-treasury-market-is-relying-more-on-hedge-funds.html"
   },
   {
    "id": "src_099",
    "source": "RSS cnbc_world",
-   "detail": "Here's who attended the Trump-Xi state dinner",
-   "date": "2026-09-25T06:30:06+00:00",
-   "url": "https://www.cnbc.com/2026/09/25/heres-who-is-attending-the-trump-xi-state-dinner.html"
+   "detail": "Inside Man: How Chinese spies used lies, love and betrayal to target the Federal Reserve",
+   "date": "2026-09-30T17:21:23+00:00",
+   "url": "https://www.cnbc.com/2026/09/30/john-rogers-fed-china-espionage-case.html"
   },
   {
    "id": "src_100",
    "source": "RSS cnbc_world",
-   "detail": "Bentley takes on Ferrari with its first EV priced at $230,000",
-   "date": "2026-09-24T21:32:37+00:00",
-   "url": "https://www.cnbc.com/2026/09/24/bentley-motors-torcal-ferrari-luce-autos-ev.html"
+   "detail": "Trump’s AI lunch included every major tech company. Except Apple",
+   "date": "2026-10-01T02:07:06+00:00",
+   "url": "https://www.cnbc.com/2026/09/30/trumps-ai-lunch-included-everyone-but-apple.html"
   },
   {
    "id": "src_101",
    "source": "RSS cnbc_world",
-   "detail": "Chinese humanoid robotics firm expanding globally in preparation for IPO",
-   "date": "2026-09-24T07:29:15+00:00",
-   "url": "https://www.cnbc.com/2026/09/24/chinese-humanoid-robotics-firm-expanding-globally-and-readying-for-ipo.html"
+   "detail": "AI race heats up as OpenAI flags alleged model-copying campaign",
+   "date": "2026-10-01T02:14:43+00:00",
+   "url": "https://www.cnbc.com/2026/10/01/openai-chinas-moonshot-ai-kimi.html"
   },
   {
    "id": "src_102",
    "source": "RSS cnbc_world",
-   "detail": "U.S. Treasury yields tick higher as global bond rout slows",
-   "date": "2026-09-25T08:08:03+00:00",
-   "url": "https://www.cnbc.com/2026/09/25/treasury-yields-bonds-debt.html"
+   "detail": "Shares of Indian auto companies slide as sales soften in September, after hitting record highs in August",
+   "date": "2026-10-01T06:33:14+00:00",
+   "url": "https://www.cnbc.com/2026/10/01/india-auto-shares-bajaj-maruti-mahindra.html"
   },
   {
    "id": "src_103",
    "source": "RSS cnbc_world",
-   "detail": "Crypto platform Bitget suspects North Korea is responsible for $352 million hack",
-   "date": "2026-09-25T06:13:35+00:00",
-   "url": "https://www.cnbc.com/2026/09/25/crypto-platform-bitget-suspects-north-korea-in-352-million-hack.html"
+   "detail": "Inflation moves in the right direction, but markets are still not out of the woods",
+   "date": "2026-09-30T13:54:33+00:00",
+   "url": "https://www.cnbc.com/2026/09/30/inflation-moves-in-the-right-direction-but-markets-are-still-not-out-of-the-woods.html"
   },
   {
    "id": "src_104",
    "source": "RSS investinglive",
-   "detail": "Spain Q2 GDP confirmed at 0.7% as domestic demand keeps growth resilient",
-   "date": "2026-09-25T07:00:15+00:00",
-   "url": "https://investinglive.com/news/spain-q2-gdp-confirmed-at-0-7-as-domestic-demand-keeps-growth-resilient/"
+   "detail": "Trump tells TIME the U.S. could resume or intensify attacks against Iran after the midterm elections",
+   "date": "2026-10-01T11:18:06+00:00",
+   "url": "https://investinglive.com/news/trump-tells-time-the-u-s-could-resume-or-intensify-attacks-against-iran-after-the-midterm-elections/"
   },
   {
    "id": "src_105",
    "source": "RSS investinglive",
-   "detail": "What are the main events for today?",
-   "date": "2026-09-25T06:28:41+00:00",
-   "url": "https://investinglive.com/news/what-are-the-main-events-for-today-50/"
+   "detail": "US layoffs ease in September, but weak hiring keeps NFP in focus",
+   "date": "2026-10-01T10:05:31+00:00",
+   "url": "https://investinglive.com/news/us-layoffs-ease-in-september-but-weak-hiring-keeps-nfp-in-focus/"
   },
   {
    "id": "src_106",
    "source": "RSS investinglive",
-   "detail": "German consumer climate darkens ahead of October as higher energy costs bite",
-   "date": "2026-09-25T06:00:14+00:00",
-   "url": "https://investinglive.com/news/german-consumer-climate-darkens-ahead-of-october-as-higher-energy-costs-bite/"
+   "detail": "UK September final manufacturing PMI 51.9 vs 52.0 preliminary",
+   "date": "2026-10-01T08:30:04+00:00",
+   "url": "https://investinglive.com/news/uk-september-final-manufacturing-pmi-51-9-vs-52-0-preliminary/"
   },
   {
    "id": "src_107",
    "source": "RSS investinglive",
-   "detail": "Trump-Xi summit extends the trade truce but leaves the biggest market questions unresolved",
-   "date": "2026-09-25T05:00:36+00:00",
-   "url": "https://investinglive.com/news/trump-xi-summit-extends-the-trade-truce-but-leaves-the-biggest-market-questions-unresolved/"
+   "detail": "Eurozone manufacturing hits 52-month high as input and output prices accelerate",
+   "date": "2026-10-01T08:01:03+00:00",
+   "url": "https://investinglive.com/news/eurozone-manufacturing-hits-52-month-high-as-input-and-output-prices-accelerate/"
   },
   {
    "id": "src_108",
    "source": "RSS investinglive",
-   "detail": "US Treasury yields continue to break higher - is 6% now in play?",
-   "date": "2026-09-25T04:28:01+00:00",
-   "url": "https://investinglive.com/news/us-treasury-yields-continue-to-break-higher-is-6-now-in-play/"
+   "detail": "France manufacturing growth slows in September as price pressures build",
+   "date": "2026-10-01T07:51:52+00:00",
+   "url": "https://investinglive.com/news/france-manufacturing-growth-slows-in-september-as-price-pressures-build/"
   },
   {
    "id": "src_109",
    "source": "RSS investinglive",
-   "detail": "investingLive Asia-Pacific market news: Iran offers seven-day Hormuz dea",
-   "date": "2026-09-25T03:38:37+00:00",
-   "url": "https://investinglive.com/news/investinglive-asia-pacific-market-news-iran-offers-seven-day-hormuz-dea/"
+   "detail": "Italy September manufacturing PMI 50.4 vs 50.0 expected",
+   "date": "2026-10-01T07:45:23+00:00",
+   "url": "https://investinglive.com/news/italy-september-manufacturing-pmi-50-4-vs-50-0-expected/"
   },
   {
    "id": "src_110",
    "source": "RSS investinglive",
-   "detail": "Recession signal flashes on Oxford Economics' US indicator, but spending shows no sign of cracking",
-   "date": "2026-09-25T02:25:04+00:00",
-   "url": "https://investinglive.com/news/recession-signal-flashes-on-oxford-economics-us-indicator-but-spending-shows-no-sign-of-cracking/"
+   "detail": "Spain manufacturing returns to growth in September but price pressures build",
+   "date": "2026-10-01T07:15:08+00:00",
+   "url": "https://investinglive.com/news/spain-manufacturing-returns-to-growth-in-september-but-price-pressures-build/"
   },
   {
    "id": "src_111",
    "source": "RSS investinglive",
-   "detail": "China shuts for Mid-Autumn Festival holiday today, a preview of the week-long National Day gap to come",
-   "date": "2026-09-24T22:14:42+00:00",
-   "url": "https://investinglive.com/news/china-shuts-for-mid-autumn-festival-holiday-today-a-preview-of-the-week-long-national-day-gap-to-come/"
+   "detail": "Switzerland September CPI +1.0% vs +1.0% y/y expected",
+   "date": "2026-10-01T06:30:13+00:00",
+   "url": "https://investinglive.com/news/switzerland-september-cpi-1-0-vs-1-0-y-y-expected/"
   },
   {
    "id": "src_112",
    "source": "RSS investinglive",
-   "detail": "Trump and Xi buy two more months of trade truce, leaving tariffs and rare earths in limbo",
-   "date": "2026-09-24T20:56:23+00:00",
-   "url": "https://investinglive.com/news/trump-and-xi-buy-two-more-months-of-trade-truce-leaving-tariffs-and-rare-earths-in-limbo/"
+   "detail": "What are the main events for today?",
+   "date": "2026-10-01T06:29:03+00:00",
+   "url": "https://investinglive.com/news/what-are-the-main-events-for-today-54/"
   },
   {
    "id": "src_113",
    "source": "RSS investinglive",
-   "detail": "investingLive Americas FX news wrap 24 Sept: USD and Treasury yields climb as Iran headlines lift stocks off their lows",
-   "date": "2026-09-24T20:39:59+00:00",
-   "url": "https://investinglive.com/news/investinglive-americas-fx-news-wrap-24-sept-usd-and-treasury-yields-climb-as-iran-headlines-lift-stocks-off-their-lows/"
+   "detail": "UK Nationwide house prices fall 0.2% in September as annual growth halves",
+   "date": "2026-10-01T06:11:12+00:00",
+   "url": "https://investinglive.com/news/uk-nationwide-house-prices-fall-0-2-in-september-as-annual-growth-halves/"
   },
   {
    "id": "src_114",
    "source": "RSS investinglive",
-   "detail": "Iran’s Pezeshkian wants a deal with the US before the midterm elections, NBC reports",
-   "date": "2026-09-24T19:11:39+00:00",
-   "url": "https://investinglive.com/news/iran-s-pezeshkian-wants-a-deal-with-the-us-before-the-midterm-elections-nbc-reports-4/"
+   "detail": "US sees China invasion of Taiwan unlikely before 2028, but trade and market risks remain",
+   "date": "2026-10-01T05:35:36+00:00",
+   "url": "https://investinglive.com/news/us-sees-china-invasion-of-taiwan-unlikely-before-2028-but-trade-and-market-risks-remain/"
   },
   {
    "id": "src_115",
    "source": "RSS investinglive",
-   "detail": "US treasury sells $44 billion of 7 year notes at a high yield of 5.085%",
-   "date": "2026-09-24T17:05:43+00:00",
-   "url": "https://investinglive.com/news/us-treasury-sells-44-billion-of-7-year-notes-at-a-high-yield-of-5-085/"
+   "detail": "investingLive Asia-Pacific market news:  Yen weakens,Nikkei jumps",
+   "date": "2026-10-01T03:43:21+00:00",
+   "url": "https://investinglive.com/news/investinglive-asia-pacific-market-news-yen-weakens-nikkei-jumps/"
   },
   {
    "id": "src_116",
    "source": "RSS investinglive",
-   "detail": "US/Iran discussed phasing in a deal to reopen Hormuz and end the US blockade",
-   "date": "2026-09-24T16:27:27+00:00",
-   "url": "https://investinglive.com/news/us-iran-discussed-phasing-in-a-deal-to-reopen-hormuz-and-end-the-us-blockade/"
+   "detail": "Australia's August trade surplus shrinks to A$495M as data center equipment imports surge",
+   "date": "2026-10-01T01:58:05+00:00",
+   "url": "https://investinglive.com/news/australia-s-august-trade-surplus-shrinks-to-a-495m-as-data-center-equipment-imports-surge/"
   },
   {
    "id": "src_117",
    "source": "RSS investinglive",
-   "detail": "Trump and Xi meet at the White House: What traders should watch",
-   "date": "2026-09-24T14:38:30+00:00",
-   "url": "https://investinglive.com/news/trump-and-xi-meet-at-the-white-house-what-traders-should-watch/"
+   "detail": "Trump announces $200 billion South Korean investment in US nuclear, LNG and gas power",
+   "date": "2026-10-01T00:55:12+00:00",
+   "url": "https://investinglive.com/news/trump-announces-200-billion-south-korean-investment-in-us-nuclear-lng-and-gas-power/"
   },
   {
    "id": "src_118",
    "source": "RSS investinglive",
-   "detail": "US new-home sales for the month of August 0.684 million versus 0.615 million estimate",
-   "date": "2026-09-24T14:01:24+00:00",
-   "url": "https://investinglive.com/news/us-new-home-sales-for-the-month-of-august-0-684-million-versus-0-615-million-estimate/"
+   "detail": "Japan manufacturing PMI slips to 54.1, a six-month low, as new order growth slows",
+   "date": "2026-10-01T00:36:05+00:00",
+   "url": "https://investinglive.com/news/japan-manufacturing-pmi-slips-to-54-1-a-six-month-low-as-new-order-growth-slows/"
   },
   {
    "id": "src_119",
    "source": "finviz",
    "detail": "titres extraits (page publique)",
-   "date": "2026-09-25",
+   "date": "2026-10-01",
    "url": null
   },
   {
    "id": "src_120",
    "source": "financialsource",
    "detail": "titres extraits (page publique)",
-   "date": "2026-09-25",
+   "date": "2026-10-01",
    "url": null
   }
  ],
@@ -2297,10 +2337,6 @@
  "graphiques_marche": {
   "wti": {
    "dates": [
-    "2026-05-20",
-    "2026-05-21",
-    "2026-05-22",
-    "2026-05-26",
     "2026-05-27",
     "2026-05-28",
     "2026-05-29",
@@ -2382,13 +2418,14 @@
     "2026-09-17",
     "2026-09-18",
     "2026-09-21",
-    "2026-09-22"
+    "2026-09-22",
+    "2026-09-23",
+    "2026-09-24",
+    "2026-09-25",
+    "2026-09-28",
+    "2026-09-29"
    ],
    "valeurs": [
-    101.69,
-    100.2,
-    100.35,
-    97.63,
     92.35,
     92.65,
     91.16,
@@ -2470,15 +2507,16 @@
     103.21,
     101.44,
     96.97,
-    96.41
+    96.41,
+    93.38,
+    95.88,
+    85.23,
+    99.37,
+    96.16
    ]
   },
   "brent": {
    "dates": [
-    "2026-05-20",
-    "2026-05-21",
-    "2026-05-22",
-    "2026-05-26",
     "2026-05-27",
     "2026-05-28",
     "2026-05-29",
@@ -2562,13 +2600,14 @@
     "2026-09-17",
     "2026-09-18",
     "2026-09-21",
-    "2026-09-22"
+    "2026-09-22",
+    "2026-09-23",
+    "2026-09-24",
+    "2026-09-25",
+    "2026-09-28",
+    "2026-09-29"
    ],
    "valeurs": [
-    108.93,
-    105.84,
-    106.9,
-    102.75,
     97.11,
     95.47,
     92.88,
@@ -2652,7 +2691,12 @@
     121.18,
     119.66,
     116.15,
-    114.89
+    114.89,
+    117.45,
+    120.92,
+    116.01,
+    119.97,
+    113.96
    ]
   }
  },
@@ -2664,19 +2708,102 @@
  },
  "controle_qualite": {
   "conforme": false,
-  "nb_anomalies": 10,
+  "nb_anomalies": 9,
   "anomalies": [
-   "USD : analyse indisponible aujourd'hui (Analyse USD impossible : 503 Server Error: Service Unavailable for url: https://) — exclue du classement",
-   "EUR : graphique de prix manquant",
-   "GBP : analyse indisponible aujourd'hui (Analyse GBP impossible : 503 Server Error: Service Unavailable for url: https://) — exclue du classement",
-   "JPY : analyse indisponible aujourd'hui (Analyse JPY impossible : 503 Server Error: Service Unavailable for url: https://) — exclue du classement",
+   "USD : analyse indisponible aujourd'hui (Analyse USD impossible : 429 Client Error: Too Many Requests for url: https://ge) — exclue du classement",
+   "EUR : analyse indisponible aujourd'hui (Analyse EUR impossible : 429 Client Error: Too Many Requests for url: https://ge) — exclue du classement",
+   "GBP : analyse indisponible aujourd'hui (Analyse GBP impossible : 429 Client Error: Too Many Requests for url: https://ge) — exclue du classement",
+   "JPY : analyse indisponible aujourd'hui (Analyse JPY impossible : 429 Client Error: Too Many Requests for url: https://ge) — exclue du classement",
    "CHF : analyse indisponible aujourd'hui (Analyse CHF impossible : 429 Client Error: Too Many Requests for url: https://ge) — exclue du classement",
-   "CAD : analyse indisponible aujourd'hui (Analyse CAD impossible : 429 Client Error: Too Many Requests for url: https://ge) — exclue du classement",
+   "CAD : graphique de prix manquant",
    "AUD : analyse indisponible aujourd'hui (Analyse AUD impossible : 429 Client Error: Too Many Requests for url: https://ge) — exclue du classement",
    "NZD : analyse indisponible aujourd'hui (Analyse NZD impossible : 429 Client Error: Too Many Requests for url: https://ge) — exclue du classement",
-   "CNY : analyse indisponible aujourd'hui (Analyse CNY impossible : 429 Client Error: Too Many Requests for url: https://ge) — exclue du classement",
-   "état du monde absent de la synthèse globale"
+   "CNY : analyse indisponible aujourd'hui (Analyse CNY impossible : 429 Client Error: Too Many Requests for url: https://ge) — exclue du classement"
   ]
+ },
+ "analyse_weekly": {
+  "USD": {
+   "semaine_iso": "2026-W40",
+   "metriques": {
+    "nb_jours": 2,
+    "trajectoire": [
+     {
+      "date": "2026-09-29",
+      "score": 65
+     },
+     {
+      "date": "2026-09-30",
+      "score": 75
+     }
+    ],
+    "score_debut": 65,
+    "score_fin": 75,
+    "variation_score": 10,
+    "ecart_type_score": 5.0,
+    "coherence_directionnelle_pct": 100.0,
+    "indicateurs_instables": {
+     "vix": 1
+    }
+   },
+   "commentaire": "Score 65 → 75 sur 2 jour(s) ; cohérence directionnelle : 100.0 %."
+  },
+  "EUR": {
+   "semaine_iso": "2026-W40",
+   "metriques": {
+    "nb_jours": 1,
+    "trajectoire": [
+     {
+      "date": "2026-09-29",
+      "score": 44
+     }
+    ],
+    "score_debut": 44,
+    "score_fin": 44,
+    "variation_score": 0,
+    "ecart_type_score": 0.0,
+    "coherence_directionnelle_pct": 100.0,
+    "indicateurs_instables": {}
+   },
+   "commentaire": "Score 44 → 44 sur 1 jour(s) ; cohérence directionnelle : 100.0 %."
+  },
+  "CHF": {
+   "semaine_iso": "2026-W40",
+   "metriques": {
+    "nb_jours": 1,
+    "trajectoire": [
+     {
+      "date": "2026-09-29",
+      "score": 31
+     }
+    ],
+    "score_debut": 31,
+    "score_fin": 31,
+    "variation_score": 0,
+    "ecart_type_score": 0.0,
+    "coherence_directionnelle_pct": 100.0,
+    "indicateurs_instables": {}
+   },
+   "commentaire": "Score 31 → 31 sur 1 jour(s) ; cohérence directionnelle : 100.0 %."
+  },
+  "CAD": {
+   "semaine_iso": "2026-W40",
+   "metriques": {
+    "nb_jours": 1,
+    "trajectoire": [
+     {
+      "date": "2026-10-01",
+      "score": 50
+     }
+    ],
+    "score_debut": 50,
+    "score_fin": 50,
+    "variation_score": 0,
+    "ecart_type_score": 0.0,
+    "coherence_directionnelle_pct": null,
+    "indicateurs_instables": {}
+   },
+   "commentaire": "Score 50 → 50 sur 1 jour(s) ; cohérence directionnelle : None %."
+  }
  },
  "critique": {
   "incoherences": [],

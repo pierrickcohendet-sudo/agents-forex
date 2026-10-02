@@ -1,10 +1,10 @@
 {
  "meta": {
-  "date_rapport": "2026-09-25",
+  "date_rapport": "2026-09-26",
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-flash-latest",
-  "genere_le": "2026-09-25T20:42:24+00:00"
+  "genere_le": "2026-09-26T00:08:30+00:00"
  },
  "synthese_globale": {
   "biais_macro_global": "neutre",
@@ -16,12 +16,17 @@
     "devise": "EUR",
     "score_confluence": 50,
     "risk_on_off": "neutre"
+   },
+   {
+    "rang": 2,
+    "devise": "JPY",
+    "score_confluence": 25,
+    "risk_on_off": "off"
    }
   ],
   "devises_indisponibles": [
    "USD",
    "GBP",
-   "JPY",
    "CHF",
    "CAD",
    "AUD",
@@ -56,7 +61,7 @@
      "precedent": null,
      "source": "FRED (FEDFUNDS)",
      "date": "2026-08-01",
-     "anciennete_jours": 55,
+     "anciennete_jours": 56,
      "note": ""
     },
     {
@@ -78,7 +83,7 @@
      "precedent": null,
      "source": "FRED (DGS10/DGS2)",
      "date": "2026-09-23",
-     "anciennete_jours": 2,
+     "anciennete_jours": 3,
      "note": ""
     },
     {
@@ -89,7 +94,7 @@
      "precedent": 14.87,
      "source": "FRED (VIXCLS)",
      "date": "2026-09-22",
-     "anciennete_jours": 3,
+     "anciennete_jours": 4,
      "note": ""
     },
     {
@@ -99,7 +104,7 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul local (Twelve Data)",
-     "date": "2026-09-25",
+     "date": "2026-09-26",
      "anciennete_jours": 0,
      "note": ""
     },
@@ -111,7 +116,7 @@
      "precedent": "53.2",
      "source": "ForexFactory",
      "date": "2026-09-23",
-     "anciennete_jours": 2,
+     "anciennete_jours": 3,
      "note": ""
     },
     {
@@ -121,7 +126,7 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul (FRED + config)",
-     "date": "2026-09-25",
+     "date": "2026-09-26",
      "anciennete_jours": 0,
      "note": ""
     },
@@ -399,6 +404,10 @@
     {
      "date": "2026-09-25",
      "score": 50
+    },
+    {
+     "date": "2026-09-26",
+     "score": 50
     }
    ]
   },
@@ -407,18 +416,18 @@
    "risk_on_off": "neutre",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "Analyse GBP impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge",
+   "raison_indisponibilite": "Analyse GBP impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (Analyse GBP impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge)",
+    "commentaire": "analyse indisponible (Analyse GBP impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene)",
     "source_id": null
    },
    "detail_score": [],
    "opportunites": [],
    "menaces": [],
-   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse GBP impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge.",
+   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse GBP impossible : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:gene.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -428,7 +437,7 @@
      "precedent": null,
      "source": "config (repli manuel)",
      "date": "2026-01-15",
-     "anciennete_jours": 253,
+     "anciennete_jours": 254,
      "note": ""
     },
     {
@@ -450,7 +459,7 @@
      "precedent": null,
      "source": "FRED (DGS10/DGS2)",
      "date": "2026-09-23",
-     "anciennete_jours": 2,
+     "anciennete_jours": 3,
      "note": ""
     },
     {
@@ -461,7 +470,7 @@
      "precedent": 14.87,
      "source": "FRED (VIXCLS)",
      "date": "2026-09-22",
-     "anciennete_jours": 3,
+     "anciennete_jours": 4,
      "note": ""
     },
     {
@@ -471,7 +480,7 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul local (Twelve Data)",
-     "date": "2026-09-25",
+     "date": "2026-09-26",
      "anciennete_jours": 0,
      "note": ""
     },
@@ -483,7 +492,7 @@
      "precedent": "51.5",
      "source": "ForexFactory",
      "date": "2026-09-23",
-     "anciennete_jours": 2,
+     "anciennete_jours": 3,
      "note": ""
     },
     {
@@ -493,7 +502,7 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul (FRED + config)",
-     "date": "2026-09-25",
+     "date": "2026-09-26",
      "anciennete_jours": 0,
      "note": ""
     },
@@ -550,20 +559,104 @@
   {
    "devise": "JPY",
    "risk_on_off": "off",
-   "score_confluence": null,
-   "analyse_indisponible": true,
-   "raison_indisponibilite": "Analyse JPY impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge",
+   "score_confluence": 25,
+   "detail_score": [
+    {
+     "indicateur": "taux_directeur",
+     "sens": -1,
+     "poids": 20,
+     "justification": "Taux directeur fixé à 1.00 % contre une médiane G8 à 2.50 %, maintenant un coût de portage structurellement défavorable.",
+     "source_id": "src_121"
+    },
+    {
+     "indicateur": "cpi_surprise",
+     "sens": 0,
+     "poids": 15,
+     "justification": "BOJ Core CPI attendu à 1.5 % contre 1.6 % précédemment sans publication du chiffre réel disponible ce jour.",
+     "source_id": "src_015"
+    },
+    {
+     "indicateur": "yield_curve",
+     "sens": -1,
+     "poids": 12,
+     "justification": "Rendement 10 ans américain tendu à 5.11 % et aplatissement de la courbe US, creusant le différentiel de taux au détriment du JPY.",
+     "source_id": "src_006"
+    },
+    {
+     "indicateur": "vix",
+     "sens": -1,
+     "poids": 10,
+     "justification": "VIX en repli de 4.44 % à 14.21 points, traduisant un appétit pour le risque défavorable au statut de valeur refuge du yen.",
+     "source_id": "src_008"
+    },
+    {
+     "indicateur": "dxy",
+     "sens": 0,
+     "poids": 10,
+     "justification": "Données techniques de référence de l'indice dollar indisponibles aujourd'hui.",
+     "source_id": null
+    },
+    {
+     "indicateur": "pmi_surprise",
+     "sens": 0,
+     "poids": 10,
+     "justification": "Flash Manufacturing PMI attendu à 55.0 contre 55.1 sans résultat réel publié.",
+     "source_id": "src_055"
+    },
+    {
+     "indicateur": "differentiel_taux",
+     "sens": -1,
+     "poids": 8,
+     "justification": "Différentiel de carry négatif de -1.50 point par rapport à la médiane G8, alimentant les flux vendeurs de financement.",
+     "source_id": "src_121"
+    },
+    {
+     "indicateur": "rsi",
+     "sens": 0,
+     "poids": 8,
+     "justification": "Série technique du yen indisponible pour calculer le momentum RSI.",
+     "source_id": null
+    },
+    {
+     "indicateur": "trendline",
+     "sens": 0,
+     "poids": 7,
+     "justification": "Aucune structure technique chiffrée fournie pour identifier une droite de tendance valide.",
+     "source_id": null
+    }
+   ],
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (Analyse JPY impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge)",
+    "commentaire": "Absence de flux technique directionnel exploitable dans les données du jour, le yen restant tributaire des écarts de rendement globaux.",
     "source_id": null
    },
-   "detail_score": [],
-   "opportunites": [],
-   "menaces": [],
-   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse JPY impossible : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:ge.",
+   "carry": {
+    "taux_directeur": 1.0,
+    "differentiel_vs_mediane_g8": -1.5,
+    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   },
+   "opportunites": [
+    {
+     "texte": "Une résurgence brutale des tensions géopolitiques globales ou une dégradation rapide de l'appétit pour le risque entraînerait un débouclage massif des positions vendeuses de carry trade.",
+     "source_id": "src_090",
+     "non_sourcee": false
+    }
+   ],
+   "menaces": [
+    {
+     "texte": "La progression des rendements souverains américains, avec un 10 ans à 5.11 %, pénalise lourdement le yen via l'élargissement des écarts de taux.",
+     "source_id": "src_108",
+     "non_sourcee": false
+    },
+    {
+     "texte": "La compression de la volatilité globale matérialisée par un VIX bas à 14.21 stimule l'utilisation du JPY comme devise de financement dans les stratégies de portage.",
+     "source_id": "src_008",
+     "non_sourcee": false
+    }
+   ],
+   "synthese_une_phrase": "Pénalisé par un portage négatif de -1.50 point et une détente du VIX à 14.21 points, le yen reste exposé aux pressions vendeuses face à des rendements obligataires américains au-delà de 5 %.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -573,7 +666,7 @@
      "precedent": null,
      "source": "config (repli manuel)",
      "date": "2026-01-15",
-     "anciennete_jours": 253,
+     "anciennete_jours": 254,
      "note": ""
     },
     {
@@ -584,7 +677,7 @@
      "precedent": "1.6%",
      "source": "ForexFactory",
      "date": "2026-09-25",
-     "anciennete_jours": 0,
+     "anciennete_jours": 1,
      "note": ""
     },
     {
@@ -595,7 +688,7 @@
      "precedent": null,
      "source": "FRED (DGS10/DGS2)",
      "date": "2026-09-23",
-     "anciennete_jours": 2,
+     "anciennete_jours": 3,
      "note": ""
     },
     {
@@ -606,7 +699,7 @@
      "precedent": 14.87,
      "source": "FRED (VIXCLS)",
      "date": "2026-09-22",
-     "anciennete_jours": 3,
+     "anciennete_jours": 4,
      "note": ""
     },
     {
@@ -616,7 +709,7 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul local (Twelve Data)",
-     "date": "2026-09-25",
+     "date": "2026-09-26",
      "anciennete_jours": 0,
      "note": ""
     },
@@ -628,7 +721,7 @@
      "precedent": "55.1",
      "source": "ForexFactory",
      "date": "2026-09-23",
-     "anciennete_jours": 2,
+     "anciennete_jours": 3,
      "note": ""
     },
     {
@@ -638,7 +731,7 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul (FRED + config)",
-     "date": "2026-09-25",
+     "date": "2026-09-26",
      "anciennete_jours": 0,
      "note": ""
     },
@@ -667,15 +760,16 @@
    ],
    "contexte_geopolitique": {
     "banque_centrale_pourquoi": {
-     "texte": "",
-     "source_id": null
+     "texte": "La BOJ maintient une approche dépendante des données pour calibrer la normalisation progressive de ses taux directeurs sans perturber le financement souverain.",
+     "source_id": "src_015"
     },
-    "evenements": []
-   },
-   "carry": {
-    "taux_directeur": 1.0,
-    "differentiel_vs_mediane_g8": -1.5,
-    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+    "evenements": [
+     {
+      "texte": "La réouverture potentielle du détroit d'Ormuz atténue les craintes sur les approvisionnements énergétiques du Japon, réduisant les primes de risque mondiales.",
+      "source_id": "src_089",
+      "non_sourcee": false
+     }
+    ]
    },
    "historique_score_7j": [
     {
@@ -684,6 +778,10 @@
     },
     {
      "date": "2026-09-23",
+     "score": 25
+    },
+    {
+     "date": "2026-09-26",
      "score": 25
     }
    ]
@@ -714,7 +812,7 @@
      "precedent": null,
      "source": "config (repli manuel)",
      "date": "2026-01-15",
-     "anciennete_jours": 253,
+     "anciennete_jours": 254,
      "note": ""
     },
     {
@@ -736,7 +834,7 @@
      "precedent": null,
      "source": "FRED (DGS10/DGS2)",
      "date": "2026-09-23",
-     "anciennete_jours": 2,
+     "anciennete_jours": 3,
      "note": ""
     },
     {
@@ -747,7 +845,7 @@
      "precedent": 14.87,
      "source": "FRED (VIXCLS)",
      "date": "2026-09-22",
-     "anciennete_jours": 3,
+     "anciennete_jours": 4,
      "note": ""
     },
     {
@@ -757,7 +855,7 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul local (Twelve Data)",
-     "date": "2026-09-25",
+     "date": "2026-09-26",
      "anciennete_jours": 0,
      "note": ""
     },
@@ -779,7 +877,7 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul (FRED + config)",
-     "date": "2026-09-25",
+     "date": "2026-09-26",
      "anciennete_jours": 0,
      "note": ""
     },
@@ -855,7 +953,7 @@
      "precedent": null,
      "source": "config (repli manuel)",
      "date": "2026-01-15",
-     "anciennete_jours": 253,
+     "anciennete_jours": 254,
      "note": ""
     },
     {
@@ -877,7 +975,7 @@
      "precedent": null,
      "source": "FRED (DGS10/DGS2)",
      "date": "2026-09-23",
-     "anciennete_jours": 2,
+     "anciennete_jours": 3,
      "note": ""
     },
     {
@@ -888,7 +986,7 @@
      "precedent": 14.87,
      "source": "FRED (VIXCLS)",
      "date": "2026-09-22",
-     "anciennete_jours": 3,
+     "anciennete_jours": 4,
      "note": ""
     },
     {
@@ -898,7 +996,7 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul local (Twelve Data)",
-     "date": "2026-09-25",
+     "date": "2026-09-26",
      "anciennete_jours": 0,
      "note": ""
     },
@@ -920,7 +1018,7 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul (FRED + config)",
-     "date": "2026-09-25",
+     "date": "2026-09-26",
      "anciennete_jours": 0,
      "note": ""
     },
@@ -954,7 +1052,7 @@
      "precedent": 96.97,
      "source": "FRED",
      "date": "2026-09-22",
-     "anciennete_jours": 3,
+     "anciennete_jours": 4,
      "note": ""
     }
    ],
@@ -1007,7 +1105,7 @@
      "precedent": null,
      "source": "config (repli manuel)",
      "date": "2026-01-15",
-     "anciennete_jours": 253,
+     "anciennete_jours": 254,
      "note": ""
     },
     {
@@ -1029,7 +1127,7 @@
      "precedent": null,
      "source": "FRED (DGS10/DGS2)",
      "date": "2026-09-23",
-     "anciennete_jours": 2,
+     "anciennete_jours": 3,
      "note": ""
     },
     {
@@ -1040,7 +1138,7 @@
      "precedent": 14.87,
      "source": "FRED (VIXCLS)",
      "date": "2026-09-22",
-     "anciennete_jours": 3,
+     "anciennete_jours": 4,
      "note": ""
     },
     {
@@ -1050,7 +1148,7 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul local (Twelve Data)",
-     "date": "2026-09-25",
+     "date": "2026-09-26",
      "anciennete_jours": 0,
      "note": ""
     },
@@ -1072,7 +1170,7 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul (FRED + config)",
-     "date": "2026-09-25",
+     "date": "2026-09-26",
      "anciennete_jours": 0,
      "note": ""
     },
@@ -1139,7 +1237,7 @@
      "precedent": null,
      "source": "config (repli manuel)",
      "date": "2026-01-15",
-     "anciennete_jours": 253,
+     "anciennete_jours": 254,
      "note": ""
     },
     {
@@ -1161,7 +1259,7 @@
      "precedent": null,
      "source": "FRED (DGS10/DGS2)",
      "date": "2026-09-23",
-     "anciennete_jours": 2,
+     "anciennete_jours": 3,
      "note": ""
     },
     {
@@ -1172,7 +1270,7 @@
      "precedent": 14.87,
      "source": "FRED (VIXCLS)",
      "date": "2026-09-22",
-     "anciennete_jours": 3,
+     "anciennete_jours": 4,
      "note": ""
     },
     {
@@ -1182,7 +1280,7 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul local (Twelve Data)",
-     "date": "2026-09-25",
+     "date": "2026-09-26",
      "anciennete_jours": 0,
      "note": ""
     },
@@ -1204,7 +1302,7 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul (FRED + config)",
-     "date": "2026-09-25",
+     "date": "2026-09-26",
      "anciennete_jours": 0,
      "note": ""
     },
@@ -1287,7 +1385,7 @@
      "precedent": null,
      "source": "config (repli manuel)",
      "date": "2026-01-15",
-     "anciennete_jours": 253,
+     "anciennete_jours": 254,
      "note": ""
     },
     {
@@ -1319,7 +1417,7 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul local (Twelve Data)",
-     "date": "2026-09-25",
+     "date": "2026-09-26",
      "anciennete_jours": 0,
      "note": ""
     },
@@ -1330,7 +1428,7 @@
      "prevision": null,
      "precedent": null,
      "source": "calcul (FRED + config)",
-     "date": "2026-09-25",
+     "date": "2026-09-26",
      "anciennete_jours": 0,
      "note": ""
     },
@@ -1342,7 +1440,7 @@
      "precedent": null,
      "source": "FRED (DGS10/DGS2)",
      "date": "2026-09-23",
-     "anciennete_jours": 2,
+     "anciennete_jours": 3,
      "note": ""
     },
     {
@@ -1353,7 +1451,7 @@
      "precedent": 14.87,
      "source": "FRED (VIXCLS)",
      "date": "2026-09-22",
-     "anciennete_jours": 3,
+     "anciennete_jours": 4,
      "note": ""
     },
     {
@@ -2239,6 +2337,20 @@
    "detail": "titres extraits (page publique)",
    "date": "2026-09-25",
    "url": null
+  },
+  {
+   "id": "src_121",
+   "source": "FRED + config",
+   "detail": "taux directeurs des 8 devises",
+   "date": "2026-09-26",
+   "url": null
+  },
+  {
+   "id": "src_122",
+   "source": "financialsource",
+   "detail": "titres extraits (page publique)",
+   "date": "2026-09-26",
+   "url": null
   }
  ],
  "donnees_non_rafraichies": [
@@ -2668,8 +2780,8 @@
   "anomalies": [
    "USD : analyse indisponible aujourd'hui (Analyse USD impossible : 503 Server Error: Service Unavailable for url: https://) — exclue du classement",
    "EUR : graphique de prix manquant",
-   "GBP : analyse indisponible aujourd'hui (Analyse GBP impossible : 503 Server Error: Service Unavailable for url: https://) — exclue du classement",
-   "JPY : analyse indisponible aujourd'hui (Analyse JPY impossible : 503 Server Error: Service Unavailable for url: https://) — exclue du classement",
+   "GBP : analyse indisponible aujourd'hui (Analyse GBP impossible : 429 Client Error: Too Many Requests for url: https://ge) — exclue du classement",
+   "JPY : graphique de prix manquant",
    "CHF : analyse indisponible aujourd'hui (Analyse CHF impossible : 429 Client Error: Too Many Requests for url: https://ge) — exclue du classement",
    "CAD : analyse indisponible aujourd'hui (Analyse CAD impossible : 429 Client Error: Too Many Requests for url: https://ge) — exclue du classement",
    "AUD : analyse indisponible aujourd'hui (Analyse AUD impossible : 429 Client Error: Too Many Requests for url: https://ge) — exclue du classement",
