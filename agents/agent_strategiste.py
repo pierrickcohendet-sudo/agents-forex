@@ -18,6 +18,7 @@ from pathlib import Path
 
 from core import overrides, scoring
 from core.llm import FournisseurLLM, extraire_json
+from core.secrets import masquer_secrets
 
 log = logging.getLogger(__name__)
 
@@ -482,8 +483,9 @@ def _analyser_devise(llm: FournisseurLLM, systeme: str, config: dict, devise: st
             return extraire_json(llm.appeler_llm(prompt, systeme=systeme))
         except Exception as exc:  # noqa: BLE001 — parsing JSON ou erreur API : on retente
             derniere_erreur = exc
-            log.warning("Analyse %s, essai %d/%d en échec : %s", devise, essai, tentatives, exc)
-    raise RuntimeError(f"Analyse {devise} impossible : {derniere_erreur}")
+            log.warning("Analyse %s, essai %d/%d en échec : %s", devise, essai, tentatives,
+                       masquer_secrets(str(exc)))
+    raise RuntimeError(f"Analyse {devise} impossible : {masquer_secrets(str(derniere_erreur))}")
 
 
 def _devise_indisponible(devise: str, raison: str, biais: str = "neutre") -> dict:
@@ -671,7 +673,7 @@ def synthese_etat_du_monde(llm: FournisseurLLM, donnees: dict, catalogue: list[d
             ]
             etat["conclusion"] = str(brut.get("conclusion", ""))[:1500]
         except Exception as exc:  # noqa: BLE001
-            log.warning("État du monde indisponible : %s", exc)
+            log.warning("État du monde indisponible : %s", masquer_secrets(str(exc)))
             return None
 
         if not biais_macro_global or not _detecter_incoherence_biais(etat, biais_macro_global):
@@ -707,7 +709,7 @@ def commenter_synthese_globale(llm: FournisseurLLM, classement: list[dict],
     try:
         return str(extraire_json(llm.appeler_llm(prompt)).get("commentaire", ""))[:400]
     except Exception as exc:  # noqa: BLE001
-        log.warning("Commentaire global indisponible : %s", exc)
+        log.warning("Commentaire global indisponible : %s", masquer_secrets(str(exc)))
         libelle = {"risk_on": "Risk On", "risk_off": "Risk Off", "neutre": "neutre"}[biais]
         tete = classement[0]["devise"] if classement else "?"
         return f"Biais {libelle} ; {tete} en tête du classement de confluence."
@@ -727,7 +729,7 @@ def commenter_analyse_weekly(llm: FournisseurLLM, devise: str, metriques: dict) 
     try:
         return str(extraire_json(llm.appeler_llm(prompt)).get("commentaire", ""))[:500]
     except Exception as exc:  # noqa: BLE001
-        log.warning("Commentaire weekly %s indisponible : %s", devise, exc)
+        log.warning("Commentaire weekly %s indisponible : %s", devise, masquer_secrets(str(exc)))
         return (f"Score {metriques.get('score_debut')} → {metriques.get('score_fin')} "
                 f"sur {metriques.get('nb_jours')} jour(s) ; cohérence directionnelle : "
                 f"{metriques.get('coherence_directionnelle_pct')} %.")
@@ -743,7 +745,7 @@ def commenter_auto_evaluation(llm: FournisseurLLM, evaluation: dict) -> str:
     try:
         return str(extraire_json(llm.appeler_llm(prompt)).get("commentaire", ""))[:500]
     except Exception as exc:  # noqa: BLE001
-        log.warning("Commentaire auto-évaluation indisponible : %s", exc)
+        log.warning("Commentaire auto-évaluation indisponible : %s", masquer_secrets(str(exc)))
         return (f"Taux de réussite : {evaluation.get('taux_reussite_biais_pct')} % ; "
                 f"corrélation de classement : {evaluation.get('correlation_classement_spearman')}.")
 
@@ -796,7 +798,7 @@ def analyser(config: dict, llm: FournisseurLLM, technique: dict, macro: dict,
             brut = _analyser_devise(llm, systeme, config, devise, donnees, catalogue, memoire,
                                     overrides_devise)
         except RuntimeError as exc:
-            entree = _devise_indisponible(devise, str(exc)[:150], biais)
+            entree = _devise_indisponible(devise, masquer_secrets(str(exc))[:150], biais)
             # Les données collectées ne dépendent pas du LLM : le tableau
             # d'indicateurs et le carry restent affichables même sans analyse.
             entree["indicateurs_tableau"] = _tableau_indicateurs(config, devise, donnees, overrides_devise)

@@ -36,7 +36,7 @@ def controler(rapport: dict, config: dict) -> dict:
             # Une seule anomalie explicite, pas une cascade de sous-anomalies.
             anomalies.append(
                 f"{code} : analyse indisponible aujourd'hui "
-                f"({str(dev.get('raison_indisponibilite', ''))[:80]}) — exclue du classement")
+                f"({str(dev.get('raison_indisponibilite', ''))[:150]}) — exclue du classement")
             continue
         attendus = set(scoring.ponderations_devise(config, code))
 

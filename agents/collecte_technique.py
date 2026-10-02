@@ -18,6 +18,8 @@ import time
 import pandas as pd
 import requests
 
+from core.secrets import masquer_secrets
+
 log = logging.getLogger(__name__)
 
 URL_TWELVE = "https://api.twelvedata.com/time_series"
@@ -102,7 +104,7 @@ def _zones_consolidation(serie: pd.Series, tolerance: float = 0.0035,
 
 
 def collecter(config: dict) -> dict:
-    cle = os.environ.get("TWELVE_DATA_API_KEY", "")
+    cle = os.environ.get("TWELVE_DATA_API_KEY", "").strip()
     resultat: dict = {"devises": {}, "graphiques": {}, "correlations": {},
                       "prix_cloture": {}, "erreurs": []}
     if not cle:
@@ -124,8 +126,9 @@ def collecter(config: dict) -> dict:
             df_w = _ohlc(paire, "1week", 120, cle)
             time.sleep(pause)
         except (requests.RequestException, RuntimeError) as exc:
-            resultat["erreurs"].append(f"{devise} ({paire}) : {exc}")
-            log.error("Collecte technique %s en échec : %s", devise, exc)
+            erreur = masquer_secrets(str(exc))
+            resultat["erreurs"].append(f"{devise} ({paire}) : {erreur}")
+            log.error("Collecte technique %s en échec : %s", devise, erreur)
             continue
         # Série orientée force de la devise (inverse pour USD/XXX).
         forces_daily[devise] = (1.0 / df_d["close"]) if dc["inverse"] else df_d["close"]

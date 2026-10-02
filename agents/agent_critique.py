@@ -33,6 +33,7 @@ import json
 import logging
 
 from core.llm import FournisseurLLM, extraire_json
+from core.secrets import masquer_secrets
 
 log = logging.getLogger(__name__)
 
@@ -116,13 +117,14 @@ def critiquer(llm: FournisseurLLM, rapport: dict) -> dict:
             critique["indisponible"] = True
             critique["note"] = "relecture non effectuée (réponse LLM inexploitable)"
     except Exception as exc:  # noqa: BLE001
-        log.warning("Agent critique indisponible : %s", exc)
+        erreur = masquer_secrets(str(exc))
+        log.warning("Agent critique indisponible : %s", erreur)
         # JAMAIS "ok" par défaut ici : une relecture qui n'a pas eu lieu n'est
         # pas une relecture qui n'a rien trouvé (incident du 2026-08-20).
         critique = {"incoherences": [], "affirmations_non_sourcees": [],
                     "suggestions_connaissances": [], "validation": "non_evalue",
                     "indisponible": True,
-                    "note": f"relecture non effectuée ({str(exc)[:150]})"}
+                    "note": f"relecture non effectuée ({erreur[:150]})"}
     if critique["validation"] == "a_revoir":
         log.warning("Relecture : point(s) de vigilance -> %s | %s",
                     critique["incoherences"], critique["affirmations_non_sourcees"])

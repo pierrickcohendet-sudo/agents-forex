@@ -18,6 +18,8 @@ from pathlib import Path
 
 from bs4 import BeautifulSoup
 
+from core.secrets import masquer_secrets
+
 from core.scraping import ClientScraping
 
 log = logging.getLogger(__name__)
@@ -147,8 +149,9 @@ def collecter(config: dict, client: ClientScraping) -> dict:
                     info["note"] = (info["note"] + " | " if info["note"] else "") + \
                         "contenu dynamique non exploitable côté serveur"
         except (json.JSONDecodeError, ValueError) as exc:
-            info["note"] = f"parsing en échec : {exc}"
-            log.warning("Parsing %s en échec : %s", nom, exc)
+            erreur = masquer_secrets(str(exc))
+            info["note"] = f"parsing en échec : {erreur}"
+            log.warning("Parsing %s en échec : %s", nom, erreur)
         resultat["sites"][nom] = info
 
     if not resultat["evenements"]:

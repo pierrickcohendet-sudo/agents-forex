@@ -43,6 +43,8 @@ from abc import ABC, abstractmethod
 
 import requests
 
+from core.secrets import masquer_secrets
+
 log = logging.getLogger(__name__)
 
 # Estimation grossière (pas de tokenizer réel installé) : ~4 caractères par
@@ -102,7 +104,7 @@ class FournisseurGemini(_FournisseurAvecCadence):
 
     def __init__(self, modele: str, temperature: float = 0.2, **kwargs):
         super().__init__(**kwargs)
-        self.cle = os.environ.get("GEMINI_API_KEY", "")
+        self.cle = os.environ.get("GEMINI_API_KEY", "").strip()
         if not self.cle:
             raise RuntimeError("GEMINI_API_KEY absente de l'environnement (voir .env.example)")
         self.modele = modele
@@ -136,6 +138,14 @@ class FournisseurGemini(_FournisseurAvecCadence):
             log.warning("Gemini 429 (limite de requêtes/minute) : attente de %.0f s "
                         "avant un unique nouvel essai", attente)
             time.sleep(attente)
+            rep = self._poster(corps)
+        elif rep.status_code == 503:
+            # UNAVAILABLE (modèle surchargé côté Google, doc officielle : retry
+            # conseillé) — même traitement que le 429 : un backoff réel, un
+            # unique nouvel essai, jamais une boucle.
+            log.warning("Gemini 503 (service temporairement indisponible) : attente de %.0f s "
+                        "avant un unique nouvel essai", self.backoff_429_s)
+            time.sleep(self.backoff_429_s)
             rep = self._poster(corps)
         rep.raise_for_status()
         donnees = rep.json()
@@ -279,7 +289,7 @@ class FournisseurGroq(_FournisseurAvecCadence):
                  budget_tokens_total_max: int = 5500,
                  connaissances_prioritaires: list[str] | None = None, **kwargs):
         super().__init__(**kwargs)
-        self.cle = os.environ.get("GROQ_API_KEY", "")
+        self.cle = os.environ.get("GROQ_API_KEY", "").strip()
         if not self.cle:
             raise RuntimeError("GROQ_API_KEY absente de l'environnement (voir .env.example)")
         self.modele = modele
@@ -358,16 +368,18 @@ class FournisseurAvecSecours(FournisseurLLM):
         try:
             return self.principal.appeler_llm(prompt, systeme=systeme)
         except Exception as exc_principal:  # noqa: BLE001
+            msg_principal = masquer_secrets(str(exc_principal))
             log.warning("Fournisseur %s en échec (%s) — repli sur %s pour cet appel",
-                       self.nom_principal, exc_principal, self.nom_secours)
+                       self.nom_principal, msg_principal, self.nom_secours)
             try:
                 return self.secours.appeler_llm(prompt, systeme=systeme)
             except Exception as exc_secours:  # noqa: BLE001
+                msg_secours = masquer_secrets(str(exc_secours))
                 log.error("Fournisseur de secours %s également en échec : %s",
-                         self.nom_secours, exc_secours)
+                         self.nom_secours, msg_secours)
                 raise RuntimeError(
                     f"{self.nom_principal} et {self.nom_secours} (secours) en échec : "
-                    f"{exc_principal} | {exc_secours}") from exc_secours
+                    f"{msg_principal} | {msg_secours}") from exc_secours
 
 
 FOURNISSEURS = {"gemini": FournisseurGemini, "groq": FournisseurGroq}

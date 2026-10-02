@@ -24,6 +24,8 @@ from urllib.parse import urlparse
 
 import requests
 
+from core.secrets import masquer_secrets
+
 log = logging.getLogger(__name__)
 
 
@@ -139,7 +141,7 @@ class ClientScraping:
                     "contenu": rep.text, "note": "",
                 }
             except requests.RequestException as exc:
-                derniere_erreur = str(exc)[:200]
+                derniere_erreur = masquer_secrets(str(exc))[:200]
                 if tentative == 1:
                     time.sleep(random.uniform(3, 8))
         return self._repli(site, cache, f"échec ({derniere_erreur})")

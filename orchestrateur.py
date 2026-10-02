@@ -42,10 +42,32 @@ from core import collecte_cache, controle_qualite, evaluation, hebdo, overrides,
 from core.llm import creer_fournisseur
 from core.notifications import notifier_echec
 from core.scraping import ClientScraping
+from core.secrets import masquer_secrets
 from core.tracabilite import valider_rapport
 
 RACINE = Path(__file__).resolve().parent
 log = logging.getLogger("orchestrateur")
+
+
+class _FiltreSecrets(logging.Filter):
+    """Filet de sécurité GLOBAL, appliqué à toute ligne de log (y compris
+    log.exception et ses tracebacks complets) : les appels individuels
+    masquent déjà les secrets à la source (voir core/secrets.py), mais un
+    nouvel appel qui oublierait de le faire ne doit jamais faire fuiter une
+    clé — ni dans data/logs/ (gitignored mais lisible sur le runner), ni sur
+    la sortie standard d'un run GitHub Actions."""
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        record.msg = masquer_secrets(record.getMessage())
+        record.args = ()
+        # exc_text n'est normalement calculé qu'au formatage (dans le Handler,
+        # après les filtres) : le précalculer ici, masqué, pour que le
+        # Formatter le réutilise tel quel (voir logging.Formatter.format —
+        # il ne reformate exc_info QUE si exc_text est encore vide).
+        if record.exc_info and not record.exc_text:
+            record.exc_text = masquer_secrets(
+                logging.Formatter().formatException(record.exc_info))
+        return True
 
 
 def initialiser_logs(dossier: Path) -> None:
@@ -58,6 +80,7 @@ def initialiser_logs(dossier: Path) -> None:
             logging.FileHandler(dossier / f"{date.today().isoformat()}.log", encoding="utf-8"),
         ],
     )
+    logging.getLogger().addFilter(_FiltreSecrets())
 
 
 def etape(nom: str, fonction, *args, fatal: bool = False, defaut=None, **kwargs):

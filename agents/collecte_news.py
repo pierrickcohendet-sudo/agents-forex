@@ -12,6 +12,8 @@ from datetime import datetime, timedelta, timezone
 import feedparser
 import requests
 
+from core.secrets import masquer_secrets
+
 log = logging.getLogger(__name__)
 
 MAX_PAR_FLUX = 15
@@ -36,8 +38,9 @@ def collecter(config: dict, user_agent: str) -> dict:
             rep.raise_for_status()
             flux = feedparser.parse(rep.content)
         except requests.RequestException as exc:
-            resultat["erreurs"].append(f"RSS {nom} : {exc}")
-            log.warning("Flux %s en échec : %s", nom, exc)
+            erreur = masquer_secrets(str(exc))
+            resultat["erreurs"].append(f"RSS {nom} : {erreur}")
+            log.warning("Flux %s en échec : %s", nom, erreur)
             resultat["flux"][nom] = {"statut": "indisponible"}
             continue
 

@@ -30,6 +30,7 @@ from notion_client import Client
 
 from core import hebdo
 from core import notion_blocks as nb
+from core.secrets import masquer_secrets
 
 log = logging.getLogger(__name__)
 
@@ -555,12 +556,13 @@ def _generer_contenu(client: Client, page_id: str, rapport: dict, config: dict,
             # coûter que cette devise — jamais couper la publication des
             # suivantes (c'est exactement ce qui a coupé le run du 2026-08-14 :
             # une image trop longue sur une devise a stoppé tout le reste).
+            erreur = masquer_secrets(str(exc))
             log.error("Contenu de %s en échec (toggle laissé avec ce message) : %s",
-                     devise["devise"], exc)
+                     devise["devise"], erreur)
             try:
                 client.blocks.children.append(toggle_id, children=[nb.callout(
                     [nb.rt("⚠️ Rendu de cette devise en échec côté Notion — ", gras=True),
-                     nb.rt(f"{type(exc).__name__}: {str(exc)[:200]}. "
+                     nb.rt(f"{type(exc).__name__}: {erreur[:200]}. "
                            "Le rapport complet reste disponible sur le dashboard web.",
                            couleur="gray")],
                     "⚠️", "orange_background")])
@@ -622,7 +624,7 @@ def publier(config: dict, rapport: dict, chemin_config: str | Path | None = None
     if not cfg.get("actif", True):
         log.info("Publication Notion désactivée (config)")
         return None
-    cle = os.environ.get("NOTION_API_KEY", "")
+    cle = os.environ.get("NOTION_API_KEY", "").strip()
     if not cle:
         log.warning("Publication Notion sautée : NOTION_API_KEY manquante")
         return None

@@ -14,6 +14,8 @@ import statistics
 
 import requests
 
+from core.secrets import masquer_secrets
+
 log = logging.getLogger(__name__)
 
 URL_FRED = "https://api.stlouisfed.org/fred/series/observations"
@@ -78,7 +80,7 @@ def _graphiques_marche(cle: str, nb_points: int) -> dict:
         try:
             obs = _serie_fred(serie_id, cle, nb=nb_points)
         except (requests.RequestException, ValueError) as exc:
-            log.warning("FRED %s (graphique pétrole) en échec : %s", serie_id, exc)
+            log.warning("FRED %s (graphique pétrole) en échec : %s", serie_id, masquer_secrets(str(exc)))
             continue
         if obs:
             graphiques[nom] = {
@@ -91,7 +93,7 @@ def _graphiques_marche(cle: str, nb_points: int) -> dict:
 def collecter(config: dict) -> dict:
     resultat: dict = {"series": {}, "yield_curve": {"disponible": False},
                       "taux_directeurs": {}, "graphiques_marche": {}, "erreurs": []}
-    cle = os.environ.get("FRED_API_KEY", "")
+    cle = os.environ.get("FRED_API_KEY", "").strip()
 
     observations: dict[str, list] = {}
     if not cle:
@@ -102,8 +104,9 @@ def collecter(config: dict) -> dict:
             try:
                 obs = _serie_fred(serie_id, cle)
             except (requests.RequestException, ValueError) as exc:
-                resultat["erreurs"].append(f"FRED {serie_id} : {exc}")
-                log.warning("FRED %s en échec : %s", serie_id, exc)
+                erreur = masquer_secrets(str(exc))
+                resultat["erreurs"].append(f"FRED {serie_id} : {erreur}")
+                log.warning("FRED %s en échec : %s", serie_id, erreur)
                 continue
             if not obs:
                 resultat["erreurs"].append(f"FRED {serie_id} : aucune observation")
