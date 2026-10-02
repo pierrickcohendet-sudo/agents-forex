@@ -39,7 +39,7 @@ from agents import (agent_critique, agent_redacteur, agent_strategiste,
                     collecte_calendrier, collecte_macro, collecte_news,
                     collecte_technique)
 from core import collecte_cache, controle_qualite, evaluation, hebdo, overrides, publication_web
-from core.llm import creer_fournisseur
+from core.llm import creer_fournisseur, journal_appels, reinitialiser_journal
 from core.notifications import notifier_echec
 from core.scraping import ClientScraping
 from core.secrets import masquer_secrets
@@ -211,6 +211,7 @@ def main() -> int:
         return 1
 
     # ---------------------------------------------------------------- analyse
+    reinitialiser_journal()
     try:
         llm = creer_fournisseur(config)
         rapport = etape("agent stratège", agent_strategiste.analyser,
@@ -278,6 +279,14 @@ def main() -> int:
     # --------------------------------------------------------------- critique
     rapport = etape("agent critique", agent_critique.critiquer, llm, rapport,
                     defaut=rapport)
+
+    # Journal léger des appels LLM (taille estimée + modèle utilisé) : en
+    # --completer, s'ajoute à ceux du matin (plafonné) ; puis alerte qualité
+    # si un prompt dépasse controle_qualite.seuil_prompt_tokens.
+    precedents = ((rapport_existant or {}).get("meta", {}).get("appels_llm", []))
+    rapport["meta"]["appels_llm"] = (precedents + journal_appels())[-80:]
+    etape("alerte taille des prompts", controle_qualite.signaler_prompts_volumineux,
+          rapport, config)
 
     # ------------------------------------------------------------- sauvegarde
     chemin = dossier_rapports / f"{rapport['meta']['date_rapport']}.json"

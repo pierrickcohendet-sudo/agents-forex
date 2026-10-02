@@ -96,3 +96,32 @@ def controler(rapport: dict, config: dict) -> dict:
     else:
         log.info("Contrôle qualité : conforme")
     return resultat
+
+
+SEUIL_PROMPT_TOKENS_DEFAUT = 18000
+_PREFIXE_ALERTE_PROMPT = "prompt LLM volumineux"
+
+
+def signaler_prompts_volumineux(rapport: dict, config: dict) -> None:
+    """Ajoute au contrôle qualité UNE anomalie si un prompt LLM du jour
+    (meta.appels_llm) dépasse controle_qualite.seuil_prompt_tokens — pour voir
+    tout de suite si le contexte envoyé regrossit. Idempotent : remplace
+    l'alerte précédente. Appelée après le dernier appel LLM du run."""
+    controle = rapport.get("controle_qualite")
+    if not isinstance(controle, dict):
+        return
+    seuil = int(config.get("controle_qualite", {}).get("seuil_prompt_tokens",
+                                                       SEUIL_PROMPT_TOKENS_DEFAUT))
+    anomalies = [a for a in controle.get("anomalies", []) if not a.startswith(_PREFIXE_ALERTE_PROMPT)]
+    appels = rapport.get("meta", {}).get("appels_llm", [])
+    gros = [a for a in appels if a.get("tokens_total", 0) > seuil]
+    if gros:
+        pire = max(gros, key=lambda a: a["tokens_total"])
+        anomalies.append(
+            f"{_PREFIXE_ALERTE_PROMPT} : {len(gros)} appel(s) au-dessus de {seuil} tokens estimés "
+            f"(max {pire['tokens_total']} à {pire.get('heure', '?')} UTC, modèle {pire.get('modele', '?')}) "
+            f"— le contexte envoyé au LLM a regrossi")
+        log.warning("Contrôle qualité : %s", anomalies[-1])
+    controle["anomalies"] = anomalies[:30]
+    controle["nb_anomalies"] = len(anomalies)
+    controle["conforme"] = not anomalies

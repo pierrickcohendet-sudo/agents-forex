@@ -80,6 +80,12 @@ llm:
   #     - exemples_annotes.md
   #     - glossaire.md
 
+# --- Contrôle qualité ---------------------------------------------------------
+controle_qualite:
+  # Alerte (anomalie) si un prompt LLM dépasse ce nombre de tokens ESTIMÉS
+  # (~4 car./token). Mesuré à 14-15 000 après la fenêtre glissante de 7 jours.
+  seuil_prompt_tokens: 18000
+
 # --- Devises suivies ---------------------------------------------------------
 # paire        : symbole Twelve Data (null pour USD -> indice synthétique calculé).
 # inverse      : true si la devise est au dénominateur de la paire

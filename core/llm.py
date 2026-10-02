@@ -40,6 +40,7 @@ import os
 import re
 import time
 from abc import ABC, abstractmethod
+from datetime import datetime, timezone
 
 import requests
 
@@ -61,6 +62,30 @@ def _estimer_tokens(texte: str) -> int:
 
 def _budget_car(budget_tokens: int) -> int:
     return budget_tokens * CARACTERES_PAR_TOKEN_ESTIME
+
+
+# Journal LÉGER des appels LLM du run (taille estimée + modèle réellement
+# utilisé), écrit dans rapport["meta"]["appels_llm"] par l'orchestrateur :
+# permet de suivre d'un jour à l'autre si les prompts regrossissent, sans
+# avoir à lire les logs GitHub Actions. Un échec est noté (ok=False) : ce sont
+# souvent les plus gros prompts qui échouent.
+_JOURNAL_APPELS: list[dict] = []
+
+
+def reinitialiser_journal() -> None:
+    _JOURNAL_APPELS.clear()
+
+
+def journal_appels() -> list[dict]:
+    return [dict(e) for e in _JOURNAL_APPELS]
+
+
+def _noter_appel(modele: str, systeme: str | None, prompt: str, ok: bool) -> None:
+    tok_sys, tok_msg = _estimer_tokens(systeme or ""), _estimer_tokens(prompt)
+    _JOURNAL_APPELS.append({
+        "heure": datetime.now(timezone.utc).strftime("%H:%M"), "modele": modele,
+        "tokens_systeme": tok_sys, "tokens_message": tok_msg,
+        "tokens_total": tok_sys + tok_msg, "ok": ok})
 
 
 class FournisseurLLM(ABC):
@@ -122,6 +147,15 @@ class FournisseurGemini(_FournisseurAvecCadence):
         )
 
     def appeler_llm(self, prompt: str, systeme: str | None = None) -> str:
+        try:
+            texte = self._appeler(prompt, systeme)
+        except Exception:
+            _noter_appel(self.modele, systeme, prompt, False)
+            raise
+        _noter_appel(self.modele, systeme, prompt, True)
+        return texte
+
+    def _appeler(self, prompt: str, systeme: str | None) -> str:
         self._loguer_taille("Gemini", systeme, prompt)
         corps = {
             "contents": [{"role": "user", "parts": [{"text": prompt}]}],
