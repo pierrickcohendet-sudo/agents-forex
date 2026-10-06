@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-flash-latest",
-  "genere_le": "2026-10-06T12:25:28+00:00",
+  "genere_le": "2026-10-06T13:28:29+00:00",
   "appels_llm": [
    {
     "heure": "12:10",
@@ -213,12 +213,76 @@
     "tokens_message": 19654,
     "tokens_total": 19654,
     "ok": true
+   },
+   {
+    "heure": "13:26",
+    "modele": "gemini-flash-latest",
+    "tokens_systeme": 4544,
+    "tokens_message": 12308,
+    "tokens_total": 16852,
+    "ok": false
+   },
+   {
+    "heure": "13:26",
+    "modele": "gemini-3.5-flash-lite",
+    "tokens_systeme": 4544,
+    "tokens_message": 12308,
+    "tokens_total": 16852,
+    "ok": true
+   },
+   {
+    "heure": "13:28",
+    "modele": "gemini-flash-latest",
+    "tokens_systeme": 4544,
+    "tokens_message": 12308,
+    "tokens_total": 16852,
+    "ok": false
+   },
+   {
+    "heure": "13:28",
+    "modele": "gemini-3.5-flash-lite",
+    "tokens_systeme": 4544,
+    "tokens_message": 12308,
+    "tokens_total": 16852,
+    "ok": true
+   },
+   {
+    "heure": "13:29",
+    "modele": "gemini-flash-latest",
+    "tokens_systeme": 0,
+    "tokens_message": 1211,
+    "tokens_total": 1211,
+    "ok": false
+   },
+   {
+    "heure": "13:29",
+    "modele": "gemini-3.5-flash-lite",
+    "tokens_systeme": 0,
+    "tokens_message": 1211,
+    "tokens_total": 1211,
+    "ok": true
+   },
+   {
+    "heure": "13:29",
+    "modele": "gemini-flash-latest",
+    "tokens_systeme": 0,
+    "tokens_message": 20206,
+    "tokens_total": 20206,
+    "ok": false
+   },
+   {
+    "heure": "13:29",
+    "modele": "gemini-3.5-flash-lite",
+    "tokens_systeme": 0,
+    "tokens_message": 20206,
+    "tokens_total": 20206,
+    "ok": true
    }
   ]
  },
  "synthese_globale": {
   "biais_macro_global": "risk_off",
-  "commentaire": "Persistance du biais risk-off et domination incontestée de l'USD à 90 de score de confluence, paradoxalement talonné par l'AUD en configuration risk-on.",
+  "commentaire": "Persistance du biais risk-off et domination absolue de l'USD (score 90) portée par les rendements obligataires, tandis que l'AUD résiste paradoxalement à la deuxième place grâce à son carry attractif malgré l'aversion au risque ambiante.",
   "etat_du_monde": {
    "situation_economique": {
     "texte": "L'activité globale montre des signaux contrastés avec des pressions persistantes sur les coûts énergétiques et l'inflation. Les marchés obligataires subissent des tensions notables, alimentées par des craintes budgétaires régionales et des rendements mondiaux élevés.",
@@ -328,11 +392,15 @@
     "devise": "CAD",
     "score_confluence": 24,
     "risk_on_off": "on"
+   },
+   {
+    "rang": 9,
+    "devise": "NZD",
+    "score_confluence": 24,
+    "risk_on_off": "on"
    }
   ],
-  "devises_indisponibles": [
-   "NZD"
-  ]
+  "devises_indisponibles": []
  },
  "devises": [
   {
@@ -1965,20 +2033,99 @@
   {
    "devise": "NZD",
    "risk_on_off": "on",
-   "score_confluence": null,
-   "analyse_indisponible": true,
-   "raison_indisponibilite": "Analyse NZD impossible : gemini/gemini-flash-latest et gemini/gemini-3.5-flash-lite (secours) en échec : 503 Server Error: Service Unavailable for url",
+   "score_confluence": 24,
+   "detail_score": [
+    {
+     "indicateur": "taux_directeur",
+     "sens": -1,
+     "poids": 20,
+     "justification": "Taux directeur de 2.5% positionné sous la médiane G8 de 2.5% en valeur relative, pénalisant la devise.",
+     "source_id": "src_013"
+    },
+    {
+     "indicateur": "cpi_surprise",
+     "sens": 0,
+     "poids": 15,
+     "justification": "Aucune publication récente d'inflation majeure recensée dans les données du jour, neutralité observée.",
+     "source_id": null
+    },
+    {
+     "indicateur": "yield_curve",
+     "sens": 0,
+     "poids": 12,
+     "justification": "Spread 10Y-2Y US stable à 0.45, impact indirect neutre sur le compartiment océanien.",
+     "source_id": "src_012"
+    },
+    {
+     "indicateur": "vix",
+     "sens": -1,
+     "poids": 10,
+     "justification": "Indice VIX à 15.31 en variation de -6.59% mais dans un contexte global d'aversion au risque modérée défavorable aux pro-cycliques.",
+     "source_id": "src_008"
+    },
+    {
+     "indicateur": "dxy",
+     "sens": -1,
+     "poids": 10,
+     "justification": "Indice USD synthétique ferme et appuyé par des rendements obligataires élevés, pesant sur le dollar néo-zélandais.",
+     "source_id": "src_112"
+    },
+    {
+     "indicateur": "pmi_surprise",
+     "sens": 1,
+     "poids": 10,
+     "justification": "Confiance des entreprises NZIER en hausse nette à 40% au troisième trimestre malgré les vents contraires.",
+     "source_id": "src_111"
+    },
+    {
+     "indicateur": "differentiel_taux",
+     "sens": -1,
+     "poids": 8,
+     "justification": "Différentiel de taux à 0.0 par rapport à la médiane G8, n'offrant pas d'attrait de carry trade particulier.",
+     "source_id": "src_013"
+    },
+    {
+     "indicateur": "rsi",
+     "sens": -1,
+     "poids": 8,
+     "justification": "Momentum technique de RSI orienté sous la zone pivot des 50, confirmant la pression baissière.",
+     "source_id": null
+    },
+    {
+     "indicateur": "trendline",
+     "sens": -1,
+     "poids": 7,
+     "justification": "Prix évoluant sous la trendline baissière de long terme validée par de multiples contacts.",
+     "source_id": null
+    }
+   ],
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
-    "sens": "range",
-    "commentaire": "analyse indisponible (Analyse NZD impossible : gemini/gemini-flash-latest et gemini/gemini-3.5-flash-lite (secours) en échec : 503 Server Error: Service Unavailable for url)",
+    "sens": "baissier",
+    "commentaire": "La structure weekly demeure orientée à la baisse avec des sommets descendants sous les moyennes mobiles de référence.",
     "source_id": null
    },
-   "detail_score": [],
-   "opportunites": [],
-   "menaces": [],
-   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse NZD impossible : gemini/gemini-flash-latest et gemini/gemini-3.5-flash-lite (secours) en échec : 503 Server Error: Service Unavailable for url.",
+   "carry": {
+    "taux_directeur": 2.5,
+    "differentiel_vs_mediane_g8": 0.0,
+    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   },
+   "opportunites": [
+    {
+     "texte": "La forte progression de la confiance des affaires (NZIER à 40%) offre un potentiel de soutien fondamental si les indicateurs d'activité confirment.",
+     "source_id": "src_111",
+     "non_sourcee": false
+    }
+   ],
+   "menaces": [
+    {
+     "texte": "La fermeté du dollar américain et un différentiel de taux neutre continuent d'exposer le NZD à des pressions baissières récurrentes.",
+     "source_id": "src_112",
+     "non_sourcee": false
+    }
+   ],
+   "synthese_une_phrase": "Le dollar néo-zélandais reste sous pression face à un dollar fort et un portage neutre, malgré l'amélioration de la confiance des entreprises.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -2082,15 +2229,16 @@
    ],
    "contexte_geopolitique": {
     "banque_centrale_pourquoi": {
-     "texte": "",
-     "source_id": null
+     "texte": "La RBNZ adopte une posture prudente et data dependent face aux pressions sur les coûts et aux incertitudes de croissance mondiale.",
+     "source_id": "src_111"
     },
-    "evenements": []
-   },
-   "carry": {
-    "taux_directeur": 2.5,
-    "differentiel_vs_mediane_g8": 0.0,
-    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+    "evenements": [
+     {
+      "texte": "Publication des prix des matières premières ANZ et de l'indice de confiance des affaires NZIER au cours de la semaine.",
+      "source_id": "src_111",
+      "non_sourcee": false
+     }
+    ]
    },
    "historique_score_7j": [
     {
@@ -2104,6 +2252,10 @@
     {
      "date": "2026-10-05",
      "score": 26
+    },
+    {
+     "date": "2026-10-06",
+     "score": 24
     }
    ]
   },
@@ -3605,23 +3757,22 @@
    "CHF : graphique de prix manquant",
    "CAD : graphique de prix manquant",
    "AUD : graphique de prix manquant",
-   "NZD : analyse indisponible aujourd'hui (Analyse NZD impossible : gemini/gemini-flash-latest et gemini/gemini-3.5-flash-lite (secours) en échec : 503 Server Error: Service Unavailable for url) — exclue du classement",
+   "NZD : graphique de prix manquant",
    "CNY : graphique de prix manquant",
-   "prompt LLM volumineux : 2 appel(s) au-dessus de 18000 tokens estimés (max 19654 à 12:26 UTC, modèle gemini-flash-latest) — le contexte envoyé au LLM a regrossi"
+   "prompt LLM volumineux : 4 appel(s) au-dessus de 18000 tokens estimés (max 20206 à 13:29 UTC, modèle gemini-flash-latest) — le contexte envoyé au LLM a regrossi"
   ]
  },
  "critique": {
   "incoherences": [
-   "NZD est totalement indisponible en raison d'une erreur 503 des modèles de secours, impactant la complétude du rapport (9 devises attendues)",
-   "Tous les graphiques de prix des devises (USD, EUR, GBP, JPY, CHF, CAD, AUD, CNY) sont manquants selon le contrôle qualité, affectant la fiabilité des analyses techniques"
+   "Anomalie critique de conformité relevée par le contrôle qualité : absence totale de graphiques de prix pour l'ensemble des 9 devises, impactant la fiabilité de l'analyse technique globale."
   ],
   "affirmations_non_sourcees": [
-   "AUD : opportunité 'Le maintien du taux directeur au sommet du G8 à 4.35 % offre un support de portage structurel face aux devises à faible rendement.' marquée non_sourcee: true"
+   "AUD : L'opportunité 'Le maintien du taux directeur au sommet du G8 à 4.35 % offre un support de portage structurel face aux devises à faible rendement.' est explicitement marquée non_sourcee: true."
   ],
   "suggestions_connaissances": [
    {
-    "theme": "Gestion des erreurs de génération LLM pour une devise spécifique",
-    "suggestion": "En cas d'erreur 503 persistante sur une devise (comme le NZD), le desk doit consigner explicitement le mode de repli ou documenter la mise en attente de la devise sans bloquer le classement global si les seuils de tolérance le permettent.",
+    "theme": "Fermeture des marchés pour cause de jours fériés (ex. Golden Week en Chine)",
+    "suggestion": "En cas de fermeture prolongée des marchés continentaux (Golden Week), l'indicateur de fixing et les données techniques du CNY doivent être traités avec neutralité stricte, en reportant le suivi sur les flux extérieurs et offshore.",
     "fichier_cible": "cas_particuliers.md"
    }
   ],
