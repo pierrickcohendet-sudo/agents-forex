@@ -1,0 +1,41 @@
+# Diagnostic ponctuel (chantier « Tableau macro ») : la page « mois » de
+# ForexFactory répond-elle depuis un runner GitHub Actions ? Se lance tout seul
+# au push de ce fichier ou du script, ou à la main (Actions > test-ff > Run
+# workflow). Écrit data/diagnostics/ff_actions.json (HTTP, taille, parsing).
+# À supprimer une fois la question tranchée.
+name: test-ff
+
+on:
+  push:
+    paths:
+      - ".github/workflows/test_ff.yml"
+      - "scripts/test_ff_actions.py"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rapport-fx
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests
+      - name: Tester ForexFactory depuis Actions
+        run: python scripts/test_ff_actions.py
+      - name: Committer le résultat
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/diagnostics/ff_actions.json
+          git commit -m "diagnostic : ForexFactory depuis GitHub Actions" || exit 0
+          git pull --rebase origin master
+          git push
