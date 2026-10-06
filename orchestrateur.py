@@ -38,7 +38,8 @@ from dotenv import load_dotenv
 from agents import (agent_critique, agent_redacteur, agent_strategiste,
                     collecte_calendrier, collecte_macro, collecte_news,
                     collecte_technique)
-from core import collecte_cache, controle_qualite, evaluation, hebdo, overrides, publication_web
+from core import (collecte_cache, controle_qualite, evaluation, hebdo, overrides, publication_web,
+                  saisies_manuelles, tableau_macro)
 from core.llm import creer_fournisseur, journal_appels, reinitialiser_journal
 from core.notifications import notifier_echec
 from core.scraping import ClientScraping
@@ -141,6 +142,15 @@ def main() -> int:
     log.info("=== Pipeline FX — rapport %s du %s%s ===", type_rapport, date.today().isoformat(),
              " (complément)" if arguments.completer else "")
 
+    # ---------------------------------------------------------- tableau macro
+    # AVANT le test « rien à compléter » : un passage --completer qui n'a rien
+    # d'autre à faire doit quand même collecter le créneau ForexFactory dû
+    # (ex. 19:15), détecter les saisies manuelles Notion et publier le tableau.
+    # Étape isolée : son échec ne bloque jamais le rapport.
+    tableau = etape("tableau macro", tableau_macro.mettre_a_jour, config, RACINE,
+                    RACINE / "config.yaml", avec_notion=not arguments.sans_notion, defaut=None)
+    saisies_notion = (tableau or {}).get("saisies_overrides", {})
+
     # ------------------------------------------------------- mode --completer
     rapport_existant = None
     if arguments.completer:
@@ -156,6 +166,9 @@ def main() -> int:
                                        donnees_dir / "cache", n, date.today())]
             if not a_completer and not etat_manquant and not collectes_a_refaire:
                 log.info("--completer : rien à compléter aujourd'hui (rapport déjà complet) — run ignoré")
+                if (tableau or {}).get("modifie") and not arguments.sans_web:
+                    etape("git push (tableau macro)", publication_web.pousser_git,
+                          config["publication_web"], RACINE, "tableau macro : mise à jour")
                 return 0
             log.info("--completer : %d devise(s) à retenter (%s)%s%s", len(a_completer),
                      ", ".join(a_completer) or "—", " + état du monde" if etat_manquant else "",
@@ -175,6 +188,9 @@ def main() -> int:
     # donnée automatique, pour n'importe quel indicateur. Lecture seule — le
     # pipeline n'écrit jamais dans ce dossier.
     overrides_du_jour = overrides.charger(donnees_dir / "overrides", date.today())
+    # Saisies faites dans le Tableau macro Notion : servent aussi à l'analyse ;
+    # le fichier manuel du jour garde la priorité.
+    overrides_du_jour = saisies_manuelles.fusionner_overrides(overrides_du_jour, saisies_notion)
 
     # ---------------------------------------------------------------- collecte
     # Séquentielle par construction : jamais d'appels parallèles sur les sites.

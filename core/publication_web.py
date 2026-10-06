@@ -57,8 +57,9 @@ def _git(*args: str, racine: Path) -> subprocess.CompletedProcess:
     )
 
 
-def pousser_git(config_web: dict, racine_projet: str | Path = ".") -> bool:
-    """Committe docs/data + data/rapports + data/cache. Retourne True si poussé."""
+def pousser_git(config_web: dict, racine_projet: str | Path = ".",
+                message: str = "rapport quotidien : données du jour") -> bool:
+    """Committe docs/data + data/rapports + data/cache + registre macro. Retourne True si poussé."""
     mode = config_web.get("git_push", "auto")
     sous_actions = os.environ.get("GITHUB_ACTIONS") == "true"
     if mode == "jamais" or (mode == "auto" and not sous_actions):
@@ -77,7 +78,12 @@ def pousser_git(config_web: dict, racine_projet: str | Path = ".") -> bool:
     # config.yaml : porte le database_id Notion écrit au premier run.
     _git("add", "docs/data", "data/rapports", "data/cache", "data/hebdo", "config.yaml",
          racine=racine)
-    commit = _git("commit", "-m", "rapport quotidien : données du jour", racine=racine)
+    # Fichiers du Tableau macro : ajoutés un par un (git add échoue en bloc si l'un
+    # des chemins n'existe pas encore).
+    for optionnel in ("data/registre_macro.json", "data/overrides/saisies_notion.json"):
+        if (racine / optionnel).exists():
+            _git("add", optionnel, racine=racine)
+    commit = _git("commit", "-m", message, racine=racine)
     if commit.returncode != 0:
         log.info("Rien à committer (%s)", commit.stdout.strip() or commit.stderr.strip())
         return False

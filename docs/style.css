@@ -259,3 +259,37 @@ details.sous-toggle li { margin: 6px 0; }
 .pied { margin-top: 28px; border-top: 1px solid var(--bordure); padding-top: 14px; color: var(--encre-3); font-size: 12px; }
 .pied-meta { margin-top: 4px; font-family: var(--mono); font-size: 11px; }
 .chargement, .erreur-chargement { margin-top: 24px; color: var(--encre-2); font-family: var(--mono); }
+
+
+/* ---------------------------------------------------------- tableau macro */
+.carte-macro { margin-top: 16px; }
+.macro-barre { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin: 8px 0 10px; }
+.macro-onglet {
+  background: var(--panneau-2); color: var(--encre-2); border: 1px solid var(--bordure);
+  border-radius: 6px; padding: 6px 12px; font: inherit; cursor: pointer;
+}
+.macro-onglet.actif { color: var(--encre); border-color: var(--bleu); }
+.macro-maj { margin-left: auto; color: var(--encre-3); font-size: 12px; }
+.macro-defilement { overflow-x: auto; border: 1px solid var(--bordure); border-radius: 8px; }
+.macro-table { border-collapse: separate; border-spacing: 0; font-size: 12.5px; min-width: 100%; }
+.macro-table th, .macro-table td {
+  padding: 7px 10px; border-bottom: 1px solid var(--bordure); border-right: 1px solid var(--bordure);
+  text-align: left; vertical-align: top;
+}
+.macro-table th { background: var(--panneau-2); color: var(--encre-2); font-weight: 600; white-space: nowrap; }
+.macro-table td { min-width: 118px; max-width: 190px; font-family: var(--mono); background: var(--panneau); }
+.macro-table .macro-indic {
+  position: sticky; left: 0; z-index: 1; min-width: 132px; background: var(--panneau-2);
+  color: var(--encre); font-family: var(--sans);
+}
+.macro-bon { color: var(--vert); background: rgba(34,197,94,.10) !important; }
+.macro-mauvais { color: var(--rouge); background: rgba(239,68,68,.10) !important; }
+.macro-egal { color: var(--encre-2); }
+.macro-expl { color: var(--encre-3); font-family: var(--sans); font-style: italic; font-size: 11.5px; }
+.macro-manuel { outline: 1px dashed var(--orange); outline-offset: -3px; }
+.macro-pied { margin-top: 8px; color: var(--encre-3); font-size: 12px; }
+@media (max-width: 640px) {
+  .macro-table { font-size: 12px; }
+  .macro-table td { min-width: 104px; }
+  .macro-maj { width: 100%; margin-left: 0; }
+}

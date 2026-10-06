@@ -146,6 +146,35 @@ class ClientScraping:
                     time.sleep(random.uniform(3, 8))
         return self._repli(site, cache, f"échec ({derniere_erreur})")
 
+    def requete_directe(self, site: str, url: str) -> dict:
+        """Une requête SANS cache journalier (le budget de requêtes par jour est
+        géré par l'appelant, ex. agents/collecte_forexfactory_mois.py — plafond
+        réglable dans config.yaml). Garde les protections communes : site en
+        blacklist 403, robots.txt, un 403 n'est jamais retenté, un seul retry
+        sur les autres erreurs réseau. Le contenu n'est PAS écrit en cache
+        (page de plusieurs Mo : elle alourdirait le dépôt à chaque collecte)."""
+        if self.site_bloque(site):
+            return {"statut": "indisponible", "contenu": None,
+                    "note": f"blacklist après {self.seuil_403} réponses 403 — requête non envoyée"}
+        if not self._robots_autorise(url):
+            return {"statut": "indisponible", "contenu": None,
+                    "note": "robots.txt interdit cette URL — aucune requête envoyée"}
+        derniere_erreur = "inconnue"
+        for tentative in (1, 2):
+            try:
+                rep = requests.get(url, headers={"User-Agent": self.ua, "Accept-Language": "en"},
+                                   timeout=40)
+                if rep.status_code == 403:
+                    self._incrementer_403(site)
+                    return {"statut": "indisponible", "contenu": None, "note": "HTTP 403"}
+                rep.raise_for_status()
+                return {"statut": "frais", "contenu": rep.text, "note": ""}
+            except requests.RequestException as exc:
+                derniere_erreur = masquer_secrets(str(exc))[:200]
+                if tentative == 1:
+                    time.sleep(random.uniform(3, 8))
+        return {"statut": "indisponible", "contenu": None, "note": f"échec ({derniere_erreur})"}
+
     def _repli(self, site: str, cache: dict | None, raison: str) -> dict:
         log.warning("Site %s non rafraîchi : %s", site, raison)
         if cache:

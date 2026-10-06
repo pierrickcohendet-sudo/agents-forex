@@ -207,6 +207,9 @@ function rendre(rapport) {
 
   if ((rapport.devises || []).length) contenu.appendChild(mosaiqueDevises(rapport));
   contenu.appendChild(carteSynthese(rapport));
+  const zoneMacro = el("div");
+  contenu.appendChild(zoneMacro);
+  carteTableauMacro().then((carte) => zoneMacro.replaceWith(carte));
   if (rapport.auto_evaluation) contenu.appendChild(carteEvaluation(rapport.auto_evaluation));
 
   const sources = new Map((rapport.sources_citees || []).map(s => [s.id, s]));
@@ -780,3 +783,78 @@ function dessinerSerieMarche(canevas, datasets, labels) {
 }
 
 initialiser();
+
+
+/* ---------------------------------------------------------- tableau macro */
+/* Matrice indicateurs × devises (docs/data/tableau_macro.json, écrite par
+   core/tableau_macro.py). Sélecteur Actuel / Précédent / Prévision ; en
+   « Actuel », coloration selon la surprise vs consensus (vert au-dessus, rouge
+   en dessous, gris en ligne ; inversé pour le chômage). Colonne des
+   indicateurs figée + défilement horizontal : lisible sur téléphone. */
+async function carteTableauMacro() {
+  const carte = el("section", "carte-synthese carte-macro");
+  carte.appendChild(el("h2", null, "🌐 Tableau macro"));
+  let donnees;
+  try {
+    donnees = await chargerJson("data/tableau_macro.json");
+  } catch (e) {
+    carte.appendChild(el("p", "chargement", "Tableau macro indisponible pour le moment."));
+    return carte;
+  }
+  let typeCourant = "Actuel";
+  const barre = el("div", "macro-barre");
+  const boutons = {};
+  for (const t of donnees.types) {
+    const b = el("button", "macro-onglet", t);
+    b.type = "button";
+    b.addEventListener("click", () => { typeCourant = t; dessiner(); });
+    boutons[t] = b;
+    barre.appendChild(b);
+  }
+  barre.appendChild(el("span", "macro-maj", `maj ${(donnees.maj || "").slice(0, 16).replace("T", " ")} UTC`));
+  carte.appendChild(barre);
+  const defilement = el("div", "macro-defilement");
+  carte.appendChild(defilement);
+  const pied = el("p", "macro-pied");
+  carte.appendChild(pied);
+
+  function classeSurprise(cellule, sens) {
+    if (typeCourant !== "Actuel" || !cellule.surprise) return "";
+    if (cellule.surprise === "=") return "macro-egal";
+    const haut = cellule.surprise === "▲";
+    return (haut === (sens !== "inverse")) ? "macro-bon" : "macro-mauvais";
+  }
+
+  function dessiner() {
+    for (const [t, b] of Object.entries(boutons)) b.classList.toggle("actif", t === typeCourant);
+    const table = el("table", "macro-table");
+    const tete = el("tr");
+    tete.appendChild(el("th", "macro-indic", "Indicateur"));
+    for (const d of donnees.devises) tete.appendChild(el("th", null, `${DRAPEAUX[d] || ""} ${d}`));
+    table.appendChild(tete);
+    for (const ind of donnees.indicateurs) {
+      const ligne = el("tr");
+      ligne.appendChild(el("th", "macro-indic", ind.libelle));
+      for (const d of donnees.devises) {
+        const c = donnees.cellules[ind.id][d][typeCourant];
+        const td = el("td", ["macro-cell", classeSurprise(c, ind.sens), c.manuel ? "macro-manuel" : "",
+          c.etat !== "valeur" ? "macro-expl" : ""].filter(Boolean).join(" "), c.texte);
+        const infos = [];
+        if (c.source) infos.push(`source : ${c.source}`);
+        if (c.consensus) infos.push(`consensus : ${c.consensus}`);
+        if (c.origine === "saisie_notion") infos.push("saisie manuelle (Notion)");
+        if (infos.length) td.title = infos.join(" · ");
+        ligne.appendChild(td);
+      }
+      table.appendChild(ligne);
+    }
+    defilement.replaceChildren(table);
+    const r = (donnees.remplissage || {})[typeCourant];
+    pied.textContent = r
+      ? `${typeCourant} : ${r.valeur} valeur(s), ${r.explique} expliquée(s), ${r.vide} à initialiser — ` +
+        `${donnees.source}`
+      : donnees.source || "";
+  }
+  dessiner();
+  return carte;
+}

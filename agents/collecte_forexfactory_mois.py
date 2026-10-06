@@ -50,3 +50,75 @@ def parser_page(html: str) -> list[dict]:
                 "url": e.get("url"),
             })
     return evenements
+
+
+# ----------------------------------------------------------------- collecte
+import logging  # noqa: E402
+from datetime import datetime, timedelta, timezone  # noqa: E402
+from pathlib import Path  # noqa: E402
+
+log = logging.getLogger(__name__)
+
+SITE = "forexfactory_mois"
+
+
+def _lire_budget(chemin: Path, jour: str) -> list[str]:
+    try:
+        brut = json.loads(chemin.read_text(encoding="utf-8"))
+        if brut.get("date") == jour:
+            return list(brut.get("horodatages", []))
+    except (OSError, json.JSONDecodeError):
+        pass
+    return []
+
+
+def collecte_due(horodatages: list[str], cfg_ff: dict, maintenant: datetime) -> tuple[bool, str]:
+    """(due, raison). Un créneau (config : creneaux_utc) est dû dès que son
+    heure est passée et qu'AUCUNE requête n'a eu lieu depuis ; jamais au-delà
+    du plafond quotidien. Les passages horaires --completer l'évaluent donc à
+    chaque fois : un cron manqué est rattrapé au passage suivant."""
+    plafond = int(cfg_ff.get("plafond_requetes_par_jour", 2))
+    if len(horodatages) >= plafond:
+        return False, f"plafond de {plafond} requête(s)/jour atteint"
+    passes = []
+    for hhmm in cfg_ff.get("creneaux_utc", ["05:15"]):
+        h, m = (int(x) for x in hhmm.split(":"))
+        creneau = maintenant.replace(hour=h, minute=m, second=0, microsecond=0)
+        if creneau <= maintenant:
+            passes.append(creneau)
+    if not passes:
+        return False, "aucun créneau atteint aujourd'hui"
+    dernier = max(passes)
+    if any(datetime.fromisoformat(t) >= dernier for t in horodatages):
+        return False, f"créneau {dernier:%H:%M} UTC déjà couvert"
+    return True, f"créneau {dernier:%H:%M} UTC dû"
+
+
+def collecter(cfg_tm: dict, client, dossier_cache: str | Path,
+              maintenant: datetime | None = None) -> dict:
+    """Retourne {statut, evenements, note}. statut : frais | non_due | indisponible.
+    Le budget (horodatages des requêtes du jour) est écrit dans
+    data/cache/forexfactory_requetes.json, committé pour survivre entre runs."""
+    maintenant = maintenant or datetime.now(timezone.utc)
+    cfg_ff = cfg_tm["forexfactory"]
+    chemin = Path(dossier_cache) / "forexfactory_requetes.json"
+    jour = maintenant.date().isoformat()
+    horodatages = _lire_budget(chemin, jour)
+    due, raison = collecte_due(horodatages, cfg_ff, maintenant)
+    if not due:
+        log.info("Tableau macro : page « mois » ForexFactory non interrogée (%s)", raison)
+        return {"statut": "non_due", "evenements": [], "note": raison}
+    log.info("Tableau macro : requête page « mois » ForexFactory (%s ; %d/%d aujourd'hui)",
+             raison, len(horodatages) + 1, int(cfg_ff.get("plafond_requetes_par_jour", 2)))
+    res = client.requete_directe(SITE, cfg_ff["url"])
+    # La requête compte dans le budget même si elle échoue : pas d'insistance.
+    horodatages.append(maintenant.isoformat(timespec="seconds"))
+    chemin.parent.mkdir(parents=True, exist_ok=True)
+    chemin.write_text(json.dumps({"date": jour, "horodatages": horodatages}, indent=1),
+                      encoding="utf-8")
+    if res["contenu"] is None:
+        return {"statut": "indisponible", "evenements": [], "note": res["note"]}
+    try:
+        return {"statut": "frais", "evenements": parser_page(res["contenu"]), "note": ""}
+    except ValueError as exc:
+        return {"statut": "indisponible", "evenements": [], "note": str(exc)}

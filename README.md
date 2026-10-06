@@ -71,6 +71,46 @@ Garanties codées en dur :
   persiste, le rapport part quand même avec une anomalie de contrôle qualité
   visible plutôt qu'une contradiction silencieuse.
 
+## Tableau macro (base Notion « Tableau macro » + dashboard)
+
+Matrice **indicateurs × 9 devises** (USD, EUR, GBP, JPY en premier), avec 3 types de
+valeur par indicateur : **Actuel**, **Précédent**, **Prévision** (consensus). 10
+indicateurs, modifiables dans `config.yaml > tableau_macro.indicateurs`. Cellule :
+`2,4 % (12/09) ▲` = valeur + date de publication + surprise vs consensus
+(▲ au-dessus, ▼ en dessous, = en ligne ; calculée en Python, jamais par un LLM, jamais
+devinée si le consensus manque). Un indicateur qui n'existe pas dans un pays
+affiche son équivalent local étiqueté (`[équiv. claimants]`, `[m/m]`…) ou
+« non publié dans ce pays » / « non couvert par ForexFactory » — jamais une case vide muette.
+
+**Source.** Les exports officiels Fair Economy (JSON/XML/CSV/ICS, semaine en cours)
+n'ont **pas** de valeur « réel » (vérifié le 2026-10-06) ; seule la page web
+`forexfactory.com/calendar?month=this` les expose (JSON embarqué, `ebaseId` stable).
+Testée depuis un runner GitHub Actions le 2026-10-06 (HTTP 200, 386 événements,
+`data/diagnostics/ff_actions.json`). Faible empreinte : robots.txt, un 403 n'est jamais
+retenté, **plafond réglable** `tableau_macro.forexfactory.plafond_requetes_par_jour`
+(2 aujourd'hui : créneaux 05:15 et 19:15 UTC ; les passages horaires `--completer`
+rattrapent un créneau manqué). Taux directeurs : `config.yaml` / FRED, remplacés par
+la décision ForexFactory quand elle est plus récente. Correspondance indicateur →
+événement ForexFactory (par `ebaseId`) dans `config.yaml > tableau_macro.correspondances`.
+
+**Registre permanent** `data/registre_macro.json` : une entrée par case, dernière
+valeur jusqu'à la publication suivante, historique ; indépendant de la fenêtre LLM de 7 jours.
+
+**Saisie manuelle dans Notion.** Modifiez une cellule : le pipeline compare à la dernière
+valeur qu'il y a lui-même écrite ; si elle diffère, c'est une saisie — conservée, marquée
+`✍️`, enregistrée dans `data/overrides/saisies_notion.json` et injectée dans l'analyse
+(via `core/overrides.py`, inchangé). Priorité : fichier manuel du jour
+`data/overrides/AAAA-MM-JJ.json` > saisie Notion > publication officielle la plus
+récente — sauf si une publication officielle plus récente que la saisie arrive : elle la
+remplace et la saisie passe dans l'historique du fichier.
+
+**Vues Notion.** Créées automatiquement par l'API à la création de la base (« Actuel »,
+« Précédent », « Prévision », filtre sur `Type`, tri sur `Ordre`). Si l'API refusait :
+dans la base, **+ Add view → Table**, nommer la vue, **Filter → Type = Actuel**,
+**Sort → Ordre ascending** (2 clics par vue).
+
+Tests : `python -m unittest discover -s tests -v` (données factices, sans réseau).
+
 ## Repli manuel généralisé (`data/overrides/`)
 
 Le principe déjà utilisé pour les taux directeurs (source affichée « config
