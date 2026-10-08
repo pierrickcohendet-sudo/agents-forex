@@ -155,7 +155,8 @@ COULEUR_BRENT = "#38bdf8"
 
 
 def url_graphique_petrole(dates_wti: list[str], valeurs_wti: list[float],
-                          dates_brent: list[str], valeurs_brent: list[float]) -> str:
+                          dates_brent: list[str], valeurs_brent: list[float],
+                          largeur: int = 640, hauteur: int = 260, titre: str | None = None) -> str:
     """Pétrole WTI + Brent (FRED — Twelve Data réserve les commodités au tier
     payant, vérifié) : même mécanisme QuickChart que url_graphique_prix, deux
     séries superposées. Légende affichée (contrairement aux autres graphiques)
@@ -188,7 +189,7 @@ def url_graphique_petrole(dates_wti: list[str], valeurs_wti: list[float],
             "options": {
                 "plugins": {
                     "legend": {"display": True, "labels": {"color": "#8b95a5", "boxWidth": 10}},
-                    "title": {"display": True, "text": "Pétrole WTI / Brent ($/baril, FRED)",
+                    "title": {"display": True, "text": titre or "Pétrole WTI / Brent ($/baril, FRED)",
                              "color": "#8b95a5"},
                 },
                 "scales": {
@@ -197,10 +198,44 @@ def url_graphique_petrole(dates_wti: list[str], valeurs_wti: list[float],
                 },
             },
         }
-        url = _url_quickchart(config_chart, 640, 260)
+        url = _url_quickchart(config_chart, largeur, hauteur)
         if len(url) <= LIMITE_URL_IMAGE_NOTION or (n_points <= 6 and decimales <= 1):
             return url
         if n_points > 6:
             n_points -= 6
         else:
             decimales -= 1
+
+
+def url_mini_graphique(dates: list[str], valeurs: list[float], titre: str, couleur: str,
+                       decimales: int = 2) -> str:
+    """Petit graphique (360x170) pour la section macro globale : une courbe, titre court,
+    URL garantie sous la limite Notion (sous-échantillonnage adaptatif)."""
+    if not valeurs:
+        return ""
+    n_points = min(len(valeurs), 36)
+    while True:
+        pas = max(1, len(valeurs) // n_points)
+        config_chart = {
+            "type": "line",
+            "data": {"labels": [d[5:] for d in dates[::pas]], "datasets": [{
+                "data": [round(v, decimales) for v in valeurs[::pas]], "borderColor": couleur,
+                "borderWidth": 2, "pointRadius": 0, "fill": False, "tension": 0.2}]},
+            "options": {
+                "plugins": {"legend": {"display": False},
+                            "title": {"display": True, "text": titre, "color": "#8b95a5",
+                                      "font": {"size": 12}}},
+                "scales": {"x": {"ticks": {"maxTicksLimit": 4, "color": "#8b95a5"}},
+                           "y": {"ticks": {"maxTicksLimit": 4, "color": "#8b95a5"}}},
+            },
+        }
+        url = _url_quickchart(config_chart, 360, 170)
+        if len(url) <= LIMITE_URL_IMAGE_NOTION or n_points <= 6:
+            return url
+        n_points -= 6
+
+
+def colonnes(blocs_par_colonne: list[list[dict]]) -> dict:
+    """Mise en colonnes Notion (column_list) : 2 colonnes minimum, ≥ 1 bloc chacune."""
+    return {"type": "column_list", "column_list": {"children": [
+        {"type": "column", "column": {"children": blocs}} for blocs in blocs_par_colonne]}}

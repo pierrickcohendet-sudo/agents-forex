@@ -112,8 +112,22 @@ remplace et la saisie passe dans l'historique du fichier.
 les saisies manuelles de l'ancienne base sont capturées avant archivage. Automatique si `database_id` pointe
 encore vers l'ancienne structure.
 
+**Rendements obligataires** (lignes « Rendement 2 ans », « Rendement 10 ans », « Spread 2 ans vs USD »).
+Données de marché : pas de consensus (Prévision = « — (donnée de marché) »), colonnes Actuel, Précédent =
+semaine précédente, Variation en points de base. Sources gratuites vérifiées sur les vraies données
+(`config.yaml > tableau_macro.taux_obligataires`), une requête par source et par jour : USD FRED (quotidien) ;
+EUR Bundesbank (Allemagne, quotidien) ; GBP Banque d'Angleterre (10 ans seulement) ; JPY ministère des
+Finances (~1 semaine de retard) ; CAD Banque du Canada ; CHF / AUD / NZD OCDE via FRED, 10 ans **mensuel**
+(étiqueté « mensuel ») ; CNY aucune source gratuite exploitable. Pas de 2 ans pour GBP, CHF (SNB : série
+arrêtée en 07/2025), AUD (RBA, 403), NZD (RBNZ, 403) — donc spread 2 ans disponible pour EUR, JPY, CAD.
+Le spread alimente la ligne « différentiel de taux » du score de confluence (pondérations inchangées).
+
 **Dashboard web.** Mode « Matrice » (devises en colonnes, sélecteur Actuel/Précédent/Prévision, coloration
 par surprise) et mode « Par devise » (mêmes colonnes que Notion), lisibles sur téléphone.
+
+**Graphiques de marché** (`docs/data/marche.json`, FRED) : VIX, pétrole WTI + Brent, indice dollar large de
+la Fed (le DXY n'est pas gratuit : jamais appelé « DXY »), période 1 mois / 3 mois / 1 an, dernière valeur et
+variation sur 7 jours ; mêmes séries en miniatures dans la section « 📈 Marchés » du rapport Notion.
 
 Tests : `python -m unittest discover -s tests -v` (données factices, sans réseau).
 

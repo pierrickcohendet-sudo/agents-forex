@@ -169,6 +169,29 @@ tableau_macro:
       CNY:
         2a:  { absent: "aucune source gratuite exploitable" }
         10a: { absent: "aucune source gratuite exploitable" }
+  # Trois graphiques du dashboard web (FRED, quotidien, 1 an d'historique ; période 1M / 3M / 1A
+  # réglable côté navigateur) et leurs miniatures Notion (section macro globale du rapport).
+  graphiques_marche:
+    vix:
+      titre: "VIX — volatilité implicite du S&P 500"
+      unite: "pts"
+      source: "FRED (VIXCLS)"
+      series:
+        vix: { serie: VIXCLS, libelle: "VIX", couleur: "#f59e0b" }
+    petrole:
+      titre: "Pétrole — WTI et Brent"
+      unite: "$/baril"
+      source: "FRED (DCOILWTICO, DCOILBRENTEU)"
+      series:
+        wti:   { serie: DCOILWTICO, libelle: "WTI", couleur: "#eab308" }
+        brent: { serie: DCOILBRENTEU, libelle: "Brent", couleur: "#38bdf8" }
+    dollar:
+      titre: "Indice dollar large (Fed) — pas le DXY"
+      unite: "indice"
+      source: "FRED (DTWEXBGS) · Fed, ~4 jours de retard"
+      note: "Le DXY (ICE) n'est pas gratuit : indice dollar large de la Fed, pondéré par les échanges commerciaux."
+      series:
+        dollar: { serie: DTWEXBGS, libelle: "Indice dollar large (Fed)", couleur: "#22c55e" }
   # Séries FRED : repli (case sans valeur ForexFactory) et/ou contrôle croisé.
   # FRED donne la PÉRIODE observée, pas la date de publication (affichée « pér. MM/AA »).
   # Vérifiées le 2026-10-06 : valeurs US identiques à ForexFactory (UNRATE 4,2 ; PAYEMS +29K ;

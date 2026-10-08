@@ -372,7 +372,8 @@ def _tableau_indicateurs(config: dict, devise: str, donnees: dict,
                 complement = f"spread 2 ans vs US {spread['spread_2a_vs_usd_pb']:+d} pb"
                 texte = f"{texte} · {complement}" if texte else complement
             ligne(indicateur, nom, texte,
-                  source="calcul (FRED + config" + (" + marché obligataire)" if spread else ")"),
+                  source="calcul (FRED + config" + (" + marché obligataire)"
+                                                 if spread.get("spread_2a_vs_usd_pb") is not None else ")"),
                   date_donnee=auj.isoformat())
         elif indicateur == "yield_curve":
             if yield_curve.get("disponible"):

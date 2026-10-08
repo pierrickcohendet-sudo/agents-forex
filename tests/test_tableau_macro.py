@@ -722,5 +722,47 @@ class SpreadDansLeScore(unittest.TestCase):
         self.assertEqual(CONFIG["ponderations_par_devise"]["CNY"]["differentiel_taux"], 8)
 
 
+class GraphiquesDeMarche(unittest.TestCase):
+    def test_resume_derniere_valeur_et_variation_semaine(self):
+        from core import marche_series as ms
+        points = [["2026-09-28", 100.0], ["2026-09-29", 101.0], ["2026-10-05", 108.0], ["2026-10-06", 110.0]]
+        r = ms._resume(points)
+        self.assertEqual((r["derniere"], r["date"], r["date_ref"]), (110.0, "2026-10-06", "2026-09-29"))
+        self.assertEqual((r["variation"], r["variation_pct"]), (9.0, 8.91))
+
+    def test_collecte_sans_cle_ne_plante_pas(self):
+        from core import marche_series as ms
+        r = ms.collecter(CFG_TM, "")
+        self.assertEqual(r["graphiques"], {})
+        self.assertTrue(r["erreurs"])
+
+    def test_json_web_ecrit_une_fois_et_dollar_non_appele_dxy(self):
+        from core import marche_series as ms
+        tmp = Path(tempfile.mkdtemp())
+        res = {"graphiques": {"dollar": {"titre": CFG_TM["graphiques_marche"]["dollar"]["titre"], "courbes": {}}}}
+        self.assertTrue(ms.ecrire_web(res, tmp, "2026-10-08T10:00:00"))
+        self.assertFalse(ms.ecrire_web(res, tmp, "2026-10-08T11:00:00"))   # contenu identique : pas de réécriture
+        self.assertIn("pas le DXY", CFG_TM["graphiques_marche"]["dollar"]["titre"])
+        self.assertNotIn("DXY (", CFG_TM["graphiques_marche"]["dollar"]["titre"])
+
+    def test_miniatures_notion_sous_la_limite_d_url_et_en_colonnes(self):
+        from agents import agent_redacteur as ar
+        dates = [f"2026-{m:02d}-{j:02d}" for m in (7, 8, 9, 10) for j in range(1, 24)]
+        serie = {"dates": dates, "valeurs": [100 + (i % 17) * 1.2345 for i in range(len(dates))]}
+        blocs = ar._blocs_marches({"graphiques_marche": {"vix": serie, "wti": serie, "brent": serie,
+                                                          "dollar_large": serie}})
+        self.assertEqual([b["type"] for b in blocs], ["heading_2", "column_list"])
+        images = [e for c in blocs[1]["column_list"]["children"] for e in c["column"]["children"]]
+        self.assertEqual(len(images), 3)
+        for image in images:
+            self.assertLessEqual(len(image["image"]["external"]["url"]), 1900)  # limite Notion : 2000
+        legendes = " ".join(i["image"]["caption"][0]["text"]["content"] for i in images)
+        self.assertIn("pas le DXY", legendes)
+
+    def test_aucune_miniature_si_aucune_donnee(self):
+        from agents import agent_redacteur as ar
+        self.assertEqual(ar._blocs_marches({"graphiques_marche": {}}), [])
+
+
 if __name__ == "__main__":
     unittest.main()

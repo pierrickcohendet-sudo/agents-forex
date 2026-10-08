@@ -65,7 +65,8 @@ def _lecture_yield_curve(obs_10y: list, obs_2y: list) -> dict:
     }
 
 
-SERIES_GRAPHIQUE_MARCHE = {"wti": "DCOILWTICO", "brent": "DCOILBRENTEU"}
+SERIES_GRAPHIQUE_MARCHE = {"wti": "DCOILWTICO", "brent": "DCOILBRENTEU", "vix": "VIXCLS",
+                          "dollar_large": "DTWEXBGS"}
 
 
 def _graphiques_marche(cle: str, nb_points: int) -> dict:

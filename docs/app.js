@@ -210,6 +210,9 @@ function rendre(rapport) {
   const zoneMacro = el("div");
   contenu.appendChild(zoneMacro);
   carteTableauMacro().then((carte) => zoneMacro.replaceWith(carte));
+  const zoneMarche = el("div");
+  contenu.appendChild(zoneMarche);
+  carteMarche().then((carte) => { zoneMarche.replaceWith(carte); if (carte.dessiner) carte.dessiner(); });
   if (rapport.auto_evaluation) contenu.appendChild(carteEvaluation(rapport.auto_evaluation));
 
   const sources = new Map((rapport.sources_citees || []).map(s => [s.id, s]));
@@ -938,5 +941,104 @@ async function carteTableauMacro() {
       : SOURCE;
   }
   dessiner();
+  return carte;
+}
+
+
+/* ------------------------------------------------------- graphiques de marché */
+/* VIX, pétrole WTI/Brent, indice dollar large (Fed) — docs/data/marche.json (FRED).
+   Période réglable 1 mois / 3 mois / 1 an ; dernière valeur et variation sur la
+   semaine au-dessus de chaque graphique. L'indice dollar est celui de la Fed, jamais « DXY ». */
+async function carteMarche() {
+  const carte = el("section", "carte-synthese carte-marche");
+  carte.appendChild(el("h2", null, "📈 Marchés"));
+  let donnees;
+  try {
+    donnees = await chargerJson("data/marche.json");
+  } catch (e) {
+    carte.appendChild(el("p", "chargement", "Graphiques de marché indisponibles pour le moment."));
+    return carte;
+  }
+  const PERIODES = [["1M", "1 mois"], ["3M", "3 mois"], ["1A", "1 an"]];
+  let periode = "3M";
+  const barre = el("div", "macro-barre");
+  const boutons = {};
+  for (const [id, libelle] of PERIODES) {
+    const b = el("button", "macro-onglet", libelle);
+    b.type = "button";
+    b.addEventListener("click", () => { periode = id; dessiner(); });
+    boutons[id] = b;
+    barre.appendChild(b);
+  }
+  barre.appendChild(el("span", "macro-maj", `maj ${(donnees.maj || "").slice(0, 16).replace("T", " ")} UTC`));
+  carte.appendChild(barre);
+  const grille = el("div", "marche-grille");
+  carte.appendChild(grille);
+  const mesGraphiques = [];
+
+  const fmt = (v, dec) => (v === null || v === undefined ? "—"
+    : Number(v).toLocaleString("fr-FR", { minimumFractionDigits: dec, maximumFractionDigits: dec }));
+  const jjmm = (iso) => (iso ? `${iso.slice(8, 10)}/${iso.slice(5, 7)}` : "—");
+
+  function bloc(id, g) {
+    const boite = el("div", "marche-bloc");
+    boite.appendChild(el("div", "marche-titre", g.titre));
+    const entetes = el("div", "marche-valeurs");
+    for (const c of Object.values(g.courbes)) {
+      const v = el("div", "marche-valeur");
+      const signe = c.variation === null || c.variation === undefined ? "" : (c.variation > 0 ? "+" : "");
+      v.appendChild(el("span", "marche-lib", c.libelle));
+      v.appendChild(el("span", "marche-val", `${fmt(c.derniere, g.decimales)} ${g.unite}`));
+      v.appendChild(el("span", "marche-var",
+        c.variation === null || c.variation === undefined ? "var. 7 j : —"
+          : `7 j : ${signe}${fmt(c.variation, g.decimales)} (${signe}${fmt(c.variation_pct, 1)} %)`));
+      v.appendChild(el("span", "marche-date", `au ${jjmm(c.date)}`));
+      entetes.appendChild(v);
+    }
+    boite.appendChild(entetes);
+    const zone = el("div", "marche-canevas");
+    const canevas = document.createElement("canvas");
+    zone.appendChild(canevas);
+    boite.appendChild(zone);
+    if (g.note) boite.appendChild(el("p", "macro-pied", g.note));
+    boite.appendChild(el("p", "macro-pied", `Source : ${g.source}`));
+    return { boite, canevas, g };
+  }
+
+  const blocs = Object.entries(donnees.graphiques).map(([id, g]) => ({ id, ...bloc(id, g) }));
+  for (const b of blocs) grille.appendChild(b.boite);
+
+  function dessiner() {
+    for (const [id, bt] of Object.entries(boutons)) bt.classList.toggle("actif", id === periode);
+    mesGraphiques.splice(0).forEach((c) => { c.destroy(); const i = graphiquesActifs.indexOf(c); if (i >= 0) graphiquesActifs.splice(i, 1); });
+    for (const b of blocs) {
+      const jours = donnees.periodes[periode];
+      const premiere = Object.values(b.g.courbes)[0];
+      const fin = new Date(premiere.date);
+      const debut = new Date(fin.getTime() - jours * 86400000).toISOString().slice(0, 10);
+      const datasets = Object.values(b.g.courbes).map((c) => ({
+        label: c.libelle, data: c.points.filter(([d]) => d >= debut).map(([d, v]) => ({ x: d, y: v })),
+        borderColor: c.couleur || "#38bdf8", borderWidth: 2, pointRadius: 0, tension: 0.15,
+      }));
+      const graphique = new Chart(b.canevas, {
+        type: "line", data: { datasets },
+        options: {
+          responsive: true, maintainAspectRatio: false, parsing: false, animation: false,
+          interaction: { mode: "index", intersect: false },
+          plugins: { legend: { display: datasets.length > 1, labels: { color: ENCRE_2, boxWidth: 10 } } },
+          scales: {
+            x: { type: "category", labels: [...new Set(datasets.flatMap(d => d.data.map(p => p.x)))].sort(),
+                 ticks: { color: ENCRE_2, maxTicksLimit: 5, callback: function (v) { return jjmm(this.getLabelForValue(v)); } },
+                 grid: { color: GRILLE } },
+            y: { ticks: { color: ENCRE_2, maxTicksLimit: 5 }, grid: { color: GRILLE } },
+          },
+        },
+      });
+      mesGraphiques.push(graphique);
+      graphiquesActifs.push(graphique);
+    }
+  }
+  // Les canevas doivent être dans le DOM avant la création des graphiques.
+  carte.dessiner = dessiner;
   return carte;
 }

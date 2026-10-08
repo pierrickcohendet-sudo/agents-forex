@@ -661,6 +661,20 @@ def mettre_a_jour(config: dict, racine: str | Path, chemin_config: str | Path | 
     except Exception as exc:  # noqa: BLE001
         log.error("Tableau macro : rendements obligataires en échec : %s", masquer_secrets(str(exc))[:200])
 
+    # 2 quater. Graphiques de marché du dashboard (VIX, pétrole, indice dollar large) : FRED,
+    # directement (4 appels, pas de cache git de 30 Ko) ; en cas d'échec, l'ancien fichier reste.
+    web_marche = False
+    try:
+        import os as _os3
+        from core import marche_series
+        ms = marche_series.collecter(cfg_tm, _os3.environ.get("FRED_API_KEY", "").strip())
+        resultat["marche_series"] = {"graphiques": list(ms["graphiques"]), "erreurs": ms["erreurs"]}
+        if ms["graphiques"]:
+            web_marche = marche_series.ecrire_web(
+                ms, racine / config["publication_web"]["dossier_docs"], maintenant.isoformat(timespec="seconds"))
+    except Exception as exc:  # noqa: BLE001
+        log.error("Tableau macro : séries de marché en échec : %s", masquer_secrets(str(exc))[:200])
+
     overrides_jour = overrides.charger(donnees / "overrides", jour)
 
     # 3. Notion : lecture, migration éventuelle de l'ancienne structure, saisies manuelles
@@ -729,7 +743,7 @@ def mettre_a_jour(config: dict, racine: str | Path, chemin_config: str | Path | 
     rm.sauver(registre, chemin_reg)
     sm.sauver(saisies, chemin_sai)
     apres = (json.dumps(registre, sort_keys=True), json.dumps(saisies, sort_keys=True))
-    resultat["modifie"] = web_modifie or avant != apres or (resultat.get("ff") or {}).get("statut") in ("frais", "indisponible")
+    resultat["modifie"] = web_modifie or web_marche or avant != apres or (resultat.get("ff") or {}).get("statut") in ("frais", "indisponible")
     resultat["saisies_overrides"] = sm.vers_overrides(saisies, registre)
     r = resultat["remplissage"]
     log.info("Tableau macro : remplissage Actuel %.0f %% · Précédent %.0f %% · Prévision %.0f %%",

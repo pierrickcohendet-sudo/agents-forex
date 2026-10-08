@@ -246,6 +246,40 @@ def _cellule_date(ligne: dict) -> list[dict]:
     return fragments
 
 
+def _derniere_valeur(serie: dict | None) -> str:
+    valeurs = (serie or {}).get("valeurs") or []
+    dates = (serie or {}).get("dates") or []
+    return f"{valeurs[-1]:g} ({dates[-1][5:]})" if valeurs and dates else "n/d"
+
+
+def _blocs_marches(rapport: dict) -> list[dict]:
+    """Trois miniatures dans la section macro globale : VIX, pétrole WTI/Brent, indice
+    dollar large (Fed — jamais appelé DXY). Données FRED déjà collectées (graphiques_marche).
+    Un graphique manquant n'empêche pas les autres ; aucun si rien n'est disponible."""
+    marche = rapport.get("graphiques_marche") or {}
+    vix, wti, brent, dollar = (marche.get(k) for k in ("vix", "wti", "brent", "dollar_large"))
+    colonnes = []
+    if vix and vix.get("valeurs"):
+        colonnes.append(([nb.image_externe(nb.url_mini_graphique(
+            vix["dates"], vix["valeurs"], "VIX", "#f59e0b"), f"VIX (FRED) : {_derniere_valeur(vix)}")]))
+    if wti or brent:
+        url = nb.url_graphique_petrole((wti or {}).get("dates", []), (wti or {}).get("valeurs", []),
+                                       (brent or {}).get("dates", []), (brent or {}).get("valeurs", []),
+                                       largeur=360, hauteur=170, titre="WTI / Brent ($/baril)")
+        if url:
+            colonnes.append([nb.image_externe(
+                url, f"WTI {_derniere_valeur(wti)} · Brent {_derniere_valeur(brent)} (FRED)")])
+    if dollar and dollar.get("valeurs"):
+        colonnes.append([nb.image_externe(nb.url_mini_graphique(
+            dollar["dates"], dollar["valeurs"], "Dollar large (Fed)", "#22c55e", 1),
+            f"Indice dollar large Fed (pas le DXY) : {_derniere_valeur(dollar)}")])
+    if not colonnes:
+        return []
+    blocs = [nb.titre(2, "📈 Marchés : VIX · pétrole · dollar")]
+    blocs.append(nb.colonnes(colonnes) if len(colonnes) >= 2 else colonnes[0][0])
+    return blocs
+
+
 def _blocs_synthese(rapport: dict) -> list[dict]:
     synthese = rapport["synthese_globale"]
     critique = rapport.get("critique", {})
@@ -291,6 +325,8 @@ def _blocs_synthese(rapport: dict) -> list[dict]:
         [nb.rt(f"Biais macro : {LIBELLE_BIAIS_GLOBAL[biais]} — ", gras=True),
          nb.rt(synthese.get("commentaire", ""))],
         "🧭", couleur))
+
+    blocs.extend(_blocs_marches(rapport))
 
     etat = synthese.get("etat_du_monde") or {}
     if any((etat.get(cle) or {}).get("texte") for cle, _ in RUBRIQUES_ETAT) \
