@@ -457,6 +457,14 @@ function carteDevise(devise, rapport, sources) {
     corps.appendChild(haut);
   }
 
+  const surp = devise.indice_surprise_30j;
+  if (surp && surp.indice !== null && surp.indice !== undefined) {
+    const fleche = { hausse: "▲", baisse: "▼", stable: "=" }[surp.tendance] || "";
+    corps.appendChild(el("p", "meta-devise",
+      `Indice de surprise macro 30 j : ${surp.indice > 0 ? "+" : ""}${String(surp.indice).replace(".", ",")} ${fleche} ` +
+      `(n=${surp.n}) — écart moyen pondéré des publications vs consensus, en écarts habituels (calcul Python).`));
+  }
+
   const tendance = devise.tendance_fond || {};
   const carry = devise.carry || {};
   const meta = el("p", "meta-devise");

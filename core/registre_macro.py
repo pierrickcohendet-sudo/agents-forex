@@ -122,17 +122,24 @@ def integrer_evenements(registre: dict, evenements: list[dict], cfg_tm: dict,
                 if case["actuel"] is None:
                     bilan["introuvables"].append(cle(indicateur, devise))
                 continue
-            publies = [e for e in trouves if e["reel"]]
-            derniere = max(publies, key=lambda e: e["dateline"]) if publies else None
-            if derniere is not None:
-                _integrer_publication(case, derniere)
+            publies = sorted((e for e in trouves if e["reel"]), key=lambda e: e["dateline"])
+            derniere = publies[-1] if publies else None
+            # Chronologique : plusieurs mois fournis d'un coup (amorçage) construisent
+            # l'historique ; une publication plus ancienne que le registre est ignorée.
+            for e in publies:
+                _integrer_publication(case, e)
             seuil = derniere["dateline"] if derniere else 0
             a_venir = [e for e in trouves if not e["reel"] and e["dateline"] > seuil]
             suivante = min(a_venir, key=lambda e: e["dateline"]) if a_venir else None
-            if suivante is not None:
+            existante = case.get("prevision") or {}
+            garder = bool(existante.get("dateline") and suivante is not None
+                          and existante["dateline"] < suivante["dateline"]
+                          and ((case["actuel"] or {}).get("dateline") or 0) < existante["dateline"])
+            if suivante is not None and not garder:
                 case["prevision"] = {"valeur": suivante["prevision"],
                                      "date_pub": _date_iso(suivante["dateline"]),
-                                     "dateline": suivante["dateline"], "nom_ff": suivante["nom"]}
+                                     "dateline": suivante["dateline"], "nom_ff": suivante["nom"],
+                                     "impact": suivante.get("impact")}
                 if case["actuel"] is None and suivante["precedent"]:
                     # Dernier chiffre publié connu via le « précédent » de la prochaine
                     # publication (réel, éventuellement révisé) — date inconnue, dite telle.
@@ -201,28 +208,167 @@ def _jj_mm(date_iso: str | None) -> str | None:
     return f"{date_iso[8:10]}/{date_iso[5:7]}" if date_iso and len(date_iso) >= 10 else None
 
 
-def texte_officiel(case: dict, type_valeur: str, unite: str) -> str:
-    """Texte de la cellule d'après le registre seul (hors saisies manuelles)."""
+def _periode_fr(periode: str | None) -> str | None:
+    return f"pér. {periode[5:7]}/{periode[2:4]}" if periode and len(periode) >= 7 else None
+
+
+def _etiquette(case: dict) -> str:
+    return f" [{case['etiquette']}]" if case.get("etiquette") else ""
+
+
+def valeur_cellule(case: dict, type_valeur: str, unite: str) -> str:
+    """Texte d'UNE cellule (valeur seule, sans date ni symbole de surprise —
+    ceux-ci ont leur propre colonne). Toujours une valeur réelle sourcée OU une
+    explication explicite, jamais une case vide ni une valeur estimée."""
     if case.get("statut") == "non_applicable":
         return case.get("absent") or "non publié dans ce pays"
-    etiquette = f" [{case['etiquette']}]" if case.get("etiquette") else ""
+    etiquette = _etiquette(case)
     if type_valeur == "Actuel":
         a = case.get("actuel")
         if not a or a.get("valeur") in (None, ""):
             return "n/d — historique à initialiser"
-        d = _jj_mm(a.get("date_pub"))
-        return f"{_fr(a['valeur'], unite)}{etiquette} ({d or 'date n/d'})" + \
-               (f" {a['surprise']}" if a.get("surprise") else "")
+        return f"{_fr(a['valeur'], unite)}{etiquette}"
     if type_valeur == "Précédent":
         p = case.get("precedent")
         if not p or not p.get("valeur"):
             return "n/d"
-        d = _jj_mm(p.get("date"))
-        return f"{_fr(p['valeur'], unite)}{etiquette}" + (f" ({d})" if d else "")
+        return f"{_fr(p['valeur'], unite)}{etiquette}" + (" (révisé)" if p.get("revise") else "")
+    if case.get("marche"):
+        return "— (donnée de marché)"
     p = case.get("prevision")
-    if not p:
-        return "prochaine pub. n/d"
-    d = _jj_mm(p.get("date_pub"))
-    if not p.get("valeur"):
+    if p and p.get("valeur"):
+        return f"{_fr(p['valeur'], unite)}{etiquette}"
+    projection = case.get("projection")
+    if projection:
+        return f"proj. BC {_fr(projection['valeur'], unite)} ({projection['horizon']})"
+    return "consensus à venir" if p else "n/d"
+
+
+def date_publication(case: dict) -> str | None:
+    """Date ISO de la dernière publication (None si inconnue ou FRED : période seulement)."""
+    return (case.get("actuel") or {}).get("date_pub")
+
+
+def prochaine_publication(case: dict) -> str | None:
+    """Date-heure ISO (UTC) de la prochaine publication connue."""
+    dateline = (case.get("prevision") or {}).get("dateline")
+    if not dateline:
+        return None
+    return datetime.fromtimestamp(int(dateline), tz=timezone.utc).isoformat(timespec="minutes")
+
+
+def surprise_cellule(case: dict) -> str | None:
+    return (case.get("actuel") or {}).get("surprise")
+
+
+def source_cellule(case: dict) -> str:
+    a = case.get("actuel") or {}
+    morceaux = [a.get("source") or ("n/d" if a.get("valeur") is None else "")]
+    if a.get("periode") and not a.get("date_pub"):
+        morceaux.append(_periode_fr(a["periode"]))
+    if not (case.get("prevision") or {}).get("valeur") and case.get("projection"):
+        pr = case["projection"]
+        morceaux.append(f"proj. BC : {pr.get('source', 'banque centrale')} ({pr.get('serie', '')})")
+    return " · ".join(m for m in morceaux if m)
+
+
+def texte_officiel(case: dict, type_valeur: str, unite: str) -> str:
+    """Texte COMPLET d'une cellule (valeur + date + surprise) : matrice du
+    dashboard web. Les colonnes Notion utilisent les fonctions ci-dessus."""
+    base = valeur_cellule(case, type_valeur, unite)
+    if case.get("statut") == "non_applicable":
+        return base
+    if type_valeur == "Actuel":
+        a = case.get("actuel") or {}
+        if a.get("valeur") in (None, ""):
+            return base
+        d = _jj_mm(a.get("date_pub")) or _periode_fr(a.get("periode")) or "date n/d"
+        return f"{base} ({d})" + (f" {a['surprise']}" if a.get("surprise") else "")
+    if type_valeur == "Précédent":
+        d = _jj_mm((case.get("precedent") or {}).get("date")) or _periode_fr((case.get("precedent") or {}).get("periode"))
+        return base + (f" ({d})" if d and not base.startswith("n/d") else "")
+    d = _jj_mm((case.get("prevision") or {}).get("date_pub"))
+    if base == "consensus à venir":
         return f"prochaine pub. {d}" if d else "prochaine pub. n/d"
-    return f"{_fr(p['valeur'], unite)}{etiquette}" + (f" ({d})" if d else "")
+    if base.startswith("proj. BC") and d:
+        return f"{base} · pub. {d}"
+    if d and not base.startswith(("n/d", "—")):
+        return f"{base} ({d})"
+    return "prochaine pub. n/d" if base == "n/d" else base
+
+
+def _texte_projection(projection: dict, unite: str, jj_mm: str | None) -> str:
+    """Consensus pas encore publié : projection OFFICIELLE de la banque centrale,
+    étiquetée « proj. BC » avec son horizon (jamais présentée comme un consensus)."""
+    texte = f"proj. BC {_fr(projection['valeur'], unite)} ({projection['horizon']})"
+    return texte + (f" · pub. {jj_mm}" if jj_mm else "")
+
+
+# --------------------------------------------------------- FRED / projections
+def integrer_fred(registre: dict, resultat_fred: dict) -> int:
+    """Repli et contrôle croisé. Une valeur FRED ne REMPLACE jamais une valeur
+    ForexFactory datée : elle ne comble que les cases sans publication connue
+    (ou reconstruites depuis le « précédent »), et sert au contrôle de divergence."""
+    comblees = 0
+    for cle_case, v in resultat_fred.get("valeurs", {}).items():
+        devise, indicateur = cle_case.split("|")
+        case = registre["cases"].get(cle(indicateur, devise))
+        if case is None:
+            continue
+        case["fred"] = {k: v.get(k) for k in ("valeur", "periode", "precedente", "serie")}
+        if v.get("usage") not in ("repli", "repli_et_controle"):
+            continue
+        a = case.get("actuel")
+        if a is None or a.get("origine") == "precedent_ff":
+            case["actuel"] = {"valeur": v["valeur"], "valeur_num": vers_nombre(v["valeur"]),
+                              "date_pub": None, "dateline": None, "periode": v["periode"],
+                              "consensus": None, "surprise": None,
+                              "source": f"FRED ({v['serie']})", "origine": "fred"}
+            if v.get("precedente"):
+                case["precedent"] = {"valeur": v["precedente"], "date": None, "revise": False}
+            if v.get("etiquette"):
+                case["etiquette"] = v["etiquette"]
+            if case.get("statut") in ("a_initialiser", None):
+                case["statut"] = "ok"
+            comblees += 1
+    return comblees
+
+
+def integrer_projections(registre: dict, resultat_fred: dict) -> None:
+    for cle_case, p in resultat_fred.get("projections", {}).items():
+        devise, indicateur = cle_case.split("|")
+        case = registre["cases"].get(cle(indicateur, devise))
+        if case is not None:
+            case["projection"] = p
+
+
+def cases_sans_date_suivante(registre: dict, cfg_tm: dict) -> list[str]:
+    """Cases (hors « non applicable ») dont la prochaine publication n'est pas connue."""
+    return [k for k, c in registre["cases"].items()
+            if c.get("statut") != "non_applicable" and not c.get("prevision")]
+
+
+def publications_a_cibler(registre: dict, cfg_ff: dict, maintenant: datetime,
+                          deja_tentees: dict[str, int]) -> list[str]:
+    """Clés « {case}@{dateline} » des publications d'impact fort/moyen dont l'heure
+    est passée depuis au moins delai_apres_publication_min minutes (et moins de
+    12 h) et dont le « réel » manque encore dans le registre."""
+    delai = int(cfg_ff.get("delai_apres_publication_min", 15)) * 60
+    impacts = set(cfg_ff.get("impacts_cibles", ["high", "medium"]))
+    maxi = int(cfg_ff.get("tentatives_ciblees_max", 2))
+    cibles = []
+    now = int(maintenant.timestamp())
+    for k, c in registre["cases"].items():
+        p = c.get("prevision")
+        if not p or not p.get("dateline") or p.get("impact") not in impacts:
+            continue
+        ecoule = now - int(p["dateline"])
+        if not (delai <= ecoule <= 12 * 3600):
+            continue
+        a = c.get("actuel") or {}
+        if a.get("dateline") and a["dateline"] >= p["dateline"]:
+            continue
+        cle_cible = f"{k}@{p['dateline']}"
+        if deja_tentees.get(cle_cible, 0) < maxi:
+            cibles.append(cle_cible)
+    return cibles

@@ -385,6 +385,14 @@ def _blocs_devise(devise: dict, rapport: dict,
             [nb.rt(devise.get("synthese_une_phrase", ""), gras=True)],
             EMOJI_BIAIS[biais], nb.COULEURS_CALLOUT[biais]))
 
+    indice = devise.get("indice_surprise_30j") or {}
+    if indice.get("indice") is not None:
+        fleche = {"hausse": "▲", "baisse": "▼", "stable": "=", "n/d": ""}.get(indice.get("tendance"), "")
+        blocs.append(nb.paragraphe([
+            nb.rt("Indice de surprise macro 30 j : ", gras=True),
+            nb.rt(f"{indice['indice']:+.1f} {fleche} (n={indice.get('n', 0)}) — écart moyen pondéré "
+                  "des publications vs consensus, en écarts habituels (calcul Python).")]))
+
     tendance = devise.get("tendance_fond") or {}
     carry = devise.get("carry") or {}
     blocs.append(nb.paragraphe([

@@ -89,6 +89,11 @@ def controler(rapport: dict, config: dict) -> dict:
             f"le texte de l'état du monde (conclusion/rubriques) semble contredire le biais "
             f"macro global calculé ({biais_libelle}) — incohérence persistante après relance")
 
+    tableau = (rapport.get("tableau_macro") or {}).get("anomalies", [])
+    anomalies.extend(tableau[:10])
+    if len(tableau) > 10:
+        anomalies.append(f"tableau macro : … +{len(tableau) - 10} autre(s) anomalie(s)")
+
     resultat = {"conforme": not anomalies, "nb_anomalies": len(anomalies),
                 "anomalies": anomalies[:30]}
     if anomalies:

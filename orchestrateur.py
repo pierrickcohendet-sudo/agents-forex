@@ -239,6 +239,19 @@ def main() -> int:
 
     rapport = valider_rapport(rapport, config.get("tracabilite", {}).get("mode", "marquer"))
 
+    # Résumé du Tableau macro (remplissage, anomalies, indice de surprise 30 j) : compact,
+    # le tableau complet vit dans le registre / Notion / docs/data/tableau_macro.json.
+    if tableau and tableau.get("remplissage"):
+        indice = tableau.get("indice_surprise", {})
+        rapport["tableau_macro"] = {
+            "remplissage": {t: {k: v[k] for k in ("valeur", "explique", "vide", "total", "taux_pct")}
+                            for t, v in tableau["remplissage"].items()},
+            "anomalies": (tableau.get("controles") or {}).get("anomalies", [])[:30],
+            "indice_surprise_30j": indice,
+        }
+        for dev in rapport.get("devises", []):
+            dev["indice_surprise_30j"] = indice.get(dev["devise"])
+
     # ------------------------------------------- contrôle qualité (chaque run)
     rapport["controle_qualite"] = etape(
         "contrôle qualité", controle_qualite.controler, rapport, config,

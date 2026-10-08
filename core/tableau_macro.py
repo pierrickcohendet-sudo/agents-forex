@@ -66,7 +66,7 @@ def _etat(case: dict, type_valeur: str, texte: str) -> str:
         return "explique"
     if texte.startswith("n/d") or texte == "prochaine pub. n/d":
         return "vide"
-    if texte.startswith("prochaine pub."):
+    if texte.startswith("prochaine pub.") or texte.startswith("proj. BC"):
         return "explique"  # consensus pas encore publié, date de la prochaine publication connue
     return "valeur"
 
@@ -271,9 +271,38 @@ def detecter_saisies(lignes: dict, registre: dict, saisies: dict, overrides_jour
     return detectees
 
 
+LIBELLE_INDICE = "Indice de surprise 30 j"
+
+
+def _upsert_ligne(client, ds_id: str, page: dict | None, libelle: str, type_valeur: str,
+                  voulu: dict[str, str], ordre: int, jour: date, stats: dict) -> None:
+    if page is None:
+        props = {"Indicateur": {"title": _rt(libelle)},
+                 "Type": {"select": {"name": type_valeur}}, "Ordre": {"number": ordre},
+                 "Dernière mise à jour": {"date": {"start": jour.isoformat()}},
+                 "Source": {"rich_text": _rt(SOURCE_LIGNE)},
+                 **{d: {"rich_text": _rt(txt)} for d, txt in voulu.items()}}
+        client.pages.create(parent={"type": "data_source_id", "data_source_id": ds_id},
+                            properties=props)
+        stats["lignes_creees"] += 1
+        stats["cellules_ecrites"] += len(voulu)
+        return
+    diff = {d: txt for d, txt in voulu.items() if _texte_rt(page["properties"].get(d)) != txt}
+    if not diff:
+        return
+    props = {d: {"rich_text": _rt(txt)} for d, txt in diff.items()}
+    props["Dernière mise à jour"] = {"date": {"start": jour.isoformat()}}
+    props["Source"] = {"rich_text": _rt(SOURCE_LIGNE)}
+    props["Ordre"] = {"number": ordre}
+    client.pages.update(page["id"], properties=props)
+    stats["lignes_modifiees"] += 1
+    stats["cellules_ecrites"] += len(diff)
+
+
 def synchroniser(client, ds_id: str, lignes: dict, matrice: dict, registre: dict,
                  cfg_tm: dict, jour: date) -> dict:
-    """Écrit uniquement les cellules qui diffèrent ; jamais de doublon de ligne."""
+    """Écrit uniquement les cellules qui diffèrent ; jamais de doublon de ligne.
+    Une ligne en échec ne bloque pas les suivantes."""
     stats = {"lignes_creees": 0, "lignes_modifiees": 0, "cellules_ecrites": 0, "erreurs": 0}
     devises = cfg_tm["ordre_devises"]
     ordre = 0
@@ -281,37 +310,25 @@ def synchroniser(client, ds_id: str, lignes: dict, matrice: dict, registre: dict
         for t in rm.TYPES:
             ordre += 1
             voulu = {d: matrice["cellules"][indicateur][d][t]["texte"] for d in devises}
-            page = lignes.get((cfg_ind["libelle"], t))
             try:
-                if page is None:
-                    props = {"Indicateur": {"title": _rt(cfg_ind["libelle"])},
-                             "Type": {"select": {"name": t}}, "Ordre": {"number": ordre},
-                             "Dernière mise à jour": {"date": {"start": jour.isoformat()}},
-                             "Source": {"rich_text": _rt(SOURCE_LIGNE)},
-                             **{d: {"rich_text": _rt(txt)} for d, txt in voulu.items()}}
-                    client.pages.create(parent={"type": "data_source_id", "data_source_id": ds_id},
-                                        properties=props)
-                    stats["lignes_creees"] += 1
-                    stats["cellules_ecrites"] += len(voulu)
-                else:
-                    diff = {d: txt for d, txt in voulu.items()
-                            if _texte_rt(page["properties"].get(d)) != txt}
-                    if not diff:
-                        _memoriser(registre, indicateur, t, voulu)
-                        continue
-                    props = {d: {"rich_text": _rt(txt)} for d, txt in diff.items()}
-                    props["Dernière mise à jour"] = {"date": {"start": jour.isoformat()}}
-                    props["Source"] = {"rich_text": _rt(SOURCE_LIGNE)}
-                    props["Ordre"] = {"number": ordre}
-                    client.pages.update(page["id"], properties=props)
-                    stats["lignes_modifiees"] += 1
-                    stats["cellules_ecrites"] += len(diff)
+                _upsert_ligne(client, ds_id, lignes.get((cfg_ind["libelle"], t)), cfg_ind["libelle"],
+                              t, voulu, ordre, jour, stats)
                 _memoriser(registre, indicateur, t, voulu)
                 time.sleep(PAUSE_ECRITURE_S)
-            except Exception as exc:  # noqa: BLE001 — une ligne en échec ne bloque pas les autres
+            except Exception as exc:  # noqa: BLE001
                 stats["erreurs"] += 1
                 log.error("Tableau macro Notion : ligne %s / %s en échec : %s",
                           cfg_ind["libelle"], t, masquer_secrets(str(exc))[:200])
+    # Indice de surprise (calculé, jamais saisi à la main) : ligne « Actuel » en fin de tableau.
+    if matrice.get("indice_surprise"):
+        try:
+            voulu = {d: matrice["indice_surprise"][d]["texte"] for d in devises}
+            _upsert_ligne(client, ds_id, lignes.get((LIBELLE_INDICE, "Actuel")), LIBELLE_INDICE,
+                          "Actuel", voulu, 99, jour, stats)
+        except Exception as exc:  # noqa: BLE001
+            stats["erreurs"] += 1
+            log.error("Tableau macro Notion : ligne indice de surprise en échec : %s",
+                      masquer_secrets(str(exc))[:200])
     return stats
 
 
@@ -374,13 +391,29 @@ def mettre_a_jour(config: dict, racine: str | Path, chemin_config: str | Path | 
         if client_scraping is None:
             from core.scraping import ClientScraping
             client_scraping = ClientScraping(config["scraping"], donnees / "cache")
-        ff = ffm.collecter(cfg_tm, client_scraping, donnees / "cache", maintenant)
-        resultat["ff"] = {"statut": ff["statut"], "note": ff["note"], "nb": len(ff["evenements"])}
+        ff = ffm.collecter(
+            cfg_tm, client_scraping, donnees / "cache", maintenant,
+            cibles_fn=lambda deja: rm.publications_a_cibler(registre, cfg_tm["forexfactory"],
+                                                            maintenant, deja))
+        resultat["ff"] = {"statut": ff["statut"], "note": ff["note"], "nb": len(ff["evenements"]),
+                          "declencheur": ff.get("declencheur")}
         if ff["statut"] == "frais":
             bilan = rm.integrer_evenements(registre, ff["evenements"], cfg_tm, maintenant)
             resultat["ff"].update(bilan)
             log.info("Tableau macro : %d case(s) mises à jour, %d introuvable(s) à initialiser",
                      bilan["mises_a_jour"], len(bilan["introuvables"]))
+            # Premier créneau du jour : mois suivants SEULEMENT si des cases n'ont pas
+            # de date de prochaine publication (jamais plus, jamais sans besoin).
+            if ff.get("premier_du_jour"):
+                for decalage, _ in enumerate(cfg_tm["forexfactory"].get("mois_suivants_si_necessaire", []), 1):
+                    if not rm.cases_sans_date_suivante(registre, cfg_tm):
+                        break
+                    suite = ffm.collecter_mois_suivant(cfg_tm, client_scraping, donnees / "cache",
+                                                       decalage, maintenant)
+                    if suite["statut"] != "frais":
+                        log.warning("Tableau macro : mois +%d non lu (%s)", decalage, suite["note"])
+                        break
+                    rm.integrer_evenements(registre, suite["evenements"], cfg_tm, maintenant)
         elif ff["statut"] == "indisponible":
             log.warning("Tableau macro : ForexFactory indisponible (%s) — registre inchangé", ff["note"])
     except Exception as exc:  # noqa: BLE001
@@ -394,6 +427,19 @@ def mettre_a_jour(config: dict, racine: str | Path, chemin_config: str | Path | 
             if mapping.get("absent"):
                 case.update(statut="non_applicable", absent=mapping["absent"])
             case["etiquette"] = mapping.get("etiquette")
+
+    # 2 bis. FRED : repli des valeurs absentes, contrôle croisé, projections Fed (cache du jour)
+    try:
+        import os as _os
+        from core import collecte_cache, fred_macro
+        fred = collecte_cache.avec_cache(
+            "tableau_fred", donnees / "cache", jour, True, fred_macro.collecter, cfg_tm,
+            _os.environ.get("FRED_API_KEY", "").strip())
+        resultat["fred"] = {"valeurs": len(fred.get("valeurs", {})), "erreurs": fred.get("erreurs", [])}
+        resultat["fred"]["comblees"] = rm.integrer_fred(registre, fred)
+        rm.integrer_projections(registre, fred)
+    except Exception as exc:  # noqa: BLE001
+        log.error("Tableau macro : FRED en échec : %s", masquer_secrets(str(exc))[:200])
 
     overrides_jour = overrides.charger(donnees / "overrides", jour)
 
@@ -418,8 +464,15 @@ def mettre_a_jour(config: dict, racine: str | Path, chemin_config: str | Path | 
             client = None
             log.error("Tableau macro Notion (lecture) en échec : %s", masquer_secrets(str(exc))[:200])
 
-    # 4. Matrice (priorités) + archivage des saisies supplantées
+    # 4. Contrôles de cohérence + indice de surprise (Python pur) puis matrice (priorités)
+    from core import controles_macro
+    controles = controles_macro.controler_registre(registre, cfg_tm, maintenant)
+    indice = controles_macro.indice_surprise(registre, cfg_tm, jour)
     matrice = construire_matrice(registre, saisies, overrides_jour, cfg_tm, jour)
+    matrice["indice_surprise"] = {d: {**v, "texte": controles_macro.texte_indice(v)}
+                                  for d, v in indice.items()}
+    matrice["anomalies"] = controles["anomalies"][:30]
+    resultat["controles"], resultat["indice_surprise"] = controles, indice
     for cle_saisie in matrice.pop("_a_archiver", []):
         sm.archiver(saisies, cle_saisie, jour, "publication officielle plus récente")
     resultat["remplissage"] = matrice["remplissage"]

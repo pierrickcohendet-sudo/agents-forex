@@ -93,27 +93,71 @@ tableau_macro:
   ordre_devises: [USD, EUR, GBP, JPY, CHF, CAD, AUD, NZD, CNY]
   forexfactory:
     url: "https://www.forexfactory.com/calendar?month=this"
-    # Plafond TOTAL de requêtes sur la page « mois » par jour (UTC). 2 = matin +
-    # soir. Le chantier « remplissage fiable » le relèvera à 6 pour les mises à
-    # jour ciblées après les publications importantes.
-    plafond_requetes_par_jour: 2
+    url_mois: "https://www.forexfactory.com/calendar?month={mois}"
+    # Plafond TOTAL de requêtes sur la page « mois » par jour (UTC), tous motifs
+    # confondus (créneaux, mois suivants, mises à jour ciblées). Les 2 premiers
+    # créneaux = matin + soir ; le reste sert aux mois suivants et aux ciblées.
+    plafond_requetes_par_jour: 6
     # Créneaux de collecte (UTC) : un créneau est « dû » dès que l'heure est
     # passée et qu'aucune requête n'a eu lieu depuis. Les passages horaires
     # --completer déclenchent donc la collecte de 19:15 même si le cron glisse.
     creneaux_utc: ["05:15", "19:15"]
+    # Au PREMIER créneau du jour : si des cases n'ont pas de date de prochaine
+    # publication, on lit le mois suivant, puis (si encore des trous, ex. PIB
+    # trimestriel) le mois d'après — jamais plus, jamais sans besoin.
+    mois_suivants_si_necessaire: ["next", "plus2"]
+    # Mises à jour CIBLÉES : une publication d'impact fort/moyen dont l'heure est
+    # passée depuis au moins `delai_apres_publication_min` minutes et dont le
+    # « réel » manque encore déclenche une requête (max `tentatives_ciblees_max`
+    # par publication, dans la limite du plafond ci-dessus).
+    delai_apres_publication_min: 15
+    tentatives_ciblees_max: 2
+    impacts_cibles: ["high", "medium"]
   # sens : normal = au-dessus du consensus est « bon » (vert sur le web) ;
   # inverse = chômage (au-dessus = mauvais, rouge). Les symboles ▲▼= restent littéraux.
   indicateurs:
-    taux_directeur:      { libelle: "Taux directeur",         unite: "%", sens: normal }
-    cpi:                 { libelle: "CPI annuel",             unite: "%", sens: normal }
-    cpi_core:            { libelle: "CPI core annuel",        unite: "%", sens: normal }
-    pib:                 { libelle: "PIB trimestriel",        unite: "%", sens: normal }
-    pmi_manufacturier:   { libelle: "PMI manufacturier",      unite: "",  sens: normal }
-    pmi_services:        { libelle: "PMI services",           unite: "",  sens: normal }
-    chomage:             { libelle: "Taux de chômage",        unite: "%", sens: inverse }
-    emploi:              { libelle: "Variation de l'emploi",  unite: "",  sens: normal }
-    ventes_detail:       { libelle: "Ventes au détail",       unite: "%", sens: normal }
-    balance_commerciale: { libelle: "Balance commerciale",    unite: "",  sens: normal }
+    taux_directeur:      { libelle: "Taux directeur",         unite: "%", sens: normal, bornes: [-1, 25], periodicite_jours: 60, echelle_surprise: 0.25, poids_surprise: 3 }
+    cpi:                 { libelle: "CPI annuel",             unite: "%", sens: normal, bornes: [-5, 30], periodicite_jours: 31, tolerance: 0.2, echelle_surprise: 0.1, poids_surprise: 3 }
+    cpi_core:            { libelle: "CPI core annuel",        unite: "%", sens: normal, bornes: [-5, 30], periodicite_jours: 31, tolerance: 0.2, echelle_surprise: 0.1, poids_surprise: 2 }
+    pib:                 { libelle: "PIB trimestriel",        unite: "%", sens: normal, bornes: [-25, 30], periodicite_jours: 92, tolerance: 0.3, echelle_surprise: 0.3, poids_surprise: 2 }
+    pmi_manufacturier:   { libelle: "PMI manufacturier",      unite: "",  sens: normal, bornes: [20, 80], periodicite_jours: 31, echelle_surprise: 1.0, poids_surprise: 1.5 }
+    pmi_services:        { libelle: "PMI services",           unite: "",  sens: normal, bornes: [20, 80], periodicite_jours: 31, echelle_surprise: 1.0, poids_surprise: 1.5 }
+    chomage:             { libelle: "Taux de chômage",        unite: "%", sens: inverse, bornes: [0, 40], periodicite_jours: 31, tolerance: 0.2, echelle_surprise: 0.1, poids_surprise: 2 }
+    emploi:              { libelle: "Variation de l'emploi",  unite: "",  sens: normal, bornes: [-5000000, 5000000], periodicite_jours: 31, tolerance_absolue: 15000, echelle_surprise: 0.1, echelle_surprise_absolue: 60000, poids_surprise: 3 }
+    ventes_detail:       { libelle: "Ventes au détail",       unite: "%", sens: normal, bornes: [-30, 30], periodicite_jours: 31, tolerance: 0.2, echelle_surprise: 0.3, poids_surprise: 1.5 }
+    balance_commerciale: { libelle: "Balance commerciale",    unite: "",  sens: normal, bornes: [-50000000000000, 50000000000000], periodicite_jours: 31, tolerance_absolue: 1500000000, echelle_surprise: 0.3, echelle_surprise_absolue: 3000000000, poids_surprise: 1 }
+  # Marge (jours) ajoutée à periodicite_jours avant de déclarer une publication manquée.
+  marge_peremption_jours: 20
+  # Écart FF/FRED au-delà de `tolerance` (points) ou `tolerance_absolue` => « divergence de sources ».
+  # Fenêtre de l'indice de surprise (jours) ; |surprise normalisée| plafonnée à `plafond_surprise`.
+  indice_surprise: { fenetre_jours: 30, plafond_surprise: 3, seuil_tendance: 0.15 }
+  # Séries FRED : repli (case sans valeur ForexFactory) et/ou contrôle croisé.
+  # FRED donne la PÉRIODE observée, pas la date de publication (affichée « pér. MM/AA »).
+  # Vérifiées le 2026-10-06 : valeurs US identiques à ForexFactory (UNRATE 4,2 ; PAYEMS +29K ;
+  # PIB 2,2 ; balance -105,6 Md). Séries internationales OCDE : contrôle seulement (retard).
+  fred:
+    series:
+      cpi:      { USD: { serie: CPIAUCSL, calcul: yoy, unite: "%", usage: repli_et_controle } }
+      cpi_core: { USD: { serie: CPILFESL, calcul: yoy, unite: "%", usage: repli_et_controle } }
+      chomage:
+        USD: { serie: UNRATE, calcul: niveau, unite: "%", usage: repli_et_controle }
+        JPY: { serie: LRHUTTTTJPM156S, calcul: niveau, unite: "%", usage: controle }
+        CAD: { serie: LRHUTTTTCAM156S, calcul: niveau, unite: "%", usage: controle }
+        NZD: { serie: LRUNTTTTNZQ156S, calcul: niveau, unite: "%", usage: controle }
+      emploi:   { USD: { serie: PAYEMS, calcul: diff, unite: K, usage: repli_et_controle } }
+      pib:      { USD: { serie: A191RL1Q225SBEA, calcul: niveau, unite: "%", usage: repli_et_controle } }
+      ventes_detail: { USD: { serie: RSAFS, calcul: pct_m, unite: "%", usage: repli_et_controle } }
+      balance_commerciale:
+        USD: { serie: BOPGSTB, calcul: milliards, unite: B, usage: repli_et_controle }
+        CHF: { serie: XTEXVA01CHM667S, serie_moins: XTIMVA01CHM667S, calcul: unites_milliards, unite: B, usage: repli, etiquette: "équiv. OCDE, USD" }
+    # Projections OFFICIELLES de banque centrale, affichées « proj. BC » dans la ligne Prévision
+    # quand le consensus n'existe pas encore. Fed : SEP (médiane), publié sur FRED.
+    # La Fed ne projette pas le CPI (elle projette le PCE) : pas de projection affichée pour le CPI.
+    projections:
+      USD:
+        taux_directeur: { serie: FEDTARMD, unite: "%", horizon: "fin {annee}", source: "Fed SEP, médiane" }
+        chomage:        { serie: UNRATEMD, unite: "%", horizon: "T4 {annee}", source: "Fed SEP, médiane" }
+        pib:            { serie: GDPC1MD,  unite: "%", horizon: "croiss. T4/T4 {annee}", source: "Fed SEP, médiane" }
   # Correspondance (indicateur, devise) -> événement(s) ForexFactory, vérifiée sur
   # les pages « mois » de 2026-09 et 2026-10 (identifiants `ebaseId` stables).
   # - ff: liste d'événements ; une publication préliminaire puis finale du même
@@ -144,23 +188,23 @@ tableau_macro:
       CHF: { ff: [{ id: 100, nom: "CPI m/m" }], etiquette: "m/m" }
       CAD: { ff: [{ id: 80,  nom: "CPI m/m" }], etiquette: "m/m" }
       AUD: { ff: [{ id: 888, nom: "CPI y/y" }] }
-      NZD: { ff: [{ id: 173, nom: "CPI q/q" }], etiquette: "t/t" }
+      NZD: { ff: [{ id: 173, nom: "CPI q/q" }], etiquette: "t/t", periodicite_jours: 92 }
       CNY: { ff: [{ id: 454, nom: "CPI y/y" }] }
     cpi_core:
       USD: { ff: [{ id: 933, nom: "Core CPI y/y" }] }
       EUR: { ff: [{ id: 593, nom: "Core CPI Flash Estimate y/y" }, { id: 167, nom: "Final Core CPI y/y" }] }
       GBP: { ff: [{ id: 83,  nom: "Core CPI y/y" }] }
-      JPY: { ff: [{ id: 631, nom: "BOJ Core CPI y/y" }], etiquette: "mesure BoJ" }
+      JPY: { ff: [{ id: 631, nom: "BOJ Core CPI y/y" }], etiquette: "BoJ hors alim./énergie" }   # spec ForexFactory : hors alimentation, énergie et facteurs institutionnels (mesure sous-jacente de la BoJ), publiée ~dernier vendredi du mois ; distincte du « National Core » (hors alimentation fraîche) affiché dans la ligne CPI
       CHF: { absent: "non couvert par ForexFactory" }
       CAD: { ff: [{ id: 659, nom: "Median CPI y/y" }], etiquette: "médian" }
       AUD: { ff: [{ id: 99,  nom: "Trimmed Mean CPI m/m" }], etiquette: "moy. tronquée m/m" }
       NZD: { absent: "non couvert par ForexFactory" }
       CNY: { absent: "non couvert par ForexFactory" }
     pib:
-      USD: { ff: [{ id: 2,   nom: "Advance GDP q/q" }, { nom: "Prelim GDP q/q" }, { id: 28, nom: "Final GDP q/q" }] }
+      USD: { ff: [{ id: 2,   nom: "Advance GDP q/q" }, { id: 27, nom: "Prelim GDP q/q" }, { id: 28, nom: "Final GDP q/q" }] }
       EUR: { ff: [{ id: 638, nom: "Prelim Flash GDP q/q" }, { id: 42, nom: "Revised GDP q/q" }] }
-      GBP: { ff: [{ nom: "Prelim GDP q/q" }, { id: 35, nom: "Final GDP q/q" }] }
-      JPY: { ff: [{ nom: "Prelim GDP q/q" }, { id: 37, nom: "Final GDP q/q" }] }
+      GBP: { ff: [{ id: 33, nom: "Prelim GDP q/q" }, { id: 35, nom: "Final GDP q/q" }] }
+      JPY: { ff: [{ id: 36, nom: "Prelim GDP q/q" }, { id: 37, nom: "Final GDP q/q" }] }
       CHF: { ff: [{ id: 32,  nom: "GDP q/q" }] }
       CAD: { ff: [{ id: 29,  nom: "GDP m/m" }], etiquette: "m/m" }
       AUD: { ff: [{ id: 31,  nom: "GDP q/q" }] }
@@ -194,17 +238,17 @@ tableau_macro:
       CHF: { ff: [{ id: 62,  nom: "Unemployment Rate" }] }
       CAD: { ff: [{ id: 57,  nom: "Unemployment Rate" }] }
       AUD: { ff: [{ id: 64,  nom: "Unemployment Rate" }] }
-      NZD: { ff: [{ nom: "Unemployment Rate" }] }
+      NZD: { ff: [{ id: 65, nom: "Unemployment Rate" }], periodicite_jours: 92 }
       CNY: { ff: [{ id: 771, nom: "Unemployment Rate" }] }
     emploi:
       USD: { ff: [{ id: 66,  nom: "Non-Farm Employment Change" }] }
-      EUR: { ff: [{ id: 69,  nom: "Final Employment Change q/q" }], etiquette: "t/t" }
+      EUR: { ff: [{ id: 69,  nom: "Final Employment Change q/q" }], etiquette: "t/t", periodicite_jours: 92 }
       GBP: { ff: [{ id: 68,  nom: "Claimant Count Change" }], etiquette: "équiv. claimants" }   # variation du nombre de demandeurs d'emploi (pas d'« emploi » mensuel suivi par FF)
       JPY: { absent: "non publié dans ce pays" }
       CHF: { absent: "non couvert par ForexFactory" }
       CAD: { ff: [{ id: 67,  nom: "Employment Change" }] }
       AUD: { ff: [{ id: 73,  nom: "Employment Change" }] }
-      NZD: { ff: [{ nom: "Employment Change q/q" }], etiquette: "t/t" }
+      NZD: { ff: [{ id: 74, nom: "Employment Change q/q" }], etiquette: "t/t", periodicite_jours: 92 }
       CNY: { absent: "non couvert par ForexFactory" }
     ventes_detail:
       USD: { ff: [{ id: 102, nom: "Retail Sales m/m" }] }
@@ -213,15 +257,15 @@ tableau_macro:
       JPY: { ff: [{ id: 115, nom: "Retail Sales y/y" }], etiquette: "a/a" }
       CHF: { ff: [{ id: 109, nom: "Retail Sales y/y" }], etiquette: "a/a" }
       CAD: { ff: [{ id: 104, nom: "Retail Sales m/m" }] }
-      AUD: { ff: [{ nom: "Retail Sales m/m" }] }
-      NZD: { ff: [{ nom: "Retail Sales q/q" }], etiquette: "t/t" }
+      AUD: { ff: [{ id: 923, nom: "Household Spending m/m" }], etiquette: "équiv. dépenses ménages" }   # ForexFactory ne liste plus « Retail Sales » pour l'AUD (vérifié 6 mois) ; l'ABS a remplacé la série par l'indicateur de dépenses des ménages
+      NZD: { ff: [{ id: 510, nom: "Retail Sales q/q" }], etiquette: "t/t", periodicite_jours: 92 }
       CNY: { ff: [{ id: 470, nom: "Retail Sales y/y" }], etiquette: "a/a" }
     balance_commerciale:
       USD: { ff: [{ id: 117, nom: "Trade Balance" }] }
       EUR: { ff: [{ id: 120, nom: "Trade Balance" }] }
       GBP: { ff: [{ id: 119, nom: "Goods Trade Balance" }], etiquette: "biens" }
       JPY: { ff: [{ id: 123, nom: "Trade Balance" }] }
-      CHF: { ff: [{ nom: "Trade Balance" }] }
+      CHF: { ff: [], etiquette: "équiv. OCDE, USD" }   # aucune balance CHF dans ForexFactory (6 mois vérifiés) : repli FRED (OCDE, exports - imports, en USD, ~3 mois de retard)
       CAD: { ff: [{ id: 118, nom: "Trade Balance" }] }
       AUD: { ff: [{ id: 122, nom: "Goods Trade Balance" }], etiquette: "biens" }
       NZD: { ff: [{ id: 121, nom: "Trade Balance" }] }

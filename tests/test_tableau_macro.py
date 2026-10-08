@@ -3,6 +3,7 @@ Lancer : python -m unittest discover -s tests -v"""
 from __future__ import annotations
 
 import json
+import os
 import sys
 import tempfile
 import unittest
@@ -17,6 +18,7 @@ sys.path.insert(0, str(RACINE))
 from agents import collecte_forexfactory_mois as ffm  # noqa: E402
 from core import registre_macro as rm  # noqa: E402
 from core import saisies_manuelles as sm  # noqa: E402
+from core import controles_macro as cm  # noqa: E402
 from core import tableau_macro as tm  # noqa: E402
 
 CONFIG = yaml.safe_load((RACINE / "config.yaml").read_text(encoding="utf-8"))
@@ -257,10 +259,11 @@ class FauxNotion:
 
 class FauxScraping:
     def __init__(self, html):
-        self.html, self.appels = html, 0
+        self.html, self.appels, self.mois = html, 0, []
 
     def requete_directe(self, site, url):
         self.appels += 1
+        self.mois.append(url.split("month=")[-1])
         return {"statut": "frais", "contenu": self.html, "note": ""}
 
 
@@ -278,6 +281,7 @@ class BoutEnBout(unittest.TestCase):
         ])
         self.notion = FauxNotion()
         self.maintenant = datetime(2026, 10, 6, 10, 0, tzinfo=timezone.utc)
+        os.environ.pop("FRED_API_KEY", None)  # aucun accès réseau dans les tests
 
     def passer(self, html=None, maintenant=None, notion=None):
         return tm.mettre_a_jour(self.config, self.tmp, None,
@@ -287,11 +291,11 @@ class BoutEnBout(unittest.TestCase):
 
     def test_creation_unique_et_aucun_doublon_de_ligne(self):
         self.passer()
-        self.assertEqual(len(self.notion.lignes), 30)  # 10 indicateurs x 3 types
+        self.assertEqual(len(self.notion.lignes), 31)  # 10 indicateurs x 3 types + indice de surprise
         self.assertEqual(self.notion.lire("CPI annuel", "Actuel", "USD"), "3,4 % (11/09) ▲")
         self.assertEqual(self.notion.lire("CPI annuel", "Prévision", "USD"), "3,5 % (14/10)")
         self.passer()
-        self.assertEqual(len(self.notion.lignes), 30)
+        self.assertEqual(len(self.notion.lignes), 31)
 
     def test_saisie_manuelle_jamais_ecrasee_puis_remplacee_par_publication_plus_recente(self):
         self.passer()
@@ -316,7 +320,9 @@ class BoutEnBout(unittest.TestCase):
         for heure in (10, 11):
             tm.mettre_a_jour(self.config, self.tmp, None, client_scraping=sc, client_notion=self.notion,
                              maintenant=self.maintenant.replace(hour=heure))
-        self.assertEqual(sc.appels, 1)
+        # 1 page « mois en cours » + mois suivants lus UNE fois (cases sans date de prochaine publication)
+        self.assertEqual(sc.appels, 3)
+        self.assertEqual(sc.mois, ["this", "next", "dec.2026"])
 
     def test_echec_notion_ne_bloque_ni_le_registre_ni_le_web(self):
         casse = FauxNotion()
@@ -332,6 +338,132 @@ class BoutEnBout(unittest.TestCase):
         self.assertEqual(web["devises"][:4], ["USD", "EUR", "GBP", "JPY"])
         self.assertEqual(web["cellules"]["cpi"]["USD"]["Actuel"]["surprise"], "▲")
         self.assertIn("Actuel", web["remplissage"])
+
+
+class FredEtProjections(unittest.TestCase):
+    def reg(self):
+        reg = rm.charger("inexistant.json")
+        rm.integrer_evenements(reg, [], CFG_TM)
+        return reg
+
+    def test_fred_comble_une_case_vide_sans_ecraser_forexfactory(self):
+        reg = self.reg()
+        rm.integrer_evenements(reg, [ev("USD", 56, "Unemployment Rate", T0, "4.2%", "4.1%", "4.1%")], CFG_TM)
+        fred = {"valeurs": {"USD|chomage": {"valeur": "9.9%", "periode": "2026-09", "precedente": "4.1%",
+                                            "serie": "UNRATE", "usage": "repli_et_controle"},
+                            "CHF|balance_commerciale": {"valeur": "5.4B", "periode": "2026-06",
+                                                        "precedente": "6.8B", "serie": "XTEXVA01CHM667S",
+                                                        "usage": "repli", "etiquette": "équiv. OCDE, USD"}}}
+        self.assertEqual(rm.integrer_fred(reg, fred), 1)
+        self.assertEqual(reg["cases"]["USD|chomage"]["actuel"]["valeur"], "4.2%")  # FF intact
+        chf = reg["cases"]["CHF|balance_commerciale"]
+        self.assertEqual(rm.texte_officiel(chf, "Actuel", ""), "5,4B [équiv. OCDE, USD] (pér. 06/26)")
+        self.assertEqual(chf["actuel"]["source"], "FRED (XTEXVA01CHM667S)")
+
+    def test_projection_bc_etiquetee_quand_pas_de_consensus(self):
+        reg = self.reg()
+        rm.integrer_evenements(reg, [ev("USD", 56, "Unemployment Rate", T0, "4.2%", "4.1%", "4.1%"),
+                                     ev("USD", 56, "Unemployment Rate", T1, None, None, "4.2%")], CFG_TM)
+        rm.integrer_projections(reg, {"projections": {"USD|chomage": {
+            "valeur": "4.1%", "horizon": "T4 2026", "date_pub": "2026-09-16", "serie": "UNRATEMD"}}})
+        self.assertEqual(rm.texte_officiel(reg["cases"]["USD|chomage"], "Prévision", "%"),
+                         "proj. BC 4,1 % (T4 2026) · pub. 14/10")
+        # un consensus réel prend toujours le pas sur la projection
+        rm.integrer_evenements(reg, [ev("USD", 56, "Unemployment Rate", T1, None, "4.3%", "4.2%")], CFG_TM)
+        self.assertEqual(rm.texte_officiel(reg["cases"]["USD|chomage"], "Prévision", "%"), "4,3 % (14/10)")
+
+
+class Controles(unittest.TestCase):
+    NOW = datetime(2026, 10, 20, 12, 0, tzinfo=timezone.utc)
+
+    def reg(self, evenements):
+        reg = rm.charger("inexistant.json")
+        rm.integrer_evenements(reg, evenements, CFG_TM)
+        return reg
+
+    def test_valeur_hors_plage(self):
+        reg = self.reg([ev("USD", 56, "Unemployment Rate", T0, "74.0%", "4.1%", "4.1%")])
+        a = cm.controler_registre(reg, CFG_TM, self.NOW)["anomalies"]
+        self.assertTrue(any("USD/Taux de chômage" in x and "hors plage" in x for x in a))
+
+    def test_divergence_ff_vs_fred_seulement_si_les_deux_valeurs_fred_s_ecartent(self):
+        reg = self.reg([ev("USD", 56, "Unemployment Rate", T0, "4.2%", "4.1%", "4.1%")])
+        reg["cases"]["USD|chomage"]["fred"] = {"valeur": "4.9%", "periode": "2026-08",
+                                               "precedente": "4.8%", "serie": "UNRATE"}
+        maintenant = datetime(2026, 9, 20, tzinfo=timezone.utc)
+        a = cm.controler_registre(reg, CFG_TM, maintenant)["anomalies"]
+        self.assertTrue(any("divergence de sources" in x for x in a))
+        reg["cases"]["USD|chomage"]["fred"]["precedente"] = "4.2%"  # concorde avec la période précédente
+        a = cm.controler_registre(reg, CFG_TM, maintenant)["anomalies"]
+        self.assertFalse(any("divergence" in x for x in a))
+
+    def test_publication_manquee(self):
+        reg = self.reg([ev("USD", 56, "Unemployment Rate", T0, "4.2%", "4.1%", "4.1%"),
+                        ev("USD", 56, "Unemployment Rate", T0 + 20 * 86400, None, "4.2%", "4.2%")])
+        a = cm.controler_registre(reg, CFG_TM, self.NOW)["anomalies"]
+        self.assertTrue(any("publication manquée" in x and "USD/Taux de chômage" in x for x in a))
+
+    def test_case_non_applicable_expliquee_sans_anomalie(self):
+        reg = self.reg([])
+        r = cm.controler_registre(reg, CFG_TM, self.NOW)
+        self.assertIn({"case": "JPY|emploi", "raison": "non publié dans ce pays"}, r["cases_sans_valeur"])
+        self.assertFalse(any("JPY/Variation" in x for x in r["anomalies"]))
+
+
+class IndiceSurprise(unittest.TestCase):
+    AUJ = date(2026, 10, 6)
+
+    def test_moyenne_ponderee_chomage_inverse_et_tendance(self):
+        reg = rm.charger("inexistant.json")
+
+        def d(j):
+            return int(datetime(2026, 9, j, 12, tzinfo=timezone.utc).timestamp())
+        # EUR : CPI +0,2 pt au-dessus du consensus (échelle 0,1 => +2), chômage +0,1 pt (inversé => -1)
+        rm.integrer_evenements(reg, [ev("EUR", 168, "CPI Flash Estimate y/y", d(20), "3.8%", "3.6%", "3.3%"),
+                                     ev("EUR", 59, "Unemployment Rate", d(25), "6.5%", "6.4%", "6.4%")], CFG_TM)
+        i = cm.indice_surprise(reg, CFG_TM, self.AUJ)["EUR"]
+        # poids CPI 3, chômage 2 : (3*2 + 2*(-1)) / 5 = 0.8
+        self.assertEqual(i["indice"], 0.8)
+        self.assertEqual(i["n"], 2)
+        self.assertEqual(i["tendance"], "n/d")  # aucune publication dans la fenêtre précédente
+        self.assertEqual(cm.texte_indice(i), "+0,8 (n=2)")
+
+    def test_aucune_publication_avec_consensus(self):
+        reg = rm.charger("inexistant.json")
+        rm.integrer_evenements(reg, [], CFG_TM)
+        i = cm.indice_surprise(reg, CFG_TM, self.AUJ)["USD"]
+        self.assertIsNone(i["indice"])
+        self.assertTrue(cm.texte_indice(i).startswith("n/d"))
+
+
+class CiblesEtMois(unittest.TestCase):
+    def test_publication_recente_sans_reel_declenche_une_requete_ciblee_limitee(self):
+        reg = rm.charger("inexistant.json")
+        rm.integrer_evenements(reg, [ev("USD", 884, "CPI y/y", T0, "3.4%", "3.3%", "3.2%"),
+                                     ev("USD", 884, "CPI y/y", T1, None, "3.5%", "3.4%")], CFG_TM)
+        cfg_ff = CFG_TM["forexfactory"]
+        trop_tot = datetime.fromtimestamp(T1 + 5 * 60, tz=timezone.utc)
+        bon = datetime.fromtimestamp(T1 + 20 * 60, tz=timezone.utc)
+        trop_tard = datetime.fromtimestamp(T1 + 13 * 3600, tz=timezone.utc)
+        self.assertEqual(rm.publications_a_cibler(reg, cfg_ff, trop_tot, {}), [])
+        cibles = rm.publications_a_cibler(reg, cfg_ff, bon, {})
+        self.assertEqual(cibles, [f"USD|cpi@{T1}"])
+        self.assertEqual(rm.publications_a_cibler(reg, cfg_ff, bon, {cibles[0]: 2}), [])  # max 2 tentatives
+        self.assertEqual(rm.publications_a_cibler(reg, cfg_ff, trop_tard, {}), [])
+
+    def test_collecte_ciblee_hors_creneau_puis_plafond(self):
+        tmp = Path(tempfile.mkdtemp())
+        sc = FauxScraping(page_html([]))
+        cibles = [f"USD|cpi@{T1}"]
+        t = datetime(2026, 10, 14, 13, 0, tzinfo=timezone.utc)
+        ffm.collecter(CFG_TM, sc, tmp, t)                                    # créneau du matin
+        r = ffm.collecter(CFG_TM, sc, tmp, t.replace(hour=14), cibles_fn=lambda deja: cibles)
+        self.assertEqual((r["statut"], r["declencheur"]), ("frais", "ciblee"))
+        cfg2 = json.loads(json.dumps(CFG_TM))
+        cfg2["forexfactory"]["plafond_requetes_par_jour"] = 2
+        r = ffm.collecter(cfg2, sc, tmp, t.replace(hour=15), cibles_fn=lambda deja: cibles)
+        self.assertEqual(r["statut"], "non_due")                              # plafond atteint
+        self.assertEqual(ffm.nom_mois(2, datetime(2026, 11, 5, tzinfo=timezone.utc)), "jan.2027")
 
 
 if __name__ == "__main__":
