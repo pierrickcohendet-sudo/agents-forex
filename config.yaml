@@ -128,11 +128,47 @@ tableau_macro:
     emploi:              { libelle: "Variation de l'emploi",  unite: "",  sens: normal, bornes: [-5000000, 5000000], periodicite_jours: 31, tolerance_absolue: 15000, echelle_surprise: 0.1, echelle_surprise_absolue: 60000, poids_surprise: 3 }
     ventes_detail:       { libelle: "Ventes au détail",       unite: "%", sens: normal, bornes: [-30, 30], periodicite_jours: 31, tolerance: 0.2, echelle_surprise: 0.3, poids_surprise: 1.5 }
     balance_commerciale: { libelle: "Balance commerciale",    unite: "",  sens: normal, bornes: [-50000000000000, 50000000000000], periodicite_jours: 31, tolerance_absolue: 1500000000, echelle_surprise: 0.3, echelle_surprise_absolue: 3000000000, poids_surprise: 1 }
+    # Données de MARCHÉ (pas de consensus : Prévision = « — (donnée de marché) ») ; voir taux_obligataires.
+    rendement_2a:        { libelle: "Rendement 2 ans",      unite: "%", sens: normal, marche: true, bornes: [-2, 25] }
+    rendement_10a:       { libelle: "Rendement 10 ans",     unite: "%", sens: normal, marche: true, bornes: [-2, 25] }
+    spread_2a_usd:       { libelle: "Spread 2 ans vs USD",  unite: "",  sens: normal, marche: true, bornes: [-2000, 2000] }
   # Marge (jours) ajoutée à periodicite_jours avant de déclarer une publication manquée.
   marge_peremption_jours: 20
   # Écart FF/FRED au-delà de `tolerance` (points) ou `tolerance_absolue` => « divergence de sources ».
   # Fenêtre de l'indice de surprise (jours) ; |surprise normalisée| plafonnée à `plafond_surprise`.
   indice_surprise: { fenetre_jours: 30, plafond_surprise: 3, seuil_tendance: 0.15 }
+  # Rendements souverains : sources gratuites VÉRIFIÉES sur les vraies données le 2026-10-08 (une
+  # requête par source et par jour). `absent` = pas de source gratuite exploitable (texte affiché).
+  taux_obligataires:
+    jours_variation: 7        # « semaine précédente » = dernière observation d'il y a >= 7 jours
+    sources:
+      USD:
+        2a:  { type: fred, serie: DGS2, source: "FRED (DGS2)" }
+        10a: { type: fred, serie: DGS10, source: "FRED (DGS10)" }
+      EUR:   # Allemagne (benchmark de la zone euro) ; l'API de la BCE renvoyait des erreurs 500 le jour du test
+        2a:  { type: bundesbank, code: "BBSIS/D.I.ZST.ZI.EUR.S1311.B.A604.R02XX.R.A.A._Z._Z.A", source: "Bundesbank (Allemagne 2 ans)" }
+        10a: { type: bundesbank, code: "BBSIS/D.I.ZST.ZI.EUR.S1311.B.A604.R10XX.R.A.A._Z._Z.A", source: "Bundesbank (Allemagne 10 ans)" }
+      GBP:
+        2a:  { absent: "2 ans non publié en accès libre (BoE : 5/10/20 ans)" }
+        10a: { type: boe, code: IUDMNPY, source: "Banque d'Angleterre (par yield 10 ans, IUDMNPY)" }
+      JPY:
+        2a:  { type: mof, colonne: "2Y", source: "Ministère des Finances du Japon (JGB 2 ans)" }
+        10a: { type: mof, colonne: "10Y", source: "Ministère des Finances du Japon (JGB 10 ans)" }
+      CHF:
+        2a:  { absent: "SNB : série arrêtée (dernière donnée 07/2025)" }
+        10a: { type: fred_mensuel, serie: IRLTLT01CHM156N, source: "OCDE via FRED (IRLTLT01CHM156N)" }
+      CAD:
+        2a:  { type: boc, serie: BD.CDN.2YR.DQ.YLD, source: "Banque du Canada (Valet, 2 ans)" }
+        10a: { type: boc, serie: BD.CDN.10YR.DQ.YLD, source: "Banque du Canada (Valet, 10 ans)" }
+      AUD:
+        2a:  { absent: "RBA : accès automatisé refusé (403)" }
+        10a: { type: fred_mensuel, serie: IRLTLT01AUM156N, source: "OCDE via FRED (IRLTLT01AUM156N)" }
+      NZD:
+        2a:  { absent: "RBNZ : accès automatisé refusé (403)" }
+        10a: { type: fred_mensuel, serie: IRLTLT01NZM156N, source: "OCDE via FRED (IRLTLT01NZM156N)" }
+      CNY:
+        2a:  { absent: "aucune source gratuite exploitable" }
+        10a: { absent: "aucune source gratuite exploitable" }
   # Séries FRED : repli (case sans valeur ForexFactory) et/ou contrôle croisé.
   # FRED donne la PÉRIODE observée, pas la date de publication (affichée « pér. MM/AA »).
   # Vérifiées le 2026-10-06 : valeurs US identiques à ForexFactory (UNRATE 4,2 ; PAYEMS +29K ;

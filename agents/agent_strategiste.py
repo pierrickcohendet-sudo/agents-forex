@@ -194,6 +194,14 @@ def assembler_contexte(config: dict, technique: dict, macro: dict,
             "source_id": id_taux, "valeurs": macro["taux_directeurs"],
             "carry": macro.get("carry"),
         }
+        if macro.get("taux_obligataires"):
+            # Spread de marché 2 ans vs USD : intègre les anticipations de banque centrale.
+            donnees["macro"]["taux_directeurs"]["spread_2a_vs_usd"] = {
+                "source_id": src("Marché obligataire (FRED, Bundesbank, BoE, MoF Japon, BoC, OCDE)",
+                                 "rendements souverains 2 ans / 10 ans et spread 2 ans vs USD",
+                                 date.today().isoformat()),
+                "valeurs": macro["taux_obligataires"],
+            }
 
     for devise, indicateurs in technique.get("devises", {}).items():
         entree = dict(indicateurs)
@@ -358,9 +366,14 @@ def _tableau_indicateurs(config: dict, devise: str, donnees: dict,
             ligne(indicateur, nom, f"{taux.get('taux', '—')} %",
                   source=taux.get("source", "config"), date_donnee=taux.get("date"))
         elif indicateur == "differentiel_taux":
-            ligne(indicateur, nom,
-                  None if differentiel is None else f"{differentiel:+.2f} pt",
-                  source="calcul (FRED + config)", date_donnee=auj.isoformat())
+            spread = (((bloc_taux.get("spread_2a_vs_usd") or {}).get("valeurs") or {}).get(devise) or {})
+            texte = None if differentiel is None else f"{differentiel:+.2f} pt"
+            if spread.get("spread_2a_vs_usd_pb") is not None:
+                complement = f"spread 2 ans vs US {spread['spread_2a_vs_usd_pb']:+d} pb"
+                texte = f"{texte} · {complement}" if texte else complement
+            ligne(indicateur, nom, texte,
+                  source="calcul (FRED + config" + (" + marché obligataire)" if spread else ")"),
+                  date_donnee=auj.isoformat())
         elif indicateur == "yield_curve":
             if yield_curve.get("disponible"):
                 ligne(indicateur, nom, f"{yield_curve['spread_10y_2y']} ({yield_curve['regime']})",
@@ -436,7 +449,10 @@ def _analyser_devise(llm: FournisseurLLM, systeme: str, config: dict, devise: st
             "cpi_surprise / pmi_surprise : surprise vs prévision du calendrier pour CETTE devise. "
             "yield_curve et vix : lire l'effet SUR cette devise (contexte risk on/off). "
             "dxy : indice USD synthétique fourni dans technique.USD. "
-            "differentiel_taux : carry fourni dans macro.taux_directeurs.carry. "
+            "differentiel_taux : carry fourni dans macro.taux_directeurs.carry ET, s'il est présent, "
+            "spread des rendements souverains 2 ans vs États-Unis dans macro.taux_directeurs."
+            "spread_2a_vs_usd (le marché y intègre les anticipations de banque centrale : s'il "
+            "diverge du carry des taux directeurs, privilégie-le et dis-le ; cite son source_id). "
             "rsi / trendline : données technique de la devise. "
             "fixing_pboc (CNY uniquement) : direction du fixing quotidien PBoC et des "
             "décisions de politique (LPR, MLF, RRR) d'après le calendrier et les news ; "

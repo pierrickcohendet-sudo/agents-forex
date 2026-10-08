@@ -222,6 +222,10 @@ def main() -> int:
                        collecte_calendrier.collecter, config, client_scraping,
                        defaut={**vide, "evenements": [], "sites": {}, "non_rafraichies": []})
 
+    # Rendements 2 ans / 10 ans et spread vs USD (Tableau macro) : alimentent la ligne
+    # « différentiel de taux » du score de confluence (pondérations inchangées).
+    macro["taux_obligataires"] = (tableau or {}).get("resume_taux", {})
+
     if not technique["devises"] and not macro["series"]:
         notifier_echec("collecte", "aucune donnée technique NI macro — rapport annulé")
         return 1

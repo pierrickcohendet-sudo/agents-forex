@@ -649,6 +649,18 @@ def mettre_a_jour(config: dict, racine: str | Path, chemin_config: str | Path | 
     except Exception as exc:  # noqa: BLE001
         log.error("Tableau macro : FRED en échec : %s", masquer_secrets(str(exc))[:200])
 
+    # 2 ter. Rendements souverains 2 ans / 10 ans + spread vs USD (données de marché, cache du jour)
+    try:
+        import os as _os2
+        from core import collecte_cache as _cc, marche_taux
+        mt = _cc.avec_cache("tableau_taux", donnees / "cache", jour, True, marche_taux.collecter,
+                            cfg_tm, _os2.environ.get("FRED_API_KEY", "").strip())
+        resultat["taux_obligataires"] = {"series": len(mt.get("series", {})), "erreurs": mt.get("erreurs", []),
+                                         "couverture": marche_taux.integrer(registre, mt, cfg_tm)}
+        resultat["resume_taux"] = marche_taux.resume_pour_analyse(registre, cfg_tm)
+    except Exception as exc:  # noqa: BLE001
+        log.error("Tableau macro : rendements obligataires en échec : %s", masquer_secrets(str(exc))[:200])
+
     overrides_jour = overrides.charger(donnees / "overrides", jour)
 
     # 3. Notion : lecture, migration éventuelle de l'ancienne structure, saisies manuelles

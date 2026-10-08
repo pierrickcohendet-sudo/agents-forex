@@ -11,6 +11,7 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 
 import yaml
+from unittest import mock
 
 RACINE = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RACINE))
@@ -19,11 +20,14 @@ from agents import collecte_forexfactory_mois as ffm  # noqa: E402
 from core import registre_macro as rm  # noqa: E402
 from core import saisies_manuelles as sm  # noqa: E402
 from core import controles_macro as cm  # noqa: E402
+from core import marche_taux as mt  # noqa: E402
 from core import tableau_macro as tm  # noqa: E402
 
 CONFIG = yaml.safe_load((RACINE / "config.yaml").read_text(encoding="utf-8"))
 CFG_TM = CONFIG["tableau_macro"]
 tm.PAUSE_ECRITURE_S = 0
+_COLLECTE_TAUX_REELLE = mt.collecter
+mt.collecter = lambda cfg, cle: {"series": {}, "erreurs": []}
 T0 = int(datetime(2026, 9, 11, 12, 30, tzinfo=timezone.utc).timestamp())
 T1 = int(datetime(2026, 10, 14, 12, 30, tzinfo=timezone.utc).timestamp())
 
@@ -304,7 +308,7 @@ class FauxScraping:
 
 
 class BoutEnBout(unittest.TestCase):
-    NB_LIGNES = 9 * 11  # 9 devises x (10 indicateurs + indice de surprise)
+    NB_LIGNES = 9 * 14  # 9 devises x (13 indicateurs dont 3 de marché + indice de surprise)
 
     def setUp(self):
         self.tmp = Path(tempfile.mkdtemp())
@@ -456,7 +460,7 @@ class Migration(unittest.TestCase):
         n = self.notion
         self.assertEqual(n.lire("Taux de chômage", "EUR", "Précédent"), "6,1 % ✍️")
         self.assertEqual(n.lire("CPI annuel", "USD", "Actuel"), "3,7 % ✍️")
-        self.assertEqual(len(n.lignes["ds_nouvelle"]), 9 * 11)
+        self.assertEqual(len(n.lignes["ds_nouvelle"]), 9 * 14)
         saisies = sm.charger(self.tmp / "data" / "overrides" / "saisies_notion.json")
         self.assertEqual(sorted(saisies["saisies"]), ["EUR|chomage|Précédent", "USD|cpi|Actuel"])
         # 2e passage : plus de migration, aucun doublon, saisies toujours là
@@ -465,7 +469,7 @@ class Migration(unittest.TestCase):
                               client_notion=self.notion, maintenant=self.maintenant)
         self.assertNotIn("migration", r2)
         self.assertEqual(self.notion.bases_creees, 1)
-        self.assertEqual(len(n.lignes["ds_nouvelle"]), 9 * 11)
+        self.assertEqual(len(n.lignes["ds_nouvelle"]), 9 * 14)
         self.assertEqual(n.lire("CPI annuel", "USD", "Actuel"), "3,7 % ✍️")
 
 
@@ -595,6 +599,127 @@ class CiblesEtMois(unittest.TestCase):
         r = ffm.collecter(cfg2, sc, tmp, t.replace(hour=15), cibles_fn=lambda deja: cibles)
         self.assertEqual(r["statut"], "non_due")                              # plafond atteint
         self.assertEqual(ffm.nom_mois(2, datetime(2026, 11, 5, tzinfo=timezone.utc)), "jan.2027")
+
+
+class RendementsObligataires(unittest.TestCase):
+    """Parseurs sur des échantillons réels (formats vérifiés le 2026-10-08) + intégration."""
+
+    def test_parseur_bundesbank_virgule_decimale(self):
+        texte = ("; | Einheit;Prozent; | Stand vom;08.10.2026 12:33:02 Uhr;\n"
+                 "2026-10-03;.;\n2026-10-06;3,08;\n2026-10-07;3,07;\n2026-10-08;3,08;\n")
+        with mock.patch.object(mt, "_get", return_value=mock.Mock(text=texte)):
+            pts = mt.lire_bundesbank("X")
+        self.assertEqual(pts[0], ("2026-10-08", 3.08))
+        self.assertEqual(len(pts), 3)  # le « . » (jour sans cotation) est ignoré
+
+    def test_parseur_boe_dates_anglaises(self):
+        texte = "DATE,IUDMNPY\r\n05 Oct 2026,5.3634\r\n06 Oct 2026,5.3368\r\n"
+        with mock.patch.object(mt, "_get", return_value=mock.Mock(text=texte)):
+            pts = mt.lire_boe("IUDMNPY")
+        self.assertEqual(pts[0], ("2026-10-06", 5.3368))
+
+    def test_parseur_mof_colonnes_et_jours_sans_cotation(self):
+        csv_txt = ("Interest Rate,(Unit : %)\nDate,1Y,2Y,10Y\n2026/9/29,1.5,1.9,3.0\n2026/9/30,-,1.952,3.057\n")
+        with mock.patch.object(mt, "_get", return_value=mock.Mock(content=csv_txt.encode())):
+            self.assertEqual(mt.lire_mof("2Y")[0], ("2026-09-30", 1.952))
+            self.assertEqual(mt.lire_mof("10Y")[0], ("2026-09-30", 3.057))
+
+    def test_parseur_boc_valet(self):
+        js = {"observations": [{"d": "2026-10-02", "BD.CDN.2YR.DQ.YLD": {"v": "3.25"}},
+                               {"d": "2026-10-05", "BD.CDN.2YR.DQ.YLD": {"v": "3.26"}}]}
+        with mock.patch.object(mt, "_get", return_value=mock.Mock(json=lambda: js)):
+            self.assertEqual(mt.lire_boc("BD.CDN.2YR.DQ.YLD")[0], ("2026-10-05", 3.26))
+
+    def test_semaine_precedente_et_mensuel(self):
+        pts = [("2026-10-06", 4.79), ("2026-10-05", 4.84), ("2026-09-29", 4.60), ("2026-09-28", 4.55)]
+        r = mt._derniere_et_precedente(pts, 7)
+        self.assertEqual((r["valeur"], r["precedente"], r["date_prec"]), (4.79, 4.60, "2026-09-29"))
+        m = mt._mensuel([("2026-08-01", 0.47), ("2026-07-01", 0.48)])
+        self.assertEqual((m["periode"], m["valeur"], m["precedente"], m["date"]), ("2026-08", 0.47, 0.48, None))
+
+    def _registre(self):
+        series = {
+            "USD|2a": {"date": "2026-10-06", "valeur": 4.79, "date_prec": "2026-09-29", "precedente": 4.60,
+                       "frequence": "quotidien", "source": "FRED (DGS2)"},
+            "USD|10a": {"date": "2026-10-06", "valeur": 5.27, "date_prec": "2026-09-29", "precedente": 5.10,
+                        "frequence": "quotidien", "source": "FRED (DGS10)"},
+            "EUR|2a": {"date": "2026-10-08", "valeur": 3.08, "date_prec": "2026-10-01", "precedente": 3.20,
+                       "frequence": "quotidien", "source": "Bundesbank"},
+            "CHF|10a": {"date": None, "periode": "2026-08", "valeur": 0.47, "date_prec": None,
+                        "periode_prec": "2026-07", "precedente": 0.48, "frequence": "mensuel", "source": "OCDE"},
+        }
+        reg = rm.charger("inexistant.json")
+        couverture = mt.integrer(reg, {"series": series}, CFG_TM)
+        return reg, couverture
+
+    def test_spread_variation_et_couverture(self):
+        reg, couv = self._registre()
+        eur = reg["cases"]["EUR|spread_2a_usd"]
+        self.assertEqual(eur["actuel"]["valeur"], "-171 pb")                    # (3,08 - 4,79) x 100
+        self.assertEqual(eur["precedent"]["valeur"], "-140 pb")                 # (3,20 - 4,60) x 100
+        self.assertEqual(eur["variation_pb"], -31.0)
+        self.assertEqual(couv["EUR"]["spread"], "quotidien")
+        self.assertEqual(couv["CHF"]["10a"], "mensuel")
+        self.assertEqual(couv["CHF"]["spread"], "absent")                         # pas de 2 ans CHF
+        self.assertEqual(couv["CNY"]["2a"], "absent")
+        usd_spread = reg["cases"]["USD|spread_2a_usd"]
+        self.assertEqual(usd_spread["absent"], "référence (États-Unis)")
+
+    def test_affichage_donnee_de_marche_et_mensuel(self):
+        reg, _ = self._registre()
+        usd = reg["cases"]["USD|rendement_2a"]
+        self.assertEqual(rm.valeur_cellule(usd, "Actuel", "%"), "4,79 %")
+        self.assertEqual(rm.valeur_cellule(usd, "Précédent", "%"), "4,60 %")
+        self.assertEqual(rm.valeur_cellule(usd, "Prévision", "%"), "— (donnée de marché)")
+        chf = reg["cases"]["CHF|rendement_10a"]
+        self.assertEqual(rm.valeur_cellule(chf, "Actuel", "%"), "0,47 % [mensuel]")
+        self.assertEqual(rm.source_cellule(chf), "OCDE · pér. 08/26")
+        self.assertEqual(rm.valeur_cellule(reg["cases"]["CNY|rendement_2a"], "Actuel", "%"),
+                         "aucune source gratuite exploitable")
+
+    def test_source_en_echec_conserve_la_derniere_valeur(self):
+        reg, _ = self._registre()
+        mt.integrer(reg, {"series": {}, "erreurs": ["EUR|2a : 500"]}, CFG_TM)
+        self.assertEqual(reg["cases"]["EUR|rendement_2a"]["actuel"]["valeur"], "3.08%")
+
+    def test_resume_pour_analyse(self):
+        reg, _ = self._registre()
+        r = mt.resume_pour_analyse(reg, CFG_TM)
+        self.assertEqual(r["EUR"]["spread_2a_vs_usd_pb"], -171)
+        self.assertEqual(r["EUR"]["variation_spread_semaine_pb"], -31.0)
+        self.assertIsNone(r["CHF"]["spread_2a_vs_usd_pb"])
+        self.assertEqual(r["CHF"]["frequence_10a"], "mensuel")
+        self.assertNotIn("CNY", r)
+
+    def test_ligne_notion_marche_surprise_et_variation(self):
+        reg, _ = self._registre()
+        m = tm.construire_matrice(reg, {"saisies": {}}, {}, CFG_TM, date(2026, 10, 8))
+        ligne = next(r for r in m["lignes"] if r["cle"] == "USD|rendement_2a")
+        self.assertEqual((ligne["Actuel"], ligne["surprise"], ligne["variation"]), ("4,79 %", "▲", "+19 pb"))
+        self.assertEqual(ligne["Prévision"], "— (donnée de marché)")
+
+
+class SpreadDansLeScore(unittest.TestCase):
+    def _donnees(self, avec_spread: bool) -> dict:
+        taux = {"source_id": "src_1", "valeurs": {"EUR": {"taux": 2.4, "source": "config", "date": "2026-01-15"}},
+                "carry": {"differentiels": {"EUR": -1.2}}}
+        if avec_spread:
+            taux["spread_2a_vs_usd"] = {"source_id": "src_9",
+                                        "valeurs": {"EUR": {"spread_2a_vs_usd_pb": -171}}}
+        return {"macro": {"series": {}, "taux_directeurs": taux}, "technique": {}, "calendrier": []}
+
+    def test_la_ligne_differentiel_de_taux_inclut_le_spread_2_ans(self):
+        from agents import agent_strategiste as st
+        ligne = next(l for l in st._tableau_indicateurs(CONFIG, "EUR", self._donnees(True))
+                     if l["indicateur"] == "differentiel_taux")
+        self.assertEqual(ligne["valeur"], "-1.20 pt · spread 2 ans vs US -171 pb")
+        sans = next(l for l in st._tableau_indicateurs(CONFIG, "EUR", self._donnees(False))
+                    if l["indicateur"] == "differentiel_taux")
+        self.assertEqual(sans["valeur"], "-1.20 pt")  # sans spread : comportement inchangé
+
+    def test_ponderations_inchangees(self):
+        self.assertEqual(CONFIG["ponderations"]["differentiel_taux"], 8)
+        self.assertEqual(CONFIG["ponderations_par_devise"]["CNY"]["differentiel_taux"], 8)
 
 
 if __name__ == "__main__":

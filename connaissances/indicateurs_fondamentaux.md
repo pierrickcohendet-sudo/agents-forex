@@ -60,5 +60,8 @@ suit pas aveuglément.
 - `yield_curve` : sens selon l'effet du régime actuel SUR la devise analysée (ex. bear
   steepening US = +1 USD, souvent -1 JPY).
 - `vix` / `dxy` : sens selon la sensibilité Risk On/Off de la devise (grilles ci-dessus).
-- `differentiel_taux` : +1 si le carry attire structurellement des flux VERS la devise ;
+- `differentiel_taux` : +1 si le carry attire structurellement des flux VERS la devise ; si le spread des
+  rendements 2 ans vs États-Unis est fourni (marché, intègre les anticipations de banque centrale), il prime
+  sur l'écart de taux directeurs quand les deux divergent — une donnée mensuelle ou absente n'est jamais
+  extrapolée ;
   -1 s'il en éloigne ; 0 si différentiel proche de zéro.

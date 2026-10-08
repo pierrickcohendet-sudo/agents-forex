@@ -1,5 +1,5 @@
 {
- "maj": "2026-10-08T12:54:16+00:00",
+ "maj": "2026-10-08T13:04:22+00:00",
  "devises": [
   "USD",
   "EUR",
@@ -76,6 +76,24 @@
    "libelle": "Balance commerciale",
    "sens": "normal",
    "marche": false
+  },
+  {
+   "id": "rendement_2a",
+   "libelle": "Rendement 2 ans",
+   "sens": "normal",
+   "marche": true
+  },
+  {
+   "id": "rendement_10a",
+   "libelle": "Rendement 10 ans",
+   "sens": "normal",
+   "marche": true
+  },
+  {
+   "id": "spread_2a_usd",
+   "libelle": "Spread 2 ans vs USD",
+   "sens": "normal",
+   "marche": true
   }
  ],
  "cellules": {
@@ -2708,6 +2726,795 @@
      "etat": "explique"
     }
    }
+  },
+  "rendement_2a": {
+   "USD": {
+    "Actuel": {
+     "texte": "4,79 % (06/10)",
+     "valeur": "4,79 %",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "valeur",
+     "date": "2026-10-06",
+     "source": "FRED (DGS2)",
+     "consensus": null
+    },
+    "Précédent": {
+     "texte": "4,89 % (29/09)",
+     "valeur": "4,89 %",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "valeur"
+    },
+    "Prévision": {
+     "texte": "— (donnée de marché)",
+     "valeur": "— (donnée de marché)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    }
+   },
+   "EUR": {
+    "Actuel": {
+     "texte": "3,08 % (08/10)",
+     "valeur": "3,08 %",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "valeur",
+     "date": "2026-10-08",
+     "source": "Bundesbank (Allemagne 2 ans)",
+     "consensus": null
+    },
+    "Précédent": {
+     "texte": "3,21 % (01/10)",
+     "valeur": "3,21 %",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "valeur"
+    },
+    "Prévision": {
+     "texte": "— (donnée de marché)",
+     "valeur": "— (donnée de marché)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    }
+   },
+   "GBP": {
+    "Actuel": {
+     "texte": "2 ans non publié en accès libre (BoE : 5/10/20 ans)",
+     "valeur": "2 ans non publié en accès libre (BoE : 5/10/20 ans)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique",
+     "date": null,
+     "source": null,
+     "consensus": null
+    },
+    "Précédent": {
+     "texte": "2 ans non publié en accès libre (BoE : 5/10/20 ans)",
+     "valeur": "2 ans non publié en accès libre (BoE : 5/10/20 ans)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    },
+    "Prévision": {
+     "texte": "2 ans non publié en accès libre (BoE : 5/10/20 ans)",
+     "valeur": "2 ans non publié en accès libre (BoE : 5/10/20 ans)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    }
+   },
+   "JPY": {
+    "Actuel": {
+     "texte": "1,95 % (30/09)",
+     "valeur": "1,95 %",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "valeur",
+     "date": "2026-09-30",
+     "source": "Ministère des Finances du Japon (JGB 2 ans)",
+     "consensus": null
+    },
+    "Précédent": {
+     "texte": "1,85 % (18/09)",
+     "valeur": "1,85 %",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "valeur"
+    },
+    "Prévision": {
+     "texte": "— (donnée de marché)",
+     "valeur": "— (donnée de marché)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    }
+   },
+   "CHF": {
+    "Actuel": {
+     "texte": "SNB : série arrêtée (dernière donnée 07/2025)",
+     "valeur": "SNB : série arrêtée (dernière donnée 07/2025)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique",
+     "date": null,
+     "source": null,
+     "consensus": null
+    },
+    "Précédent": {
+     "texte": "SNB : série arrêtée (dernière donnée 07/2025)",
+     "valeur": "SNB : série arrêtée (dernière donnée 07/2025)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    },
+    "Prévision": {
+     "texte": "SNB : série arrêtée (dernière donnée 07/2025)",
+     "valeur": "SNB : série arrêtée (dernière donnée 07/2025)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    }
+   },
+   "CAD": {
+    "Actuel": {
+     "texte": "3,23 % (06/10)",
+     "valeur": "3,23 %",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "valeur",
+     "date": "2026-10-06",
+     "source": "Banque du Canada (Valet, 2 ans)",
+     "consensus": null
+    },
+    "Précédent": {
+     "texte": "3,37 % (29/09)",
+     "valeur": "3,37 %",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "valeur"
+    },
+    "Prévision": {
+     "texte": "— (donnée de marché)",
+     "valeur": "— (donnée de marché)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    }
+   },
+   "AUD": {
+    "Actuel": {
+     "texte": "RBA : accès automatisé refusé (403)",
+     "valeur": "RBA : accès automatisé refusé (403)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique",
+     "date": null,
+     "source": null,
+     "consensus": null
+    },
+    "Précédent": {
+     "texte": "RBA : accès automatisé refusé (403)",
+     "valeur": "RBA : accès automatisé refusé (403)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    },
+    "Prévision": {
+     "texte": "RBA : accès automatisé refusé (403)",
+     "valeur": "RBA : accès automatisé refusé (403)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    }
+   },
+   "NZD": {
+    "Actuel": {
+     "texte": "RBNZ : accès automatisé refusé (403)",
+     "valeur": "RBNZ : accès automatisé refusé (403)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique",
+     "date": null,
+     "source": null,
+     "consensus": null
+    },
+    "Précédent": {
+     "texte": "RBNZ : accès automatisé refusé (403)",
+     "valeur": "RBNZ : accès automatisé refusé (403)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    },
+    "Prévision": {
+     "texte": "RBNZ : accès automatisé refusé (403)",
+     "valeur": "RBNZ : accès automatisé refusé (403)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    }
+   },
+   "CNY": {
+    "Actuel": {
+     "texte": "aucune source gratuite exploitable",
+     "valeur": "aucune source gratuite exploitable",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique",
+     "date": null,
+     "source": null,
+     "consensus": null
+    },
+    "Précédent": {
+     "texte": "aucune source gratuite exploitable",
+     "valeur": "aucune source gratuite exploitable",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    },
+    "Prévision": {
+     "texte": "aucune source gratuite exploitable",
+     "valeur": "aucune source gratuite exploitable",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    }
+   }
+  },
+  "rendement_10a": {
+   "USD": {
+    "Actuel": {
+     "texte": "5,27 % (06/10)",
+     "valeur": "5,27 %",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "valeur",
+     "date": "2026-10-06",
+     "source": "FRED (DGS10)",
+     "consensus": null
+    },
+    "Précédent": {
+     "texte": "5,26 % (29/09)",
+     "valeur": "5,26 %",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "valeur"
+    },
+    "Prévision": {
+     "texte": "— (donnée de marché)",
+     "valeur": "— (donnée de marché)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    }
+   },
+   "EUR": {
+    "Actuel": {
+     "texte": "3,57 % (08/10)",
+     "valeur": "3,57 %",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "valeur",
+     "date": "2026-10-08",
+     "source": "Bundesbank (Allemagne 10 ans)",
+     "consensus": null
+    },
+    "Précédent": {
+     "texte": "3,66 % (01/10)",
+     "valeur": "3,66 %",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "valeur"
+    },
+    "Prévision": {
+     "texte": "— (donnée de marché)",
+     "valeur": "— (donnée de marché)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    }
+   },
+   "GBP": {
+    "Actuel": {
+     "texte": "5,34 % (06/10)",
+     "valeur": "5,34 %",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "valeur",
+     "date": "2026-10-06",
+     "source": "Banque d'Angleterre (par yield 10 ans, IUDMNPY)",
+     "consensus": null
+    },
+    "Précédent": {
+     "texte": "5,36 % (29/09)",
+     "valeur": "5,36 %",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "valeur"
+    },
+    "Prévision": {
+     "texte": "— (donnée de marché)",
+     "valeur": "— (donnée de marché)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    }
+   },
+   "JPY": {
+    "Actuel": {
+     "texte": "3,06 % (30/09)",
+     "valeur": "3,06 %",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "valeur",
+     "date": "2026-09-30",
+     "source": "Ministère des Finances du Japon (JGB 10 ans)",
+     "consensus": null
+    },
+    "Précédent": {
+     "texte": "2,98 % (18/09)",
+     "valeur": "2,98 %",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "valeur"
+    },
+    "Prévision": {
+     "texte": "— (donnée de marché)",
+     "valeur": "— (donnée de marché)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    }
+   },
+   "CHF": {
+    "Actuel": {
+     "texte": "0,47 % [mensuel] (pér. 08/26)",
+     "valeur": "0,47 % [mensuel]",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "valeur",
+     "date": null,
+     "source": "OCDE via FRED (IRLTLT01CHM156N)",
+     "consensus": null
+    },
+    "Précédent": {
+     "texte": "0,48 % [mensuel] (pér. 07/26)",
+     "valeur": "0,48 % [mensuel]",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "valeur"
+    },
+    "Prévision": {
+     "texte": "— (donnée de marché)",
+     "valeur": "— (donnée de marché)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    }
+   },
+   "CAD": {
+    "Actuel": {
+     "texte": "3,92 % (06/10)",
+     "valeur": "3,92 %",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "valeur",
+     "date": "2026-10-06",
+     "source": "Banque du Canada (Valet, 10 ans)",
+     "consensus": null
+    },
+    "Précédent": {
+     "texte": "3,99 % (29/09)",
+     "valeur": "3,99 %",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "valeur"
+    },
+    "Prévision": {
+     "texte": "— (donnée de marché)",
+     "valeur": "— (donnée de marché)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    }
+   },
+   "AUD": {
+    "Actuel": {
+     "texte": "5,01 % [mensuel] (pér. 08/26)",
+     "valeur": "5,01 % [mensuel]",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "valeur",
+     "date": null,
+     "source": "OCDE via FRED (IRLTLT01AUM156N)",
+     "consensus": null
+    },
+    "Précédent": {
+     "texte": "4,92 % [mensuel] (pér. 07/26)",
+     "valeur": "4,92 % [mensuel]",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "valeur"
+    },
+    "Prévision": {
+     "texte": "— (donnée de marché)",
+     "valeur": "— (donnée de marché)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    }
+   },
+   "NZD": {
+    "Actuel": {
+     "texte": "4,71 % [mensuel] (pér. 08/26)",
+     "valeur": "4,71 % [mensuel]",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "valeur",
+     "date": null,
+     "source": "OCDE via FRED (IRLTLT01NZM156N)",
+     "consensus": null
+    },
+    "Précédent": {
+     "texte": "4,61 % [mensuel] (pér. 07/26)",
+     "valeur": "4,61 % [mensuel]",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "valeur"
+    },
+    "Prévision": {
+     "texte": "— (donnée de marché)",
+     "valeur": "— (donnée de marché)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    }
+   },
+   "CNY": {
+    "Actuel": {
+     "texte": "aucune source gratuite exploitable",
+     "valeur": "aucune source gratuite exploitable",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique",
+     "date": null,
+     "source": null,
+     "consensus": null
+    },
+    "Précédent": {
+     "texte": "aucune source gratuite exploitable",
+     "valeur": "aucune source gratuite exploitable",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    },
+    "Prévision": {
+     "texte": "aucune source gratuite exploitable",
+     "valeur": "aucune source gratuite exploitable",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    }
+   }
+  },
+  "spread_2a_usd": {
+   "USD": {
+    "Actuel": {
+     "texte": "référence (États-Unis)",
+     "valeur": "référence (États-Unis)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique",
+     "date": null,
+     "source": null,
+     "consensus": null
+    },
+    "Précédent": {
+     "texte": "référence (États-Unis)",
+     "valeur": "référence (États-Unis)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    },
+    "Prévision": {
+     "texte": "référence (États-Unis)",
+     "valeur": "référence (États-Unis)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    }
+   },
+   "EUR": {
+    "Actuel": {
+     "texte": "-171 pb (06/10)",
+     "valeur": "-171 pb",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "valeur",
+     "date": "2026-10-06",
+     "source": "Calcul : Bundesbank (Allemagne 2 ans) − FRED (DGS2)",
+     "consensus": null
+    },
+    "Précédent": {
+     "texte": "-168 pb (01/10)",
+     "valeur": "-168 pb",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "valeur"
+    },
+    "Prévision": {
+     "texte": "— (donnée de marché)",
+     "valeur": "— (donnée de marché)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    }
+   },
+   "GBP": {
+    "Actuel": {
+     "texte": "spread impossible : 2 ans non publié en accès libre (BoE : 5/10/20 ans)",
+     "valeur": "spread impossible : 2 ans non publié en accès libre (BoE : 5/10/20 ans)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique",
+     "date": null,
+     "source": null,
+     "consensus": null
+    },
+    "Précédent": {
+     "texte": "spread impossible : 2 ans non publié en accès libre (BoE : 5/10/20 ans)",
+     "valeur": "spread impossible : 2 ans non publié en accès libre (BoE : 5/10/20 ans)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    },
+    "Prévision": {
+     "texte": "spread impossible : 2 ans non publié en accès libre (BoE : 5/10/20 ans)",
+     "valeur": "spread impossible : 2 ans non publié en accès libre (BoE : 5/10/20 ans)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    }
+   },
+   "JPY": {
+    "Actuel": {
+     "texte": "-284 pb (30/09)",
+     "valeur": "-284 pb",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "valeur",
+     "date": "2026-09-30",
+     "source": "Calcul : Ministère des Finances du Japon (JGB 2 ans) − FRED (DGS2)",
+     "consensus": null
+    },
+    "Précédent": {
+     "texte": "-304 pb (18/09)",
+     "valeur": "-304 pb",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "valeur"
+    },
+    "Prévision": {
+     "texte": "— (donnée de marché)",
+     "valeur": "— (donnée de marché)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    }
+   },
+   "CHF": {
+    "Actuel": {
+     "texte": "spread impossible : SNB : série arrêtée (dernière donnée 07/2025)",
+     "valeur": "spread impossible : SNB : série arrêtée (dernière donnée 07/2025)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique",
+     "date": null,
+     "source": null,
+     "consensus": null
+    },
+    "Précédent": {
+     "texte": "spread impossible : SNB : série arrêtée (dernière donnée 07/2025)",
+     "valeur": "spread impossible : SNB : série arrêtée (dernière donnée 07/2025)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    },
+    "Prévision": {
+     "texte": "spread impossible : SNB : série arrêtée (dernière donnée 07/2025)",
+     "valeur": "spread impossible : SNB : série arrêtée (dernière donnée 07/2025)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    }
+   },
+   "CAD": {
+    "Actuel": {
+     "texte": "-156 pb (06/10)",
+     "valeur": "-156 pb",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "valeur",
+     "date": "2026-10-06",
+     "source": "Calcul : Banque du Canada (Valet, 2 ans) − FRED (DGS2)",
+     "consensus": null
+    },
+    "Précédent": {
+     "texte": "-152 pb (29/09)",
+     "valeur": "-152 pb",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "valeur"
+    },
+    "Prévision": {
+     "texte": "— (donnée de marché)",
+     "valeur": "— (donnée de marché)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    }
+   },
+   "AUD": {
+    "Actuel": {
+     "texte": "spread impossible : RBA : accès automatisé refusé (403)",
+     "valeur": "spread impossible : RBA : accès automatisé refusé (403)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique",
+     "date": null,
+     "source": null,
+     "consensus": null
+    },
+    "Précédent": {
+     "texte": "spread impossible : RBA : accès automatisé refusé (403)",
+     "valeur": "spread impossible : RBA : accès automatisé refusé (403)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    },
+    "Prévision": {
+     "texte": "spread impossible : RBA : accès automatisé refusé (403)",
+     "valeur": "spread impossible : RBA : accès automatisé refusé (403)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    }
+   },
+   "NZD": {
+    "Actuel": {
+     "texte": "spread impossible : RBNZ : accès automatisé refusé (403)",
+     "valeur": "spread impossible : RBNZ : accès automatisé refusé (403)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique",
+     "date": null,
+     "source": null,
+     "consensus": null
+    },
+    "Précédent": {
+     "texte": "spread impossible : RBNZ : accès automatisé refusé (403)",
+     "valeur": "spread impossible : RBNZ : accès automatisé refusé (403)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    },
+    "Prévision": {
+     "texte": "spread impossible : RBNZ : accès automatisé refusé (403)",
+     "valeur": "spread impossible : RBNZ : accès automatisé refusé (403)",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    }
+   },
+   "CNY": {
+    "Actuel": {
+     "texte": "spread impossible : aucune source gratuite exploitable",
+     "valeur": "spread impossible : aucune source gratuite exploitable",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique",
+     "date": null,
+     "source": null,
+     "consensus": null
+    },
+    "Précédent": {
+     "texte": "spread impossible : aucune source gratuite exploitable",
+     "valeur": "spread impossible : aucune source gratuite exploitable",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    },
+    "Prévision": {
+     "texte": "spread impossible : aucune source gratuite exploitable",
+     "valeur": "spread impossible : aucune source gratuite exploitable",
+     "manuel": false,
+     "origine": "officiel",
+     "surprise": null,
+     "etat": "explique"
+    }
+   }
   }
  },
  "lignes": [
@@ -5142,6 +5949,735 @@
    "source": "ForexFactory"
   },
   {
+   "cle": "USD|rendement_2a",
+   "indicateur": "rendement_2a",
+   "libelle": "Rendement 2 ans",
+   "devise": "USD",
+   "ordre": 11,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": true,
+   "frequence": "quotidien",
+   "Actuel": "4,79 %",
+   "Précédent": "4,89 %",
+   "Prévision": "— (donnée de marché)",
+   "surprise": "▼",
+   "variation": "-10 pb",
+   "date_pub": "2026-10-06",
+   "prochaine": null,
+   "source": "FRED (DGS2)"
+  },
+  {
+   "cle": "EUR|rendement_2a",
+   "indicateur": "rendement_2a",
+   "libelle": "Rendement 2 ans",
+   "devise": "EUR",
+   "ordre": 11,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": true,
+   "frequence": "quotidien",
+   "Actuel": "3,08 %",
+   "Précédent": "3,21 %",
+   "Prévision": "— (donnée de marché)",
+   "surprise": "▼",
+   "variation": "-13 pb",
+   "date_pub": "2026-10-08",
+   "prochaine": null,
+   "source": "Bundesbank (Allemagne 2 ans)"
+  },
+  {
+   "cle": "GBP|rendement_2a",
+   "indicateur": "rendement_2a",
+   "libelle": "Rendement 2 ans",
+   "devise": "GBP",
+   "ordre": 11,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "explique",
+    "Précédent": "explique",
+    "Prévision": "explique"
+   },
+   "marche": true,
+   "frequence": null,
+   "Actuel": "2 ans non publié en accès libre (BoE : 5/10/20 ans)",
+   "Précédent": "2 ans non publié en accès libre (BoE : 5/10/20 ans)",
+   "Prévision": "2 ans non publié en accès libre (BoE : 5/10/20 ans)",
+   "surprise": null,
+   "variation": null,
+   "date_pub": null,
+   "prochaine": null,
+   "source": "—"
+  },
+  {
+   "cle": "JPY|rendement_2a",
+   "indicateur": "rendement_2a",
+   "libelle": "Rendement 2 ans",
+   "devise": "JPY",
+   "ordre": 11,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": true,
+   "frequence": "quotidien",
+   "Actuel": "1,95 %",
+   "Précédent": "1,85 %",
+   "Prévision": "— (donnée de marché)",
+   "surprise": "▲",
+   "variation": "+10 pb",
+   "date_pub": "2026-09-30",
+   "prochaine": null,
+   "source": "Ministère des Finances du Japon (JGB 2 ans)"
+  },
+  {
+   "cle": "CHF|rendement_2a",
+   "indicateur": "rendement_2a",
+   "libelle": "Rendement 2 ans",
+   "devise": "CHF",
+   "ordre": 11,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "explique",
+    "Précédent": "explique",
+    "Prévision": "explique"
+   },
+   "marche": true,
+   "frequence": null,
+   "Actuel": "SNB : série arrêtée (dernière donnée 07/2025)",
+   "Précédent": "SNB : série arrêtée (dernière donnée 07/2025)",
+   "Prévision": "SNB : série arrêtée (dernière donnée 07/2025)",
+   "surprise": null,
+   "variation": null,
+   "date_pub": null,
+   "prochaine": null,
+   "source": "—"
+  },
+  {
+   "cle": "CAD|rendement_2a",
+   "indicateur": "rendement_2a",
+   "libelle": "Rendement 2 ans",
+   "devise": "CAD",
+   "ordre": 11,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": true,
+   "frequence": "quotidien",
+   "Actuel": "3,23 %",
+   "Précédent": "3,37 %",
+   "Prévision": "— (donnée de marché)",
+   "surprise": "▼",
+   "variation": "-14 pb",
+   "date_pub": "2026-10-06",
+   "prochaine": null,
+   "source": "Banque du Canada (Valet, 2 ans)"
+  },
+  {
+   "cle": "AUD|rendement_2a",
+   "indicateur": "rendement_2a",
+   "libelle": "Rendement 2 ans",
+   "devise": "AUD",
+   "ordre": 11,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "explique",
+    "Précédent": "explique",
+    "Prévision": "explique"
+   },
+   "marche": true,
+   "frequence": null,
+   "Actuel": "RBA : accès automatisé refusé (403)",
+   "Précédent": "RBA : accès automatisé refusé (403)",
+   "Prévision": "RBA : accès automatisé refusé (403)",
+   "surprise": null,
+   "variation": null,
+   "date_pub": null,
+   "prochaine": null,
+   "source": "—"
+  },
+  {
+   "cle": "NZD|rendement_2a",
+   "indicateur": "rendement_2a",
+   "libelle": "Rendement 2 ans",
+   "devise": "NZD",
+   "ordre": 11,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "explique",
+    "Précédent": "explique",
+    "Prévision": "explique"
+   },
+   "marche": true,
+   "frequence": null,
+   "Actuel": "RBNZ : accès automatisé refusé (403)",
+   "Précédent": "RBNZ : accès automatisé refusé (403)",
+   "Prévision": "RBNZ : accès automatisé refusé (403)",
+   "surprise": null,
+   "variation": null,
+   "date_pub": null,
+   "prochaine": null,
+   "source": "—"
+  },
+  {
+   "cle": "CNY|rendement_2a",
+   "indicateur": "rendement_2a",
+   "libelle": "Rendement 2 ans",
+   "devise": "CNY",
+   "ordre": 11,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "explique",
+    "Précédent": "explique",
+    "Prévision": "explique"
+   },
+   "marche": true,
+   "frequence": null,
+   "Actuel": "aucune source gratuite exploitable",
+   "Précédent": "aucune source gratuite exploitable",
+   "Prévision": "aucune source gratuite exploitable",
+   "surprise": null,
+   "variation": null,
+   "date_pub": null,
+   "prochaine": null,
+   "source": "—"
+  },
+  {
+   "cle": "USD|rendement_10a",
+   "indicateur": "rendement_10a",
+   "libelle": "Rendement 10 ans",
+   "devise": "USD",
+   "ordre": 12,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": true,
+   "frequence": "quotidien",
+   "Actuel": "5,27 %",
+   "Précédent": "5,26 %",
+   "Prévision": "— (donnée de marché)",
+   "surprise": "▲",
+   "variation": "+1 pb",
+   "date_pub": "2026-10-06",
+   "prochaine": null,
+   "source": "FRED (DGS10)"
+  },
+  {
+   "cle": "EUR|rendement_10a",
+   "indicateur": "rendement_10a",
+   "libelle": "Rendement 10 ans",
+   "devise": "EUR",
+   "ordre": 12,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": true,
+   "frequence": "quotidien",
+   "Actuel": "3,57 %",
+   "Précédent": "3,66 %",
+   "Prévision": "— (donnée de marché)",
+   "surprise": "▼",
+   "variation": "-9 pb",
+   "date_pub": "2026-10-08",
+   "prochaine": null,
+   "source": "Bundesbank (Allemagne 10 ans)"
+  },
+  {
+   "cle": "GBP|rendement_10a",
+   "indicateur": "rendement_10a",
+   "libelle": "Rendement 10 ans",
+   "devise": "GBP",
+   "ordre": 12,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": true,
+   "frequence": "quotidien",
+   "Actuel": "5,34 %",
+   "Précédent": "5,36 %",
+   "Prévision": "— (donnée de marché)",
+   "surprise": "▼",
+   "variation": "-3 pb",
+   "date_pub": "2026-10-06",
+   "prochaine": null,
+   "source": "Banque d'Angleterre (par yield 10 ans, IUDMNPY)"
+  },
+  {
+   "cle": "JPY|rendement_10a",
+   "indicateur": "rendement_10a",
+   "libelle": "Rendement 10 ans",
+   "devise": "JPY",
+   "ordre": 12,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": true,
+   "frequence": "quotidien",
+   "Actuel": "3,06 %",
+   "Précédent": "2,98 %",
+   "Prévision": "— (donnée de marché)",
+   "surprise": "▲",
+   "variation": "+8 pb",
+   "date_pub": "2026-09-30",
+   "prochaine": null,
+   "source": "Ministère des Finances du Japon (JGB 10 ans)"
+  },
+  {
+   "cle": "CHF|rendement_10a",
+   "indicateur": "rendement_10a",
+   "libelle": "Rendement 10 ans",
+   "devise": "CHF",
+   "ordre": 12,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": true,
+   "frequence": "mensuel",
+   "Actuel": "0,47 % [mensuel]",
+   "Précédent": "0,48 % [mensuel]",
+   "Prévision": "— (donnée de marché)",
+   "surprise": "▼",
+   "variation": "-1 pb",
+   "date_pub": null,
+   "prochaine": null,
+   "source": "OCDE via FRED (IRLTLT01CHM156N) · pér. 08/26"
+  },
+  {
+   "cle": "CAD|rendement_10a",
+   "indicateur": "rendement_10a",
+   "libelle": "Rendement 10 ans",
+   "devise": "CAD",
+   "ordre": 12,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": true,
+   "frequence": "quotidien",
+   "Actuel": "3,92 %",
+   "Précédent": "3,99 %",
+   "Prévision": "— (donnée de marché)",
+   "surprise": "▼",
+   "variation": "-7 pb",
+   "date_pub": "2026-10-06",
+   "prochaine": null,
+   "source": "Banque du Canada (Valet, 10 ans)"
+  },
+  {
+   "cle": "AUD|rendement_10a",
+   "indicateur": "rendement_10a",
+   "libelle": "Rendement 10 ans",
+   "devise": "AUD",
+   "ordre": 12,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": true,
+   "frequence": "mensuel",
+   "Actuel": "5,01 % [mensuel]",
+   "Précédent": "4,92 % [mensuel]",
+   "Prévision": "— (donnée de marché)",
+   "surprise": "▲",
+   "variation": "+10 pb",
+   "date_pub": null,
+   "prochaine": null,
+   "source": "OCDE via FRED (IRLTLT01AUM156N) · pér. 08/26"
+  },
+  {
+   "cle": "NZD|rendement_10a",
+   "indicateur": "rendement_10a",
+   "libelle": "Rendement 10 ans",
+   "devise": "NZD",
+   "ordre": 12,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": true,
+   "frequence": "mensuel",
+   "Actuel": "4,71 % [mensuel]",
+   "Précédent": "4,61 % [mensuel]",
+   "Prévision": "— (donnée de marché)",
+   "surprise": "▲",
+   "variation": "+10 pb",
+   "date_pub": null,
+   "prochaine": null,
+   "source": "OCDE via FRED (IRLTLT01NZM156N) · pér. 08/26"
+  },
+  {
+   "cle": "CNY|rendement_10a",
+   "indicateur": "rendement_10a",
+   "libelle": "Rendement 10 ans",
+   "devise": "CNY",
+   "ordre": 12,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "explique",
+    "Précédent": "explique",
+    "Prévision": "explique"
+   },
+   "marche": true,
+   "frequence": null,
+   "Actuel": "aucune source gratuite exploitable",
+   "Précédent": "aucune source gratuite exploitable",
+   "Prévision": "aucune source gratuite exploitable",
+   "surprise": null,
+   "variation": null,
+   "date_pub": null,
+   "prochaine": null,
+   "source": "—"
+  },
+  {
+   "cle": "USD|spread_2a_usd",
+   "indicateur": "spread_2a_usd",
+   "libelle": "Spread 2 ans vs USD",
+   "devise": "USD",
+   "ordre": 13,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "explique",
+    "Précédent": "explique",
+    "Prévision": "explique"
+   },
+   "marche": true,
+   "frequence": null,
+   "Actuel": "référence (États-Unis)",
+   "Précédent": "référence (États-Unis)",
+   "Prévision": "référence (États-Unis)",
+   "surprise": null,
+   "variation": null,
+   "date_pub": null,
+   "prochaine": null,
+   "source": "—"
+  },
+  {
+   "cle": "EUR|spread_2a_usd",
+   "indicateur": "spread_2a_usd",
+   "libelle": "Spread 2 ans vs USD",
+   "devise": "EUR",
+   "ordre": 13,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": true,
+   "frequence": "quotidien",
+   "Actuel": "-171 pb",
+   "Précédent": "-168 pb",
+   "Prévision": "— (donnée de marché)",
+   "surprise": "▼",
+   "variation": "-3 pb",
+   "date_pub": "2026-10-06",
+   "prochaine": null,
+   "source": "Calcul : Bundesbank (Allemagne 2 ans) − FRED (DGS2)"
+  },
+  {
+   "cle": "GBP|spread_2a_usd",
+   "indicateur": "spread_2a_usd",
+   "libelle": "Spread 2 ans vs USD",
+   "devise": "GBP",
+   "ordre": 13,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "explique",
+    "Précédent": "explique",
+    "Prévision": "explique"
+   },
+   "marche": true,
+   "frequence": null,
+   "Actuel": "spread impossible : 2 ans non publié en accès libre (BoE : 5/10/20 ans)",
+   "Précédent": "spread impossible : 2 ans non publié en accès libre (BoE : 5/10/20 ans)",
+   "Prévision": "spread impossible : 2 ans non publié en accès libre (BoE : 5/10/20 ans)",
+   "surprise": null,
+   "variation": null,
+   "date_pub": null,
+   "prochaine": null,
+   "source": "—"
+  },
+  {
+   "cle": "JPY|spread_2a_usd",
+   "indicateur": "spread_2a_usd",
+   "libelle": "Spread 2 ans vs USD",
+   "devise": "JPY",
+   "ordre": 13,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": true,
+   "frequence": "quotidien",
+   "Actuel": "-284 pb",
+   "Précédent": "-304 pb",
+   "Prévision": "— (donnée de marché)",
+   "surprise": "▲",
+   "variation": "+20 pb",
+   "date_pub": "2026-09-30",
+   "prochaine": null,
+   "source": "Calcul : Ministère des Finances du Japon (JGB 2 ans) − FRED (DGS2)"
+  },
+  {
+   "cle": "CHF|spread_2a_usd",
+   "indicateur": "spread_2a_usd",
+   "libelle": "Spread 2 ans vs USD",
+   "devise": "CHF",
+   "ordre": 13,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "explique",
+    "Précédent": "explique",
+    "Prévision": "explique"
+   },
+   "marche": true,
+   "frequence": null,
+   "Actuel": "spread impossible : SNB : série arrêtée (dernière donnée 07/2025)",
+   "Précédent": "spread impossible : SNB : série arrêtée (dernière donnée 07/2025)",
+   "Prévision": "spread impossible : SNB : série arrêtée (dernière donnée 07/2025)",
+   "surprise": null,
+   "variation": null,
+   "date_pub": null,
+   "prochaine": null,
+   "source": "—"
+  },
+  {
+   "cle": "CAD|spread_2a_usd",
+   "indicateur": "spread_2a_usd",
+   "libelle": "Spread 2 ans vs USD",
+   "devise": "CAD",
+   "ordre": 13,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": true,
+   "frequence": "quotidien",
+   "Actuel": "-156 pb",
+   "Précédent": "-152 pb",
+   "Prévision": "— (donnée de marché)",
+   "surprise": "▼",
+   "variation": "-4 pb",
+   "date_pub": "2026-10-06",
+   "prochaine": null,
+   "source": "Calcul : Banque du Canada (Valet, 2 ans) − FRED (DGS2)"
+  },
+  {
+   "cle": "AUD|spread_2a_usd",
+   "indicateur": "spread_2a_usd",
+   "libelle": "Spread 2 ans vs USD",
+   "devise": "AUD",
+   "ordre": 13,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "explique",
+    "Précédent": "explique",
+    "Prévision": "explique"
+   },
+   "marche": true,
+   "frequence": null,
+   "Actuel": "spread impossible : RBA : accès automatisé refusé (403)",
+   "Précédent": "spread impossible : RBA : accès automatisé refusé (403)",
+   "Prévision": "spread impossible : RBA : accès automatisé refusé (403)",
+   "surprise": null,
+   "variation": null,
+   "date_pub": null,
+   "prochaine": null,
+   "source": "—"
+  },
+  {
+   "cle": "NZD|spread_2a_usd",
+   "indicateur": "spread_2a_usd",
+   "libelle": "Spread 2 ans vs USD",
+   "devise": "NZD",
+   "ordre": 13,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "explique",
+    "Précédent": "explique",
+    "Prévision": "explique"
+   },
+   "marche": true,
+   "frequence": null,
+   "Actuel": "spread impossible : RBNZ : accès automatisé refusé (403)",
+   "Précédent": "spread impossible : RBNZ : accès automatisé refusé (403)",
+   "Prévision": "spread impossible : RBNZ : accès automatisé refusé (403)",
+   "surprise": null,
+   "variation": null,
+   "date_pub": null,
+   "prochaine": null,
+   "source": "—"
+  },
+  {
+   "cle": "CNY|spread_2a_usd",
+   "indicateur": "spread_2a_usd",
+   "libelle": "Spread 2 ans vs USD",
+   "devise": "CNY",
+   "ordre": 13,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "explique",
+    "Précédent": "explique",
+    "Prévision": "explique"
+   },
+   "marche": true,
+   "frequence": null,
+   "Actuel": "spread impossible : aucune source gratuite exploitable",
+   "Précédent": "spread impossible : aucune source gratuite exploitable",
+   "Prévision": "spread impossible : aucune source gratuite exploitable",
+   "surprise": null,
+   "variation": null,
+   "date_pub": null,
+   "prochaine": null,
+   "source": "—"
+  },
+  {
    "cle": "USD|indice_surprise",
    "indicateur": "indice_surprise",
    "libelle": "Indice de surprise 30 j",
@@ -5380,24 +6916,24 @@
  },
  "remplissage": {
   "Actuel": {
-   "valeur": 79,
-   "explique": 11,
+   "valeur": 94,
+   "explique": 23,
    "vide": 0,
-   "total": 90,
+   "total": 117,
    "taux_pct": 100.0
   },
   "Précédent": {
-   "valeur": 79,
-   "explique": 11,
+   "valeur": 94,
+   "explique": 23,
    "vide": 0,
-   "total": 90,
+   "total": 117,
    "taux_pct": 100.0
   },
   "Prévision": {
    "valeur": 2,
-   "explique": 88,
+   "explique": 115,
    "vide": 0,
-   "total": 90,
+   "total": 117,
    "taux_pct": 100.0
   }
  },
