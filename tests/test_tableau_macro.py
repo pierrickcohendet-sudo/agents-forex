@@ -204,57 +204,93 @@ def _convertir(props: dict) -> dict:
     return sortie
 
 
-class FauxNotion:
-    """Imite juste ce que le Tableau macro utilise ; les lignes sont dans self.lignes."""
+PROPRIETES_NOUVELLES = {"Indicateur": {"type": "title"}, "Devise": {}, "Actuel": {}, "Précédent": {},
+                        "Prévision": {}, "Surprise": {}, "Variation": {}, "Date de publication": {},
+                        "Prochaine publication": {}, "Source": {}, "Dernière mise à jour": {}, "Ordre": {}}
+PROPRIETES_ANCIENNES = {"Indicateur": {"type": "title"}, "Type": {}, "Ordre": {}, "Source": {},
+                        "Dernière mise à jour": {}, **{d: {} for d in CFG_TM["ordre_devises"]}}
 
-    def __init__(self):
-        self.lignes: dict[str, dict] = {}
-        self.vues: list[str] = []
+
+class FauxNotion:
+    """Imite juste ce que le Tableau macro utilise. Une ou deux bases (migration)."""
+
+    def __init__(self, ancienne_structure: bool = False):
+        self.bases = {}          # database_id -> {"ds": id, "props": {...}, "titre": str}
+        self.lignes = {"ds_nouvelle": {}}
+        self.vues: dict[str, dict] = {"ds_nouvelle": {"v0": {"name": "Default view"}}}
+        self.titres_mis_a_jour: list[tuple[str, str]] = []
         self.bases_creees = 0
         self._n = 0
+        self.ancienne_id = "a" * 32
+        self.nouvelle_id = "b" * 32
+        if ancienne_structure:
+            self.bases[self.ancienne_id] = {"ds": "ds_ancienne", "props": PROPRIETES_ANCIENNES}
+            self.lignes["ds_ancienne"] = {}
+        else:
+            self.bases[self.nouvelle_id] = {"ds": "ds_nouvelle", "props": PROPRIETES_NOUVELLES}
         self.blocks = _Ns(); self.blocks.children = _Ns()
         self.blocks.children.list = lambda *a, **k: {"results": [], "has_more": False}
         self.databases = _Ns()
         self.databases.create = self._creer_base
-        self.databases.retrieve = lambda i: {"data_sources": [{"id": "ds1"}]}
+        self.databases.retrieve = lambda i: {"data_sources": [{"id": self.bases[i]["ds"]}]}
+        self.databases.update = lambda i, **k: self.titres_mis_a_jour.append(
+            (i, k["title"][0]["text"]["content"]))
         self.data_sources = _Ns()
-        self.data_sources.retrieve = lambda i: {"properties": {
-            "Indicateur": {"type": "title"}, "Type": {}, "Ordre": {}, "Source": {},
-            "Dernière mise à jour": {}, **{d: {} for d in CFG_TM["ordre_devises"]}}}
+        self.data_sources.retrieve = lambda ds: {"properties": {
+            nom: {**p, "id": f"id_{nom}"}
+            for nom, p in next(b["props"] for b in self.bases.values() if b["ds"] == ds).items()}}
         self.data_sources.update = lambda *a, **k: None
-        self.data_sources.query = lambda ds, **k: {"results": list(self.lignes.values()), "has_more": False}
+        self.data_sources.query = lambda ds, **k: {"results": list(self.lignes[ds].values()),
+                                                   "has_more": False}
         self.pages = _Ns()
         self.pages.create = self._creer_ligne
         self.pages.update = self._maj_ligne
         self.views = _Ns()
-        self.views.list = lambda **k: {"results": []}
-        self.views.create = lambda **k: self.vues.append(k["name"])
+        self.views.list = lambda **k: {"results": [{"id": i} for i in self.vues["ds_nouvelle"]]}
+        self.views.retrieve = lambda i: self.vues["ds_nouvelle"][i]
+        self.views.create = self._creer_vue
+        self.views.delete = lambda i: self.vues["ds_nouvelle"].pop(i)
 
     def _creer_base(self, **k):
         self.bases_creees += 1
-        return {"id": "abcdefabcdefabcdefabcdefabcdefab"}
+        self.bases[self.nouvelle_id] = {"ds": "ds_nouvelle", "props": PROPRIETES_NOUVELLES}
+        return {"id": self.nouvelle_id}
+
+    def _creer_vue(self, **k):
+        self._n += 1
+        self.vues["ds_nouvelle"][f"v{self._n}"] = k
 
     def _creer_ligne(self, parent, properties, **k):
         self._n += 1
         pid = f"p{self._n}"
-        self.lignes[pid] = {"id": pid, "properties": _convertir(properties)}
+        ds = parent["data_source_id"]
+        self.lignes[ds][pid] = {"id": pid, "properties": _convertir(properties)}
 
     def _maj_ligne(self, pid, properties):
-        self.lignes[pid]["properties"].update(_convertir(properties))
+        for lignes in self.lignes.values():
+            if pid in lignes:
+                lignes[pid]["properties"].update(_convertir(properties))
 
-    def _ligne(self, libelle, type_valeur):
-        for p in self.lignes.values():
+    # -- aides de test (base de la nouvelle structure)
+    def _ligne(self, libelle, devise):
+        for p in self.lignes["ds_nouvelle"].values():
             titre = "".join(t["plain_text"] for t in p["properties"]["Indicateur"]["title"])
-            if titre == libelle and p["properties"]["Type"]["select"]["name"] == type_valeur:
+            if titre == libelle and p["properties"]["Devise"]["select"]["name"] == devise:
                 return p
-        raise KeyError((libelle, type_valeur))
+        raise KeyError((libelle, devise))
 
-    def editer(self, libelle, type_valeur, devise, texte):
-        self._ligne(libelle, type_valeur)["properties"][devise] = {"rich_text": [{"plain_text": texte}]}
+    def editer(self, libelle, devise, colonne, texte):
+        self._ligne(libelle, devise)["properties"][colonne] = {"rich_text": [{"plain_text": texte}]}
 
-    def lire(self, libelle, type_valeur, devise):
-        rt = self._ligne(libelle, type_valeur)["properties"][devise]["rich_text"]
-        return "".join(t["plain_text"] for t in rt)
+    def lire(self, libelle, devise, colonne):
+        prop = self._ligne(libelle, devise)["properties"][colonne]
+        if "rich_text" in prop:
+            return "".join(t["plain_text"] for t in prop["rich_text"])
+        if "select" in prop:
+            return (prop["select"] or {}).get("name")
+        if "date" in prop:
+            return (prop["date"] or {}).get("start")
+        return prop.get("number")
 
 
 class FauxScraping:
@@ -268,6 +304,8 @@ class FauxScraping:
 
 
 class BoutEnBout(unittest.TestCase):
+    NB_LIGNES = 9 * 11  # 9 devises x (10 indicateurs + indice de surprise)
+
     def setUp(self):
         self.tmp = Path(tempfile.mkdtemp())
         (self.tmp / "data" / "cache").mkdir(parents=True)
@@ -289,31 +327,61 @@ class BoutEnBout(unittest.TestCase):
                                 client_notion=notion or self.notion,
                                 maintenant=maintenant or self.maintenant)
 
-    def test_creation_unique_et_aucun_doublon_de_ligne(self):
+    def test_une_ligne_par_indicateur_et_devise_sans_doublon(self):
         self.passer()
-        self.assertEqual(len(self.notion.lignes), 31)  # 10 indicateurs x 3 types + indice de surprise
-        self.assertEqual(self.notion.lire("CPI annuel", "Actuel", "USD"), "3,4 % (11/09) ▲")
-        self.assertEqual(self.notion.lire("CPI annuel", "Prévision", "USD"), "3,5 % (14/10)")
+        self.assertEqual(len(self.notion.lignes["ds_nouvelle"]), self.NB_LIGNES)
+        self.assertEqual(self.notion.lire("CPI annuel", "USD", "Actuel"), "3,4 %")
+        self.assertEqual(self.notion.lire("CPI annuel", "USD", "Précédent"), "3,2 %")
+        self.assertEqual(self.notion.lire("CPI annuel", "USD", "Prévision"), "3,5 %")
+        self.assertEqual(self.notion.lire("CPI annuel", "USD", "Surprise"), "▲")
+        self.assertEqual(self.notion.lire("CPI annuel", "USD", "Date de publication"), "2026-09-11")
+        self.assertEqual(self.notion.lire("CPI annuel", "USD", "Prochaine publication"), "2026-10-14T12:30+00:00")
         self.passer()
-        self.assertEqual(len(self.notion.lignes), 31)
+        self.assertEqual(len(self.notion.lignes["ds_nouvelle"]), self.NB_LIGNES)
+
+    def test_vues_par_devise_et_groupee_sans_default_view(self):
+        self.passer()
+        noms = sorted(v["name"] for v in self.notion.vues["ds_nouvelle"].values())
+        self.assertEqual(len(noms), 10)
+        self.assertIn("Toutes les devises", noms)
+        self.assertNotIn("Default view", noms)
+        groupee = next(v for v in self.notion.vues["ds_nouvelle"].values() if v["name"] == "Toutes les devises")
+        self.assertEqual(groupee["configuration"]["group_by"]["type"], "select")
+        usd = next(v for v in self.notion.vues["ds_nouvelle"].values() if v["name"].endswith("USD"))
+        self.assertEqual(usd["filter"], {"property": "Devise", "select": {"equals": "USD"}})
+        self.assertEqual(usd["configuration"]["properties"][0]["property_id"], "title")
+        self.assertEqual(groupee["configuration"]["group_by"]["property_id"], "id_Devise")
+        self.assertEqual([c["property_id"] for c in usd["configuration"]["properties"][1:5]],
+                         ["id_Actuel", "id_Précédent", "id_Prévision", "id_Surprise"])
 
     def test_saisie_manuelle_jamais_ecrasee_puis_remplacee_par_publication_plus_recente(self):
         self.passer()
-        self.notion.editer("CPI annuel", "Actuel", "USD", "9,9 %")
+        self.notion.editer("CPI annuel", "USD", "Actuel", "9,9 %")
         r = self.passer()
-        self.assertEqual(self.notion.lire("CPI annuel", "Actuel", "USD"), "9,9 % ✍️")
+        self.assertEqual(self.notion.lire("CPI annuel", "USD", "Actuel"), "9,9 % ✍️")
         self.assertEqual(r["saisies_overrides"]["USD"]["cpi"]["valeur"], "9,9 %")
         self.passer()  # passage suivant : toujours là
-        self.assertEqual(self.notion.lire("CPI annuel", "Actuel", "USD"), "9,9 % ✍️")
+        self.assertEqual(self.notion.lire("CPI annuel", "USD", "Actuel"), "9,9 % ✍️")
         saisies = sm.charger(self.tmp / "data" / "overrides" / "saisies_notion.json")
         self.assertIn("USD|cpi|Actuel", saisies["saisies"])
+        # les autres cellules de la ligne (Précédent, Prévision) restent mises à jour par le pipeline
+        self.assertEqual(self.notion.lire("CPI annuel", "USD", "Prévision"), "3,5 %")
         # nouvelle publication officielle, plus récente que la saisie : elle remplace
         nouvelle = page_html([ev("USD", 884, "CPI y/y", T1, "3.6%", "3.5%", "3.4%")])
         self.passer(html=nouvelle, maintenant=self.maintenant.replace(hour=20, day=15, month=10))
         saisies = sm.charger(self.tmp / "data" / "overrides" / "saisies_notion.json")
         self.assertNotIn("USD|cpi|Actuel", saisies["saisies"])
         self.assertEqual(saisies["historique"][-1]["texte"], "9,9 %")
-        self.assertTrue(self.notion.lire("CPI annuel", "Actuel", "USD").startswith("3,6 %"))
+        self.assertEqual(self.notion.lire("CPI annuel", "USD", "Actuel"), "3,6 %")
+
+    def test_saisie_sur_precedent_ou_prevision_detectee_cellule_par_cellule(self):
+        self.passer()
+        self.notion.editer("Taux de chômage", "EUR", "Prévision", "6,6 %")
+        self.passer()
+        self.assertEqual(self.notion.lire("Taux de chômage", "EUR", "Prévision"), "6,6 % ✍️")
+        self.assertEqual(self.notion.lire("Taux de chômage", "EUR", "Actuel"), "6,4 %")  # pas touché
+        saisies = sm.charger(self.tmp / "data" / "overrides" / "saisies_notion.json")
+        self.assertEqual(list(saisies["saisies"]), ["EUR|chomage|Prévision"])
 
     def test_collecte_ff_non_relancee_dans_le_meme_creneau(self):
         sc = FauxScraping(self.html)
@@ -332,12 +400,73 @@ class BoutEnBout(unittest.TestCase):
         self.assertTrue((self.tmp / "data" / "registre_macro.json").exists())
         self.assertIsNone(r["notion"])
 
-    def test_json_web_contient_la_matrice(self):
+    def test_json_web_matrice_et_lignes_par_devise(self):
         self.passer()
         web = json.loads((self.tmp / "docs" / "data" / "tableau_macro.json").read_text(encoding="utf-8"))
         self.assertEqual(web["devises"][:4], ["USD", "EUR", "GBP", "JPY"])
         self.assertEqual(web["cellules"]["cpi"]["USD"]["Actuel"]["surprise"], "▲")
-        self.assertIn("Actuel", web["remplissage"])
+        self.assertEqual(len(web["lignes"]), self.NB_LIGNES)
+        ligne = next(r for r in web["lignes"] if r["cle"] == "USD|cpi")
+        self.assertEqual((ligne["Actuel"], ligne["Précédent"], ligne["Prévision"], ligne["surprise"]),
+                         ("3,4 %", "3,2 %", "3,5 %", "▲"))
+
+
+class Migration(unittest.TestCase):
+    """Ancienne structure (Type x devises en colonnes) -> nouvelle (une ligne par couple)."""
+
+    def setUp(self):
+        self.tmp = Path(tempfile.mkdtemp())
+        (self.tmp / "data" / "cache").mkdir(parents=True)
+        (self.tmp / "docs").mkdir()
+        os.environ.pop("FRED_API_KEY", None)
+        self.config = json.loads(json.dumps(CONFIG))
+        self.config["tableau_macro"]["database_id"] = "a" * 32
+        self.maintenant = datetime(2026, 10, 6, 10, 0, tzinfo=timezone.utc)
+        self.html = page_html([ev("USD", 884, "CPI y/y", T0, "3.4%", "3.3%", "3.2%"),
+                               ev("EUR", 59, "Unemployment Rate", T0, "6.4%", "6.4%", "6.4%")])
+        # registre déjà alimenté par l'ancien pipeline, avec la mémoire de l'ancienne structure
+        reg = rm.charger("inexistant.json")
+        rm.integrer_evenements(reg, ffm.parser_page(self.html), CFG_TM)
+        reg["cases"]["USD|cpi"]["ecrit_notion"] = {"Actuel": "3,4 % (11/09) ▲"}
+        rm.sauver(reg, self.tmp / "data" / "registre_macro.json")
+        sm.sauver({"saisies": {"EUR|chomage|Précédent": {"texte": "6,1 %", "saisi_le": "2026-10-01",
+                                                          "origine": "x"}}, "historique": []},
+                  self.tmp / "data" / "overrides" / "saisies_notion.json")
+        self.notion = FauxNotion(ancienne_structure=True)
+        # l'utilisateur a modifié une cellule de l'ancienne base juste avant la migration
+        self.notion.lignes["ds_ancienne"]["x1"] = {"id": "x1", "properties": _convertir({
+            "Indicateur": {"title": [{"text": {"content": "CPI annuel"}}]},
+            "Type": {"select": {"name": "Actuel"}},
+            "USD": {"rich_text": [{"text": {"content": "3,7 %"}}]}})}
+
+    def test_migration_conserve_saisies_archive_l_ancienne_base_et_remplit_la_nouvelle(self):
+        cfg_path = self.tmp / "config.yaml"
+        cfg_path.write_text('tableau_macro:\n  actif: true\n  database_id: "' + "a" * 32 + '"\n',
+                            encoding="utf-8")
+        r = tm.mettre_a_jour(self.config, self.tmp, cfg_path, client_scraping=FauxScraping(self.html),
+                             client_notion=self.notion, maintenant=self.maintenant)
+        self.assertEqual(r["migration"]["saisies_capturees"], 1)
+        # ancienne base archivée (renommée), jamais supprimée
+        self.assertEqual(len(self.notion.titres_mis_a_jour), 1)
+        self.assertIn("ancienne structure (archivée", self.notion.titres_mis_a_jour[0][1])
+        self.assertEqual(self.notion.bases_creees, 1)
+        self.assertIn("b" * 32, cfg_path.read_text(encoding="utf-8"))
+        self.assertIn("ancienne_database_id", cfg_path.read_text(encoding="utf-8"))
+        # les deux saisies (préexistante + celle capturée dans l'ancienne base) sont dans la nouvelle
+        n = self.notion
+        self.assertEqual(n.lire("Taux de chômage", "EUR", "Précédent"), "6,1 % ✍️")
+        self.assertEqual(n.lire("CPI annuel", "USD", "Actuel"), "3,7 % ✍️")
+        self.assertEqual(len(n.lignes["ds_nouvelle"]), 9 * 11)
+        saisies = sm.charger(self.tmp / "data" / "overrides" / "saisies_notion.json")
+        self.assertEqual(sorted(saisies["saisies"]), ["EUR|chomage|Précédent", "USD|cpi|Actuel"])
+        # 2e passage : plus de migration, aucun doublon, saisies toujours là
+        self.config["tableau_macro"]["database_id"] = "b" * 32
+        r2 = tm.mettre_a_jour(self.config, self.tmp, cfg_path, client_scraping=FauxScraping(self.html),
+                              client_notion=self.notion, maintenant=self.maintenant)
+        self.assertNotIn("migration", r2)
+        self.assertEqual(self.notion.bases_creees, 1)
+        self.assertEqual(len(n.lignes["ds_nouvelle"]), 9 * 11)
+        self.assertEqual(n.lire("CPI annuel", "USD", "Actuel"), "3,7 % ✍️")
 
 
 class FredEtProjections(unittest.TestCase):
@@ -358,6 +487,8 @@ class FredEtProjections(unittest.TestCase):
         self.assertEqual(reg["cases"]["USD|chomage"]["actuel"]["valeur"], "4.2%")  # FF intact
         chf = reg["cases"]["CHF|balance_commerciale"]
         self.assertEqual(rm.texte_officiel(chf, "Actuel", ""), "5,4B [équiv. OCDE, USD] (pér. 06/26)")
+        self.assertEqual(rm.valeur_cellule(chf, "Actuel", ""), "5,4B [équiv. OCDE, USD]")
+        self.assertEqual(rm.source_cellule(chf), "FRED (XTEXVA01CHM667S) · pér. 06/26")
         self.assertEqual(chf["actuel"]["source"], "FRED (XTEXVA01CHM667S)")
 
     def test_projection_bc_etiquetee_quand_pas_de_consensus(self):

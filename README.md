@@ -73,41 +73,47 @@ Garanties codées en dur :
 
 ## Tableau macro (base Notion « Tableau macro » + dashboard)
 
-Matrice **indicateurs × 9 devises** (USD, EUR, GBP, JPY en premier), avec 3 types de
-valeur par indicateur : **Actuel**, **Précédent**, **Prévision** (consensus). 10
-indicateurs, modifiables dans `config.yaml > tableau_macro.indicateurs`. Cellule :
-`2,4 % (12/09) ▲` = valeur + date de publication + surprise vs consensus
-(▲ au-dessus, ▼ en dessous, = en ligne ; calculée en Python, jamais par un LLM, jamais
-devinée si le consensus manque). Un indicateur qui n'existe pas dans un pays
-affiche son équivalent local étiqueté (`[équiv. claimants]`, `[m/m]`…) ou
-« non publié dans ce pays » / « non couvert par ForexFactory » — jamais une case vide muette.
+**Une ligne par couple (indicateur, devise)** — 9 devises (USD, EUR, GBP, JPY, CHF, CAD, AUD, NZD, CNY)
+× 10 indicateurs (`config.yaml > tableau_macro.indicateurs`) + une ligne « Indice de surprise 30 j » par
+devise — pour comparer **Actuel / Précédent / Prévision** (consensus) sur la même ligne, sans changer de vue.
+Colonnes : `Indicateur`, `Actuel`, `Précédent`, `Prévision`, `Surprise` (▲ au-dessus du consensus,
+▼ en dessous, = en ligne — calculée en Python, jamais devinée), `Variation`, `Devise`, `Date de publication`,
+`Prochaine publication`, `Source`, `Dernière mise à jour`, `Ordre` (masquée). **Vues** : « Toutes les devises »
+(groupée par devise) + une vue par devise (filtre `Devise`, lignes dans l'ordre de `config.yaml`), créées par
+l'API ; « Default view » supprimée. Si l'API refusait : **+ Add view → Table**, **Filter → Devise = USD**,
+**Sort → Ordre ascending**.
 
-**Source.** Les exports officiels Fair Economy (JSON/XML/CSV/ICS, semaine en cours)
-n'ont **pas** de valeur « réel » (vérifié le 2026-10-06) ; seule la page web
-`forexfactory.com/calendar?month=this` les expose (JSON embarqué, `ebaseId` stable).
-Testée depuis un runner GitHub Actions le 2026-10-06 (HTTP 200, 386 événements,
-`data/diagnostics/ff_actions.json`). Faible empreinte : robots.txt, un 403 n'est jamais
-retenté, **plafond réglable** `tableau_macro.forexfactory.plafond_requetes_par_jour`
-(2 aujourd'hui : créneaux 05:15 et 19:15 UTC ; les passages horaires `--completer`
-rattrapent un créneau manqué). Taux directeurs : `config.yaml` / FRED, remplacés par
-la décision ForexFactory quand elle est plus récente. Correspondance indicateur →
-événement ForexFactory (par `ebaseId`) dans `config.yaml > tableau_macro.correspondances`.
+Un indicateur qui n'existe pas dans un pays affiche son équivalent local étiqueté (`[équiv. claimants]`,
+`[m/m]`…) ou « non publié dans ce pays » / « non couvert par ForexFactory » (définitions :
+`connaissances/tableau_macro_definitions.md`) — jamais une case vide muette. Quand le consensus n'existe pas
+encore : « consensus à venir » (+ date en `Prochaine publication`) ou la **projection officielle** de la banque
+centrale étiquetée « proj. BC » (Fed SEP via FRED).
 
-**Registre permanent** `data/registre_macro.json` : une entrée par case, dernière
-valeur jusqu'à la publication suivante, historique ; indépendant de la fenêtre LLM de 7 jours.
+**Sources.** Les exports officiels Fair Economy (JSON/XML/CSV/ICS, semaine en cours) n'ont **pas** de valeur
+« réel » (vérifié le 2026-10-06) ; seule la page web `forexfactory.com/calendar?month=…` les expose (JSON
+embarqué, `ebaseId` stable) — testée depuis GitHub Actions (`data/diagnostics/ff_actions.json`). Faible
+empreinte : robots.txt, un 403 n'est jamais retenté, **plafond** `forexfactory.plafond_requetes_par_jour`
+(6 : créneaux 05:15 et 19:15 UTC, mois suivants lus seulement si des dates manquent, mises à jour ciblées
+≥ 15 min après une publication d'impact fort/moyen dont le « réel » manque). FRED : repli des valeurs US
+absentes et contrôle croisé (divergence). Registre permanent `data/registre_macro.json` (historique par case,
+indépendant de la fenêtre LLM de 7 jours) ; amorçage : `python scripts/initialiser_registre.py` (une fois).
+Contrôles (`core/controles_macro.py`) : hors plage, divergence FF/FRED, publication manquée, événement
+introuvable ; indice de surprise 30 j (moyenne pondérée des surprises normalisées, chômage inversé).
 
-**Saisie manuelle dans Notion.** Modifiez une cellule : le pipeline compare à la dernière
-valeur qu'il y a lui-même écrite ; si elle diffère, c'est une saisie — conservée, marquée
-`✍️`, enregistrée dans `data/overrides/saisies_notion.json` et injectée dans l'analyse
-(via `core/overrides.py`, inchangé). Priorité : fichier manuel du jour
-`data/overrides/AAAA-MM-JJ.json` > saisie Notion > publication officielle la plus
-récente — sauf si une publication officielle plus récente que la saisie arrive : elle la
+**Saisie manuelle dans Notion.** Modifiez une cellule `Actuel` / `Précédent` / `Prévision` : le pipeline compare
+à la dernière valeur qu'il y a lui-même écrite ; si elle diffère, c'est une saisie — conservée, marquée `✍️`,
+enregistrée dans `data/overrides/saisies_notion.json` et injectée dans l'analyse (`core/overrides.py`,
+inchangé). Priorité : fichier manuel du jour `data/overrides/AAAA-MM-JJ.json` > saisie Notion > publication
+officielle la plus récente — sauf si une publication officielle plus récente que la saisie arrive : elle la
 remplace et la saisie passe dans l'historique du fichier.
 
-**Vues Notion.** Créées automatiquement par l'API à la création de la base (« Actuel »,
-« Précédent », « Prévision », filtre sur `Type`, tri sur `Ordre`). Si l'API refusait :
-dans la base, **+ Add view → Table**, nommer la vue, **Filter → Type = Actuel**,
-**Sort → Ordre ascending** (2 clics par vue).
+**Migration (2026-10-08).** L'ancienne structure (une ligne par type, une colonne par devise) est archivée
+(« Tableau macro — ancienne structure (archivée …) », conservée, `ancienne_database_id` dans `config.yaml`) ;
+les saisies manuelles de l'ancienne base sont capturées avant archivage. Automatique si `database_id` pointe
+encore vers l'ancienne structure.
+
+**Dashboard web.** Mode « Matrice » (devises en colonnes, sélecteur Actuel/Précédent/Prévision, coloration
+par surprise) et mode « Par devise » (mêmes colonnes que Notion), lisibles sur téléphone.
 
 Tests : `python -m unittest discover -s tests -v` (données factices, sans réseau).
 

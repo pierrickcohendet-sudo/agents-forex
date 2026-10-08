@@ -262,6 +262,8 @@ def surprise_cellule(case: dict) -> str | None:
 
 
 def source_cellule(case: dict) -> str:
+    if case.get("statut") == "non_applicable":
+        return "—"
     a = case.get("actuel") or {}
     morceaux = [a.get("source") or ("n/d" if a.get("valeur") is None else "")]
     if a.get("periode") and not a.get("date_pub"):

@@ -24,7 +24,7 @@ def _jj_mm(d: str | None) -> str:
 
 def _periodicite(cfg_tm: dict, indicateur: str, devise: str) -> int:
     mapping = cfg_tm["correspondances"].get(indicateur, {}).get(devise, {})
-    return int(mapping.get("periodicite_jours", cfg_tm["indicateurs"][indicateur]["periodicite_jours"]))
+    return int(mapping.get("periodicite_jours", cfg_tm["indicateurs"][indicateur].get("periodicite_jours", 31)))
 
 
 def controler_registre(registre: dict, cfg_tm: dict, maintenant: datetime | None = None) -> dict:

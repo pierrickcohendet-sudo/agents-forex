@@ -1,5 +1,5 @@
 {
- "maj": "2026-10-08T12:38:17+00:00",
+ "maj": "2026-10-08T12:54:16+00:00",
  "devises": [
   "USD",
   "EUR",
@@ -20,52 +20,62 @@
   {
    "id": "taux_directeur",
    "libelle": "Taux directeur",
-   "sens": "normal"
+   "sens": "normal",
+   "marche": false
   },
   {
    "id": "cpi",
    "libelle": "CPI annuel",
-   "sens": "normal"
+   "sens": "normal",
+   "marche": false
   },
   {
    "id": "cpi_core",
    "libelle": "CPI core annuel",
-   "sens": "normal"
+   "sens": "normal",
+   "marche": false
   },
   {
    "id": "pib",
    "libelle": "PIB trimestriel",
-   "sens": "normal"
+   "sens": "normal",
+   "marche": false
   },
   {
    "id": "pmi_manufacturier",
    "libelle": "PMI manufacturier",
-   "sens": "normal"
+   "sens": "normal",
+   "marche": false
   },
   {
    "id": "pmi_services",
    "libelle": "PMI services",
-   "sens": "normal"
+   "sens": "normal",
+   "marche": false
   },
   {
    "id": "chomage",
    "libelle": "Taux de chômage",
-   "sens": "inverse"
+   "sens": "inverse",
+   "marche": false
   },
   {
    "id": "emploi",
    "libelle": "Variation de l'emploi",
-   "sens": "normal"
+   "sens": "normal",
+   "marche": false
   },
   {
    "id": "ventes_detail",
    "libelle": "Ventes au détail",
-   "sens": "normal"
+   "sens": "normal",
+   "marche": false
   },
   {
    "id": "balance_commerciale",
    "libelle": "Balance commerciale",
-   "sens": "normal"
+   "sens": "normal",
+   "marche": false
   }
  ],
  "cellules": {
@@ -73,17 +83,18 @@
    "USD": {
     "Actuel": {
      "texte": "4,00 % (16/09) =",
+     "valeur": "4,00 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "=",
      "etat": "valeur",
-     "valeur": "4.00%",
      "date": "2026-09-16",
      "source": "ForexFactory",
      "consensus": "4.00%"
     },
     "Précédent": {
      "texte": "3,75 %",
+     "valeur": "3,75 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -91,6 +102,7 @@
     },
     "Prévision": {
      "texte": "proj. BC 4,1 % (fin 2026) · pub. 28/10",
+     "valeur": "proj. BC 4,1 % (fin 2026)",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -100,17 +112,18 @@
    "EUR": {
     "Actuel": {
      "texte": "2,65 % (10/09) =",
+     "valeur": "2,65 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "=",
      "etat": "valeur",
-     "valeur": "2.65%",
      "date": "2026-09-10",
      "source": "ForexFactory",
      "consensus": "2.65%"
     },
     "Précédent": {
      "texte": "2,40 %",
+     "valeur": "2,40 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -118,6 +131,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 29/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -127,17 +141,18 @@
    "GBP": {
     "Actuel": {
      "texte": "3,75 % (17/09) =",
+     "valeur": "3,75 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "=",
      "etat": "valeur",
-     "valeur": "3.75%",
      "date": "2026-09-17",
      "source": "ForexFactory",
      "consensus": "3.75%"
     },
     "Précédent": {
      "texte": "3,75 %",
+     "valeur": "3,75 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -145,6 +160,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 05/11",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -154,17 +170,18 @@
    "JPY": {
     "Actuel": {
      "texte": "<1,25 % (18/09)",
+     "valeur": "<1,25 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
      "etat": "valeur",
-     "valeur": "<1.25%",
      "date": "2026-09-18",
      "source": "ForexFactory",
      "consensus": "<1.25%"
     },
     "Précédent": {
      "texte": "<1,00 %",
+     "valeur": "<1,00 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -172,6 +189,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 30/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -181,17 +199,18 @@
    "CHF": {
     "Actuel": {
      "texte": "0,00 % (24/09) =",
+     "valeur": "0,00 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "=",
      "etat": "valeur",
-     "valeur": "0.00%",
      "date": "2026-09-24",
      "source": "ForexFactory",
      "consensus": "0.00%"
     },
     "Précédent": {
      "texte": "0,00 %",
+     "valeur": "0,00 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -199,6 +218,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 10/12",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -208,17 +228,18 @@
    "CAD": {
     "Actuel": {
      "texte": "2,25 % (02/09) =",
+     "valeur": "2,25 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "=",
      "etat": "valeur",
-     "valeur": "2.25%",
      "date": "2026-09-02",
      "source": "ForexFactory",
      "consensus": "2.25%"
     },
     "Précédent": {
      "texte": "2,25 %",
+     "valeur": "2,25 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -226,6 +247,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 28/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -235,17 +257,18 @@
    "AUD": {
     "Actuel": {
      "texte": "4,60 % (29/09) =",
+     "valeur": "4,60 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "=",
      "etat": "valeur",
-     "valeur": "4.60%",
      "date": "2026-09-29",
      "source": "ForexFactory",
      "consensus": "4.60%"
     },
     "Précédent": {
      "texte": "4,35 %",
+     "valeur": "4,35 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -253,6 +276,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 03/11",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -262,17 +286,18 @@
    "NZD": {
     "Actuel": {
      "texte": "2,75 % (02/09) =",
+     "valeur": "2,75 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "=",
      "etat": "valeur",
-     "valeur": "2.75%",
      "date": "2026-09-02",
      "source": "ForexFactory",
      "consensus": "2.75%"
     },
     "Précédent": {
      "texte": "2,50 %",
+     "valeur": "2,50 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -280,6 +305,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 28/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -289,17 +315,18 @@
    "CNY": {
     "Actuel": {
      "texte": "3,00 % [LPR 1 an] (20/09) =",
+     "valeur": "3,00 % [LPR 1 an]",
      "manuel": false,
      "origine": "officiel",
      "surprise": "=",
      "etat": "valeur",
-     "valeur": "3.00%",
      "date": "2026-09-20",
      "source": "ForexFactory",
      "consensus": "3.00%"
     },
     "Précédent": {
      "texte": "3,00 % [LPR 1 an]",
+     "valeur": "3,00 % [LPR 1 an]",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -307,6 +334,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 20/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -318,17 +346,18 @@
    "USD": {
     "Actuel": {
      "texte": "3,4 % (11/09) =",
+     "valeur": "3,4 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "=",
      "etat": "valeur",
-     "valeur": "3.4%",
      "date": "2026-09-11",
      "source": "ForexFactory",
      "consensus": "3.4%"
     },
     "Précédent": {
      "texte": "3,4 %",
+     "valeur": "3,4 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -336,6 +365,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 14/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -345,17 +375,18 @@
    "EUR": {
     "Actuel": {
      "texte": "3,8 % (02/10) ▲",
+     "valeur": "3,8 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▲",
      "etat": "valeur",
-     "valeur": "3.8%",
      "date": "2026-10-02",
      "source": "ForexFactory",
      "consensus": "3.7%"
     },
     "Précédent": {
      "texte": "3,2 % (révisé) (17/09)",
+     "valeur": "3,2 % (révisé)",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -363,6 +394,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 16/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -372,17 +404,18 @@
    "GBP": {
     "Actuel": {
      "texte": "3,1 % (16/09) =",
+     "valeur": "3,1 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "=",
      "etat": "valeur",
-     "valeur": "3.1%",
      "date": "2026-09-16",
      "source": "ForexFactory",
      "consensus": "3.1%"
     },
     "Précédent": {
      "texte": "2,9 %",
+     "valeur": "2,9 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -390,6 +423,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 21/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -399,17 +433,18 @@
    "JPY": {
     "Actuel": {
      "texte": "1,7 % [équiv. core national] (17/09) ▼",
+     "valeur": "1,7 % [équiv. core national]",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▼",
      "etat": "valeur",
-     "valeur": "1.7%",
      "date": "2026-09-17",
      "source": "ForexFactory",
      "consensus": "1.8%"
     },
     "Précédent": {
      "texte": "1,8 % [équiv. core national]",
+     "valeur": "1,8 % [équiv. core national]",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -417,6 +452,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 22/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -426,17 +462,18 @@
    "CHF": {
     "Actuel": {
      "texte": "0,0 % [m/m] (01/10) =",
+     "valeur": "0,0 % [m/m]",
      "manuel": false,
      "origine": "officiel",
      "surprise": "=",
      "etat": "valeur",
-     "valeur": "0.0%",
      "date": "2026-10-01",
      "source": "ForexFactory",
      "consensus": "0.0%"
     },
     "Précédent": {
      "texte": "0,4 % [m/m] (03/09)",
+     "valeur": "0,4 % [m/m]",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -444,6 +481,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 04/11",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -453,17 +491,18 @@
    "CAD": {
     "Actuel": {
      "texte": "-0,1 % [m/m] (14/09) =",
+     "valeur": "-0,1 % [m/m]",
      "manuel": false,
      "origine": "officiel",
      "surprise": "=",
      "etat": "valeur",
-     "valeur": "-0.1%",
      "date": "2026-09-14",
      "source": "ForexFactory",
      "consensus": "-0.1%"
     },
     "Précédent": {
      "texte": "0,5 % [m/m]",
+     "valeur": "0,5 % [m/m]",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -471,6 +510,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 19/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -480,17 +520,18 @@
    "AUD": {
     "Actuel": {
      "texte": "4,0 % (30/09) ▼",
+     "valeur": "4,0 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▼",
      "etat": "valeur",
-     "valeur": "4.0%",
      "date": "2026-09-30",
      "source": "ForexFactory",
      "consensus": "4.1%"
     },
     "Précédent": {
      "texte": "3,5 %",
+     "valeur": "3,5 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -498,6 +539,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 28/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -507,17 +549,18 @@
    "NZD": {
     "Actuel": {
      "texte": "1,5 % [t/t] (20/07) ▲",
+     "valeur": "1,5 % [t/t]",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▲",
      "etat": "valeur",
-     "valeur": "1.5%",
      "date": "2026-07-20",
      "source": "ForexFactory",
      "consensus": "1.4%"
     },
     "Précédent": {
      "texte": "0,9 % [t/t]",
+     "valeur": "0,9 % [t/t]",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -525,6 +568,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 19/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -534,17 +578,18 @@
    "CNY": {
     "Actuel": {
      "texte": "0,8 % (09/09) =",
+     "valeur": "0,8 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "=",
      "etat": "valeur",
-     "valeur": "0.8%",
      "date": "2026-09-09",
      "source": "ForexFactory",
      "consensus": "0.8%"
     },
     "Précédent": {
      "texte": "0,5 %",
+     "valeur": "0,5 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -552,6 +597,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 14/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -563,17 +609,18 @@
    "USD": {
     "Actuel": {
      "texte": "2,4 % (11/09) =",
+     "valeur": "2,4 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "=",
      "etat": "valeur",
-     "valeur": "2.4%",
      "date": "2026-09-11",
      "source": "ForexFactory",
      "consensus": "2.4%"
     },
     "Précédent": {
      "texte": "2,5 %",
+     "valeur": "2,5 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -581,6 +628,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 14/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -590,17 +638,18 @@
    "EUR": {
     "Actuel": {
      "texte": "2,5 % (02/10) =",
+     "valeur": "2,5 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "=",
      "etat": "valeur",
-     "valeur": "2.5%",
      "date": "2026-10-02",
      "source": "ForexFactory",
      "consensus": "2.5%"
     },
     "Précédent": {
      "texte": "2,4 % (17/09)",
+     "valeur": "2,4 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -608,6 +657,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 16/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -617,17 +667,18 @@
    "GBP": {
     "Actuel": {
      "texte": "2,6 % (16/09) =",
+     "valeur": "2,6 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "=",
      "etat": "valeur",
-     "valeur": "2.6%",
      "date": "2026-09-16",
      "source": "ForexFactory",
      "consensus": "2.6%"
     },
     "Précédent": {
      "texte": "2,6 %",
+     "valeur": "2,6 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -635,6 +686,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 21/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -644,17 +696,18 @@
    "JPY": {
     "Actuel": {
      "texte": "1,8 % [BoJ hors alim./énergie] (25/09) ▲",
+     "valeur": "1,8 % [BoJ hors alim./énergie]",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▲",
      "etat": "valeur",
-     "valeur": "1.8%",
      "date": "2026-09-25",
      "source": "ForexFactory",
      "consensus": "1.5%"
     },
     "Précédent": {
      "texte": "1,6 % [BoJ hors alim./énergie]",
+     "valeur": "1,6 % [BoJ hors alim./énergie]",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -662,6 +715,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 27/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -671,17 +725,18 @@
    "CHF": {
     "Actuel": {
      "texte": "non couvert par ForexFactory",
+     "valeur": "non couvert par ForexFactory",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
      "etat": "explique",
-     "valeur": null,
      "date": null,
      "source": null,
      "consensus": null
     },
     "Précédent": {
      "texte": "non couvert par ForexFactory",
+     "valeur": "non couvert par ForexFactory",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -689,6 +744,7 @@
     },
     "Prévision": {
      "texte": "non couvert par ForexFactory",
+     "valeur": "non couvert par ForexFactory",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -698,17 +754,18 @@
    "CAD": {
     "Actuel": {
      "texte": "2,0 % [médian] (14/09) =",
+     "valeur": "2,0 % [médian]",
      "manuel": false,
      "origine": "officiel",
      "surprise": "=",
      "etat": "valeur",
-     "valeur": "2.0%",
      "date": "2026-09-14",
      "source": "ForexFactory",
      "consensus": "2.0%"
     },
     "Précédent": {
      "texte": "2,0 % [médian]",
+     "valeur": "2,0 % [médian]",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -716,6 +773,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 19/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -725,17 +783,18 @@
    "AUD": {
     "Actuel": {
      "texte": "0,2 % [moy. tronquée m/m] (30/09) ▼",
+     "valeur": "0,2 % [moy. tronquée m/m]",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▼",
      "etat": "valeur",
-     "valeur": "0.2%",
      "date": "2026-09-30",
      "source": "ForexFactory",
      "consensus": "0.3%"
     },
     "Précédent": {
      "texte": "0,5 % [moy. tronquée m/m]",
+     "valeur": "0,5 % [moy. tronquée m/m]",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -743,6 +802,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 28/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -752,17 +812,18 @@
    "NZD": {
     "Actuel": {
      "texte": "non couvert par ForexFactory",
+     "valeur": "non couvert par ForexFactory",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
      "etat": "explique",
-     "valeur": null,
      "date": null,
      "source": null,
      "consensus": null
     },
     "Précédent": {
      "texte": "non couvert par ForexFactory",
+     "valeur": "non couvert par ForexFactory",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -770,6 +831,7 @@
     },
     "Prévision": {
      "texte": "non couvert par ForexFactory",
+     "valeur": "non couvert par ForexFactory",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -779,17 +841,18 @@
    "CNY": {
     "Actuel": {
      "texte": "non couvert par ForexFactory",
+     "valeur": "non couvert par ForexFactory",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
      "etat": "explique",
-     "valeur": null,
      "date": null,
      "source": null,
      "consensus": null
     },
     "Précédent": {
      "texte": "non couvert par ForexFactory",
+     "valeur": "non couvert par ForexFactory",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -797,6 +860,7 @@
     },
     "Prévision": {
      "texte": "non couvert par ForexFactory",
+     "valeur": "non couvert par ForexFactory",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -808,17 +872,18 @@
    "USD": {
     "Actuel": {
      "texte": "2,2 % (30/09) ▲",
+     "valeur": "2,2 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▲",
      "etat": "valeur",
-     "valeur": "2.2%",
      "date": "2026-09-30",
      "source": "ForexFactory",
      "consensus": "1.5%"
     },
     "Précédent": {
      "texte": "1,5 %",
+     "valeur": "1,5 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -826,6 +891,7 @@
     },
     "Prévision": {
      "texte": "proj. BC 2,3 % (croiss. T4/T4 2026) · pub. 29/10",
+     "valeur": "proj. BC 2,3 % (croiss. T4/T4 2026)",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -835,17 +901,18 @@
    "EUR": {
     "Actuel": {
      "texte": "0,6 % (07/09) ▲",
+     "valeur": "0,6 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▲",
      "etat": "valeur",
-     "valeur": "0.6%",
      "date": "2026-09-07",
      "source": "ForexFactory",
      "consensus": "0.4%"
     },
     "Précédent": {
      "texte": "0,4 %",
+     "valeur": "0,4 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -853,6 +920,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 30/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -862,17 +930,18 @@
    "GBP": {
     "Actuel": {
      "texte": "0,5 % (30/09) ▲",
+     "valeur": "0,5 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▲",
      "etat": "valeur",
-     "valeur": "0.5%",
      "date": "2026-09-30",
      "source": "ForexFactory",
      "consensus": "0.4%"
     },
     "Précédent": {
      "texte": "0,4 %",
+     "valeur": "0,4 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -880,6 +949,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 12/11",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -889,17 +959,18 @@
    "JPY": {
     "Actuel": {
      "texte": "0,4 % (07/09) =",
+     "valeur": "0,4 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "=",
      "etat": "valeur",
-     "valeur": "0.4%",
      "date": "2026-09-07",
      "source": "ForexFactory",
      "consensus": "0.4%"
     },
     "Précédent": {
      "texte": "0,3 %",
+     "valeur": "0,3 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -907,6 +978,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 15/11",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -916,17 +988,18 @@
    "CHF": {
     "Actuel": {
      "texte": "1,9 % (03/09) ▲",
+     "valeur": "1,9 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▲",
      "etat": "valeur",
-     "valeur": "1.9%",
      "date": "2026-09-03",
      "source": "ForexFactory",
      "consensus": "1.7%"
     },
     "Précédent": {
      "texte": "0,6 % (révisé)",
+     "valeur": "0,6 % (révisé)",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -934,6 +1007,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 30/11",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -943,17 +1017,18 @@
    "CAD": {
     "Actuel": {
      "texte": "0,0 % [m/m] (29/09) =",
+     "valeur": "0,0 % [m/m]",
      "manuel": false,
      "origine": "officiel",
      "surprise": "=",
      "etat": "valeur",
-     "valeur": "0.0%",
      "date": "2026-09-29",
      "source": "ForexFactory",
      "consensus": "0.0%"
     },
     "Précédent": {
      "texte": "0,4 % [m/m] (révisé)",
+     "valeur": "0,4 % [m/m] (révisé)",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -961,6 +1036,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 30/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -970,17 +1046,18 @@
    "AUD": {
     "Actuel": {
      "texte": "0,4 % (02/09) ▲",
+     "valeur": "0,4 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▲",
      "etat": "valeur",
-     "valeur": "0.4%",
      "date": "2026-09-02",
      "source": "ForexFactory",
      "consensus": "0.3%"
     },
     "Précédent": {
      "texte": "0,3 %",
+     "valeur": "0,3 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -988,6 +1065,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 02/12",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -997,17 +1075,18 @@
    "NZD": {
     "Actuel": {
      "texte": "0,2 % (16/09) ▲",
+     "valeur": "0,2 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▲",
      "etat": "valeur",
-     "valeur": "0.2%",
      "date": "2026-09-16",
      "source": "ForexFactory",
      "consensus": "0.1%"
     },
     "Précédent": {
      "texte": "0,9 % (révisé)",
+     "valeur": "0,9 % (révisé)",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1015,6 +1094,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 16/12",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1024,17 +1104,18 @@
    "CNY": {
     "Actuel": {
      "texte": "4,3 % [a/a] (15/07) ▼",
+     "valeur": "4,3 % [a/a]",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▼",
      "etat": "valeur",
-     "valeur": "4.3%",
      "date": "2026-07-15",
      "source": "ForexFactory",
      "consensus": "4.5%"
     },
     "Précédent": {
      "texte": "5,0 % [a/a]",
+     "valeur": "5,0 % [a/a]",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1042,6 +1123,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 19/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1053,17 +1135,18 @@
    "USD": {
     "Actuel": {
      "texte": "54,5 (01/10) ▼",
+     "valeur": "54,5",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▼",
      "etat": "valeur",
-     "valeur": "54.5",
      "date": "2026-10-01",
      "source": "ForexFactory",
      "consensus": "54.8"
     },
     "Précédent": {
      "texte": "54,6 (01/09)",
+     "valeur": "54,6",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1071,6 +1154,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 02/11",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1080,17 +1164,18 @@
    "EUR": {
     "Actuel": {
      "texte": "52,9 (01/10) ▲",
+     "valeur": "52,9",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▲",
      "etat": "valeur",
-     "valeur": "52.9",
      "date": "2026-10-01",
      "source": "ForexFactory",
      "consensus": "52.7"
     },
     "Précédent": {
      "texte": "52,7 (23/09)",
+     "valeur": "52,7",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1098,6 +1183,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 23/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1107,17 +1193,18 @@
    "GBP": {
     "Actuel": {
      "texte": "51,9 (01/10) ▼",
+     "valeur": "51,9",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▼",
      "etat": "valeur",
-     "valeur": "51.9",
      "date": "2026-10-01",
      "source": "ForexFactory",
      "consensus": "52.0"
     },
     "Précédent": {
      "texte": "52,0 (23/09)",
+     "valeur": "52,0",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1125,6 +1212,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 23/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1134,17 +1222,18 @@
    "JPY": {
     "Actuel": {
      "texte": "54,1 (01/10) =",
+     "valeur": "54,1",
      "manuel": false,
      "origine": "officiel",
      "surprise": "=",
      "etat": "valeur",
-     "valeur": "54.1",
      "date": "2026-10-01",
      "source": "ForexFactory",
      "consensus": "54.1"
     },
     "Précédent": {
      "texte": "54,1 (24/09)",
+     "valeur": "54,1",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1152,6 +1241,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 23/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1161,17 +1251,18 @@
    "CHF": {
     "Actuel": {
      "texte": "55,3 (01/10) ▼",
+     "valeur": "55,3",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▼",
      "etat": "valeur",
-     "valeur": "55.3",
      "date": "2026-10-01",
      "source": "ForexFactory",
      "consensus": "56.3"
     },
     "Précédent": {
      "texte": "57,1 (01/09)",
+     "valeur": "57,1",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1179,6 +1270,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 02/11",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1188,17 +1280,18 @@
    "CAD": {
     "Actuel": {
      "texte": "51,5 (01/10)",
+     "valeur": "51,5",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
      "etat": "valeur",
-     "valeur": "51.5",
      "date": "2026-10-01",
      "source": "ForexFactory",
      "consensus": null
     },
     "Précédent": {
      "texte": "53,0 (01/09)",
+     "valeur": "53,0",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1206,6 +1299,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 02/11",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1215,17 +1309,18 @@
    "AUD": {
     "Actuel": {
      "texte": "49,3 (22/09)",
+     "valeur": "49,3",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
      "etat": "valeur",
-     "valeur": "49.3",
      "date": "2026-09-22",
      "source": "ForexFactory",
      "consensus": null
     },
     "Précédent": {
      "texte": "52,0",
+     "valeur": "52,0",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1233,6 +1328,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 22/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1242,17 +1338,18 @@
    "NZD": {
     "Actuel": {
      "texte": "non couvert par ForexFactory",
+     "valeur": "non couvert par ForexFactory",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
      "etat": "explique",
-     "valeur": null,
      "date": null,
      "source": null,
      "consensus": null
     },
     "Précédent": {
      "texte": "non couvert par ForexFactory",
+     "valeur": "non couvert par ForexFactory",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1260,6 +1357,7 @@
     },
     "Prévision": {
      "texte": "non couvert par ForexFactory",
+     "valeur": "non couvert par ForexFactory",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1269,17 +1367,18 @@
    "CNY": {
     "Actuel": {
      "texte": "50,1 [officiel NBS] (30/09) =",
+     "valeur": "50,1 [officiel NBS]",
      "manuel": false,
      "origine": "officiel",
      "surprise": "=",
      "etat": "valeur",
-     "valeur": "50.1",
      "date": "2026-09-30",
      "source": "ForexFactory",
      "consensus": "50.1"
     },
     "Précédent": {
      "texte": "49,8 [officiel NBS]",
+     "valeur": "49,8 [officiel NBS]",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1287,6 +1386,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 31/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1298,17 +1398,18 @@
    "USD": {
     "Actuel": {
      "texte": "54,9 (05/10) ▼",
+     "valeur": "54,9",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▼",
      "etat": "valeur",
-     "valeur": "54.9",
      "date": "2026-10-05",
      "source": "ForexFactory",
      "consensus": "55.1"
     },
     "Précédent": {
      "texte": "55,4 (03/09)",
+     "valeur": "55,4",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1316,6 +1417,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 04/11",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1325,17 +1427,18 @@
    "EUR": {
     "Actuel": {
      "texte": "53,0 (05/10) =",
+     "valeur": "53,0",
      "manuel": false,
      "origine": "officiel",
      "surprise": "=",
      "etat": "valeur",
-     "valeur": "53.0",
      "date": "2026-10-05",
      "source": "ForexFactory",
      "consensus": "53.0"
     },
     "Précédent": {
      "texte": "53,0 (23/09)",
+     "valeur": "53,0",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1343,6 +1446,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 23/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1352,17 +1456,18 @@
    "GBP": {
     "Actuel": {
      "texte": "52,1 (05/10) ▲",
+     "valeur": "52,1",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▲",
      "etat": "valeur",
-     "valeur": "52.1",
      "date": "2026-10-05",
      "source": "ForexFactory",
      "consensus": "51.7"
     },
     "Précédent": {
      "texte": "51,7 (23/09)",
+     "valeur": "51,7",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1370,6 +1475,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 23/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1379,17 +1485,18 @@
    "JPY": {
     "Actuel": {
      "texte": "non couvert par ForexFactory",
+     "valeur": "non couvert par ForexFactory",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
      "etat": "explique",
-     "valeur": null,
      "date": null,
      "source": null,
      "consensus": null
     },
     "Précédent": {
      "texte": "non couvert par ForexFactory",
+     "valeur": "non couvert par ForexFactory",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1397,6 +1504,7 @@
     },
     "Prévision": {
      "texte": "non couvert par ForexFactory",
+     "valeur": "non couvert par ForexFactory",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1406,17 +1514,18 @@
    "CHF": {
     "Actuel": {
      "texte": "non couvert par ForexFactory",
+     "valeur": "non couvert par ForexFactory",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
      "etat": "explique",
-     "valeur": null,
      "date": null,
      "source": null,
      "consensus": null
     },
     "Précédent": {
      "texte": "non couvert par ForexFactory",
+     "valeur": "non couvert par ForexFactory",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1424,6 +1533,7 @@
     },
     "Prévision": {
      "texte": "non couvert par ForexFactory",
+     "valeur": "non couvert par ForexFactory",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1433,17 +1543,18 @@
    "CAD": {
     "Actuel": {
      "texte": "58,2 [équiv. Ivey] (06/10) ▼",
+     "valeur": "58,2 [équiv. Ivey]",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▼",
      "etat": "valeur",
-     "valeur": "58.2",
      "date": "2026-10-06",
      "source": "ForexFactory",
      "consensus": "65.2"
     },
     "Précédent": {
      "texte": "64,3 [équiv. Ivey] (04/09)",
+     "valeur": "64,3 [équiv. Ivey]",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1451,6 +1562,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 06/11",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1460,17 +1572,18 @@
    "AUD": {
     "Actuel": {
      "texte": "51,4 (22/09)",
+     "valeur": "51,4",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
      "etat": "valeur",
-     "valeur": "51.4",
      "date": "2026-09-22",
      "source": "ForexFactory",
      "consensus": null
     },
     "Précédent": {
      "texte": "53,2 (révisé)",
+     "valeur": "53,2 (révisé)",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1478,6 +1591,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 22/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1487,17 +1601,18 @@
    "NZD": {
     "Actuel": {
      "texte": "non couvert par ForexFactory",
+     "valeur": "non couvert par ForexFactory",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
      "etat": "explique",
-     "valeur": null,
      "date": null,
      "source": null,
      "consensus": null
     },
     "Précédent": {
      "texte": "non couvert par ForexFactory",
+     "valeur": "non couvert par ForexFactory",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1505,6 +1620,7 @@
     },
     "Prévision": {
      "texte": "non couvert par ForexFactory",
+     "valeur": "non couvert par ForexFactory",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1514,17 +1630,18 @@
    "CNY": {
     "Actuel": {
      "texte": "50,2 [NBS non manuf.] (30/09) ▲",
+     "valeur": "50,2 [NBS non manuf.]",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▲",
      "etat": "valeur",
-     "valeur": "50.2",
      "date": "2026-09-30",
      "source": "ForexFactory",
      "consensus": "49.2"
     },
     "Précédent": {
      "texte": "49,0 [NBS non manuf.]",
+     "valeur": "49,0 [NBS non manuf.]",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1532,6 +1649,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 31/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1543,17 +1661,18 @@
    "USD": {
     "Actuel": {
      "texte": "4,2 % (02/10) ▲",
+     "valeur": "4,2 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▲",
      "etat": "valeur",
-     "valeur": "4.2%",
      "date": "2026-10-02",
      "source": "ForexFactory",
      "consensus": "4.1%"
     },
     "Précédent": {
      "texte": "4,1 % (04/09)",
+     "valeur": "4,1 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1561,6 +1680,7 @@
     },
     "Prévision": {
      "texte": "proj. BC 4,1 % (T4 2026) · pub. 06/11",
+     "valeur": "proj. BC 4,1 % (T4 2026)",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1570,17 +1690,18 @@
    "EUR": {
     "Actuel": {
      "texte": "6,4 % (01/10) =",
+     "valeur": "6,4 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "=",
      "etat": "valeur",
-     "valeur": "6.4%",
      "date": "2026-10-01",
      "source": "ForexFactory",
      "consensus": "6.4%"
     },
     "Précédent": {
      "texte": "6,4 % (01/09)",
+     "valeur": "6,4 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1588,6 +1709,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 30/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1597,17 +1719,18 @@
    "GBP": {
     "Actuel": {
      "texte": "4,9 % (15/09) ▼",
+     "valeur": "4,9 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▼",
      "etat": "valeur",
-     "valeur": "4.9%",
      "date": "2026-09-15",
      "source": "ForexFactory",
      "consensus": "5.0%"
     },
     "Précédent": {
      "texte": "4,9 %",
+     "valeur": "4,9 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1615,6 +1738,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 20/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1624,17 +1748,18 @@
    "JPY": {
     "Actuel": {
      "texte": "2,5 % (01/10) ▲",
+     "valeur": "2,5 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▲",
      "etat": "valeur",
-     "valeur": "2.5%",
      "date": "2026-10-01",
      "source": "ForexFactory",
      "consensus": "2.4%"
     },
     "Précédent": {
      "texte": "2,4 %",
+     "valeur": "2,4 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1642,6 +1767,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 29/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1651,17 +1777,18 @@
    "CHF": {
     "Actuel": {
      "texte": "3,1 % (06/10) =",
+     "valeur": "3,1 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "=",
      "etat": "valeur",
-     "valeur": "3.1%",
      "date": "2026-10-06",
      "source": "ForexFactory",
      "consensus": "3.1%"
     },
     "Précédent": {
      "texte": "3,1 % (07/09)",
+     "valeur": "3,1 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1669,6 +1796,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 11/11",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1678,17 +1806,18 @@
    "CAD": {
     "Actuel": {
      "texte": "6,4 % (04/09) =",
+     "valeur": "6,4 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "=",
      "etat": "valeur",
-     "valeur": "6.4%",
      "date": "2026-09-04",
      "source": "ForexFactory",
      "consensus": "6.4%"
     },
     "Précédent": {
      "texte": "6,4 %",
+     "valeur": "6,4 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1696,6 +1825,7 @@
     },
     "Prévision": {
      "texte": "6,5 % (09/10)",
+     "valeur": "6,5 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1705,17 +1835,18 @@
    "AUD": {
     "Actuel": {
      "texte": "4,6 % (24/09) ▲",
+     "valeur": "4,6 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▲",
      "etat": "valeur",
-     "valeur": "4.6%",
      "date": "2026-09-24",
      "source": "ForexFactory",
      "consensus": "4.5%"
     },
     "Précédent": {
      "texte": "4,5 %",
+     "valeur": "4,5 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1723,6 +1854,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 15/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1732,17 +1864,18 @@
    "NZD": {
     "Actuel": {
      "texte": "5,6 % (04/08) ▲",
+     "valeur": "5,6 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▲",
      "etat": "valeur",
-     "valeur": "5.6%",
      "date": "2026-08-04",
      "source": "ForexFactory",
      "consensus": "5.4%"
     },
     "Précédent": {
      "texte": "5,4 % (révisé)",
+     "valeur": "5,4 % (révisé)",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1750,6 +1883,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 03/11",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1759,17 +1893,18 @@
    "CNY": {
     "Actuel": {
      "texte": "5,3 % (15/09) ▲",
+     "valeur": "5,3 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▲",
      "etat": "valeur",
-     "valeur": "5.3%",
      "date": "2026-09-15",
      "source": "ForexFactory",
      "consensus": "5.2%"
     },
     "Précédent": {
      "texte": "5,2 %",
+     "valeur": "5,2 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1777,6 +1912,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 19/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1788,17 +1924,18 @@
    "USD": {
     "Actuel": {
      "texte": "29K (02/10) ▼",
+     "valeur": "29K",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▼",
      "etat": "valeur",
-     "valeur": "29K",
      "date": "2026-10-02",
      "source": "ForexFactory",
      "consensus": "89K"
     },
     "Précédent": {
      "texte": "133K (révisé) (04/09)",
+     "valeur": "133K (révisé)",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1806,6 +1943,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 06/11",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1815,17 +1953,18 @@
    "EUR": {
     "Actuel": {
      "texte": "0,1 % [t/t] (07/09) =",
+     "valeur": "0,1 % [t/t]",
      "manuel": false,
      "origine": "officiel",
      "surprise": "=",
      "etat": "valeur",
-     "valeur": "0.1%",
      "date": "2026-09-07",
      "source": "ForexFactory",
      "consensus": "0.1%"
     },
     "Précédent": {
      "texte": "0,1 % [t/t]",
+     "valeur": "0,1 % [t/t]",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1833,6 +1972,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 07/12",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1842,17 +1982,18 @@
    "GBP": {
     "Actuel": {
      "texte": "27,8K [équiv. claimants] (15/09) ▲",
+     "valeur": "27,8K [équiv. claimants]",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▲",
      "etat": "valeur",
-     "valeur": "27.8K",
      "date": "2026-09-15",
      "source": "ForexFactory",
      "consensus": "8.3K"
     },
     "Précédent": {
      "texte": "-11,8K [équiv. claimants] (révisé)",
+     "valeur": "-11,8K [équiv. claimants] (révisé)",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1860,6 +2001,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 20/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1869,17 +2011,18 @@
    "JPY": {
     "Actuel": {
      "texte": "non publié dans ce pays",
+     "valeur": "non publié dans ce pays",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
      "etat": "explique",
-     "valeur": null,
      "date": null,
      "source": null,
      "consensus": null
     },
     "Précédent": {
      "texte": "non publié dans ce pays",
+     "valeur": "non publié dans ce pays",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1887,6 +2030,7 @@
     },
     "Prévision": {
      "texte": "non publié dans ce pays",
+     "valeur": "non publié dans ce pays",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1896,17 +2040,18 @@
    "CHF": {
     "Actuel": {
      "texte": "non couvert par ForexFactory",
+     "valeur": "non couvert par ForexFactory",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
      "etat": "explique",
-     "valeur": null,
      "date": null,
      "source": null,
      "consensus": null
     },
     "Précédent": {
      "texte": "non couvert par ForexFactory",
+     "valeur": "non couvert par ForexFactory",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1914,6 +2059,7 @@
     },
     "Prévision": {
      "texte": "non couvert par ForexFactory",
+     "valeur": "non couvert par ForexFactory",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1923,17 +2069,18 @@
    "CAD": {
     "Actuel": {
      "texte": "-41,7K (04/09) ▼",
+     "valeur": "-41,7K",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▼",
      "etat": "valeur",
-     "valeur": "-41.7K",
      "date": "2026-09-04",
      "source": "ForexFactory",
      "consensus": "15.1K"
     },
     "Précédent": {
      "texte": "75,1K",
+     "valeur": "75,1K",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1941,6 +2088,7 @@
     },
     "Prévision": {
      "texte": "6,3K (09/10)",
+     "valeur": "6,3K",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1950,17 +2098,18 @@
    "AUD": {
     "Actuel": {
      "texte": "39,5K (24/09) ▲",
+     "valeur": "39,5K",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▲",
      "etat": "valeur",
-     "valeur": "39.5K",
      "date": "2026-09-24",
      "source": "ForexFactory",
      "consensus": "21.5K"
     },
     "Précédent": {
      "texte": "-15,9K (révisé)",
+     "valeur": "-15,9K (révisé)",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1968,6 +2117,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 15/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1977,17 +2127,18 @@
    "NZD": {
     "Actuel": {
      "texte": "0,5 % [t/t] (04/08) ▲",
+     "valeur": "0,5 % [t/t]",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▲",
      "etat": "valeur",
-     "valeur": "0.5%",
      "date": "2026-08-04",
      "source": "ForexFactory",
      "consensus": "0.1%"
     },
     "Précédent": {
      "texte": "0,2 % [t/t]",
+     "valeur": "0,2 % [t/t]",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -1995,6 +2146,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 03/11",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2004,17 +2156,18 @@
    "CNY": {
     "Actuel": {
      "texte": "non couvert par ForexFactory",
+     "valeur": "non couvert par ForexFactory",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
      "etat": "explique",
-     "valeur": null,
      "date": null,
      "source": null,
      "consensus": null
     },
     "Précédent": {
      "texte": "non couvert par ForexFactory",
+     "valeur": "non couvert par ForexFactory",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2022,6 +2175,7 @@
     },
     "Prévision": {
      "texte": "non couvert par ForexFactory",
+     "valeur": "non couvert par ForexFactory",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2033,17 +2187,18 @@
    "USD": {
     "Actuel": {
      "texte": "1,2 % (16/09) ▲",
+     "valeur": "1,2 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▲",
      "etat": "valeur",
-     "valeur": "1.2%",
      "date": "2026-09-16",
      "source": "ForexFactory",
      "consensus": "0.8%"
     },
     "Précédent": {
      "texte": "-0,5 % (révisé)",
+     "valeur": "-0,5 % (révisé)",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2051,6 +2206,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 15/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2060,17 +2216,18 @@
    "EUR": {
     "Actuel": {
      "texte": "0,1 % (06/10) ▼",
+     "valeur": "0,1 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▼",
      "etat": "valeur",
-     "valeur": "0.1%",
      "date": "2026-10-06",
      "source": "ForexFactory",
      "consensus": "0.2%"
     },
     "Précédent": {
      "texte": "-0,6 % (04/09)",
+     "valeur": "-0,6 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2078,6 +2235,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 06/11",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2087,17 +2245,18 @@
    "GBP": {
     "Actuel": {
      "texte": "0,5 % (18/09) ▲",
+     "valeur": "0,5 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▲",
      "etat": "valeur",
-     "valeur": "0.5%",
      "date": "2026-09-18",
      "source": "ForexFactory",
      "consensus": "-0.2%"
     },
     "Précédent": {
      "texte": "-0,5 %",
+     "valeur": "-0,5 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2105,6 +2264,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 23/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2114,17 +2274,18 @@
    "JPY": {
     "Actuel": {
      "texte": "2,7 % [a/a] (29/09) ▼",
+     "valeur": "2,7 % [a/a]",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▼",
      "etat": "valeur",
-     "valeur": "2.7%",
      "date": "2026-09-29",
      "source": "ForexFactory",
      "consensus": "3.3%"
     },
     "Précédent": {
      "texte": "3,7 % [a/a] (révisé)",
+     "valeur": "3,7 % [a/a] (révisé)",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2132,6 +2293,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 29/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2141,17 +2303,18 @@
    "CHF": {
     "Actuel": {
      "texte": "3,2 % [a/a] (01/10) ▲",
+     "valeur": "3,2 % [a/a]",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▲",
      "etat": "valeur",
-     "valeur": "3.2%",
      "date": "2026-10-01",
      "source": "ForexFactory",
      "consensus": "2.1%"
     },
     "Précédent": {
      "texte": "2,6 % [a/a] (révisé) (01/09)",
+     "valeur": "2,6 % [a/a] (révisé)",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2159,6 +2322,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 29/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2168,17 +2332,18 @@
    "CAD": {
     "Actuel": {
      "texte": "-0,7 % (24/09) ▲",
+     "valeur": "-0,7 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▲",
      "etat": "valeur",
-     "valeur": "-0.7%",
      "date": "2026-09-24",
      "source": "ForexFactory",
      "consensus": "-0.8%"
     },
     "Précédent": {
      "texte": "0,6 %",
+     "valeur": "0,6 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2186,6 +2351,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 23/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2195,17 +2361,18 @@
    "AUD": {
     "Actuel": {
      "texte": "0,0 % [équiv. dépenses ménages] (29/09) ▼",
+     "valeur": "0,0 % [équiv. dépenses ménages]",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▼",
      "etat": "valeur",
-     "valeur": "0.0%",
      "date": "2026-09-29",
      "source": "ForexFactory",
      "consensus": "0.3%"
     },
     "Précédent": {
      "texte": "1,1 % [équiv. dépenses ménages] (27/08)",
+     "valeur": "1,1 % [équiv. dépenses ménages]",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2213,6 +2380,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 04/11",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2222,17 +2390,18 @@
    "NZD": {
     "Actuel": {
      "texte": "-0,5 % [t/t] (23/08) ▼",
+     "valeur": "-0,5 % [t/t]",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▼",
      "etat": "valeur",
-     "valeur": "-0.5%",
      "date": "2026-08-23",
      "source": "ForexFactory",
      "consensus": "0.1%"
     },
     "Précédent": {
      "texte": "1,0 % [t/t] (révisé)",
+     "valeur": "1,0 % [t/t] (révisé)",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2240,6 +2409,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 25/11",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2249,17 +2419,18 @@
    "CNY": {
     "Actuel": {
      "texte": "0,4 % [a/a] (15/09) ▼",
+     "valeur": "0,4 % [a/a]",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▼",
      "etat": "valeur",
-     "valeur": "0.4%",
      "date": "2026-09-15",
      "source": "ForexFactory",
      "consensus": "0.7%"
     },
     "Précédent": {
      "texte": "0,6 % [a/a]",
+     "valeur": "0,6 % [a/a]",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2267,6 +2438,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 19/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2278,17 +2450,18 @@
    "USD": {
     "Actuel": {
      "texte": "-105,6B (06/10) ▼",
+     "valeur": "-105,6B",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▼",
      "etat": "valeur",
-     "valeur": "-105.6B",
      "date": "2026-10-06",
      "source": "ForexFactory",
      "consensus": "-100.8B"
     },
     "Précédent": {
      "texte": "-92,8B (révisé) (03/09)",
+     "valeur": "-92,8B (révisé)",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2296,6 +2469,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 04/11",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2305,17 +2479,18 @@
    "EUR": {
     "Actuel": {
      "texte": "5,0B (15/09) ▲",
+     "valeur": "5,0B",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▲",
      "etat": "valeur",
-     "valeur": "5.0B",
      "date": "2026-09-15",
      "source": "ForexFactory",
      "consensus": "3.7B"
     },
     "Précédent": {
      "texte": "1,0B (révisé)",
+     "valeur": "1,0B (révisé)",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2323,6 +2498,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 16/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2332,17 +2508,18 @@
    "GBP": {
     "Actuel": {
      "texte": "-21,0B [biens] (11/09) ▲",
+     "valeur": "-21,0B [biens]",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▲",
      "etat": "valeur",
-     "valeur": "-21.0B",
      "date": "2026-09-11",
      "source": "ForexFactory",
      "consensus": "-22.6B"
     },
     "Précédent": {
      "texte": "-23,0B [biens]",
+     "valeur": "-23,0B [biens]",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2350,6 +2527,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 15/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2359,17 +2537,18 @@
    "JPY": {
     "Actuel": {
      "texte": "-0,84T (15/09) ▲",
+     "valeur": "-0,84T",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▲",
      "etat": "valeur",
-     "valeur": "-0.84T",
      "date": "2026-09-15",
      "source": "ForexFactory",
      "consensus": "-1.00T"
     },
     "Précédent": {
      "texte": "-0,68T (révisé)",
+     "valeur": "-0,68T (révisé)",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2377,6 +2556,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 25/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2386,17 +2566,18 @@
    "CHF": {
     "Actuel": {
      "texte": "non couvert par ForexFactory",
+     "valeur": "non couvert par ForexFactory",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
      "etat": "explique",
-     "valeur": "5.4B",
      "date": null,
      "source": "FRED (XTEXVA01CHM667S)",
      "consensus": null
     },
     "Précédent": {
      "texte": "non couvert par ForexFactory",
+     "valeur": "non couvert par ForexFactory",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2404,6 +2585,7 @@
     },
     "Prévision": {
      "texte": "non couvert par ForexFactory",
+     "valeur": "non couvert par ForexFactory",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2413,17 +2595,18 @@
    "CAD": {
     "Actuel": {
      "texte": "4,2B (06/10) ▲",
+     "valeur": "4,2B",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▲",
      "etat": "valeur",
-     "valeur": "4.2B",
      "date": "2026-10-06",
      "source": "ForexFactory",
      "consensus": "1.5B"
     },
     "Précédent": {
      "texte": "0,8B (03/09)",
+     "valeur": "0,8B",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2431,6 +2614,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 04/11",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2440,17 +2624,18 @@
    "AUD": {
     "Actuel": {
      "texte": "0,50B [biens] (01/10) ▼",
+     "valeur": "0,50B [biens]",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▼",
      "etat": "valeur",
-     "valeur": "0.50B",
      "date": "2026-10-01",
      "source": "ForexFactory",
      "consensus": "2.00B"
     },
     "Précédent": {
      "texte": "1,35B [biens] (révisé) (03/09)",
+     "valeur": "1,35B [biens] (révisé)",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2458,6 +2643,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 05/11",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2467,17 +2653,18 @@
    "NZD": {
     "Actuel": {
      "texte": "-1349M (17/09) ▲",
+     "valeur": "-1349M",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▲",
      "etat": "valeur",
-     "valeur": "-1349M",
      "date": "2026-09-17",
      "source": "ForexFactory",
      "consensus": "-1775M"
     },
     "Précédent": {
      "texte": "-2118M (révisé)",
+     "valeur": "-2118M (révisé)",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2485,6 +2672,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 19/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2494,17 +2682,18 @@
    "CNY": {
     "Actuel": {
      "texte": "809B (08/09) ▲",
+     "valeur": "809B",
      "manuel": false,
      "origine": "officiel",
      "surprise": "▲",
      "etat": "valeur",
-     "valeur": "809B",
      "date": "2026-09-08",
      "source": "ForexFactory",
      "consensus": "805B"
     },
     "Précédent": {
      "texte": "767B",
+     "valeur": "767B",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2512,6 +2701,7 @@
     },
     "Prévision": {
      "texte": "prochaine pub. 14/10",
+     "valeur": "consensus à venir",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
@@ -2520,30 +2710,2609 @@
    }
   }
  },
- "remplissage": {
-  "Actuel": {
-   "valeur": 79,
-   "explique": 11,
-   "vide": 0,
-   "total": 90,
-   "taux_pct": 100.0
+ "lignes": [
+  {
+   "cle": "USD|taux_directeur",
+   "indicateur": "taux_directeur",
+   "libelle": "Taux directeur",
+   "devise": "USD",
+   "ordre": 1,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "4,00 %",
+   "Précédent": "3,75 %",
+   "Prévision": "proj. BC 4,1 % (fin 2026)",
+   "surprise": "=",
+   "variation": null,
+   "date_pub": "2026-09-16",
+   "prochaine": "2026-10-28T18:00+00:00",
+   "source": "ForexFactory · proj. BC : Fed SEP, médiane (FEDTARMD)"
   },
-  "Précédent": {
-   "valeur": 79,
-   "explique": 11,
-   "vide": 0,
-   "total": 90,
-   "taux_pct": 100.0
+  {
+   "cle": "EUR|taux_directeur",
+   "indicateur": "taux_directeur",
+   "libelle": "Taux directeur",
+   "devise": "EUR",
+   "ordre": 1,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "2,65 %",
+   "Précédent": "2,40 %",
+   "Prévision": "consensus à venir",
+   "surprise": "=",
+   "variation": null,
+   "date_pub": "2026-09-10",
+   "prochaine": "2026-10-29T13:15+00:00",
+   "source": "ForexFactory"
   },
-  "Prévision": {
-   "valeur": 2,
-   "explique": 88,
-   "vide": 0,
-   "total": 90,
-   "taux_pct": 100.0
+  {
+   "cle": "GBP|taux_directeur",
+   "indicateur": "taux_directeur",
+   "libelle": "Taux directeur",
+   "devise": "GBP",
+   "ordre": 1,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "3,75 %",
+   "Précédent": "3,75 %",
+   "Prévision": "consensus à venir",
+   "surprise": "=",
+   "variation": null,
+   "date_pub": "2026-09-17",
+   "prochaine": "2026-11-05T12:00+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "JPY|taux_directeur",
+   "indicateur": "taux_directeur",
+   "libelle": "Taux directeur",
+   "devise": "JPY",
+   "ordre": 1,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "<1,25 %",
+   "Précédent": "<1,00 %",
+   "Prévision": "consensus à venir",
+   "surprise": null,
+   "variation": null,
+   "date_pub": "2026-09-18",
+   "prochaine": "2026-10-30T02:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "CHF|taux_directeur",
+   "indicateur": "taux_directeur",
+   "libelle": "Taux directeur",
+   "devise": "CHF",
+   "ordre": 1,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "0,00 %",
+   "Précédent": "0,00 %",
+   "Prévision": "consensus à venir",
+   "surprise": "=",
+   "variation": null,
+   "date_pub": "2026-09-24",
+   "prochaine": "2026-12-10T08:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "CAD|taux_directeur",
+   "indicateur": "taux_directeur",
+   "libelle": "Taux directeur",
+   "devise": "CAD",
+   "ordre": 1,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "2,25 %",
+   "Précédent": "2,25 %",
+   "Prévision": "consensus à venir",
+   "surprise": "=",
+   "variation": null,
+   "date_pub": "2026-09-02",
+   "prochaine": "2026-10-28T13:45+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "AUD|taux_directeur",
+   "indicateur": "taux_directeur",
+   "libelle": "Taux directeur",
+   "devise": "AUD",
+   "ordre": 1,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "4,60 %",
+   "Précédent": "4,35 %",
+   "Prévision": "consensus à venir",
+   "surprise": "=",
+   "variation": null,
+   "date_pub": "2026-09-29",
+   "prochaine": "2026-11-03T03:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "NZD|taux_directeur",
+   "indicateur": "taux_directeur",
+   "libelle": "Taux directeur",
+   "devise": "NZD",
+   "ordre": 1,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "2,75 %",
+   "Précédent": "2,50 %",
+   "Prévision": "consensus à venir",
+   "surprise": "=",
+   "variation": null,
+   "date_pub": "2026-09-02",
+   "prochaine": "2026-10-28T01:00+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "CNY|taux_directeur",
+   "indicateur": "taux_directeur",
+   "libelle": "Taux directeur",
+   "devise": "CNY",
+   "ordre": 1,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "3,00 % [LPR 1 an]",
+   "Précédent": "3,00 % [LPR 1 an]",
+   "Prévision": "consensus à venir",
+   "surprise": "=",
+   "variation": null,
+   "date_pub": "2026-09-20",
+   "prochaine": "2026-10-20T01:00+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "USD|cpi",
+   "indicateur": "cpi",
+   "libelle": "CPI annuel",
+   "devise": "USD",
+   "ordre": 2,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "3,4 %",
+   "Précédent": "3,4 %",
+   "Prévision": "consensus à venir",
+   "surprise": "=",
+   "variation": null,
+   "date_pub": "2026-09-11",
+   "prochaine": "2026-10-14T12:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "EUR|cpi",
+   "indicateur": "cpi",
+   "libelle": "CPI annuel",
+   "devise": "EUR",
+   "ordre": 2,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "3,8 %",
+   "Précédent": "3,2 % (révisé)",
+   "Prévision": "consensus à venir",
+   "surprise": "▲",
+   "variation": null,
+   "date_pub": "2026-10-02",
+   "prochaine": "2026-10-16T09:00+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "GBP|cpi",
+   "indicateur": "cpi",
+   "libelle": "CPI annuel",
+   "devise": "GBP",
+   "ordre": 2,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "3,1 %",
+   "Précédent": "2,9 %",
+   "Prévision": "consensus à venir",
+   "surprise": "=",
+   "variation": null,
+   "date_pub": "2026-09-16",
+   "prochaine": "2026-10-21T06:00+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "JPY|cpi",
+   "indicateur": "cpi",
+   "libelle": "CPI annuel",
+   "devise": "JPY",
+   "ordre": 2,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "1,7 % [équiv. core national]",
+   "Précédent": "1,8 % [équiv. core national]",
+   "Prévision": "consensus à venir",
+   "surprise": "▼",
+   "variation": null,
+   "date_pub": "2026-09-17",
+   "prochaine": "2026-10-22T23:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "CHF|cpi",
+   "indicateur": "cpi",
+   "libelle": "CPI annuel",
+   "devise": "CHF",
+   "ordre": 2,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "0,0 % [m/m]",
+   "Précédent": "0,4 % [m/m]",
+   "Prévision": "consensus à venir",
+   "surprise": "=",
+   "variation": null,
+   "date_pub": "2026-10-01",
+   "prochaine": "2026-11-04T07:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "CAD|cpi",
+   "indicateur": "cpi",
+   "libelle": "CPI annuel",
+   "devise": "CAD",
+   "ordre": 2,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "-0,1 % [m/m]",
+   "Précédent": "0,5 % [m/m]",
+   "Prévision": "consensus à venir",
+   "surprise": "=",
+   "variation": null,
+   "date_pub": "2026-09-14",
+   "prochaine": "2026-10-19T12:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "AUD|cpi",
+   "indicateur": "cpi",
+   "libelle": "CPI annuel",
+   "devise": "AUD",
+   "ordre": 2,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "4,0 %",
+   "Précédent": "3,5 %",
+   "Prévision": "consensus à venir",
+   "surprise": "▼",
+   "variation": null,
+   "date_pub": "2026-09-30",
+   "prochaine": "2026-10-28T00:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "NZD|cpi",
+   "indicateur": "cpi",
+   "libelle": "CPI annuel",
+   "devise": "NZD",
+   "ordre": 2,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "1,5 % [t/t]",
+   "Précédent": "0,9 % [t/t]",
+   "Prévision": "consensus à venir",
+   "surprise": "▲",
+   "variation": null,
+   "date_pub": "2026-07-20",
+   "prochaine": "2026-10-19T21:45+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "CNY|cpi",
+   "indicateur": "cpi",
+   "libelle": "CPI annuel",
+   "devise": "CNY",
+   "ordre": 2,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "0,8 %",
+   "Précédent": "0,5 %",
+   "Prévision": "consensus à venir",
+   "surprise": "=",
+   "variation": null,
+   "date_pub": "2026-09-09",
+   "prochaine": "2026-10-14T01:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "USD|cpi_core",
+   "indicateur": "cpi_core",
+   "libelle": "CPI core annuel",
+   "devise": "USD",
+   "ordre": 3,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "2,4 %",
+   "Précédent": "2,5 %",
+   "Prévision": "consensus à venir",
+   "surprise": "=",
+   "variation": null,
+   "date_pub": "2026-09-11",
+   "prochaine": "2026-10-14T12:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "EUR|cpi_core",
+   "indicateur": "cpi_core",
+   "libelle": "CPI core annuel",
+   "devise": "EUR",
+   "ordre": 3,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "2,5 %",
+   "Précédent": "2,4 %",
+   "Prévision": "consensus à venir",
+   "surprise": "=",
+   "variation": null,
+   "date_pub": "2026-10-02",
+   "prochaine": "2026-10-16T09:00+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "GBP|cpi_core",
+   "indicateur": "cpi_core",
+   "libelle": "CPI core annuel",
+   "devise": "GBP",
+   "ordre": 3,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "2,6 %",
+   "Précédent": "2,6 %",
+   "Prévision": "consensus à venir",
+   "surprise": "=",
+   "variation": null,
+   "date_pub": "2026-09-16",
+   "prochaine": "2026-10-21T06:00+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "JPY|cpi_core",
+   "indicateur": "cpi_core",
+   "libelle": "CPI core annuel",
+   "devise": "JPY",
+   "ordre": 3,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "1,8 % [BoJ hors alim./énergie]",
+   "Précédent": "1,6 % [BoJ hors alim./énergie]",
+   "Prévision": "consensus à venir",
+   "surprise": "▲",
+   "variation": null,
+   "date_pub": "2026-09-25",
+   "prochaine": "2026-10-27T05:00+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "CHF|cpi_core",
+   "indicateur": "cpi_core",
+   "libelle": "CPI core annuel",
+   "devise": "CHF",
+   "ordre": 3,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "explique",
+    "Précédent": "explique",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "non couvert par ForexFactory",
+   "Précédent": "non couvert par ForexFactory",
+   "Prévision": "non couvert par ForexFactory",
+   "surprise": null,
+   "variation": null,
+   "date_pub": null,
+   "prochaine": null,
+   "source": "—"
+  },
+  {
+   "cle": "CAD|cpi_core",
+   "indicateur": "cpi_core",
+   "libelle": "CPI core annuel",
+   "devise": "CAD",
+   "ordre": 3,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "2,0 % [médian]",
+   "Précédent": "2,0 % [médian]",
+   "Prévision": "consensus à venir",
+   "surprise": "=",
+   "variation": null,
+   "date_pub": "2026-09-14",
+   "prochaine": "2026-10-19T12:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "AUD|cpi_core",
+   "indicateur": "cpi_core",
+   "libelle": "CPI core annuel",
+   "devise": "AUD",
+   "ordre": 3,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "0,2 % [moy. tronquée m/m]",
+   "Précédent": "0,5 % [moy. tronquée m/m]",
+   "Prévision": "consensus à venir",
+   "surprise": "▼",
+   "variation": null,
+   "date_pub": "2026-09-30",
+   "prochaine": "2026-10-28T00:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "NZD|cpi_core",
+   "indicateur": "cpi_core",
+   "libelle": "CPI core annuel",
+   "devise": "NZD",
+   "ordre": 3,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "explique",
+    "Précédent": "explique",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "non couvert par ForexFactory",
+   "Précédent": "non couvert par ForexFactory",
+   "Prévision": "non couvert par ForexFactory",
+   "surprise": null,
+   "variation": null,
+   "date_pub": null,
+   "prochaine": null,
+   "source": "—"
+  },
+  {
+   "cle": "CNY|cpi_core",
+   "indicateur": "cpi_core",
+   "libelle": "CPI core annuel",
+   "devise": "CNY",
+   "ordre": 3,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "explique",
+    "Précédent": "explique",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "non couvert par ForexFactory",
+   "Précédent": "non couvert par ForexFactory",
+   "Prévision": "non couvert par ForexFactory",
+   "surprise": null,
+   "variation": null,
+   "date_pub": null,
+   "prochaine": null,
+   "source": "—"
+  },
+  {
+   "cle": "USD|pib",
+   "indicateur": "pib",
+   "libelle": "PIB trimestriel",
+   "devise": "USD",
+   "ordre": 4,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "2,2 %",
+   "Précédent": "1,5 %",
+   "Prévision": "proj. BC 2,3 % (croiss. T4/T4 2026)",
+   "surprise": "▲",
+   "variation": null,
+   "date_pub": "2026-09-30",
+   "prochaine": "2026-10-29T12:30+00:00",
+   "source": "ForexFactory · proj. BC : Fed SEP, médiane (GDPC1MD)"
+  },
+  {
+   "cle": "EUR|pib",
+   "indicateur": "pib",
+   "libelle": "PIB trimestriel",
+   "devise": "EUR",
+   "ordre": 4,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "0,6 %",
+   "Précédent": "0,4 %",
+   "Prévision": "consensus à venir",
+   "surprise": "▲",
+   "variation": null,
+   "date_pub": "2026-09-07",
+   "prochaine": "2026-10-30T09:00+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "GBP|pib",
+   "indicateur": "pib",
+   "libelle": "PIB trimestriel",
+   "devise": "GBP",
+   "ordre": 4,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "0,5 %",
+   "Précédent": "0,4 %",
+   "Prévision": "consensus à venir",
+   "surprise": "▲",
+   "variation": null,
+   "date_pub": "2026-09-30",
+   "prochaine": "2026-11-12T07:00+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "JPY|pib",
+   "indicateur": "pib",
+   "libelle": "PIB trimestriel",
+   "devise": "JPY",
+   "ordre": 4,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "0,4 %",
+   "Précédent": "0,3 %",
+   "Prévision": "consensus à venir",
+   "surprise": "=",
+   "variation": null,
+   "date_pub": "2026-09-07",
+   "prochaine": "2026-11-15T23:50+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "CHF|pib",
+   "indicateur": "pib",
+   "libelle": "PIB trimestriel",
+   "devise": "CHF",
+   "ordre": 4,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "1,9 %",
+   "Précédent": "0,6 % (révisé)",
+   "Prévision": "consensus à venir",
+   "surprise": "▲",
+   "variation": null,
+   "date_pub": "2026-09-03",
+   "prochaine": "2026-11-30T08:00+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "CAD|pib",
+   "indicateur": "pib",
+   "libelle": "PIB trimestriel",
+   "devise": "CAD",
+   "ordre": 4,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "0,0 % [m/m]",
+   "Précédent": "0,4 % [m/m] (révisé)",
+   "Prévision": "consensus à venir",
+   "surprise": "=",
+   "variation": null,
+   "date_pub": "2026-09-29",
+   "prochaine": "2026-10-30T12:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "AUD|pib",
+   "indicateur": "pib",
+   "libelle": "PIB trimestriel",
+   "devise": "AUD",
+   "ordre": 4,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "0,4 %",
+   "Précédent": "0,3 %",
+   "Prévision": "consensus à venir",
+   "surprise": "▲",
+   "variation": null,
+   "date_pub": "2026-09-02",
+   "prochaine": "2026-12-02T00:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "NZD|pib",
+   "indicateur": "pib",
+   "libelle": "PIB trimestriel",
+   "devise": "NZD",
+   "ordre": 4,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "0,2 %",
+   "Précédent": "0,9 % (révisé)",
+   "Prévision": "consensus à venir",
+   "surprise": "▲",
+   "variation": null,
+   "date_pub": "2026-09-16",
+   "prochaine": "2026-12-16T21:45+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "CNY|pib",
+   "indicateur": "pib",
+   "libelle": "PIB trimestriel",
+   "devise": "CNY",
+   "ordre": 4,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "4,3 % [a/a]",
+   "Précédent": "5,0 % [a/a]",
+   "Prévision": "consensus à venir",
+   "surprise": "▼",
+   "variation": null,
+   "date_pub": "2026-07-15",
+   "prochaine": "2026-10-19T02:00+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "USD|pmi_manufacturier",
+   "indicateur": "pmi_manufacturier",
+   "libelle": "PMI manufacturier",
+   "devise": "USD",
+   "ordre": 5,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "54,5",
+   "Précédent": "54,6",
+   "Prévision": "consensus à venir",
+   "surprise": "▼",
+   "variation": null,
+   "date_pub": "2026-10-01",
+   "prochaine": "2026-11-02T15:00+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "EUR|pmi_manufacturier",
+   "indicateur": "pmi_manufacturier",
+   "libelle": "PMI manufacturier",
+   "devise": "EUR",
+   "ordre": 5,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "52,9",
+   "Précédent": "52,7",
+   "Prévision": "consensus à venir",
+   "surprise": "▲",
+   "variation": null,
+   "date_pub": "2026-10-01",
+   "prochaine": "2026-10-23T08:00+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "GBP|pmi_manufacturier",
+   "indicateur": "pmi_manufacturier",
+   "libelle": "PMI manufacturier",
+   "devise": "GBP",
+   "ordre": 5,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "51,9",
+   "Précédent": "52,0",
+   "Prévision": "consensus à venir",
+   "surprise": "▼",
+   "variation": null,
+   "date_pub": "2026-10-01",
+   "prochaine": "2026-10-23T08:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "JPY|pmi_manufacturier",
+   "indicateur": "pmi_manufacturier",
+   "libelle": "PMI manufacturier",
+   "devise": "JPY",
+   "ordre": 5,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "54,1",
+   "Précédent": "54,1",
+   "Prévision": "consensus à venir",
+   "surprise": "=",
+   "variation": null,
+   "date_pub": "2026-10-01",
+   "prochaine": "2026-10-23T00:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "CHF|pmi_manufacturier",
+   "indicateur": "pmi_manufacturier",
+   "libelle": "PMI manufacturier",
+   "devise": "CHF",
+   "ordre": 5,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "55,3",
+   "Précédent": "57,1",
+   "Prévision": "consensus à venir",
+   "surprise": "▼",
+   "variation": null,
+   "date_pub": "2026-10-01",
+   "prochaine": "2026-11-02T08:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "CAD|pmi_manufacturier",
+   "indicateur": "pmi_manufacturier",
+   "libelle": "PMI manufacturier",
+   "devise": "CAD",
+   "ordre": 5,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "51,5",
+   "Précédent": "53,0",
+   "Prévision": "consensus à venir",
+   "surprise": null,
+   "variation": null,
+   "date_pub": "2026-10-01",
+   "prochaine": "2026-11-02T14:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "AUD|pmi_manufacturier",
+   "indicateur": "pmi_manufacturier",
+   "libelle": "PMI manufacturier",
+   "devise": "AUD",
+   "ordre": 5,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "49,3",
+   "Précédent": "52,0",
+   "Prévision": "consensus à venir",
+   "surprise": null,
+   "variation": null,
+   "date_pub": "2026-09-22",
+   "prochaine": "2026-10-22T22:00+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "NZD|pmi_manufacturier",
+   "indicateur": "pmi_manufacturier",
+   "libelle": "PMI manufacturier",
+   "devise": "NZD",
+   "ordre": 5,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "explique",
+    "Précédent": "explique",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "non couvert par ForexFactory",
+   "Précédent": "non couvert par ForexFactory",
+   "Prévision": "non couvert par ForexFactory",
+   "surprise": null,
+   "variation": null,
+   "date_pub": null,
+   "prochaine": null,
+   "source": "—"
+  },
+  {
+   "cle": "CNY|pmi_manufacturier",
+   "indicateur": "pmi_manufacturier",
+   "libelle": "PMI manufacturier",
+   "devise": "CNY",
+   "ordre": 5,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "50,1 [officiel NBS]",
+   "Précédent": "49,8 [officiel NBS]",
+   "Prévision": "consensus à venir",
+   "surprise": "=",
+   "variation": null,
+   "date_pub": "2026-09-30",
+   "prochaine": "2026-10-31T01:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "USD|pmi_services",
+   "indicateur": "pmi_services",
+   "libelle": "PMI services",
+   "devise": "USD",
+   "ordre": 6,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "54,9",
+   "Précédent": "55,4",
+   "Prévision": "consensus à venir",
+   "surprise": "▼",
+   "variation": null,
+   "date_pub": "2026-10-05",
+   "prochaine": "2026-11-04T15:00+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "EUR|pmi_services",
+   "indicateur": "pmi_services",
+   "libelle": "PMI services",
+   "devise": "EUR",
+   "ordre": 6,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "53,0",
+   "Précédent": "53,0",
+   "Prévision": "consensus à venir",
+   "surprise": "=",
+   "variation": null,
+   "date_pub": "2026-10-05",
+   "prochaine": "2026-10-23T08:00+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "GBP|pmi_services",
+   "indicateur": "pmi_services",
+   "libelle": "PMI services",
+   "devise": "GBP",
+   "ordre": 6,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "52,1",
+   "Précédent": "51,7",
+   "Prévision": "consensus à venir",
+   "surprise": "▲",
+   "variation": null,
+   "date_pub": "2026-10-05",
+   "prochaine": "2026-10-23T08:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "JPY|pmi_services",
+   "indicateur": "pmi_services",
+   "libelle": "PMI services",
+   "devise": "JPY",
+   "ordre": 6,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "explique",
+    "Précédent": "explique",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "non couvert par ForexFactory",
+   "Précédent": "non couvert par ForexFactory",
+   "Prévision": "non couvert par ForexFactory",
+   "surprise": null,
+   "variation": null,
+   "date_pub": null,
+   "prochaine": null,
+   "source": "—"
+  },
+  {
+   "cle": "CHF|pmi_services",
+   "indicateur": "pmi_services",
+   "libelle": "PMI services",
+   "devise": "CHF",
+   "ordre": 6,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "explique",
+    "Précédent": "explique",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "non couvert par ForexFactory",
+   "Précédent": "non couvert par ForexFactory",
+   "Prévision": "non couvert par ForexFactory",
+   "surprise": null,
+   "variation": null,
+   "date_pub": null,
+   "prochaine": null,
+   "source": "—"
+  },
+  {
+   "cle": "CAD|pmi_services",
+   "indicateur": "pmi_services",
+   "libelle": "PMI services",
+   "devise": "CAD",
+   "ordre": 6,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "58,2 [équiv. Ivey]",
+   "Précédent": "64,3 [équiv. Ivey]",
+   "Prévision": "consensus à venir",
+   "surprise": "▼",
+   "variation": null,
+   "date_pub": "2026-10-06",
+   "prochaine": "2026-11-06T15:00+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "AUD|pmi_services",
+   "indicateur": "pmi_services",
+   "libelle": "PMI services",
+   "devise": "AUD",
+   "ordre": 6,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "51,4",
+   "Précédent": "53,2 (révisé)",
+   "Prévision": "consensus à venir",
+   "surprise": null,
+   "variation": null,
+   "date_pub": "2026-09-22",
+   "prochaine": "2026-10-22T22:00+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "NZD|pmi_services",
+   "indicateur": "pmi_services",
+   "libelle": "PMI services",
+   "devise": "NZD",
+   "ordre": 6,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "explique",
+    "Précédent": "explique",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "non couvert par ForexFactory",
+   "Précédent": "non couvert par ForexFactory",
+   "Prévision": "non couvert par ForexFactory",
+   "surprise": null,
+   "variation": null,
+   "date_pub": null,
+   "prochaine": null,
+   "source": "—"
+  },
+  {
+   "cle": "CNY|pmi_services",
+   "indicateur": "pmi_services",
+   "libelle": "PMI services",
+   "devise": "CNY",
+   "ordre": 6,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "50,2 [NBS non manuf.]",
+   "Précédent": "49,0 [NBS non manuf.]",
+   "Prévision": "consensus à venir",
+   "surprise": "▲",
+   "variation": null,
+   "date_pub": "2026-09-30",
+   "prochaine": "2026-10-31T01:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "USD|chomage",
+   "indicateur": "chomage",
+   "libelle": "Taux de chômage",
+   "devise": "USD",
+   "ordre": 7,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "4,2 %",
+   "Précédent": "4,1 %",
+   "Prévision": "proj. BC 4,1 % (T4 2026)",
+   "surprise": "▲",
+   "variation": null,
+   "date_pub": "2026-10-02",
+   "prochaine": "2026-11-06T13:30+00:00",
+   "source": "ForexFactory · proj. BC : Fed SEP, médiane (UNRATEMD)"
+  },
+  {
+   "cle": "EUR|chomage",
+   "indicateur": "chomage",
+   "libelle": "Taux de chômage",
+   "devise": "EUR",
+   "ordre": 7,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "6,4 %",
+   "Précédent": "6,4 %",
+   "Prévision": "consensus à venir",
+   "surprise": "=",
+   "variation": null,
+   "date_pub": "2026-10-01",
+   "prochaine": "2026-10-30T10:00+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "GBP|chomage",
+   "indicateur": "chomage",
+   "libelle": "Taux de chômage",
+   "devise": "GBP",
+   "ordre": 7,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "4,9 %",
+   "Précédent": "4,9 %",
+   "Prévision": "consensus à venir",
+   "surprise": "▼",
+   "variation": null,
+   "date_pub": "2026-09-15",
+   "prochaine": "2026-10-20T06:00+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "JPY|chomage",
+   "indicateur": "chomage",
+   "libelle": "Taux de chômage",
+   "devise": "JPY",
+   "ordre": 7,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "2,5 %",
+   "Précédent": "2,4 %",
+   "Prévision": "consensus à venir",
+   "surprise": "▲",
+   "variation": null,
+   "date_pub": "2026-10-01",
+   "prochaine": "2026-10-29T23:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "CHF|chomage",
+   "indicateur": "chomage",
+   "libelle": "Taux de chômage",
+   "devise": "CHF",
+   "ordre": 7,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "3,1 %",
+   "Précédent": "3,1 %",
+   "Prévision": "consensus à venir",
+   "surprise": "=",
+   "variation": null,
+   "date_pub": "2026-10-06",
+   "prochaine": "2026-11-11T08:00+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "CAD|chomage",
+   "indicateur": "chomage",
+   "libelle": "Taux de chômage",
+   "devise": "CAD",
+   "ordre": 7,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "valeur"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "6,4 %",
+   "Précédent": "6,4 %",
+   "Prévision": "6,5 %",
+   "surprise": "=",
+   "variation": null,
+   "date_pub": "2026-09-04",
+   "prochaine": "2026-10-09T12:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "AUD|chomage",
+   "indicateur": "chomage",
+   "libelle": "Taux de chômage",
+   "devise": "AUD",
+   "ordre": 7,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "4,6 %",
+   "Précédent": "4,5 %",
+   "Prévision": "consensus à venir",
+   "surprise": "▲",
+   "variation": null,
+   "date_pub": "2026-09-24",
+   "prochaine": "2026-10-15T00:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "NZD|chomage",
+   "indicateur": "chomage",
+   "libelle": "Taux de chômage",
+   "devise": "NZD",
+   "ordre": 7,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "5,6 %",
+   "Précédent": "5,4 % (révisé)",
+   "Prévision": "consensus à venir",
+   "surprise": "▲",
+   "variation": null,
+   "date_pub": "2026-08-04",
+   "prochaine": "2026-11-03T21:45+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "CNY|chomage",
+   "indicateur": "chomage",
+   "libelle": "Taux de chômage",
+   "devise": "CNY",
+   "ordre": 7,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "5,3 %",
+   "Précédent": "5,2 %",
+   "Prévision": "consensus à venir",
+   "surprise": "▲",
+   "variation": null,
+   "date_pub": "2026-09-15",
+   "prochaine": "2026-10-19T02:00+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "USD|emploi",
+   "indicateur": "emploi",
+   "libelle": "Variation de l'emploi",
+   "devise": "USD",
+   "ordre": 8,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "29K",
+   "Précédent": "133K (révisé)",
+   "Prévision": "consensus à venir",
+   "surprise": "▼",
+   "variation": null,
+   "date_pub": "2026-10-02",
+   "prochaine": "2026-11-06T13:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "EUR|emploi",
+   "indicateur": "emploi",
+   "libelle": "Variation de l'emploi",
+   "devise": "EUR",
+   "ordre": 8,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "0,1 % [t/t]",
+   "Précédent": "0,1 % [t/t]",
+   "Prévision": "consensus à venir",
+   "surprise": "=",
+   "variation": null,
+   "date_pub": "2026-09-07",
+   "prochaine": "2026-12-07T10:00+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "GBP|emploi",
+   "indicateur": "emploi",
+   "libelle": "Variation de l'emploi",
+   "devise": "GBP",
+   "ordre": 8,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "27,8K [équiv. claimants]",
+   "Précédent": "-11,8K [équiv. claimants] (révisé)",
+   "Prévision": "consensus à venir",
+   "surprise": "▲",
+   "variation": null,
+   "date_pub": "2026-09-15",
+   "prochaine": "2026-10-20T06:00+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "JPY|emploi",
+   "indicateur": "emploi",
+   "libelle": "Variation de l'emploi",
+   "devise": "JPY",
+   "ordre": 8,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "explique",
+    "Précédent": "explique",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "non publié dans ce pays",
+   "Précédent": "non publié dans ce pays",
+   "Prévision": "non publié dans ce pays",
+   "surprise": null,
+   "variation": null,
+   "date_pub": null,
+   "prochaine": null,
+   "source": "—"
+  },
+  {
+   "cle": "CHF|emploi",
+   "indicateur": "emploi",
+   "libelle": "Variation de l'emploi",
+   "devise": "CHF",
+   "ordre": 8,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "explique",
+    "Précédent": "explique",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "non couvert par ForexFactory",
+   "Précédent": "non couvert par ForexFactory",
+   "Prévision": "non couvert par ForexFactory",
+   "surprise": null,
+   "variation": null,
+   "date_pub": null,
+   "prochaine": null,
+   "source": "—"
+  },
+  {
+   "cle": "CAD|emploi",
+   "indicateur": "emploi",
+   "libelle": "Variation de l'emploi",
+   "devise": "CAD",
+   "ordre": 8,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "valeur"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "-41,7K",
+   "Précédent": "75,1K",
+   "Prévision": "6,3K",
+   "surprise": "▼",
+   "variation": null,
+   "date_pub": "2026-09-04",
+   "prochaine": "2026-10-09T12:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "AUD|emploi",
+   "indicateur": "emploi",
+   "libelle": "Variation de l'emploi",
+   "devise": "AUD",
+   "ordre": 8,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "39,5K",
+   "Précédent": "-15,9K (révisé)",
+   "Prévision": "consensus à venir",
+   "surprise": "▲",
+   "variation": null,
+   "date_pub": "2026-09-24",
+   "prochaine": "2026-10-15T00:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "NZD|emploi",
+   "indicateur": "emploi",
+   "libelle": "Variation de l'emploi",
+   "devise": "NZD",
+   "ordre": 8,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "0,5 % [t/t]",
+   "Précédent": "0,2 % [t/t]",
+   "Prévision": "consensus à venir",
+   "surprise": "▲",
+   "variation": null,
+   "date_pub": "2026-08-04",
+   "prochaine": "2026-11-03T21:45+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "CNY|emploi",
+   "indicateur": "emploi",
+   "libelle": "Variation de l'emploi",
+   "devise": "CNY",
+   "ordre": 8,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "explique",
+    "Précédent": "explique",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "non couvert par ForexFactory",
+   "Précédent": "non couvert par ForexFactory",
+   "Prévision": "non couvert par ForexFactory",
+   "surprise": null,
+   "variation": null,
+   "date_pub": null,
+   "prochaine": null,
+   "source": "—"
+  },
+  {
+   "cle": "USD|ventes_detail",
+   "indicateur": "ventes_detail",
+   "libelle": "Ventes au détail",
+   "devise": "USD",
+   "ordre": 9,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "1,2 %",
+   "Précédent": "-0,5 % (révisé)",
+   "Prévision": "consensus à venir",
+   "surprise": "▲",
+   "variation": null,
+   "date_pub": "2026-09-16",
+   "prochaine": "2026-10-15T12:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "EUR|ventes_detail",
+   "indicateur": "ventes_detail",
+   "libelle": "Ventes au détail",
+   "devise": "EUR",
+   "ordre": 9,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "0,1 %",
+   "Précédent": "-0,6 %",
+   "Prévision": "consensus à venir",
+   "surprise": "▼",
+   "variation": null,
+   "date_pub": "2026-10-06",
+   "prochaine": "2026-11-06T10:00+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "GBP|ventes_detail",
+   "indicateur": "ventes_detail",
+   "libelle": "Ventes au détail",
+   "devise": "GBP",
+   "ordre": 9,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "0,5 %",
+   "Précédent": "-0,5 %",
+   "Prévision": "consensus à venir",
+   "surprise": "▲",
+   "variation": null,
+   "date_pub": "2026-09-18",
+   "prochaine": "2026-10-23T06:00+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "JPY|ventes_detail",
+   "indicateur": "ventes_detail",
+   "libelle": "Ventes au détail",
+   "devise": "JPY",
+   "ordre": 9,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "2,7 % [a/a]",
+   "Précédent": "3,7 % [a/a] (révisé)",
+   "Prévision": "consensus à venir",
+   "surprise": "▼",
+   "variation": null,
+   "date_pub": "2026-09-29",
+   "prochaine": "2026-10-29T23:50+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "CHF|ventes_detail",
+   "indicateur": "ventes_detail",
+   "libelle": "Ventes au détail",
+   "devise": "CHF",
+   "ordre": 9,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "3,2 % [a/a]",
+   "Précédent": "2,6 % [a/a] (révisé)",
+   "Prévision": "consensus à venir",
+   "surprise": "▲",
+   "variation": null,
+   "date_pub": "2026-10-01",
+   "prochaine": "2026-10-29T07:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "CAD|ventes_detail",
+   "indicateur": "ventes_detail",
+   "libelle": "Ventes au détail",
+   "devise": "CAD",
+   "ordre": 9,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "-0,7 %",
+   "Précédent": "0,6 %",
+   "Prévision": "consensus à venir",
+   "surprise": "▲",
+   "variation": null,
+   "date_pub": "2026-09-24",
+   "prochaine": "2026-10-23T12:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "AUD|ventes_detail",
+   "indicateur": "ventes_detail",
+   "libelle": "Ventes au détail",
+   "devise": "AUD",
+   "ordre": 9,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "0,0 % [équiv. dépenses ménages]",
+   "Précédent": "1,1 % [équiv. dépenses ménages]",
+   "Prévision": "consensus à venir",
+   "surprise": "▼",
+   "variation": null,
+   "date_pub": "2026-09-29",
+   "prochaine": "2026-11-04T00:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "NZD|ventes_detail",
+   "indicateur": "ventes_detail",
+   "libelle": "Ventes au détail",
+   "devise": "NZD",
+   "ordre": 9,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "-0,5 % [t/t]",
+   "Précédent": "1,0 % [t/t] (révisé)",
+   "Prévision": "consensus à venir",
+   "surprise": "▼",
+   "variation": null,
+   "date_pub": "2026-08-23",
+   "prochaine": "2026-11-25T21:45+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "CNY|ventes_detail",
+   "indicateur": "ventes_detail",
+   "libelle": "Ventes au détail",
+   "devise": "CNY",
+   "ordre": 9,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "0,4 % [a/a]",
+   "Précédent": "0,6 % [a/a]",
+   "Prévision": "consensus à venir",
+   "surprise": "▼",
+   "variation": null,
+   "date_pub": "2026-09-15",
+   "prochaine": "2026-10-19T02:00+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "USD|balance_commerciale",
+   "indicateur": "balance_commerciale",
+   "libelle": "Balance commerciale",
+   "devise": "USD",
+   "ordre": 10,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "-105,6B",
+   "Précédent": "-92,8B (révisé)",
+   "Prévision": "consensus à venir",
+   "surprise": "▼",
+   "variation": null,
+   "date_pub": "2026-10-06",
+   "prochaine": "2026-11-04T13:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "EUR|balance_commerciale",
+   "indicateur": "balance_commerciale",
+   "libelle": "Balance commerciale",
+   "devise": "EUR",
+   "ordre": 10,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "5,0B",
+   "Précédent": "1,0B (révisé)",
+   "Prévision": "consensus à venir",
+   "surprise": "▲",
+   "variation": null,
+   "date_pub": "2026-09-15",
+   "prochaine": "2026-10-16T09:00+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "GBP|balance_commerciale",
+   "indicateur": "balance_commerciale",
+   "libelle": "Balance commerciale",
+   "devise": "GBP",
+   "ordre": 10,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "-21,0B [biens]",
+   "Précédent": "-23,0B [biens]",
+   "Prévision": "consensus à venir",
+   "surprise": "▲",
+   "variation": null,
+   "date_pub": "2026-09-11",
+   "prochaine": "2026-10-15T06:00+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "JPY|balance_commerciale",
+   "indicateur": "balance_commerciale",
+   "libelle": "Balance commerciale",
+   "devise": "JPY",
+   "ordre": 10,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "-0,84T",
+   "Précédent": "-0,68T (révisé)",
+   "Prévision": "consensus à venir",
+   "surprise": "▲",
+   "variation": null,
+   "date_pub": "2026-09-15",
+   "prochaine": "2026-10-25T23:50+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "CHF|balance_commerciale",
+   "indicateur": "balance_commerciale",
+   "libelle": "Balance commerciale",
+   "devise": "CHF",
+   "ordre": 10,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "explique",
+    "Précédent": "explique",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "non couvert par ForexFactory",
+   "Précédent": "non couvert par ForexFactory",
+   "Prévision": "non couvert par ForexFactory",
+   "surprise": null,
+   "variation": null,
+   "date_pub": null,
+   "prochaine": null,
+   "source": "—"
+  },
+  {
+   "cle": "CAD|balance_commerciale",
+   "indicateur": "balance_commerciale",
+   "libelle": "Balance commerciale",
+   "devise": "CAD",
+   "ordre": 10,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "4,2B",
+   "Précédent": "0,8B",
+   "Prévision": "consensus à venir",
+   "surprise": "▲",
+   "variation": null,
+   "date_pub": "2026-10-06",
+   "prochaine": "2026-11-04T13:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "AUD|balance_commerciale",
+   "indicateur": "balance_commerciale",
+   "libelle": "Balance commerciale",
+   "devise": "AUD",
+   "ordre": 10,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "0,50B [biens]",
+   "Précédent": "1,35B [biens] (révisé)",
+   "Prévision": "consensus à venir",
+   "surprise": "▼",
+   "variation": null,
+   "date_pub": "2026-10-01",
+   "prochaine": "2026-11-05T00:30+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "NZD|balance_commerciale",
+   "indicateur": "balance_commerciale",
+   "libelle": "Balance commerciale",
+   "devise": "NZD",
+   "ordre": 10,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "-1349M",
+   "Précédent": "-2118M (révisé)",
+   "Prévision": "consensus à venir",
+   "surprise": "▲",
+   "variation": null,
+   "date_pub": "2026-09-17",
+   "prochaine": "2026-10-19T21:45+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "CNY|balance_commerciale",
+   "indicateur": "balance_commerciale",
+   "libelle": "Balance commerciale",
+   "devise": "CNY",
+   "ordre": 10,
+   "manuel": {
+    "Actuel": false,
+    "Précédent": false,
+    "Prévision": false
+   },
+   "etat": {
+    "Actuel": "valeur",
+    "Précédent": "valeur",
+    "Prévision": "explique"
+   },
+   "marche": false,
+   "frequence": null,
+   "Actuel": "809B",
+   "Précédent": "767B",
+   "Prévision": "consensus à venir",
+   "surprise": "▲",
+   "variation": null,
+   "date_pub": "2026-09-08",
+   "prochaine": "2026-10-14T02:03+00:00",
+   "source": "ForexFactory"
+  },
+  {
+   "cle": "USD|indice_surprise",
+   "indicateur": "indice_surprise",
+   "libelle": "Indice de surprise 30 j",
+   "devise": "USD",
+   "ordre": 90,
+   "Actuel": "-0,0",
+   "Précédent": "+0,7",
+   "Prévision": "— (indicateur calculé)",
+   "manuel": {},
+   "etat": {},
+   "surprise": "▼",
+   "variation": "n=10",
+   "date_pub": null,
+   "prochaine": null,
+   "marche": false,
+   "frequence": null,
+   "source": "Calcul Python : surprises vs consensus, fenêtre 30 j"
+  },
+  {
+   "cle": "EUR|indice_surprise",
+   "indicateur": "indice_surprise",
+   "libelle": "Indice de surprise 30 j",
+   "devise": "EUR",
+   "ordre": 90,
+   "Actuel": "+0,1",
+   "Précédent": "-0,6",
+   "Prévision": "— (indicateur calculé)",
+   "manuel": {},
+   "etat": {},
+   "surprise": "▲",
+   "variation": "n=12",
+   "date_pub": null,
+   "prochaine": null,
+   "marche": false,
+   "frequence": null,
+   "source": "Calcul Python : surprises vs consensus, fenêtre 30 j"
+  },
+  {
+   "cle": "GBP|indice_surprise",
+   "indicateur": "indice_surprise",
+   "libelle": "Indice de surprise 30 j",
+   "devise": "GBP",
+   "ordre": 90,
+   "Actuel": "+0,4",
+   "Précédent": "—",
+   "Prévision": "— (indicateur calculé)",
+   "manuel": {},
+   "etat": {},
+   "surprise": null,
+   "variation": "n=12",
+   "date_pub": null,
+   "prochaine": null,
+   "marche": false,
+   "frequence": null,
+   "source": "Calcul Python : surprises vs consensus, fenêtre 30 j"
+  },
+  {
+   "cle": "JPY|indice_surprise",
+   "indicateur": "indice_surprise",
+   "libelle": "Indice de surprise 30 j",
+   "devise": "JPY",
+   "ordre": 90,
+   "Actuel": "-0,0",
+   "Précédent": "+0,0",
+   "Prévision": "— (indicateur calculé)",
+   "manuel": {},
+   "etat": {},
+   "surprise": "=",
+   "variation": "n=7",
+   "date_pub": null,
+   "prochaine": null,
+   "marche": false,
+   "frequence": null,
+   "source": "Calcul Python : surprises vs consensus, fenêtre 30 j"
+  },
+  {
+   "cle": "CHF|indice_surprise",
+   "indicateur": "indice_surprise",
+   "libelle": "Indice de surprise 30 j",
+   "devise": "CHF",
+   "ordre": 90,
+   "Actuel": "+0,3",
+   "Précédent": "+1,8",
+   "Prévision": "— (indicateur calculé)",
+   "manuel": {},
+   "etat": {},
+   "surprise": "▼",
+   "variation": "n=5",
+   "date_pub": null,
+   "prochaine": null,
+   "marche": false,
+   "frequence": null,
+   "source": "Calcul Python : surprises vs consensus, fenêtre 30 j"
+  },
+  {
+   "cle": "CAD|indice_surprise",
+   "indicateur": "indice_surprise",
+   "libelle": "Indice de surprise 30 j",
+   "devise": "CAD",
+   "ordre": 90,
+   "Actuel": "-0,3",
+   "Précédent": "+0,1",
+   "Prévision": "— (indicateur calculé)",
+   "manuel": {},
+   "etat": {},
+   "surprise": "▼",
+   "variation": "n=6",
+   "date_pub": null,
+   "prochaine": null,
+   "marche": false,
+   "frequence": null,
+   "source": "Calcul Python : surprises vs consensus, fenêtre 30 j"
+  },
+  {
+   "cle": "AUD|indice_surprise",
+   "indicateur": "indice_surprise",
+   "libelle": "Indice de surprise 30 j",
+   "devise": "AUD",
+   "ordre": 90,
+   "Actuel": "-0,5",
+   "Précédent": "+1,1",
+   "Prévision": "— (indicateur calculé)",
+   "manuel": {},
+   "etat": {},
+   "surprise": "▼",
+   "variation": "n=7",
+   "date_pub": null,
+   "prochaine": null,
+   "marche": false,
+   "frequence": null,
+   "source": "Calcul Python : surprises vs consensus, fenêtre 30 j"
+  },
+  {
+   "cle": "NZD|indice_surprise",
+   "indicateur": "indice_surprise",
+   "libelle": "Indice de surprise 30 j",
+   "devise": "NZD",
+   "ordre": 90,
+   "Actuel": "+0,3",
+   "Précédent": "-0,7",
+   "Prévision": "— (indicateur calculé)",
+   "manuel": {},
+   "etat": {},
+   "surprise": "▲",
+   "variation": "n=2",
+   "date_pub": null,
+   "prochaine": null,
+   "marche": false,
+   "frequence": null,
+   "source": "Calcul Python : surprises vs consensus, fenêtre 30 j"
+  },
+  {
+   "cle": "CNY|indice_surprise",
+   "indicateur": "indice_surprise",
+   "libelle": "Indice de surprise 30 j",
+   "devise": "CNY",
+   "ordre": 90,
+   "Actuel": "-0,2",
+   "Précédent": "+1,3",
+   "Prévision": "— (indicateur calculé)",
+   "manuel": {},
+   "etat": {},
+   "surprise": "▼",
+   "variation": "n=6",
+   "date_pub": null,
+   "prochaine": null,
+   "marche": false,
+   "frequence": null,
+   "source": "Calcul Python : surprises vs consensus, fenêtre 30 j"
   }
- },
- "source": "ForexFactory (page mois) · taux : config/FRED · ✍️ = saisie manuelle",
+ ],
  "indice_surprise": {
   "USD": {
    "indice": -0.03,
@@ -2607,6 +5376,29 @@
    "tendance": "baisse",
    "n": 6,
    "texte": "-0,2 ▼ (n=6)"
+  }
+ },
+ "remplissage": {
+  "Actuel": {
+   "valeur": 79,
+   "explique": 11,
+   "vide": 0,
+   "total": 90,
+   "taux_pct": 100.0
+  },
+  "Précédent": {
+   "valeur": 79,
+   "explique": 11,
+   "vide": 0,
+   "total": 90,
+   "taux_pct": 100.0
+  },
+  "Prévision": {
+   "valeur": 2,
+   "explique": 88,
+   "vide": 0,
+   "total": 90,
+   "taux_pct": 100.0
   }
  },
  "anomalies": [

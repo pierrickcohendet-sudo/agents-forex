@@ -809,32 +809,57 @@ async function carteTableauMacro() {
     carte.appendChild(el("p", "chargement", "Tableau macro indisponible pour le moment."));
     return carte;
   }
+  const SOURCE = "ForexFactory (page mois), FRED, config · ✍️ = saisie manuelle";
+  let mode = "matrice";            // "matrice" (devises en colonnes) | "devise" (colonnes de Notion)
   let typeCourant = "Actuel";
-  const barre = el("div", "macro-barre");
-  const boutons = {};
-  for (const t of donnees.types) {
-    const b = el("button", "macro-onglet", t);
+  let deviseCourante = donnees.devises[0];
+
+  // ---- barres de contrôle
+  const barreMode = el("div", "macro-barre");
+  const boutonsMode = {};
+  for (const [id, libelle] of [["matrice", "Matrice"], ["devise", "Par devise"]]) {
+    const b = el("button", "macro-onglet", libelle);
     b.type = "button";
-    b.addEventListener("click", () => { typeCourant = t; dessiner(); });
-    boutons[t] = b;
-    barre.appendChild(b);
+    b.addEventListener("click", () => { mode = id; dessiner(); });
+    boutonsMode[id] = b;
+    barreMode.appendChild(b);
   }
-  barre.appendChild(el("span", "macro-maj", `maj ${(donnees.maj || "").slice(0, 16).replace("T", " ")} UTC`));
-  carte.appendChild(barre);
+  barreMode.appendChild(el("span", "macro-maj", `maj ${(donnees.maj || "").slice(0, 16).replace("T", " ")} UTC`));
+  carte.appendChild(barreMode);
+
+  const barreSous = el("div", "macro-barre");
+  carte.appendChild(barreSous);
   const defilement = el("div", "macro-defilement");
   carte.appendChild(defilement);
   const pied = el("p", "macro-pied");
   carte.appendChild(pied);
 
-  function classeSurprise(cellule, sens) {
-    if (typeCourant !== "Actuel" || !cellule.surprise) return "";
-    if (cellule.surprise === "=") return "macro-egal";
-    const haut = cellule.surprise === "▲";
-    return (haut === (sens !== "inverse")) ? "macro-bon" : "macro-mauvais";
+  const boutonsType = {}, boutonsDevise = {};
+  for (const t of donnees.types) {
+    const b = el("button", "macro-onglet macro-type", t);
+    b.type = "button";
+    b.addEventListener("click", () => { typeCourant = t; dessiner(); });
+    boutonsType[t] = b;
+  }
+  for (const d of donnees.devises) {
+    const b = el("button", "macro-onglet macro-devise", `${DRAPEAUX[d] || ""} ${d}`);
+    b.type = "button";
+    b.addEventListener("click", () => { deviseCourante = d; dessiner(); });
+    boutonsDevise[d] = b;
   }
 
-  function dessiner() {
-    for (const [t, b] of Object.entries(boutons)) b.classList.toggle("actif", t === typeCourant);
+  const sensDe = Object.fromEntries(donnees.indicateurs.map(i => [i.id, i.sens]));
+
+  function classeSurprise(symbole, sens, marche) {
+    if (!symbole) return "";
+    if (symbole === "=" || marche) return "macro-egal";
+    const haut = symbole === "▲";
+    return (haut === (sens !== "inverse")) ? "macro-bon" : "macro-mauvais";
+  }
+  const jjmm = (iso) => (iso ? `${iso.slice(8, 10)}/${iso.slice(5, 7)}` : "—");
+  const jjmmHeure = (iso) => (iso ? `${jjmm(iso)} ${iso.slice(11, 16)} UTC` : "—");
+
+  function tableMatrice() {
     const table = el("table", "macro-table");
     const tete = el("tr");
     tete.appendChild(el("th", "macro-indic", "Indicateur"));
@@ -845,8 +870,10 @@ async function carteTableauMacro() {
       ligne.appendChild(el("th", "macro-indic", ind.libelle));
       for (const d of donnees.devises) {
         const c = donnees.cellules[ind.id][d][typeCourant];
-        const td = el("td", ["macro-cell", classeSurprise(c, ind.sens), c.manuel ? "macro-manuel" : "",
-          c.etat !== "valeur" ? "macro-expl" : ""].filter(Boolean).join(" "), c.texte);
+        const surprise = typeCourant === "Actuel" ? c.surprise : null;
+        const td = el("td", ["macro-cell", classeSurprise(surprise, ind.sens, ind.marche),
+          c.manuel ? "macro-manuel" : "", c.etat !== "valeur" ? "macro-expl" : ""].filter(Boolean).join(" "),
+          c.texte);
         const infos = [];
         if (c.source) infos.push(`source : ${c.source}`);
         if (c.consensus) infos.push(`consensus : ${c.consensus}`);
@@ -856,12 +883,59 @@ async function carteTableauMacro() {
       }
       table.appendChild(ligne);
     }
-    defilement.replaceChildren(table);
+    if (typeCourant === "Actuel" && donnees.indice_surprise) {
+      const ligne = el("tr");
+      ligne.appendChild(el("th", "macro-indic", "Indice de surprise 30 j"));
+      for (const d of donnees.devises) {
+        const i = donnees.indice_surprise[d] || {};
+        const classe = i.indice === null || i.indice === undefined ? "macro-expl"
+          : (i.indice > 0.05 ? "macro-bon" : i.indice < -0.05 ? "macro-mauvais" : "macro-egal");
+        const td = el("td", `macro-cell ${classe}`, i.texte || "n/d");
+        td.title = "Moyenne pondérée des surprises vs consensus sur 30 j (calcul Python)";
+        ligne.appendChild(td);
+      }
+      table.appendChild(ligne);
+    }
+    return table;
+  }
+
+  function tableDevise() {
+    const table = el("table", "macro-table macro-table-devise");
+    const tete = el("tr");
+    const colonnes = ["Indicateur", "Actuel", "Précédent", "Prévision", "Surprise", "Variation",
+                      "Publié le", "Prochaine publication", "Source"];
+    colonnes.forEach((c, k) => tete.appendChild(el("th", k === 0 ? "macro-indic" : null, c)));
+    table.appendChild(tete);
+    const lignes = donnees.lignes.filter(l => l.devise === deviseCourante).sort((a, b) => a.ordre - b.ordre);
+    for (const l of lignes) {
+      const tr = el("tr");
+      tr.appendChild(el("th", "macro-indic", l.libelle));
+      for (const t of donnees.types) {
+        tr.appendChild(el("td", ["macro-cell", l.manuel && l.manuel[t] ? "macro-manuel" : "",
+          l.etat && l.etat[t] && l.etat[t] !== "valeur" ? "macro-expl" : ""].filter(Boolean).join(" "), l[t]));
+      }
+      tr.appendChild(el("td", `macro-cell ${classeSurprise(l.surprise, sensDe[l.indicateur], l.marche)}`,
+        l.surprise || "—"));
+      tr.appendChild(el("td", "macro-cell", l.variation || "—"));
+      tr.appendChild(el("td", "macro-cell", jjmm(l.date_pub)));
+      tr.appendChild(el("td", "macro-cell", jjmmHeure(l.prochaine)));
+      tr.appendChild(el("td", "macro-cell macro-src", l.source || "—"));
+      table.appendChild(tr);
+    }
+    return table;
+  }
+
+  function dessiner() {
+    for (const [id, b] of Object.entries(boutonsMode)) b.classList.toggle("actif", id === mode);
+    barreSous.replaceChildren(...(mode === "matrice" ? Object.values(boutonsType)
+                                                      : Object.values(boutonsDevise)));
+    for (const [t, b] of Object.entries(boutonsType)) b.classList.toggle("actif", t === typeCourant);
+    for (const [d, b] of Object.entries(boutonsDevise)) b.classList.toggle("actif", d === deviseCourante);
+    defilement.replaceChildren(mode === "matrice" ? tableMatrice() : tableDevise());
     const r = (donnees.remplissage || {})[typeCourant];
-    pied.textContent = r
-      ? `${typeCourant} : ${r.valeur} valeur(s), ${r.explique} expliquée(s), ${r.vide} à initialiser — ` +
-        `${donnees.source}`
-      : donnees.source || "";
+    pied.textContent = mode === "matrice" && r
+      ? `${typeCourant} : ${r.valeur} valeur(s), ${r.explique} expliquée(s), ${r.vide} à initialiser — ${SOURCE}`
+      : SOURCE;
   }
   dessiner();
   return carte;
