@@ -32,7 +32,7 @@ import copy
 import json
 import logging
 
-from core.llm import FournisseurLLM, extraire_json
+from core.llm import FournisseurLLM, attribution_modele, definir_etiquette, extraire_json
 from core.secrets import masquer_secrets
 
 log = logging.getLogger(__name__)
@@ -92,8 +92,10 @@ def critiquer(llm: FournisseurLLM, rapport: dict) -> dict:
     """Retourne le rapport enrichi d'une clé "critique". Ne lève jamais :
     si la relecture échoue, on publie avec la mention d'indisponibilité."""
     prompt = PROMPT_CRITIQUE + json.dumps(_condenser(rapport), ensure_ascii=False, default=str)
+    definir_etiquette("critique")
     try:
         brut = extraire_json(llm.appeler_llm(prompt))
+        modele_critique = attribution_modele()
         validation = str(brut.get("validation", "ok")).lower()
         suggestions = []
         for s in (brut.get("suggestions_connaissances") or [])[:3]:
@@ -112,6 +114,7 @@ def critiquer(llm: FournisseurLLM, rapport: dict) -> dict:
             "affirmations_non_sourcees": [str(x)[:300] for x in brut.get("affirmations_non_sourcees", [])][:10],
             "suggestions_connaissances": suggestions,
             "validation": validation,
+            "redige_par": modele_critique,
         }
         if validation == "non_evalue":
             critique["indisponible"] = True

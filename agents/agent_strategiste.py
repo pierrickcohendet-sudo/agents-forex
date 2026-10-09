@@ -18,7 +18,7 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 from core import overrides, scoring
-from core.llm import FournisseurLLM, extraire_json
+from core.llm import FournisseurLLM, attribution_modele, definir_etiquette, extraire_json
 from core.secrets import masquer_secrets
 
 log = logging.getLogger(__name__)
@@ -817,9 +817,11 @@ def analyser(config: dict, llm: FournisseurLLM, technique: dict, macro: dict,
         overrides_devise = overrides_du_jour.get(devise)
         # Biais Risk On/Off structurel : dérivé du profil configuré, pas du LLM.
         biais = scoring.biais_structurel(config["devises"][devise].get("profil_risque", "neutre"))
+        definir_etiquette(f"analyse:{devise}")
         try:
             brut = _analyser_devise(llm, systeme, config, devise, donnees, catalogue, memoire,
                                     overrides_devise)
+            redige_par = attribution_modele()   # modèle qui a RÉELLEMENT répondu (principal ou secours)
         except RuntimeError as exc:
             entree = _devise_indisponible(devise, masquer_secrets(str(exc))[:150], biais)
             # Les données collectées ne dépendent pas du LLM : le tableau
@@ -843,6 +845,7 @@ def analyser(config: dict, llm: FournisseurLLM, technique: dict, macro: dict,
         devises_finales.append({
             "devise": devise,
             "risk_on_off": biais,
+            "redige_par": redige_par,
             "score_confluence": score,
             "detail_score": detail,
             "biais_banque_centrale": brut.get("biais_banque_centrale", "data_dependent"),
@@ -867,8 +870,14 @@ def analyser(config: dict, llm: FournisseurLLM, technique: dict, macro: dict,
     # à retenter) : généré maintenant, APRÈS la boucle devise, pour voir le
     # détail par devise ET le biais calculé (ne doit jamais le contredire).
     etat_existant = (rapport_existant or {}).get("synthese_globale", {}).get("etat_du_monde")
-    etat_du_monde = etat_existant or synthese_etat_du_monde(
-        llm, donnees, catalogue, systeme, devises_finales, biais)
+    if etat_existant:
+        etat_du_monde = etat_existant
+    else:
+        definir_etiquette("etat_du_monde")
+        etat_du_monde = synthese_etat_du_monde(llm, donnees, catalogue, systeme, devises_finales, biais)
+        if isinstance(etat_du_monde, dict) and etat_du_monde:
+            etat_du_monde["redige_par"] = attribution_modele()
+    definir_etiquette("commentaire_classement")
 
     non_rafraichies = list(calendrier.get("non_rafraichies", []))
     for source, erreurs in (("Twelve Data", technique.get("erreurs", [])),

@@ -421,6 +421,11 @@ def _blocs_devise(devise: dict, rapport: dict,
             [nb.rt(devise.get("synthese_une_phrase", ""), gras=True)],
             EMOJI_BIAIS[biais], nb.COULEURS_CALLOUT[biais]))
 
+    redige = (devise.get("redige_par") or {}).get("libelle")
+    if redige:
+        # Modèle qui a réellement produit l'analyse (principal ou secours Flash-Lite).
+        blocs.append(nb.paragraphe([nb.rt(f"✍️ Analyse rédigée par {redige}", couleur="gray", italique=True)]))
+
     indice = devise.get("indice_surprise_30j") or {}
     if indice.get("indice") is not None:
         fleche = {"hausse": "▲", "baisse": "▼", "stable": "=", "n/d": ""}.get(indice.get("tendance"), "")

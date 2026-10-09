@@ -29,7 +29,7 @@ import argparse
 import json
 import logging
 import sys
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from pathlib import Path
 
 import yaml
@@ -318,6 +318,13 @@ def main() -> int:
     # si un prompt dépasse controle_qualite.seuil_prompt_tokens.
     precedents = ((rapport_existant or {}).get("meta", {}).get("appels_llm", []))
     rapport["meta"]["appels_llm"] = (precedents + journal_appels())[-80:]
+    # État du disjoncteur du modèle principal pour CE passage (un passage --completer
+    # s'ajoute à ceux du matin, plafonné) : voir core/llm.py, FournisseurAvecSecours.
+    if hasattr(llm, "etat_disjoncteur"):
+        anciens = (rapport_existant or {}).get("meta", {}).get("disjoncteur", [])
+        anciens = anciens if isinstance(anciens, list) else [anciens]
+        rapport["meta"]["disjoncteur"] = (anciens + [{
+            "heure": datetime.now(timezone.utc).strftime("%H:%M"), **llm.etat_disjoncteur()}])[-12:]
     etape("alerte taille des prompts", controle_qualite.signaler_prompts_volumineux,
           rapport, config)
 

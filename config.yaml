@@ -6,8 +6,19 @@
 
 llm:
   fournisseur: gemini            # principal ; "gemini" et "groq" implémentés — nouveau fournisseur = 1 classe dans core/llm.py
-  modele: gemini-flash-latest
+  # Nom FIXE (2026-10-09) : l'alias « gemini-flash-latest » pointe vers un modèle saturé
+  # (503 « high demand » presque tous les jours) et au quota gratuit de 20 requêtes/JOUR
+  # (429 « PerDay »). gemini-3.5-flash répond (test réel, prompt ~17 000 tokens en 3 s).
+  modele: gemini-3.5-flash
   temperature: 0.2
+
+  # Disjoncteur : après N échecs consécutifs du modèle principal pendant un run (ou dès
+  # un quota journalier épuisé), il est ignoré pour le reste du run et les appels vont
+  # directement au secours. Au run suivant, le principal est retenté. État dans
+  # rapport.meta.disjoncteur.
+  disjoncteur:
+    actif: true
+    seuil_echecs_consecutifs: 3
   max_tentatives_json: 2         # tentatives de parsing JSON par appel LLM
   pause_entre_appels_s: 7        # tier gratuit Gemini : espace TOUS les appels (9 devises + synthèses)
   backoff_429_s: 30              # attente réelle avant nouvel essai après un 429 (Retry-After respecté si plus long)

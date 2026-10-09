@@ -70,22 +70,64 @@ def _budget_car(budget_tokens: int) -> int:
 # avoir à lire les logs GitHub Actions. Un échec est noté (ok=False) : ce sont
 # souvent les plus gros prompts qui échouent.
 _JOURNAL_APPELS: list[dict] = []
+_ETIQUETTE_COURANTE: list[str] = [""]      # ex. « analyse:EUR », « synthese:EUR » (posée par l'appelant)
+_DERNIER_MODELE_OK: list[str | None] = [None]
 
 
 def reinitialiser_journal() -> None:
     _JOURNAL_APPELS.clear()
+    _DERNIER_MODELE_OK[0] = None
 
 
 def journal_appels() -> list[dict]:
     return [dict(e) for e in _JOURNAL_APPELS]
 
 
+def definir_etiquette(etiquette: str) -> None:
+    """Étiquette attachée aux prochaines entrées du journal (distingue analyse,
+    synthèse, critique… dans meta.appels_llm)."""
+    _ETIQUETTE_COURANTE[0] = etiquette
+
+
+def dernier_modele() -> str | None:
+    """Identifiant du modèle qui a réellement produit la dernière réponse réussie
+    (principal ou secours) — à lire juste après l'appel."""
+    return _DERNIER_MODELE_OK[0]
+
+
+def libelle_modele(modele: str | None) -> str | None:
+    """'gemini-3.5-flash-lite' -> 'Flash-Lite 3.5' ; 'gemini-3.5-flash' -> 'Flash 3.5'."""
+    if not modele:
+        return None
+    m = re.match(r"gemini-?(\d+(?:\.\d+)?)?-?(flash-lite|flash|pro)?(?:-(latest|preview))?", modele)
+    if not m or not m.group(2):
+        return modele
+    famille = {"flash-lite": "Flash-Lite", "flash": "Flash", "pro": "Pro"}[m.group(2)]
+    return f"{famille} {m.group(1)}" if m.group(1) else famille
+
+
+def attribution_modele() -> dict | None:
+    """{'modele': id, 'libelle': 'Flash-Lite 3.5'} du dernier appel réussi, ou None."""
+    modele = dernier_modele()
+    return {"modele": modele, "libelle": libelle_modele(modele)} if modele else None
+
+
 def _noter_appel(modele: str, systeme: str | None, prompt: str, ok: bool) -> None:
     tok_sys, tok_msg = _estimer_tokens(systeme or ""), _estimer_tokens(prompt)
-    _JOURNAL_APPELS.append({
+    entree = {
         "heure": datetime.now(timezone.utc).strftime("%H:%M"), "modele": modele,
         "tokens_systeme": tok_sys, "tokens_message": tok_msg,
-        "tokens_total": tok_sys + tok_msg, "ok": ok})
+        "tokens_total": tok_sys + tok_msg, "ok": ok}
+    if _ETIQUETTE_COURANTE[0]:
+        entree["etiquette"] = _ETIQUETTE_COURANTE[0]
+    _JOURNAL_APPELS.append(entree)
+    if ok:
+        _DERNIER_MODELE_OK[0] = modele
+
+
+class QuotaJournalierEpuise(RuntimeError):
+    """Quota gratuit PAR JOUR du modèle épuisé (429 « PerDay ») : inutile de
+    réessayer pendant des heures — le disjoncteur s'ouvre aussitôt."""
 
 
 class FournisseurLLM(ABC):
@@ -167,6 +209,11 @@ class FournisseurGemini(_FournisseurAvecCadence):
         if systeme:
             corps["system_instruction"] = {"parts": [{"text": systeme}]}
         rep = self._poster(corps)
+        if rep.status_code == 429 and "PerDay" in rep.text:
+            # Quota gratuit journalier (ex. 20 requêtes/jour/modèle) : le délai de
+            # reprise se compte en heures, attendre 30 s n'aurait aucun sens.
+            raise QuotaJournalierEpuise(
+                f"quota gratuit journalier épuisé pour {self.modele} (HTTP 429, requêtes/jour)")
         if rep.status_code == 429:
             attente = self._delai_apres_429(rep)
             log.warning("Gemini 429 (limite de requêtes/minute) : attente de %.0f s "
@@ -392,28 +439,73 @@ class FournisseurAvecSecours(FournisseurLLM):
     appel précis (jamais l'inverse, jamais en parallèle)."""
 
     def __init__(self, principal: FournisseurLLM, secours: FournisseurLLM,
-                nom_principal: str, nom_secours: str):
+                nom_principal: str, nom_secours: str,
+                disjoncteur_actif: bool = False, seuil_echecs: int = 3):
         self.principal = principal
         self.secours = secours
         self.nom_principal = nom_principal
         self.nom_secours = nom_secours
+        # Disjoncteur : après `seuil_echecs` échecs CONSÉCUTIFS du principal (ou dès
+        # un quota journalier épuisé), il est ignoré pour le reste du run — plus
+        # d'attente de 30 s + retry sur un modèle qui ne répond pas. L'instance
+        # vit le temps d'un run : au run suivant, le principal est retenté.
+        self.disjoncteur_actif = bool(disjoncteur_actif)
+        self.seuil_echecs = max(1, int(seuil_echecs))
+        self.echecs_consecutifs = 0
+        self.ouvert = False
+        self.cause_ouverture: str | None = None
+        self.appels_principal_ignores = 0
+        self.appels_total = 0
+        self.ouvert_a_l_appel: int | None = None
+
+    def etat_disjoncteur(self) -> dict:
+        """État loggé dans rapport['meta']['disjoncteur']."""
+        return {"actif": self.disjoncteur_actif, "principal": self.nom_principal,
+                "secours": self.nom_secours, "seuil_echecs": self.seuil_echecs,
+                "ouvert": self.ouvert, "cause": self.cause_ouverture,
+                "ouvert_a_l_appel": self.ouvert_a_l_appel,
+                "echecs_consecutifs_fin_de_run": self.echecs_consecutifs,
+                "appels_total": self.appels_total,
+                "appels_principal_ignores": self.appels_principal_ignores}
+
+    def _echec_principal(self, exc: Exception, msg: str) -> None:
+        self.echecs_consecutifs += 1
+        quota = isinstance(exc, QuotaJournalierEpuise)
+        if self.disjoncteur_actif and not self.ouvert and (quota or self.echecs_consecutifs >= self.seuil_echecs):
+            self.ouvert = True
+            self.ouvert_a_l_appel = self.appels_total
+            self.cause_ouverture = ("quota journalier épuisé" if quota else
+                                    f"{self.echecs_consecutifs} échecs consécutifs") + f" — {msg[:120]}"
+            log.warning("DISJONCTEUR OUVERT : %s ignoré pour le reste de ce run (%s) — appels "
+                        "directs sur %s ; il sera retenté au prochain run",
+                        self.nom_principal, self.cause_ouverture, self.nom_secours)
 
     def appeler_llm(self, prompt: str, systeme: str | None = None) -> str:
+        self.appels_total += 1
+        if self.ouvert:
+            self.appels_principal_ignores += 1
+            return self._appeler_secours(prompt, systeme, "disjoncteur ouvert")
         try:
-            return self.principal.appeler_llm(prompt, systeme=systeme)
+            texte = self.principal.appeler_llm(prompt, systeme=systeme)
+            self.echecs_consecutifs = 0
+            return texte
         except Exception as exc_principal:  # noqa: BLE001
             msg_principal = masquer_secrets(str(exc_principal))
+            self._echec_principal(exc_principal, msg_principal)
             log.warning("Fournisseur %s en échec (%s) — repli sur %s pour cet appel",
                        self.nom_principal, msg_principal, self.nom_secours)
-            try:
-                return self.secours.appeler_llm(prompt, systeme=systeme)
-            except Exception as exc_secours:  # noqa: BLE001
-                msg_secours = masquer_secrets(str(exc_secours))
-                log.error("Fournisseur de secours %s également en échec : %s",
-                         self.nom_secours, msg_secours)
-                raise RuntimeError(
-                    f"{self.nom_principal} et {self.nom_secours} (secours) en échec : "
-                    f"{msg_principal} | {msg_secours}") from exc_secours
+            return self._appeler_secours(prompt, systeme, msg_principal)
+
+    def _appeler_secours(self, prompt: str, systeme: str | None, msg_principal: str) -> str:
+        try:
+            return self.secours.appeler_llm(prompt, systeme=systeme)
+        except Exception as exc_secours:  # noqa: BLE001
+            msg_secours = masquer_secrets(str(exc_secours))
+            log.error("Fournisseur de secours %s également en échec : %s",
+                     self.nom_secours, msg_secours)
+            raise RuntimeError(
+                f"{self.nom_principal} et {self.nom_secours} (secours) en échec : "
+                f"{msg_principal} | {msg_secours}") from exc_secours
 
 
 FOURNISSEURS = {"gemini": FournisseurGemini, "groq": FournisseurGroq}
@@ -467,8 +559,11 @@ def creer_fournisseur(config: dict) -> FournisseurLLM:
     nom_secours = f"{cfg_secours.get('fournisseur', 'secours')}/{cfg_secours.get('modele', '?')}"
     log.info("Fournisseur de secours actif : %s -> repli sur %s en cas d'échec",
              nom_principal, nom_secours)
+    cfg_disj = cfg.get("disjoncteur") or {}
     return FournisseurAvecSecours(principal, secours,
-                                  nom_principal=nom_principal, nom_secours=nom_secours)
+                                  nom_principal=nom_principal, nom_secours=nom_secours,
+                                  disjoncteur_actif=cfg_disj.get("actif", False),
+                                  seuil_echecs=cfg_disj.get("seuil_echecs_consecutifs", 3))
 
 
 def extraire_json(texte: str) -> dict | list:

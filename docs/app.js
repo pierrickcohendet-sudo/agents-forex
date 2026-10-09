@@ -460,6 +460,13 @@ function carteDevise(devise, rapport, sources) {
     corps.appendChild(haut);
   }
 
+  if (devise.redige_par && devise.redige_par.libelle) {
+    corps.appendChild(el("p", "meta-devise",
+      `✍️ Analyse rédigée par ${devise.redige_par.libelle}` +
+      (devise.synthese_approfondie && devise.synthese_approfondie.redige_par
+        ? ` · synthèse approfondie par ${devise.synthese_approfondie.redige_par.libelle}` : "")));
+  }
+
   const surp = devise.indice_surprise_30j;
   if (surp && surp.indice !== null && surp.indice !== undefined) {
     const fleche = { hausse: "▲", baisse: "▼", stable: "=" }[surp.tendance] || "";
