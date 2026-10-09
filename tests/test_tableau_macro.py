@@ -495,6 +495,22 @@ class FredEtProjections(unittest.TestCase):
         self.assertEqual(rm.source_cellule(chf), "FRED (XTEXVA01CHM667S) · pér. 06/26")
         self.assertEqual(chf["actuel"]["source"], "FRED (XTEXVA01CHM667S)")
 
+    def test_cpi_core_us_annuel_par_mois_malgre_le_trou_d_octobre_2025(self):
+        """Régression : indices réels FRED (CPILFESL). Octobre 2025 n'a jamais été publié
+        (shutdown) : comparer par position donnait 2,8 % (août 2026 vs juillet 2025) au lieu
+        de 2,4 % (août 2026 vs août 2025), chiffre BLS confirmé par ForexFactory."""
+        from core import fred_macro as fm
+        idx = {"2025-07": 328.682, "2025-08": 329.700, "2025-09": 330.5, "2025-11": 331.2,
+               "2025-12": 332.0, "2026-01": 333.0, "2026-02": 333.8, "2026-03": 334.6,
+               "2026-04": 335.4, "2026-05": 336.121, "2026-06": 336.065, "2026-07": 336.789,
+               "2026-08": 337.765}
+        obs = [{"date": f"{p}-01", "value": str(v)} for p, v in sorted(idx.items(), reverse=True)]
+        self.assertEqual(fm._valeur(obs, 0, "yoy", "%"), ("2.4%", "2026-08"))
+        # mois sans équivalent 12 mois plus tôt (octobre manquant) : pas de valeur plutôt qu'un faux calcul
+        self.assertIsNone(fm._valeur([{"date": "2026-10-01", "value": "338"}] + obs, 0, "yoy", "%"))
+        self.assertEqual(fm._mois_moins("2026-01-01", 12), "2025-01")
+        self.assertEqual(fm._mois_moins("2026-01-01", 1), "2025-12")
+
     def test_projection_bc_etiquetee_quand_pas_de_consensus(self):
         reg = self.reg()
         rm.integrer_evenements(reg, [ev("USD", 56, "Unemployment Rate", T0, "4.2%", "4.1%", "4.1%"),

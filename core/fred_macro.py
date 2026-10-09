@@ -47,15 +47,36 @@ def _formater(valeur: float, unite: str) -> str:
     return f"{valeur:.1f}%"
 
 
+def _mois_moins(periode: str, mois: int) -> str:
+    """'2026-08-01' - 12 mois -> '2025-08'."""
+    a, m = int(periode[:4]), int(periode[5:7])
+    n = a * 12 + (m - 1) - mois
+    return f"{n // 12:04d}-{n % 12 + 1:02d}"
+
+
+def _valeur_a(obs: list[dict], periode: str) -> float | None:
+    """Valeur de la série pour le mois `AAAA-MM`, ou None si ce mois n'a pas été publié."""
+    for o in obs:
+        if o["date"][:7] == periode:
+            return float(o["value"])
+    return None
+
+
 def _valeur(obs: list[dict], decalage: int, calcul: str, unite: str) -> tuple[str, str] | None:
-    """(valeur formatée, période AAAA-MM) pour l'observation `decalage` (0 = la plus récente)."""
+    """(valeur formatée, période AAAA-MM) pour l'observation `decalage` (0 = la plus récente).
+
+    Les comparaisons (a/a, m/m, variation) se font par MOIS, jamais par position : une série
+    peut avoir un trou (CPI américain d'octobre 2025 jamais publié, shutdown) et un décalage
+    d'index comparerait alors deux mois qui ne sont pas espacés de 12."""
     try:
-        if calcul == "yoy":
-            v = (float(obs[decalage]["value"]) / float(obs[decalage + 12]["value"]) - 1) * 100
-        elif calcul == "pct_m":
-            v = (float(obs[decalage]["value"]) / float(obs[decalage + 1]["value"]) - 1) * 100
-        elif calcul == "diff":
-            v = float(obs[decalage]["value"]) - float(obs[decalage + 1]["value"])
+        courant = float(obs[decalage]["value"])
+        periode = obs[decalage]["date"][:7]
+        if calcul in ("yoy", "pct_m", "diff"):
+            base = _valeur_a(obs, _mois_moins(periode, 12 if calcul == "yoy" else 1))
+            if base is None:
+                return None
+            v = {"yoy": (courant / base - 1) * 100, "pct_m": (courant / base - 1) * 100,
+                 "diff": courant - base}[calcul]
         elif calcul == "milliards":
             v = float(obs[decalage]["value"]) / 1000.0
         elif calcul == "unites_milliards":
