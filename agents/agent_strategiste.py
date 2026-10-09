@@ -18,7 +18,8 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 from core import overrides, scoring
-from core.llm import FournisseurLLM, attribution_modele, definir_etiquette, extraire_json
+from core.llm import (MESSAGE_QUOTA_ATTEINT, FournisseurLLM, QuotaAtteint, attribution_modele,
+                      definir_etiquette, extraire_json)
 from core.secrets import masquer_secrets
 
 log = logging.getLogger(__name__)
@@ -499,6 +500,8 @@ def _analyser_devise(llm: FournisseurLLM, systeme: str, config: dict, devise: st
     for essai in range(1, tentatives + 1):
         try:
             return extraire_json(llm.appeler_llm(prompt, systeme=systeme))
+        except QuotaAtteint:
+            raise   # inutile de retenter : plus aucun modèle disponible aujourd'hui
         except Exception as exc:  # noqa: BLE001 — parsing JSON ou erreur API : on retente
             derniere_erreur = exc
             log.warning("Analyse %s, essai %d/%d en échec : %s", devise, essai, tentatives,
@@ -826,7 +829,8 @@ def analyser(config: dict, llm: FournisseurLLM, technique: dict, macro: dict,
                                     overrides_devise)
             redige_par = attribution_modele()   # modèle qui a RÉELLEMENT répondu (principal ou secours)
         except RuntimeError as exc:
-            entree = _devise_indisponible(devise, masquer_secrets(str(exc))[:150], biais)
+            raison = MESSAGE_QUOTA_ATTEINT if isinstance(exc, QuotaAtteint) else masquer_secrets(str(exc))[:150]
+            entree = _devise_indisponible(devise, raison, biais)
             # Les données collectées ne dépendent pas du LLM : le tableau
             # d'indicateurs et le carry restent affichables même sans analyse.
             entree["indicateurs_tableau"] = _tableau_indicateurs(config, devise, donnees, overrides_devise)
@@ -883,7 +887,8 @@ def analyser(config: dict, llm: FournisseurLLM, technique: dict, macro: dict,
     # Commentaire du classement : réutilisé tel quel en --completer tant qu'aucune devise
     # n'a été ré-analysée (une retentative de synthèse seule ne relance pas l'analyse de base).
     commentaire_existant = (rapport_existant or {}).get("synthese_globale", {}).get("commentaire")
-    if commentaire_existant and nb_analysees == 0:
+    if (commentaire_existant and nb_analysees == 0
+            and "en tête du classement de confluence" not in commentaire_existant):   # pas le texte de repli
         commentaire = commentaire_existant
     else:
         definir_etiquette("commentaire_classement")

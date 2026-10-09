@@ -38,7 +38,15 @@ def _ohlc(paire: str, intervalle: str, taille: int, cle: str) -> pd.DataFrame:
     df["datetime"] = pd.to_datetime(df["datetime"])
     for col in ("open", "high", "low", "close"):
         df[col] = df[col].astype(float)
-    return df.sort_values("datetime").set_index("datetime")
+    df = df.sort_values("datetime").set_index("datetime")
+    # Twelve Data peut renvoyer deux fois la même bougie (ex. jour en cours + même date) : un index
+    # dupliqué fait échouer tout le calcul des corrélations/indice USD (incident du 2026-10-09,
+    # « cannot reindex on an axis with duplicate labels »). On garde la dernière valeur.
+    if df.index.has_duplicates:
+        log.warning("Twelve Data %s %s : %d bougie(s) en double — dernière valeur conservée",
+                    paire, intervalle, int(df.index.duplicated().sum()))
+        df = df[~df.index.duplicated(keep="last")]
+    return df
 
 
 def _calculer_rsi(serie: pd.Series, periode: int = 14) -> pd.Series:

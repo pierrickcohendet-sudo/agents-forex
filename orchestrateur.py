@@ -38,7 +38,7 @@ from dotenv import load_dotenv
 from agents import (agent_critique, agent_redacteur, agent_strategiste, agent_synthese,
                     collecte_calendrier, collecte_macro, collecte_news,
                     collecte_technique)
-from core import (collecte_cache, controle_qualite, evaluation, hebdo, overrides, publication_web,
+from core import (collecte_cache, controle_qualite, evaluation, hebdo, marche_taux, overrides, publication_web,
                   registre_macro, saisies_manuelles, tableau_macro)
 from core.llm import creer_fournisseur, journal_appels, reinitialiser_journal
 from core.notifications import notifier_echec
@@ -233,6 +233,11 @@ def main() -> int:
     # Rendements 2 ans / 10 ans et spread vs USD (Tableau macro) : alimentent la ligne
     # « différentiel de taux » du score de confluence (pondérations inchangées).
     macro["taux_obligataires"] = (tableau or {}).get("resume_taux", {})
+    # Taux directeurs OFFICIELS (registre) à la place des valeurs de repli de config.yaml ;
+    # le carry et les différentiels sont recalculés. La config reste le repli si le registre
+    # n'a pas de valeur numérique pour la devise.
+    etape("taux directeurs (registre)", marche_taux.appliquer_registre_taux, macro,
+          registre_macro.charger(donnees_dir / "registre_macro.json"), config["tableau_macro"])
 
     if not technique["devises"] and not macro["series"]:
         notifier_echec("collecte", "aucune donnée technique NI macro — rapport annulé")
@@ -331,6 +336,15 @@ def main() -> int:
     rapport["meta"]["appels_llm"] = (precedents + journal_appels())[-80:]
     # État du disjoncteur du modèle principal pour CE passage (un passage --completer
     # s'ajoute à ceux du matin, plafonné) : voir core/llm.py, FournisseurAvecSecours.
+    # Appels par modèle : ce run (journal) + compteur du jour (fichier d'état, plafond gratuit).
+    if hasattr(llm, "etat_quota"):
+        rapport["meta"]["quota_llm"] = llm.etat_quota()
+    appels_run: dict[str, dict] = {}
+    for e in rapport["meta"]["appels_llm"]:   # cumul du jour (passages --completer inclus, plafonné)
+        c = appels_run.setdefault(e["modele"], {"appels": 0, "echecs": 0})
+        c["appels"] += 1
+        c["echecs"] += 0 if e.get("ok") else 1
+    rapport["meta"]["appels_par_modele"] = appels_run
     if hasattr(llm, "etat_disjoncteur"):
         anciens = (rapport_existant or {}).get("meta", {}).get("disjoncteur", [])
         anciens = anciens if isinstance(anciens, list) else [anciens]

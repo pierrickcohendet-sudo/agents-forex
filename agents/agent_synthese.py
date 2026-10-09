@@ -25,7 +25,8 @@ import unicodedata
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
-from core.llm import (FournisseurLLM, attribution_modele, definir_etiquette, extraire_json)
+from core.llm import (MESSAGE_QUOTA_ATTEINT, FournisseurLLM, QuotaAtteint, attribution_modele,
+                      definir_etiquette, extraire_json)
 from core.secrets import masquer_secrets
 
 log = logging.getLogger(__name__)
@@ -471,6 +472,8 @@ def _synthetiser_devise(llm: FournisseurLLM, systeme: str, config: dict, devise:
             synthese = normaliser(brut, candidats, entree, cfg)
             synthese["redige_par"] = modele
             return synthese
+        except QuotaAtteint:
+            raise   # plus aucun modèle disponible aujourd'hui : inutile de retenter
         except Exception as exc:  # noqa: BLE001 — JSON invalide, schéma incomplet ou erreur API : on retente
             derniere = exc
             log.warning("Synthèse %s, essai %d/%d en échec : %s", devise, essai, tentatives,
@@ -495,8 +498,17 @@ def synthetiser(config: dict, llm: FournisseurLLM, devises: list[dict], donnees:
     dossier = Path(dossier_rapports) if dossier_rapports else None
     maximum = int(cfg.get("tentatives_max", 4))
     appels = 0
+    quota_atteint = False
     for entree in a_faire:
         devise = entree["devise"]
+        if quota_atteint:
+            # Plus aucun modèle disponible : pas d'appel, pas de tentative comptée (ce n'est pas un
+            # échec de la synthèse) — elle sera retentée par --completer après la remise à zéro du quota.
+            entree["synthese_approfondie"] = {
+                "statut": "indisponible", "raison": MESSAGE_QUOTA_ATTEINT, "quota_atteint": True,
+                "tentatives": int((entree.get("synthese_approfondie") or {}).get("tentatives", 0)),
+                "genere_le": datetime.now(timezone.utc).isoformat(timespec="seconds")}
+            continue
         if appels and pause > 0:
             time.sleep(pause)   # même cadence que les analyses : jamais de rafale de gros prompts
         appels += 1
@@ -508,6 +520,13 @@ def synthetiser(config: dict, llm: FournisseurLLM, devises: list[dict], donnees:
             synthese.update({"statut": "ok", "tentatives": precedentes + 1,
                              "genere_le": datetime.now(timezone.utc).isoformat(timespec="seconds")})
             entree["synthese_approfondie"] = synthese
+        except QuotaAtteint:
+            quota_atteint = True
+            entree["synthese_approfondie"] = {
+                "statut": "indisponible", "raison": MESSAGE_QUOTA_ATTEINT, "quota_atteint": True,
+                "tentatives": precedentes, "genere_le": datetime.now(timezone.utc).isoformat(timespec="seconds")}
+            log.warning("Synthèses approfondies : quota atteint sur tous les modèles — arrêt (retentées au "
+                        "prochain passage après remise à zéro)")
         except Exception as exc:  # noqa: BLE001
             n = precedentes + 1
             raison = masquer_secrets(str(exc))[:200]

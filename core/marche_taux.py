@@ -266,3 +266,35 @@ def resume_pour_analyse(registre: dict, cfg_tm: dict) -> dict:
             "date": ((sp or y2 or y10)["actuel"].get("date_pub") or (y10 or {}).get("actuel", {}).get("periode")),
         }
     return resultat
+
+
+def appliquer_registre_taux(macro: dict, registre: dict, cfg_tm: dict) -> dict:
+    """Taux directeurs OFFICIELS du registre macro (dernière publication ForexFactory) à la place
+    des valeurs de repli de config.yaml (et du FEDFUNDS mensuel pour l'USD) ; recalcule le carry
+    (médiane G8 et différentiels). La config ne reste en repli que si le registre n'a pas de valeur
+    NUMÉRIQUE pour la devise (ex. « <1.25% » du JPY : une borne, pas un taux). Retourne
+    {devise: {avant, apres, source}} pour les devises modifiées ; macro est modifié en place."""
+    taux = macro.get("taux_directeurs") or {}
+    modifs = {}
+    for devise in cfg_tm.get("ordre_devises", list(taux)):
+        case = (registre.get("cases") or {}).get(rm.cle("taux_directeur", devise)) or {}
+        actuel = case.get("actuel") or {}
+        if case.get("statut") == "non_applicable" or actuel.get("valeur_num") is None:
+            continue
+        avant = taux.get(devise) or {}
+        nouveau = {"taux": float(actuel["valeur_num"]), "date": str(actuel.get("date_pub") or ""),
+                   "source": "registre macro (ForexFactory, publication officielle)"}
+        if avant.get("taux") is not None:
+            nouveau["repli_precedent"] = {"taux": avant["taux"], "date": avant.get("date"),
+                                         "source": avant.get("source")}
+        taux[devise] = nouveau
+        if avant.get("taux") != nouveau["taux"]:
+            modifs[devise] = {"avant": avant.get("taux"), "apres": nouveau["taux"], "source": nouveau["source"]}
+    macro["taux_directeurs"] = taux
+    valeurs = {d: v["taux"] for d, v in taux.items() if v.get("taux") is not None}
+    if valeurs:
+        import statistics
+        mediane = statistics.median(valeurs.values())
+        macro["carry"] = {"mediane_g8": round(mediane, 2),
+                          "differentiels": {d: round(t - mediane, 2) for d, t in valeurs.items()}}
+    return modifs

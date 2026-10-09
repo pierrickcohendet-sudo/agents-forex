@@ -40,7 +40,8 @@ import os
 import re
 import time
 from abc import ABC, abstractmethod
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
 
 import requests
 
@@ -126,8 +127,110 @@ def _noter_appel(modele: str, systeme: str | None, prompt: str, ok: bool) -> Non
 
 
 class QuotaJournalierEpuise(RuntimeError):
-    """Quota gratuit PAR JOUR du modèle épuisé (429 « PerDay ») : inutile de
-    réessayer pendant des heures — le disjoncteur s'ouvre aussitôt."""
+    """Quota gratuit PAR JOUR du modèle épuisé (429 « PerDay ») ou plafond local atteint :
+    inutile de réessayer pendant des heures — le disjoncteur s'ouvre aussitôt."""
+
+
+class QuotaAtteint(RuntimeError):
+    """Tous les modèles de la chaîne sont indisponibles faute de quota du jour : les sections
+    concernées sont marquées « indisponible : quota atteint » et retentées au passage suivant
+    (sans appel réseau tant que les quotas ne sont pas remis à zéro)."""
+
+
+MESSAGE_QUOTA_ATTEINT = "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)"
+
+
+def _delai_reprise_s(rep_texte: str) -> float | None:
+    """Délai avant remise à zéro du quota, lu dans la réponse 429 (RetryInfo « 42460s » ou
+    « Please retry in 11h47m40.5s »)."""
+    m = re.search(r'"retryDelay":\s*"(\d+(?:\.\d+)?)s"', rep_texte)
+    if m:
+        return float(m.group(1))
+    m = re.search(r"retry in (?:(\d+)h)?(?:(\d+)m)?(?:(\d+(?:\.\d+)?)s)?", rep_texte)
+    if m and any(m.groups()):
+        h, mn, sec = (float(x) if x else 0.0 for x in m.groups())
+        return h * 3600 + mn * 60 + sec
+    return None
+
+
+class RegistreQuotas:
+    """Compteur d'appels (requêtes HTTP envoyées) par modèle et par jour, persistant dans un
+    fichier d'état (versionné avec data/cache : partagé entre les runs GitHub Actions).
+    Remis à zéro au changement de jour UTC ; un 429 « PerDay » marque en plus le modèle épuisé
+    jusqu'à l'heure de reprise donnée par l'API (source de vérité). Un plafond local atteint
+    n'est JAMAIS dépassé : l'appel est refusé avant l'envoi."""
+
+    def __init__(self, chemin, plafonds: dict[str, int]):
+        from pathlib import Path as _P
+        self.chemin = _P(chemin) if chemin else None
+        self.plafonds = {m: int(q) for m, q in plafonds.items()}
+        self.donnees: dict = {"date": "", "modeles": {}}
+        self._charger()
+
+    @staticmethod
+    def _maintenant() -> datetime:
+        return datetime.now(timezone.utc)
+
+    def _charger(self) -> None:
+        brut = {}
+        if self.chemin and self.chemin.exists():
+            try:
+                brut = json.loads(self.chemin.read_text(encoding="utf-8"))
+            except (OSError, ValueError):
+                brut = {}
+        jour = self._maintenant().date().isoformat()
+        modeles = brut.get("modeles", {}) if isinstance(brut, dict) else {}
+        if brut.get("date") != jour:   # nouveau jour : compteurs à zéro, épuisements encore valides conservés
+            modeles = {m: {"appels": 0, "epuise_jusqu_a": v.get("epuise_jusqu_a")} for m, v in modeles.items()}
+        self.donnees = {"date": jour, "modeles": modeles}
+
+    def _sauver(self) -> None:
+        if not self.chemin:
+            return
+        try:
+            self.chemin.parent.mkdir(parents=True, exist_ok=True)
+            self.chemin.write_text(json.dumps(self.donnees, ensure_ascii=False, indent=1), encoding="utf-8")
+        except OSError as exc:
+            log.warning("Fichier de quota LLM non écrit (%s) : compteur gardé en mémoire", exc)
+
+    def _entree(self, modele: str) -> dict:
+        return self.donnees["modeles"].setdefault(modele, {"appels": 0, "epuise_jusqu_a": None})
+
+    def epuise(self, modele: str) -> bool:
+        jusqu = self._entree(modele).get("epuise_jusqu_a")
+        if jusqu:
+            try:
+                return self._maintenant() < datetime.fromisoformat(jusqu)
+            except ValueError:
+                return False
+        return False
+
+    def autoriser(self, modele: str) -> bool:
+        if self.epuise(modele):
+            return False
+        plafond = self.plafonds.get(modele)
+        return plafond is None or self._entree(modele)["appels"] < plafond
+
+    def compter(self, modele: str) -> None:
+        self._entree(modele)["appels"] += 1
+        self._sauver()
+
+    def marquer_epuise(self, modele: str, delai_s: float | None) -> None:
+        e = self._entree(modele)
+        delai = delai_s if delai_s else max(
+            (datetime.combine(self._maintenant().date() + timedelta(days=1), datetime.min.time(),
+                              tzinfo=timezone.utc) - self._maintenant()).total_seconds(), 60)
+        e["epuise_jusqu_a"] = (self._maintenant() + timedelta(seconds=delai)).isoformat(timespec="seconds")
+        plafond = self.plafonds.get(modele)
+        if plafond:
+            e["appels"] = max(e["appels"], plafond)
+        self._sauver()
+
+    def etat(self) -> dict:
+        return {"date": self.donnees["date"],
+                "modeles": {m: {"appels_aujourdhui": self._entree(m)["appels"], "plafond_jour": self.plafonds.get(m),
+                                "epuise_jusqu_a": self._entree(m).get("epuise_jusqu_a")}
+                            for m in self.plafonds}}
 
 
 class FournisseurLLM(ABC):
@@ -169,8 +272,10 @@ class _FournisseurAvecCadence(FournisseurLLM):
 class FournisseurGemini(_FournisseurAvecCadence):
     URL = "https://generativelanguage.googleapis.com/v1beta/models/{modele}:generateContent"
 
-    def __init__(self, modele: str, temperature: float = 0.2, **kwargs):
+    def __init__(self, modele: str, temperature: float = 0.2, registre_quotas: "RegistreQuotas | None" = None,
+                 **kwargs):
         super().__init__(**kwargs)
+        self.registre_quotas = registre_quotas
         self.cle = os.environ.get("GEMINI_API_KEY", "").strip()
         if not self.cle:
             raise RuntimeError("GEMINI_API_KEY absente de l'environnement (voir .env.example)")
@@ -178,6 +283,11 @@ class FournisseurGemini(_FournisseurAvecCadence):
         self.temperature = temperature
 
     def _poster(self, corps: dict) -> requests.Response:
+        if self.registre_quotas is not None:
+            # Plafond gratuit JAMAIS dépassé : refus AVANT l'envoi (y compris pour le nouvel essai).
+            if not self.registre_quotas.autoriser(self.modele):
+                raise QuotaJournalierEpuise(f"plafond gratuit du jour atteint pour {self.modele} (compteur local)")
+            self.registre_quotas.compter(self.modele)
         self._attendre_cadence()
         # Clé en HEADER, jamais en query string : les erreurs HTTP embarquent
         # l'URL dans leur message et finissent dans les logs.
@@ -212,6 +322,8 @@ class FournisseurGemini(_FournisseurAvecCadence):
         if rep.status_code == 429 and "PerDay" in rep.text:
             # Quota gratuit journalier (ex. 20 requêtes/jour/modèle) : le délai de
             # reprise se compte en heures, attendre 30 s n'aurait aucun sens.
+            if self.registre_quotas is not None:
+                self.registre_quotas.marquer_epuise(self.modele, _delai_reprise_s(rep.text))
             raise QuotaJournalierEpuise(
                 f"quota gratuit journalier épuisé pour {self.modele} (HTTP 429, requêtes/jour)")
         if rep.status_code == 429:
@@ -508,6 +620,79 @@ class FournisseurAvecSecours(FournisseurLLM):
                 f"{msg_principal} | {msg_secours}") from exc_secours
 
 
+class FournisseurChaine(FournisseurLLM):
+    """Liste ORDONNÉE de modèles (config llm.modeles) : l'appel va au premier modèle disponible.
+    Un modèle dont le quota du jour est atteint (compteur local ou 429 « PerDay ») ou dont le
+    disjoncteur est ouvert (N échecs consécutifs pendant ce run) est SAUTÉ sans attente.
+    Si aucun modèle n'est disponible : QuotaAtteint (quota) ou RuntimeError (autres échecs)."""
+
+    def __init__(self, maillons: list[tuple[str, FournisseurLLM]], registre: RegistreQuotas | None,
+                 disjoncteur_actif: bool = True, seuil_echecs: int = 3):
+        self.maillons = [{"modele": nom, "fournisseur": f, "echecs": 0, "ouvert": False, "cause": None,
+                          "ouvert_a_l_appel": None, "ignores": 0, "tentatives": 0, "reussites": 0}
+                         for nom, f in maillons]
+        self.registre = registre
+        self.disjoncteur_actif = bool(disjoncteur_actif)
+        self.seuil_echecs = max(1, int(seuil_echecs))
+        self.appels_total = 0
+
+    def _echec(self, m: dict, exc: Exception, msg: str) -> None:
+        m["echecs"] += 1
+        quota = isinstance(exc, QuotaJournalierEpuise)
+        if self.disjoncteur_actif and not m["ouvert"] and (quota or m["echecs"] >= self.seuil_echecs):
+            m["ouvert"], m["ouvert_a_l_appel"] = True, self.appels_total
+            m["cause"] = ("quota journalier épuisé" if quota else f"{m['echecs']} échecs consécutifs") + f" — {msg[:120]}"
+            log.warning("DISJONCTEUR OUVERT : %s ignoré pour le reste de ce run (%s)", m["modele"], m["cause"])
+
+    def appeler_llm(self, prompt: str, systeme: str | None = None) -> str:
+        self.appels_total += 1
+        raisons: list[str] = []
+        autre_echec = False
+        for m in self.maillons:
+            if m["ouvert"]:
+                m["ignores"] += 1
+                raisons.append(f"{m['modele']} : ignoré (disjoncteur)")
+                autre_echec = autre_echec or "quota" not in (m["cause"] or "")
+                continue
+            if self.registre is not None and not self.registre.autoriser(m["modele"]):
+                m["ignores"] += 1
+                raisons.append(f"{m['modele']} : quota du jour atteint")
+                continue
+            m["tentatives"] += 1
+            try:
+                texte = m["fournisseur"].appeler_llm(prompt, systeme=systeme)
+                m["echecs"] = 0
+                m["reussites"] += 1
+                if raisons:
+                    log.warning("Appel servi par %s après : %s", m["modele"], " | ".join(raisons))
+                return texte
+            except Exception as exc:  # noqa: BLE001
+                msg = masquer_secrets(str(exc))
+                self._echec(m, exc, msg)
+                raisons.append(f"{m['modele']} : {msg[:100]}")
+                autre_echec = autre_echec or not isinstance(exc, QuotaJournalierEpuise)
+                log.warning("Modèle %s en échec (%s) — essai du modèle suivant", m["modele"], msg[:150])
+        if not autre_echec:
+            raise QuotaAtteint(f"{MESSAGE_QUOTA_ATTEINT} — " + " | ".join(raisons))
+        raise RuntimeError("tous les modèles de la chaîne en échec : " + " | ".join(raisons))
+
+    def etat_disjoncteur(self) -> dict:
+        return {"actif": self.disjoncteur_actif, "seuil_echecs": self.seuil_echecs,
+                "ouvert": any(m["ouvert"] for m in self.maillons), "appels_total": self.appels_total,
+                "modeles": [{"modele": m["modele"], "ouvert": m["ouvert"], "cause": m["cause"],
+                             "ouvert_a_l_appel": m["ouvert_a_l_appel"], "echecs_consecutifs": m["echecs"],
+                             "ignores": m["ignores"]} for m in self.maillons]}
+
+    def etat_quota(self) -> dict:
+        """meta.quota_llm : compteur du jour (fichier d'état) + appels de CE run, par modèle."""
+        jour = self.registre.etat()["modeles"] if self.registre is not None else {}
+        return {"date": (self.registre.etat()["date"] if self.registre is not None else None),
+                "ordre": [m["modele"] for m in self.maillons],
+                "modeles": {m["modele"]: {**jour.get(m["modele"], {}), "appels_ce_run": m["tentatives"],
+                                          "reussites_ce_run": m["reussites"], "sauts_ce_run": m["ignores"]}
+                            for m in self.maillons}}
+
+
 FOURNISSEURS = {"gemini": FournisseurGemini, "groq": FournisseurGroq}
 
 # Paramètres propres à certains fournisseurs (ex. budgets de réduction Groq) :
@@ -535,6 +720,33 @@ def _instancier(cfg: dict) -> FournisseurLLM:
     return FOURNISSEURS[nom](**kwargs)
 
 
+def _creer_chaine(config: dict) -> FournisseurChaine:
+    cfg = config["llm"]
+    entrees = cfg["modeles"]
+    plafonds = {e["modele"]: int(e["quota_jour"]) for e in entrees if e.get("quota_jour") is not None}
+    racine = Path(__file__).resolve().parent.parent
+    chemin = racine / cfg.get("fichier_quota", "data/cache/quota_llm.json")
+    registre = RegistreQuotas(chemin, plafonds)
+    maillons = []
+    for e in entrees:
+        sous = {**cfg, "modele": e["modele"], **{k: v for k, v in e.items() if k not in ("quota_jour",)}}
+        try:
+            fournisseur = _instancier(sous)
+        except (RuntimeError, ValueError) as exc:
+            log.warning("Modèle %s non initialisé (%s) — ignoré dans la chaîne", e["modele"], exc)
+            continue
+        if isinstance(fournisseur, FournisseurGemini):
+            fournisseur.registre_quotas = registre
+        maillons.append((e["modele"], fournisseur))
+    if not maillons:
+        raise RuntimeError("llm.modeles : aucun modèle n'a pu être initialisé")
+    disj = cfg.get("disjoncteur") or {}
+    log.info("Chaîne de modèles : %s (quotas du jour : %s)", " -> ".join(m for m, _ in maillons),
+             {m: registre.etat()["modeles"][m]["appels_aujourdhui"] for m in plafonds})
+    return FournisseurChaine(maillons, registre, disjoncteur_actif=disj.get("actif", True),
+                             seuil_echecs=disj.get("seuil_echecs_consecutifs", 3))
+
+
 def creer_fournisseur(config: dict) -> FournisseurLLM:
     """Fournisseur principal (Gemini par défaut). Si llm.secours.actif est
     vrai dans config.yaml et que le fournisseur de secours s'initialise
@@ -543,6 +755,8 @@ def creer_fournisseur(config: dict) -> FournisseurLLM:
     secours.actif = false par défaut depuis le 2026-08-24 (voir le verdict en
     tête de module) — Gemini seul est le filet de sécurité recommandé."""
     cfg = config["llm"]
+    if cfg.get("modeles"):
+        return _creer_chaine(config)
     principal = _instancier(cfg)
 
     cfg_secours = cfg.get("secours") or {}

@@ -12,6 +12,21 @@ llm:
   modele: gemini-3.5-flash
   temperature: 0.2
 
+  # CHAÎNE DE MODÈLES (2026-10-09) : liste ORDONNÉE ; l'appel va au premier modèle disponible.
+  # Quota gratuit Gemini : 20 requêtes/jour/modèle (429 « PerDay » constaté). Compteur d'appels par
+  # modèle et par jour dans `fichier_quota` (versionné avec data/cache : partagé entre les runs
+  # GitHub Actions, remis à zéro au changement de jour UTC ; un 429 « PerDay » marque aussi le
+  # modèle épuisé jusqu'à l'heure de reprise donnée par l'API). Un modèle au plafond (ou au
+  # disjoncteur ouvert) est SAUTÉ sans attente ; le plafond n'est jamais dépassé. Si tous sont
+  # épuisés : sections « indisponible : quota atteint », retentées par --completer après la
+  # remise à zéro. `quota_jour` = plafond LOCAL (prudent pour Flash-Lite : limite réelle non lue).
+  # Si `modeles` est présent, il remplace `modele` + `secours` ci-dessous.
+  modeles:
+    - { modele: gemini-3.5-flash,      quota_jour: 20 }
+    - { modele: gemini-3.8-flash,      quota_jour: 20 }
+    - { modele: gemini-3.5-flash-lite, quota_jour: 20 }
+  fichier_quota: data/cache/quota_llm.json
+
   # Disjoncteur : après N échecs consécutifs du modèle principal pendant un run (ou dès
   # un quota journalier épuisé), il est ignoré pour le reste du run et les appels vont
   # directement au secours. Au run suivant, le principal est retenté. État dans
