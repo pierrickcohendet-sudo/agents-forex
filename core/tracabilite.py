@@ -30,6 +30,35 @@ def _filtrer_liste_sourcee(items: list[dict], ids_valides: set, mode: str,
     return conserves, marquees, rejetees
 
 
+def _valider_synthese(syn: dict, ids_valides: set, mode: str, code: str) -> tuple[int, int]:
+    """Synthèse approfondie d'une devise : mêmes règles que le reste du rapport. Les blocs
+    de texte sans aucune source valide sont marqués « non_source » ; les listes à puces
+    sourcées (opportunités / menaces) suivent le mode marquer / rejeter ; un identifiant
+    inventé ailleurs est simplement annulé."""
+    marquees = rejetees = 0
+    for cle in ("these_centrale", "taux_et_flux", "geopolitique", "lecture_technique"):
+        bloc = syn.get(cle)
+        if not isinstance(bloc, dict):
+            continue
+        valides = [i for i in bloc.get("source_ids", []) if i in ids_valides]
+        bloc["non_source"] = bool(bloc.get("texte") and not valides)
+        marquees += int(bloc["non_source"])
+        bloc["source_ids"] = valides
+    for scenario in syn.get("scenarios", []):
+        scenario["source_ids"] = [i for i in scenario.get("source_ids", []) if i in ids_valides]
+    for cle in ("moteurs", "invalidation", "catalyseurs"):
+        for item in syn.get(cle, []):
+            if item.get("source_id") not in ids_valides:
+                item["source_id"] = None
+    for cle in ("opportunites", "menaces"):
+        conserves, m, r = _filtrer_liste_sourcee(syn.get(cle, []), ids_valides, mode,
+                                                 f"synthese.{cle}", code)
+        syn[cle] = conserves
+        marquees += m
+        rejetees += r
+    return marquees, rejetees
+
+
 def valider_rapport(rapport: dict, mode: str = "marquer") -> dict:
     ids_valides = {s.get("id") for s in rapport.get("sources_citees", [])}
     marquees = rejetees = 0
@@ -50,6 +79,12 @@ def valider_rapport(rapport: dict, mode: str = "marquer") -> dict:
         tendance = devise.get("tendance_fond") or {}
         if tendance.get("source_id") not in ids_valides:
             tendance["source_id"] = None
+
+        syn = devise.get("synthese_approfondie")
+        if isinstance(syn, dict) and syn.get("statut") == "ok":
+            m, r = _valider_synthese(syn, ids_valides, mode, code)
+            marquees += m
+            rejetees += r
 
         # Contexte géopolitique & décisions (par devise) : même traitement que
         # opportunites/menaces pour les événements ; la phrase de posture

@@ -356,7 +356,7 @@ function carteSynthese(rapport) {
     rang.appendChild(el("td", null, `${c.score_confluence} %`));
     const celluleBarre = el("td");
     const barre = el("span", "barre-score");
-    barre.style.width = `${c.score_confluence}px`;
+    barre.style.width = `${Math.round(c.score_confluence * 0.55)}px`;  // 55 px max : tient sur 375 px
     barre.style.background = biais.couleur;
     celluleBarre.appendChild(barre);
     rang.appendChild(celluleBarre);
@@ -575,6 +575,7 @@ function carteDevise(devise, rapport, sources) {
     corps.appendChild(bloc);
   }
 
+  if (devise.synthese_approfondie) corps.appendChild(blocSyntheseApprofondie(devise.synthese_approfondie, sources));
   corps.appendChild(listeSourcee("🟢 Opportunités", devise.opportunites, sources));
   corps.appendChild(listeSourcee("🔴 Menaces", devise.menaces, sources));
   corps.appendChild(detailScore(devise.detail_score));
@@ -621,6 +622,131 @@ function carteDevise(devise, rapport, sources) {
     }
   });
   return carte;
+}
+
+const LIBELLES_PROBA = { faible: "faible", moyenne: "moyenne", elevee: "élevée" };
+const LIBELLES_ORIENTATION = { haussier: "haussière", baissier: "baissière", neutre: "neutre" };
+const LIBELLES_MOTEURS = { croissance: "Croissance", inflation: "Inflation", emploi: "Emploi", banque_centrale: "Banque centrale" };
+const LIBELLES_IMPACT = { high: "élevé", medium: "moyen", low: "faible" };
+
+function sourcesEnLigne(ids, sources) {
+  const textes = (ids || []).filter(i => sources.get(i)).map(i => {
+    const x = sources.get(i);
+    return `${x.source} · ${(x.detail || "").slice(0, 60)} · ${x.date || "s.d."}`;
+  });
+  return textes.length ? el("span", "ref-source", " — " + textes.join(" ; ")) : null;
+}
+
+function blocSyntheseApprofondie(syn, sources) {
+  const toggle = el("details", "sous-toggle synthese-approfondie");
+  const modele = syn.redige_par && syn.redige_par.libelle;
+  toggle.appendChild(el("summary", null, "📘 Synthèse approfondie" +
+    (syn.statut === "ok" ? (modele ? ` · rédigée par ${modele}` : "") : " · indisponible")));
+  const contenu = el("div", "contenu-synthese");
+  if (syn.statut !== "ok") {
+    contenu.appendChild(el("p", "meta-devise",
+      `Synthèse indisponible aujourd'hui — ${syn.raison || ""} ` +
+      (syn.statut === "abandonnee" ? "Abandonnée pour la journée après plusieurs tentatives."
+                                    : "Elle sera retentée au prochain passage.")));
+    toggle.appendChild(contenu);
+    return toggle;
+  }
+  const bloc = (texte, ids, nonSource) => {
+    const p = el("p", "texte-synthese", texte);
+    if (nonSource) p.appendChild(el("span", "tag-non-source", " [⚠ non sourcée]"));
+    else { const s = sourcesEnLigne(ids, sources); if (s) p.appendChild(s); }
+    return p;
+  };
+  const these = syn.these_centrale || {};
+  const cadre = el("div", "callout callout-these");
+  cadre.appendChild(el("div", "titre-section", `Thèse centrale — orientation ${LIBELLES_ORIENTATION[syn.orientation] || "non précisée"}`));
+  cadre.appendChild(bloc(these.texte || "", these.source_ids, these.non_source));
+  contenu.appendChild(cadre);
+
+  contenu.appendChild(el("div", "titre-section", "Moteurs fondamentaux"));
+  const liste = el("ul");
+  for (const m of syn.moteurs || []) {
+    const li = el("li");
+    li.appendChild(el("b", null, `${LIBELLES_MOTEURS[m.moteur] || m.moteur} : `));
+    li.appendChild(document.createTextNode(`${m.donnee}. ${m.trajectoire} → ${m.implication}`));
+    const s = sourcesEnLigne([m.source_id], sources); if (s) li.appendChild(s);
+    liste.appendChild(li);
+  }
+  contenu.appendChild(liste);
+
+  for (const [cle, titre] of [["taux_et_flux", "Taux et flux"], ["geopolitique", "Contexte géopolitique et politique"]]) {
+    const b = syn[cle] || {};
+    if (!b.texte) continue;
+    contenu.appendChild(el("div", "titre-section", titre));
+    contenu.appendChild(bloc(b.texte, b.source_ids, b.non_source));
+  }
+  const tech = syn.lecture_technique || {};
+  if (tech.texte) {
+    const coherence = { alignee: "alignée avec le fondamental", divergente: "en divergence avec le fondamental", mixte: "signaux mixtes" }[tech.coherence];
+    contenu.appendChild(el("div", "titre-section", "Lecture technique" + (coherence ? ` — ${coherence}` : "")));
+    contenu.appendChild(bloc(tech.texte, tech.source_ids, tech.non_source));
+  }
+
+  contenu.appendChild(el("div", "titre-section", "Scénarios"));
+  for (const sc of syn.scenarios || []) {
+    const carte = el("div", `scenario scenario-${sc.type}`);
+    carte.appendChild(el("div", "scenario-titre",
+      `${{ haussier: "🟢", central: "🟡", baissier: "🔴" }[sc.type] || "•"} Scénario ${sc.type} — probabilité ${LIBELLES_PROBA[sc.probabilite] || "non précisée"}`));
+    const p = el("p", "texte-synthese");
+    p.appendChild(el("b", null, "Déclencheur : "));
+    p.appendChild(document.createTextNode(`${sc.declencheur} ${sc.justification}`));
+    const s = sourcesEnLigne(sc.source_ids, sources); if (s) p.appendChild(s);
+    carte.appendChild(p);
+    contenu.appendChild(carte);
+  }
+
+  if ((syn.catalyseurs || []).length) {
+    contenu.appendChild(el("div", "titre-section", "Catalyseurs à venir"));
+    const defile = el("div", "tableau-defilant");
+    const table = el("table", "tableau-synthese");
+    const tete = el("tr");
+    for (const t of ["Date", "Heure (UTC)", "Événement", "Impact", "Pourquoi"]) tete.appendChild(el("th", null, t));
+    table.appendChild(tete);
+    for (const c of syn.catalyseurs) {
+      const tr = el("tr");
+      for (const v of [c.date, c.heure_utc || "—", c.evenement, LIBELLES_IMPACT[c.impact] || c.impact, c.pourquoi || ""]) tr.appendChild(el("td", null, v));
+      table.appendChild(tr);
+    }
+    defile.appendChild(table);
+    contenu.appendChild(defile);
+  }
+
+  if ((syn.invalidation || []).length) {
+    contenu.appendChild(el("div", "titre-section", "Ce qui invaliderait la thèse"));
+    const ul = el("ul");
+    for (const i of syn.invalidation) {
+      const li = el("li", null, i.signal);
+      const s = sourcesEnLigne([i.source_id], sources); if (s) li.appendChild(s);
+      ul.appendChild(li);
+    }
+    contenu.appendChild(ul);
+  }
+  for (const [cle, titre] of [["opportunites", "🟢 Opportunités (détaillées)"], ["menaces", "🔴 Menaces (détaillées)"]]) {
+    if (!(syn[cle] || []).length) continue;
+    contenu.appendChild(el("div", "titre-section", titre));
+    const ul = el("ul");
+    for (const o of syn[cle]) {
+      const li = el("li");
+      li.appendChild(el("b", null, o.texte));
+      li.appendChild(document.createTextNode(` — ${o.mecanisme || ""}`));
+      if (o.non_sourcee) li.appendChild(el("span", "tag-non-source", " [⚠ affirmation non sourcée]"));
+      else { const s = sourcesEnLigne([o.source_id], sources); if (s) li.appendChild(s); }
+      ul.appendChild(li);
+    }
+    contenu.appendChild(ul);
+  }
+  if ((syn.controles || []).length) {
+    contenu.appendChild(el("p", "tag-non-source", "Points de vigilance : " + syn.controles.join(" · ")));
+  }
+  contenu.appendChild(el("p", "pied-carte",
+    `Synthèse rédigée par ${modele || "modèle inconnu"} le ${(syn.genere_le || "").slice(0, 16).replace("T", " ")} UTC · aide à la décision — aucun signal d'achat/vente.`));
+  toggle.appendChild(contenu);
+  return toggle;
 }
 
 function blocWeekly(analyse) {

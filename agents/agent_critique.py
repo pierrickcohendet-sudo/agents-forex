@@ -44,6 +44,12 @@ ci-dessous AVANT publication. Trois missions, rien d'autre :
    controle_qualite (vérifications programmatiques : complétude des indicateurs,
    repli 7 jours, complétude des 9 devises) t'est fourni : reprends ses anomalies
    non triviales dans tes incohérences si elles affectent la fiabilité du rapport.
+   Chaque devise peut porter une "synthese_approfondie" (version condensée ici) : vérifie
+   que son "orientation" et ses scénarios sont cohérents avec le score_confluence calculé et
+   le biais_macro_global (le score et le biais sont calculés par programme : tu ne les
+   contestes pas, tu signales seulement une synthèse qui les contredit), que la thèse ne
+   contredit pas ses propres scénarios ni son "invalidation", et que les contrôles Python
+   déjà relevés ("controles") sont repris s'ils affectent la fiabilité.
 2. Les affirmations sans donnée source précise : élément d'opportunité/menace
    déjà marqué "non_sourcee": true, ou affirmation chiffrée introuvable dans le
    catalogue de sources.
@@ -85,6 +91,25 @@ def _condenser(rapport: dict) -> dict:
     condense = copy.deepcopy(rapport)
     condense.pop("graphiques", None)
     condense.pop("prix_cloture", None)
+    condense.pop("graphiques_marche", None)
+    # Synthèses approfondies : version condensée (thèse, orientation, scénarios, invalidation,
+    # contrôles) — le texte complet coûterait ~700 tokens de plus par devise.
+    for dev in condense.get("devises", []):
+        syn = dev.get("synthese_approfondie")
+        if isinstance(syn, dict) and syn.get("statut") == "ok":
+            dev["synthese_approfondie"] = {
+                "orientation": syn.get("orientation"),
+                "these_centrale": (syn.get("these_centrale") or {}).get("texte"),
+                "scenarios": [{"type": s.get("type"), "probabilite": s.get("probabilite"),
+                               "declencheur": s.get("declencheur")} for s in syn.get("scenarios", [])],
+                "invalidation": [i.get("signal") for i in syn.get("invalidation", [])],
+                "nb_opportunites": len(syn.get("opportunites", [])), "nb_menaces": len(syn.get("menaces", [])),
+                "controles_python": syn.get("controles", []),
+                "affirmations_non_sourcees": [o.get("texte") for k in ("opportunites", "menaces")
+                                              for o in syn.get(k, []) if o.get("non_sourcee")],
+            }
+        elif isinstance(syn, dict):
+            dev["synthese_approfondie"] = {"statut": syn.get("statut"), "raison": syn.get("raison")}
     return condense
 
 

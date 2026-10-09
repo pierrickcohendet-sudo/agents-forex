@@ -35,11 +35,11 @@ from pathlib import Path
 import yaml
 from dotenv import load_dotenv
 
-from agents import (agent_critique, agent_redacteur, agent_strategiste,
+from agents import (agent_critique, agent_redacteur, agent_strategiste, agent_synthese,
                     collecte_calendrier, collecte_macro, collecte_news,
                     collecte_technique)
 from core import (collecte_cache, controle_qualite, evaluation, hebdo, overrides, publication_web,
-                  saisies_manuelles, tableau_macro)
+                  registre_macro, saisies_manuelles, tableau_macro)
 from core.llm import creer_fournisseur, journal_appels, reinitialiser_journal
 from core.notifications import notifier_echec
 from core.scraping import ClientScraping
@@ -160,11 +160,16 @@ def main() -> int:
         else:
             a_completer = [d["devise"] for d in rapport_existant.get("devises", [])
                           if d.get("score_confluence") is None]
+            # Synthèses approfondies manquantes / en échec : retentées SEULES (l'analyse de
+            # base de ces devises est réutilisée telle quelle, jamais rappelée au LLM).
+            cfg_synthese = config.get("synthese_approfondie") or {}
+            synthese_manquantes = [d["devise"] for d in rapport_existant.get("devises", [])
+                                   if agent_synthese.synthese_a_faire(d, cfg_synthese)]
             etat_manquant = not rapport_existant.get("synthese_globale", {}).get("etat_du_monde")
             collectes_a_refaire = [n for n in ("technique", "macro", "news")
                                    if collecte_cache.collecte_incomplete(
                                        donnees_dir / "cache", n, date.today())]
-            if not a_completer and not etat_manquant and not collectes_a_refaire:
+            if not a_completer and not etat_manquant and not collectes_a_refaire                     and not synthese_manquantes:
                 log.info("--completer : rien à compléter aujourd'hui (rapport déjà complet) — run ignoré")
                 if (tableau or {}).get("modifie") and not arguments.sans_web:
                     etape("git push (tableau macro)", publication_web.pousser_git,
@@ -174,6 +179,9 @@ def main() -> int:
                      ", ".join(a_completer) or "—", " + état du monde" if etat_manquant else "",
                      f" + collecte(s) en erreur : {', '.join(collectes_a_refaire)}"
                      if collectes_a_refaire else "")
+            if synthese_manquantes:
+                log.info("--completer : synthèse(s) approfondie(s) à retenter seule(s) : %s",
+                         ", ".join(synthese_manquantes))
         heure_limite = str(config.get("completer", {}).get("heure_limite", "")).strip()
         if heure_limite:
             try:
@@ -237,6 +245,9 @@ def main() -> int:
         rapport = etape("agent stratège", agent_strategiste.analyser,
                         config, llm, technique, macro, news, calendrier,
                         dossier_rapports, type_rapport, overrides_du_jour, rapport_existant,
+                        extras_synthese={
+                            "registre": registre_macro.charger(donnees_dir / "registre_macro.json"),
+                            "indice_surprise": (tableau or {}).get("indice_surprise", {})},
                         fatal=True)
     except Exception:  # noqa: BLE001
         return 1

@@ -233,6 +233,116 @@ def _puces_sourcees(elements: list[dict], catalogue: dict[str, dict]) -> list[di
     return puces or [nb.puce([nb.rt("Rien à signaler aujourd'hui.", couleur="gray")])]
 
 
+LIBELLES_ORIENTATION = {"haussier": "haussière", "baissier": "baissière", "neutre": "neutre"}
+LIBELLES_MOTEURS_NOTION = {"croissance": "Croissance", "inflation": "Inflation", "emploi": "Emploi",
+                           "banque_centrale": "Banque centrale"}
+SCENARIOS_NOTION = {"haussier": ("🟢", "green_background", "Scénario haussier"),
+                    "central": ("🟡", "yellow_background", "Scénario central"),
+                    "baissier": ("🔴", "red_background", "Scénario baissier")}
+LIBELLES_PROBA = {"faible": "faible", "moyenne": "moyenne", "elevee": "élevée", None: "non précisée"}
+
+
+def _sources_inline(ids: list[str] | None, catalogue: dict[str, dict]) -> list[dict]:
+    """« — source · détail · date » en gris (plusieurs sources séparées par « ; »)."""
+    textes = [_source_lisible(i, catalogue) for i in (ids or []) if i in catalogue]
+    return [nb.rt("  — " + " ; ".join(textes), couleur="gray", italique=True)] if textes else []
+
+
+def _titre_synthese_approfondie(devise: dict) -> list[dict]:
+    syn = devise.get("synthese_approfondie") or {}
+    fragments = [nb.rt("📘 Synthèse approfondie", gras=True)]
+    if syn.get("statut") == "ok" and (syn.get("redige_par") or {}).get("libelle"):
+        fragments.append(nb.rt(f"  ·  rédigée par {syn['redige_par']['libelle']}", couleur="gray"))
+    elif syn.get("statut") in ("indisponible", "abandonnee"):
+        fragments.append(nb.rt("  ·  indisponible", couleur="gray", italique=True))
+    return fragments
+
+
+def _non_sourcee(bloc: dict, catalogue: dict[str, dict]) -> list[dict]:
+    if bloc.get("non_source"):
+        return [nb.rt("  [⚠ non sourcée]", couleur="orange", italique=True)]
+    return _sources_inline(bloc.get("source_ids"), catalogue)
+
+
+def _blocs_synthese_approfondie(devise: dict, catalogue: dict[str, dict]) -> list[dict]:
+    """Contenu du toggle « 📘 Synthèse approfondie » d'une devise (posé par un appel séparé :
+    le tableau des catalyseurs ajoute un niveau d'imbrication)."""
+    syn = devise.get("synthese_approfondie") or {}
+    if not syn:
+        return []
+    if syn.get("statut") != "ok":
+        abandon = syn.get("statut") == "abandonnee"
+        return [nb.callout(
+            [nb.rt("Synthèse approfondie indisponible aujourd'hui — ", gras=True),
+             nb.rt(str(syn.get("raison", ""))[:200], couleur="gray"),
+             nb.rt("  Abandonnée pour la journée après plusieurs tentatives."
+                   if abandon else "  Elle sera retentée au prochain passage.", couleur="gray")],
+            "⏸", "gray_background")]
+
+    blocs = []
+    orientation = LIBELLES_ORIENTATION.get(syn.get("orientation"), "non précisée")
+    these = syn.get("these_centrale") or {}
+    blocs.append(nb.callout(
+        [nb.rt(f"Thèse centrale — orientation {orientation}\n", gras=True), nb.rt(these.get("texte", ""))]
+        + _non_sourcee(these, catalogue), "📘", "blue_background"))
+
+    blocs.append(nb.titre(3, "Moteurs fondamentaux"))
+    for m in syn.get("moteurs", []):
+        blocs.append(nb.puce(
+            [nb.rt(f"{LIBELLES_MOTEURS_NOTION.get(m['moteur'], m['moteur'])} : ", gras=True),
+             nb.rt(f"{m.get('donnee', '')}. {m.get('trajectoire', '')} → {m.get('implication', '')}")]
+            + _sources_inline([m.get("source_id")], catalogue)))
+
+    for cle, titre in (("taux_et_flux", "Taux et flux"), ("geopolitique", "Contexte géopolitique et politique")):
+        bloc = syn.get(cle) or {}
+        if bloc.get("texte"):
+            blocs.append(nb.titre(3, titre))
+            blocs.append(nb.paragraphe([nb.rt(bloc["texte"])] + _non_sourcee(bloc, catalogue)))
+    tech = syn.get("lecture_technique") or {}
+    if tech.get("texte"):
+        coherence = {"alignee": "alignée avec le fondamental", "divergente": "en divergence avec le fondamental",
+                     "mixte": "signaux mixtes"}.get(tech.get("coherence"), "")
+        blocs.append(nb.titre(3, "Lecture technique" + (f" — {coherence}" if coherence else "")))
+        blocs.append(nb.paragraphe([nb.rt(tech["texte"])] + _non_sourcee(tech, catalogue)))
+
+    blocs.append(nb.titre(3, "Scénarios"))
+    for sc in syn.get("scenarios", []):
+        emoji, couleur, libelle = SCENARIOS_NOTION.get(sc["type"], ("•", "gray_background", sc["type"]))
+        blocs.append(nb.callout(
+            [nb.rt(f"{libelle} — probabilité {LIBELLES_PROBA.get(sc.get('probabilite'), 'non précisée')}\n", gras=True),
+             nb.rt("Déclencheur : ", gras=True), nb.rt(sc.get("declencheur", "") + "\n"),
+             nb.rt(sc.get("justification", ""))] + _sources_inline(sc.get("source_ids"), catalogue),
+            emoji, couleur))
+
+    if syn.get("catalyseurs"):
+        blocs.append(nb.titre(3, "Catalyseurs à venir"))
+        blocs.append(nb.tableau(
+            ["Date", "Heure (UTC)", "Événement", "Impact", "Pourquoi"],
+            [[c["date"], c.get("heure_utc") or "—", c["evenement"],
+              {"high": "élevé", "medium": "moyen", "low": "faible"}.get(c.get("impact"), c.get("impact")),
+              c.get("pourquoi", "")] for c in syn["catalyseurs"]]))
+    if syn.get("invalidation"):
+        blocs.append(nb.titre(3, "Ce qui invaliderait la thèse"))
+        for i in syn["invalidation"]:
+            blocs.append(nb.puce([nb.rt(i["signal"])] + _sources_inline([i.get("source_id")], catalogue)))
+    for cle, titre in (("opportunites", "🟢 Opportunités (détaillées)"), ("menaces", "🔴 Menaces (détaillées)")):
+        if syn.get(cle):
+            blocs.append(nb.titre(3, titre))
+            for o in syn[cle]:
+                frag = [nb.rt(o.get("texte", ""), gras=True), nb.rt(f" — {o.get('mecanisme', '')}")]
+                frag += ([nb.rt("  [⚠ affirmation non sourcée]", couleur="orange", italique=True)]
+                         if o.get("non_sourcee") else _sources_inline([o.get("source_id")], catalogue))
+                blocs.append(nb.puce(frag))
+    if syn.get("controles"):
+        blocs.append(nb.paragraphe([nb.rt("Points de vigilance : ", gras=True, couleur="orange"),
+                                    nb.rt(" · ".join(syn["controles"]), couleur="gray")]))
+    modele = (syn.get("redige_par") or {}).get("libelle", "modèle inconnu")
+    blocs.append(nb.paragraphe_gris(
+        f"Synthèse rédigée par {modele} le {str(syn.get('genere_le', ''))[:16].replace('T', ' ')} UTC "
+        "· aide à la décision — aucun signal d'achat/vente."))
+    return blocs
+
+
 def _cellule_date(ligne: dict) -> list[dict]:
     """Date d'origine + badge J-n en orange (aligné sur le rendu web) ; tiret
     si aucune donnée — la mention « aucune publication < 7 j » vit dans la
@@ -593,13 +703,28 @@ def _generer_contenu(client: Client, page_id: str, rapport: dict, config: dict,
         poser([nb.toggle(_fragments_titre_toggle(devise, drapeau))])
         toggle_id = dernier
         blocs, opportunites, menaces = _blocs_devise(devise, rapport, catalogue)
+        enfants_synthese = _blocs_synthese_approfondie(devise, catalogue)
+        if enfants_synthese:
+            blocs.append(nb.toggle(_titre_synthese_approfondie(devise)))   # rempli par un 2e appel
         blocs.append(nb.toggle([nb.rt("🟢 Opportunités", gras=True)], opportunites))
         blocs.append(nb.toggle([nb.rt("🔴 Menaces", gras=True)], menaces))
         blocs.append(nb.paragraphe_gris(
             f"Sources : Twelve Data, FRED, ForexFactory, RSS, sites news · généré le "
             f"{rapport['meta']['genere_le']} · aide à la décision — aucun signal d'achat/vente."))
         try:
-            client.blocks.children.append(toggle_id, children=blocs)
+            ajoutes = client.blocks.children.append(toggle_id, children=blocs)
+            if enfants_synthese:
+                # 2e appel : contenu du toggle « 📘 » (le tableau des catalyseurs ajoute un niveau
+                # d'imbrication de plus que ce qu'un seul appel accepte). Isolé : son échec ne
+                # coûte que la synthèse, pas le reste de la devise.
+                try:
+                    position = next(i for i, b_ in enumerate(blocs) if b_.get("type") == "toggle"
+                                    and b_["toggle"]["rich_text"][0]["text"]["content"].startswith("📘"))
+                    client.blocks.children.append(ajoutes["results"][position]["id"],
+                                                  children=enfants_synthese)
+                except Exception as exc_syn:  # noqa: BLE001
+                    log.error("Synthèse approfondie %s en échec côté Notion : %s", devise["devise"],
+                              masquer_secrets(str(exc_syn)))
         except Exception as exc:  # noqa: BLE001
             # Un échec Notion (ex. contrainte API dépassée sur UN bloc) ne doit
             # coûter que cette devise — jamais couper la publication des

@@ -773,7 +773,8 @@ def analyser(config: dict, llm: FournisseurLLM, technique: dict, macro: dict,
              news: dict, calendrier: dict, dossier_rapports: str | Path,
              type_rapport: str = "quotidien",
              overrides_du_jour: dict | None = None,
-             rapport_existant: dict | None = None) -> dict:
+             rapport_existant: dict | None = None,
+             extras_synthese: dict | None = None) -> dict:
     """rapport_existant (mode --completer) : rapport déjà sauvegardé plus tôt
     dans la journée. Toute devise qui y a déjà un score_confluence est
     RÉUTILISÉE VERBATIM — jamais rappelée au LLM, jamais retraitée. Seules les
@@ -806,6 +807,7 @@ def analyser(config: dict, llm: FournisseurLLM, technique: dict, macro: dict,
     devises_finales = []
     pause_devises_s = float(config["llm"].get("pause_entre_devises_s", 0))
     deja_appele = False
+    nb_analysees = 0   # devises réellement envoyées au LLM dans ce passage (hors réutilisées)
     for devise in config["devises"]:
         if devise in devises_deja_ok:
             # --completer : déjà réussie plus tôt aujourd'hui — jamais retraitée.
@@ -814,6 +816,7 @@ def analyser(config: dict, llm: FournisseurLLM, technique: dict, macro: dict,
         if deja_appele and pause_devises_s > 0:
             time.sleep(pause_devises_s)  # évite la rafale de 9 gros prompts consécutifs
         deja_appele = True
+        nb_analysees += 1
         overrides_devise = overrides_du_jour.get(devise)
         # Biais Risk On/Off structurel : dérivé du profil configuré, pas du LLM.
         biais = scoring.biais_structurel(config["devises"][devise].get("profil_risque", "neutre"))
@@ -877,7 +880,26 @@ def analyser(config: dict, llm: FournisseurLLM, technique: dict, macro: dict,
         etat_du_monde = synthese_etat_du_monde(llm, donnees, catalogue, systeme, devises_finales, biais)
         if isinstance(etat_du_monde, dict) and etat_du_monde:
             etat_du_monde["redige_par"] = attribution_modele()
-    definir_etiquette("commentaire_classement")
+    # Commentaire du classement : réutilisé tel quel en --completer tant qu'aucune devise
+    # n'a été ré-analysée (une retentative de synthèse seule ne relance pas l'analyse de base).
+    commentaire_existant = (rapport_existant or {}).get("synthese_globale", {}).get("commentaire")
+    if commentaire_existant and nb_analysees == 0:
+        commentaire = commentaire_existant
+    else:
+        definir_etiquette("commentaire_classement")
+        commentaire = commenter_synthese_globale(llm, classement, biais, memoire)
+
+    # Synthèse approfondie par devise : APRÈS tout le reste (un quota épuisé ne coûte alors
+    # que ces synthèses), une devise à la fois, même pause que les analyses ; un échec ne
+    # touche que sa devise.
+    extras = extras_synthese or {}
+    try:
+        from agents import agent_synthese
+        agent_synthese.synthetiser(config, llm, devises_finales, donnees, catalogue, dossier_rapports,
+                                   registre=extras.get("registre"), extras=extras)
+    except Exception as exc:  # noqa: BLE001 — jamais bloquant pour le rapport de base
+        log.error("Synthèses approfondies : étape en échec (%s) — analyse de base publiée seule",
+                  masquer_secrets(str(exc)))
 
     non_rafraichies = list(calendrier.get("non_rafraichies", []))
     for source, erreurs in (("Twelve Data", technique.get("erreurs", [])),
@@ -897,7 +919,7 @@ def analyser(config: dict, llm: FournisseurLLM, technique: dict, macro: dict,
         },
         "synthese_globale": {
             "biais_macro_global": biais,
-            "commentaire": commenter_synthese_globale(llm, classement, biais, memoire),
+            "commentaire": commentaire,
             "etat_du_monde": etat_du_monde,
             "classement_devises": classement,
             "devises_indisponibles": [d["devise"] for d in devises_finales

@@ -75,6 +75,21 @@ def controler(rapport: dict, config: dict) -> dict:
         if not str(pourquoi.get("texte", "")).strip():
             anomalies.append(f"{code} : posture banque centrale non expliquée (contexte_geopolitique)")
 
+    # Synthèses approfondies (chantier 3) : statut honnête + points relevés par les contrôles Python.
+    if (config.get("synthese_approfondie") or {}).get("actif", True):
+        for dev in rapport.get("devises", []):
+            if dev.get("score_confluence") is None:
+                continue
+            syn = dev.get("synthese_approfondie")
+            if not syn:
+                anomalies.append(f"{dev['devise']} : synthèse approfondie absente")
+            elif syn.get("statut") != "ok":
+                anomalies.append(f"{dev['devise']} : synthèse approfondie {syn.get('statut')} "
+                                 f"({str(syn.get('raison', ''))[:100]})")
+            else:
+                for point in syn.get("controles", [])[:3]:
+                    anomalies.append(f"{dev['devise']} synthèse approfondie : {point}")
+
     etat_du_monde = rapport.get("synthese_globale", {}).get("etat_du_monde")
     if not etat_du_monde:
         anomalies.append("état du monde absent de la synthèse globale")
@@ -119,11 +134,17 @@ def signaler_prompts_volumineux(rapport: dict, config: dict) -> None:
                                                        SEUIL_PROMPT_TOKENS_DEFAUT))
     anomalies = [a for a in controle.get("anomalies", []) if not a.startswith(_PREFIXE_ALERTE_PROMPT)]
     appels = rapport.get("meta", {}).get("appels_llm", [])
-    gros = [a for a in appels if a.get("tokens_total", 0) > seuil]
+    plafond_synthese = int((config.get("synthese_approfondie") or {}).get("plafond_prompt_tokens", seuil))
+
+    def depasse(appel: dict) -> bool:
+        limite = plafond_synthese if str(appel.get("etiquette", "")).startswith("synthese:") else seuil
+        return appel.get("tokens_total", 0) > limite
+    gros = [a for a in appels if depasse(a)]
     if gros:
         pire = max(gros, key=lambda a: a["tokens_total"])
         anomalies.append(
-            f"{_PREFIXE_ALERTE_PROMPT} : {len(gros)} appel(s) au-dessus de {seuil} tokens estimés "
+            f"{_PREFIXE_ALERTE_PROMPT} : {len(gros)} appel(s) au-dessus du seuil ({seuil} tokens estimés, "
+            f"{plafond_synthese} pour les synthèses) "
             f"(max {pire['tokens_total']} à {pire.get('heure', '?')} UTC, modèle {pire.get('modele', '?')}) "
             f"— le contexte envoyé au LLM a regrossi")
         log.warning("Contrôle qualité : %s", anomalies[-1])

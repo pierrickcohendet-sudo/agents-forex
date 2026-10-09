@@ -310,3 +310,24 @@ details.sous-toggle li { margin: 6px 0; }
 .marche-var { font-family: var(--mono); font-size: 12px; color: var(--encre-2); }
 .marche-date { color: var(--encre-3); font-size: 11px; }
 .marche-canevas { position: relative; height: 190px; }
+
+/* ------------------------------------------------- synthèse approfondie */
+.contenu-synthese { padding: 4px 14px 14px; display: flex; flex-direction: column; gap: 8px; }
+.contenu-synthese ul { margin: 0; padding: 0 0 0 18px; }
+.contenu-synthese li { margin: 6px 0; line-height: 1.5; }
+.texte-synthese { margin: 0; line-height: 1.55; font-weight: 400; }
+.callout-these { border-color: var(--bleu); font-weight: 400; }
+.scenario { border-left: 3px solid; border-radius: 6px; padding: 10px 12px; background: var(--panneau); }
+.scenario-haussier { border-color: var(--vert); }
+.scenario-central { border-color: var(--jaune); }
+.scenario-baissier { border-color: var(--rouge); }
+.scenario-titre { font-weight: 700; font-size: 13px; margin-bottom: 4px; }
+.tableau-defilant { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.tableau-synthese { border-collapse: collapse; font-size: 12.5px; min-width: 520px; }
+.tableau-synthese th, .tableau-synthese td { border: 1px solid var(--bordure); padding: 6px 8px; text-align: left; vertical-align: top; }
+.tableau-synthese th { color: var(--encre-3); font-family: var(--mono); font-size: 11px; text-transform: uppercase; }
+.contenu-synthese, .contenu-synthese * { overflow-wrap: anywhere; min-width: 0; }
+.contenu-synthese .tableau-synthese td, .contenu-synthese .tableau-synthese th { overflow-wrap: normal; }
+.contenu-synthese .ref-source { display: block; margin-top: 2px; }
+details.synthese-approfondie { overflow: hidden; min-width: 0; max-width: 100%; }
+.corps-devise { grid-template-columns: minmax(0, 1fr); }

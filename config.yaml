@@ -349,6 +349,33 @@ controle_qualite:
   # (~4 car./token). Mesuré à 14-15 000 après la fenêtre glissante de 7 jours.
   seuil_prompt_tokens: 18000
 
+# --- Synthèse approfondie par devise (chantier 3) -------------------------------
+# UN appel LLM dédié par devise, APRÈS l'analyse de base et l'état du monde. S'il échoue,
+# l'analyse de base est publiée sans elle ; --completer retente la synthèse seule (jamais
+# l'analyse de base). Plan imposé : connaissances/synthese/*.md (jamais chargé dans les
+# autres appels). Pause entre devises : llm.pause_entre_devises_s.
+synthese_approfondie:
+  actif: true
+  plafond_prompt_tokens: 12000      # alerte contrôle qualité au-delà (contexte cible : 8 000-10 000)
+  tentatives_max: 4                 # au-delà, la synthèse du jour est marquée « abandonnée » (plus de retry)
+  articles_max: 15                  # titres d'actualité envoyés (pertinents d'abord, puis les plus récents)
+  jours_catalyseurs: 21             # horizon des publications à venir proposées au modèle
+  catalyseurs_max: 12
+  jours_memoire: 2                  # thèses des N derniers rapports (évolution)
+  fichiers_connaissances_racine: [banques_centrales.md]   # ajoutés au prompt système de la synthèse
+  orientation_haussier_min: 60      # incohérence si orientation « baissier » avec score >= ce seuil
+  orientation_baissier_max: 40      # … ou « haussier » avec score <= ce seuil
+  mots_cles_news:
+    USD: [fed, powell, dollar, treasury, "u.s.", us economy, tariff, wall street, trump, nonfarm, payroll]
+    EUR: [ecb, lagarde, euro, eurozone, euro zone, germany, german, france, french, italy]
+    GBP: [boe, bank of england, bailey, sterling, pound, uk, britain, british, gilt]
+    JPY: [boj, bank of japan, ueda, yen, japan, japanese, nikkei, tokyo]
+    CHF: [snb, swiss, switzerland, franc, zurich]
+    CAD: [boc, bank of canada, macklem, canada, canadian, loonie, oil, crude]
+    AUD: [rba, reserve bank of australia, australia, australian, aussie, iron ore, china]
+    NZD: [rbnz, new zealand, kiwi, nzd, dairy, china]
+    CNY: [pboc, china, chinese, yuan, renminbi, beijing, xi jinping, property, evergrande]
+
 # --- Devises suivies ---------------------------------------------------------
 # paire        : symbole Twelve Data (null pour USD -> indice synthétique calculé).
 # inverse      : true si la devise est au dénominateur de la paire

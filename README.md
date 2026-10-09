@@ -129,6 +129,22 @@ par surprise) et mode « Par devise » (mêmes colonnes que Notion), lisibles su
 la Fed (le DXY n'est pas gratuit : jamais appelé « DXY »), période 1 mois / 3 mois / 1 an, dernière valeur et
 variation sur 7 jours ; mêmes séries en miniatures dans la section « 📈 Marchés » du rapport Notion.
 
+**Synthèse approfondie par devise** (`agents/agent_synthese.py`, config `synthese_approfondie`). Un appel LLM
+dédié par devise, après l'analyse de base et l'état du monde : thèse, 4 moteurs fondamentaux, taux et flux,
+géopolitique, lecture technique, 3 scénarios (probabilité qualitative), catalyseurs, invalidation,
+opportunités/menaces détaillées. Plan imposé et éditable : `connaissances/synthese/plan_synthese.md` (sous-dossier,
+donc jamais chargé dans les autres appels). Garde-fous Python : score/biais intacts, date et heure des catalyseurs
+recopiées du registre macro, `source_id` validés, orientation vs score signalée, phrases d'ordre d'achat/vente
+retirées. Un échec n'affecte que sa devise ; `--completer` retente la synthèse **seule** (jusqu'à
+`tentatives_max`, puis « abandonnée »). Notion : toggle « 📘 Synthèse approfondie » (scénarios en callouts
+vert/jaune/rouge) ; web : bloc repliable. Chaque appel est étiqueté dans `meta.appels_llm` (`synthese:EUR`…).
+
+**Modèle LLM et disjoncteur** (`llm.disjoncteur`). Le modèle principal est un nom fixe (`gemini-3.5-flash`) : l'alias
+`gemini-flash-latest` était saturé (503) et limité à 20 requêtes/jour (429). Après 3 échecs consécutifs du
+principal pendant un run (ou dès un quota journalier épuisé), il est ignoré pour le reste du run ; le suivant le
+retente. État dans `meta.disjoncteur` ; le modèle qui a réellement rédigé chaque analyse/synthèse est affiché
+(`redige_par`) dans Notion et sur le web.
+
 Tests : `python -m unittest discover -s tests -v` (données factices, sans réseau).
 
 ## Repli manuel généralisé (`data/overrides/`)
