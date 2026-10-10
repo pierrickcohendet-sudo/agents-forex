@@ -149,3 +149,34 @@ table.dense tr:last-child td { border-bottom: 0; }
 
 /* ------------------------------------------------------------------ pied */
 .pied { max-width: 1180px; margin: 8px auto 32px; padding: 0 16px; color: var(--texte-2); font-size: 12.5px; }
+
+/* ------------------------------------------------------------- heatmap */
+table.heatmap td.case { text-align: center; min-width: 58px; cursor: pointer; background: var(--carte-2); }
+table.heatmap tbody tr { cursor: default; }
+
+/* ----------------------------------------------------------- classement */
+ol.classement { list-style: none; margin: 0; padding: 0; }
+ol.classement li { border-bottom: 1px solid var(--trait); }
+ol.classement li:last-child { border-bottom: 0; }
+ol.classement a {
+  display: grid; grid-template-columns: 22px 64px minmax(0, 1fr) 30px 64px; gap: 8px; align-items: center;
+  padding: 8px 2px; color: var(--texte); text-decoration: none;
+}
+ol.classement .rang { color: var(--texte-2); }
+ol.classement .nom { font-weight: 700; }
+ol.classement .score { text-align: right; font-weight: 700; }
+ol.classement .profil { color: var(--texte-2); font-size: 12.5px; text-align: right; }
+.barre.large { width: 100%; margin: 0; }
+
+/* -------------------------------------------------------------- tuiles */
+.tuiles { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+@media (min-width: 640px) { .tuiles { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.tuile {
+  all: unset; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; gap: 2px;
+  background: var(--carte-2); border: 1px solid var(--trait); border-radius: var(--rayon); padding: 10px 12px; min-width: 0;
+}
+.tuile:focus-visible { outline: 2px solid var(--accent); }
+.tuile-titre { font-weight: 700; font-size: 13px; color: var(--texte-2); }
+.tuile-valeur { font-family: var(--serif); font-size: 24px; font-weight: 700; }
+.tuile-variation { font-size: 13px; }
+.sparkline { width: 100%; height: 40px; margin: 4px 0; }

@@ -29,7 +29,8 @@ function appliquerTheme(t) {
 
 /* ---------------------------------------------------------------- routage */
 async function afficher() {
-  const id = (location.hash || "#synthese").slice(1);
+  const hash = (location.hash || "#synthese").slice(1);
+  const [id, parametre] = hash.split("/");
   const onglet = ONGLETS[id] ? id : "synthese";
   document.querySelectorAll(".onglets a").forEach(a => {
     if (a.dataset.onglet === onglet) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
@@ -46,17 +47,19 @@ async function afficher() {
       c.appendChild(el("p", "indisponible", `Bientôt disponible. ${conf.bientot}`));
       blocs = [c];
     } else if (conf.rendu) {
-      blocs = await conf.rendu();
+      blocs = await conf.rendu(parametre);
     } else {
       const module = await import(conf.module);
-      blocs = await module[conf.fonction]();
+      blocs = await module[conf.fonction](parametre);
     }
   } catch (e) {
     console.error(e);
     blocs = [indisponible(conf.titre, `erreur d'affichage (${e.message})`)];
   }
-  if ((location.hash || "#synthese").slice(1) !== id) return;   // l'utilisateur a changé d'onglet entre-temps
+  if ((location.hash || "#synthese").slice(1) !== hash) return;   // l'utilisateur a changé d'onglet entre-temps
   main.replaceChildren(...blocs);
+  if (parametre) document.getElementById(`fiche-${parametre}`)?.scrollIntoView();
+  else window.scrollTo(0, 0);
 }
 
 async function initialiser() {
