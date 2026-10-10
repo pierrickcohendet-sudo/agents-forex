@@ -180,3 +180,54 @@ ol.classement .profil { color: var(--texte-2); font-size: 12.5px; text-align: ri
 .tuile-valeur { font-family: var(--serif); font-size: 24px; font-weight: 700; }
 .tuile-variation { font-size: 13px; }
 .sparkline { width: 100%; height: 40px; margin: 4px 0; }
+
+/* -------------------------------------------------------------- fiches */
+.fiche { padding: 0; }
+.fiche > summary {
+  list-style: none; cursor: pointer; padding: 12px 16px; display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap;
+}
+.fiche > summary::-webkit-details-marker { display: none; }
+.fiche > summary::before { content: "▸"; color: var(--texte-2); }
+.fiche[open] > summary::before { content: "▾"; }
+.fiche[open] > summary { border-bottom: 1px solid var(--trait); }
+.fiche-nom { font-family: var(--serif); font-size: 19px; font-weight: 700; }
+.fiche-score { font-weight: 700; }
+.fiche-corps { padding: 12px 16px 16px; display: grid; gap: 12px; grid-template-columns: minmax(0, 1fr); }
+.phrase { font-family: var(--serif); font-size: 17px; margin: 0; }
+.bloc h3, .these h3 { font-size: 16px; margin-bottom: 4px; }
+.bloc ul { margin: 0; padding-left: 18px; }
+.bloc li { margin: 4px 0; }
+.texte { margin: 0; }
+.source { color: var(--texte-2); font-size: 12.5px; }
+.tag-alerte { color: var(--alerte); font-size: 12.5px; font-weight: 600; }
+.source-cellule { color: var(--texte-2); font-size: 12.5px; text-align: left !important; }
+.texte-long { white-space: normal !important; text-align: left !important; min-width: 220px; }
+details.synthese { border: 1px solid var(--trait); border-radius: var(--rayon); background: var(--carte-2); padding: 0 12px; }
+details.synthese > summary { cursor: pointer; padding: 10px 0; font-family: var(--serif); font-weight: 700; font-size: 16px; }
+details.synthese[open] { padding-bottom: 12px; }
+details.synthese > * + * { margin-top: 10px; }
+.these { border-left: 3px solid var(--accent); padding-left: 10px; }
+.scenario { border-left: 3px solid var(--neutre); padding: 6px 10px; background: var(--carte); margin-top: 6px; border-radius: var(--rayon); }
+.scenario.haussier { border-left-color: var(--positif); }
+.scenario.central { border-left-color: var(--alerte); }
+.scenario.baissier { border-left-color: var(--negatif); }
+.puces-devises { display: flex; flex-wrap: wrap; gap: 6px; }
+.puces-devises a { border: 1px solid var(--trait); border-radius: var(--rayon); padding: 4px 8px; text-decoration: none; color: var(--texte); font-weight: 600; font-size: 14px; background: var(--carte-2); }
+
+/* ------------------------------------------------------- tableau macro */
+.outils { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.outils input, .outils select {
+  font: 15px var(--sans); color: var(--texte); background: var(--carte-2); border: 1px solid var(--trait);
+  border-radius: var(--rayon); padding: 7px 9px; min-width: 0;
+}
+.outils input { flex: 1 1 220px; }
+table.macro td { text-align: left; }
+table.macro tr.groupe td { background: var(--carte-2); font-weight: 700; font-family: var(--serif); cursor: default; position: sticky; left: 0; }
+
+/* ------------------------------------------------------------ archives */
+ul.archives { list-style: none; margin: 0; padding: 0; }
+ul.archives li { border-bottom: 1px solid var(--trait); }
+ul.archives li:last-child { border-bottom: 0; }
+ul.archives a { display: flex; justify-content: space-between; gap: 10px; padding: 9px 2px; text-decoration: none; color: var(--texte); flex-wrap: wrap; }
+table.compact td, table.compact th { text-align: left; white-space: normal; min-width: 84px; vertical-align: top; }
+table.compact td:first-child { min-width: 110px; }
