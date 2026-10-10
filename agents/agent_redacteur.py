@@ -390,6 +390,87 @@ def _blocs_marches(rapport: dict) -> list[dict]:
     return blocs
 
 
+FLECHES_DOLLAR = {"haussier": "Dollar ↑", "baissier": "Dollar ↓", "neutre": "Dollar ="}
+LIBELLES_RISQUE = {"risk_on": "Risk on", "risk_off": "Risk off", "neutre": "Risque neutre"}
+LIBELLES_CONVICTION = {"faible": "faible", "moyen": "moyenne", "eleve": "élevée"}
+
+
+def _premiere_phrase(texte: str, maximum: int = 160) -> str:
+    phrase = (texte or "").split(". ")[0].strip()
+    return (phrase if phrase.endswith(".") else phrase + ".")[:maximum] if phrase else "—"
+
+
+def _direction_courte(direction: dict) -> str:
+    morceaux = [FLECHES_DOLLAR.get(direction.get("dollar")), LIBELLES_RISQUE.get(direction.get("risque"))]
+    devises = direction.get("devises_concernees") or []
+    texte = " · ".join(m for m in morceaux if m) or "non déterminée"
+    return texte + (f" ({', '.join(devises)})" if devises else "")
+
+
+def _blocs_engrenages(rapport: dict) -> list[dict]:
+    """Section « ⚙️ Les 8 engrenages » : tableau récapitulatif, un toggle par engrenage,
+    chaînes de transmission (callout bleu), conflits (orange), concept du jour (violet)."""
+    eng = (rapport.get("synthese_globale") or {}).get("engrenages")
+    if not eng:
+        return []
+    blocs = [nb.titre(2, "⚙️ Les 8 engrenages")]
+    if eng.get("statut") != "ok":
+        blocs.append(nb.callout([nb.rt("Synthèse « 8 engrenages » indisponible aujourd'hui — ", gras=True),
+                                 nb.rt(str(eng.get("raison", ""))[:200], couleur="gray")], "⏸", "gray_background"))
+        return blocs
+    catalogue = {x["id"]: x for x in rapport.get("sources_citees", [])}
+    lignes = []
+    for e in eng.get("engrenages", []):
+        conv = (e.get("conviction") or {}).get("niveau")
+        lignes.append([f"{e['numero']}. {e['nom']}", _direction_courte(e.get("direction") or {}),
+                       LIBELLES_CONVICTION.get(conv, "—" if e.get("donnees_insuffisantes") else "n/d"),
+                       _premiere_phrase(e.get("diagnostic"))])
+    blocs.append(nb.tableau(["Engrenage", "Direction", "Conviction", "En une phrase"], lignes))
+    for e in eng.get("engrenages", []):
+        d = e.get("direction") or {}
+        enfants = [nb.paragraphe([nb.rt(e.get("diagnostic", ""))] + _sources_inline(e.get("source_ids"), catalogue))]
+        if not e.get("donnees_insuffisantes"):
+            calc = d.get("calculee") or {}
+            enfants.append(nb.paragraphe([nb.rt("Direction : ", gras=True), nb.rt(_direction_courte(d) + ". "),
+                                          nb.rt(d.get("texte", ""))]
+                                         + ([nb.rt(f"  Règle Python : {calc['regle']}.", couleur="gray", italique=True)]
+                                            if calc.get("regle") and (calc.get("dollar") or calc.get("risque")) else [])))
+            if e.get("comprendre"):
+                enfants.append(nb.paragraphe([nb.rt("📘 Comprendre : ", gras=True), nb.rt(e["comprendre"])]))
+            if e.get("desk"):
+                enfants.append(nb.paragraphe([nb.rt("🎯 Ce que regarde un desk : ", gras=True), nb.rt(e["desk"])]))
+            conv = e.get("conviction") or {}
+            if conv.get("niveau"):
+                enfants.append(nb.paragraphe([nb.rt("Conviction : ", gras=True),
+                                              nb.rt(f"{LIBELLES_CONVICTION[conv['niveau']]} — {conv.get('justification', '')}"),
+                                              nb.rt(f"  ({conv.get('origine')})", couleur="gray", italique=True)]))
+        blocs.append(nb.toggle([nb.rt(f"{e['numero']}. {e['nom']}", gras=True),
+                                nb.rt(f"  ·  {_direction_courte(d)}", couleur="gray")], enfants))
+    for c in eng.get("chaines", []):
+        fragments = [nb.rt(f"Chaîne de transmission — {c.get('titre') or 'du jour'}\n", gras=True)]
+        for i, m in enumerate(c.get("maillons", [])):
+            fragments.append(nb.rt(("" if i == 0 else " → ") + f"{m['texte']} ({m['engrenage']})"))
+            if m.get("non_sourcee"):
+                fragments.append(nb.rt(" [non sourcé]", couleur="orange", italique=True))
+        blocs.append(nb.callout(fragments, "🔗", "blue_background"))
+    if eng.get("conflits"):
+        fragments = [nb.rt("Engrenages en conflit\n", gras=True)]
+        for c in eng["conflits"]:
+            a, b = c["engrenages"]
+            fragments.append(nb.rt(f"({a}) contre ({b}) : {c['texte']}\n"))
+        blocs.append(nb.callout(fragments, "⚖️", "orange_background"))
+    concept = eng.get("concept")
+    if concept:
+        blocs.append(nb.callout(
+            [nb.rt(f"🎓 Concept du jour — {concept['titre']}\n", gras=True), nb.rt(concept.get("explication", "")),
+             nb.rt(("\nAujourd'hui : " + concept["exemple"]) if concept.get("exemple") else "")]
+            + _sources_inline(concept.get("source_ids"), catalogue), "🎓", "purple_background"))
+    modele = (eng.get("redige_par") or {}).get("libelle", "modèle inconnu")
+    blocs.append(nb.paragraphe_gris(f"Rédigé par {modele} · directions et convictions calculées en Python quand "
+                                    "les données le permettent · aucun signal d'achat/vente."))
+    return blocs
+
+
 def _blocs_synthese(rapport: dict) -> list[dict]:
     synthese = rapport["synthese_globale"]
     critique = rapport.get("critique", {})
@@ -475,6 +556,8 @@ def _blocs_synthese(rapport: dict) -> list[dict]:
         if etat.get("conclusion"):
             blocs.append(nb.titre(3, "Conclusion"))
             blocs.append(nb.callout([nb.rt(etat["conclusion"])], "🖋", "gray_background"))
+
+    blocs.extend(_blocs_engrenages(rapport))
 
     blocs.append(nb.tableau(
         ["Rang", "Devise", "Biais", "Confluence"],

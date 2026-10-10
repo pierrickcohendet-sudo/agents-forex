@@ -90,6 +90,15 @@ def controler(rapport: dict, config: dict) -> dict:
                 for point in syn.get("controles", [])[:3]:
                     anomalies.append(f"{dev['devise']} synthèse approfondie : {point}")
 
+    if (config.get("engrenages") or {}).get("actif", True):
+        eng = rapport.get("synthese_globale", {}).get("engrenages")
+        if not eng:
+            anomalies.append("8 engrenages : synthèse absente")
+        elif eng.get("statut") != "ok":
+            anomalies.append(f"8 engrenages : {eng.get('statut')} ({str(eng.get('raison', ''))[:100]})")
+        else:
+            anomalies.extend(f"8 engrenages : {c}" for c in eng.get("controles", [])[:3])
+
     etat_du_monde = rapport.get("synthese_globale", {}).get("etat_du_monde")
     if not etat_du_monde:
         anomalies.append("état du monde absent de la synthèse globale")

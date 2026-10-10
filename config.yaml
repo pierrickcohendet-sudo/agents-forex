@@ -391,6 +391,15 @@ synthese_approfondie:
     NZD: [rbnz, new zealand, kiwi, nzd, dairy, china]
     CNY: [pboc, china, chinese, yuan, renminbi, beijing, xi jinping, property, evergrande]
 
+# --- Synthèse globale « 8 engrenages » -----------------------------------------
+# Quotidien : UN appel LLM (directions et convictions calculées en Python quand les données le
+# permettent ; concept du jour choisi en Python dans connaissances/concepts_formation.md, rotation
+# sans répétition, état dans data/cache/concepts_rotation.json). Retentée seule par --completer.
+engrenages:
+  actif: true
+  articles_max: 25            # titres d'actualité envoyés (géopolitique, fiscalité)
+  tentatives_max: 4
+
 # --- Devises suivies ---------------------------------------------------------
 # paire        : symbole Twelve Data (null pour USD -> indice synthétique calculé).
 # inverse      : true si la devise est au dénominateur de la paire

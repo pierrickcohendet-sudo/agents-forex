@@ -102,6 +102,27 @@ def valider_rapport(rapport: dict, mode: str = "marquer") -> dict:
             marquees += d_marquees
             rejetees += d_rejetees
 
+    # 8 engrenages : ids inventés retirés ; maillon de chaîne sans source valide marqué non sourcé.
+    eng = (rapport.get("synthese_globale") or {}).get("engrenages") or {}
+    if eng.get("statut") == "ok":
+        for e in eng.get("engrenages", []):
+            e["source_ids"] = [i for i in e.get("source_ids", []) if i in ids_valides]
+            for d in e.get("donnees_calculees", []):
+                if d.get("source_id") not in ids_valides:
+                    d["source_id"] = None
+            e["non_source"] = bool(not e.get("donnees_insuffisantes") and not e["source_ids"])
+            marquees += int(e["non_source"])
+        for c in eng.get("chaines", []):
+            for m in c.get("maillons", []):
+                m["non_sourcee"] = m.get("source_id") not in ids_valides
+                if m["non_sourcee"]:
+                    m["source_id"] = None
+                    marquees += 1
+        for c in eng.get("conflits", []):
+            c["source_ids"] = [i for i in c.get("source_ids", []) if i in ids_valides]
+        if eng.get("concept"):
+            eng["concept"]["source_ids"] = [i for i in eng["concept"].get("source_ids", []) if i in ids_valides]
+
     # État du monde : rubriques (source_ids multiples), listes du briefing
     # (source_id unitaire par item) ; la conclusion est une synthèse, sans
     # exigence de source propre.

@@ -4,7 +4,7 @@ import { pageSynthese } from "./synthese.js";
 
 const ONGLETS = {
   synthese: { titre: "Synthèse", rendu: pageSynthese },
-  engrenages: { titre: "8 engrenages", bientot: "La lecture « 8 engrenages » (thème macro, politique monétaire, données, fiscalité, interconnexions, géopolitique, flux, offre et demande) arrive avec le chantier dédié." },
+  engrenages: { titre: "8 engrenages", module: "./engrenages.js", fonction: "pageEngrenages" },
   devises: { titre: "Devises", module: "./devises.js", fonction: "pageDevises" },
   tableau: { titre: "Tableau macro", module: "./tableau.js", fonction: "pageTableau" },
   agenda: { titre: "Agenda", bientot: "L'agenda des publications et réunions de banques centrales arrive dans une prochaine version." },

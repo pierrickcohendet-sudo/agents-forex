@@ -231,3 +231,16 @@ ul.archives li:last-child { border-bottom: 0; }
 ul.archives a { display: flex; justify-content: space-between; gap: 10px; padding: 9px 2px; text-decoration: none; color: var(--texte); flex-wrap: wrap; }
 table.compact td, table.compact th { text-align: left; white-space: normal; min-width: 84px; vertical-align: top; }
 table.compact td:first-child { min-width: 110px; }
+
+/* -------------------------------------------------------- 8 engrenages */
+.encadre { border-left: 3px solid var(--accent); background: var(--carte-2); border-radius: var(--rayon); padding: 10px 12px; margin-top: 10px; }
+.encadre.bleu { border-left-color: var(--accent); }
+.encadre.orange { border-left-color: var(--alerte); }
+.encadre.violet { border-left-color: #7C3AED; }
+:root[data-theme="noir"] .encadre.violet { border-left-color: #A78BFA; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="clair"]) .encadre.violet { border-left-color: #A78BFA; } }
+.encadre ul { margin: 6px 0 0; padding-left: 18px; }
+.fleche { color: var(--texte-2); }
+.numero { color: var(--accent); font-weight: 700; font-size: 12.5px; }
+details.sous > summary { cursor: pointer; color: var(--texte-2); font-size: 13px; }
+details.sous ul { margin: 6px 0 0; padding-left: 18px; font-size: 13.5px; }

@@ -210,5 +210,12 @@ class BougiesEnDouble(unittest.TestCase):
         self.assertEqual(len(df), 2)
 
 
+class JsonTolerant(unittest.TestCase):
+    def test_virgules_finales_retirees_hors_chaines(self):
+        brut = '{"a": [1, 2,], "b": {"t": "x, ]", "u": "y",},}'
+        self.assertEqual(L.extraire_json(brut), {"a": [1, 2], "b": {"t": "x, ]", "u": "y"}})
+        self.assertEqual(L.extraire_json('```json\n{"ok": true}\n```'), {"ok": True})
+
+
 if __name__ == "__main__":
     unittest.main()

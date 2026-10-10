@@ -220,7 +220,8 @@ class ReprisePartielle(unittest.TestCase):
             "statut": "indisponible", "tentatives": 1}
         existant = {"devises": existant_devises, "sources_citees": [],
                     "synthese_globale": {"etat_du_monde": {"conclusion": "déjà là"},
-                                         "commentaire": "commentaire existant"}}
+                                         "commentaire": "commentaire existant",
+                                         "engrenages": {"statut": "ok", "tentatives": 1}}}
         llm = FauxLLM([])
         cfg = copy.deepcopy(CONFIG)
         with tempfile.TemporaryDirectory() as tmp:

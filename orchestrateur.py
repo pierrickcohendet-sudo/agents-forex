@@ -35,7 +35,7 @@ from pathlib import Path
 import yaml
 from dotenv import load_dotenv
 
-from agents import (agent_critique, agent_redacteur, agent_strategiste, agent_synthese,
+from agents import (agent_critique, agent_engrenages, agent_redacteur, agent_strategiste, agent_synthese,
                     collecte_calendrier, collecte_macro, collecte_news,
                     collecte_technique)
 from core import (collecte_cache, controle_qualite, evaluation, hebdo, marche_taux, overrides, publication_web,
@@ -169,7 +169,10 @@ def main() -> int:
             collectes_a_refaire = [n for n in ("technique", "macro", "news")
                                    if collecte_cache.collecte_incomplete(
                                        donnees_dir / "cache", n, date.today())]
-            if not a_completer and not etat_manquant and not collectes_a_refaire                     and not synthese_manquantes:
+            engrenages_manquants = agent_engrenages.a_faire(rapport_existant.get("synthese_globale"),
+                                                            config.get("engrenages") or {})
+            if (not a_completer and not etat_manquant and not collectes_a_refaire
+                    and not synthese_manquantes and not engrenages_manquants):
                 log.info("--completer : rien à compléter aujourd'hui (rapport déjà complet) — run ignoré")
                 if (tableau or {}).get("modifie") and not arguments.sans_web:
                     etape("site web (site.json)", site_donnees.ecrire, RACINE, config)

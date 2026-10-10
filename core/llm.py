@@ -788,10 +788,42 @@ def extraire_json(texte: str) -> dict | list:
     try:
         return json.loads(texte)
     except json.JSONDecodeError:
+        pass
+    # Virgule finale avant ] ou } (« [1, 2,] ») : erreur fréquente de Flash-Lite (constatée le
+    # 2026-10-10). Retirée hors chaînes de caractères uniquement, jamais de contenu modifié.
+    repare = _retirer_virgules_finales(texte)
+    try:
+        return json.loads(repare)
+    except json.JSONDecodeError:
         # Dernier recours : isoler le premier objet/tableau JSON complet.
         for ouvrant, fermant in (("{", "}"), ("[", "]")):
-            debut = texte.find(ouvrant)
-            fin = texte.rfind(fermant)
+            debut = repare.find(ouvrant)
+            fin = repare.rfind(fermant)
             if debut != -1 and fin > debut:
-                return json.loads(texte[debut : fin + 1])
+                return json.loads(repare[debut : fin + 1])
         raise
+
+
+def _retirer_virgules_finales(texte: str) -> str:
+    """Supprime les virgules suivies (après espaces) de ] ou }, en dehors des chaînes JSON."""
+    sortie, dans_chaine, echappe = [], False, False
+    for i, c in enumerate(texte):
+        if dans_chaine:
+            sortie.append(c)
+            if echappe:
+                echappe = False
+            elif c == "\\":
+                echappe = True
+            elif c == '"':
+                dans_chaine = False
+            continue
+        if c == '"':
+            dans_chaine = True
+        elif c == ",":
+            j = i + 1
+            while j < len(texte) and texte[j] in " \t\r\n":
+                j += 1
+            if j < len(texte) and texte[j] in "]}":
+                continue
+        sortie.append(c)
+    return "".join(sortie)

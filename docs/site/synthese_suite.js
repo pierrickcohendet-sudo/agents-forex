@@ -1,5 +1,6 @@
 /* Synthèse, suite : heatmap des surprises, classement des devises, tuiles marchés (palier 2). */
 import { chargerJson, enErreur, el, indisponible, dateCourte, ouvrirDetail, listeDefinitions, DRAPEAUX } from "./commun.js";
+import { carteEngrenagesCompacte } from "./engrenages.js";
 
 const COURTS = {
   taux_directeur: "Taux", cpi: "CPI", cpi_core: "CPI core", pib: "PIB", pmi_manufacturier: "PMI man.",
@@ -156,7 +157,9 @@ function marches(marche) {
 
 export async function blocsSuite(site) {
   const [rapport, marche] = await Promise.all([chargerJson("data/latest.json"), chargerJson("data/marche.json")]);
+  const engrenages = enErreur(rapport) ? null : carteEngrenagesCompacte(rapport);
   return [
+    ...(engrenages ? [engrenages] : []),
     heatmap(site),
     enErreur(rapport) ? indisponible("Classement des devises", rapport?.__erreur) : classement(rapport),
     marches(marche),

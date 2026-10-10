@@ -75,11 +75,18 @@ DOSSIER_CONNAISSANCES = Path(__file__).resolve().parent.parent / "connaissances"
 
 
 # ------------------------------------------------------------- connaissances
+# Fichiers de connaissances/ qui ne doivent PAS alourdir le prompt système des analyses :
+# ils servent à d'autres appels (ex. concept du jour de l'appel « 8 engrenages »).
+FICHIERS_HORS_PROMPT = {"concepts_formation.md"}
+
+
 def charger_connaissances(dossier: str | Path | None = None) -> str:
-    """Concatène tous les .md du dossier, par ordre alphabétique."""
+    """Concatène tous les .md du dossier, par ordre alphabétique (hors FICHIERS_HORS_PROMPT)."""
     dossier = Path(dossier) if dossier else DOSSIER_CONNAISSANCES
     morceaux = []
     for fichier in sorted(dossier.glob("*.md")):
+        if fichier.name in FICHIERS_HORS_PROMPT:
+            continue
         morceaux.append(f"\n\n# ===== {fichier.name} =====\n\n" + fichier.read_text(encoding="utf-8"))
     if not morceaux:
         log.warning("Dossier connaissances/ vide : prompt système réduit aux règles de sortie")
@@ -894,6 +901,16 @@ def analyser(config: dict, llm: FournisseurLLM, technique: dict, macro: dict,
         definir_etiquette("commentaire_classement")
         commentaire = commenter_synthese_globale(llm, classement, biais, memoire)
 
+    # Synthèse globale « 8 engrenages » (un appel, quotidien compact) : réutilisée telle quelle
+    # en --completer si déjà réussie, sinon (re)tentée seule.
+    engrenages_existant = (rapport_existant or {}).get("synthese_globale", {}).get("engrenages")
+    from agents import agent_engrenages
+    if agent_engrenages.a_faire({"engrenages": engrenages_existant}, config.get("engrenages") or {}):
+        engrenages = agent_engrenages.generer(config, llm, donnees, macro, catalogue, devises_finales, biais,
+                                              extras_synthese or {}, engrenages_existant)
+    else:
+        engrenages = engrenages_existant
+
     # Synthèse approfondie par devise : APRÈS tout le reste (un quota épuisé ne coûte alors
     # que ces synthèses), une devise à la fois, même pause que les analyses ; un échec ne
     # touche que sa devise.
@@ -926,6 +943,7 @@ def analyser(config: dict, llm: FournisseurLLM, technique: dict, macro: dict,
             "biais_macro_global": biais,
             "commentaire": commentaire,
             "etat_du_monde": etat_du_monde,
+            "engrenages": engrenages,
             "classement_devises": classement,
             "devises_indisponibles": [d["devise"] for d in devises_finales
                                       if d.get("score_confluence") is None],
