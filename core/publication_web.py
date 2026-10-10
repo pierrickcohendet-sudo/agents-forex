@@ -48,6 +48,9 @@ def ecrire_donnees(rapport: dict, dossier_docs: str | Path) -> Path:
     liste = sorted(entrees.values(), key=lambda e: e["date"], reverse=True)
     chemin_index.write_text(json.dumps(liste, ensure_ascii=False), encoding="utf-8")
     log.info("Dashboard web : %d rapport(s) disponibles, dernier %s", len(liste), date_rapport)
+    # JSON dérivé du site (régime, indicateurs clés, heatmap) : calcul Python, jamais bloquant.
+    from core import site_donnees
+    site_donnees.ecrire(Path(dossier_docs).resolve().parent)
     return dossier
 
 

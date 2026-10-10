@@ -108,7 +108,7 @@ function dessinerCalendrier() {
         cellule.title = `${entree.date} · ${entree.type || "rapport"} · ${entree.biais || ""}`;
         cellule.addEventListener("click", () => {
           fermerCalendrier();
-          chargerRapport(`data/${entree.date}.json`);
+          chargerRapport(`../data/${entree.date}.json`);
         });
       }
       grille.appendChild(cellule);
@@ -126,7 +126,7 @@ function fermerCalendrier() {
 /* ------------------------------------------------------------- chargement */
 async function initialiser() {
   try {
-    const brut = await chargerJson("data/index.json");
+    const brut = await chargerJson("../data/index.json");
     INDEX = (brut || [])
       .map((e) => (typeof e === "string" ? { date: e } : e))
       .filter((e) => e && e.date);
@@ -144,7 +144,7 @@ async function initialiser() {
     if (!document.querySelector(".calendrier-conteneur").contains(e.target)) fermerCalendrier();
   });
 
-  await chargerRapport("data/latest.json");
+  await chargerRapport("../data/latest.json");
 }
 
 async function chargerRapport(chemin) {
@@ -940,7 +940,7 @@ async function carteTableauMacro() {
   carte.appendChild(el("h2", null, "🌐 Tableau macro"));
   let donnees;
   try {
-    donnees = await chargerJson("data/tableau_macro.json");
+    donnees = await chargerJson("../data/tableau_macro.json");
   } catch (e) {
     carte.appendChild(el("p", "chargement", "Tableau macro indisponible pour le moment."));
     return carte;
@@ -1087,7 +1087,7 @@ async function carteMarche() {
   carte.appendChild(el("h2", null, "📈 Marchés"));
   let donnees;
   try {
-    donnees = await chargerJson("data/marche.json");
+    donnees = await chargerJson("../data/marche.json");
   } catch (e) {
     carte.appendChild(el("p", "chargement", "Graphiques de marché indisponibles pour le moment."));
     return carte;

@@ -1,0 +1,2251 @@
+{
+ "version_schema": 1,
+ "genere_le": "2026-10-10T10:12:49+00:00",
+ "sources": {
+  "rapport": "2026-10-10T00:21:15+00:00",
+  "tableau_macro": "2026-10-10T00:02:54+00:00"
+ },
+ "regime": {
+  "biais": "risk_off",
+  "libelle": "Risk Off",
+  "ecart_points": -8.3,
+  "seuil_points": 5.0,
+  "devises_risque": [
+   "AUD",
+   "NZD",
+   "CAD"
+  ],
+  "devises_refuge": [
+   "JPY",
+   "CHF",
+   "USD"
+  ],
+  "explication": "Écart entre le score de confluence moyen des devises « risque » et celui des devises « refuge » (calcul Python) : au-delà du seuil, Risk On ; en deçà de son opposé, Risk Off ; sinon Neutre.",
+  "driver": "USD domine outrageusement en risk-off à 80 de confluence tandis que les refuges traditionnels JPY et CHF décrochent curieusement à 26.",
+  "relecture": "a_revoir",
+  "date_rapport": "2026-10-10",
+  "maj": "2026-10-10T00:21:15+00:00",
+  "type_rapport": "quotidien",
+  "nb_devises": 9,
+  "nb_devises_disponibles": 9,
+  "notion_url": "https://www.notion.so/f55a99e090404d419c8f594a96610fb7",
+  "notion_page_du_jour": false
+ },
+ "colonnes_cles": [
+  {
+   "id": "taux_directeur",
+   "libelle": "Taux directeur",
+   "type": "macro"
+  },
+  {
+   "id": "cpi",
+   "libelle": "CPI a/a",
+   "type": "macro"
+  },
+  {
+   "id": "chomage",
+   "libelle": "Chômage",
+   "type": "macro"
+  },
+  {
+   "id": "pmi_manufacturier",
+   "libelle": "PMI manuf.",
+   "type": "macro"
+  },
+  {
+   "id": "rendement_2a",
+   "libelle": "Taux 2 ans",
+   "type": "macro"
+  },
+  {
+   "id": "indice_surprise",
+   "libelle": "Surprise 30 j",
+   "type": "indice"
+  },
+  {
+   "id": "score",
+   "libelle": "Confluence",
+   "type": "score"
+  },
+  {
+   "id": "biais",
+   "libelle": "Biais du jour",
+   "type": "biais"
+  }
+ ],
+ "indicateurs_cles": [
+  {
+   "devise": "USD",
+   "drapeau": "🇺🇸",
+   "cellules": {
+    "taux_directeur": {
+     "texte": "4,00 %",
+     "valeur_num": 4.0,
+     "date": "2026-09-16",
+     "source": "ForexFactory",
+     "consensus": "4,00 %",
+     "surprise": "=",
+     "precedent": "3,75 %",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "cpi": {
+     "texte": "3,4 %",
+     "valeur_num": 3.4,
+     "date": "2026-09-11",
+     "source": "ForexFactory",
+     "consensus": "3,4 %",
+     "surprise": "=",
+     "precedent": "3,4 %",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "chomage": {
+     "texte": "4,2 %",
+     "valeur_num": 4.2,
+     "date": "2026-10-02",
+     "source": "ForexFactory",
+     "consensus": "4,1 %",
+     "surprise": "▲",
+     "precedent": "4,1 %",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "pmi_manufacturier": {
+     "texte": "54,5",
+     "valeur_num": 54.5,
+     "date": "2026-10-01",
+     "source": "ForexFactory",
+     "consensus": "54,8",
+     "surprise": "▼",
+     "precedent": "54,6",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "rendement_2a": {
+     "texte": "4,75 %",
+     "valeur_num": 4.75,
+     "date": "2026-10-08",
+     "source": "FRED (DGS2)",
+     "consensus": null,
+     "surprise": null,
+     "precedent": "4,78 %",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "indice_surprise": {
+     "texte": "0,0",
+     "valeur_num": -0.03,
+     "tendance": "baisse",
+     "n": 10,
+     "etat": "valeur",
+     "source": "calcul Python (registre macro, 30 j)",
+     "date": "2026-10-10",
+     "raison": null
+    },
+    "score": {
+     "texte": "80",
+     "valeur_num": 80,
+     "etat": "valeur",
+     "source": "score de confluence (calcul Python)",
+     "date": "2026-10-10",
+     "raison": null
+    },
+    "biais": {
+     "texte": "Haussier",
+     "valeur_num": 80,
+     "code": "haussier",
+     "etat": "valeur",
+     "profil": "off",
+     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
+     "raison": null
+    }
+   }
+  },
+  {
+   "devise": "EUR",
+   "drapeau": "🇪🇺",
+   "cellules": {
+    "taux_directeur": {
+     "texte": "2,65 %",
+     "valeur_num": 2.65,
+     "date": "2026-09-10",
+     "source": "ForexFactory",
+     "consensus": "2,65 %",
+     "surprise": "=",
+     "precedent": "2,40 %",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "cpi": {
+     "texte": "3,8 %",
+     "valeur_num": 3.8,
+     "date": "2026-10-02",
+     "source": "ForexFactory",
+     "consensus": "3,7 %",
+     "surprise": "▲",
+     "precedent": "3,2 % (révisé)",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "chomage": {
+     "texte": "6,4 %",
+     "valeur_num": 6.4,
+     "date": "2026-10-01",
+     "source": "ForexFactory",
+     "consensus": "6,4 %",
+     "surprise": "=",
+     "precedent": "6,4 %",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "pmi_manufacturier": {
+     "texte": "52,9",
+     "valeur_num": 52.9,
+     "date": "2026-10-01",
+     "source": "ForexFactory",
+     "consensus": "52,7",
+     "surprise": "▲",
+     "precedent": "52,7",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "rendement_2a": {
+     "texte": "3,08 %",
+     "valeur_num": 3.08,
+     "date": "2026-10-09",
+     "source": "Bundesbank (Allemagne 2 ans)",
+     "consensus": null,
+     "surprise": null,
+     "precedent": "3,02 %",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "indice_surprise": {
+     "texte": "+0,1",
+     "valeur_num": 0.14,
+     "tendance": "hausse",
+     "n": 11,
+     "etat": "valeur",
+     "source": "calcul Python (registre macro, 30 j)",
+     "date": "2026-10-10",
+     "raison": null
+    },
+    "score": {
+     "texte": "26",
+     "valeur_num": 26,
+     "etat": "valeur",
+     "source": "score de confluence (calcul Python)",
+     "date": "2026-10-10",
+     "raison": null
+    },
+    "biais": {
+     "texte": "Baissier",
+     "valeur_num": 26,
+     "code": "baissier",
+     "etat": "valeur",
+     "profil": "neutre",
+     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
+     "raison": null
+    }
+   }
+  },
+  {
+   "devise": "GBP",
+   "drapeau": "🇬🇧",
+   "cellules": {
+    "taux_directeur": {
+     "texte": "3,75 %",
+     "valeur_num": 3.75,
+     "date": "2026-09-17",
+     "source": "ForexFactory",
+     "consensus": "3,75 %",
+     "surprise": "=",
+     "precedent": "3,75 %",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "cpi": {
+     "texte": "3,1 %",
+     "valeur_num": 3.1,
+     "date": "2026-09-16",
+     "source": "ForexFactory",
+     "consensus": "3,1 %",
+     "surprise": "=",
+     "precedent": "2,9 %",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "chomage": {
+     "texte": "4,9 %",
+     "valeur_num": 4.9,
+     "date": "2026-09-15",
+     "source": "ForexFactory",
+     "consensus": "5,0 %",
+     "surprise": "▼",
+     "precedent": "4,9 %",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "pmi_manufacturier": {
+     "texte": "51,9",
+     "valeur_num": 51.9,
+     "date": "2026-10-01",
+     "source": "ForexFactory",
+     "consensus": "52,0",
+     "surprise": "▼",
+     "precedent": "52,0",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "rendement_2a": {
+     "texte": "n/d",
+     "valeur_num": null,
+     "date": null,
+     "source": null,
+     "consensus": null,
+     "surprise": null,
+     "precedent": null,
+     "manuel": false,
+     "etat": "absent",
+     "raison": "2 ans non publié en accès libre (BoE : 5/10/20 ans)"
+    },
+    "indice_surprise": {
+     "texte": "+0,4",
+     "valeur_num": 0.36,
+     "tendance": "n/d",
+     "n": 12,
+     "etat": "valeur",
+     "source": "calcul Python (registre macro, 30 j)",
+     "date": "2026-10-10",
+     "raison": null
+    },
+    "score": {
+     "texte": "44",
+     "valeur_num": 44,
+     "etat": "valeur",
+     "source": "score de confluence (calcul Python)",
+     "date": "2026-10-10",
+     "raison": null
+    },
+    "biais": {
+     "texte": "Neutre",
+     "valeur_num": 44,
+     "code": "neutre",
+     "etat": "valeur",
+     "profil": "neutre",
+     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
+     "raison": null
+    }
+   }
+  },
+  {
+   "devise": "JPY",
+   "drapeau": "🇯🇵",
+   "cellules": {
+    "taux_directeur": {
+     "texte": "<1,25 %",
+     "valeur_num": 1.25,
+     "date": "2026-09-18",
+     "source": "ForexFactory",
+     "consensus": "<1,25 %",
+     "surprise": null,
+     "precedent": "<1,00 %",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "cpi": {
+     "texte": "1,7 % [équiv. core national]",
+     "valeur_num": 1.7,
+     "date": "2026-09-17",
+     "source": "ForexFactory",
+     "consensus": "1,8 %",
+     "surprise": "▼",
+     "precedent": "1,8 % [équiv. core national]",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "chomage": {
+     "texte": "2,5 %",
+     "valeur_num": 2.5,
+     "date": "2026-10-01",
+     "source": "ForexFactory",
+     "consensus": "2,4 %",
+     "surprise": "▲",
+     "precedent": "2,4 %",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "pmi_manufacturier": {
+     "texte": "54,1",
+     "valeur_num": 54.1,
+     "date": "2026-10-01",
+     "source": "ForexFactory",
+     "consensus": "54,1",
+     "surprise": "=",
+     "precedent": "54,1",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "rendement_2a": {
+     "texte": "1,95 %",
+     "valeur_num": 1.95,
+     "date": "2026-09-30",
+     "source": "Ministère des Finances du Japon (JGB 2 ans)",
+     "consensus": null,
+     "surprise": null,
+     "precedent": "1,85 %",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "indice_surprise": {
+     "texte": "0,0",
+     "valeur_num": -0.03,
+     "tendance": "stable",
+     "n": 7,
+     "etat": "valeur",
+     "source": "calcul Python (registre macro, 30 j)",
+     "date": "2026-10-10",
+     "raison": null
+    },
+    "score": {
+     "texte": "26",
+     "valeur_num": 26,
+     "etat": "valeur",
+     "source": "score de confluence (calcul Python)",
+     "date": "2026-10-10",
+     "raison": null
+    },
+    "biais": {
+     "texte": "Baissier",
+     "valeur_num": 26,
+     "code": "baissier",
+     "etat": "valeur",
+     "profil": "off",
+     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
+     "raison": null
+    }
+   }
+  },
+  {
+   "devise": "CHF",
+   "drapeau": "🇨🇭",
+   "cellules": {
+    "taux_directeur": {
+     "texte": "0,00 %",
+     "valeur_num": 0.0,
+     "date": "2026-09-24",
+     "source": "ForexFactory",
+     "consensus": "0,00 %",
+     "surprise": "=",
+     "precedent": "0,00 %",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "cpi": {
+     "texte": "0,0 % [m/m]",
+     "valeur_num": 0.0,
+     "date": "2026-10-01",
+     "source": "ForexFactory",
+     "consensus": "0,0 %",
+     "surprise": "=",
+     "precedent": "0,4 % [m/m]",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "chomage": {
+     "texte": "3,1 %",
+     "valeur_num": 3.1,
+     "date": "2026-10-06",
+     "source": "ForexFactory",
+     "consensus": "3,1 %",
+     "surprise": "=",
+     "precedent": "3,1 %",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "pmi_manufacturier": {
+     "texte": "55,3",
+     "valeur_num": 55.3,
+     "date": "2026-10-01",
+     "source": "ForexFactory",
+     "consensus": "56,3",
+     "surprise": "▼",
+     "precedent": "57,1",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "rendement_2a": {
+     "texte": "n/d",
+     "valeur_num": null,
+     "date": null,
+     "source": null,
+     "consensus": null,
+     "surprise": null,
+     "precedent": null,
+     "manuel": false,
+     "etat": "absent",
+     "raison": "SNB : série arrêtée (dernière donnée 07/2025)"
+    },
+    "indice_surprise": {
+     "texte": "+0,3",
+     "valeur_num": 0.27,
+     "tendance": "baisse",
+     "n": 5,
+     "etat": "valeur",
+     "source": "calcul Python (registre macro, 30 j)",
+     "date": "2026-10-10",
+     "raison": null
+    },
+    "score": {
+     "texte": "26",
+     "valeur_num": 26,
+     "etat": "valeur",
+     "source": "score de confluence (calcul Python)",
+     "date": "2026-10-10",
+     "raison": null
+    },
+    "biais": {
+     "texte": "Baissier",
+     "valeur_num": 26,
+     "code": "baissier",
+     "etat": "valeur",
+     "profil": "off",
+     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
+     "raison": null
+    }
+   }
+  },
+  {
+   "devise": "CAD",
+   "drapeau": "🇨🇦",
+   "cellules": {
+    "taux_directeur": {
+     "texte": "2,25 %",
+     "valeur_num": 2.25,
+     "date": "2026-09-02",
+     "source": "ForexFactory",
+     "consensus": "2,25 %",
+     "surprise": "=",
+     "precedent": "2,25 %",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "cpi": {
+     "texte": "-0,1 % [m/m]",
+     "valeur_num": -0.1,
+     "date": "2026-09-14",
+     "source": "ForexFactory",
+     "consensus": "-0,1 %",
+     "surprise": "=",
+     "precedent": "0,5 % [m/m]",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "chomage": {
+     "texte": "6,5 %",
+     "valeur_num": 6.5,
+     "date": "2026-10-09",
+     "source": "ForexFactory",
+     "consensus": "6,5 %",
+     "surprise": "=",
+     "precedent": "6,4 %",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "pmi_manufacturier": {
+     "texte": "51,5",
+     "valeur_num": 51.5,
+     "date": "2026-10-01",
+     "source": "ForexFactory",
+     "consensus": null,
+     "surprise": null,
+     "precedent": "53,0",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "rendement_2a": {
+     "texte": "3,24 %",
+     "valeur_num": 3.24,
+     "date": "2026-10-08",
+     "source": "Banque du Canada (Valet, 2 ans)",
+     "consensus": null,
+     "surprise": null,
+     "precedent": "3,27 %",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "indice_surprise": {
+     "texte": "-0,4",
+     "valeur_num": -0.43,
+     "tendance": "baisse",
+     "n": 8,
+     "etat": "valeur",
+     "source": "calcul Python (registre macro, 30 j)",
+     "date": "2026-10-10",
+     "raison": null
+    },
+    "score": {
+     "texte": "21",
+     "valeur_num": 21,
+     "etat": "valeur",
+     "source": "score de confluence (calcul Python)",
+     "date": "2026-10-10",
+     "raison": null
+    },
+    "biais": {
+     "texte": "Baissier",
+     "valeur_num": 21,
+     "code": "baissier",
+     "etat": "valeur",
+     "profil": "on",
+     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
+     "raison": null
+    }
+   }
+  },
+  {
+   "devise": "AUD",
+   "drapeau": "🇦🇺",
+   "cellules": {
+    "taux_directeur": {
+     "texte": "4,60 %",
+     "valeur_num": 4.6,
+     "date": "2026-09-29",
+     "source": "ForexFactory",
+     "consensus": "4,60 %",
+     "surprise": "=",
+     "precedent": "4,35 %",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "cpi": {
+     "texte": "4,0 %",
+     "valeur_num": 4.0,
+     "date": "2026-09-30",
+     "source": "ForexFactory",
+     "consensus": "4,1 %",
+     "surprise": "▼",
+     "precedent": "3,5 %",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "chomage": {
+     "texte": "4,6 %",
+     "valeur_num": 4.6,
+     "date": "2026-09-24",
+     "source": "ForexFactory",
+     "consensus": "4,5 %",
+     "surprise": "▲",
+     "precedent": "4,5 %",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "pmi_manufacturier": {
+     "texte": "49,3",
+     "valeur_num": 49.3,
+     "date": "2026-09-22",
+     "source": "ForexFactory",
+     "consensus": null,
+     "surprise": null,
+     "precedent": "52,0",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "rendement_2a": {
+     "texte": "n/d",
+     "valeur_num": null,
+     "date": null,
+     "source": null,
+     "consensus": null,
+     "surprise": null,
+     "precedent": null,
+     "manuel": false,
+     "etat": "absent",
+     "raison": "RBA : accès automatisé refusé (403)"
+    },
+    "indice_surprise": {
+     "texte": "-0,5",
+     "valeur_num": -0.52,
+     "tendance": "baisse",
+     "n": 7,
+     "etat": "valeur",
+     "source": "calcul Python (registre macro, 30 j)",
+     "date": "2026-10-10",
+     "raison": null
+    },
+    "score": {
+     "texte": "56",
+     "valeur_num": 56,
+     "etat": "valeur",
+     "source": "score de confluence (calcul Python)",
+     "date": "2026-10-10",
+     "raison": null
+    },
+    "biais": {
+     "texte": "Neutre",
+     "valeur_num": 56,
+     "code": "neutre",
+     "etat": "valeur",
+     "profil": "on",
+     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
+     "raison": null
+    }
+   }
+  },
+  {
+   "devise": "NZD",
+   "drapeau": "🇳🇿",
+   "cellules": {
+    "taux_directeur": {
+     "texte": "2,75 %",
+     "valeur_num": 2.75,
+     "date": "2026-09-02",
+     "source": "ForexFactory",
+     "consensus": "2,75 %",
+     "surprise": "=",
+     "precedent": "2,50 %",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "cpi": {
+     "texte": "1,5 % [t/t]",
+     "valeur_num": 1.5,
+     "date": "2026-07-20",
+     "source": "ForexFactory",
+     "consensus": "1,4 %",
+     "surprise": "▲",
+     "precedent": "0,9 % [t/t]",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "chomage": {
+     "texte": "5,6 %",
+     "valeur_num": 5.6,
+     "date": "2026-08-04",
+     "source": "ForexFactory",
+     "consensus": "5,4 %",
+     "surprise": "▲",
+     "precedent": "5,4 % (révisé)",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "pmi_manufacturier": {
+     "texte": "n/d",
+     "valeur_num": null,
+     "date": null,
+     "source": null,
+     "consensus": null,
+     "surprise": null,
+     "precedent": null,
+     "manuel": false,
+     "etat": "absent",
+     "raison": "non couvert par ForexFactory"
+    },
+    "rendement_2a": {
+     "texte": "n/d",
+     "valeur_num": null,
+     "date": null,
+     "source": null,
+     "consensus": null,
+     "surprise": null,
+     "precedent": null,
+     "manuel": false,
+     "etat": "absent",
+     "raison": "RBNZ : accès automatisé refusé (403)"
+    },
+    "indice_surprise": {
+     "texte": "+0,3",
+     "valeur_num": 0.27,
+     "tendance": "hausse",
+     "n": 2,
+     "etat": "valeur",
+     "source": "calcul Python (registre macro, 30 j)",
+     "date": "2026-10-10",
+     "raison": null
+    },
+    "score": {
+     "texte": "30",
+     "valeur_num": 30,
+     "etat": "valeur",
+     "source": "score de confluence (calcul Python)",
+     "date": "2026-10-10",
+     "raison": null
+    },
+    "biais": {
+     "texte": "Baissier",
+     "valeur_num": 30,
+     "code": "baissier",
+     "etat": "valeur",
+     "profil": "on",
+     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
+     "raison": null
+    }
+   }
+  },
+  {
+   "devise": "CNY",
+   "drapeau": "🇨🇳",
+   "cellules": {
+    "taux_directeur": {
+     "texte": "3,00 % [LPR 1 an]",
+     "valeur_num": 3.0,
+     "date": "2026-09-20",
+     "source": "ForexFactory",
+     "consensus": "3,00 %",
+     "surprise": "=",
+     "precedent": "3,00 % [LPR 1 an]",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "cpi": {
+     "texte": "0,8 %",
+     "valeur_num": 0.8,
+     "date": "2026-09-09",
+     "source": "ForexFactory",
+     "consensus": "0,8 %",
+     "surprise": "=",
+     "precedent": "0,5 %",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "chomage": {
+     "texte": "5,3 %",
+     "valeur_num": 5.3,
+     "date": "2026-09-15",
+     "source": "ForexFactory",
+     "consensus": "5,2 %",
+     "surprise": "▲",
+     "precedent": "5,2 %",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "pmi_manufacturier": {
+     "texte": "50,1 [officiel NBS]",
+     "valeur_num": 50.1,
+     "date": "2026-09-30",
+     "source": "ForexFactory",
+     "consensus": "50,1",
+     "surprise": "=",
+     "precedent": "49,8 [officiel NBS]",
+     "manuel": false,
+     "etat": "valeur",
+     "raison": null
+    },
+    "rendement_2a": {
+     "texte": "n/d",
+     "valeur_num": null,
+     "date": null,
+     "source": null,
+     "consensus": null,
+     "surprise": null,
+     "precedent": null,
+     "manuel": false,
+     "etat": "absent",
+     "raison": "aucune source gratuite exploitable"
+    },
+    "indice_surprise": {
+     "texte": "-0,2",
+     "valeur_num": -0.21,
+     "tendance": "baisse",
+     "n": 5,
+     "etat": "valeur",
+     "source": "calcul Python (registre macro, 30 j)",
+     "date": "2026-10-10",
+     "raison": null
+    },
+    "score": {
+     "texte": "36",
+     "valeur_num": 36,
+     "etat": "valeur",
+     "source": "score de confluence (calcul Python)",
+     "date": "2026-10-10",
+     "raison": null
+    },
+    "biais": {
+     "texte": "Baissier",
+     "valeur_num": 36,
+     "code": "baissier",
+     "etat": "valeur",
+     "profil": "neutre",
+     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
+     "raison": null
+    }
+   }
+  }
+ ],
+ "heatmap": {
+  "indicateurs": [
+   {
+    "id": "taux_directeur",
+    "libelle": "Taux directeur",
+    "inverse": false
+   },
+   {
+    "id": "cpi",
+    "libelle": "CPI annuel",
+    "inverse": false
+   },
+   {
+    "id": "cpi_core",
+    "libelle": "CPI core annuel",
+    "inverse": false
+   },
+   {
+    "id": "pib",
+    "libelle": "PIB trimestriel",
+    "inverse": false
+   },
+   {
+    "id": "pmi_manufacturier",
+    "libelle": "PMI manufacturier",
+    "inverse": false
+   },
+   {
+    "id": "pmi_services",
+    "libelle": "PMI services",
+    "inverse": false
+   },
+   {
+    "id": "chomage",
+    "libelle": "Taux de chômage",
+    "inverse": true
+   },
+   {
+    "id": "emploi",
+    "libelle": "Variation de l'emploi",
+    "inverse": false
+   },
+   {
+    "id": "ventes_detail",
+    "libelle": "Ventes au détail",
+    "inverse": false
+   },
+   {
+    "id": "balance_commerciale",
+    "libelle": "Balance commerciale",
+    "inverse": false
+   }
+  ],
+  "plafond": 3.0,
+  "lignes": [
+   {
+    "devise": "USD",
+    "cellules": {
+     "taux_directeur": {
+      "texte": "4,00 %",
+      "valeur_num": 4.0,
+      "date": "2026-09-16",
+      "source": "ForexFactory",
+      "consensus": "4,00 %",
+      "surprise": "=",
+      "precedent": "3,75 %",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.0
+     },
+     "cpi": {
+      "texte": "3,4 %",
+      "valeur_num": 3.4,
+      "date": "2026-09-11",
+      "source": "ForexFactory",
+      "consensus": "3,4 %",
+      "surprise": "=",
+      "precedent": "3,4 %",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.0
+     },
+     "cpi_core": {
+      "texte": "2,4 %",
+      "valeur_num": 2.4,
+      "date": "2026-09-11",
+      "source": "ForexFactory",
+      "consensus": "2,4 %",
+      "surprise": "=",
+      "precedent": "2,5 %",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.0
+     },
+     "pib": {
+      "texte": "2,2 %",
+      "valeur_num": 2.2,
+      "date": "2026-09-30",
+      "source": "ForexFactory",
+      "consensus": "1,5 %",
+      "surprise": "▲",
+      "precedent": "1,5 %",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 2.33
+     },
+     "pmi_manufacturier": {
+      "texte": "54,5",
+      "valeur_num": 54.5,
+      "date": "2026-10-01",
+      "source": "ForexFactory",
+      "consensus": "54,8",
+      "surprise": "▼",
+      "precedent": "54,6",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": -0.3
+     },
+     "pmi_services": {
+      "texte": "54,9",
+      "valeur_num": 54.9,
+      "date": "2026-10-05",
+      "source": "ForexFactory",
+      "consensus": "55,1",
+      "surprise": "▼",
+      "precedent": "55,4",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": -0.2
+     },
+     "chomage": {
+      "texte": "4,2 %",
+      "valeur_num": 4.2,
+      "date": "2026-10-02",
+      "source": "ForexFactory",
+      "consensus": "4,1 %",
+      "surprise": "▲",
+      "precedent": "4,1 %",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": -1.0
+     },
+     "emploi": {
+      "texte": "29K",
+      "valeur_num": 29000.0,
+      "date": "2026-10-02",
+      "source": "ForexFactory",
+      "consensus": "89K",
+      "surprise": "▼",
+      "precedent": "133K (révisé)",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": -1.0
+     },
+     "ventes_detail": {
+      "texte": "1,2 %",
+      "valeur_num": 1.2,
+      "date": "2026-09-16",
+      "source": "ForexFactory",
+      "consensus": "0,8 %",
+      "surprise": "▲",
+      "precedent": "-0,5 % (révisé)",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 1.33
+     },
+     "balance_commerciale": {
+      "texte": "-105,6B",
+      "valeur_num": -105600000000.0,
+      "date": "2026-10-06",
+      "source": "ForexFactory",
+      "consensus": "-100,8B",
+      "surprise": "▼",
+      "precedent": "-92,8B (révisé)",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": -1.6
+     }
+    },
+    "indice_30j": {
+     "indice": -0.03,
+     "precedent": 0.72,
+     "tendance": "baisse",
+     "n": 10,
+     "texte": "-0,0 ▼ (n=10)"
+    }
+   },
+   {
+    "devise": "EUR",
+    "cellules": {
+     "taux_directeur": {
+      "texte": "2,65 %",
+      "valeur_num": 2.65,
+      "date": "2026-09-10",
+      "source": "ForexFactory",
+      "consensus": "2,65 %",
+      "surprise": "=",
+      "precedent": "2,40 %",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.0
+     },
+     "cpi": {
+      "texte": "3,8 %",
+      "valeur_num": 3.8,
+      "date": "2026-10-02",
+      "source": "ForexFactory",
+      "consensus": "3,7 %",
+      "surprise": "▲",
+      "precedent": "3,2 % (révisé)",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 1.0
+     },
+     "cpi_core": {
+      "texte": "2,5 %",
+      "valeur_num": 2.5,
+      "date": "2026-10-02",
+      "source": "ForexFactory",
+      "consensus": "2,5 %",
+      "surprise": "=",
+      "precedent": "2,4 %",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.0
+     },
+     "pib": {
+      "texte": "0,6 %",
+      "valeur_num": 0.6,
+      "date": "2026-09-07",
+      "source": "ForexFactory",
+      "consensus": "0,4 %",
+      "surprise": "▲",
+      "precedent": "0,4 %",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.67
+     },
+     "pmi_manufacturier": {
+      "texte": "52,9",
+      "valeur_num": 52.9,
+      "date": "2026-10-01",
+      "source": "ForexFactory",
+      "consensus": "52,7",
+      "surprise": "▲",
+      "precedent": "52,7",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.2
+     },
+     "pmi_services": {
+      "texte": "53,0",
+      "valeur_num": 53.0,
+      "date": "2026-10-05",
+      "source": "ForexFactory",
+      "consensus": "53,0",
+      "surprise": "=",
+      "precedent": "53,0",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.0
+     },
+     "chomage": {
+      "texte": "6,4 %",
+      "valeur_num": 6.4,
+      "date": "2026-10-01",
+      "source": "ForexFactory",
+      "consensus": "6,4 %",
+      "surprise": "=",
+      "precedent": "6,4 %",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": -0.0
+     },
+     "emploi": {
+      "texte": "0,1 % [t/t]",
+      "valeur_num": 0.1,
+      "date": "2026-09-07",
+      "source": "ForexFactory",
+      "consensus": "0,1 %",
+      "surprise": "=",
+      "precedent": "0,1 % [t/t]",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.0
+     },
+     "ventes_detail": {
+      "texte": "0,1 %",
+      "valeur_num": 0.1,
+      "date": "2026-10-06",
+      "source": "ForexFactory",
+      "consensus": "0,2 %",
+      "surprise": "▼",
+      "precedent": "-0,6 %",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": -0.33
+     },
+     "balance_commerciale": {
+      "texte": "5,0B",
+      "valeur_num": 5000000000.0,
+      "date": "2026-09-15",
+      "source": "ForexFactory",
+      "consensus": "3,7B",
+      "surprise": "▲",
+      "precedent": "1,0B (révisé)",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.43
+     }
+    },
+    "indice_30j": {
+     "indice": 0.14,
+     "precedent": -0.45,
+     "tendance": "hausse",
+     "n": 11,
+     "texte": "+0,1 ▲ (n=11)"
+    }
+   },
+   {
+    "devise": "GBP",
+    "cellules": {
+     "taux_directeur": {
+      "texte": "3,75 %",
+      "valeur_num": 3.75,
+      "date": "2026-09-17",
+      "source": "ForexFactory",
+      "consensus": "3,75 %",
+      "surprise": "=",
+      "precedent": "3,75 %",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.0
+     },
+     "cpi": {
+      "texte": "3,1 %",
+      "valeur_num": 3.1,
+      "date": "2026-09-16",
+      "source": "ForexFactory",
+      "consensus": "3,1 %",
+      "surprise": "=",
+      "precedent": "2,9 %",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.0
+     },
+     "cpi_core": {
+      "texte": "2,6 %",
+      "valeur_num": 2.6,
+      "date": "2026-09-16",
+      "source": "ForexFactory",
+      "consensus": "2,6 %",
+      "surprise": "=",
+      "precedent": "2,6 %",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.0
+     },
+     "pib": {
+      "texte": "0,5 %",
+      "valeur_num": 0.5,
+      "date": "2026-09-30",
+      "source": "ForexFactory",
+      "consensus": "0,4 %",
+      "surprise": "▲",
+      "precedent": "0,4 %",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.33
+     },
+     "pmi_manufacturier": {
+      "texte": "51,9",
+      "valeur_num": 51.9,
+      "date": "2026-10-01",
+      "source": "ForexFactory",
+      "consensus": "52,0",
+      "surprise": "▼",
+      "precedent": "52,0",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": -0.1
+     },
+     "pmi_services": {
+      "texte": "52,1",
+      "valeur_num": 52.1,
+      "date": "2026-10-05",
+      "source": "ForexFactory",
+      "consensus": "51,7",
+      "surprise": "▲",
+      "precedent": "51,7",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.4
+     },
+     "chomage": {
+      "texte": "4,9 %",
+      "valeur_num": 4.9,
+      "date": "2026-09-15",
+      "source": "ForexFactory",
+      "consensus": "5,0 %",
+      "surprise": "▼",
+      "precedent": "4,9 %",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 1.0
+     },
+     "emploi": {
+      "texte": "27,8K [équiv. claimants]",
+      "valeur_num": 27.8,
+      "date": "2026-09-15",
+      "source": "ForexFactory",
+      "consensus": "8,3K",
+      "surprise": "▲",
+      "precedent": "-11,8K [équiv. claimants] (révisé)",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.33
+     },
+     "ventes_detail": {
+      "texte": "0,5 %",
+      "valeur_num": 0.5,
+      "date": "2026-09-18",
+      "source": "ForexFactory",
+      "consensus": "-0,2 %",
+      "surprise": "▲",
+      "precedent": "-0,5 %",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 2.33
+     },
+     "balance_commerciale": {
+      "texte": "-21,0B [biens]",
+      "valeur_num": -21.0,
+      "date": "2026-09-11",
+      "source": "ForexFactory",
+      "consensus": "-22,6B",
+      "surprise": "▲",
+      "precedent": "-23,0B [biens]",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.53
+     }
+    },
+    "indice_30j": {
+     "indice": 0.36,
+     "precedent": null,
+     "tendance": "n/d",
+     "n": 12,
+     "texte": "+0,4 (n=12)"
+    }
+   },
+   {
+    "devise": "JPY",
+    "cellules": {
+     "taux_directeur": {
+      "texte": "<1,25 %",
+      "valeur_num": 1.25,
+      "date": "2026-09-18",
+      "source": "ForexFactory",
+      "consensus": "<1,25 %",
+      "surprise": null,
+      "precedent": "<1,00 %",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": "pas de consensus publié pour cette publication",
+      "z": null
+     },
+     "cpi": {
+      "texte": "1,7 % [équiv. core national]",
+      "valeur_num": 1.7,
+      "date": "2026-09-17",
+      "source": "ForexFactory",
+      "consensus": "1,8 %",
+      "surprise": "▼",
+      "precedent": "1,8 % [équiv. core national]",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": -1.0
+     },
+     "cpi_core": {
+      "texte": "1,8 % [BoJ hors alim./énergie]",
+      "valeur_num": 1.8,
+      "date": "2026-09-25",
+      "source": "ForexFactory",
+      "consensus": "1,5 %",
+      "surprise": "▲",
+      "precedent": "1,6 % [BoJ hors alim./énergie]",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 3.0
+     },
+     "pib": {
+      "texte": "0,4 %",
+      "valeur_num": 0.4,
+      "date": "2026-09-07",
+      "source": "ForexFactory",
+      "consensus": "0,4 %",
+      "surprise": "=",
+      "precedent": "0,3 %",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.0
+     },
+     "pmi_manufacturier": {
+      "texte": "54,1",
+      "valeur_num": 54.1,
+      "date": "2026-10-01",
+      "source": "ForexFactory",
+      "consensus": "54,1",
+      "surprise": "=",
+      "precedent": "54,1",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.0
+     },
+     "pmi_services": {
+      "texte": "n/d",
+      "valeur_num": null,
+      "date": null,
+      "source": null,
+      "consensus": null,
+      "surprise": null,
+      "precedent": null,
+      "manuel": false,
+      "etat": "absent",
+      "raison": "non couvert par ForexFactory",
+      "z": null
+     },
+     "chomage": {
+      "texte": "2,5 %",
+      "valeur_num": 2.5,
+      "date": "2026-10-01",
+      "source": "ForexFactory",
+      "consensus": "2,4 %",
+      "surprise": "▲",
+      "precedent": "2,4 %",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": -1.0
+     },
+     "emploi": {
+      "texte": "n/d",
+      "valeur_num": null,
+      "date": null,
+      "source": null,
+      "consensus": null,
+      "surprise": null,
+      "precedent": null,
+      "manuel": false,
+      "etat": "absent",
+      "raison": "non publié dans ce pays",
+      "z": null
+     },
+     "ventes_detail": {
+      "texte": "2,7 % [a/a]",
+      "valeur_num": 2.7,
+      "date": "2026-09-29",
+      "source": "ForexFactory",
+      "consensus": "3,3 %",
+      "surprise": "▼",
+      "precedent": "3,7 % [a/a] (révisé)",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": -2.0
+     },
+     "balance_commerciale": {
+      "texte": "-0,84T",
+      "valeur_num": -840000000000.0,
+      "date": "2026-09-15",
+      "source": "ForexFactory",
+      "consensus": "-1,00T",
+      "surprise": "▲",
+      "precedent": "-0,68T (révisé)",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 3.0
+     }
+    },
+    "indice_30j": {
+     "indice": -0.03,
+     "precedent": 0.0,
+     "tendance": "stable",
+     "n": 7,
+     "texte": "-0,0 = (n=7)"
+    }
+   },
+   {
+    "devise": "CHF",
+    "cellules": {
+     "taux_directeur": {
+      "texte": "0,00 %",
+      "valeur_num": 0.0,
+      "date": "2026-09-24",
+      "source": "ForexFactory",
+      "consensus": "0,00 %",
+      "surprise": "=",
+      "precedent": "0,00 %",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.0
+     },
+     "cpi": {
+      "texte": "0,0 % [m/m]",
+      "valeur_num": 0.0,
+      "date": "2026-10-01",
+      "source": "ForexFactory",
+      "consensus": "0,0 %",
+      "surprise": "=",
+      "precedent": "0,4 % [m/m]",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.0
+     },
+     "cpi_core": {
+      "texte": "n/d",
+      "valeur_num": null,
+      "date": null,
+      "source": null,
+      "consensus": null,
+      "surprise": null,
+      "precedent": null,
+      "manuel": false,
+      "etat": "absent",
+      "raison": "non couvert par ForexFactory",
+      "z": null
+     },
+     "pib": {
+      "texte": "1,9 %",
+      "valeur_num": 1.9,
+      "date": "2026-09-03",
+      "source": "ForexFactory",
+      "consensus": "1,7 %",
+      "surprise": "▲",
+      "precedent": "0,6 % (révisé)",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.67
+     },
+     "pmi_manufacturier": {
+      "texte": "55,3",
+      "valeur_num": 55.3,
+      "date": "2026-10-01",
+      "source": "ForexFactory",
+      "consensus": "56,3",
+      "surprise": "▼",
+      "precedent": "57,1",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": -1.0
+     },
+     "pmi_services": {
+      "texte": "n/d",
+      "valeur_num": null,
+      "date": null,
+      "source": null,
+      "consensus": null,
+      "surprise": null,
+      "precedent": null,
+      "manuel": false,
+      "etat": "absent",
+      "raison": "non couvert par ForexFactory",
+      "z": null
+     },
+     "chomage": {
+      "texte": "3,1 %",
+      "valeur_num": 3.1,
+      "date": "2026-10-06",
+      "source": "ForexFactory",
+      "consensus": "3,1 %",
+      "surprise": "=",
+      "precedent": "3,1 %",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": -0.0
+     },
+     "emploi": {
+      "texte": "n/d",
+      "valeur_num": null,
+      "date": null,
+      "source": null,
+      "consensus": null,
+      "surprise": null,
+      "precedent": null,
+      "manuel": false,
+      "etat": "absent",
+      "raison": "non couvert par ForexFactory",
+      "z": null
+     },
+     "ventes_detail": {
+      "texte": "3,2 % [a/a]",
+      "valeur_num": 3.2,
+      "date": "2026-10-01",
+      "source": "ForexFactory",
+      "consensus": "2,1 %",
+      "surprise": "▲",
+      "precedent": "2,6 % [a/a] (révisé)",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 3.0
+     },
+     "balance_commerciale": {
+      "texte": "n/d",
+      "valeur_num": null,
+      "date": null,
+      "source": null,
+      "consensus": null,
+      "surprise": null,
+      "precedent": null,
+      "manuel": false,
+      "etat": "absent",
+      "raison": "non couvert par ForexFactory",
+      "z": null
+     }
+    },
+    "indice_30j": {
+     "indice": 0.27,
+     "precedent": 1.83,
+     "tendance": "baisse",
+     "n": 5,
+     "texte": "+0,3 ▼ (n=5)"
+    }
+   },
+   {
+    "devise": "CAD",
+    "cellules": {
+     "taux_directeur": {
+      "texte": "2,25 %",
+      "valeur_num": 2.25,
+      "date": "2026-09-02",
+      "source": "ForexFactory",
+      "consensus": "2,25 %",
+      "surprise": "=",
+      "precedent": "2,25 %",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.0
+     },
+     "cpi": {
+      "texte": "-0,1 % [m/m]",
+      "valeur_num": -0.1,
+      "date": "2026-09-14",
+      "source": "ForexFactory",
+      "consensus": "-0,1 %",
+      "surprise": "=",
+      "precedent": "0,5 % [m/m]",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.0
+     },
+     "cpi_core": {
+      "texte": "2,0 % [médian]",
+      "valeur_num": 2.0,
+      "date": "2026-09-14",
+      "source": "ForexFactory",
+      "consensus": "2,0 %",
+      "surprise": "=",
+      "precedent": "2,0 % [médian]",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.0
+     },
+     "pib": {
+      "texte": "0,0 % [m/m]",
+      "valeur_num": 0.0,
+      "date": "2026-09-29",
+      "source": "ForexFactory",
+      "consensus": "0,0 %",
+      "surprise": "=",
+      "precedent": "0,4 % [m/m] (révisé)",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.0
+     },
+     "pmi_manufacturier": {
+      "texte": "51,5",
+      "valeur_num": 51.5,
+      "date": "2026-10-01",
+      "source": "ForexFactory",
+      "consensus": null,
+      "surprise": null,
+      "precedent": "53,0",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": "pas de consensus publié pour cette publication",
+      "z": null
+     },
+     "pmi_services": {
+      "texte": "58,2 [équiv. Ivey]",
+      "valeur_num": 58.2,
+      "date": "2026-10-06",
+      "source": "ForexFactory",
+      "consensus": "65,2",
+      "surprise": "▼",
+      "precedent": "64,3 [équiv. Ivey]",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": -3.0
+     },
+     "chomage": {
+      "texte": "6,5 %",
+      "valeur_num": 6.5,
+      "date": "2026-10-09",
+      "source": "ForexFactory",
+      "consensus": "6,5 %",
+      "surprise": "=",
+      "precedent": "6,4 %",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": -0.0
+     },
+     "emploi": {
+      "texte": "-68,3K",
+      "valeur_num": -68300.0,
+      "date": "2026-10-09",
+      "source": "ForexFactory",
+      "consensus": "6,1K",
+      "surprise": "▼",
+      "precedent": "-41,7K",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": -1.24
+     },
+     "ventes_detail": {
+      "texte": "-0,7 %",
+      "valeur_num": -0.7,
+      "date": "2026-09-24",
+      "source": "ForexFactory",
+      "consensus": "-0,8 %",
+      "surprise": "▲",
+      "precedent": "0,6 %",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.33
+     },
+     "balance_commerciale": {
+      "texte": "4,2B",
+      "valeur_num": 4200000000.0,
+      "date": "2026-10-06",
+      "source": "ForexFactory",
+      "consensus": "1,5B",
+      "surprise": "▲",
+      "precedent": "0,8B",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.9
+     }
+    },
+    "indice_30j": {
+     "indice": -0.43,
+     "precedent": 0.08,
+     "tendance": "baisse",
+     "n": 8,
+     "texte": "-0,4 ▼ (n=8)"
+    }
+   },
+   {
+    "devise": "AUD",
+    "cellules": {
+     "taux_directeur": {
+      "texte": "4,60 %",
+      "valeur_num": 4.6,
+      "date": "2026-09-29",
+      "source": "ForexFactory",
+      "consensus": "4,60 %",
+      "surprise": "=",
+      "precedent": "4,35 %",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.0
+     },
+     "cpi": {
+      "texte": "4,0 %",
+      "valeur_num": 4.0,
+      "date": "2026-09-30",
+      "source": "ForexFactory",
+      "consensus": "4,1 %",
+      "surprise": "▼",
+      "precedent": "3,5 %",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": -1.0
+     },
+     "cpi_core": {
+      "texte": "0,2 % [moy. tronquée m/m]",
+      "valeur_num": 0.2,
+      "date": "2026-09-30",
+      "source": "ForexFactory",
+      "consensus": "0,3 %",
+      "surprise": "▼",
+      "precedent": "0,5 % [moy. tronquée m/m]",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": -1.0
+     },
+     "pib": {
+      "texte": "0,4 %",
+      "valeur_num": 0.4,
+      "date": "2026-09-02",
+      "source": "ForexFactory",
+      "consensus": "0,3 %",
+      "surprise": "▲",
+      "precedent": "0,3 %",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.33
+     },
+     "pmi_manufacturier": {
+      "texte": "49,3",
+      "valeur_num": 49.3,
+      "date": "2026-09-22",
+      "source": "ForexFactory",
+      "consensus": null,
+      "surprise": null,
+      "precedent": "52,0",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": "pas de consensus publié pour cette publication",
+      "z": null
+     },
+     "pmi_services": {
+      "texte": "51,4",
+      "valeur_num": 51.4,
+      "date": "2026-09-22",
+      "source": "ForexFactory",
+      "consensus": null,
+      "surprise": null,
+      "precedent": "53,2 (révisé)",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": "pas de consensus publié pour cette publication",
+      "z": null
+     },
+     "chomage": {
+      "texte": "4,6 %",
+      "valeur_num": 4.6,
+      "date": "2026-09-24",
+      "source": "ForexFactory",
+      "consensus": "4,5 %",
+      "surprise": "▲",
+      "precedent": "4,5 %",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": -1.0
+     },
+     "emploi": {
+      "texte": "39,5K",
+      "valeur_num": 39500.0,
+      "date": "2026-09-24",
+      "source": "ForexFactory",
+      "consensus": "21,5K",
+      "surprise": "▲",
+      "precedent": "-15,9K (révisé)",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.3
+     },
+     "ventes_detail": {
+      "texte": "0,0 % [équiv. dépenses ménages]",
+      "valeur_num": 0.0,
+      "date": "2026-09-29",
+      "source": "ForexFactory",
+      "consensus": "0,3 %",
+      "surprise": "▼",
+      "precedent": "1,1 % [équiv. dépenses ménages]",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": -1.0
+     },
+     "balance_commerciale": {
+      "texte": "0,50B [biens]",
+      "valeur_num": 0.5,
+      "date": "2026-10-01",
+      "source": "ForexFactory",
+      "consensus": "2,00B",
+      "surprise": "▼",
+      "precedent": "1,35B [biens] (révisé)",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": -0.5
+     }
+    },
+    "indice_30j": {
+     "indice": -0.52,
+     "precedent": 1.07,
+     "tendance": "baisse",
+     "n": 7,
+     "texte": "-0,5 ▼ (n=7)"
+    }
+   },
+   {
+    "devise": "NZD",
+    "cellules": {
+     "taux_directeur": {
+      "texte": "2,75 %",
+      "valeur_num": 2.75,
+      "date": "2026-09-02",
+      "source": "ForexFactory",
+      "consensus": "2,75 %",
+      "surprise": "=",
+      "precedent": "2,50 %",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.0
+     },
+     "cpi": {
+      "texte": "1,5 % [t/t]",
+      "valeur_num": 1.5,
+      "date": "2026-07-20",
+      "source": "ForexFactory",
+      "consensus": "1,4 %",
+      "surprise": "▲",
+      "precedent": "0,9 % [t/t]",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 1.0
+     },
+     "cpi_core": {
+      "texte": "n/d",
+      "valeur_num": null,
+      "date": null,
+      "source": null,
+      "consensus": null,
+      "surprise": null,
+      "precedent": null,
+      "manuel": false,
+      "etat": "absent",
+      "raison": "non couvert par ForexFactory",
+      "z": null
+     },
+     "pib": {
+      "texte": "0,2 %",
+      "valeur_num": 0.2,
+      "date": "2026-09-16",
+      "source": "ForexFactory",
+      "consensus": "0,1 %",
+      "surprise": "▲",
+      "precedent": "0,9 % (révisé)",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.33
+     },
+     "pmi_manufacturier": {
+      "texte": "n/d",
+      "valeur_num": null,
+      "date": null,
+      "source": null,
+      "consensus": null,
+      "surprise": null,
+      "precedent": null,
+      "manuel": false,
+      "etat": "absent",
+      "raison": "non couvert par ForexFactory",
+      "z": null
+     },
+     "pmi_services": {
+      "texte": "n/d",
+      "valeur_num": null,
+      "date": null,
+      "source": null,
+      "consensus": null,
+      "surprise": null,
+      "precedent": null,
+      "manuel": false,
+      "etat": "absent",
+      "raison": "non couvert par ForexFactory",
+      "z": null
+     },
+     "chomage": {
+      "texte": "5,6 %",
+      "valeur_num": 5.6,
+      "date": "2026-08-04",
+      "source": "ForexFactory",
+      "consensus": "5,4 %",
+      "surprise": "▲",
+      "precedent": "5,4 % (révisé)",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": -2.0
+     },
+     "emploi": {
+      "texte": "0,5 % [t/t]",
+      "valeur_num": 0.5,
+      "date": "2026-08-04",
+      "source": "ForexFactory",
+      "consensus": "0,1 %",
+      "surprise": "▲",
+      "precedent": "0,2 % [t/t]",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 3.0
+     },
+     "ventes_detail": {
+      "texte": "-0,5 % [t/t]",
+      "valeur_num": -0.5,
+      "date": "2026-08-23",
+      "source": "ForexFactory",
+      "consensus": "0,1 %",
+      "surprise": "▼",
+      "precedent": "1,0 % [t/t] (révisé)",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": -2.0
+     },
+     "balance_commerciale": {
+      "texte": "-1349M",
+      "valeur_num": -1349000000.0,
+      "date": "2026-09-17",
+      "source": "ForexFactory",
+      "consensus": "-1775M",
+      "surprise": "▲",
+      "precedent": "-2118M (révisé)",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.14
+     }
+    },
+    "indice_30j": {
+     "indice": 0.27,
+     "precedent": -0.67,
+     "tendance": "hausse",
+     "n": 2,
+     "texte": "+0,3 ▲ (n=2)"
+    }
+   },
+   {
+    "devise": "CNY",
+    "cellules": {
+     "taux_directeur": {
+      "texte": "3,00 % [LPR 1 an]",
+      "valeur_num": 3.0,
+      "date": "2026-09-20",
+      "source": "ForexFactory",
+      "consensus": "3,00 %",
+      "surprise": "=",
+      "precedent": "3,00 % [LPR 1 an]",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.0
+     },
+     "cpi": {
+      "texte": "0,8 %",
+      "valeur_num": 0.8,
+      "date": "2026-09-09",
+      "source": "ForexFactory",
+      "consensus": "0,8 %",
+      "surprise": "=",
+      "precedent": "0,5 %",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.0
+     },
+     "cpi_core": {
+      "texte": "n/d",
+      "valeur_num": null,
+      "date": null,
+      "source": null,
+      "consensus": null,
+      "surprise": null,
+      "precedent": null,
+      "manuel": false,
+      "etat": "absent",
+      "raison": "non couvert par ForexFactory",
+      "z": null
+     },
+     "pib": {
+      "texte": "4,3 % [a/a]",
+      "valeur_num": 4.3,
+      "date": "2026-07-15",
+      "source": "ForexFactory",
+      "consensus": "4,5 %",
+      "surprise": "▼",
+      "precedent": "5,0 % [a/a]",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": -0.67
+     },
+     "pmi_manufacturier": {
+      "texte": "50,1 [officiel NBS]",
+      "valeur_num": 50.1,
+      "date": "2026-09-30",
+      "source": "ForexFactory",
+      "consensus": "50,1",
+      "surprise": "=",
+      "precedent": "49,8 [officiel NBS]",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 0.0
+     },
+     "pmi_services": {
+      "texte": "50,2 [NBS non manuf.]",
+      "valeur_num": 50.2,
+      "date": "2026-09-30",
+      "source": "ForexFactory",
+      "consensus": "49,2",
+      "surprise": "▲",
+      "precedent": "49,0 [NBS non manuf.]",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 1.0
+     },
+     "chomage": {
+      "texte": "5,3 %",
+      "valeur_num": 5.3,
+      "date": "2026-09-15",
+      "source": "ForexFactory",
+      "consensus": "5,2 %",
+      "surprise": "▲",
+      "precedent": "5,2 %",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": -1.0
+     },
+     "emploi": {
+      "texte": "n/d",
+      "valeur_num": null,
+      "date": null,
+      "source": null,
+      "consensus": null,
+      "surprise": null,
+      "precedent": null,
+      "manuel": false,
+      "etat": "absent",
+      "raison": "non couvert par ForexFactory",
+      "z": null
+     },
+     "ventes_detail": {
+      "texte": "0,4 % [a/a]",
+      "valeur_num": 0.4,
+      "date": "2026-09-15",
+      "source": "ForexFactory",
+      "consensus": "0,7 %",
+      "surprise": "▼",
+      "precedent": "0,6 % [a/a]",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": -1.0
+     },
+     "balance_commerciale": {
+      "texte": "809B",
+      "valeur_num": 809000000000.0,
+      "date": "2026-09-08",
+      "source": "ForexFactory",
+      "consensus": "805B",
+      "surprise": "▲",
+      "precedent": "767B",
+      "manuel": false,
+      "etat": "valeur",
+      "raison": null,
+      "z": 1.33
+     }
+    },
+    "indice_30j": {
+     "indice": -0.21,
+     "precedent": 0.33,
+     "tendance": "baisse",
+     "n": 5,
+     "texte": "-0,2 ▼ (n=5)"
+    }
+   }
+  ],
+  "explication": "Surprise = (réel − consensus) ÷ écart habituel de l'indicateur, plafonnée à ±3 ; signe inversé pour le chômage (au-dessus = mauvais). Gris : en ligne, pas de consensus ou pas de publication."
+ }
+}

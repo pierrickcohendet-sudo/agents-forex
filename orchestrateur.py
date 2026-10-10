@@ -39,7 +39,7 @@ from agents import (agent_critique, agent_redacteur, agent_strategiste, agent_sy
                     collecte_calendrier, collecte_macro, collecte_news,
                     collecte_technique)
 from core import (collecte_cache, controle_qualite, evaluation, hebdo, marche_taux, overrides, publication_web,
-                  registre_macro, saisies_manuelles, tableau_macro)
+                  registre_macro, saisies_manuelles, site_donnees, tableau_macro)
 from core.llm import creer_fournisseur, journal_appels, reinitialiser_journal
 from core.notifications import notifier_echec
 from core.scraping import ClientScraping
@@ -172,6 +172,7 @@ def main() -> int:
             if not a_completer and not etat_manquant and not collectes_a_refaire                     and not synthese_manquantes:
                 log.info("--completer : rien à compléter aujourd'hui (rapport déjà complet) — run ignoré")
                 if (tableau or {}).get("modifie") and not arguments.sans_web:
+                    etape("site web (site.json)", site_donnees.ecrire, RACINE, config)
                     etape("git push (tableau macro)", publication_web.pousser_git,
                           config["publication_web"], RACINE, "tableau macro : mise à jour")
                 return 0
@@ -360,8 +361,10 @@ def main() -> int:
 
     # ------------------------------------------------------------ publication
     if not arguments.sans_notion:
-        etape("publication Notion (base de données)", agent_redacteur.publier,
-              config, rapport, RACINE / "config.yaml")
+        url_notion = etape("publication Notion (base de données)", agent_redacteur.publier,
+                           config, rapport, RACINE / "config.yaml")
+        if url_notion:
+            rapport["meta"]["notion_url"] = url_notion   # lien « Ouvrir dans Notion » du site web
     if not arguments.sans_web and config.get("publication_web", {}).get("actif", True):
         etape("publication web (docs/)", publication_web.ecrire_donnees,
               rapport, RACINE / config["publication_web"]["dossier_docs"])
