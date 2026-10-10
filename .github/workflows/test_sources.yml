@@ -1,0 +1,43 @@
+# Diagnostic ponctuel (8 engrenages, palier 2) : CFTC (COT), EIA (stocks de brut) et FRED (indice or)
+# répondent-ils depuis un runner GitHub Actions ? Se lance au push de ce fichier, du script ou du
+# collecteur, ou à la main. Écrit data/diagnostics/sources_palier2.json. À supprimer une fois tranché.
+name: test-sources
+
+on:
+  push:
+    paths:
+      - ".github/workflows/test_sources.yml"
+      - "scripts/test_sources_actions.py"
+      - "agents/collecte_flux.py"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rapport-fx
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests
+      - name: Tester les sources depuis Actions
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
+        run: python scripts/test_sources_actions.py
+      - name: Committer le résultat
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/diagnostics/sources_palier2.json
+          git commit -m "diagnostic : sources palier 2 depuis GitHub Actions" || exit 0
+          git pull --rebase origin master
+          git push
