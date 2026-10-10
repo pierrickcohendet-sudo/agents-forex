@@ -444,6 +444,8 @@ def _blocs_engrenages(rapport: dict) -> list[dict]:
                 enfants.append(nb.paragraphe([nb.rt("Conviction : ", gras=True),
                                               nb.rt(f"{LIBELLES_CONVICTION[conv['niveau']]} — {conv.get('justification', '')}"),
                                               nb.rt(f"  ({conv.get('origine')})", couleur="gray", italique=True)]))
+        if e.get("sources_indisponibles"):
+            enfants.append(nb.paragraphe_gris("Sources indisponibles aujourd'hui : " + " ; ".join(e["sources_indisponibles"])))
         blocs.append(nb.toggle([nb.rt(f"{e['numero']}. {e['nom']}", gras=True),
                                 nb.rt(f"  ·  {_direction_courte(d)}", couleur="gray")], enfants))
     for c in eng.get("chaines", []):

@@ -36,7 +36,7 @@ import yaml
 from dotenv import load_dotenv
 
 from agents import (agent_critique, agent_engrenages, agent_redacteur, agent_strategiste, agent_synthese,
-                    collecte_calendrier, collecte_macro, collecte_news,
+                    collecte_calendrier, collecte_flux, collecte_macro, collecte_news,
                     collecte_technique)
 from core import (collecte_cache, controle_qualite, evaluation, hebdo, marche_taux, overrides, publication_web,
                   registre_macro, saisies_manuelles, site_donnees, tableau_macro)
@@ -233,10 +233,15 @@ def main() -> int:
     calendrier = etape("collecte calendrier (scraping faible empreinte)",
                        collecte_calendrier.collecter, config, client_scraping,
                        defaut={**vide, "evenements": [], "sites": {}, "non_rafraichies": []})
+    # COT (CFTC), stocks de brut (EIA), indice or (FRED) : engrenages 5, 7 et 8. Une requête par
+    # source et par jour (cache) ; une source en échec n'affecte qu'elle.
+    flux = etape("collecte flux (CFTC, EIA, or)", _collecter, "flux", collecte_flux.collecter, config,
+                 defaut={**vide, "cot": {}, "eia": None, "or": None})
 
     # Rendements 2 ans / 10 ans et spread vs USD (Tableau macro) : alimentent la ligne
     # « différentiel de taux » du score de confluence (pondérations inchangées).
     macro["taux_obligataires"] = (tableau or {}).get("resume_taux", {})
+    macro["flux"] = flux
     # Taux directeurs OFFICIELS (registre) à la place des valeurs de repli de config.yaml ;
     # le carry et les différentiels sont recalculés. La config reste le repli si le registre
     # n'a pas de valeur numérique pour la devise.

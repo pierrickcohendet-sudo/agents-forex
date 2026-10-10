@@ -117,6 +117,8 @@ def signaux(config: dict, donnees: dict, macro: dict, devises: list[dict], biais
     series = (donnees.get("macro") or {}).get("series") or {}
     technique = donnees.get("technique") or {}
     marche = (macro or {}).get("graphiques_marche") or {}
+    flux = (macro or {}).get("flux") or {}
+    erreurs_flux = " ; ".join(flux.get("erreurs") or [])
     scores = {d["devise"]: d.get("score_confluence") for d in devises}
     resultat: dict[int, dict] = {}
 
@@ -199,6 +201,14 @@ def signaux(config: dict, donnees: dict, macro: dict, devises: list[dict], biais
         donnees5.append({"texte": f"S&P 500 {sp['valeur']} le {sp.get('date')} ({sp.get('variation_pct'):+.2f} % sur la séance)"
                          if sp.get("variation_pct") is not None else f"S&P 500 {sp['valeur']} le {sp.get('date')}",
                          "source_id": sp.get("source_id")})
+    indisponibles5 = []
+    or_ = flux.get("or")
+    if or_:
+        donnees5.append({"texte": f"{or_['libelle']} : {or_['valeur']} le {or_['date']}"
+                                  + (f" ({or_['variation_7j_pct']:+.2f} % sur 7 j)" if or_.get("variation_7j_pct") is not None else ""),
+                         "source_id": cat.src("FRED", f"{or_['libelle']} ({or_['serie']})", or_["date"])})
+    else:
+        indisponibles5.append("indice or (FRED) : " + (erreurs_flux or "non collecté aujourd'hui"))
     yc = (donnees.get("macro") or {}).get("yield_curve") or {}
     if yc.get("disponible") and yc.get("spread_10y_2y") is not None:
         donnees5.append({"texte": f"Courbe US 10 ans - 2 ans : {yc['spread_10y_2y']:+.2f} pt le {yc.get('date')} "
@@ -208,7 +218,7 @@ def signaux(config: dict, donnees: dict, macro: dict, devises: list[dict], biais
                    "risque": risque5, "devises": ["JPY", "CHF", "AUD"] if risque5 in ("risk_on", "risk_off") else [],
                    "regle": "risque : VIX (≥ 25 ou +25 % sur 7 j : risk off ; ≤ 14 sans hausse : risk on) ; "
                             "dollar : indice dollar large Fed sur 7 j (±0,5 %)",
-                   "donnees": donnees5, "force": max(_force(v_dollar[1] if v_dollar else None, 0.5),
+                   "donnees": donnees5, "indisponibles": indisponibles5, "force": max(_force(v_dollar[1] if v_dollar else None, 0.5),
                                                      2 if risque5 == "risk_off" and vix.get("valeur", 0) >= 30 else 1 if risque5 else 0)}
 
     # 6. Géopolitique : actualité seulement
@@ -231,10 +241,29 @@ def signaux(config: dict, donnees: dict, macro: dict, devises: list[dict], biais
             f"{d} {technique[d]['variation_5j_pct']:+.2f} %" for d in RISQUE + REFUGE if (technique.get(d) or {}).get("variation_5j_pct") is not None)
             + f" ; écart risque - refuge {ecart:+.2f} pt",
             "source_id": (technique.get("AUD") or technique.get("JPY") or {}).get("source_id")})
+    cot = flux.get("cot") or {}
+    indisponibles7 = [] if cot else ["positionnement CFTC (COT) : " + (erreurs_flux or "non collecté aujourd'hui")]
+    extremes = []
+    if cot:
+        id_cot = cat.src("CFTC (Commitments of Traders, legacy futures only)",
+                         "positions nettes non commerciales (spéculateurs)", max(v["date"] for v in cot.values()))
+        lignes = []
+        for d, v in cot.items():
+            lignes.append(f"{d} net {v['net']:+,} ({v['variation_semaine']:+,} sur la semaine)".replace(",", " ")
+                          + (f", percentile 52 s {v['percentile_52s']}" if v.get("percentile_52s") is not None else ""))
+            if v.get("extreme"):
+                extremes.append(f"{d} ({'long' if v['extreme'] == 'long' else 'short'} extrême)")
+        donnees7.append({"texte": "COT CFTC, spéculateurs (positions du " + max(v["date"] for v in cot.values()) + ") : "
+                                  + " ; ".join(lignes) + ". Non couvert : CNY.", "source_id": id_cot})
+        if extremes:
+            donnees7.append({"texte": "Positionnement extrême (≥ 90e ou ≤ 10e percentile sur 52 semaines) : "
+                                      + ", ".join(extremes) + " — risque de retournement si le flux s'inverse.",
+                             "source_id": id_cot})
     resultat[7] = {"dollar": _dir(v_usd, 0.3, "haussier", "baissier"), "risque": _dir(ecart, 0.3, "risk_on", "risk_off"),
                    "devises": [d for d in RISQUE + REFUGE if abs((technique.get(d) or {}).get("variation_5j_pct") or 0) >= 0.5],
-                   "regle": "dollar : indice USD synthétique sur 5 j (±0,3 %) ; risque : devises risque vs refuge sur 5 j (±0,3 pt)",
-                   "donnees": donnees7, "force": max(_force(v_usd, 0.3), _force(ecart, 0.3))}
+                   "regle": "dollar : indice USD synthétique sur 5 j (±0,3 %) ; risque : devises risque vs refuge sur 5 j (±0,3 pt) ; "
+                            "COT : positionnement décrit, extrêmes signalés (pas de direction tirée du COT seul)",
+                   "donnees": donnees7, "indisponibles": indisponibles7, "force": max(_force(v_usd, 0.3), _force(ecart, 0.3))}
 
     # 8. Offre et demande : pétrole (7 j) et balances commerciales
     donnees8 = []
@@ -246,6 +275,15 @@ def signaux(config: dict, donnees: dict, macro: dict, devises: list[dict], biais
     if v_brent:
         donnees8.append({"texte": f"Brent {v_brent[0]} $ le {v_brent[2]} ({v_brent[1]:+.1f} % sur 7 j)",
                          "source_id": (series.get("petrole_brent") or {}).get("source_id")})
+    indisponibles8 = []
+    eia = flux.get("eia")
+    if eia:
+        donnees8.append({"texte": f"{eia['libelle']} : {eia['valeur']} M barils au {eia['date']} "
+                                  f"({eia['variation_semaine']:+.1f} M sur la semaine"
+                                  + (f", {eia['variation_4_semaines']:+.1f} M sur 4 semaines)" if eia.get("variation_4_semaines") is not None else ")"),
+                         "source_id": cat.src("EIA (Weekly Petroleum Status Report)", f"{eia['libelle']} ({eia['serie']})", eia["date"])})
+    else:
+        indisponibles8.append("stocks de pétrole EIA : " + (erreurs_flux or "non collectés aujourd'hui"))
     for devise in config.get("devises", {}):
         actuel = (cases.get(f"{devise}|balance_commerciale") or {}).get("actuel") or {}
         if actuel.get("valeur"):
@@ -253,9 +291,9 @@ def signaux(config: dict, donnees: dict, macro: dict, devises: list[dict], biais
                              "source_id": src_registre(devise, "balance_commerciale", actuel)})
     resultat[8] = {"dollar": None, "risque": None,
                    "devises": ["CAD"] + (["NZD", "AUD"] if v_wti and abs(v_wti[1]) >= 3 else []),
-                   "regle": "aucune direction dollar/risque calculée : pétrole (CAD) et balances commerciales décrits ; "
-                            "stocks EIA et COT ajoutés au palier 2",
-                   "donnees": donnees8, "force": _force(v_wti[1] if v_wti else None, 3)}
+                   "regle": "aucune direction dollar/risque calculée : pétrole (CAD), stocks EIA et balances commerciales décrits",
+                   "donnees": donnees8, "indisponibles": indisponibles8, "force": max(_force(v_wti[1] if v_wti else None, 3),
+                                _force((eia or {}).get("variation_semaine"), 3))}
 
     for n, s in resultat.items():
         s["donnees"] = [d for d in s["donnees"] if d.get("texte")]
@@ -417,6 +455,7 @@ def normaliser(brut: dict, sig: dict[int, dict], conflits_py: list[dict], concep
                                                    if isinstance(e.get("conviction"), dict) else "", 300)},
             "source_ids": _ids(e.get("source_ids")) or [x["source_id"] for x in s.get("donnees", []) if x.get("source_id")][:4],
             "donnees_calculees": s.get("donnees", []),
+            "sources_indisponibles": s.get("indisponibles", []),
         })
         if n not in par_num:
             controles.append(f"engrenage {n} ({nom}) absent de la réponse du modèle")
@@ -495,6 +534,7 @@ def generer(config: dict, llm: FournisseurLLM, donnees: dict, macro: dict, catal
             "engrenages_signaux_calcules": {
                 str(n): {"nom": NOMS[n], "direction_calculee": {"dollar": s["dollar"], "risque": s["risque"]},
                          "regle": s["regle"], "conviction_calculee": s["conviction"], "donnees": s["donnees"],
+                         "sources_indisponibles": s.get("indisponibles", []),
                          "devises": s["devises"]} for n, s in sig.items()},
             "conflits_detectes": conflits_py,
             "actualites": [{"titre": a.get("titre"), "date": (a.get("date") or "")[:10], "source_id": a.get("source_id")}

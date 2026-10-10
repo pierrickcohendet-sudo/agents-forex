@@ -103,6 +103,7 @@ function ficheEngrenage(e, sources) {
     if (e.conviction?.niveau) corps.appendChild(el("p", "note",
       `Conviction ${CONVICTION[e.conviction.niveau]} (${e.conviction.origine}) — ${e.conviction.justification || ""}`));
   }
+  if ((e.sources_indisponibles || []).length) corps.appendChild(el("p", "tag-alerte", `Sources indisponibles aujourd'hui : ${e.sources_indisponibles.join(" ; ")}`));
   if ((e.donnees_calculees || []).length) {
     const det = el("details", "sous");
     det.appendChild(el("summary", null, `Données utilisées (${e.donnees_calculees.length})`));

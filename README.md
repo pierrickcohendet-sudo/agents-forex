@@ -414,3 +414,12 @@ données non rafraîchies, critique, prix de clôture pour l'auto-évaluation).
   vide — dans ce cas, remettre son ID à la main dans `notion.database_id`.
 - **Auto-évaluation absente le lundi** : il faut au moins un rapport vieux de
   ~7 jours dans `data/rapports/`.
+
+**8 engrenages — sources de flux** (`agents/collecte_flux.py`, une requête par source et par jour, cache).
+COT de la CFTC (rapport legacy futures only, API publique sans clé) : positions nettes des spéculateurs sur
+EUR, GBP, JPY, CHF, CAD, AUD, NZD et l'indice dollar ICE, variation hebdomadaire et percentile sur 52 semaines
+(extrême ≥ 90 ou ≤ 10) ; pas de contrat yuan. Stocks de brut US hors réserve stratégique (EIA, API v2,
+secret `EIA_API_KEY`, repli sur la clé publique `DEMO_KEY`). Or : FRED n'a plus de cours spot gratuit, on
+utilise l'indice NASDAQ QGLDI, toujours étiqueté « proxy, pas le cours spot ». Les trois ont été vérifiées
+depuis GitHub Actions le 2026-10-10 (`data/diagnostics/sources_palier2.json`). Une source en échec donne
+« sources indisponibles aujourd'hui » dans l'engrenage concerné, jamais une valeur inventée.
