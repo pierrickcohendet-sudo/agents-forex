@@ -154,6 +154,7 @@ class QuotaEpuiseCoteRapport(unittest.TestCase):
     def test_analyser_marque_les_devises_quota_atteint_sans_planter(self):
         cfg = copy.deepcopy(CONFIG)
         cfg["llm"]["pause_entre_devises_s"] = 0
+        cfg["chemins"] = {**cfg["chemins"], "donnees": tempfile.mkdtemp()}   # jamais l état réel
         with tempfile.TemporaryDirectory() as tmp:
             rapport = st.analyser(cfg, self.llm_epuise(), {"devises": {}}, {"series": {}}, {"articles": []},
                                   {"evenements": [], "sites": {}, "non_rafraichies": []}, tmp)
