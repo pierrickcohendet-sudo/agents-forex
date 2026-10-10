@@ -8,6 +8,8 @@ const ORIENTATION = { haussier: "haussière", baissier: "baissière", neutre: "n
 const MOTEURS = { croissance: "Croissance", inflation: "Inflation", emploi: "Emploi", banque_centrale: "Banque centrale" };
 const IMPACT = { high: "élevé", medium: "moyen", low: "faible" };
 
+const raison = t => String(t || "raison inconnue").replace(/^indisponible\s*:\s*/i, "");
+
 function sourceTexte(sources, ids) {
   const liste = (Array.isArray(ids) ? ids : [ids]).filter(i => i && sources.get(i));
   return liste.map(i => { const s = sources.get(i); return `${s.source} · ${String(s.detail || "").slice(0, 60)} · ${s.date || "s.d."}`; }).join(" ; ");
@@ -66,7 +68,7 @@ function syntheseApprofondie(syn, sources) {
   bloc.appendChild(titre);
   if (!syn) { bloc.appendChild(el("p", "indisponible", "Synthèse indisponible : non générée pour ce rapport.")); return bloc; }
   if (syn.statut !== "ok") {
-    bloc.appendChild(el("p", "indisponible", `Synthèse indisponible : ${syn.raison || syn.statut}.` +
+    bloc.appendChild(el("p", "indisponible", `Synthèse indisponible : ${raison(syn.raison || syn.statut)}.` +
       (syn.statut === "abandonnee" ? " Abandonnée pour la journée après plusieurs tentatives." : " Elle sera retentée au prochain passage.")));
     return bloc;
   }
@@ -139,7 +141,7 @@ function fiche(d, cles, sources, ouverte) {
   f.appendChild(s);
   const corps = el("div", "fiche-corps");
   if (d.score_confluence === null || d.score_confluence === undefined) {
-    corps.appendChild(el("p", "indisponible", `Analyse indisponible aujourd'hui : ${d.raison_indisponibilite || "raison inconnue"}. Les données collectées restent affichées.`));
+    corps.appendChild(el("p", "indisponible", `Analyse indisponible aujourd'hui : ${raison(d.raison_indisponibilite)}. Les données collectées restent affichées.`));
   } else {
     corps.appendChild(el("p", "phrase", d.synthese_une_phrase || ""));
   }
