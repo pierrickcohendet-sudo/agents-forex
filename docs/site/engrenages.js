@@ -1,5 +1,6 @@
 /* Onglet « 8 engrenages » : synthèse globale (rapport du jour, synthese_globale.engrenages). */
 import { chargerJson, enErreur, el, indisponible, dateHeure } from "./commun.js";
+import { carteDossiers } from "./dossiers.js";
 
 const DOLLAR = { haussier: "Dollar ↑", baissier: "Dollar ↓", neutre: "Dollar =" };
 const RISQUE = { risk_on: "Risk on", risk_off: "Risk off", neutre: "Risque neutre" };
@@ -138,11 +139,12 @@ export function carteEngrenagesCompacte(rapport) {
 }
 
 export async function pageEngrenages() {
-  const rapport = await chargerJson("data/latest.json");
-  if (enErreur(rapport)) return [indisponible("8 engrenages", rapport?.__erreur)];
+  // Les dossiers chiffrés (Python, quotidiens) s'affichent toujours, même sans synthèse rédigée.
+  const [rapport, dossiers] = await Promise.all([chargerJson("data/latest.json"), carteDossiers()]);
+  if (enErreur(rapport)) return [dossiers, indisponible("Synthèse rédigée", rapport?.__erreur)];
   const eng = rapport.synthese_globale?.engrenages;
-  if (!eng) return [indisponible("8 engrenages", "synthèse non générée pour ce rapport (première version livrée le 10/10/2026)")];
-  if (eng.statut !== "ok") return [indisponible("8 engrenages", String(eng.raison || eng.statut).replace(/^indisponible\s*:\s*/i, ""))];
+  if (!eng) return [dossiers, indisponible("Synthèse rédigée", "pas encore générée pour ce rapport (premier run complet à venir)")];
+  if (eng.statut !== "ok") return [dossiers, indisponible("Synthèse rédigée", String(eng.raison || eng.statut).replace(/^indisponible\s*:\s*/i, ""))];
   const sources = new Map((rapport.sources_citees || []).map(s => [s.id, s]));
   const tete = el("section", "carte");
   tete.appendChild(el("h2", null, "Les 8 engrenages"));
@@ -155,5 +157,5 @@ export async function pageEngrenages() {
   if (cpt) fin.appendChild(cpt);
   if ((eng.controles || []).length) fin.appendChild(el("p", "tag-alerte", `Points de vigilance : ${eng.controles.join(" · ")}`));
   fin.appendChild(el("p", "note", "Aide à la décision uniquement : aucun signal d'achat ou de vente."));
-  return [tete, ...fiches, fin];
+  return [dossiers, tete, ...fiches, fin];
 }

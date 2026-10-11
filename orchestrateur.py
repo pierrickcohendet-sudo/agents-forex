@@ -36,9 +36,10 @@ import yaml
 from dotenv import load_dotenv
 
 from agents import (agent_critique, agent_engrenages, agent_redacteur, agent_strategiste, agent_synthese,
-                    collecte_calendrier, collecte_flux, collecte_macro, collecte_news,
+                    collecte_calendrier, collecte_flux, collecte_historiques, collecte_macro, collecte_news,
                     collecte_technique)
-from core import (collecte_cache, controle_qualite, evaluation, hebdo, marche_taux, overrides, publication_web,
+from core import (collecte_cache, controle_qualite, dossiers, evaluation, hebdo, marche_taux, overrides,
+                  publication_web,
                   registre_macro, saisies_manuelles, site_donnees, tableau_macro)
 from core.llm import creer_fournisseur, journal_appels, reinitialiser_journal
 from core.notifications import notifier_echec
@@ -237,6 +238,12 @@ def main() -> int:
     # source et par jour (cache) ; une source en échec n'affecte qu'elle.
     flux = etape("collecte flux (CFTC, EIA, or)", _collecter, "flux", collecte_flux.collecter, config,
                  defaut={**vide, "cot": {}, "eia": None, "or": None})
+    # Historiques 5 ans + dossiers chiffrés des engrenages (percentiles, variations, corrélations) :
+    # calcul Python quotidien, AUCUN appel LLM ; docs/data/dossiers.json lu par le site.
+    historiques = etape("collecte historiques 5 ans", _collecter, "historiques",
+                        collecte_historiques.collecter, config, defaut={**vide, "series": {}})
+    etape("dossiers des engrenages (dossiers.json)", dossiers.ecrire, RACINE, historiques,
+          registre_macro.charger(donnees_dir / "registre_macro.json"), technique, config)
 
     # Rendements 2 ans / 10 ans et spread vs USD (Tableau macro) : alimentent la ligne
     # « différentiel de taux » du score de confluence (pondérations inchangées).

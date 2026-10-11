@@ -1,0 +1,2689 @@
+{
+ "version_schema": 1,
+ "genere_le": "2026-10-11T13:43:41+00:00",
+ "debut_historique": "2021-08-10",
+ "erreurs_collecte": [],
+ "engrenages": {
+  "2": {
+   "numero": 2,
+   "titre": "Politique monétaire",
+   "colonnes": [
+    {
+     "id": "taux_directeur",
+     "libelle": "Taux directeur",
+     "unite": "%"
+    },
+    {
+     "id": "taux_2a",
+     "libelle": "Taux 2 ans",
+     "unite": "%"
+    },
+    {
+     "id": "ecart_2a_directeur",
+     "libelle": "2 ans − directeur",
+     "unite": "pb"
+    },
+    {
+     "id": "taux_reel",
+     "libelle": "Taux réel",
+     "unite": "%"
+    },
+    {
+     "id": "pente_2_10",
+     "libelle": "Pente 10 − 2 ans",
+     "unite": "pb"
+    },
+    {
+     "id": "ecart_2a_us",
+     "libelle": "Écart 2 ans vs US",
+     "unite": "pb"
+    },
+    {
+     "id": "prochaine_reunion",
+     "libelle": "Prochaine réunion",
+     "unite": null
+    }
+   ],
+   "lignes": [
+    {
+     "devise": "USD",
+     "cellules": {
+      "taux_directeur": {
+       "valeur": 3.88,
+       "unite": "%",
+       "date": "2026-10-08",
+       "source": "FRED (DFF, taux effectif)",
+       "frequence": "quotidien",
+       "raison": null,
+       "var_1s": 0.0,
+       "var_4s": 25.0,
+       "percentile_5a": 42,
+       "n_5a": 262,
+       "raison_percentile": null,
+       "note": "fourchette cible : borne haute 4.00% (ForexFactory)"
+      },
+      "taux_2a": {
+       "valeur": 4.75,
+       "unite": "%",
+       "date": "2026-10-08",
+       "source": "FRED (DGS2)",
+       "frequence": "quotidien",
+       "raison": null,
+       "var_1s": -3.0,
+       "var_4s": 19.0,
+       "percentile_5a": 87,
+       "n_5a": 262,
+       "raison_percentile": null
+      },
+      "ecart_2a_directeur": {
+       "valeur": 87.0,
+       "unite": "pb",
+       "date": "2026-10-08",
+       "source": "calcul : DGS2 − DFF",
+       "frequence": "quotidien",
+       "raison": null,
+       "var_1s": -3.0,
+       "var_4s": -6.0,
+       "percentile_5a": 82,
+       "n_5a": 262,
+       "raison_percentile": null,
+       "lecture": "le marché intègre des hausses"
+      },
+      "taux_reel": {
+       "valeur": 1.48,
+       "raison": null,
+       "source": "calcul : taux directeur − CPI core a/a (registre)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "%",
+       "date": "2026-09-11",
+       "raison_percentile": "historique de l'inflation core trop court dans le registre"
+      },
+      "pente_2_10": {
+       "valeur": 47.0,
+       "unite": "pb",
+       "date": "2026-10-08",
+       "source": "calcul : 10 ans − 2 ans",
+       "frequence": "quotidien",
+       "raison": null,
+       "var_1s": 1.0,
+       "var_4s": 8.0,
+       "percentile_5a": 72,
+       "n_5a": 262,
+       "raison_percentile": null
+      },
+      "ecart_2a_us": {
+       "valeur": null,
+       "raison": "référence (États-Unis)",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "prochaine_reunion": {
+       "valeur": null,
+       "texte": "2026-10-28",
+       "source": "ForexFactory (calendrier)",
+       "raison": null
+      }
+     }
+    },
+    {
+     "devise": "EUR",
+     "cellules": {
+      "taux_directeur": {
+       "valeur": 2.65,
+       "unite": "%",
+       "date": "2026-09-10",
+       "source": "registre macro (ForexFactory)",
+       "frequence": "mensuel",
+       "raison": null,
+       "percentile_5a": null,
+       "n_5a": 0,
+       "var_1s": 0.0,
+       "var_4s": 0.0,
+       "raison_percentile": "dernière donnée OCDE au 2026-01 : trop ancienne pour un percentile"
+      },
+      "taux_2a": {
+       "valeur": 3.08,
+       "unite": "%",
+       "date": "2026-10-09",
+       "source": "Bundesbank (Allemagne 2 ans)",
+       "frequence": "quotidien",
+       "raison": null,
+       "var_1s": 6.0,
+       "var_4s": -9.0,
+       "percentile_5a": 95,
+       "n_5a": 261,
+       "raison_percentile": null
+      },
+      "ecart_2a_directeur": {
+       "valeur": 43.0,
+       "raison": null,
+       "source": "calcul : taux 2 ans − taux directeur du registre",
+       "percentile_5a": null,
+       "var_1s": 6.0,
+       "var_4s": -9.0,
+       "unite": "pb",
+       "date": "2026-10-09",
+       "raison_percentile": "pas d'historique quotidien du taux directeur",
+       "lecture": "le marché intègre des hausses"
+      },
+      "taux_reel": {
+       "valeur": 0.15,
+       "raison": null,
+       "source": "calcul : taux directeur − CPI core a/a (registre)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "%",
+       "date": "2026-10-02",
+       "raison_percentile": "historique de l'inflation core trop court dans le registre"
+      },
+      "pente_2_10": {
+       "valeur": 45.0,
+       "unite": "pb",
+       "date": "2026-10-09",
+       "source": "calcul : 10 ans − 2 ans",
+       "frequence": "quotidien",
+       "raison": null,
+       "var_1s": -2.0,
+       "var_4s": 6.0,
+       "percentile_5a": 56,
+       "n_5a": 261,
+       "raison_percentile": null
+      },
+      "ecart_2a_us": {
+       "valeur": -167.0,
+       "unite": "pb",
+       "date": "2026-10-09",
+       "source": "calcul : 2 ans local − 2 ans US (DGS2)",
+       "frequence": "quotidien",
+       "raison": null,
+       "var_1s": 14.0,
+       "var_4s": -21.0,
+       "percentile_5a": 62,
+       "n_5a": 261,
+       "raison_percentile": null,
+       "serie_90j": [
+        [
+         "2026-07-13",
+         -160.0
+        ],
+        [
+         "2026-07-14",
+         -143.0
+        ],
+        [
+         "2026-07-15",
+         -140.0
+        ],
+        [
+         "2026-07-16",
+         -143.0
+        ],
+        [
+         "2026-07-17",
+         -143.0
+        ],
+        [
+         "2026-07-20",
+         -145.0
+        ],
+        [
+         "2026-07-21",
+         -151.0
+        ],
+        [
+         "2026-07-22",
+         -152.0
+        ],
+        [
+         "2026-07-23",
+         -152.0
+        ],
+        [
+         "2026-07-24",
+         -150.0
+        ],
+        [
+         "2026-07-27",
+         -154.0
+        ],
+        [
+         "2026-07-28",
+         -152.0
+        ],
+        [
+         "2026-07-29",
+         -147.0
+        ],
+        [
+         "2026-07-30",
+         -146.0
+        ],
+        [
+         "2026-07-31",
+         -152.0
+        ],
+        [
+         "2026-08-03",
+         -150.0
+        ],
+        [
+         "2026-08-04",
+         -144.0
+        ],
+        [
+         "2026-08-05",
+         -148.0
+        ],
+        [
+         "2026-08-06",
+         -154.0
+        ],
+        [
+         "2026-08-07",
+         -145.0
+        ],
+        [
+         "2026-08-10",
+         -151.0
+        ],
+        [
+         "2026-08-11",
+         -143.0
+        ],
+        [
+         "2026-08-12",
+         -144.0
+        ],
+        [
+         "2026-08-13",
+         -140.0
+        ],
+        [
+         "2026-08-14",
+         -141.0
+        ],
+        [
+         "2026-08-17",
+         -141.0
+        ],
+        [
+         "2026-08-18",
+         -138.0
+        ],
+        [
+         "2026-08-19",
+         -136.0
+        ],
+        [
+         "2026-08-20",
+         -135.0
+        ],
+        [
+         "2026-08-21",
+         -144.0
+        ],
+        [
+         "2026-08-24",
+         -142.0
+        ],
+        [
+         "2026-08-25",
+         -133.0
+        ],
+        [
+         "2026-08-26",
+         -142.0
+        ],
+        [
+         "2026-08-27",
+         -141.0
+        ],
+        [
+         "2026-08-28",
+         -153.0
+        ],
+        [
+         "2026-08-31",
+         -145.0
+        ],
+        [
+         "2026-09-01",
+         -149.0
+        ],
+        [
+         "2026-09-02",
+         -141.0
+        ],
+        [
+         "2026-09-03",
+         -138.0
+        ],
+        [
+         "2026-09-04",
+         -143.0
+        ],
+        [
+         "2026-09-07",
+         -143.0
+        ],
+        [
+         "2026-09-08",
+         -140.0
+        ],
+        [
+         "2026-09-09",
+         -142.0
+        ],
+        [
+         "2026-09-10",
+         -152.0
+        ],
+        [
+         "2026-09-11",
+         -146.0
+        ],
+        [
+         "2026-09-14",
+         -142.0
+        ],
+        [
+         "2026-09-15",
+         -141.0
+        ],
+        [
+         "2026-09-16",
+         -149.0
+        ],
+        [
+         "2026-09-17",
+         -143.0
+        ],
+        [
+         "2026-09-18",
+         -152.0
+        ],
+        [
+         "2026-09-21",
+         -154.0
+        ],
+        [
+         "2026-09-22",
+         -151.0
+        ],
+        [
+         "2026-09-23",
+         -162.0
+        ],
+        [
+         "2026-09-24",
+         -157.0
+        ],
+        [
+         "2026-09-25",
+         -153.0
+        ],
+        [
+         "2026-09-28",
+         -160.0
+        ],
+        [
+         "2026-09-29",
+         -160.0
+        ],
+        [
+         "2026-09-30",
+         -164.0
+        ],
+        [
+         "2026-10-01",
+         -157.0
+        ],
+        [
+         "2026-10-02",
+         -181.0
+        ],
+        [
+         "2026-10-05",
+         -182.0
+        ],
+        [
+         "2026-10-06",
+         -171.0
+        ],
+        [
+         "2026-10-07",
+         -170.0
+        ],
+        [
+         "2026-10-08",
+         -167.0
+        ],
+        [
+         "2026-10-09",
+         -167.0
+        ]
+       ]
+      },
+      "prochaine_reunion": {
+       "valeur": null,
+       "texte": "2026-10-29",
+       "source": "ForexFactory (calendrier)",
+       "raison": null
+      }
+     }
+    },
+    {
+     "devise": "GBP",
+     "cellules": {
+      "taux_directeur": {
+       "valeur": 3.75,
+       "unite": "%",
+       "date": "2026-09-17",
+       "source": "registre macro (ForexFactory)",
+       "frequence": "mensuel",
+       "raison": null,
+       "var_1s": 0.0,
+       "var_4s": 0.0,
+       "percentile_5a": 43,
+       "n_5a": 61,
+       "raison_percentile": null,
+       "note_percentile": "percentile du taux du registre parmi les taux au jour le jour OCDE (mensuel, proxy) sur 5 ans"
+      },
+      "taux_2a": {
+       "valeur": null,
+       "raison": "2 ans non publié en accès libre (BoE : 5/10/20 ans)",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "ecart_2a_directeur": {
+       "valeur": null,
+       "raison": "taux 2 ans ou taux directeur indisponible",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "taux_reel": {
+       "valeur": 1.15,
+       "raison": null,
+       "source": "calcul : taux directeur − CPI core a/a (registre)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "%",
+       "date": "2026-09-16",
+       "raison_percentile": "historique de l'inflation core trop court dans le registre"
+      },
+      "pente_2_10": {
+       "valeur": null,
+       "raison": "10 ans quotidien et 2 ans nécessaires",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "ecart_2a_us": {
+       "valeur": null,
+       "raison": "pas de rendement 2 ans pour ce pays",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "prochaine_reunion": {
+       "valeur": null,
+       "texte": "2026-11-05",
+       "source": "ForexFactory (calendrier)",
+       "raison": null
+      }
+     }
+    },
+    {
+     "devise": "JPY",
+     "cellules": {
+      "taux_directeur": {
+       "valeur": null,
+       "raison": "valeur du registre non numérique (<1.25%)",
+       "source": "registre macro (ForexFactory)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "taux_2a": {
+       "valeur": 1.952,
+       "unite": "%",
+       "date": "2026-09-30",
+       "source": "Ministère des Finances du Japon (JGB 2 ans)",
+       "frequence": "quotidien",
+       "raison": null,
+       "var_1s": 10.3,
+       "var_4s": 9.8,
+       "percentile_5a": 100,
+       "n_5a": 262,
+       "raison_percentile": null
+      },
+      "ecart_2a_directeur": {
+       "valeur": null,
+       "raison": "taux 2 ans ou taux directeur indisponible",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "taux_reel": {
+       "valeur": null,
+       "raison": "inflation core ou taux directeur indisponible",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "pente_2_10": {
+       "valeur": 110.5,
+       "unite": "pb",
+       "date": "2026-09-30",
+       "source": "calcul : 10 ans − 2 ans",
+       "frequence": "quotidien",
+       "raison": null,
+       "var_1s": -2.7,
+       "var_4s": -4.7,
+       "percentile_5a": 92,
+       "n_5a": 262,
+       "raison_percentile": null
+      },
+      "ecart_2a_us": {
+       "valeur": -292.8,
+       "unite": "pb",
+       "date": "2026-09-30",
+       "source": "calcul : 2 ans local − 2 ans US (DGS2)",
+       "frequence": "quotidien",
+       "raison": null,
+       "var_1s": -1.7,
+       "var_4s": -39.2,
+       "percentile_5a": 63,
+       "n_5a": 262,
+       "raison_percentile": null,
+       "serie_90j": [
+        [
+         "2026-07-02",
+         -274.5
+        ],
+        [
+         "2026-07-03",
+         -275.0
+        ],
+        [
+         "2026-07-06",
+         -273.4
+        ],
+        [
+         "2026-07-07",
+         -278.8
+        ],
+        [
+         "2026-07-08",
+         -277.7
+        ],
+        [
+         "2026-07-09",
+         -271.6
+        ],
+        [
+         "2026-07-10",
+         -277.6
+        ],
+        [
+         "2026-07-13",
+         -280.9
+        ],
+        [
+         "2026-07-14",
+         -274.5
+        ],
+        [
+         "2026-07-15",
+         -269.4
+        ],
+        [
+         "2026-07-16",
+         -272.0
+        ],
+        [
+         "2026-07-17",
+         -274.4
+        ],
+        [
+         "2026-07-21",
+         -281.9
+        ],
+        [
+         "2026-07-22",
+         -286.0
+        ],
+        [
+         "2026-07-23",
+         -287.1
+        ],
+        [
+         "2026-07-24",
+         -279.9
+        ],
+        [
+         "2026-07-27",
+         -279.7
+        ],
+        [
+         "2026-07-28",
+         -275.6
+        ],
+        [
+         "2026-07-29",
+         -273.2
+        ],
+        [
+         "2026-07-30",
+         -273.3
+        ],
+        [
+         "2026-07-31",
+         -277.3
+        ],
+        [
+         "2026-08-03",
+         -268.8
+        ],
+        [
+         "2026-08-04",
+         -263.2
+        ],
+        [
+         "2026-08-05",
+         -261.1
+        ],
+        [
+         "2026-08-06",
+         -268.5
+        ],
+        [
+         "2026-08-07",
+         -257.9
+        ],
+        [
+         "2026-08-10",
+         -263.2
+        ],
+        [
+         "2026-08-12",
+         -255.4
+        ],
+        [
+         "2026-08-13",
+         -249.9
+        ],
+        [
+         "2026-08-14",
+         -251.3
+        ],
+        [
+         "2026-08-17",
+         -249.4
+        ],
+        [
+         "2026-08-18",
+         -249.9
+        ],
+        [
+         "2026-08-19",
+         -250.9
+        ],
+        [
+         "2026-08-20",
+         -250.8
+        ],
+        [
+         "2026-08-21",
+         -255.8
+        ],
+        [
+         "2026-08-24",
+         -255.5
+        ],
+        [
+         "2026-08-25",
+         -248.6
+        ],
+        [
+         "2026-08-26",
+         -249.3
+        ],
+        [
+         "2026-08-27",
+         -250.4
+        ],
+        [
+         "2026-08-28",
+         -262.1
+        ],
+        [
+         "2026-08-31",
+         -259.7
+        ],
+        [
+         "2026-09-01",
+         -258.8
+        ],
+        [
+         "2026-09-02",
+         -253.6
+        ],
+        [
+         "2026-09-03",
+         -249.0
+        ],
+        [
+         "2026-09-04",
+         -254.0
+        ],
+        [
+         "2026-09-07",
+         -251.8
+        ],
+        [
+         "2026-09-08",
+         -254.2
+        ],
+        [
+         "2026-09-09",
+         -259.7
+        ],
+        [
+         "2026-09-10",
+         -273.7
+        ],
+        [
+         "2026-09-11",
+         -278.6
+        ],
+        [
+         "2026-09-14",
+         -280.9
+        ],
+        [
+         "2026-09-15",
+         -280.9
+        ],
+        [
+         "2026-09-16",
+         -288.8
+        ],
+        [
+         "2026-09-17",
+         -280.2
+        ],
+        [
+         "2026-09-18",
+         -291.1
+        ],
+        [
+         "2026-09-24",
+         -295.8
+        ],
+        [
+         "2026-09-25",
+         -286.2
+        ],
+        [
+         "2026-09-28",
+         -293.9
+        ],
+        [
+         "2026-09-29",
+         -291.4
+        ],
+        [
+         "2026-09-30",
+         -292.8
+        ]
+       ]
+      },
+      "prochaine_reunion": {
+       "valeur": null,
+       "texte": "2026-10-30",
+       "source": "ForexFactory (calendrier)",
+       "raison": null
+      }
+     }
+    },
+    {
+     "devise": "CHF",
+     "cellules": {
+      "taux_directeur": {
+       "valeur": 0.0,
+       "unite": "%",
+       "date": "2026-09-24",
+       "source": "registre macro (ForexFactory)",
+       "frequence": "mensuel",
+       "raison": null,
+       "percentile_5a": null,
+       "n_5a": 0,
+       "var_1s": 0.0,
+       "var_4s": 0.0,
+       "raison_percentile": "dernière donnée OCDE au 2024-03 : trop ancienne pour un percentile"
+      },
+      "taux_2a": {
+       "valeur": null,
+       "raison": "SNB : série arrêtée (dernière donnée 07/2025)",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "ecart_2a_directeur": {
+       "valeur": null,
+       "raison": "taux 2 ans ou taux directeur indisponible",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "taux_reel": {
+       "valeur": null,
+       "raison": "inflation core ou taux directeur indisponible",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "pente_2_10": {
+       "valeur": null,
+       "raison": "10 ans quotidien et 2 ans nécessaires",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "ecart_2a_us": {
+       "valeur": null,
+       "raison": "pas de rendement 2 ans pour ce pays",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "prochaine_reunion": {
+       "valeur": null,
+       "texte": "2026-12-10",
+       "source": "ForexFactory (calendrier)",
+       "raison": null
+      }
+     }
+    },
+    {
+     "devise": "CAD",
+     "cellules": {
+      "taux_directeur": {
+       "valeur": 2.25,
+       "unite": "%",
+       "date": "2026-09-02",
+       "source": "registre macro (ForexFactory)",
+       "frequence": "mensuel",
+       "raison": null,
+       "var_1s": 0.0,
+       "var_4s": 0.0,
+       "percentile_5a": 25,
+       "n_5a": 61,
+       "raison_percentile": null,
+       "note_percentile": "percentile du taux du registre parmi les taux au jour le jour OCDE (mensuel, proxy) sur 5 ans"
+      },
+      "taux_2a": {
+       "valeur": 3.24,
+       "unite": "%",
+       "date": "2026-10-08",
+       "source": "Banque du Canada (Valet, 2 ans)",
+       "frequence": "quotidien",
+       "raison": null,
+       "var_1s": -3.0,
+       "var_4s": -7.0,
+       "percentile_5a": 57,
+       "n_5a": 262,
+       "raison_percentile": null
+      },
+      "ecart_2a_directeur": {
+       "valeur": 99.0,
+       "raison": null,
+       "source": "calcul : taux 2 ans − taux directeur du registre",
+       "percentile_5a": null,
+       "var_1s": -3.0,
+       "var_4s": -7.0,
+       "unite": "pb",
+       "date": "2026-10-08",
+       "raison_percentile": "pas d'historique quotidien du taux directeur",
+       "lecture": "le marché intègre des hausses"
+      },
+      "taux_reel": {
+       "valeur": 0.25,
+       "raison": null,
+       "source": "calcul : taux directeur − CPI core a/a (registre)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "%",
+       "date": "2026-09-14",
+       "raison_percentile": "historique de l'inflation core trop court dans le registre"
+      },
+      "pente_2_10": {
+       "valeur": 69.0,
+       "unite": "pb",
+       "date": "2026-10-08",
+       "source": "calcul : 10 ans − 2 ans",
+       "frequence": "quotidien",
+       "raison": null,
+       "var_1s": 2.0,
+       "var_4s": 6.0,
+       "percentile_5a": 83,
+       "n_5a": 262,
+       "raison_percentile": null
+      },
+      "ecart_2a_us": {
+       "valeur": -151.0,
+       "unite": "pb",
+       "date": "2026-10-08",
+       "source": "calcul : 2 ans local − 2 ans US (DGS2)",
+       "frequence": "quotidien",
+       "raison": null,
+       "var_1s": 0.0,
+       "var_4s": -26.0,
+       "percentile_5a": 2,
+       "n_5a": 262,
+       "raison_percentile": null,
+       "serie_90j": [
+        [
+         "2026-07-10",
+         -139.0
+        ],
+        [
+         "2026-07-13",
+         -138.0
+        ],
+        [
+         "2026-07-14",
+         -132.0
+        ],
+        [
+         "2026-07-15",
+         -131.0
+        ],
+        [
+         "2026-07-16",
+         -133.0
+        ],
+        [
+         "2026-07-17",
+         -132.0
+        ],
+        [
+         "2026-07-20",
+         -137.0
+        ],
+        [
+         "2026-07-21",
+         -144.0
+        ],
+        [
+         "2026-07-22",
+         -142.0
+        ],
+        [
+         "2026-07-23",
+         -141.0
+        ],
+        [
+         "2026-07-24",
+         -143.0
+        ],
+        [
+         "2026-07-27",
+         -144.0
+        ],
+        [
+         "2026-07-28",
+         -142.0
+        ],
+        [
+         "2026-07-29",
+         -137.0
+        ],
+        [
+         "2026-07-30",
+         -138.0
+        ],
+        [
+         "2026-07-31",
+         -137.0
+        ],
+        [
+         "2026-08-04",
+         -137.0
+        ],
+        [
+         "2026-08-05",
+         -136.0
+        ],
+        [
+         "2026-08-06",
+         -133.0
+        ],
+        [
+         "2026-08-07",
+         -123.0
+        ],
+        [
+         "2026-08-10",
+         -123.0
+        ],
+        [
+         "2026-08-11",
+         -121.0
+        ],
+        [
+         "2026-08-12",
+         -122.0
+        ],
+        [
+         "2026-08-13",
+         -123.0
+        ],
+        [
+         "2026-08-14",
+         -121.0
+        ],
+        [
+         "2026-08-17",
+         -122.0
+        ],
+        [
+         "2026-08-18",
+         -123.0
+        ],
+        [
+         "2026-08-19",
+         -121.0
+        ],
+        [
+         "2026-08-20",
+         -117.0
+        ],
+        [
+         "2026-08-21",
+         -121.0
+        ],
+        [
+         "2026-08-24",
+         -128.0
+        ],
+        [
+         "2026-08-25",
+         -127.0
+        ],
+        [
+         "2026-08-26",
+         -126.0
+        ],
+        [
+         "2026-08-27",
+         -124.0
+        ],
+        [
+         "2026-08-28",
+         -133.0
+        ],
+        [
+         "2026-08-31",
+         -133.0
+        ],
+        [
+         "2026-09-01",
+         -138.0
+        ],
+        [
+         "2026-09-02",
+         -128.0
+        ],
+        [
+         "2026-09-03",
+         -124.0
+        ],
+        [
+         "2026-09-04",
+         -129.0
+        ],
+        [
+         "2026-09-08",
+         -126.0
+        ],
+        [
+         "2026-09-09",
+         -127.0
+        ],
+        [
+         "2026-09-10",
+         -125.0
+        ],
+        [
+         "2026-09-11",
+         -128.0
+        ],
+        [
+         "2026-09-14",
+         -128.0
+        ],
+        [
+         "2026-09-15",
+         -132.0
+        ],
+        [
+         "2026-09-16",
+         -139.0
+        ],
+        [
+         "2026-09-17",
+         -140.0
+        ],
+        [
+         "2026-09-18",
+         -144.0
+        ],
+        [
+         "2026-09-21",
+         -147.0
+        ],
+        [
+         "2026-09-22",
+         -146.0
+        ],
+        [
+         "2026-09-23",
+         -145.0
+        ],
+        [
+         "2026-09-24",
+         -148.0
+        ],
+        [
+         "2026-09-25",
+         -146.0
+        ],
+        [
+         "2026-09-28",
+         -155.0
+        ],
+        [
+         "2026-09-29",
+         -152.0
+        ],
+        [
+         "2026-10-01",
+         -151.0
+        ],
+        [
+         "2026-10-02",
+         -158.0
+        ],
+        [
+         "2026-10-05",
+         -158.0
+        ],
+        [
+         "2026-10-06",
+         -156.0
+        ],
+        [
+         "2026-10-07",
+         -154.0
+        ],
+        [
+         "2026-10-08",
+         -151.0
+        ]
+       ]
+      },
+      "prochaine_reunion": {
+       "valeur": null,
+       "texte": "2026-10-28",
+       "source": "ForexFactory (calendrier)",
+       "raison": null
+      }
+     }
+    },
+    {
+     "devise": "AUD",
+     "cellules": {
+      "taux_directeur": {
+       "valeur": 4.6,
+       "unite": "%",
+       "date": "2026-09-29",
+       "source": "registre macro (ForexFactory)",
+       "frequence": "mensuel",
+       "raison": null,
+       "var_1s": 0.0,
+       "var_4s": 25.0,
+       "percentile_5a": 100,
+       "n_5a": 61,
+       "raison_percentile": null,
+       "note_percentile": "percentile du taux du registre parmi les taux au jour le jour OCDE (mensuel, proxy) sur 5 ans"
+      },
+      "taux_2a": {
+       "valeur": null,
+       "raison": "RBA : accès automatisé refusé (403)",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "ecart_2a_directeur": {
+       "valeur": null,
+       "raison": "taux 2 ans ou taux directeur indisponible",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "taux_reel": {
+       "valeur": 4.4,
+       "raison": null,
+       "source": "calcul : taux directeur − CPI core a/a (registre)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "%",
+       "date": "2026-09-30",
+       "raison_percentile": "historique de l'inflation core trop court dans le registre"
+      },
+      "pente_2_10": {
+       "valeur": null,
+       "raison": "10 ans quotidien et 2 ans nécessaires",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "ecart_2a_us": {
+       "valeur": null,
+       "raison": "pas de rendement 2 ans pour ce pays",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "prochaine_reunion": {
+       "valeur": null,
+       "texte": "2026-11-03",
+       "source": "ForexFactory (calendrier)",
+       "raison": null
+      }
+     }
+    },
+    {
+     "devise": "NZD",
+     "cellules": {
+      "taux_directeur": {
+       "valeur": 2.75,
+       "unite": "%",
+       "date": "2026-09-02",
+       "source": "registre macro (ForexFactory)",
+       "frequence": "mensuel",
+       "raison": null,
+       "percentile_5a": null,
+       "n_5a": 0,
+       "var_1s": 0.0,
+       "var_4s": 0.0,
+       "raison_percentile": "dernière donnée OCDE au 2024-12 : trop ancienne pour un percentile"
+      },
+      "taux_2a": {
+       "valeur": null,
+       "raison": "RBNZ : accès automatisé refusé (403)",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "ecart_2a_directeur": {
+       "valeur": null,
+       "raison": "taux 2 ans ou taux directeur indisponible",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "taux_reel": {
+       "valeur": null,
+       "raison": "inflation core ou taux directeur indisponible",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "pente_2_10": {
+       "valeur": null,
+       "raison": "10 ans quotidien et 2 ans nécessaires",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "ecart_2a_us": {
+       "valeur": null,
+       "raison": "pas de rendement 2 ans pour ce pays",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "prochaine_reunion": {
+       "valeur": null,
+       "texte": "2026-10-28",
+       "source": "ForexFactory (calendrier)",
+       "raison": null
+      }
+     }
+    },
+    {
+     "devise": "CNY",
+     "cellules": {
+      "taux_directeur": {
+       "valeur": 3.0,
+       "unite": "%",
+       "date": "2026-09-20",
+       "source": "registre macro (ForexFactory)",
+       "frequence": "mensuel",
+       "raison": null,
+       "percentile_5a": null,
+       "n_5a": 0,
+       "var_1s": 0.0,
+       "var_4s": 0.0,
+       "raison_percentile": "dernière donnée OCDE au 2025-06 : trop ancienne pour un percentile"
+      },
+      "taux_2a": {
+       "valeur": null,
+       "raison": "aucune source gratuite exploitable",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "ecart_2a_directeur": {
+       "valeur": null,
+       "raison": "taux 2 ans ou taux directeur indisponible",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "taux_reel": {
+       "valeur": null,
+       "raison": "inflation core ou taux directeur indisponible",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "pente_2_10": {
+       "valeur": null,
+       "raison": "10 ans quotidien et 2 ans nécessaires",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "ecart_2a_us": {
+       "valeur": null,
+       "raison": "pas de rendement 2 ans pour ce pays",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "prochaine_reunion": {
+       "valeur": null,
+       "texte": "2026-10-20",
+       "source": "ForexFactory (calendrier)",
+       "raison": null
+      }
+     }
+    }
+   ],
+   "notes": [
+    "USD : taux effectif quotidien de la Fed (DFF) ; ForexFactory publie la borne haute de la fourchette.",
+    "Percentile du taux directeur hors USD : calculé parmi les taux au jour le jour OCDE (mensuels, proxy).",
+    "2 ans − directeur négatif : le marché anticipe des baisses ; positif : des hausses."
+   ]
+  },
+  "3": {
+   "numero": 3,
+   "titre": "Données économiques",
+   "colonnes": [
+    {
+     "id": "indice_surprise",
+     "libelle": "Surprise 30 j",
+     "unite": "écarts"
+    },
+    {
+     "id": "dispersion",
+     "libelle": "Dispersion",
+     "unite": "écarts"
+    },
+    {
+     "id": "inflation_core",
+     "libelle": "Inflation core",
+     "unite": "%"
+    },
+    {
+     "id": "chomage",
+     "libelle": "Chômage",
+     "unite": "%"
+    },
+    {
+     "id": "publications",
+     "libelle": "Plus fortes surprises (30 j)",
+     "unite": null
+    }
+   ],
+   "lignes": [
+    {
+     "devise": "USD",
+     "cellules": {
+      "indice_surprise": {
+       "valeur": -0.04,
+       "raison": null,
+       "source": "calcul Python (registre macro, 30 j)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "écarts",
+       "date": "2026-10-11",
+       "tendance": "baisse",
+       "n": 8,
+       "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
+      },
+      "dispersion": {
+       "valeur": 1.09,
+       "raison": null,
+       "source": "calcul Python (écart-type des surprises 30 j)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "écarts",
+       "n": 10,
+       "raison_percentile": "historique trop court"
+      },
+      "publications": {
+       "valeur": null,
+       "liste": [
+        {
+         "indicateur": "PIB trimestriel",
+         "date": "2026-09-30",
+         "surprise": 2.33,
+         "reel": "2.2%",
+         "consensus": "1.5%"
+        },
+        {
+         "indicateur": "Balance commerciale",
+         "date": "2026-10-06",
+         "surprise": -1.6,
+         "reel": "-105.6B",
+         "consensus": "-100.8B"
+        },
+        {
+         "indicateur": "Ventes au détail",
+         "date": "2026-09-16",
+         "surprise": 1.33,
+         "reel": "1.2%",
+         "consensus": "0.8%"
+        }
+       ],
+       "source": "registre macro (ForexFactory)",
+       "raison": null
+      },
+      "inflation_core": {
+       "valeur": 2.4,
+       "raison": null,
+       "source": "registre macro (ForexFactory)",
+       "percentile_5a": 0,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "%",
+       "date": "2026-09-11",
+       "tendance_3m": null,
+       "raison_tendance": "pas de publication 2 à 4 mois plus tôt dans le registre",
+       "n_5a": 60,
+       "note_percentile": "parmi FRED (CPILFESL)"
+      },
+      "chomage": {
+       "valeur": 4.2,
+       "raison": null,
+       "source": "registre macro (ForexFactory)",
+       "percentile_5a": 78,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "%",
+       "date": "2026-10-02",
+       "tendance_3m": null,
+       "raison_tendance": "pas de publication 2 à 4 mois plus tôt dans le registre",
+       "n_5a": 60,
+       "note_percentile": "parmi FRED (UNRATE)"
+      }
+     }
+    },
+    {
+     "devise": "EUR",
+     "cellules": {
+      "indice_surprise": {
+       "valeur": 0.14,
+       "raison": null,
+       "source": "calcul Python (registre macro, 30 j)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "écarts",
+       "date": "2026-10-11",
+       "tendance": "hausse",
+       "n": 11,
+       "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
+      },
+      "dispersion": {
+       "valeur": 0.64,
+       "raison": null,
+       "source": "calcul Python (écart-type des surprises 30 j)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "écarts",
+       "n": 11,
+       "raison_percentile": "historique trop court"
+      },
+      "publications": {
+       "valeur": null,
+       "liste": [
+        {
+         "indicateur": "CPI annuel",
+         "date": "2026-10-02",
+         "surprise": 1.0,
+         "reel": "3.8%",
+         "consensus": "3.7%"
+        },
+        {
+         "indicateur": "Balance commerciale",
+         "date": "2026-09-15",
+         "surprise": 0.43,
+         "reel": "5.0B",
+         "consensus": "3.7B"
+        },
+        {
+         "indicateur": "Ventes au détail",
+         "date": "2026-10-06",
+         "surprise": -0.33,
+         "reel": "0.1%",
+         "consensus": "0.2%"
+        }
+       ],
+       "source": "registre macro (ForexFactory)",
+       "raison": null
+      },
+      "inflation_core": {
+       "valeur": 2.5,
+       "raison": null,
+       "source": "registre macro (ForexFactory)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "%",
+       "date": "2026-10-02",
+       "tendance_3m": null,
+       "raison_tendance": "pas de publication 2 à 4 mois plus tôt dans le registre",
+       "raison_percentile": "pas de série gratuite à jour sur 5 ans pour ce pays (séries OCDE arrêtées)"
+      },
+      "chomage": {
+       "valeur": 6.4,
+       "raison": null,
+       "source": "registre macro (ForexFactory)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "%",
+       "date": "2026-10-01",
+       "tendance_3m": null,
+       "raison_tendance": "pas de publication 2 à 4 mois plus tôt dans le registre",
+       "raison_percentile": "pas de série gratuite à jour sur 5 ans pour ce pays (séries OCDE arrêtées)"
+      }
+     }
+    },
+    {
+     "devise": "GBP",
+     "cellules": {
+      "indice_surprise": {
+       "valeur": 0.35,
+       "raison": null,
+       "source": "calcul Python (registre macro, 30 j)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "écarts",
+       "date": "2026-10-11",
+       "tendance": "baisse",
+       "n": 11,
+       "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
+      },
+      "dispersion": {
+       "valeur": 0.67,
+       "raison": null,
+       "source": "calcul Python (écart-type des surprises 30 j)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "écarts",
+       "n": 12,
+       "raison_percentile": "historique trop court"
+      },
+      "publications": {
+       "valeur": null,
+       "liste": [
+        {
+         "indicateur": "Ventes au détail",
+         "date": "2026-09-18",
+         "surprise": 2.33,
+         "reel": "0.5%",
+         "consensus": "-0.2%"
+        },
+        {
+         "indicateur": "Taux de chômage",
+         "date": "2026-09-15",
+         "surprise": 1.0,
+         "reel": "4.9%",
+         "consensus": "5.0%"
+        },
+        {
+         "indicateur": "Balance commerciale",
+         "date": "2026-09-11",
+         "surprise": 0.53,
+         "reel": "-21.0B",
+         "consensus": "-22.6B"
+        }
+       ],
+       "source": "registre macro (ForexFactory)",
+       "raison": null
+      },
+      "inflation_core": {
+       "valeur": 2.6,
+       "raison": null,
+       "source": "registre macro (ForexFactory)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "%",
+       "date": "2026-09-16",
+       "tendance_3m": null,
+       "raison_tendance": "pas de publication 2 à 4 mois plus tôt dans le registre",
+       "raison_percentile": "pas de série gratuite à jour sur 5 ans pour ce pays (séries OCDE arrêtées)"
+      },
+      "chomage": {
+       "valeur": 4.9,
+       "raison": null,
+       "source": "registre macro (ForexFactory)",
+       "percentile_5a": 90,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "%",
+       "date": "2026-09-15",
+       "tendance_3m": null,
+       "raison_tendance": "pas de publication 2 à 4 mois plus tôt dans le registre",
+       "n_5a": 61,
+       "note_percentile": "parmi OCDE via FRED (LRHUTTTTGBM156S)"
+      }
+     }
+    },
+    {
+     "devise": "JPY",
+     "cellules": {
+      "indice_surprise": {
+       "valeur": -0.03,
+       "raison": null,
+       "source": "calcul Python (registre macro, 30 j)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "écarts",
+       "date": "2026-10-11",
+       "tendance": "stable",
+       "n": 7,
+       "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
+      },
+      "dispersion": {
+       "valeur": 1.88,
+       "raison": null,
+       "source": "calcul Python (écart-type des surprises 30 j)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "écarts",
+       "n": 7,
+       "raison_percentile": "historique trop court"
+      },
+      "publications": {
+       "valeur": null,
+       "liste": [
+        {
+         "indicateur": "CPI core annuel",
+         "date": "2026-09-25",
+         "surprise": 3.0,
+         "reel": "1.8%",
+         "consensus": "1.5%"
+        },
+        {
+         "indicateur": "Balance commerciale",
+         "date": "2026-09-15",
+         "surprise": 3.0,
+         "reel": "-0.84T",
+         "consensus": "-1.00T"
+        },
+        {
+         "indicateur": "Ventes au détail",
+         "date": "2026-09-29",
+         "surprise": -2.0,
+         "reel": "2.7%",
+         "consensus": "3.3%"
+        }
+       ],
+       "source": "registre macro (ForexFactory)",
+       "raison": null
+      },
+      "inflation_core": {
+       "valeur": 1.8,
+       "raison": null,
+       "source": "registre macro (ForexFactory)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "%",
+       "date": "2026-09-25",
+       "tendance_3m": null,
+       "raison_tendance": "pas de publication 2 à 4 mois plus tôt dans le registre",
+       "raison_percentile": "pas de série gratuite à jour sur 5 ans pour ce pays (séries OCDE arrêtées)"
+      },
+      "chomage": {
+       "valeur": 2.5,
+       "raison": null,
+       "source": "registre macro (ForexFactory)",
+       "percentile_5a": 44,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "%",
+       "date": "2026-10-01",
+       "tendance_3m": null,
+       "raison_tendance": "pas de publication 2 à 4 mois plus tôt dans le registre",
+       "n_5a": 61,
+       "note_percentile": "parmi OCDE via FRED (LRHUTTTTJPM156S)"
+      }
+     }
+    },
+    {
+     "devise": "CHF",
+     "cellules": {
+      "indice_surprise": {
+       "valeur": 0.27,
+       "raison": null,
+       "source": "calcul Python (registre macro, 30 j)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "écarts",
+       "date": "2026-10-11",
+       "tendance": "baisse",
+       "n": 5,
+       "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
+      },
+      "dispersion": {
+       "valeur": 1.36,
+       "raison": null,
+       "source": "calcul Python (écart-type des surprises 30 j)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "écarts",
+       "n": 5,
+       "raison_percentile": "historique trop court"
+      },
+      "publications": {
+       "valeur": null,
+       "liste": [
+        {
+         "indicateur": "Ventes au détail",
+         "date": "2026-10-01",
+         "surprise": 3.0,
+         "reel": "3.2%",
+         "consensus": "2.1%"
+        },
+        {
+         "indicateur": "PMI manufacturier",
+         "date": "2026-10-01",
+         "surprise": -1.0,
+         "reel": "55.3",
+         "consensus": "56.3"
+        },
+        {
+         "indicateur": "Taux directeur",
+         "date": "2026-09-24",
+         "surprise": 0.0,
+         "reel": "0.00%",
+         "consensus": "0.00%"
+        }
+       ],
+       "source": "registre macro (ForexFactory)",
+       "raison": null
+      },
+      "inflation_core": {
+       "valeur": null,
+       "raison": "non publié ou non numérique dans le registre",
+       "source": "registre macro",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "chomage": {
+       "valeur": 3.1,
+       "raison": null,
+       "source": "registre macro (ForexFactory)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "%",
+       "date": "2026-10-06",
+       "tendance_3m": null,
+       "raison_tendance": "pas de publication 2 à 4 mois plus tôt dans le registre",
+       "raison_percentile": "pas de série gratuite à jour sur 5 ans pour ce pays (séries OCDE arrêtées)"
+      }
+     }
+    },
+    {
+     "devise": "CAD",
+     "cellules": {
+      "indice_surprise": {
+       "valeur": -0.43,
+       "raison": null,
+       "source": "calcul Python (registre macro, 30 j)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "écarts",
+       "date": "2026-10-11",
+       "tendance": "baisse",
+       "n": 8,
+       "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
+      },
+      "dispersion": {
+       "valeur": 1.14,
+       "raison": null,
+       "source": "calcul Python (écart-type des surprises 30 j)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "écarts",
+       "n": 8,
+       "raison_percentile": "historique trop court"
+      },
+      "publications": {
+       "valeur": null,
+       "liste": [
+        {
+         "indicateur": "PMI services",
+         "date": "2026-10-06",
+         "surprise": -3.0,
+         "reel": "58.2",
+         "consensus": "65.2"
+        },
+        {
+         "indicateur": "Variation de l'emploi",
+         "date": "2026-10-09",
+         "surprise": -1.24,
+         "reel": "-68.3K",
+         "consensus": "6.1K"
+        },
+        {
+         "indicateur": "Balance commerciale",
+         "date": "2026-10-06",
+         "surprise": 0.9,
+         "reel": "4.2B",
+         "consensus": "1.5B"
+        }
+       ],
+       "source": "registre macro (ForexFactory)",
+       "raison": null
+      },
+      "inflation_core": {
+       "valeur": 2.0,
+       "raison": null,
+       "source": "registre macro (ForexFactory)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "%",
+       "date": "2026-09-14",
+       "tendance_3m": null,
+       "raison_tendance": "pas de publication 2 à 4 mois plus tôt dans le registre",
+       "raison_percentile": "pas de série gratuite à jour sur 5 ans pour ce pays (séries OCDE arrêtées)"
+      },
+      "chomage": {
+       "valeur": 6.5,
+       "raison": null,
+       "source": "registre macro (ForexFactory)",
+       "percentile_5a": 64,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "%",
+       "date": "2026-10-09",
+       "tendance_3m": null,
+       "raison_tendance": "pas de publication 2 à 4 mois plus tôt dans le registre",
+       "n_5a": 61,
+       "note_percentile": "parmi OCDE via FRED (LRHUTTTTCAM156S)"
+      }
+     }
+    },
+    {
+     "devise": "AUD",
+     "cellules": {
+      "indice_surprise": {
+       "valeur": -0.52,
+       "raison": null,
+       "source": "calcul Python (registre macro, 30 j)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "écarts",
+       "date": "2026-10-11",
+       "tendance": "baisse",
+       "n": 7,
+       "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
+      },
+      "dispersion": {
+       "valeur": 0.51,
+       "raison": null,
+       "source": "calcul Python (écart-type des surprises 30 j)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "écarts",
+       "n": 7,
+       "raison_percentile": "historique trop court"
+      },
+      "publications": {
+       "valeur": null,
+       "liste": [
+        {
+         "indicateur": "CPI annuel",
+         "date": "2026-09-30",
+         "surprise": -1.0,
+         "reel": "4.0%",
+         "consensus": "4.1%"
+        },
+        {
+         "indicateur": "CPI core annuel",
+         "date": "2026-09-30",
+         "surprise": -1.0,
+         "reel": "0.2%",
+         "consensus": "0.3%"
+        },
+        {
+         "indicateur": "Taux de chômage",
+         "date": "2026-09-24",
+         "surprise": -1.0,
+         "reel": "4.6%",
+         "consensus": "4.5%"
+        }
+       ],
+       "source": "registre macro (ForexFactory)",
+       "raison": null
+      },
+      "inflation_core": {
+       "valeur": 0.2,
+       "raison": null,
+       "source": "registre macro (ForexFactory)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "%",
+       "date": "2026-09-30",
+       "tendance_3m": null,
+       "raison_tendance": "pas de publication 2 à 4 mois plus tôt dans le registre",
+       "raison_percentile": "pas de série gratuite à jour sur 5 ans pour ce pays (séries OCDE arrêtées)"
+      },
+      "chomage": {
+       "valeur": 4.6,
+       "raison": null,
+       "source": "registre macro (ForexFactory)",
+       "percentile_5a": 93,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "%",
+       "date": "2026-09-24",
+       "tendance_3m": null,
+       "raison_tendance": "pas de publication 2 à 4 mois plus tôt dans le registre",
+       "n_5a": 61,
+       "note_percentile": "parmi OCDE via FRED (LRHUTTTTAUM156S)"
+      }
+     }
+    },
+    {
+     "devise": "NZD",
+     "cellules": {
+      "indice_surprise": {
+       "valeur": 0.27,
+       "raison": null,
+       "source": "calcul Python (registre macro, 30 j)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "écarts",
+       "date": "2026-10-11",
+       "tendance": "hausse",
+       "n": 2,
+       "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
+      },
+      "dispersion": {
+       "valeur": null,
+       "raison": "moins de 3 surprises sur 30 jours (2)",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "publications": {
+       "valeur": null,
+       "liste": [
+        {
+         "indicateur": "PIB trimestriel",
+         "date": "2026-09-16",
+         "surprise": 0.33,
+         "reel": "0.2%",
+         "consensus": "0.1%"
+        },
+        {
+         "indicateur": "Balance commerciale",
+         "date": "2026-09-17",
+         "surprise": 0.14,
+         "reel": "-1349M",
+         "consensus": "-1775M"
+        }
+       ],
+       "source": "registre macro (ForexFactory)",
+       "raison": null
+      },
+      "inflation_core": {
+       "valeur": null,
+       "raison": "non publié ou non numérique dans le registre",
+       "source": "registre macro",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "chomage": {
+       "valeur": 5.6,
+       "raison": null,
+       "source": "registre macro (ForexFactory)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "%",
+       "date": "2026-08-04",
+       "tendance_3m": null,
+       "raison_tendance": "pas de publication 2 à 4 mois plus tôt dans le registre",
+       "raison_percentile": "pas de série gratuite à jour sur 5 ans pour ce pays (séries OCDE arrêtées)"
+      }
+     }
+    },
+    {
+     "devise": "CNY",
+     "cellules": {
+      "indice_surprise": {
+       "valeur": -0.21,
+       "raison": null,
+       "source": "calcul Python (registre macro, 30 j)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "écarts",
+       "date": "2026-10-11",
+       "tendance": "baisse",
+       "n": 5,
+       "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
+      },
+      "dispersion": {
+       "valeur": 0.75,
+       "raison": null,
+       "source": "calcul Python (écart-type des surprises 30 j)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "écarts",
+       "n": 5,
+       "raison_percentile": "historique trop court"
+      },
+      "publications": {
+       "valeur": null,
+       "liste": [
+        {
+         "indicateur": "PMI services",
+         "date": "2026-09-30",
+         "surprise": 1.0,
+         "reel": "50.2",
+         "consensus": "49.2"
+        },
+        {
+         "indicateur": "Taux de chômage",
+         "date": "2026-09-15",
+         "surprise": -1.0,
+         "reel": "5.3%",
+         "consensus": "5.2%"
+        },
+        {
+         "indicateur": "Ventes au détail",
+         "date": "2026-09-15",
+         "surprise": -1.0,
+         "reel": "0.4%",
+         "consensus": "0.7%"
+        }
+       ],
+       "source": "registre macro (ForexFactory)",
+       "raison": null
+      },
+      "inflation_core": {
+       "valeur": null,
+       "raison": "non publié ou non numérique dans le registre",
+       "source": "registre macro",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "chomage": {
+       "valeur": 5.3,
+       "raison": null,
+       "source": "registre macro (ForexFactory)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "%",
+       "date": "2026-09-15",
+       "tendance_3m": null,
+       "raison_tendance": "pas de publication 2 à 4 mois plus tôt dans le registre",
+       "raison_percentile": "pas de série gratuite à jour sur 5 ans pour ce pays (séries OCDE arrêtées)"
+      }
+     }
+    }
+   ],
+   "notes": [
+    "Surprise en « écarts habituels » : (réel − consensus) ÷ écart habituel de l'indicateur, chômage inversé.",
+    "Percentile 5 ans : seulement là où une série gratuite à jour existe (US : FRED ; chômage GBP, JPY, CAD, AUD : OCDE)."
+   ]
+  },
+  "5": {
+   "numero": 5,
+   "titre": "Interconnexions de marchés",
+   "instruments": [
+    {
+     "id": "vix",
+     "libelle": "VIX",
+     "unite_affichage": "pts",
+     "cellule": {
+      "valeur": 15.41,
+      "unite": "niveau",
+      "date": "2026-10-08",
+      "source": "FRED (VIXCLS)",
+      "frequence": "quotidien",
+      "raison": null,
+      "var_1s": -5.98,
+      "var_4s": -13.62,
+      "percentile_5a": 31,
+      "n_5a": 262,
+      "raison_percentile": null
+     }
+    },
+    {
+     "id": "dollar_large",
+     "libelle": "Indice dollar large (Fed)",
+     "unite_affichage": "indice",
+     "cellule": {
+      "valeur": 121.3848,
+      "unite": "niveau",
+      "date": "2026-10-02",
+      "source": "FRED (DTWEXBGS, indice dollar large de la Fed)",
+      "frequence": "quotidien",
+      "raison": null,
+      "var_1s": 0.88,
+      "var_4s": 2.8,
+      "percentile_5a": 63,
+      "n_5a": 261,
+      "raison_percentile": null
+     }
+    },
+    {
+     "id": "indice_or",
+     "libelle": "Indice or (proxy)",
+     "unite_affichage": "indice",
+     "cellule": {
+      "valeur": 2554.51,
+      "unite": "niveau",
+      "date": "2026-10-09",
+      "source": "FRED (NASDAQQGLDI) — indice or (proxy)",
+      "frequence": "quotidien",
+      "raison": null,
+      "var_1s": 0.83,
+      "var_4s": -4.34,
+      "percentile_5a": 20,
+      "n_5a": 261,
+      "raison_percentile": null
+     }
+    },
+    {
+     "id": "wti",
+     "libelle": "Pétrole WTI",
+     "unite_affichage": "$/baril",
+     "cellule": {
+      "valeur": 96.24,
+      "unite": "niveau",
+      "date": "2026-10-06",
+      "source": "FRED (DCOILWTICO)",
+      "frequence": "quotidien",
+      "raison": null,
+      "var_1s": 0.08,
+      "var_4s": 2.15,
+      "percentile_5a": 87,
+      "n_5a": 262,
+      "raison_percentile": null,
+      "alerte": "série heurtée : +16,6 % le 28/09, -11,1 % le 25/09 en une séance (chiffres officiels)"
+     }
+    },
+    {
+     "id": "brent",
+     "libelle": "Pétrole Brent",
+     "unite_affichage": "$/baril",
+     "cellule": {
+      "valeur": 125.44,
+      "unite": "niveau",
+      "date": "2026-10-06",
+      "source": "FRED (DCOILBRENTEU)",
+      "frequence": "quotidien",
+      "raison": null,
+      "var_1s": 10.07,
+      "var_4s": 18.21,
+      "percentile_5a": 98,
+      "n_5a": 262,
+      "raison_percentile": null,
+      "alerte": "série heurtée : +18,0 % le 02/10 en une séance (chiffres officiels)"
+     }
+    },
+    {
+     "id": "sp500",
+     "libelle": "S&P 500",
+     "unite_affichage": "indice",
+     "cellule": {
+      "valeur": 7811.54,
+      "unite": "niveau",
+      "date": "2026-10-09",
+      "source": "FRED (SP500)",
+      "frequence": "quotidien",
+      "raison": null,
+      "var_1s": 1.15,
+      "var_4s": 2.02,
+      "percentile_5a": 100,
+      "n_5a": 261,
+      "raison_percentile": null
+     }
+    },
+    {
+     "id": "USD_10a",
+     "libelle": "Rendement 10 ans US",
+     "unite_affichage": "%",
+     "cellule": {
+      "valeur": 5.22,
+      "unite": "%",
+      "date": "2026-10-08",
+      "source": "FRED (DGS10)",
+      "frequence": "quotidien",
+      "raison": null,
+      "var_1s": -2.0,
+      "var_4s": 27.0,
+      "percentile_5a": 100,
+      "n_5a": 262,
+      "raison_percentile": null
+     }
+    },
+    {
+     "id": "USD_2a",
+     "libelle": "Rendement 2 ans US",
+     "unite_affichage": "%",
+     "cellule": {
+      "valeur": 4.75,
+      "unite": "%",
+      "date": "2026-10-08",
+      "source": "FRED (DGS2)",
+      "frequence": "quotidien",
+      "raison": null,
+      "var_1s": -3.0,
+      "var_4s": 19.0,
+      "percentile_5a": 87,
+      "n_5a": 262,
+      "raison_percentile": null
+     }
+    }
+   ],
+   "correlations": {
+    "noms": [
+     "EUR",
+     "GBP",
+     "JPY",
+     "CHF",
+     "CAD",
+     "AUD",
+     "NZD",
+     "CNY",
+     "USD",
+     "VIX",
+     "Indice dollar large (Fed)",
+     "Indice or (proxy)",
+     "Pétrole WTI",
+     "Pétrole Brent",
+     "S&P 500",
+     "Rendement 10 ans US"
+    ],
+    "matrice": {
+     "EUR": {
+      "GBP": 0.85,
+      "JPY": 0.37,
+      "CHF": 0.31,
+      "CAD": 0.58,
+      "AUD": 0.6,
+      "NZD": 0.82,
+      "CNY": 0.13,
+      "USD": -0.84,
+      "VIX": -0.31,
+      "Indice dollar large (Fed)": -0.66,
+      "Indice or (proxy)": 0.4,
+      "Pétrole WTI": 0.02,
+      "Pétrole Brent": 0.14,
+      "S&P 500": 0.3,
+      "Rendement 10 ans US": -0.25
+     },
+     "GBP": {
+      "EUR": 0.85,
+      "JPY": 0.36,
+      "CHF": 0.4,
+      "CAD": 0.48,
+      "AUD": 0.66,
+      "NZD": 0.76,
+      "CNY": 0.28,
+      "USD": -0.86,
+      "VIX": -0.28,
+      "Indice dollar large (Fed)": -0.61,
+      "Indice or (proxy)": 0.25,
+      "Pétrole WTI": 0.03,
+      "Pétrole Brent": 0.13,
+      "S&P 500": 0.33,
+      "Rendement 10 ans US": -0.24
+     },
+     "JPY": {
+      "EUR": 0.37,
+      "GBP": 0.36,
+      "CHF": 0.22,
+      "CAD": 0.32,
+      "AUD": 0.4,
+      "NZD": 0.46,
+      "CNY": -0.08,
+      "USD": -0.57,
+      "VIX": -0.44,
+      "Indice dollar large (Fed)": -0.5,
+      "Indice or (proxy)": 0.41,
+      "Pétrole WTI": -0.24,
+      "Pétrole Brent": -0.11,
+      "S&P 500": 0.45,
+      "Rendement 10 ans US": -0.36
+     },
+     "CHF": {
+      "EUR": 0.31,
+      "GBP": 0.4,
+      "JPY": 0.22,
+      "CAD": 0.5,
+      "AUD": 0.63,
+      "NZD": 0.47,
+      "CNY": 0.24,
+      "USD": -0.65,
+      "VIX": -0.35,
+      "Indice dollar large (Fed)": -0.25,
+      "Indice or (proxy)": 0.47,
+      "Pétrole WTI": -0.09,
+      "Pétrole Brent": 0.0,
+      "S&P 500": 0.52,
+      "Rendement 10 ans US": -0.52
+     },
+     "CAD": {
+      "EUR": 0.58,
+      "GBP": 0.48,
+      "JPY": 0.32,
+      "CHF": 0.5,
+      "AUD": 0.42,
+      "NZD": 0.46,
+      "CNY": -0.03,
+      "USD": -0.64,
+      "VIX": -0.25,
+      "Indice dollar large (Fed)": -0.37,
+      "Indice or (proxy)": 0.43,
+      "Pétrole WTI": 0.02,
+      "Pétrole Brent": -0.08,
+      "S&P 500": 0.21,
+      "Rendement 10 ans US": -0.38
+     },
+     "AUD": {
+      "EUR": 0.6,
+      "GBP": 0.66,
+      "JPY": 0.4,
+      "CHF": 0.63,
+      "CAD": 0.42,
+      "NZD": 0.77,
+      "CNY": 0.4,
+      "USD": -0.86,
+      "VIX": -0.6,
+      "Indice dollar large (Fed)": -0.53,
+      "Indice or (proxy)": 0.47,
+      "Pétrole WTI": -0.11,
+      "Pétrole Brent": -0.14,
+      "S&P 500": 0.64,
+      "Rendement 10 ans US": -0.56
+     },
+     "NZD": {
+      "EUR": 0.82,
+      "GBP": 0.76,
+      "JPY": 0.46,
+      "CHF": 0.47,
+      "CAD": 0.46,
+      "AUD": 0.77,
+      "CNY": 0.13,
+      "USD": -0.9,
+      "VIX": -0.55,
+      "Indice dollar large (Fed)": -0.48,
+      "Indice or (proxy)": 0.41,
+      "Pétrole WTI": -0.05,
+      "Pétrole Brent": -0.11,
+      "S&P 500": 0.58,
+      "Rendement 10 ans US": -0.51
+     },
+     "CNY": {
+      "EUR": 0.13,
+      "GBP": 0.28,
+      "JPY": -0.08,
+      "CHF": 0.24,
+      "CAD": -0.03,
+      "AUD": 0.4,
+      "NZD": 0.13,
+      "USD": -0.29,
+      "VIX": -0.08,
+      "Indice dollar large (Fed)": -0.23,
+      "Indice or (proxy)": 0.08,
+      "Pétrole WTI": 0.17,
+      "Pétrole Brent": -0.07,
+      "S&P 500": 0.22,
+      "Rendement 10 ans US": -0.27
+     },
+     "USD": {
+      "EUR": -0.84,
+      "GBP": -0.86,
+      "JPY": -0.57,
+      "CHF": -0.65,
+      "CAD": -0.64,
+      "AUD": -0.86,
+      "NZD": -0.9,
+      "CNY": -0.29,
+      "VIX": 0.51,
+      "Indice dollar large (Fed)": 0.62,
+      "Indice or (proxy)": -0.51,
+      "Pétrole WTI": 0.08,
+      "Pétrole Brent": 0.04,
+      "S&P 500": -0.57,
+      "Rendement 10 ans US": 0.52
+     },
+     "VIX": {
+      "EUR": -0.31,
+      "GBP": -0.28,
+      "JPY": -0.44,
+      "CHF": -0.35,
+      "CAD": -0.25,
+      "AUD": -0.6,
+      "NZD": -0.55,
+      "CNY": -0.08,
+      "USD": 0.51,
+      "Indice dollar large (Fed)": 0.29,
+      "Indice or (proxy)": -0.69,
+      "Pétrole WTI": 0.47,
+      "Pétrole Brent": 0.29,
+      "S&P 500": -0.78,
+      "Rendement 10 ans US": 0.49
+     },
+     "Indice dollar large (Fed)": {
+      "EUR": -0.66,
+      "GBP": -0.61,
+      "JPY": -0.5,
+      "CHF": -0.25,
+      "CAD": -0.37,
+      "AUD": -0.53,
+      "NZD": -0.48,
+      "CNY": -0.23,
+      "USD": 0.62,
+      "VIX": 0.29,
+      "Indice or (proxy)": -0.25,
+      "Pétrole WTI": 0.27,
+      "Pétrole Brent": -0.25,
+      "S&P 500": -0.35,
+      "Rendement 10 ans US": 0.15
+     },
+     "Indice or (proxy)": {
+      "EUR": 0.4,
+      "GBP": 0.25,
+      "JPY": 0.41,
+      "CHF": 0.47,
+      "CAD": 0.43,
+      "AUD": 0.47,
+      "NZD": 0.41,
+      "CNY": 0.08,
+      "USD": -0.51,
+      "VIX": -0.69,
+      "Indice dollar large (Fed)": -0.25,
+      "Pétrole WTI": -0.5,
+      "Pétrole Brent": -0.39,
+      "S&P 500": 0.57,
+      "Rendement 10 ans US": -0.49
+     },
+     "Pétrole WTI": {
+      "EUR": 0.02,
+      "GBP": 0.03,
+      "JPY": -0.24,
+      "CHF": -0.09,
+      "CAD": 0.02,
+      "AUD": -0.11,
+      "NZD": -0.05,
+      "CNY": 0.17,
+      "USD": 0.08,
+      "VIX": 0.47,
+      "Indice dollar large (Fed)": 0.27,
+      "Indice or (proxy)": -0.5,
+      "Pétrole Brent": 0.46,
+      "S&P 500": -0.48,
+      "Rendement 10 ans US": 0.3
+     },
+     "Pétrole Brent": {
+      "EUR": 0.14,
+      "GBP": 0.13,
+      "JPY": -0.11,
+      "CHF": 0.0,
+      "CAD": -0.08,
+      "AUD": -0.14,
+      "NZD": -0.11,
+      "CNY": -0.07,
+      "USD": 0.04,
+      "VIX": 0.29,
+      "Indice dollar large (Fed)": -0.25,
+      "Indice or (proxy)": -0.39,
+      "Pétrole WTI": 0.46,
+      "S&P 500": -0.28,
+      "Rendement 10 ans US": 0.48
+     },
+     "S&P 500": {
+      "EUR": 0.3,
+      "GBP": 0.33,
+      "JPY": 0.45,
+      "CHF": 0.52,
+      "CAD": 0.21,
+      "AUD": 0.64,
+      "NZD": 0.58,
+      "CNY": 0.22,
+      "USD": -0.57,
+      "VIX": -0.78,
+      "Indice dollar large (Fed)": -0.35,
+      "Indice or (proxy)": 0.57,
+      "Pétrole WTI": -0.48,
+      "Pétrole Brent": -0.28,
+      "Rendement 10 ans US": -0.54
+     },
+     "Rendement 10 ans US": {
+      "EUR": -0.25,
+      "GBP": -0.24,
+      "JPY": -0.36,
+      "CHF": -0.52,
+      "CAD": -0.38,
+      "AUD": -0.56,
+      "NZD": -0.51,
+      "CNY": -0.27,
+      "USD": 0.52,
+      "VIX": 0.49,
+      "Indice dollar large (Fed)": 0.15,
+      "Indice or (proxy)": -0.49,
+      "Pétrole WTI": 0.3,
+      "Pétrole Brent": 0.48,
+      "S&P 500": -0.54
+     }
+    },
+    "seances": 30,
+    "derniere_seance": "2026-10-11",
+    "changements_de_signe": [],
+    "source": "calcul Python : rendements quotidiens (log) des devises (force, Twelve Data) et des séries FRED ; variations en points pour les taux"
+   },
+   "regime_volatilite": "intermédiaire",
+   "notes": [
+    "Indice or (proxy) : NASDAQ QGLDI, pas le cours spot (FRED n'a plus de cours de l'or gratuit).",
+    "Changement de signe : corrélation ≥ 0,3 en valeur absolue sur les deux fenêtres de 30 séances, de signe opposé."
+   ]
+  }
+ }
+}
