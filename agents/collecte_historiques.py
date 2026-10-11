@@ -51,6 +51,17 @@ for _dev, _c in PAYS_OCDE.items():
         SERIES_FRED[f"{_dev}_taux_jj"] = (f"IRSTCI01{_c}M156N", f"OCDE via FRED (IRSTCI01{_c}M156N, taux au jour le jour)", "%", "mensuel")
 for _dev in ("GBP", "JPY", "CAD", "AUD"):
     SERIES_FRED[f"{_dev}_chomage"] = (f"LRHUTTTT{PAYS_OCDE[_dev]}M156S", f"OCDE via FRED (LRHUTTTT{PAYS_OCDE[_dev]}M156S)", "%", "mensuel")
+# Engrenage 4 (politique fiscale) : dette et solde publics en % du PIB, prime de terme 10 ans US
+SERIES_FRED.update({
+    "USD_dette_pib": ("GFDEGDQ188S", "FRED (GFDEGDQ188S, dette fédérale / PIB)", "%", "trimestriel"),
+    "USD_solde_pib": ("FYFSGDA188S", "FRED (FYFSGDA188S, solde fédéral / PIB)", "%", "annuel"),
+    "USD_prime_terme": ("THREEFYTP10", "FRED (THREEFYTP10, prime de terme 10 ans, Kim-Wright)", "%", "quotidien"),
+})
+PAYS_FMI = {"EUR": ("DE", "Allemagne"), "GBP": ("GB", "Royaume-Uni"), "JPY": ("JP", "Japon"), "CAD": ("CA", "Canada"),
+            "AUD": ("AU", "Australie"), "CNY": ("CN", "Chine")}
+for _dev, (_c, _nom) in PAYS_FMI.items():
+    SERIES_FRED[f"{_dev}_dette_pib"] = (f"GGGDTA{_c}A188N", f"FMI via FRED (GGGDTA{_c}A188N, dette publique brute / PIB, {_nom})", "%", "annuel")
+    SERIES_FRED[f"{_dev}_solde_pib"] = (f"GGNLBA{_c}A188N", f"FMI via FRED (GGNLBA{_c}A188N, solde public / PIB, {_nom})", "%", "annuel")
 
 
 def _get(url: str, **params) -> requests.Response:
@@ -111,6 +122,27 @@ def _boe(code: str, debut: date) -> list[tuple[str, float]]:
     return sorted(points)
 
 
+def _boj(code: str, debut: date) -> list[tuple[str, float]]:
+    """API statistique de la Banque du Japon (une requête, JSON)."""
+    rep = _get("https://www.stat-search.boj.or.jp/api/v1/getDataCode",
+               format="json", lang="en", db="FM01", code=code, startDate=f"{debut.year}{debut.month:02d}")
+    valeurs = rep.json()["RESULTSET"][0]["VALUES"]
+    return [(f"{str(d)[:4]}-{str(d)[4:6]}-{str(d)[6:8]}", float(v))
+            for d, v in zip(valeurs["SURVEY_DATES"], valeurs["VALUES"]) if v is not None]
+
+
+def _eia(series: list[str], cle: str) -> dict[str, list[tuple[str, float]]]:
+    """Stocks / production hebdomadaires EIA sur 6 ans (une requête pour toutes les séries)."""
+    rep = _get("https://api.eia.gov/v2/petroleum/sum/sndw/data/", api_key=cle, frequency="weekly", **{
+        "data[0]": "value", "facets[series][]": series, "start": (date.today() - timedelta(days=6 * 366)).isoformat(),
+        "sort[0][column]": "period", "sort[0][direction]": "asc", "length": 5000})
+    sortie: dict[str, list] = {}
+    for x in rep.json().get("response", {}).get("data", []):
+        if x.get("value") not in (None, ""):
+            sortie.setdefault(x["series"], []).append((x["period"], float(x["value"])))
+    return sortie
+
+
 def compacter(points: list[tuple[str, float]], frequence: str, aujourdhui: date) -> list[list]:
     """Quotidien : 140 derniers jours entiers + dernière valeur de chaque semaine ISO avant."""
     if frequence != "quotidien" or not points:
@@ -146,10 +178,30 @@ def collecter(config: dict) -> dict:
 
     if cle:
         for nom, (serie, source, unite, freq) in SERIES_FRED.items():
-            ajouter(nom, lambda s=serie, f=freq: _fred(s, cle, debut_mensuel if f == "mensuel" else debut),
+            ajouter(nom, lambda s=serie, f=freq: _fred(s, cle, debut_mensuel if f in ("mensuel", "trimestriel") else
+                                                      aujourdhui - timedelta(days=12 * 366) if f == "annuel" else debut),
                     source, unite, freq)
     else:
         resultat["erreurs"].append("FRED_API_KEY absente : séries FRED non collectées")
+
+    # Taux au jour le jour OFFICIELS, quotidiens : Banque du Japon (call rate non garanti) et
+    # Banque d'Angleterre (SONIA) — historique du taux directeur effectif, comme DFF pour l'USD.
+    ajouter("JPY_taux_effectif", lambda: _boj("STRDCLUCON", debut),
+            "Banque du Japon (STRDCLUCON, call rate non garanti au jour le jour)", "%", "quotidien")
+    ajouter("GBP_taux_effectif", lambda: _boe("IUDSOIA", debut), "Banque d'Angleterre (IUDSOIA, SONIA)", "%", "quotidien")
+    # Pétrole : stocks commerciaux de brut et production US, hebdomadaires sur 6 ans (moyenne 5 ans)
+    cle_eia = os.environ.get("EIA_API_KEY", "").strip() or "DEMO_KEY"
+    try:
+        eia = _eia(["WCESTUS1", "WCRFPUS2"], cle_eia)
+        for code, nom, libelle in (("WCESTUS1", "eia_stocks", "EIA (WCESTUS1, stocks de brut hors réserve stratégique)"),
+                                   ("WCRFPUS2", "eia_production", "EIA (WCRFPUS2, production de brut US)")):
+            if eia.get(code):
+                resultat["series"][nom] = {"source": libelle, "unite": "milliers de barils" if code == "WCESTUS1" else "milliers de b/j",
+                                           "frequence": "hebdomadaire", "points": [[d, v] for d, v in eia[code]]}
+            else:
+                resultat["erreurs"].append(f"{nom} ({libelle}) : aucune observation")
+    except Exception as exc:  # noqa: BLE001
+        resultat["erreurs"].append(masquer_secrets(f"EIA : {exc}")[:200])
 
     lecteurs = {"bundesbank": lambda s: _bundesbank(s["code"], debut), "mof": lambda s: _mof(s["colonne"], debut),
                 "boc": lambda s: _boc(s["serie"], debut), "boe": lambda s: _boe(s["code"], debut),

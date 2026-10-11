@@ -216,5 +216,21 @@ class RenduNotion(unittest.TestCase):
         self.assertEqual(blocs[1]["type"], "callout")
 
 
+
+
+class Vocabulaire(unittest.TestCase):
+    def test_record_et_envol_seulement_si_justifies(self):
+        dossiers = {"engrenages": {"8": {"instruments": [{"cellule": {"percentile_5a": 98, "var_4s": 18.2, "unite": "niveau",
+                                                                      "alerte": "série heurtée"}}]},
+                                   "5": {"instruments": [{"cellule": {"percentile_5a": 100, "var_4s": 12.0, "unite": "niveau"}}]}}}
+        j = ae.justifications(dossiers)
+        self.assertEqual(j[8], {"record": False, "envol": False})       # p98 pas un extrême ; hausse sur série heurtée
+        self.assertEqual(j[5], {"record": True, "envol": True})
+        texte, n = ae.moderer_vocabulaire("Le Brent s'envole ; shorts records. L'envolée continue.", j[8])
+        self.assertEqual(texte, "Le Brent progresse ; shorts extrêmes. La hausse continue.")
+        self.assertEqual(n, 3)
+        self.assertEqual(ae.moderer_vocabulaire("Le S&P 500 s'envole à un record.", j[5])[1], 0)
+
+
 if __name__ == "__main__":
     unittest.main()

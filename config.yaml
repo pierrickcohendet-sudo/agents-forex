@@ -400,6 +400,21 @@ engrenages:
   articles_max: 25            # titres d'actualité envoyés (géopolitique, fiscalité)
   tentatives_max: 4
 
+# --- Valeurs manuelles (dossiers des engrenages) --------------------------------
+# Pour les chiffres SANS source officielle gratuite accessible automatiquement (vérifié le
+# 2026-10-11 : RBA et RBNZ refusent l'accès automatisé (403) ; BNS : séries arrêtées en 07/2025 ;
+# Banque d'Angleterre : pas de 2 ans dans la base en ligne, seulement 5/10/20 ans).
+# Chaque entrée : valeur (nombre, en %), date (AAAA-MM-JJ du relevé), source (nom exact + page).
+# Laisser valeur: null tant qu'elle n'a pas été relevée À LA MAIN sur la source : le site affiche
+# alors « n/d » avec la raison. Jamais de valeur devinée. Une valeur de plus de 10 jours est
+# signalée « relevé ancien ».
+valeurs_manuelles:
+  rendement_2a:
+    GBP: { valeur: null, date: null, source: "Bank of England — Yield curves, nominal 2 ans (bankofengland.co.uk/statistics/yield-curves)" }
+    CHF: { valeur: null, date: null, source: "BNS — Rendements des obligations de la Confédération 2 ans (data.snb.ch)" }
+    AUD: { valeur: null, date: null, source: "RBA — F2 Capital Market Yields, Government Bonds 2 ans (rba.gov.au/statistics)" }
+    NZD: { valeur: null, date: null, source: "RBNZ — B2 Wholesale interest rates, 2 ans (rbnz.govt.nz/statistics)" }
+
 # --- Devises suivies ---------------------------------------------------------
 # paire        : symbole Twelve Data (null pour USD -> indice synthétique calculé).
 # inverse      : true si la devise est au dénominateur de la paire
@@ -475,7 +490,7 @@ memoire:
   fenetre_jours: 7
 
 technique:
-  outputsize: 200
+  outputsize: 230          # marge au-delà de 200 : une bougie en double retirée ne doit pas faire perdre la MM200 (incident 2026-10-10)
   rsi_periode: 14
   moyennes_mobiles: [100, 200]
   fenetre_correlation: 60

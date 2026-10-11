@@ -242,8 +242,9 @@ def main() -> int:
     # calcul Python quotidien, AUCUN appel LLM ; docs/data/dossiers.json lu par le site.
     historiques = etape("collecte historiques 5 ans", _collecter, "historiques",
                         collecte_historiques.collecter, config, defaut={**vide, "series": {}})
-    etape("dossiers des engrenages (dossiers.json)", dossiers.ecrire, RACINE, historiques,
-          registre_macro.charger(donnees_dir / "registre_macro.json"), technique, config)
+    dossiers_jour = etape("dossiers des engrenages (dossiers.json)", dossiers.ecrire, RACINE, historiques,
+                          registre_macro.charger(donnees_dir / "registre_macro.json"), technique, config,
+                          None, flux, news, dossier_rapports, defaut=None)
 
     # Rendements 2 ans / 10 ans et spread vs USD (Tableau macro) : alimentent la ligne
     # « différentiel de taux » du score de confluence (pondérations inchangées).
@@ -268,7 +269,8 @@ def main() -> int:
                         dossier_rapports, type_rapport, overrides_du_jour, rapport_existant,
                         extras_synthese={
                             "registre": registre_macro.charger(donnees_dir / "registre_macro.json"),
-                            "indice_surprise": (tableau or {}).get("indice_surprise", {})},
+                            "indice_surprise": (tableau or {}).get("indice_surprise", {}),
+                            "dossiers": dossiers_jour},
                         fatal=True)
     except Exception:  # noqa: BLE001
         return 1
@@ -287,6 +289,11 @@ def main() -> int:
         }
         for dev in rapport.get("devises", []):
             dev["indice_surprise_30j"] = indice.get(dev["devise"])
+
+    # Dossiers : recalcul APRÈS l'analyse pour l'engrenage 1 (thème), qui dépend du rapport du jour.
+    etape("dossiers des engrenages (thème)", dossiers.ecrire, RACINE, historiques,
+          registre_macro.charger(donnees_dir / "registre_macro.json"), technique, config,
+          rapport, flux, news, dossier_rapports, defaut=None)
 
     # ------------------------------------------- contrôle qualité (chaque run)
     rapport["controle_qualite"] = etape(

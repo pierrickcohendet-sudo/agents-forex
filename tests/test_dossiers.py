@@ -89,7 +89,7 @@ class Engrenages(unittest.TestCase):
         self.assertEqual(l["EUR"]["taux_reel"]["valeur"], 0.15)                       # 2,65 − 2,5
         self.assertIsNotNone(l["EUR"]["ecart_2a_us"]["percentile_5a"])
         self.assertTrue(l["EUR"]["ecart_2a_us"]["serie_90j"])
-        self.assertIn("non numérique", l["JPY"]["taux_directeur"]["raison"])            # « <1.25% » : jamais deviné
+        self.assertIn("indisponible", l["JPY"]["taux_directeur"]["raison"])          # sans série BoJ : n/d, jamais « <1.25% » deviné
         self.assertIn("pas de rendement 2 ans", l["GBP"]["ecart_2a_us"]["raison"])
         self.assertEqual(l["USD"]["prochaine_reunion"]["texte"], "2026-10-28")
         self.assertIn("borne haute", l["USD"]["taux_directeur"]["note"])
@@ -106,12 +106,52 @@ class Engrenages(unittest.TestCase):
 
     def test_construire_isole_un_engrenage_en_echec(self):
         d = ds.construire({"series": {}}, {"cases": {}}, {}, CONFIG)
-        self.assertEqual(set(d["engrenages"]), {"2", "3", "5"})
+        self.assertEqual(set(d["engrenages"]), {str(n) for n in range(1, 9)})
         self.assertIn("lignes", d["engrenages"]["2"])          # séries absentes : cases n/d, pas d'engrenage entier en échec
         usd = d["engrenages"]["2"]["lignes"][0]["cellules"]
         self.assertIsNone(usd["taux_directeur"]["valeur"])
-        self.assertTrue(all("lignes" in d["engrenages"][n] or "instruments" in d["engrenages"][n]
+        self.assertTrue(all(any(k in d["engrenages"][n] for k in ("lignes", "instruments", "evenements", "indicateurs"))
                             or "indisponible" in d["engrenages"][n] for n in d["engrenages"]))
+
+
+
+
+class Palier2(unittest.TestCase):
+    def test_jpy_taux_effectif_boj_et_2_ans_manuel(self):
+        h = historiques()
+        h["series"]["JPY_taux_effectif"] = {"source": "BoJ", "frequence": "quotidien", "points": quotidien(lambda i: 1.0 + i / 10000)}
+        config = {**CONFIG, "valeurs_manuelles": {"rendement_2a": {
+            "GBP": {"valeur": 4.1, "date": date.today().isoformat(), "source": "BoE yield curves"},
+            "AUD": {"valeur": None, "date": None, "source": "RBA F2"}}}}
+        l = {x["devise"]: x["cellules"] for x in ds.engrenage_2(h, REGISTRE, config)["lignes"]}
+        self.assertIsNotNone(l["JPY"]["taux_directeur"]["valeur"])                  # BoJ, plus de « <1.25% » illisible
+        self.assertIn("une borne", l["JPY"]["taux_directeur"]["note"])
+        self.assertEqual(l["GBP"]["taux_2a"]["valeur"], 4.1)
+        self.assertIn("saisie manuelle", l["GBP"]["taux_2a"]["source"])
+        self.assertIn("non renseignée", l["AUD"]["taux_2a"]["raison"])                # jamais devinée
+
+    def test_engrenages_4_6_7_8_et_1(self):
+        h = historiques()
+        h["series"]["eia_stocks"] = {"source": "EIA", "frequence": "hebdomadaire",
+                                     "points": [((FIN - timedelta(weeks=k)).isoformat(), 420000.0 + (k % 52) * 100) for k in range(320, -1, -1)]}
+        h["series"]["USD_dette_pib"] = {"source": "FRED", "frequence": "trimestriel", "points": [["2025-10-01", 120.0], ["2026-01-01", 122.6]]}
+        news = {"articles": [{"titre": "Attack on oil tanker near Hormuz", "source": "rss", "date": "2026-10-10"},
+                             {"titre": "Italy budget deficit widens", "source": "rss", "date": "2026-10-10"},
+                             {"titre": "Celebrity wedding in Paris", "source": "rss", "date": "2026-10-10"}]}
+        flux = {"cot": {"EUR": {"date": "2026-10-06", "net": -99000, "variation_semaine": -36000, "percentile_52s": 2,
+                                "extreme": "short", "historique": [["2026-09-29", -63000], ["2026-10-06", -99000]]}}}
+        d = ds.construire(h, REGISTRE, {}, CONFIG, None, flux, news, None)
+        e4, e6, e7, e8 = (d["engrenages"][k] for k in ("4", "6", "7", "8"))
+        self.assertEqual(e4["lignes"][0]["cellules"]["dette_pib"]["valeur"], 122.6)
+        self.assertEqual([a["titre"] for a in e4["actualites"]], ["Italy budget deficit widens"])
+        self.assertEqual([ev["canal"] for ev in e6["evenements"]], ["energie"])   # sans canal identifiable : non retenu
+        self.assertEqual(e7["lignes"][1]["cellules"]["cot"]["percentile_52s"], 2)
+        self.assertIn("non couvert", e7["lignes"][8]["cellules"]["cot"]["raison"])
+        stocks = e8["instruments"][0]["cellule"]
+        self.assertIsNotNone(stocks["ecart_moyenne_5a"])
+        self.assertIn("termes de l'échange", e8["termes_echange"]["raison"])
+        self.assertIn("indisponible", d["engrenages"]["1"])                          # thème : attend le rapport
+        self.assertTrue(all(len(d["engrenages"][k]["graphiques"]) == 2 for k in ("2", "3", "4", "5", "7", "8")))
 
 
 if __name__ == "__main__":

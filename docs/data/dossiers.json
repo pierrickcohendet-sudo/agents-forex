@@ -1,9 +1,144 @@
 {
  "version_schema": 1,
- "genere_le": "2026-10-11T13:43:41+00:00",
+ "genere_le": "2026-10-11T14:01:23+00:00",
  "debut_historique": "2021-08-10",
  "erreurs_collecte": [],
  "engrenages": {
+  "1": {
+   "numero": 1,
+   "titre": "Thème macro",
+   "indicateurs": [
+    {
+     "libelle": "Régime de risque (biais calculé)",
+     "texte": "Risk Off",
+     "detail": "écart de score risque − refuge : -15.3 pts",
+     "source": "calcul Python (scores de confluence)"
+    },
+    {
+     "libelle": "Cohérence des engrenages chiffrés",
+     "texte": "1 accord(s), 0 désaccord(s)",
+     "detail": "engrenages 2, 3, 5 et 7 comparés à la direction du thème (dollar et risque)",
+     "source": "règles Python des 8 engrenages",
+     "raison": null
+    },
+    {
+     "libelle": "Indice de surprise global (moyenne 9 devises)",
+     "texte": "-0,02",
+     "detail": "9 devise(s) avec un indice",
+     "source": "calcul Python (registre macro, 30 j)"
+    },
+    {
+     "libelle": "Score de confluence USD",
+     "texte": "80",
+     "detail": "0-100, calcul Python",
+     "source": "rapport du jour"
+    }
+   ],
+   "evolution": [
+    {
+     "date": "2026-09-07",
+     "biais": "risk_on",
+     "score_usd": null,
+     "ecart": 37
+    },
+    {
+     "date": "2026-09-26",
+     "biais": "neutre",
+     "score_usd": null,
+     "ecart": null
+    },
+    {
+     "date": "2026-10-03",
+     "biais": "risk_off",
+     "score_usd": 88,
+     "ecart": -17.0
+    },
+    {
+     "date": "2026-10-11",
+     "biais": "risk_off",
+     "score_usd": 80,
+     "ecart": -15.3
+    }
+   ],
+   "graphiques": [
+    {
+     "type": "serie",
+     "titre": "Écart de score risque − refuge, rapports des 4 dernières semaines",
+     "unite": "pts",
+     "courbes": [
+      {
+       "nom": "Écart risque − refuge",
+       "points": [
+        [
+         "2026-09-07",
+         37
+        ],
+        [
+         "2026-10-03",
+         -17.0
+        ],
+        [
+         "2026-10-11",
+         -15.3
+        ]
+       ]
+      }
+     ],
+     "source": "rapports archivés (data/rapports)",
+     "raison": null
+    },
+    {
+     "type": "barres",
+     "titre": "Scores de confluence du jour",
+     "unite": "0-100",
+     "barres": [
+      {
+       "nom": "USD",
+       "valeur": 80
+      },
+      {
+       "nom": "EUR",
+       "valeur": 26
+      },
+      {
+       "nom": "GBP",
+       "valeur": 44
+      },
+      {
+       "nom": "JPY",
+       "valeur": 26
+      },
+      {
+       "nom": "CHF",
+       "valeur": 30
+      },
+      {
+       "nom": "CAD",
+       "valeur": 16
+      },
+      {
+       "nom": "AUD",
+       "valeur": 44
+      },
+      {
+       "nom": "NZD",
+       "valeur": 30
+      },
+      {
+       "nom": "CNY",
+       "valeur": 40
+      }
+     ],
+     "source": "calcul Python",
+     "note": null,
+     "absentes": [],
+     "raison": null
+    }
+   ],
+   "notes": [
+    "Le thème découle des 7 autres engrenages ; la cohérence compte les directions calculées en Python qui vont dans son sens."
+   ]
+  },
   "2": {
    "numero": 2,
    "titre": "Politique monétaire",
@@ -485,18 +620,18 @@
        "unite": "%",
        "date": "2026-09-17",
        "source": "registre macro (ForexFactory)",
-       "frequence": "mensuel",
+       "frequence": "quotidien",
        "raison": null,
        "var_1s": 0.0,
        "var_4s": 0.0,
        "percentile_5a": 43,
-       "n_5a": 61,
+       "n_5a": 262,
        "raison_percentile": null,
-       "note_percentile": "percentile du taux du registre parmi les taux au jour le jour OCDE (mensuel, proxy) sur 5 ans"
+       "note_percentile": "percentile du taux du registre parmi le SONIA quotidien (Banque d'Angleterre) sur 5 ans"
       },
       "taux_2a": {
        "valeur": null,
-       "raison": "2 ans non publié en accès libre (BoE : 5/10/20 ans)",
+       "raison": "2 ans non publié en accès libre (BoE : 5/10/20 ans) — valeur manuelle prévue dans config.yaml (valeurs_manuelles), non renseignée",
        "source": null,
        "percentile_5a": null,
        "var_1s": null,
@@ -549,12 +684,18 @@
      "devise": "JPY",
      "cellules": {
       "taux_directeur": {
-       "valeur": null,
-       "raison": "valeur du registre non numérique (<1.25%)",
-       "source": "registre macro (ForexFactory)",
-       "percentile_5a": null,
-       "var_1s": null,
-       "var_4s": null
+       "valeur": 1.227,
+       "unite": "%",
+       "date": "2026-10-07",
+       "source": "Banque du Japon (call rate non garanti au jour le jour)",
+       "frequence": "quotidien",
+       "raison": null,
+       "var_1s": 0.1,
+       "var_4s": 25.0,
+       "percentile_5a": 100,
+       "n_5a": 262,
+       "raison_percentile": null,
+       "note": "objectif publié « <1.25% » (ForexFactory) : une borne, pas un taux"
       },
       "taux_2a": {
        "valeur": 1.952,
@@ -570,20 +711,27 @@
        "raison_percentile": null
       },
       "ecart_2a_directeur": {
-       "valeur": null,
-       "raison": "taux 2 ans ou taux directeur indisponible",
-       "source": null,
+       "valeur": 72.5,
+       "raison": null,
+       "source": "calcul : taux 2 ans − taux directeur du registre",
        "percentile_5a": null,
-       "var_1s": null,
-       "var_4s": null
+       "var_1s": 10.3,
+       "var_4s": 9.8,
+       "unite": "pb",
+       "date": "2026-09-30",
+       "raison_percentile": "pas d'historique quotidien du taux directeur",
+       "lecture": "le marché intègre des hausses"
       },
       "taux_reel": {
-       "valeur": null,
-       "raison": "inflation core ou taux directeur indisponible",
-       "source": null,
+       "valeur": -0.57,
+       "raison": null,
+       "source": "calcul : taux directeur − CPI core a/a (registre)",
        "percentile_5a": null,
        "var_1s": null,
-       "var_4s": null
+       "var_4s": null,
+       "unite": "%",
+       "date": "2026-09-25",
+       "raison_percentile": "historique de l'inflation core trop court dans le registre"
       },
       "pente_2_10": {
        "valeur": 110.5,
@@ -879,7 +1027,7 @@
       },
       "taux_2a": {
        "valeur": null,
-       "raison": "SNB : série arrêtée (dernière donnée 07/2025)",
+       "raison": "SNB : série arrêtée (dernière donnée 07/2025) — valeur manuelle prévue dans config.yaml (valeurs_manuelles), non renseignée",
        "source": null,
        "percentile_5a": null,
        "var_1s": null,
@@ -940,7 +1088,7 @@
        "percentile_5a": 25,
        "n_5a": 61,
        "raison_percentile": null,
-       "note_percentile": "percentile du taux du registre parmi les taux au jour le jour OCDE (mensuel, proxy) sur 5 ans"
+       "note_percentile": "percentile du taux du registre parmi le taux au jour le jour OCDE (mensuel, proxy) sur 5 ans"
       },
       "taux_2a": {
        "valeur": 3.24,
@@ -1277,11 +1425,11 @@
        "percentile_5a": 100,
        "n_5a": 61,
        "raison_percentile": null,
-       "note_percentile": "percentile du taux du registre parmi les taux au jour le jour OCDE (mensuel, proxy) sur 5 ans"
+       "note_percentile": "percentile du taux du registre parmi le taux au jour le jour OCDE (mensuel, proxy) sur 5 ans"
       },
       "taux_2a": {
        "valeur": null,
-       "raison": "RBA : accès automatisé refusé (403)",
+       "raison": "RBA : accès automatisé refusé (403) — valeur manuelle prévue dans config.yaml (valeurs_manuelles), non renseignée",
        "source": null,
        "percentile_5a": null,
        "var_1s": null,
@@ -1348,7 +1496,7 @@
       },
       "taux_2a": {
        "valeur": null,
-       "raison": "RBNZ : accès automatisé refusé (403)",
+       "raison": "RBNZ : accès automatisé refusé (403) — valeur manuelle prévue dans config.yaml (valeurs_manuelles), non renseignée",
        "source": null,
        "percentile_5a": null,
        "var_1s": null,
@@ -1463,6 +1611,827 @@
     "USD : taux effectif quotidien de la Fed (DFF) ; ForexFactory publie la borne haute de la fourchette.",
     "Percentile du taux directeur hors USD : calculé parmi les taux au jour le jour OCDE (mensuels, proxy).",
     "2 ans − directeur négatif : le marché anticipe des baisses ; positif : des hausses."
+   ],
+   "graphiques": [
+    {
+     "type": "serie",
+     "titre": "Écart de taux 2 ans face aux États-Unis, 90 jours",
+     "unite": "pb",
+     "courbes": [
+      {
+       "nom": "EUR",
+       "points": [
+        [
+         "2026-07-13",
+         -160.0
+        ],
+        [
+         "2026-07-14",
+         -143.0
+        ],
+        [
+         "2026-07-15",
+         -140.0
+        ],
+        [
+         "2026-07-16",
+         -143.0
+        ],
+        [
+         "2026-07-17",
+         -143.0
+        ],
+        [
+         "2026-07-20",
+         -145.0
+        ],
+        [
+         "2026-07-21",
+         -151.0
+        ],
+        [
+         "2026-07-22",
+         -152.0
+        ],
+        [
+         "2026-07-23",
+         -152.0
+        ],
+        [
+         "2026-07-24",
+         -150.0
+        ],
+        [
+         "2026-07-27",
+         -154.0
+        ],
+        [
+         "2026-07-28",
+         -152.0
+        ],
+        [
+         "2026-07-29",
+         -147.0
+        ],
+        [
+         "2026-07-30",
+         -146.0
+        ],
+        [
+         "2026-07-31",
+         -152.0
+        ],
+        [
+         "2026-08-03",
+         -150.0
+        ],
+        [
+         "2026-08-04",
+         -144.0
+        ],
+        [
+         "2026-08-05",
+         -148.0
+        ],
+        [
+         "2026-08-06",
+         -154.0
+        ],
+        [
+         "2026-08-07",
+         -145.0
+        ],
+        [
+         "2026-08-10",
+         -151.0
+        ],
+        [
+         "2026-08-11",
+         -143.0
+        ],
+        [
+         "2026-08-12",
+         -144.0
+        ],
+        [
+         "2026-08-13",
+         -140.0
+        ],
+        [
+         "2026-08-14",
+         -141.0
+        ],
+        [
+         "2026-08-17",
+         -141.0
+        ],
+        [
+         "2026-08-18",
+         -138.0
+        ],
+        [
+         "2026-08-19",
+         -136.0
+        ],
+        [
+         "2026-08-20",
+         -135.0
+        ],
+        [
+         "2026-08-21",
+         -144.0
+        ],
+        [
+         "2026-08-24",
+         -142.0
+        ],
+        [
+         "2026-08-25",
+         -133.0
+        ],
+        [
+         "2026-08-26",
+         -142.0
+        ],
+        [
+         "2026-08-27",
+         -141.0
+        ],
+        [
+         "2026-08-28",
+         -153.0
+        ],
+        [
+         "2026-08-31",
+         -145.0
+        ],
+        [
+         "2026-09-01",
+         -149.0
+        ],
+        [
+         "2026-09-02",
+         -141.0
+        ],
+        [
+         "2026-09-03",
+         -138.0
+        ],
+        [
+         "2026-09-04",
+         -143.0
+        ],
+        [
+         "2026-09-07",
+         -143.0
+        ],
+        [
+         "2026-09-08",
+         -140.0
+        ],
+        [
+         "2026-09-09",
+         -142.0
+        ],
+        [
+         "2026-09-10",
+         -152.0
+        ],
+        [
+         "2026-09-11",
+         -146.0
+        ],
+        [
+         "2026-09-14",
+         -142.0
+        ],
+        [
+         "2026-09-15",
+         -141.0
+        ],
+        [
+         "2026-09-16",
+         -149.0
+        ],
+        [
+         "2026-09-17",
+         -143.0
+        ],
+        [
+         "2026-09-18",
+         -152.0
+        ],
+        [
+         "2026-09-21",
+         -154.0
+        ],
+        [
+         "2026-09-22",
+         -151.0
+        ],
+        [
+         "2026-09-23",
+         -162.0
+        ],
+        [
+         "2026-09-24",
+         -157.0
+        ],
+        [
+         "2026-09-25",
+         -153.0
+        ],
+        [
+         "2026-09-28",
+         -160.0
+        ],
+        [
+         "2026-09-29",
+         -160.0
+        ],
+        [
+         "2026-09-30",
+         -164.0
+        ],
+        [
+         "2026-10-01",
+         -157.0
+        ],
+        [
+         "2026-10-02",
+         -181.0
+        ],
+        [
+         "2026-10-05",
+         -182.0
+        ],
+        [
+         "2026-10-06",
+         -171.0
+        ],
+        [
+         "2026-10-07",
+         -170.0
+        ],
+        [
+         "2026-10-08",
+         -167.0
+        ],
+        [
+         "2026-10-09",
+         -167.0
+        ]
+       ]
+      },
+      {
+       "nom": "JPY",
+       "points": [
+        [
+         "2026-07-02",
+         -274.5
+        ],
+        [
+         "2026-07-03",
+         -275.0
+        ],
+        [
+         "2026-07-06",
+         -273.4
+        ],
+        [
+         "2026-07-07",
+         -278.8
+        ],
+        [
+         "2026-07-08",
+         -277.7
+        ],
+        [
+         "2026-07-09",
+         -271.6
+        ],
+        [
+         "2026-07-10",
+         -277.6
+        ],
+        [
+         "2026-07-13",
+         -280.9
+        ],
+        [
+         "2026-07-14",
+         -274.5
+        ],
+        [
+         "2026-07-15",
+         -269.4
+        ],
+        [
+         "2026-07-16",
+         -272.0
+        ],
+        [
+         "2026-07-17",
+         -274.4
+        ],
+        [
+         "2026-07-21",
+         -281.9
+        ],
+        [
+         "2026-07-22",
+         -286.0
+        ],
+        [
+         "2026-07-23",
+         -287.1
+        ],
+        [
+         "2026-07-24",
+         -279.9
+        ],
+        [
+         "2026-07-27",
+         -279.7
+        ],
+        [
+         "2026-07-28",
+         -275.6
+        ],
+        [
+         "2026-07-29",
+         -273.2
+        ],
+        [
+         "2026-07-30",
+         -273.3
+        ],
+        [
+         "2026-07-31",
+         -277.3
+        ],
+        [
+         "2026-08-03",
+         -268.8
+        ],
+        [
+         "2026-08-04",
+         -263.2
+        ],
+        [
+         "2026-08-05",
+         -261.1
+        ],
+        [
+         "2026-08-06",
+         -268.5
+        ],
+        [
+         "2026-08-07",
+         -257.9
+        ],
+        [
+         "2026-08-10",
+         -263.2
+        ],
+        [
+         "2026-08-12",
+         -255.4
+        ],
+        [
+         "2026-08-13",
+         -249.9
+        ],
+        [
+         "2026-08-14",
+         -251.3
+        ],
+        [
+         "2026-08-17",
+         -249.4
+        ],
+        [
+         "2026-08-18",
+         -249.9
+        ],
+        [
+         "2026-08-19",
+         -250.9
+        ],
+        [
+         "2026-08-20",
+         -250.8
+        ],
+        [
+         "2026-08-21",
+         -255.8
+        ],
+        [
+         "2026-08-24",
+         -255.5
+        ],
+        [
+         "2026-08-25",
+         -248.6
+        ],
+        [
+         "2026-08-26",
+         -249.3
+        ],
+        [
+         "2026-08-27",
+         -250.4
+        ],
+        [
+         "2026-08-28",
+         -262.1
+        ],
+        [
+         "2026-08-31",
+         -259.7
+        ],
+        [
+         "2026-09-01",
+         -258.8
+        ],
+        [
+         "2026-09-02",
+         -253.6
+        ],
+        [
+         "2026-09-03",
+         -249.0
+        ],
+        [
+         "2026-09-04",
+         -254.0
+        ],
+        [
+         "2026-09-07",
+         -251.8
+        ],
+        [
+         "2026-09-08",
+         -254.2
+        ],
+        [
+         "2026-09-09",
+         -259.7
+        ],
+        [
+         "2026-09-10",
+         -273.7
+        ],
+        [
+         "2026-09-11",
+         -278.6
+        ],
+        [
+         "2026-09-14",
+         -280.9
+        ],
+        [
+         "2026-09-15",
+         -280.9
+        ],
+        [
+         "2026-09-16",
+         -288.8
+        ],
+        [
+         "2026-09-17",
+         -280.2
+        ],
+        [
+         "2026-09-18",
+         -291.1
+        ],
+        [
+         "2026-09-24",
+         -295.8
+        ],
+        [
+         "2026-09-25",
+         -286.2
+        ],
+        [
+         "2026-09-28",
+         -293.9
+        ],
+        [
+         "2026-09-29",
+         -291.4
+        ],
+        [
+         "2026-09-30",
+         -292.8
+        ]
+       ]
+      },
+      {
+       "nom": "CAD",
+       "points": [
+        [
+         "2026-07-10",
+         -139.0
+        ],
+        [
+         "2026-07-13",
+         -138.0
+        ],
+        [
+         "2026-07-14",
+         -132.0
+        ],
+        [
+         "2026-07-15",
+         -131.0
+        ],
+        [
+         "2026-07-16",
+         -133.0
+        ],
+        [
+         "2026-07-17",
+         -132.0
+        ],
+        [
+         "2026-07-20",
+         -137.0
+        ],
+        [
+         "2026-07-21",
+         -144.0
+        ],
+        [
+         "2026-07-22",
+         -142.0
+        ],
+        [
+         "2026-07-23",
+         -141.0
+        ],
+        [
+         "2026-07-24",
+         -143.0
+        ],
+        [
+         "2026-07-27",
+         -144.0
+        ],
+        [
+         "2026-07-28",
+         -142.0
+        ],
+        [
+         "2026-07-29",
+         -137.0
+        ],
+        [
+         "2026-07-30",
+         -138.0
+        ],
+        [
+         "2026-07-31",
+         -137.0
+        ],
+        [
+         "2026-08-04",
+         -137.0
+        ],
+        [
+         "2026-08-05",
+         -136.0
+        ],
+        [
+         "2026-08-06",
+         -133.0
+        ],
+        [
+         "2026-08-07",
+         -123.0
+        ],
+        [
+         "2026-08-10",
+         -123.0
+        ],
+        [
+         "2026-08-11",
+         -121.0
+        ],
+        [
+         "2026-08-12",
+         -122.0
+        ],
+        [
+         "2026-08-13",
+         -123.0
+        ],
+        [
+         "2026-08-14",
+         -121.0
+        ],
+        [
+         "2026-08-17",
+         -122.0
+        ],
+        [
+         "2026-08-18",
+         -123.0
+        ],
+        [
+         "2026-08-19",
+         -121.0
+        ],
+        [
+         "2026-08-20",
+         -117.0
+        ],
+        [
+         "2026-08-21",
+         -121.0
+        ],
+        [
+         "2026-08-24",
+         -128.0
+        ],
+        [
+         "2026-08-25",
+         -127.0
+        ],
+        [
+         "2026-08-26",
+         -126.0
+        ],
+        [
+         "2026-08-27",
+         -124.0
+        ],
+        [
+         "2026-08-28",
+         -133.0
+        ],
+        [
+         "2026-08-31",
+         -133.0
+        ],
+        [
+         "2026-09-01",
+         -138.0
+        ],
+        [
+         "2026-09-02",
+         -128.0
+        ],
+        [
+         "2026-09-03",
+         -124.0
+        ],
+        [
+         "2026-09-04",
+         -129.0
+        ],
+        [
+         "2026-09-08",
+         -126.0
+        ],
+        [
+         "2026-09-09",
+         -127.0
+        ],
+        [
+         "2026-09-10",
+         -125.0
+        ],
+        [
+         "2026-09-11",
+         -128.0
+        ],
+        [
+         "2026-09-14",
+         -128.0
+        ],
+        [
+         "2026-09-15",
+         -132.0
+        ],
+        [
+         "2026-09-16",
+         -139.0
+        ],
+        [
+         "2026-09-17",
+         -140.0
+        ],
+        [
+         "2026-09-18",
+         -144.0
+        ],
+        [
+         "2026-09-21",
+         -147.0
+        ],
+        [
+         "2026-09-22",
+         -146.0
+        ],
+        [
+         "2026-09-23",
+         -145.0
+        ],
+        [
+         "2026-09-24",
+         -148.0
+        ],
+        [
+         "2026-09-25",
+         -146.0
+        ],
+        [
+         "2026-09-28",
+         -155.0
+        ],
+        [
+         "2026-09-29",
+         -152.0
+        ],
+        [
+         "2026-10-01",
+         -151.0
+        ],
+        [
+         "2026-10-02",
+         -158.0
+        ],
+        [
+         "2026-10-05",
+         -158.0
+        ],
+        [
+         "2026-10-06",
+         -156.0
+        ],
+        [
+         "2026-10-07",
+         -154.0
+        ],
+        [
+         "2026-10-08",
+         -151.0
+        ]
+       ]
+      }
+     ],
+     "source": "calcul : 2 ans local − 2 ans US (DGS2)",
+     "raison": null
+    },
+    {
+     "type": "barres",
+     "titre": "Taux directeur par devise",
+     "unite": "%",
+     "barres": [
+      {
+       "nom": "USD",
+       "valeur": 3.88
+      },
+      {
+       "nom": "EUR",
+       "valeur": 2.65
+      },
+      {
+       "nom": "GBP",
+       "valeur": 3.75
+      },
+      {
+       "nom": "JPY",
+       "valeur": 1.227
+      },
+      {
+       "nom": "CHF",
+       "valeur": 0.0
+      },
+      {
+       "nom": "CAD",
+       "valeur": 2.25
+      },
+      {
+       "nom": "AUD",
+       "valeur": 4.6
+      },
+      {
+       "nom": "NZD",
+       "valeur": 2.75
+      },
+      {
+       "nom": "CNY",
+       "valeur": 3.0
+      }
+     ],
+     "source": "registre macro ; USD et JPY : taux effectifs officiels",
+     "note": null,
+     "absentes": [],
+     "raison": null
+    }
    ]
   },
   "3": {
@@ -2228,6 +3197,2028 @@
    "notes": [
     "Surprise en « écarts habituels » : (réel − consensus) ÷ écart habituel de l'indicateur, chômage inversé.",
     "Percentile 5 ans : seulement là où une série gratuite à jour existe (US : FRED ; chômage GBP, JPY, CAD, AUD : OCDE)."
+   ],
+   "graphiques": [
+    {
+     "type": "serie",
+     "titre": "Indice de surprise 30 j glissant, 90 jours (USD + 3 devises les plus surprenantes)",
+     "unite": "écarts",
+     "courbes": [
+      {
+       "nom": "USD",
+       "points": [
+        [
+         "2026-09-06",
+         0.72
+        ],
+        [
+         "2026-09-13",
+         0.47
+        ],
+        [
+         "2026-09-20",
+         0.46
+        ],
+        [
+         "2026-09-27",
+         0.46
+        ],
+        [
+         "2026-10-04",
+         0.07
+        ],
+        [
+         "2026-10-11",
+         -0.04
+        ]
+       ]
+      },
+      {
+       "nom": "AUD",
+       "points": [
+        [
+         "2026-07-12",
+         2.67
+        ],
+        [
+         "2026-07-19",
+         2.67
+        ],
+        [
+         "2026-08-09",
+         2.0
+        ],
+        [
+         "2026-08-16",
+         2.0
+        ],
+        [
+         "2026-08-23",
+         2.0
+        ],
+        [
+         "2026-08-30",
+         2.33
+        ],
+        [
+         "2026-09-06",
+         1.07
+        ],
+        [
+         "2026-09-13",
+         1.07
+        ],
+        [
+         "2026-09-20",
+         1.07
+        ],
+        [
+         "2026-09-27",
+         -0.04
+        ],
+        [
+         "2026-10-04",
+         -0.52
+        ],
+        [
+         "2026-10-11",
+         -0.52
+        ]
+       ]
+      },
+      {
+       "nom": "CAD",
+       "points": [
+        [
+         "2026-09-06",
+         0.08
+        ],
+        [
+         "2026-09-13",
+         0.08
+        ],
+        [
+         "2026-09-20",
+         0.06
+        ],
+        [
+         "2026-09-27",
+         0.08
+        ],
+        [
+         "2026-10-04",
+         0.06
+        ],
+        [
+         "2026-10-11",
+         -0.43
+        ]
+       ]
+      },
+      {
+       "nom": "GBP",
+       "points": [
+        [
+         "2026-09-13",
+         0.53
+        ],
+        [
+         "2026-09-20",
+         0.45
+        ],
+        [
+         "2026-09-27",
+         0.4
+        ],
+        [
+         "2026-10-04",
+         0.36
+        ],
+        [
+         "2026-10-11",
+         0.35
+        ]
+       ]
+      }
+     ],
+     "source": "calcul Python (registre macro)",
+     "raison": null
+    },
+    {
+     "type": "barres",
+     "titre": "Indice de surprise 30 j par devise",
+     "unite": "écarts",
+     "barres": [
+      {
+       "nom": "USD",
+       "valeur": -0.04
+      },
+      {
+       "nom": "EUR",
+       "valeur": 0.14
+      },
+      {
+       "nom": "GBP",
+       "valeur": 0.35
+      },
+      {
+       "nom": "JPY",
+       "valeur": -0.03
+      },
+      {
+       "nom": "CHF",
+       "valeur": 0.27
+      },
+      {
+       "nom": "CAD",
+       "valeur": -0.43
+      },
+      {
+       "nom": "AUD",
+       "valeur": -0.52
+      },
+      {
+       "nom": "NZD",
+       "valeur": 0.27
+      },
+      {
+       "nom": "CNY",
+       "valeur": -0.21
+      }
+     ],
+     "source": "calcul Python (registre macro)",
+     "note": null,
+     "absentes": [],
+     "raison": null
+    }
+   ]
+  },
+  "4": {
+   "numero": 4,
+   "titre": "Politique fiscale",
+   "colonnes": [
+    {
+     "id": "dette_pib",
+     "libelle": "Dette / PIB",
+     "unite": "% PIB"
+    },
+    {
+     "id": "solde_pib",
+     "libelle": "Solde / PIB",
+     "unite": "% PIB"
+    },
+    {
+     "id": "taux_10a",
+     "libelle": "Rendement 10 ans",
+     "unite": "%"
+    },
+    {
+     "id": "prime_terme",
+     "libelle": "Prime de terme 10 ans",
+     "unite": "%"
+    }
+   ],
+   "lignes": [
+    {
+     "devise": "USD",
+     "cellules": {
+      "dette_pib": {
+       "valeur": 122.6,
+       "raison": null,
+       "source": "FRED (GFDEGDQ188S, dette fédérale / PIB)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "% PIB",
+       "date": "2026-01",
+       "variation_an": 0.0,
+       "raison_percentile": "série annuelle : pas de percentile hebdomadaire",
+       "alerte": null,
+       "note": "dette fédérale, trimestrielle"
+      },
+      "solde_pib": {
+       "valeur": -5.8,
+       "raison": null,
+       "source": "FRED (FYFSGDA188S, solde fédéral / PIB)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "% PIB",
+       "date": "2025",
+       "variation_an": 0.4,
+       "raison_percentile": "série annuelle : pas de percentile hebdomadaire",
+       "alerte": null
+      },
+      "taux_10a": {
+       "valeur": 5.22,
+       "unite": "%",
+       "date": "2026-10-08",
+       "source": "FRED (DGS10)",
+       "frequence": "quotidien",
+       "raison": null,
+       "var_1s": -2.0,
+       "var_4s": 27.0,
+       "percentile_5a": 100,
+       "n_5a": 262,
+       "raison_percentile": null
+      },
+      "prime_terme": {
+       "valeur": 1.0847,
+       "unite": "%",
+       "date": "2026-10-02",
+       "source": "FRED (THREEFYTP10, prime de terme 10 ans, Kim-Wright)",
+       "frequence": "quotidien",
+       "raison": null,
+       "var_1s": 6.4,
+       "var_4s": 19.6,
+       "percentile_5a": 100,
+       "n_5a": 261,
+       "raison_percentile": null
+      }
+     }
+    },
+    {
+     "devise": "EUR",
+     "cellules": {
+      "dette_pib": {
+       "valeur": 63.9,
+       "raison": null,
+       "source": "FMI via FRED (GGGDTADEA188N, dette publique brute / PIB, Allemagne)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "% PIB",
+       "date": "2024",
+       "variation_an": 1.0,
+       "raison_percentile": "série annuelle : pas de percentile hebdomadaire",
+       "alerte": "dernière année disponible : 2024"
+      },
+      "solde_pib": {
+       "valeur": -2.8,
+       "raison": null,
+       "source": "FMI via FRED (GGNLBADEA188N, solde public / PIB, Allemagne)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "% PIB",
+       "date": "2024",
+       "variation_an": -0.3,
+       "raison_percentile": "série annuelle : pas de percentile hebdomadaire",
+       "alerte": "dernière année disponible : 2024"
+      },
+      "taux_10a": {
+       "valeur": 3.53,
+       "unite": "%",
+       "date": "2026-10-09",
+       "source": "Bundesbank (Allemagne 10 ans)",
+       "frequence": "quotidien",
+       "raison": null,
+       "var_1s": 4.0,
+       "var_4s": -3.0,
+       "percentile_5a": 99,
+       "n_5a": 261,
+       "raison_percentile": null
+      },
+      "prime_terme": {
+       "valeur": null,
+       "raison": "prime de terme publiée gratuitement pour les États-Unis seulement (FRED)",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      }
+     }
+    },
+    {
+     "devise": "GBP",
+     "cellules": {
+      "dette_pib": {
+       "valeur": 101.2,
+       "raison": null,
+       "source": "FMI via FRED (GGGDTAGBA188N, dette publique brute / PIB, Royaume-Uni)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "% PIB",
+       "date": "2024",
+       "variation_an": 0.9,
+       "raison_percentile": "série annuelle : pas de percentile hebdomadaire",
+       "alerte": "dernière année disponible : 2024"
+      },
+      "solde_pib": {
+       "valeur": -5.7,
+       "raison": null,
+       "source": "FMI via FRED (GGNLBAGBA188N, solde public / PIB, Royaume-Uni)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "% PIB",
+       "date": "2024",
+       "variation_an": 0.3,
+       "raison_percentile": "série annuelle : pas de percentile hebdomadaire",
+       "alerte": "dernière année disponible : 2024"
+      },
+      "taux_10a": {
+       "valeur": 5.3852,
+       "unite": "%",
+       "date": "2026-10-07",
+       "source": "Banque d'Angleterre (par yield 10 ans, IUDMNPY)",
+       "frequence": "quotidien",
+       "raison": null,
+       "var_1s": 1.4,
+       "var_4s": 19.3,
+       "percentile_5a": 100,
+       "n_5a": 262,
+       "raison_percentile": null
+      },
+      "prime_terme": {
+       "valeur": null,
+       "raison": "prime de terme publiée gratuitement pour les États-Unis seulement (FRED)",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      }
+     }
+    },
+    {
+     "devise": "JPY",
+     "cellules": {
+      "dette_pib": {
+       "valeur": 240.0,
+       "raison": null,
+       "source": "FMI via FRED (GGGDTAJPA188N, dette publique brute / PIB, Japon)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "% PIB",
+       "date": "2023",
+       "variation_an": -8.3,
+       "raison_percentile": "série annuelle : pas de percentile hebdomadaire",
+       "alerte": "dernière année disponible : 2023"
+      },
+      "solde_pib": {
+       "valeur": -2.3,
+       "raison": null,
+       "source": "FMI via FRED (GGNLBAJPA188N, solde public / PIB, Japon)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "% PIB",
+       "date": "2023",
+       "variation_an": 2.0,
+       "raison_percentile": "série annuelle : pas de percentile hebdomadaire",
+       "alerte": "dernière année disponible : 2023"
+      },
+      "taux_10a": {
+       "valeur": 3.057,
+       "unite": "%",
+       "date": "2026-09-30",
+       "source": "Ministère des Finances du Japon (JGB 10 ans)",
+       "frequence": "quotidien",
+       "raison": null,
+       "var_1s": 7.6,
+       "var_4s": 5.1,
+       "percentile_5a": 100,
+       "n_5a": 262,
+       "raison_percentile": null
+      },
+      "prime_terme": {
+       "valeur": null,
+       "raison": "prime de terme publiée gratuitement pour les États-Unis seulement (FRED)",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      }
+     }
+    },
+    {
+     "devise": "CHF",
+     "cellules": {
+      "dette_pib": {
+       "valeur": null,
+       "raison": "pas de donnée FMI/OCDE pour ce pays",
+       "source": "FMI via FRED",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "solde_pib": {
+       "valeur": null,
+       "raison": "pas de donnée FMI/OCDE pour ce pays",
+       "source": "FMI via FRED",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "taux_10a": {
+       "valeur": 0.47,
+       "unite": "%",
+       "date": "2026-08-01",
+       "source": "OCDE via FRED (IRLTLT01CHM156N)",
+       "frequence": "mensuel",
+       "raison": null,
+       "var_1s": null,
+       "var_4s": null,
+       "percentile_5a": 51,
+       "n_5a": 61,
+       "raison_percentile": null
+      },
+      "prime_terme": {
+       "valeur": null,
+       "raison": "prime de terme publiée gratuitement pour les États-Unis seulement (FRED)",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      }
+     }
+    },
+    {
+     "devise": "CAD",
+     "cellules": {
+      "dette_pib": {
+       "valeur": 110.8,
+       "raison": null,
+       "source": "FMI via FRED (GGGDTACAA188N, dette publique brute / PIB, Canada)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "% PIB",
+       "date": "2024",
+       "variation_an": 3.1,
+       "raison_percentile": "série annuelle : pas de percentile hebdomadaire",
+       "alerte": "dernière année disponible : 2024"
+      },
+      "solde_pib": {
+       "valeur": -2.1,
+       "raison": null,
+       "source": "FMI via FRED (GGNLBACAA188N, solde public / PIB, Canada)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "% PIB",
+       "date": "2024",
+       "variation_an": -2.2,
+       "raison_percentile": "série annuelle : pas de percentile hebdomadaire",
+       "alerte": "dernière année disponible : 2024"
+      },
+      "taux_10a": {
+       "valeur": 3.93,
+       "unite": "%",
+       "date": "2026-10-08",
+       "source": "Banque du Canada (Valet, 10 ans)",
+       "frequence": "quotidien",
+       "raison": null,
+       "var_1s": -1.0,
+       "var_4s": -1.0,
+       "percentile_5a": 97,
+       "n_5a": 262,
+       "raison_percentile": null
+      },
+      "prime_terme": {
+       "valeur": null,
+       "raison": "prime de terme publiée gratuitement pour les États-Unis seulement (FRED)",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      }
+     }
+    },
+    {
+     "devise": "AUD",
+     "cellules": {
+      "dette_pib": {
+       "valeur": 49.8,
+       "raison": null,
+       "source": "FMI via FRED (GGGDTAAUA188N, dette publique brute / PIB, Australie)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "% PIB",
+       "date": "2024",
+       "variation_an": 0.9,
+       "raison_percentile": "série annuelle : pas de percentile hebdomadaire",
+       "alerte": "dernière année disponible : 2024"
+      },
+      "solde_pib": {
+       "valeur": -2.2,
+       "raison": null,
+       "source": "FMI via FRED (GGNLBAAUA188N, solde public / PIB, Australie)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "% PIB",
+       "date": "2024",
+       "variation_an": -1.2,
+       "raison_percentile": "série annuelle : pas de percentile hebdomadaire",
+       "alerte": "dernière année disponible : 2024"
+      },
+      "taux_10a": {
+       "valeur": 5.015,
+       "unite": "%",
+       "date": "2026-08-01",
+       "source": "OCDE via FRED (IRLTLT01AUM156N)",
+       "frequence": "mensuel",
+       "raison": null,
+       "var_1s": null,
+       "var_4s": null,
+       "percentile_5a": 100,
+       "n_5a": 61,
+       "raison_percentile": null
+      },
+      "prime_terme": {
+       "valeur": null,
+       "raison": "prime de terme publiée gratuitement pour les États-Unis seulement (FRED)",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      }
+     }
+    },
+    {
+     "devise": "NZD",
+     "cellules": {
+      "dette_pib": {
+       "valeur": null,
+       "raison": "pas de donnée FMI/OCDE pour ce pays",
+       "source": "FMI via FRED",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "solde_pib": {
+       "valeur": null,
+       "raison": "pas de donnée FMI/OCDE pour ce pays",
+       "source": "FMI via FRED",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "taux_10a": {
+       "valeur": 4.71,
+       "unite": "%",
+       "date": "2026-08-01",
+       "source": "OCDE via FRED (IRLTLT01NZM156N)",
+       "frequence": "mensuel",
+       "raison": null,
+       "var_1s": null,
+       "var_4s": null,
+       "percentile_5a": 89,
+       "n_5a": 61,
+       "raison_percentile": null
+      },
+      "prime_terme": {
+       "valeur": null,
+       "raison": "prime de terme publiée gratuitement pour les États-Unis seulement (FRED)",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      }
+     }
+    },
+    {
+     "devise": "CNY",
+     "cellules": {
+      "dette_pib": {
+       "valeur": 88.3,
+       "raison": null,
+       "source": "FMI via FRED (GGGDTACNA188N, dette publique brute / PIB, Chine)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "% PIB",
+       "date": "2024",
+       "variation_an": 6.3,
+       "raison_percentile": "série annuelle : pas de percentile hebdomadaire",
+       "alerte": "dernière année disponible : 2024"
+      },
+      "solde_pib": {
+       "valeur": -7.3,
+       "raison": null,
+       "source": "FMI via FRED (GGNLBACNA188N, solde public / PIB, Chine)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "% PIB",
+       "date": "2024",
+       "variation_an": -0.6,
+       "raison_percentile": "série annuelle : pas de percentile hebdomadaire",
+       "alerte": "dernière année disponible : 2024"
+      },
+      "taux_10a": {
+       "valeur": null,
+       "raison": "pas de rendement 10 ans gratuit",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "prime_terme": {
+       "valeur": null,
+       "raison": "prime de terme publiée gratuitement pour les États-Unis seulement (FRED)",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      }
+     }
+    }
+   ],
+   "actualites": [
+    {
+     "titre": "After France, is Italy next? Goldman Sachs flags bond risks as Rome's deficit widens",
+     "source": "cnbc_world",
+     "date": "2026-10-11",
+     "lien": "https://www.cnbc.com/2026/10/11/italy-government-bonds-sovereign-debt-giorgia-meloni.html"
+    }
+   ],
+   "graphiques": [
+    {
+     "type": "serie",
+     "titre": "Rendements 10 ans, 90 jours",
+     "unite": "%",
+     "courbes": [
+      {
+       "nom": "USD",
+       "points": [
+        [
+         "2026-07-10",
+         4.56
+        ],
+        [
+         "2026-07-13",
+         4.62
+        ],
+        [
+         "2026-07-14",
+         4.58
+        ],
+        [
+         "2026-07-15",
+         4.55
+        ],
+        [
+         "2026-07-16",
+         4.57
+        ],
+        [
+         "2026-07-17",
+         4.55
+        ],
+        [
+         "2026-07-20",
+         4.6
+        ],
+        [
+         "2026-07-21",
+         4.63
+        ],
+        [
+         "2026-07-22",
+         4.67
+        ],
+        [
+         "2026-07-23",
+         4.71
+        ],
+        [
+         "2026-07-24",
+         4.69
+        ],
+        [
+         "2026-07-27",
+         4.65
+        ],
+        [
+         "2026-07-28",
+         4.61
+        ],
+        [
+         "2026-07-29",
+         4.67
+        ],
+        [
+         "2026-07-30",
+         4.68
+        ],
+        [
+         "2026-07-31",
+         4.75
+        ],
+        [
+         "2026-08-03",
+         4.7
+        ],
+        [
+         "2026-08-04",
+         4.63
+        ],
+        [
+         "2026-08-05",
+         4.63
+        ],
+        [
+         "2026-08-06",
+         4.69
+        ],
+        [
+         "2026-08-07",
+         4.65
+        ],
+        [
+         "2026-08-10",
+         4.72
+        ],
+        [
+         "2026-08-11",
+         4.7
+        ],
+        [
+         "2026-08-12",
+         4.68
+        ],
+        [
+         "2026-08-13",
+         4.63
+        ],
+        [
+         "2026-08-14",
+         4.68
+        ],
+        [
+         "2026-08-17",
+         4.72
+        ],
+        [
+         "2026-08-18",
+         4.71
+        ],
+        [
+         "2026-08-19",
+         4.65
+        ],
+        [
+         "2026-08-20",
+         4.69
+        ],
+        [
+         "2026-08-21",
+         4.74
+        ],
+        [
+         "2026-08-24",
+         4.7
+        ],
+        [
+         "2026-08-25",
+         4.64
+        ],
+        [
+         "2026-08-26",
+         4.66
+        ],
+        [
+         "2026-08-27",
+         4.67
+        ],
+        [
+         "2026-08-28",
+         4.73
+        ],
+        [
+         "2026-08-31",
+         4.75
+        ],
+        [
+         "2026-09-01",
+         4.79
+        ],
+        [
+         "2026-09-02",
+         4.79
+        ],
+        [
+         "2026-09-03",
+         4.77
+        ],
+        [
+         "2026-09-04",
+         4.78
+        ],
+        [
+         "2026-09-08",
+         4.8
+        ],
+        [
+         "2026-09-09",
+         4.83
+        ],
+        [
+         "2026-09-10",
+         4.95
+        ],
+        [
+         "2026-09-11",
+         4.96
+        ],
+        [
+         "2026-09-14",
+         4.97
+        ],
+        [
+         "2026-09-15",
+         5.0
+        ],
+        [
+         "2026-09-16",
+         5.01
+        ],
+        [
+         "2026-09-17",
+         4.94
+        ],
+        [
+         "2026-09-18",
+         5.01
+        ],
+        [
+         "2026-09-21",
+         4.96
+        ],
+        [
+         "2026-09-22",
+         4.96
+        ],
+        [
+         "2026-09-23",
+         5.11
+        ],
+        [
+         "2026-09-24",
+         5.18
+        ],
+        [
+         "2026-09-25",
+         5.17
+        ],
+        [
+         "2026-09-28",
+         5.24
+        ],
+        [
+         "2026-09-29",
+         5.26
+        ],
+        [
+         "2026-09-30",
+         5.29
+        ],
+        [
+         "2026-10-01",
+         5.24
+        ],
+        [
+         "2026-10-02",
+         5.28
+        ],
+        [
+         "2026-10-05",
+         5.31
+        ],
+        [
+         "2026-10-06",
+         5.27
+        ],
+        [
+         "2026-10-07",
+         5.28
+        ],
+        [
+         "2026-10-08",
+         5.22
+        ]
+       ]
+      },
+      {
+       "nom": "EUR",
+       "points": [
+        [
+         "2026-07-13",
+         3.14
+        ],
+        [
+         "2026-07-14",
+         3.18
+        ],
+        [
+         "2026-07-15",
+         3.18
+        ],
+        [
+         "2026-07-16",
+         3.2
+        ],
+        [
+         "2026-07-17",
+         3.19
+        ],
+        [
+         "2026-07-20",
+         3.2
+        ],
+        [
+         "2026-07-21",
+         3.21
+        ],
+        [
+         "2026-07-22",
+         3.23
+        ],
+        [
+         "2026-07-23",
+         3.25
+        ],
+        [
+         "2026-07-24",
+         3.24
+        ],
+        [
+         "2026-07-27",
+         3.19
+        ],
+        [
+         "2026-07-28",
+         3.17
+        ],
+        [
+         "2026-07-29",
+         3.18
+        ],
+        [
+         "2026-07-30",
+         3.24
+        ],
+        [
+         "2026-07-31",
+         3.21
+        ],
+        [
+         "2026-08-03",
+         3.21
+        ],
+        [
+         "2026-08-04",
+         3.22
+        ],
+        [
+         "2026-08-05",
+         3.16
+        ],
+        [
+         "2026-08-06",
+         3.17
+        ],
+        [
+         "2026-08-07",
+         3.2
+        ],
+        [
+         "2026-08-10",
+         3.19
+        ],
+        [
+         "2026-08-11",
+         3.26
+        ],
+        [
+         "2026-08-12",
+         3.21
+        ],
+        [
+         "2026-08-13",
+         3.21
+        ],
+        [
+         "2026-08-14",
+         3.22
+        ],
+        [
+         "2026-08-17",
+         3.26
+        ],
+        [
+         "2026-08-18",
+         3.32
+        ],
+        [
+         "2026-08-19",
+         3.33
+        ],
+        [
+         "2026-08-20",
+         3.32
+        ],
+        [
+         "2026-08-21",
+         3.31
+        ],
+        [
+         "2026-08-24",
+         3.3
+        ],
+        [
+         "2026-08-25",
+         3.31
+        ],
+        [
+         "2026-08-26",
+         3.26
+        ],
+        [
+         "2026-08-27",
+         3.22
+        ],
+        [
+         "2026-08-28",
+         3.24
+        ],
+        [
+         "2026-08-31",
+         3.37
+        ],
+        [
+         "2026-09-01",
+         3.32
+        ],
+        [
+         "2026-09-02",
+         3.45
+        ],
+        [
+         "2026-09-03",
+         3.42
+        ],
+        [
+         "2026-09-04",
+         3.4
+        ],
+        [
+         "2026-09-07",
+         3.41
+        ],
+        [
+         "2026-09-08",
+         3.45
+        ],
+        [
+         "2026-09-09",
+         3.45
+        ],
+        [
+         "2026-09-10",
+         3.51
+        ],
+        [
+         "2026-09-11",
+         3.56
+        ],
+        [
+         "2026-09-14",
+         3.59
+        ],
+        [
+         "2026-09-15",
+         3.61
+        ],
+        [
+         "2026-09-16",
+         3.61
+        ],
+        [
+         "2026-09-17",
+         3.58
+        ],
+        [
+         "2026-09-18",
+         3.55
+        ],
+        [
+         "2026-09-21",
+         3.52
+        ],
+        [
+         "2026-09-22",
+         3.5
+        ],
+        [
+         "2026-09-23",
+         3.52
+        ],
+        [
+         "2026-09-24",
+         3.62
+        ],
+        [
+         "2026-09-25",
+         3.63
+        ],
+        [
+         "2026-09-28",
+         3.69
+        ],
+        [
+         "2026-09-29",
+         3.68
+        ],
+        [
+         "2026-09-30",
+         3.64
+        ],
+        [
+         "2026-10-01",
+         3.66
+        ],
+        [
+         "2026-10-02",
+         3.49
+        ],
+        [
+         "2026-10-05",
+         3.51
+        ],
+        [
+         "2026-10-06",
+         3.52
+        ],
+        [
+         "2026-10-07",
+         3.55
+        ],
+        [
+         "2026-10-08",
+         3.57
+        ],
+        [
+         "2026-10-09",
+         3.53
+        ]
+       ]
+      },
+      {
+       "nom": "GBP",
+       "points": [
+        [
+         "2026-07-09",
+         4.892
+        ],
+        [
+         "2026-07-10",
+         4.8681
+        ],
+        [
+         "2026-07-13",
+         4.9503
+        ],
+        [
+         "2026-07-14",
+         4.9386
+        ],
+        [
+         "2026-07-15",
+         4.9399
+        ],
+        [
+         "2026-07-16",
+         4.9648
+        ],
+        [
+         "2026-07-17",
+         4.9436
+        ],
+        [
+         "2026-07-20",
+         5.0195
+        ],
+        [
+         "2026-07-21",
+         5.021
+        ],
+        [
+         "2026-07-22",
+         5.0424
+        ],
+        [
+         "2026-07-23",
+         5.0934
+        ],
+        [
+         "2026-07-24",
+         5.0253
+        ],
+        [
+         "2026-07-27",
+         4.9715
+        ],
+        [
+         "2026-07-28",
+         4.9409
+        ],
+        [
+         "2026-07-29",
+         5.0051
+        ],
+        [
+         "2026-07-30",
+         4.9967
+        ],
+        [
+         "2026-07-31",
+         5.0257
+        ],
+        [
+         "2026-08-03",
+         4.9382
+        ],
+        [
+         "2026-08-04",
+         4.9031
+        ],
+        [
+         "2026-08-05",
+         4.8802
+        ],
+        [
+         "2026-08-06",
+         4.9129
+        ],
+        [
+         "2026-08-07",
+         4.9118
+        ],
+        [
+         "2026-08-10",
+         4.9718
+        ],
+        [
+         "2026-08-11",
+         4.9462
+        ],
+        [
+         "2026-08-12",
+         4.9593
+        ],
+        [
+         "2026-08-13",
+         4.9437
+        ],
+        [
+         "2026-08-14",
+         5.0087
+        ],
+        [
+         "2026-08-17",
+         5.0427
+        ],
+        [
+         "2026-08-18",
+         5.0676
+        ],
+        [
+         "2026-08-19",
+         5.0401
+        ],
+        [
+         "2026-08-20",
+         5.0478
+        ],
+        [
+         "2026-08-21",
+         5.0506
+        ],
+        [
+         "2026-08-24",
+         5.0513
+        ],
+        [
+         "2026-08-25",
+         4.9959
+        ],
+        [
+         "2026-08-26",
+         5.0121
+        ],
+        [
+         "2026-08-27",
+         5.0254
+        ],
+        [
+         "2026-08-28",
+         5.0631
+        ],
+        [
+         "2026-09-01",
+         5.1333
+        ],
+        [
+         "2026-09-02",
+         5.171
+        ],
+        [
+         "2026-09-03",
+         5.0843
+        ],
+        [
+         "2026-09-04",
+         5.0737
+        ],
+        [
+         "2026-09-07",
+         5.1079
+        ],
+        [
+         "2026-09-08",
+         5.0979
+        ],
+        [
+         "2026-09-09",
+         5.1922
+        ],
+        [
+         "2026-09-10",
+         5.319
+        ],
+        [
+         "2026-09-11",
+         5.304
+        ],
+        [
+         "2026-09-14",
+         5.3699
+        ],
+        [
+         "2026-09-15",
+         5.3616
+        ],
+        [
+         "2026-09-16",
+         5.2421
+        ],
+        [
+         "2026-09-17",
+         5.1742
+        ],
+        [
+         "2026-09-18",
+         5.256
+        ],
+        [
+         "2026-09-21",
+         5.163
+        ],
+        [
+         "2026-09-22",
+         5.1907
+        ],
+        [
+         "2026-09-23",
+         5.291
+        ],
+        [
+         "2026-09-24",
+         5.3438
+        ],
+        [
+         "2026-09-25",
+         5.3321
+        ],
+        [
+         "2026-09-28",
+         5.3829
+        ],
+        [
+         "2026-09-29",
+         5.364
+        ],
+        [
+         "2026-09-30",
+         5.3714
+        ],
+        [
+         "2026-10-01",
+         5.3665
+        ],
+        [
+         "2026-10-02",
+         5.3341
+        ],
+        [
+         "2026-10-05",
+         5.3634
+        ],
+        [
+         "2026-10-06",
+         5.3368
+        ],
+        [
+         "2026-10-07",
+         5.3852
+        ]
+       ]
+      },
+      {
+       "nom": "JPY",
+       "points": [
+        [
+         "2026-07-02",
+         2.778
+        ],
+        [
+         "2026-07-03",
+         2.768
+        ],
+        [
+         "2026-07-06",
+         2.823
+        ],
+        [
+         "2026-07-07",
+         2.834
+        ],
+        [
+         "2026-07-08",
+         2.856
+        ],
+        [
+         "2026-07-09",
+         2.866
+        ],
+        [
+         "2026-07-10",
+         2.761
+        ],
+        [
+         "2026-07-13",
+         2.786
+        ],
+        [
+         "2026-07-14",
+         2.713
+        ],
+        [
+         "2026-07-15",
+         2.697
+        ],
+        [
+         "2026-07-16",
+         2.719
+        ],
+        [
+         "2026-07-17",
+         2.715
+        ],
+        [
+         "2026-07-21",
+         2.731
+        ],
+        [
+         "2026-07-22",
+         2.745
+        ],
+        [
+         "2026-07-23",
+         2.776
+        ],
+        [
+         "2026-07-24",
+         2.815
+        ],
+        [
+         "2026-07-27",
+         2.778
+        ],
+        [
+         "2026-07-28",
+         2.783
+        ],
+        [
+         "2026-07-29",
+         2.757
+        ],
+        [
+         "2026-07-30",
+         2.801
+        ],
+        [
+         "2026-07-31",
+         2.801
+        ],
+        [
+         "2026-08-03",
+         2.824
+        ],
+        [
+         "2026-08-04",
+         2.848
+        ],
+        [
+         "2026-08-05",
+         2.813
+        ],
+        [
+         "2026-08-06",
+         2.773
+        ],
+        [
+         "2026-08-07",
+         2.804
+        ],
+        [
+         "2026-08-10",
+         2.815
+        ],
+        [
+         "2026-08-12",
+         2.856
+        ],
+        [
+         "2026-08-13",
+         2.873
+        ],
+        [
+         "2026-08-14",
+         2.878
+        ],
+        [
+         "2026-08-17",
+         2.919
+        ],
+        [
+         "2026-08-18",
+         2.934
+        ],
+        [
+         "2026-08-19",
+         2.894
+        ],
+        [
+         "2026-08-20",
+         2.854
+        ],
+        [
+         "2026-08-21",
+         2.882
+        ],
+        [
+         "2026-08-24",
+         2.887
+        ],
+        [
+         "2026-08-25",
+         2.897
+        ],
+        [
+         "2026-08-26",
+         2.892
+        ],
+        [
+         "2026-08-27",
+         2.897
+        ],
+        [
+         "2026-08-28",
+         2.93
+        ],
+        [
+         "2026-08-31",
+         2.943
+        ],
+        [
+         "2026-09-01",
+         2.987
+        ],
+        [
+         "2026-09-02",
+         3.006
+        ],
+        [
+         "2026-09-03",
+         2.966
+        ],
+        [
+         "2026-09-04",
+         2.91
+        ],
+        [
+         "2026-09-07",
+         2.935
+        ],
+        [
+         "2026-09-08",
+         2.896
+        ],
+        [
+         "2026-09-09",
+         2.891
+        ],
+        [
+         "2026-09-10",
+         2.92
+        ],
+        [
+         "2026-09-11",
+         2.987
+        ],
+        [
+         "2026-09-14",
+         2.988
+        ],
+        [
+         "2026-09-15",
+         3.028
+        ],
+        [
+         "2026-09-16",
+         2.998
+        ],
+        [
+         "2026-09-17",
+         2.993
+        ],
+        [
+         "2026-09-18",
+         2.981
+        ],
+        [
+         "2026-09-24",
+         3.073
+        ],
+        [
+         "2026-09-25",
+         3.071
+        ],
+        [
+         "2026-09-28",
+         3.082
+        ],
+        [
+         "2026-09-29",
+         3.082
+        ],
+        [
+         "2026-09-30",
+         3.057
+        ]
+       ]
+      },
+      {
+       "nom": "CAD",
+       "points": [
+        [
+         "2026-07-10",
+         3.51
+        ],
+        [
+         "2026-07-13",
+         3.56
+        ],
+        [
+         "2026-07-14",
+         3.57
+        ],
+        [
+         "2026-07-15",
+         3.53
+        ],
+        [
+         "2026-07-16",
+         3.53
+        ],
+        [
+         "2026-07-17",
+         3.56
+        ],
+        [
+         "2026-07-20",
+         3.57
+        ],
+        [
+         "2026-07-21",
+         3.56
+        ],
+        [
+         "2026-07-22",
+         3.6
+        ],
+        [
+         "2026-07-23",
+         3.65
+        ],
+        [
+         "2026-07-24",
+         3.6
+        ],
+        [
+         "2026-07-27",
+         3.56
+        ],
+        [
+         "2026-07-28",
+         3.53
+        ],
+        [
+         "2026-07-29",
+         3.58
+        ],
+        [
+         "2026-07-30",
+         3.59
+        ],
+        [
+         "2026-07-31",
+         3.65
+        ],
+        [
+         "2026-08-04",
+         3.55
+        ],
+        [
+         "2026-08-05",
+         3.55
+        ],
+        [
+         "2026-08-06",
+         3.61
+        ],
+        [
+         "2026-08-07",
+         3.64
+        ],
+        [
+         "2026-08-10",
+         3.72
+        ],
+        [
+         "2026-08-11",
+         3.7
+        ],
+        [
+         "2026-08-12",
+         3.69
+        ],
+        [
+         "2026-08-13",
+         3.62
+        ],
+        [
+         "2026-08-14",
+         3.68
+        ],
+        [
+         "2026-08-17",
+         3.72
+        ],
+        [
+         "2026-08-18",
+         3.7
+        ],
+        [
+         "2026-08-19",
+         3.69
+        ],
+        [
+         "2026-08-20",
+         3.75
+        ],
+        [
+         "2026-08-21",
+         3.76
+        ],
+        [
+         "2026-08-24",
+         3.68
+        ],
+        [
+         "2026-08-25",
+         3.62
+        ],
+        [
+         "2026-08-26",
+         3.66
+        ],
+        [
+         "2026-08-27",
+         3.7
+        ],
+        [
+         "2026-08-28",
+         3.73
+        ],
+        [
+         "2026-08-31",
+         3.73
+        ],
+        [
+         "2026-09-01",
+         3.75
+        ],
+        [
+         "2026-09-02",
+         3.8
+        ],
+        [
+         "2026-09-03",
+         3.79
+        ],
+        [
+         "2026-09-04",
+         3.77
+        ],
+        [
+         "2026-09-08",
+         3.81
+        ],
+        [
+         "2026-09-09",
+         3.84
+        ],
+        [
+         "2026-09-10",
+         3.94
+        ],
+        [
+         "2026-09-11",
+         3.95
+        ],
+        [
+         "2026-09-14",
+         3.94
+        ],
+        [
+         "2026-09-15",
+         3.95
+        ],
+        [
+         "2026-09-16",
+         3.92
+        ],
+        [
+         "2026-09-17",
+         3.83
+        ],
+        [
+         "2026-09-18",
+         3.87
+        ],
+        [
+         "2026-09-21",
+         3.84
+        ],
+        [
+         "2026-09-22",
+         3.83
+        ],
+        [
+         "2026-09-23",
+         3.96
+        ],
+        [
+         "2026-09-24",
+         3.97
+        ],
+        [
+         "2026-09-25",
+         3.94
+        ],
+        [
+         "2026-09-28",
+         3.96
+        ],
+        [
+         "2026-09-29",
+         3.99
+        ],
+        [
+         "2026-10-01",
+         3.94
+        ],
+        [
+         "2026-10-02",
+         3.93
+        ],
+        [
+         "2026-10-05",
+         3.96
+        ],
+        [
+         "2026-10-06",
+         3.92
+        ],
+        [
+         "2026-10-07",
+         3.94
+        ],
+        [
+         "2026-10-08",
+         3.93
+        ]
+       ]
+      }
+     ],
+     "source": "FRED, Bundesbank, BoE, MoF Japon, BoC",
+     "raison": null
+    },
+    {
+     "type": "barres",
+     "titre": "Dette publique / PIB (dernière année FMI)",
+     "unite": "% PIB",
+     "barres": [
+      {
+       "nom": "USD",
+       "valeur": 122.6
+      },
+      {
+       "nom": "EUR",
+       "valeur": 63.9
+      },
+      {
+       "nom": "GBP",
+       "valeur": 101.2
+      },
+      {
+       "nom": "JPY",
+       "valeur": 240.0
+      },
+      {
+       "nom": "CAD",
+       "valeur": 110.8
+      },
+      {
+       "nom": "AUD",
+       "valeur": 49.8
+      },
+      {
+       "nom": "CNY",
+       "valeur": 88.3
+      }
+     ],
+     "source": "FMI / FRED",
+     "note": "années différentes selon les pays (voir le tableau)",
+     "absentes": [
+      "CHF",
+      "NZD"
+     ],
+     "raison": null
+    }
+   ],
+   "notes": [
+    "Dette et solde publics : FMI (annuel, avec 1 à 3 ans de retard) ; EUR = Allemagne. Pas de série gratuite pour CHF et NZD.",
+    "Prime de terme : modèle Kim-Wright (Fed, via FRED), États-Unis seulement.",
+    "Actualités budgétaires : titres des flux RSS contenant un mot-clé budgétaire (source et date)."
    ]
   },
   "5": {
@@ -2683,6 +5674,2869 @@
    "notes": [
     "Indice or (proxy) : NASDAQ QGLDI, pas le cours spot (FRED n'a plus de cours de l'or gratuit).",
     "Changement de signe : corrélation ≥ 0,3 en valeur absolue sur les deux fenêtres de 30 séances, de signe opposé."
+   ],
+   "graphiques": [
+    {
+     "type": "serie",
+     "titre": "Marchés rebasés à 100, 90 jours",
+     "unite": "base 100",
+     "courbes": [
+      {
+       "nom": "Indice dollar large",
+       "points": [
+        [
+         "2026-07-06",
+         100.0
+        ],
+        [
+         "2026-07-07",
+         99.98
+        ],
+        [
+         "2026-07-08",
+         100.24
+        ],
+        [
+         "2026-07-09",
+         99.93
+        ],
+        [
+         "2026-07-10",
+         99.73
+        ],
+        [
+         "2026-07-13",
+         99.92
+        ],
+        [
+         "2026-07-14",
+         99.7
+        ],
+        [
+         "2026-07-15",
+         99.56
+        ],
+        [
+         "2026-07-16",
+         99.58
+        ],
+        [
+         "2026-07-17",
+         99.75
+        ],
+        [
+         "2026-07-20",
+         99.76
+        ],
+        [
+         "2026-07-21",
+         99.79
+        ],
+        [
+         "2026-07-22",
+         99.78
+        ],
+        [
+         "2026-07-23",
+         100.06
+        ],
+        [
+         "2026-07-24",
+         99.9
+        ],
+        [
+         "2026-07-27",
+         99.95
+        ],
+        [
+         "2026-07-28",
+         99.83
+        ],
+        [
+         "2026-07-29",
+         99.96
+        ],
+        [
+         "2026-07-30",
+         99.04
+        ],
+        [
+         "2026-07-31",
+         99.06
+        ],
+        [
+         "2026-08-03",
+         99.06
+        ],
+        [
+         "2026-08-04",
+         98.98
+        ],
+        [
+         "2026-08-05",
+         98.8
+        ],
+        [
+         "2026-08-06",
+         98.9
+        ],
+        [
+         "2026-08-07",
+         98.54
+        ],
+        [
+         "2026-08-10",
+         98.58
+        ],
+        [
+         "2026-08-11",
+         98.63
+        ],
+        [
+         "2026-08-12",
+         98.58
+        ],
+        [
+         "2026-08-13",
+         98.63
+        ],
+        [
+         "2026-08-14",
+         98.4
+        ],
+        [
+         "2026-08-17",
+         98.33
+        ],
+        [
+         "2026-08-18",
+         98.47
+        ],
+        [
+         "2026-08-19",
+         97.93
+        ],
+        [
+         "2026-08-20",
+         97.86
+        ],
+        [
+         "2026-08-21",
+         97.71
+        ],
+        [
+         "2026-08-24",
+         97.92
+        ],
+        [
+         "2026-08-25",
+         97.84
+        ],
+        [
+         "2026-08-26",
+         98.02
+        ],
+        [
+         "2026-08-27",
+         97.95
+        ],
+        [
+         "2026-08-28",
+         98.27
+        ],
+        [
+         "2026-08-31",
+         98.12
+        ],
+        [
+         "2026-09-01",
+         98.2
+        ],
+        [
+         "2026-09-02",
+         98.09
+        ],
+        [
+         "2026-09-03",
+         97.76
+        ],
+        [
+         "2026-09-04",
+         97.71
+        ],
+        [
+         "2026-09-08",
+         97.58
+        ],
+        [
+         "2026-09-09",
+         97.56
+        ],
+        [
+         "2026-09-10",
+         97.72
+        ],
+        [
+         "2026-09-11",
+         97.83
+        ],
+        [
+         "2026-09-14",
+         98.23
+        ],
+        [
+         "2026-09-15",
+         98.38
+        ],
+        [
+         "2026-09-16",
+         98.42
+        ],
+        [
+         "2026-09-17",
+         98.77
+        ],
+        [
+         "2026-09-18",
+         98.91
+        ],
+        [
+         "2026-09-21",
+         98.81
+        ],
+        [
+         "2026-09-22",
+         98.97
+        ],
+        [
+         "2026-09-23",
+         99.41
+        ],
+        [
+         "2026-09-24",
+         99.77
+        ],
+        [
+         "2026-09-25",
+         99.58
+        ],
+        [
+         "2026-09-28",
+         99.88
+        ],
+        [
+         "2026-09-29",
+         100.16
+        ],
+        [
+         "2026-09-30",
+         100.11
+        ],
+        [
+         "2026-10-01",
+         100.79
+        ],
+        [
+         "2026-10-02",
+         100.46
+        ]
+       ]
+      },
+      {
+       "nom": "Indice or (proxy)",
+       "points": [
+        [
+         "2026-07-13",
+         100.0
+        ],
+        [
+         "2026-07-14",
+         101.24
+        ],
+        [
+         "2026-07-15",
+         101.33
+        ],
+        [
+         "2026-07-16",
+         99.64
+        ],
+        [
+         "2026-07-17",
+         100.51
+        ],
+        [
+         "2026-07-20",
+         100.42
+        ],
+        [
+         "2026-07-21",
+         102.08
+        ],
+        [
+         "2026-07-22",
+         102.96
+        ],
+        [
+         "2026-07-23",
+         101.39
+        ],
+        [
+         "2026-07-24",
+         101.54
+        ],
+        [
+         "2026-07-27",
+         102.26
+        ],
+        [
+         "2026-07-28",
+         101.04
+        ],
+        [
+         "2026-07-29",
+         101.42
+        ],
+        [
+         "2026-07-30",
+         102.8
+        ],
+        [
+         "2026-07-31",
+         101.67
+        ],
+        [
+         "2026-08-03",
+         101.78
+        ],
+        [
+         "2026-08-04",
+         102.34
+        ],
+        [
+         "2026-08-05",
+         105.28
+        ],
+        [
+         "2026-08-06",
+         105.49
+        ],
+        [
+         "2026-08-07",
+         106.69
+        ],
+        [
+         "2026-08-10",
+         106.99
+        ],
+        [
+         "2026-08-11",
+         107.1
+        ],
+        [
+         "2026-08-12",
+         107.66
+        ],
+        [
+         "2026-08-13",
+         107.08
+        ],
+        [
+         "2026-08-14",
+         107.53
+        ],
+        [
+         "2026-08-17",
+         106.77
+        ],
+        [
+         "2026-08-18",
+         105.71
+        ],
+        [
+         "2026-08-19",
+         107.89
+        ],
+        [
+         "2026-08-20",
+         108.06
+        ],
+        [
+         "2026-08-21",
+         108.95
+        ],
+        [
+         "2026-08-24",
+         109.35
+        ],
+        [
+         "2026-08-25",
+         109.6
+        ],
+        [
+         "2026-08-26",
+         109.13
+        ],
+        [
+         "2026-08-27",
+         109.41
+        ],
+        [
+         "2026-08-28",
+         107.93
+        ],
+        [
+         "2026-08-31",
+         108.09
+        ],
+        [
+         "2026-09-01",
+         105.82
+        ],
+        [
+         "2026-09-02",
+         106.99
+        ],
+        [
+         "2026-09-03",
+         108.28
+        ],
+        [
+         "2026-09-04",
+         107.87
+        ],
+        [
+         "2026-09-08",
+         106.56
+        ],
+        [
+         "2026-09-09",
+         107.25
+        ],
+        [
+         "2026-09-10",
+         105.87
+        ],
+        [
+         "2026-09-11",
+         106.65
+        ],
+        [
+         "2026-09-14",
+         103.59
+        ],
+        [
+         "2026-09-15",
+         103.9
+        ],
+        [
+         "2026-09-16",
+         103.51
+        ],
+        [
+         "2026-09-17",
+         105.02
+        ],
+        [
+         "2026-09-18",
+         105.77
+        ],
+        [
+         "2026-09-21",
+         105.33
+        ],
+        [
+         "2026-09-22",
+         105.68
+        ],
+        [
+         "2026-09-23",
+         104.21
+        ],
+        [
+         "2026-09-24",
+         103.98
+        ],
+        [
+         "2026-09-25",
+         104.43
+        ],
+        [
+         "2026-09-28",
+         100.55
+        ],
+        [
+         "2026-09-29",
+         101.85
+        ],
+        [
+         "2026-09-30",
+         101.35
+        ],
+        [
+         "2026-10-01",
+         101.86
+        ],
+        [
+         "2026-10-02",
+         101.19
+        ],
+        [
+         "2026-10-05",
+         101.05
+        ],
+        [
+         "2026-10-06",
+         101.74
+        ],
+        [
+         "2026-10-07",
+         100.17
+        ],
+        [
+         "2026-10-08",
+         100.84
+        ],
+        [
+         "2026-10-09",
+         102.03
+        ]
+       ]
+      },
+      {
+       "nom": "WTI",
+       "points": [
+        [
+         "2026-07-08",
+         100.0
+        ],
+        [
+         "2026-07-09",
+         98.11
+        ],
+        [
+         "2026-07-10",
+         97.17
+        ],
+        [
+         "2026-07-13",
+         106.22
+        ],
+        [
+         "2026-07-14",
+         107.89
+        ],
+        [
+         "2026-07-15",
+         108.28
+        ],
+        [
+         "2026-07-16",
+         107.34
+        ],
+        [
+         "2026-07-17",
+         111.9
+        ],
+        [
+         "2026-07-20",
+         113.17
+        ],
+        [
+         "2026-07-21",
+         115.4
+        ],
+        [
+         "2026-07-22",
+         117.57
+        ],
+        [
+         "2026-07-23",
+         124.84
+        ],
+        [
+         "2026-07-24",
+         123.04
+        ],
+        [
+         "2026-07-27",
+         113.0
+        ],
+        [
+         "2026-07-28",
+         108.52
+        ],
+        [
+         "2026-07-29",
+         115.45
+        ],
+        [
+         "2026-07-30",
+         114.2
+        ],
+        [
+         "2026-07-31",
+         115.56
+        ],
+        [
+         "2026-08-03",
+         109.92
+        ],
+        [
+         "2026-08-04",
+         103.72
+        ],
+        [
+         "2026-08-05",
+         102.98
+        ],
+        [
+         "2026-08-06",
+         105.79
+        ],
+        [
+         "2026-08-07",
+         106.99
+        ],
+        [
+         "2026-08-10",
+         112.34
+        ],
+        [
+         "2026-08-11",
+         113.69
+        ],
+        [
+         "2026-08-12",
+         113.96
+        ],
+        [
+         "2026-08-13",
+         111.01
+        ],
+        [
+         "2026-08-14",
+         112.65
+        ],
+        [
+         "2026-08-17",
+         115.4
+        ],
+        [
+         "2026-08-18",
+         115.99
+        ],
+        [
+         "2026-08-19",
+         117.06
+        ],
+        [
+         "2026-08-20",
+         120.37
+        ],
+        [
+         "2026-08-21",
+         116.97
+        ],
+        [
+         "2026-08-24",
+         115.8
+        ],
+        [
+         "2026-08-25",
+         112.53
+        ],
+        [
+         "2026-08-26",
+         111.94
+        ],
+        [
+         "2026-08-27",
+         113.75
+        ],
+        [
+         "2026-08-28",
+         113.43
+        ],
+        [
+         "2026-08-31",
+         116.72
+        ],
+        [
+         "2026-09-01",
+         122.69
+        ],
+        [
+         "2026-09-02",
+         123.59
+        ],
+        [
+         "2026-09-03",
+         124.13
+        ],
+        [
+         "2026-09-04",
+         124.32
+        ],
+        [
+         "2026-09-08",
+         126.35
+        ],
+        [
+         "2026-09-09",
+         130.45
+        ],
+        [
+         "2026-09-10",
+         138.91
+        ],
+        [
+         "2026-09-11",
+         135.82
+        ],
+        [
+         "2026-09-14",
+         137.37
+        ],
+        [
+         "2026-09-15",
+         143.54
+        ],
+        [
+         "2026-09-16",
+         138.98
+        ],
+        [
+         "2026-09-17",
+         138.43
+        ],
+        [
+         "2026-09-18",
+         136.05
+        ],
+        [
+         "2026-09-21",
+         130.06
+        ],
+        [
+         "2026-09-22",
+         129.31
+        ],
+        [
+         "2026-09-23",
+         125.24
+        ],
+        [
+         "2026-09-24",
+         128.59
+        ],
+        [
+         "2026-09-25",
+         114.31
+        ],
+        [
+         "2026-09-28",
+         133.28
+        ],
+        [
+         "2026-09-29",
+         128.97
+        ],
+        [
+         "2026-09-30",
+         130.34
+        ],
+        [
+         "2026-10-01",
+         133.81
+        ],
+        [
+         "2026-10-02",
+         131.29
+        ],
+        [
+         "2026-10-05",
+         128.93
+        ],
+        [
+         "2026-10-06",
+         129.08
+        ]
+       ]
+      },
+      {
+       "nom": "S&P 500",
+       "points": [
+        [
+         "2026-07-13",
+         100.0
+        ],
+        [
+         "2026-07-14",
+         100.38
+        ],
+        [
+         "2026-07-15",
+         100.76
+        ],
+        [
+         "2026-07-16",
+         100.25
+        ],
+        [
+         "2026-07-17",
+         99.23
+        ],
+        [
+         "2026-07-20",
+         99.04
+        ],
+        [
+         "2026-07-21",
+         99.92
+        ],
+        [
+         "2026-07-22",
+         99.78
+        ],
+        [
+         "2026-07-23",
+         98.58
+        ],
+        [
+         "2026-07-24",
+         98.62
+        ],
+        [
+         "2026-07-27",
+         98.64
+        ],
+        [
+         "2026-07-28",
+         98.85
+        ],
+        [
+         "2026-07-29",
+         97.35
+        ],
+        [
+         "2026-07-30",
+         98.97
+        ],
+        [
+         "2026-07-31",
+         99.66
+        ],
+        [
+         "2026-08-03",
+         101.13
+        ],
+        [
+         "2026-08-04",
+         102.94
+        ],
+        [
+         "2026-08-05",
+         102.77
+        ],
+        [
+         "2026-08-06",
+         102.59
+        ],
+        [
+         "2026-08-07",
+         103.22
+        ],
+        [
+         "2026-08-10",
+         103.16
+        ],
+        [
+         "2026-08-11",
+         102.83
+        ],
+        [
+         "2026-08-12",
+         103.1
+        ],
+        [
+         "2026-08-13",
+         103.77
+        ],
+        [
+         "2026-08-14",
+         103.6
+        ],
+        [
+         "2026-08-17",
+         103.06
+        ],
+        [
+         "2026-08-18",
+         102.35
+        ],
+        [
+         "2026-08-19",
+         102.56
+        ],
+        [
+         "2026-08-20",
+         101.67
+        ],
+        [
+         "2026-08-21",
+         102.12
+        ],
+        [
+         "2026-08-24",
+         101.83
+        ],
+        [
+         "2026-08-25",
+         102.15
+        ],
+        [
+         "2026-08-26",
+         102.13
+        ],
+        [
+         "2026-08-27",
+         102.87
+        ],
+        [
+         "2026-08-28",
+         102.61
+        ],
+        [
+         "2026-08-31",
+         102.27
+        ],
+        [
+         "2026-09-01",
+         101.55
+        ],
+        [
+         "2026-09-02",
+         102.01
+        ],
+        [
+         "2026-09-03",
+         103.09
+        ],
+        [
+         "2026-09-04",
+         102.7
+        ],
+        [
+         "2026-09-08",
+         102.1
+        ],
+        [
+         "2026-09-09",
+         101.61
+        ],
+        [
+         "2026-09-10",
+         101.02
+        ],
+        [
+         "2026-09-11",
+         101.88
+        ],
+        [
+         "2026-09-14",
+         101.39
+        ],
+        [
+         "2026-09-15",
+         100.94
+        ],
+        [
+         "2026-09-16",
+         100.49
+        ],
+        [
+         "2026-09-17",
+         101.63
+        ],
+        [
+         "2026-09-18",
+         101.8
+        ],
+        [
+         "2026-09-21",
+         103.32
+        ],
+        [
+         "2026-09-22",
+         103.32
+        ],
+        [
+         "2026-09-23",
+         102.54
+        ],
+        [
+         "2026-09-24",
+         102.51
+        ],
+        [
+         "2026-09-25",
+         103.03
+        ],
+        [
+         "2026-09-28",
+         102.24
+        ],
+        [
+         "2026-09-29",
+         102.07
+        ],
+        [
+         "2026-09-30",
+         101.81
+        ],
+        [
+         "2026-10-01",
+         102.01
+        ],
+        [
+         "2026-10-02",
+         102.76
+        ],
+        [
+         "2026-10-05",
+         103.44
+        ],
+        [
+         "2026-10-06",
+         104.04
+        ],
+        [
+         "2026-10-07",
+         103.81
+        ],
+        [
+         "2026-10-08",
+         103.33
+        ],
+        [
+         "2026-10-09",
+         103.94
+        ]
+       ]
+      }
+     ],
+     "source": "FRED",
+     "raison": null
+    },
+    {
+     "type": "barres",
+     "titre": "Corrélation 30 séances de chaque devise avec le S&P 500",
+     "unite": "corrélation",
+     "barres": [
+      {
+       "nom": "USD",
+       "valeur": -0.57
+      },
+      {
+       "nom": "EUR",
+       "valeur": 0.3
+      },
+      {
+       "nom": "GBP",
+       "valeur": 0.33
+      },
+      {
+       "nom": "JPY",
+       "valeur": 0.45
+      },
+      {
+       "nom": "CHF",
+       "valeur": 0.52
+      },
+      {
+       "nom": "CAD",
+       "valeur": 0.21
+      },
+      {
+       "nom": "AUD",
+       "valeur": 0.64
+      },
+      {
+       "nom": "NZD",
+       "valeur": 0.58
+      },
+      {
+       "nom": "CNY",
+       "valeur": 0.22
+      }
+     ],
+     "source": "calcul Python (rendements quotidiens)",
+     "note": "positif : la devise monte avec les actions (devise « risque »)",
+     "absentes": [],
+     "raison": null
+    }
+   ]
+  },
+  "6": {
+   "numero": 6,
+   "titre": "Géopolitique",
+   "evenements": [
+    {
+     "titre": "Trump says he is 'going to look at' joining Saudi Arabia in the fight against Iran-backed Houthis after deadly airport strike",
+     "canal": "energie",
+     "canaux": [
+      "energie",
+      "refuge"
+     ],
+     "mecanisme": "choc d'offre énergétique : prix du pétrole et du gaz, inflation importée",
+     "devises": [
+      "CAD",
+      "NZD",
+      "AUD",
+      "JPY",
+      "EUR"
+     ],
+     "source": "cnbc_world",
+     "date": "2026-10-11",
+     "lien": "https://www.cnbc.com/2026/10/11/trump-saudi-arabia-iran-houthis.html"
+    },
+    {
+     "titre": "Putin relayed Iran war proposal to Trump, Kremlin says",
+     "canal": "refuge",
+     "canaux": [
+      "refuge"
+     ],
+     "mecanisme": "conflit armé : fuite vers les valeurs refuges",
+     "devises": [
+      "USD",
+      "JPY",
+      "CHF"
+     ],
+     "source": "cnbc_world",
+     "date": "2026-10-10",
+     "lien": "https://www.cnbc.com/2026/10/10/putin-trump-iran-war-russia-diesel.html"
+    },
+    {
+     "titre": "Attack on Riyadh airport killed 12 people and wounded more than 300, Saudi authorities say",
+     "canal": "energie",
+     "canaux": [
+      "energie",
+      "refuge"
+     ],
+     "mecanisme": "choc d'offre énergétique : prix du pétrole et du gaz, inflation importée",
+     "devises": [
+      "CAD",
+      "NZD",
+      "AUD",
+      "JPY",
+      "EUR"
+     ],
+     "source": "cnbc_world",
+     "date": "2026-10-10",
+     "lien": "https://www.cnbc.com/2026/10/10/the-airport-in-the-saudi-capital-has-been-attacked-again-officials.html"
+    }
+   ],
+   "graphiques": [
+    {
+     "type": "serie",
+     "titre": "Série temporelle",
+     "raison": "pas de série chiffrée gratuite pour la géopolitique"
+    },
+    {
+     "type": "barres",
+     "titre": "Titres du jour par canal de transmission",
+     "unite": "titres",
+     "barres": [
+      {
+       "nom": "Énergie",
+       "valeur": 2
+      },
+      {
+       "nom": "Commerce",
+       "valeur": 0
+      },
+      {
+       "nom": "Sanctions",
+       "valeur": 0
+      },
+      {
+       "nom": "Refuge (conflits)",
+       "valeur": 3
+      },
+      {
+       "nom": "Politique intérieure",
+       "valeur": 0
+      }
+     ],
+     "source": "flux RSS (classement par mots-clés)",
+     "note": null,
+     "absentes": [],
+     "raison": null
+    }
+   ],
+   "notes": [
+    "Classement par mots-clés en Python : un titre sans canal identifiable (énergie, commerce, sanctions, refuge, politique intérieure) n'est pas retenu.",
+    "Le mécanisme et les devises touchées sont ceux du canal, pas une analyse du titre : à lire comme une piste, pas un fait."
+   ]
+  },
+  "7": {
+   "numero": 7,
+   "titre": "Price action et flux",
+   "colonnes": [
+    {
+     "id": "tendance",
+     "libelle": "Tendance",
+     "unite": null
+    },
+    {
+     "id": "rsi",
+     "libelle": "RSI",
+     "unite": ""
+    },
+    {
+     "id": "ecart_mm100",
+     "libelle": "Écart MM100",
+     "unite": "%"
+    },
+    {
+     "id": "ecart_mm200",
+     "libelle": "Écart MM200",
+     "unite": "%"
+    },
+    {
+     "id": "volatilite",
+     "libelle": "Volatilité 20 j",
+     "unite": "%"
+    },
+    {
+     "id": "niveau_cle",
+     "libelle": "Niveau clé",
+     "unite": null
+    },
+    {
+     "id": "cot",
+     "libelle": "COT net",
+     "unite": "contrats"
+    }
+   ],
+   "lignes": [
+    {
+     "devise": "USD",
+     "cellules": {
+      "tendance": {
+       "valeur": null,
+       "raison": null,
+       "source": "calcul local (Twelve Data, weekly Dow)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "texte": "baissier"
+      },
+      "rsi": {
+       "valeur": 66.2,
+       "raison": null,
+       "source": "calcul local (RSI 14, daily)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "",
+       "signal": null,
+       "raison_percentile": "non calculé"
+      },
+      "ecart_mm100": {
+       "valeur": 1.27,
+       "raison": null,
+       "source": "calcul local (MM100, force de la devise)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "%",
+       "raison_percentile": "non calculé"
+      },
+      "ecart_mm200": {
+       "valeur": null,
+       "raison": "moyenne indisponible (historique de prix trop court)",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "volatilite": {
+       "valeur": 2.9,
+       "raison": null,
+       "source": "calcul local : volatilité réalisée 20 séances",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "% annualisé",
+       "percentile_90j": 9,
+       "raison_percentile": "percentile sur 90 jours seulement (historique de prix Twelve Data limité à 90 séances)"
+      },
+      "niveau_cle": {
+       "valeur": null,
+       "raison": null,
+       "source": "calcul local (zones de consolidation)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "texte": "resistance 100.69909 (+0.16 %)"
+      },
+      "cot": {
+       "valeur": 12011,
+       "raison": null,
+       "source": "CFTC (COT legacy, positions nettes non commerciales)",
+       "percentile_5a": null,
+       "var_1s": 130,
+       "var_4s": null,
+       "unite": "contrats",
+       "date": "2026-10-06",
+       "percentile_52s": 75,
+       "extreme": null
+      }
+     }
+    },
+    {
+     "devise": "EUR",
+     "cellules": {
+      "tendance": {
+       "valeur": null,
+       "raison": null,
+       "source": "calcul local (Twelve Data, weekly Dow)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "texte": "range"
+      },
+      "rsi": {
+       "valeur": 25.1,
+       "raison": null,
+       "source": "calcul local (RSI 14, daily)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "",
+       "signal": "survente",
+       "raison_percentile": "non calculé"
+      },
+      "ecart_mm100": {
+       "valeur": -2.42,
+       "raison": null,
+       "source": "calcul local (MM100, force de la devise)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "%",
+       "raison_percentile": "non calculé"
+      },
+      "ecart_mm200": {
+       "valeur": null,
+       "raison": "moyenne indisponible (historique de prix trop court)",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "volatilite": {
+       "valeur": 4.2,
+       "raison": null,
+       "source": "calcul local : volatilité réalisée 20 séances",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "% annualisé",
+       "percentile_90j": 87,
+       "raison_percentile": "percentile sur 90 jours seulement (historique de prix Twelve Data limité à 90 séances)"
+      },
+      "niveau_cle": {
+       "valeur": null,
+       "raison": null,
+       "source": "calcul local (zones de consolidation)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "texte": "resistance 1.13732 (+1.53 %)"
+      },
+      "cot": {
+       "valeur": -99332,
+       "raison": null,
+       "source": "CFTC (COT legacy, positions nettes non commerciales)",
+       "percentile_5a": null,
+       "var_1s": -36076,
+       "var_4s": null,
+       "unite": "contrats",
+       "date": "2026-10-06",
+       "percentile_52s": 2,
+       "extreme": "short"
+      }
+     }
+    },
+    {
+     "devise": "GBP",
+     "cellules": {
+      "tendance": {
+       "valeur": null,
+       "raison": null,
+       "source": "calcul local (Twelve Data, weekly Dow)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "texte": "haussier"
+      },
+      "rsi": {
+       "valeur": 40.6,
+       "raison": null,
+       "source": "calcul local (RSI 14, daily)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "",
+       "signal": null,
+       "raison_percentile": "non calculé"
+      },
+      "ecart_mm100": {
+       "valeur": -1.43,
+       "raison": null,
+       "source": "calcul local (MM100, force de la devise)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "%",
+       "raison_percentile": "non calculé"
+      },
+      "ecart_mm200": {
+       "valeur": null,
+       "raison": "moyenne indisponible (historique de prix trop court)",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "volatilite": {
+       "valeur": 4.5,
+       "raison": null,
+       "source": "calcul local : volatilité réalisée 20 séances",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "% annualisé",
+       "percentile_90j": 83,
+       "raison_percentile": "percentile sur 90 jours seulement (historique de prix Twelve Data limité à 90 séances)"
+      },
+      "niveau_cle": {
+       "valeur": null,
+       "raison": null,
+       "source": "calcul local (zones de consolidation)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "texte": "resistance 1.32549 (+0.17 %)"
+      },
+      "cot": {
+       "valeur": -97611,
+       "raison": null,
+       "source": "CFTC (COT legacy, positions nettes non commerciales)",
+       "percentile_5a": null,
+       "var_1s": -6536,
+       "var_4s": null,
+       "unite": "contrats",
+       "date": "2026-10-06",
+       "percentile_52s": 6,
+       "extreme": "short"
+      }
+     }
+    },
+    {
+     "devise": "JPY",
+     "cellules": {
+      "tendance": {
+       "valeur": null,
+       "raison": null,
+       "source": "calcul local (Twelve Data, weekly Dow)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "texte": "haussier"
+      },
+      "rsi": {
+       "valeur": 40.5,
+       "raison": null,
+       "source": "calcul local (RSI 14, daily)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "",
+       "signal": null,
+       "raison_percentile": "non calculé"
+      },
+      "ecart_mm100": {
+       "valeur": 0.48,
+       "raison": null,
+       "source": "calcul local (MM100, force de la devise)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "%",
+       "raison_percentile": "non calculé"
+      },
+      "ecart_mm200": {
+       "valeur": null,
+       "raison": "moyenne indisponible (historique de prix trop court)",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "volatilite": {
+       "valeur": 4.9,
+       "raison": null,
+       "source": "calcul local : volatilité réalisée 20 séances",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "% annualisé",
+       "percentile_90j": 6,
+       "raison_percentile": "percentile sur 90 jours seulement (historique de prix Twelve Data limité à 90 séances)"
+      },
+      "niveau_cle": {
+       "valeur": null,
+       "raison": null,
+       "source": "calcul local (zones de consolidation)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "texte": "resistance 0.00632 (+0.13 %)"
+      },
+      "cot": {
+       "valeur": 62325,
+       "raison": null,
+       "source": "CFTC (COT legacy, positions nettes non commerciales)",
+       "percentile_5a": null,
+       "var_1s": 6885,
+       "var_4s": null,
+       "unite": "contrats",
+       "date": "2026-10-06",
+       "percentile_52s": 92,
+       "extreme": "long"
+      }
+     }
+    },
+    {
+     "devise": "CHF",
+     "cellules": {
+      "tendance": {
+       "valeur": null,
+       "raison": null,
+       "source": "calcul local (Twelve Data, weekly Dow)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "texte": "haussier"
+      },
+      "rsi": {
+       "valeur": 42.2,
+       "raison": null,
+       "source": "calcul local (RSI 14, daily)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "",
+       "signal": null,
+       "raison_percentile": "non calculé"
+      },
+      "ecart_mm100": {
+       "valeur": -1.87,
+       "raison": null,
+       "source": "calcul local (MM100, force de la devise)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "%",
+       "raison_percentile": "non calculé"
+      },
+      "ecart_mm200": {
+       "valeur": null,
+       "raison": "moyenne indisponible (historique de prix trop court)",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "volatilite": {
+       "valeur": 4.0,
+       "raison": null,
+       "source": "calcul local : volatilité réalisée 20 séances",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "% annualisé",
+       "percentile_90j": 3,
+       "raison_percentile": "percentile sur 90 jours seulement (historique de prix Twelve Data limité à 90 séances)"
+      },
+      "niveau_cle": {
+       "valeur": null,
+       "raison": null,
+       "source": "calcul local (zones de consolidation)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "texte": "resistance 1.20581 (+0.08 %)"
+      },
+      "cot": {
+       "valeur": -23740,
+       "raison": null,
+       "source": "CFTC (COT legacy, positions nettes non commerciales)",
+       "percentile_5a": null,
+       "var_1s": 877,
+       "var_4s": null,
+       "unite": "contrats",
+       "date": "2026-10-06",
+       "percentile_52s": 96,
+       "extreme": "long"
+      }
+     }
+    },
+    {
+     "devise": "CAD",
+     "cellules": {
+      "tendance": {
+       "valeur": null,
+       "raison": null,
+       "source": "calcul local (Twelve Data, weekly Dow)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "texte": "haussier"
+      },
+      "rsi": {
+       "valeur": 32.2,
+       "raison": null,
+       "source": "calcul local (RSI 14, daily)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "",
+       "signal": null,
+       "raison_percentile": "non calculé"
+      },
+      "ecart_mm100": {
+       "valeur": -1.68,
+       "raison": null,
+       "source": "calcul local (MM100, force de la devise)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "%",
+       "raison_percentile": "non calculé"
+      },
+      "ecart_mm200": {
+       "valeur": null,
+       "raison": "moyenne indisponible (historique de prix trop court)",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "volatilite": {
+       "valeur": 2.9,
+       "raison": null,
+       "source": "calcul local : volatilité réalisée 20 séances",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "% annualisé",
+       "percentile_90j": 27,
+       "raison_percentile": "percentile sur 90 jours seulement (historique de prix Twelve Data limité à 90 séances)"
+      },
+      "niveau_cle": {
+       "valeur": null,
+       "raison": null,
+       "source": "calcul local (zones de consolidation)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "texte": "resistance 0.70208 (+0.08 %)"
+      },
+      "cot": {
+       "valeur": -90163,
+       "raison": null,
+       "source": "CFTC (COT legacy, positions nettes non commerciales)",
+       "percentile_5a": null,
+       "var_1s": -11492,
+       "var_4s": null,
+       "unite": "contrats",
+       "date": "2026-10-06",
+       "percentile_52s": 46,
+       "extreme": null
+      }
+     }
+    },
+    {
+     "devise": "AUD",
+     "cellules": {
+      "tendance": {
+       "valeur": null,
+       "raison": null,
+       "source": "calcul local (Twelve Data, weekly Dow)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "texte": "range"
+      },
+      "rsi": {
+       "valeur": 41.3,
+       "raison": null,
+       "source": "calcul local (RSI 14, daily)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "",
+       "signal": null,
+       "raison_percentile": "non calculé"
+      },
+      "ecart_mm100": {
+       "valeur": -1.0,
+       "raison": null,
+       "source": "calcul local (MM100, force de la devise)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "%",
+       "raison_percentile": "non calculé"
+      },
+      "ecart_mm200": {
+       "valeur": null,
+       "raison": "moyenne indisponible (historique de prix trop court)",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "volatilite": {
+       "valeur": 5.3,
+       "raison": null,
+       "source": "calcul local : volatilité réalisée 20 séances",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "% annualisé",
+       "percentile_90j": 59,
+       "raison_percentile": "percentile sur 90 jours seulement (historique de prix Twelve Data limité à 90 séances)"
+      },
+      "niveau_cle": {
+       "valeur": null,
+       "raison": null,
+       "source": "calcul local (zones de consolidation)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "texte": "resistance 0.69939 (+0.12 %)"
+      },
+      "cot": {
+       "valeur": -98588,
+       "raison": null,
+       "source": "CFTC (COT legacy, positions nettes non commerciales)",
+       "percentile_5a": null,
+       "var_1s": -35349,
+       "var_4s": null,
+       "unite": "contrats",
+       "date": "2026-10-06",
+       "percentile_52s": 2,
+       "extreme": "short"
+      }
+     }
+    },
+    {
+     "devise": "NZD",
+     "cellules": {
+      "tendance": {
+       "valeur": null,
+       "raison": null,
+       "source": "calcul local (Twelve Data, weekly Dow)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "texte": "haussier"
+      },
+      "rsi": {
+       "valeur": 35.3,
+       "raison": null,
+       "source": "calcul local (RSI 14, daily)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "",
+       "signal": null,
+       "raison_percentile": "non calculé"
+      },
+      "ecart_mm100": {
+       "valeur": -3.14,
+       "raison": null,
+       "source": "calcul local (MM100, force de la devise)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "%",
+       "raison_percentile": "non calculé"
+      },
+      "ecart_mm200": {
+       "valeur": null,
+       "raison": "moyenne indisponible (historique de prix trop court)",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "volatilite": {
+       "valeur": 5.1,
+       "raison": null,
+       "source": "calcul local : volatilité réalisée 20 séances",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "% annualisé",
+       "percentile_90j": 9,
+       "raison_percentile": "percentile sur 90 jours seulement (historique de prix Twelve Data limité à 90 séances)"
+      },
+      "niveau_cle": {
+       "valeur": null,
+       "raison": null,
+       "source": "calcul local (zones de consolidation)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "texte": "resistance 0.56204 (+0.05 %)"
+      },
+      "cot": {
+       "valeur": -29346,
+       "raison": null,
+       "source": "CFTC (COT legacy, positions nettes non commerciales)",
+       "percentile_5a": null,
+       "var_1s": -12031,
+       "var_4s": null,
+       "unite": "contrats",
+       "date": "2026-10-06",
+       "percentile_52s": 81,
+       "extreme": null
+      }
+     }
+    },
+    {
+     "devise": "CNY",
+     "cellules": {
+      "tendance": {
+       "valeur": null,
+       "raison": null,
+       "source": "calcul local (Twelve Data, weekly Dow)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "texte": "haussier"
+      },
+      "rsi": {
+       "valeur": 62.7,
+       "raison": null,
+       "source": "calcul local (RSI 14, daily)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "",
+       "signal": null,
+       "raison_percentile": "non calculé"
+      },
+      "ecart_mm100": {
+       "valeur": 0.78,
+       "raison": null,
+       "source": "calcul local (MM100, force de la devise)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "%",
+       "raison_percentile": "non calculé"
+      },
+      "ecart_mm200": {
+       "valeur": null,
+       "raison": "moyenne indisponible (historique de prix trop court)",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      },
+      "volatilite": {
+       "valeur": 1.7,
+       "raison": null,
+       "source": "calcul local : volatilité réalisée 20 séances",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "unite": "% annualisé",
+       "percentile_90j": 6,
+       "raison_percentile": "percentile sur 90 jours seulement (historique de prix Twelve Data limité à 90 séances)"
+      },
+      "niveau_cle": {
+       "valeur": null,
+       "raison": null,
+       "source": "calcul local (zones de consolidation)",
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null,
+       "texte": "support 0.14939 (-0.09 %)"
+      },
+      "cot": {
+       "valeur": null,
+       "raison": "non couvert par la CFTC",
+       "source": null,
+       "percentile_5a": null,
+       "var_1s": null,
+       "var_4s": null
+      }
+     }
+    }
+   ],
+   "graphiques": [
+    {
+     "type": "serie",
+     "titre": "Positions nettes des spéculateurs (COT), 26 semaines",
+     "unite": "milliers de contrats",
+     "courbes": [
+      {
+       "nom": "EUR",
+       "points": [
+        [
+         "2026-04-14",
+         26.0
+        ],
+        [
+         "2026-04-21",
+         41.3
+        ],
+        [
+         "2026-04-28",
+         35.7
+        ],
+        [
+         "2026-05-05",
+         32.2
+        ],
+        [
+         "2026-05-12",
+         40.2
+        ],
+        [
+         "2026-05-19",
+         33.5
+        ],
+        [
+         "2026-05-26",
+         29.4
+        ],
+        [
+         "2026-06-02",
+         48.9
+        ],
+        [
+         "2026-06-09",
+         13.9
+        ],
+        [
+         "2026-06-16",
+         34.4
+        ],
+        [
+         "2026-06-23",
+         30.2
+        ],
+        [
+         "2026-06-30",
+         1.1
+        ],
+        [
+         "2026-07-07",
+         -16.2
+        ],
+        [
+         "2026-07-14",
+         -12.6
+        ],
+        [
+         "2026-07-21",
+         -41.3
+        ],
+        [
+         "2026-07-28",
+         -72.4
+        ],
+        [
+         "2026-08-04",
+         -58.1
+        ],
+        [
+         "2026-08-11",
+         -60.0
+        ],
+        [
+         "2026-08-18",
+         -59.1
+        ],
+        [
+         "2026-08-25",
+         -36.4
+        ],
+        [
+         "2026-09-01",
+         -24.9
+        ],
+        [
+         "2026-09-08",
+         -42.6
+        ],
+        [
+         "2026-09-15",
+         -27.0
+        ],
+        [
+         "2026-09-22",
+         -52.3
+        ],
+        [
+         "2026-09-29",
+         -63.3
+        ],
+        [
+         "2026-10-06",
+         -99.3
+        ]
+       ]
+      },
+      {
+       "nom": "JPY",
+       "points": [
+        [
+         "2026-04-14",
+         -83.2
+        ],
+        [
+         "2026-04-21",
+         -94.5
+        ],
+        [
+         "2026-04-28",
+         -102.1
+        ],
+        [
+         "2026-05-05",
+         -61.7
+        ],
+        [
+         "2026-05-12",
+         -75.1
+        ],
+        [
+         "2026-05-19",
+         -93.9
+        ],
+        [
+         "2026-05-26",
+         -114.7
+        ],
+        [
+         "2026-06-02",
+         -129.6
+        ],
+        [
+         "2026-06-09",
+         -145.8
+        ],
+        [
+         "2026-06-16",
+         -150.1
+        ],
+        [
+         "2026-06-23",
+         -146.1
+        ],
+        [
+         "2026-06-30",
+         -155.1
+        ],
+        [
+         "2026-07-07",
+         -123.8
+        ],
+        [
+         "2026-07-14",
+         -122.7
+        ],
+        [
+         "2026-07-21",
+         -152.1
+        ],
+        [
+         "2026-07-28",
+         -163.4
+        ],
+        [
+         "2026-08-04",
+         -45.5
+        ],
+        [
+         "2026-08-11",
+         -42.1
+        ],
+        [
+         "2026-08-18",
+         -52.9
+        ],
+        [
+         "2026-08-25",
+         -63.3
+        ],
+        [
+         "2026-09-01",
+         -92.2
+        ],
+        [
+         "2026-09-08",
+         10.8
+        ],
+        [
+         "2026-09-15",
+         120.4
+        ],
+        [
+         "2026-09-22",
+         72.0
+        ],
+        [
+         "2026-09-29",
+         55.4
+        ],
+        [
+         "2026-10-06",
+         62.3
+        ]
+       ]
+      },
+      {
+       "nom": "GBP",
+       "points": [
+        [
+         "2026-04-14",
+         -54.7
+        ],
+        [
+         "2026-04-21",
+         -52.0
+        ],
+        [
+         "2026-04-28",
+         -60.6
+        ],
+        [
+         "2026-05-05",
+         -63.9
+        ],
+        [
+         "2026-05-12",
+         -43.1
+        ],
+        [
+         "2026-05-19",
+         -64.3
+        ],
+        [
+         "2026-05-26",
+         -61.4
+        ],
+        [
+         "2026-06-02",
+         -52.2
+        ],
+        [
+         "2026-06-09",
+         -64.2
+        ],
+        [
+         "2026-06-16",
+         -71.6
+        ],
+        [
+         "2026-06-23",
+         -105.7
+        ],
+        [
+         "2026-06-30",
+         -102.1
+        ],
+        [
+         "2026-07-07",
+         -87.9
+        ],
+        [
+         "2026-07-14",
+         -71.3
+        ],
+        [
+         "2026-07-21",
+         -55.6
+        ],
+        [
+         "2026-07-28",
+         -64.8
+        ],
+        [
+         "2026-08-04",
+         -57.8
+        ],
+        [
+         "2026-08-11",
+         -56.2
+        ],
+        [
+         "2026-08-18",
+         -54.6
+        ],
+        [
+         "2026-08-25",
+         -44.5
+        ],
+        [
+         "2026-09-01",
+         -49.6
+        ],
+        [
+         "2026-09-08",
+         -58.8
+        ],
+        [
+         "2026-09-15",
+         -58.7
+        ],
+        [
+         "2026-09-22",
+         -82.6
+        ],
+        [
+         "2026-09-29",
+         -91.1
+        ],
+        [
+         "2026-10-06",
+         -97.6
+        ]
+       ]
+      },
+      {
+       "nom": "AUD",
+       "points": [
+        [
+         "2026-04-14",
+         65.1
+        ],
+        [
+         "2026-04-21",
+         64.8
+        ],
+        [
+         "2026-04-28",
+         71.9
+        ],
+        [
+         "2026-05-05",
+         78.7
+        ],
+        [
+         "2026-05-12",
+         85.0
+        ],
+        [
+         "2026-05-19",
+         85.6
+        ],
+        [
+         "2026-05-26",
+         60.2
+        ],
+        [
+         "2026-06-02",
+         41.8
+        ],
+        [
+         "2026-06-09",
+         18.2
+        ],
+        [
+         "2026-06-16",
+         -4.1
+        ],
+        [
+         "2026-06-23",
+         -13.0
+        ],
+        [
+         "2026-06-30",
+         -17.7
+        ],
+        [
+         "2026-07-07",
+         -24.7
+        ],
+        [
+         "2026-07-14",
+         -30.7
+        ],
+        [
+         "2026-07-21",
+         -37.7
+        ],
+        [
+         "2026-07-28",
+         -40.0
+        ],
+        [
+         "2026-08-04",
+         -33.2
+        ],
+        [
+         "2026-08-11",
+         -39.2
+        ],
+        [
+         "2026-08-18",
+         -44.2
+        ],
+        [
+         "2026-08-25",
+         -44.5
+        ],
+        [
+         "2026-09-01",
+         -39.4
+        ],
+        [
+         "2026-09-08",
+         -34.9
+        ],
+        [
+         "2026-09-15",
+         -38.9
+        ],
+        [
+         "2026-09-22",
+         -46.8
+        ],
+        [
+         "2026-09-29",
+         -63.2
+        ],
+        [
+         "2026-10-06",
+         -98.6
+        ]
+       ]
+      }
+     ],
+     "source": "CFTC",
+     "raison": null
+    },
+    {
+     "type": "barres",
+     "titre": "Percentile 52 semaines du positionnement net (COT)",
+     "unite": "percentile",
+     "barres": [
+      {
+       "nom": "USD",
+       "valeur": 75
+      },
+      {
+       "nom": "EUR",
+       "valeur": 2
+      },
+      {
+       "nom": "GBP",
+       "valeur": 6
+      },
+      {
+       "nom": "JPY",
+       "valeur": 92
+      },
+      {
+       "nom": "CHF",
+       "valeur": 96
+      },
+      {
+       "nom": "CAD",
+       "valeur": 46
+      },
+      {
+       "nom": "AUD",
+       "valeur": 2
+      },
+      {
+       "nom": "NZD",
+       "valeur": 81
+      }
+     ],
+     "source": "CFTC",
+     "note": "≥ 90 ou ≤ 10 : positionnement extrême",
+     "absentes": [
+      "CNY"
+     ],
+     "raison": null
+    }
+   ],
+   "notes": [
+    "Force de la devise (paires inversées pour USD/JPY, USD/CHF, USD/CAD, USD/CNH) ; USD = indice synthétique.",
+    "COT : positions des spéculateurs (non commerciaux) ; percentile sur 52 semaines, extrême ≥ 90 ou ≤ 10.",
+    "Volatilité : percentile sur 90 jours seulement (historique de prix gratuit limité)."
+   ]
+  },
+  "8": {
+   "numero": 8,
+   "titre": "Offre et demande",
+   "instruments": [
+    {
+     "id": "eia_stocks",
+     "libelle": "Stocks de brut US (hors réserve stratégique)",
+     "cellule": {
+      "valeur": 424.1,
+      "unite": "M barils",
+      "date": "2026-10-02",
+      "source": "EIA (WCESTUS1, stocks de brut hors réserve stratégique)",
+      "frequence": "quotidien",
+      "raison": null,
+      "var_1s": -0.75,
+      "var_4s": 0.02,
+      "percentile_5a": 38,
+      "n_5a": 261,
+      "raison_percentile": null,
+      "ecart_moyenne_5a": -2.5,
+      "ecart_moyenne_5a_pct": -0.6,
+      "moyenne_5a": 426.7,
+      "note": "moyenne des 5 mêmes semaines des 5 années précédentes"
+     }
+    },
+    {
+     "id": "eia_production",
+     "libelle": "Production de brut US",
+     "cellule": {
+      "valeur": 13979.0,
+      "unite": "milliers b/j",
+      "date": "2026-10-02",
+      "source": "EIA (WCRFPUS2, production de brut US)",
+      "frequence": "quotidien",
+      "raison": null,
+      "var_1s": 0.17,
+      "var_4s": 0.23,
+      "percentile_5a": 100,
+      "n_5a": 261,
+      "raison_percentile": null
+     }
+    },
+    {
+     "id": "wti",
+     "libelle": "Pétrole WTI",
+     "cellule": {
+      "valeur": 96.24,
+      "unite": "niveau",
+      "date": "2026-10-06",
+      "source": "FRED (DCOILWTICO)",
+      "frequence": "quotidien",
+      "raison": null,
+      "var_1s": 0.08,
+      "var_4s": 2.15,
+      "percentile_5a": 87,
+      "n_5a": 262,
+      "raison_percentile": null,
+      "alerte": "série heurtée : +16,6 % le 28/09, -11,1 % le 25/09 en une séance (chiffres officiels)"
+     }
+    },
+    {
+     "id": "brent",
+     "libelle": "Pétrole Brent",
+     "cellule": {
+      "valeur": 125.44,
+      "unite": "niveau",
+      "date": "2026-10-06",
+      "source": "FRED (DCOILBRENTEU)",
+      "frequence": "quotidien",
+      "raison": null,
+      "var_1s": 10.07,
+      "var_4s": 18.21,
+      "percentile_5a": 98,
+      "n_5a": 262,
+      "raison_percentile": null,
+      "alerte": "série heurtée : +18,0 % le 02/10 en une séance (chiffres officiels)"
+     }
+    },
+    {
+     "id": "indice_or",
+     "libelle": "Indice or (proxy)",
+     "cellule": {
+      "valeur": 2554.51,
+      "unite": "niveau",
+      "date": "2026-10-09",
+      "source": "FRED (NASDAQQGLDI) — indice or (proxy)",
+      "frequence": "quotidien",
+      "raison": null,
+      "var_1s": 0.83,
+      "var_4s": -4.34,
+      "percentile_5a": 20,
+      "n_5a": 261,
+      "raison_percentile": null
+     }
+    }
+   ],
+   "balances": [
+    {
+     "devise": "USD",
+     "valeur": "-105.6B",
+     "consensus": "-100.8B",
+     "date": "2026-10-06",
+     "source": "ForexFactory",
+     "raison": null
+    },
+    {
+     "devise": "EUR",
+     "valeur": "5.0B",
+     "consensus": "3.7B",
+     "date": "2026-09-15",
+     "source": "ForexFactory",
+     "raison": null
+    },
+    {
+     "devise": "GBP",
+     "valeur": "-21.0B",
+     "consensus": "-22.6B",
+     "date": "2026-09-11",
+     "source": "ForexFactory",
+     "raison": null
+    },
+    {
+     "devise": "JPY",
+     "valeur": "-0.84T",
+     "consensus": "-1.00T",
+     "date": "2026-09-15",
+     "source": "ForexFactory",
+     "raison": null
+    },
+    {
+     "devise": "CHF",
+     "valeur": "5.4B",
+     "consensus": null,
+     "date": "2026-06",
+     "source": "FRED (XTEXVA01CHM667S)",
+     "raison": null
+    },
+    {
+     "devise": "CAD",
+     "valeur": "4.2B",
+     "consensus": "1.5B",
+     "date": "2026-10-06",
+     "source": "ForexFactory",
+     "raison": null
+    },
+    {
+     "devise": "AUD",
+     "valeur": "0.50B",
+     "consensus": "2.00B",
+     "date": "2026-10-01",
+     "source": "ForexFactory",
+     "raison": null
+    },
+    {
+     "devise": "NZD",
+     "valeur": "-1349M",
+     "consensus": "-1775M",
+     "date": "2026-09-17",
+     "source": "ForexFactory",
+     "raison": null
+    },
+    {
+     "devise": "CNY",
+     "valeur": "809B",
+     "consensus": "805B",
+     "date": "2026-09-08",
+     "source": "ForexFactory",
+     "raison": null
+    }
+   ],
+   "graphiques": [
+    {
+     "type": "serie",
+     "titre": "Stocks de brut US contre moyenne 5 ans, 26 semaines",
+     "unite": "M barils",
+     "courbes": [
+      {
+       "nom": "Stocks",
+       "points": [
+        [
+         "2026-04-03",
+         464.7
+        ],
+        [
+         "2026-04-10",
+         463.8
+        ],
+        [
+         "2026-04-17",
+         465.7
+        ],
+        [
+         "2026-04-24",
+         459.5
+        ],
+        [
+         "2026-05-01",
+         457.2
+        ],
+        [
+         "2026-05-08",
+         452.9
+        ],
+        [
+         "2026-05-15",
+         445.0
+        ],
+        [
+         "2026-05-22",
+         441.7
+        ],
+        [
+         "2026-05-29",
+         433.7
+        ],
+        [
+         "2026-06-05",
+         426.5
+        ],
+        [
+         "2026-06-12",
+         418.2
+        ],
+        [
+         "2026-06-19",
+         412.1
+        ],
+        [
+         "2026-06-26",
+         408.4
+        ],
+        [
+         "2026-07-03",
+         411.4
+        ],
+        [
+         "2026-07-10",
+         409.7
+        ],
+        [
+         "2026-07-17",
+         411.7
+        ],
+        [
+         "2026-07-24",
+         404.5
+        ],
+        [
+         "2026-07-31",
+         407.0
+        ],
+        [
+         "2026-08-07",
+         424.4
+        ],
+        [
+         "2026-08-14",
+         428.8
+        ],
+        [
+         "2026-08-21",
+         428.9
+        ],
+        [
+         "2026-08-28",
+         424.5
+        ],
+        [
+         "2026-09-04",
+         424.1
+        ],
+        [
+         "2026-09-11",
+         423.4
+        ],
+        [
+         "2026-09-18",
+         426.4
+        ],
+        [
+         "2026-09-25",
+         427.3
+        ],
+        [
+         "2026-10-02",
+         424.1
+        ]
+       ]
+      },
+      {
+       "nom": "Moyenne 5 ans (même semaine)",
+       "points": [
+        [
+         "2026-04-03",
+         456.9
+        ],
+        [
+         "2026-04-10",
+         455.1
+        ],
+        [
+         "2026-04-17",
+         453.0
+        ],
+        [
+         "2026-04-24",
+         452.4
+        ],
+        [
+         "2026-05-01",
+         453.9
+        ],
+        [
+         "2026-05-08",
+         454.7
+        ],
+        [
+         "2026-05-15",
+         452.3
+        ],
+        [
+         "2026-05-22",
+         449.7
+        ],
+        [
+         "2026-05-29",
+         448.4
+        ],
+        [
+         "2026-06-05",
+         448.9
+        ],
+        [
+         "2026-06-12",
+         443.7
+        ],
+        [
+         "2026-06-19",
+         439.5
+        ],
+        [
+         "2026-06-26",
+         437.8
+        ],
+        [
+         "2026-07-03",
+         438.8
+        ],
+        [
+         "2026-07-10",
+         437.2
+        ],
+        [
+         "2026-07-17",
+         434.0
+        ],
+        [
+         "2026-07-24",
+         433.1
+        ],
+        [
+         "2026-07-31",
+         433.9
+        ],
+        [
+         "2026-08-07",
+         431.5
+        ],
+        [
+         "2026-08-14",
+         426.9
+        ],
+        [
+         "2026-08-21",
+         422.0
+        ],
+        [
+         "2026-08-28",
+         421.3
+        ],
+        [
+         "2026-09-04",
+         422.3
+        ],
+        [
+         "2026-09-11",
+         419.2
+        ],
+        [
+         "2026-09-18",
+         418.6
+        ],
+        [
+         "2026-09-25",
+         419.5
+        ],
+        [
+         "2026-10-02",
+         426.7
+        ]
+       ]
+      }
+     ],
+     "source": "EIA",
+     "raison": null
+    },
+    {
+     "type": "barres",
+     "titre": "Variation sur 4 semaines",
+     "unite": "%",
+     "barres": [
+      {
+       "nom": "Production de brut US",
+       "valeur": 0.23
+      },
+      {
+       "nom": "Pétrole WTI",
+       "valeur": 2.15
+      },
+      {
+       "nom": "Pétrole Brent",
+       "valeur": 18.21
+      },
+      {
+       "nom": "Indice or (proxy)",
+       "valeur": -4.34
+      }
+     ],
+     "source": "EIA, FRED",
+     "note": null,
+     "absentes": [],
+     "raison": null
+    }
+   ],
+   "termes_echange": {
+    "valeur": null,
+    "raison": "pas de série gratuite des termes de l'échange (AUD, CAD, NZD) accessible automatiquement",
+    "source": null,
+    "percentile_5a": null,
+    "var_1s": null,
+    "var_4s": null
+   },
+   "notes": [
+    "Stocks EIA : écart à la moyenne des 5 années précédentes pour la même semaine.",
+    "Balances commerciales : monnaies et unités propres à chaque pays (non comparables directement).",
+    "Indice or (proxy) : NASDAQ QGLDI, pas le cours spot."
    ]
   }
  }

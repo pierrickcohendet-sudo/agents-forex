@@ -132,12 +132,18 @@ def engrenage_2(historiques: dict, registre: dict, config: dict) -> dict:
         c: dict = {}
         case = cases.get(f"{devise}|taux_directeur") or {}
         actuel = case.get("actuel") or {}
-        # Taux directeur : USD = taux effectif quotidien (DFF) + fourchette ; autres = registre
-        if devise == "USD":
-            dff = _serie(historiques, "USD_taux_effectif")
-            c["taux_directeur"] = stats(dff, "%", "FRED (DFF, taux effectif)")
-            c["taux_directeur"]["note"] = (f"fourchette cible : borne haute {actuel.get('valeur')} (ForexFactory)"
-                                           if actuel.get("valeur") else None)
+        # Taux directeur : USD et JPY = taux au jour le jour EFFECTIF officiel et quotidien (Fed DFF,
+        # Banque du Japon) ; autres = registre (ForexFactory), percentile parmi une série de référence.
+        effectif = {"USD": ("USD_taux_effectif", "FRED (DFF, taux effectif)",
+                            f"fourchette cible : borne haute {actuel.get('valeur')} (ForexFactory)"),
+                    "JPY": ("JPY_taux_effectif", "Banque du Japon (call rate non garanti au jour le jour)",
+                            f"objectif publié « {actuel.get('valeur')} » (ForexFactory) : une borne, pas un taux")}
+        if devise in effectif:
+            nom_serie, source_eff, note = effectif[devise]
+            serie_eff = _serie(historiques, nom_serie)
+            c["taux_directeur"] = stats(serie_eff, "%", source_eff) if serie_eff else \
+                absent("série officielle du taux effectif indisponible aujourd'hui", source_eff)
+            c["taux_directeur"]["note"] = note if actuel.get("valeur") else None
             directeur, d_dir = (c["taux_directeur"].get("valeur"), c["taux_directeur"].get("date"))
         else:
             directeur, d_dir = _registre_valeur(case)
@@ -145,8 +151,12 @@ def engrenage_2(historiques: dict, registre: dict, config: dict) -> dict:
                 c["taux_directeur"] = absent(f"valeur du registre non numérique ({actuel.get('valeur') or 'absente'})",
                                              "registre macro (ForexFactory)")
             else:
-                proxy = _serie(historiques, f"{devise}_taux_jj")
-                cel = stats(proxy, "%", "registre macro (ForexFactory)", "mensuel", valeur=directeur, date_valeur=d_dir) \
+                # GBP : SONIA quotidien (Banque d'Angleterre) ; sinon taux au jour le jour OCDE mensuel
+                if devise == "GBP" and _serie(historiques, "GBP_taux_effectif"):
+                    proxy, freq_proxy, libelle_proxy = _serie(historiques, "GBP_taux_effectif"), "quotidien", "SONIA quotidien (Banque d'Angleterre)"
+                else:
+                    proxy, freq_proxy, libelle_proxy = _serie(historiques, f"{devise}_taux_jj"), "mensuel", "taux au jour le jour OCDE (mensuel, proxy)"
+                cel = stats(proxy, "%", "registre macro (ForexFactory)", freq_proxy, valeur=directeur, date_valeur=d_dir) \
                     if proxy else absent("pas de série longue", "registre macro (ForexFactory)") | {"valeur": directeur, "date": d_dir}
                 prec = rm.vers_nombre(str((case.get("precedent") or {}).get("valeur") or "").replace(" ", ""))
                 for cle, jours in (("var_1s", 7), ("var_4s", 28)):
@@ -154,15 +164,25 @@ def engrenage_2(historiques: dict, registre: dict, config: dict) -> dict:
                     cel[cle] = round((directeur - prec) * 100, 1) if (recent and prec is not None) else 0.0
                 cel["unite"] = "%"
                 if proxy and cel.get("percentile_5a") is not None:
-                    cel["note_percentile"] = "percentile du taux du registre parmi les taux au jour le jour OCDE (mensuel, proxy) sur 5 ans"
+                    cel["note_percentile"] = f"percentile du taux du registre parmi le {libelle_proxy} sur 5 ans"
                 lignes_src = cel["source"]
                 cel["source"] = lignes_src
                 c["taux_directeur"] = cel
         # Taux 2 ans
         s2 = us2 if devise == "USD" else _serie(historiques, f"{devise}_2a")
         spec2 = (sources_taux.get(devise) or {}).get("2a") or {}
-        c["taux_2a"] = stats(s2, "%", spec2.get("source") or "FRED (DGS2)") if s2 else \
-            absent(spec2.get("absent") or "pas de rendement 2 ans gratuit pour ce pays")
+        manuel = ((config.get("valeurs_manuelles") or {}).get("rendement_2a") or {}).get(devise) or {}
+        if s2:
+            c["taux_2a"] = stats(s2, "%", spec2.get("source") or "FRED (DGS2)")
+        elif manuel.get("valeur") is not None and manuel.get("date"):
+            age = (date.today() - date.fromisoformat(str(manuel["date"]))).days
+            c["taux_2a"] = {**absent(None), "valeur": float(manuel["valeur"]), "unite": "%", "date": str(manuel["date"]),
+                            "source": f"saisie manuelle (config.yaml) : {manuel.get('source')}",
+                            "raison_percentile": "valeur manuelle ponctuelle (pas d'historique)",
+                            "alerte": f"relevé ancien ({age} jours)" if age > 10 else None}
+        else:
+            c["taux_2a"] = absent((spec2.get("absent") or "pas de rendement 2 ans gratuit pour ce pays")
+                                  + (" — valeur manuelle prévue dans config.yaml (valeurs_manuelles), non renseignée" if manuel else ""))
         # 2 ans − directeur (ce que le marché intègre de baisses / hausses)
         if s2 and directeur is not None:
             if devise == "USD":
@@ -364,28 +384,405 @@ def engrenage_5(historiques: dict, technique: dict) -> dict:
                       "Changement de signe : corrélation ≥ 0,3 en valeur absolue sur les deux fenêtres de 30 séances, de signe opposé."]}
 
 
+
+
+# ----------------------------------------------------------------- graphiques
+def _90j(points: list[tuple[str, float]], jours: int = 90) -> list[list]:
+    if not points:
+        return []
+    limite = (date.fromisoformat(points[-1][0]) - timedelta(days=jours)).isoformat()
+    return [[d, v] for d, v in points if d >= limite]
+
+
+def graphique_serie(titre: str, unite: str, lignes: list[tuple[str, list]], source: str, base_100: bool = False) -> dict:
+    """Série temporelle multi-courbes (90 jours). base_100 : chaque courbe rebasée à 100 au début."""
+    sortie = []
+    for nom, points in lignes:
+        if len(points) < 2:
+            continue
+        if base_100 and points[0][1]:
+            points = [[d, round(v / points[0][1] * 100, 2)] for d, v in points]
+        sortie.append({"nom": nom, "points": points})
+    return {"type": "serie", "titre": titre, "unite": unite, "courbes": sortie, "source": source,
+            "raison": None if sortie else "séries indisponibles"}
+
+
+def graphique_barres(titre: str, unite: str, valeurs: list[tuple[str, float | None]], source: str, note: str | None = None) -> dict:
+    barres = [{"nom": n, "valeur": v} for n, v in valeurs if v is not None]
+    return {"type": "barres", "titre": titre, "unite": unite, "barres": barres, "source": source, "note": note,
+            "absentes": [n for n, v in valeurs if v is None], "raison": None if barres else "valeurs indisponibles"}
+
+
+def graphiques_2(e: dict, historiques: dict) -> list[dict]:
+    lignes = {l["devise"]: l["cellules"] for l in e["lignes"]}
+    courbes = [(d, lignes[d]["ecart_2a_us"].get("serie_90j") or []) for d in DEVISES if d != "USD"]
+    return [graphique_serie("Écart de taux 2 ans face aux États-Unis, 90 jours", "pb", courbes,
+                            "calcul : 2 ans local − 2 ans US (DGS2)"),
+            graphique_barres("Taux directeur par devise", "%",
+                             [(d, lignes[d]["taux_directeur"].get("valeur")) for d in DEVISES],
+                             "registre macro ; USD et JPY : taux effectifs officiels")]
+
+
+def graphiques_3(registre: dict, config: dict, e: dict) -> list[dict]:
+    cfg_tm = config.get("tableau_macro") or {}
+    aujourdhui = date.today()
+    historique: dict[str, list] = {d: [] for d in DEVISES}
+    for k in range(13, -1, -1):   # un point par semaine sur ~90 jours
+        jour = aujourdhui - timedelta(days=7 * k)
+        for devise, v in controles_macro.indice_surprise(registre, cfg_tm, jour).items():
+            if devise in historique and v.get("indice") is not None:
+                historique[devise].append([jour.isoformat(), v["indice"]])
+    lignes = {l["devise"]: l["cellules"] for l in e["lignes"]}
+    actuels = {d: lignes[d]["indice_surprise"].get("valeur") for d in DEVISES}
+    choix = ["USD"] + [d for d, _ in sorted(((d, abs(v)) for d, v in actuels.items() if v is not None and d != "USD"),
+                                             key=lambda x: -x[1])[:3]]
+    return [graphique_serie("Indice de surprise 30 j glissant, 90 jours (USD + 3 devises les plus surprenantes)", "écarts",
+                            [(d, historique[d]) for d in choix], "calcul Python (registre macro)"),
+            graphique_barres("Indice de surprise 30 j par devise", "écarts", [(d, actuels[d]) for d in DEVISES],
+                             "calcul Python (registre macro)")]
+
+
+def graphiques_5(e: dict, historiques: dict) -> list[dict]:
+    courbes = [(lib, _90j(_serie(historiques, nom))) for nom, lib in
+               (("dollar_large", "Indice dollar large"), ("indice_or", "Indice or (proxy)"), ("wti", "WTI"), ("sp500", "S&P 500"))]
+    matrice = (e.get("correlations") or {}).get("matrice") or {}
+    return [graphique_serie("Marchés rebasés à 100, 90 jours", "base 100", courbes, "FRED", base_100=True),
+            graphique_barres("Corrélation 30 séances de chaque devise avec le S&P 500", "corrélation",
+                             [(d, (matrice.get(d) or {}).get("S&P 500")) for d in DEVISES],
+                             "calcul Python (rendements quotidiens)", "positif : la devise monte avec les actions (devise « risque »)")]
+
+
+# ------------------------------------------------------------- engrenage 1
+def engrenage_1(rapport: dict | None, dossier_rapports: Path | None, dossiers_calcules: dict) -> dict:
+    if not rapport:
+        return {"numero": 1, "titre": "Thème macro", "indisponible": "rapport du jour pas encore produit (thème calculé après l'analyse)"}
+    sg = rapport.get("synthese_globale") or {}
+    scores = {d["devise"]: d.get("score_confluence") for d in rapport.get("devises", [])}
+    eng = (sg.get("engrenages") or {}).get("engrenages") or []
+    theme = next((x for x in eng if x.get("numero") == 1), {})
+    ref = (theme.get("direction") or {}).get("calculee") or {}
+    accords = desaccords = 0
+    for x in eng:
+        if x.get("numero") in (1, 4, 6, 8):
+            continue
+        calc = (x.get("direction") or {}).get("calculee") or {}
+        for cle, oppose in (("dollar", {"haussier": "baissier", "baissier": "haussier"}),
+                            ("risque", {"risk_on": "risk_off", "risk_off": "risk_on"})):
+            if ref.get(cle) in oppose:
+                accords += int(calc.get(cle) == ref.get(cle))
+                desaccords += int(calc.get(cle) == oppose[ref[cle]])
+    indices = [l["cellules"]["indice_surprise"]["valeur"] for l in (dossiers_calcules.get("3") or {}).get("lignes", [])
+               if l["cellules"]["indice_surprise"].get("valeur") is not None]
+    # Évolution sur 4 semaines : rapports archivés (un par semaine)
+    evolution = []
+    if dossier_rapports:
+        fichiers = sorted(Path(dossier_rapports).glob("????-??-??.json"))
+        for k in range(4, 0, -1):
+            cible = (date.today() - timedelta(days=7 * k)).isoformat()
+            f = next((x for x in reversed(fichiers) if x.stem <= cible), None)
+            if f:
+                try:
+                    r = json.loads(f.read_text(encoding="utf-8"))
+                    sc = {d["devise"]: d.get("score_confluence") for d in r.get("devises", [])}
+                    evolution.append({"date": f.stem, "biais": (r.get("synthese_globale") or {}).get("biais_macro_global"),
+                                      "score_usd": sc.get("USD"), "ecart": _ecart_regime(sc)})
+                except (OSError, ValueError):
+                    continue
+    evolution.append({"date": (rapport.get("meta") or {}).get("date_rapport"), "biais": sg.get("biais_macro_global"),
+                      "score_usd": scores.get("USD"), "ecart": _ecart_regime(scores)})
+    vues, uniques = set(), []
+    for x in evolution:   # un rapport manquant ferait apparaître deux fois le même fichier
+        if x["date"] not in vues:
+            vues.add(x["date"])
+            uniques.append(x)
+    evolution = uniques
+    lignes = [
+        {"libelle": "Régime de risque (biais calculé)", "texte": {"risk_on": "Risk On", "risk_off": "Risk Off", "neutre": "Neutre"}.get(sg.get("biais_macro_global"), "n/d"),
+         "detail": f"écart de score risque − refuge : {_ecart_regime(scores)} pts", "source": "calcul Python (scores de confluence)"},
+        {"libelle": "Cohérence des engrenages chiffrés", "texte": f"{accords} accord(s), {desaccords} désaccord(s)" if ref else "n/d",
+         "detail": "engrenages 2, 3, 5 et 7 comparés à la direction du thème (dollar et risque)",
+         "source": "règles Python des 8 engrenages", "raison": None if ref else "synthèse 8 engrenages absente de ce rapport"},
+        {"libelle": "Indice de surprise global (moyenne 9 devises)", "texte": f"{statistics.mean(indices):+.2f}".replace(".", ",") if indices else "n/d",
+         "detail": f"{len(indices)} devise(s) avec un indice", "source": "calcul Python (registre macro, 30 j)"},
+        {"libelle": "Score de confluence USD", "texte": str(scores.get("USD")) if scores.get("USD") is not None else "n/d",
+         "detail": "0-100, calcul Python", "source": "rapport du jour"},
+    ]
+    graphes = [graphique_serie("Écart de score risque − refuge, rapports des 4 dernières semaines", "pts",
+                               [("Écart risque − refuge", [[x["date"], x["ecart"]] for x in evolution if x["ecart"] is not None])],
+                               "rapports archivés (data/rapports)"),
+               graphique_barres("Scores de confluence du jour", "0-100", [(d, scores.get(d)) for d in DEVISES], "calcul Python")]
+    return {"numero": 1, "titre": "Thème macro", "indicateurs": lignes, "evolution": evolution, "graphiques": graphes,
+            "notes": ["Le thème découle des 7 autres engrenages ; la cohérence compte les directions calculées en Python qui vont dans son sens."]}
+
+
+def _ecart_regime(scores: dict) -> float | None:
+    risque = [scores[d] for d in ("AUD", "NZD", "CAD") if scores.get(d) is not None]
+    refuge = [scores[d] for d in ("JPY", "CHF", "USD") if scores.get(d) is not None]
+    return round(statistics.mean(risque) - statistics.mean(refuge), 1) if risque and refuge else None
+
+
+# ------------------------------------------------------------- engrenage 4
+MOTS_BUDGET = ("budget", "deficit", "déficit", "debt", "dette", "fiscal", "austerity", "austérité", "stimulus", "relance",
+               "bond auction", "adjudication", "treasury issuance", "spending bill", "shutdown", "debt ceiling", "tax cut", "gilt", "btp")
+
+
+def _annuel(points: list[tuple[str, float]], source: str) -> dict:
+    if not points:
+        return absent("pas de donnée FMI/OCDE pour ce pays", source)
+    d, v = points[-1]
+    prec = points[-2][1] if len(points) > 1 else None
+    return {**absent(None), "valeur": round(v, 1), "unite": "% PIB", "date": d[:4], "source": source,
+            "variation_an": None if prec is None else round(v - prec, 1),
+            "raison_percentile": "série annuelle : pas de percentile hebdomadaire",
+            "alerte": f"dernière année disponible : {d[:4]}" if int(d[:4]) < date.today().year - 1 else None}
+
+
+def engrenage_4(historiques: dict, news: dict | None) -> dict:
+    series = historiques.get("series") or {}
+    lignes = []
+    for devise in DEVISES:
+        c: dict = {}
+        dette, solde = f"{devise}_dette_pib", f"{devise}_solde_pib"
+        c["dette_pib"] = _annuel(_serie(historiques, dette), (series.get(dette) or {}).get("source", "FMI via FRED"))
+        if devise == "USD" and _serie(historiques, dette):
+            pts = _serie(historiques, dette)
+            c["dette_pib"].update({"date": pts[-1][0][:7], "unite": "% PIB", "note": "dette fédérale, trimestrielle"})
+        c["solde_pib"] = _annuel(_serie(historiques, solde), (series.get(solde) or {}).get("source", "FMI via FRED"))
+        s10 = _serie(historiques, f"{devise}_10a")
+        f10 = (series.get(f"{devise}_10a") or {}).get("frequence", "quotidien")
+        c["taux_10a"] = stats(s10, "%", (series.get(f"{devise}_10a") or {}).get("source", ""), "mensuel" if f10 == "mensuel" else "quotidien") \
+            if s10 else absent("pas de rendement 10 ans gratuit")
+        if devise == "USD":
+            tp = _serie(historiques, "USD_prime_terme")
+            c["prime_terme"] = stats(tp, "%", (series.get("USD_prime_terme") or {}).get("source", "")) if tp else absent("série indisponible")
+        else:
+            c["prime_terme"] = absent("prime de terme publiée gratuitement pour les États-Unis seulement (FRED)")
+        lignes.append({"devise": devise, "cellules": c})
+    actus = []
+    for a in (news or {}).get("articles", []) or []:
+        titre = (a.get("titre") or "")
+        if any(m in titre.lower() for m in MOTS_BUDGET):
+            actus.append({"titre": titre, "source": a.get("source"), "date": (a.get("date") or "")[:10], "lien": a.get("lien")})
+    graphes = [graphique_serie("Rendements 10 ans, 90 jours", "%",
+                               [(d, _90j(_serie(historiques, f"{d}_10a"))) for d in ("USD", "EUR", "GBP", "JPY", "CAD")
+                                if (series.get(f"{d}_10a") or {}).get("frequence") == "quotidien"], "FRED, Bundesbank, BoE, MoF Japon, BoC"),
+               graphique_barres("Dette publique / PIB (dernière année FMI)", "% PIB",
+                                [(d, (next(l for l in lignes if l["devise"] == d)["cellules"]["dette_pib"]).get("valeur")) for d in DEVISES],
+                                "FMI / FRED", "années différentes selon les pays (voir le tableau)")]
+    return {"numero": 4, "titre": "Politique fiscale",
+            "colonnes": [{"id": "dette_pib", "libelle": "Dette / PIB", "unite": "% PIB"},
+                         {"id": "solde_pib", "libelle": "Solde / PIB", "unite": "% PIB"},
+                         {"id": "taux_10a", "libelle": "Rendement 10 ans", "unite": "%"},
+                         {"id": "prime_terme", "libelle": "Prime de terme 10 ans", "unite": "%"}],
+            "lignes": lignes, "actualites": actus[:10], "graphiques": graphes,
+            "notes": ["Dette et solde publics : FMI (annuel, avec 1 à 3 ans de retard) ; EUR = Allemagne. Pas de série gratuite pour CHF et NZD.",
+                      "Prime de terme : modèle Kim-Wright (Fed, via FRED), États-Unis seulement.",
+                      "Actualités budgétaires : titres des flux RSS contenant un mot-clé budgétaire (source et date)."]}
+
+
+# ------------------------------------------------------------- engrenage 6
+CANAUX = {
+    "energie": (("oil", "crude", "opec", "pipeline", "refinery", "lng", "gas", "pétrole", "houthi", "hormuz", "tanker", "riyadh", "saudi"),
+                "choc d'offre énergétique : prix du pétrole et du gaz, inflation importée",
+                ["CAD", "NZD", "AUD", "JPY", "EUR"]),
+    "commerce": (("tariff", "trade war", "trade deal", "export", "import ban", "droits de douane", "customs"),
+                 "tensions commerciales : volumes d'échanges, chaînes d'approvisionnement",
+                 ["CNY", "AUD", "CAD", "EUR"]),
+    "sanctions": (("sanction", "embargo", "blacklist", "asset freeze"),
+                  "sanctions : flux financiers et commerce bloqués", ["USD", "EUR", "CNY"]),
+    "refuge": (("war", "attack", "missile", "strike", "invasion", "military", "troops", "guerre", "attaque", "conflict", "killed"),
+               "conflit armé : fuite vers les valeurs refuges", ["USD", "JPY", "CHF"]),
+    "budget": (("election", "élection", "government collapse", "coalition", "impeachment", "budget crisis", "shutdown"),
+               "politique intérieure : prime de risque sur la dette et la devise", ["EUR", "GBP", "USD", "JPY"]),
+}
+
+
+def engrenage_6(news: dict | None) -> dict:
+    evenements, comptes = [], {k: 0 for k in CANAUX}
+    for a in (news or {}).get("articles", []) or []:
+        titre = a.get("titre") or ""
+        bas = titre.lower()
+        canaux = [k for k, (mots, _, _) in CANAUX.items() if any(m in bas for m in mots)]
+        if not canaux:
+            continue   # pas de mécanisme identifiable : pas retenu
+        principal = canaux[0]
+        for k in canaux:
+            comptes[k] += 1
+        evenements.append({"titre": titre, "canal": principal, "canaux": canaux, "mecanisme": CANAUX[principal][1],
+                           "devises": CANAUX[principal][2], "source": a.get("source"), "date": (a.get("date") or "")[:10],
+                           "lien": a.get("lien")})
+    libelles = {"energie": "Énergie", "commerce": "Commerce", "sanctions": "Sanctions", "refuge": "Refuge (conflits)", "budget": "Politique intérieure"}
+    return {"numero": 6, "titre": "Géopolitique", "evenements": evenements[:15],
+            "graphiques": [{"type": "serie", "titre": "Série temporelle", "raison": "pas de série chiffrée gratuite pour la géopolitique"},
+                           graphique_barres("Titres du jour par canal de transmission", "titres",
+                                            [(libelles[k], v) for k, v in comptes.items()], "flux RSS (classement par mots-clés)")],
+            "notes": ["Classement par mots-clés en Python : un titre sans canal identifiable (énergie, commerce, sanctions, refuge, politique intérieure) n'est pas retenu.",
+                      "Le mécanisme et les devises touchées sont ceux du canal, pas une analyse du titre : à lire comme une piste, pas un fait."]}
+
+
+# ------------------------------------------------------------- engrenage 7
+def engrenage_7(technique: dict, flux: dict | None) -> dict:
+    cot = (flux or {}).get("cot") or {}
+    techs = (technique or {}).get("devises") or {}
+    graphes_series = (technique or {}).get("graphiques") or {}
+    lignes = []
+    for devise in DEVISES:
+        t, c = techs.get(devise) or {}, {}
+        if t.get("dernier") is not None:
+            sens = (t.get("tendance_fond") or {}).get("sens")
+            c["tendance"] = {**absent(None), "valeur": None, "texte": sens or "n/d", "source": "calcul local (Twelve Data, weekly Dow)"}
+            rsi = t.get("rsi")
+            c["rsi"] = {**absent(None), "valeur": rsi, "unite": "", "source": "calcul local (RSI 14, daily)",
+                        "signal": "surachat" if rsi is not None and rsi >= 70 else "survente" if rsi is not None and rsi <= 30 else None,
+                        "raison_percentile": "non calculé"}
+            for cle, mm in (("ecart_mm100", "mm100"), ("ecart_mm200", "mm200")):
+                # Les séries techniques sont déjà en FORCE de la devise (paires inversées converties à la collecte).
+                ecart = None if not t.get(mm) else (t["dernier"] / t[mm] - 1) * 100
+                c[cle] = ({**absent(None), "valeur": round(ecart, 2), "unite": "%", "source": f"calcul local ({mm.upper()}, force de la devise)",
+                           "raison_percentile": "non calculé"} if ecart is not None else absent("moyenne indisponible (historique de prix trop court)"))
+            g = graphes_series.get(devise) or {}
+            closes = g.get("clotures") or []
+            if len(closes) >= 45:
+                rend = [math.log(b / a) for a, b in zip(closes, closes[1:]) if a and b]
+                vols = [statistics.pstdev(rend[i - 20:i]) * math.sqrt(252) * 100 for i in range(20, len(rend) + 1)]
+                actuel = vols[-1]
+                c["volatilite"] = {**absent(None), "valeur": round(actuel, 1), "unite": "% annualisé",
+                                   "percentile_90j": round(100 * sum(1 for v in vols if v <= actuel) / len(vols)),
+                                   "source": "calcul local : volatilité réalisée 20 séances",
+                                   "raison_percentile": "percentile sur 90 jours seulement (historique de prix Twelve Data limité à 90 séances)"}
+            else:
+                c["volatilite"] = absent("historique de prix insuffisant")
+            zones = t.get("zones_consolidation") or []
+            c["niveau_cle"] = ({**absent(None), "texte": f"{zones[0]['type']} {zones[0]['niveau']} ({zones[0]['distance_pct']:+.2f} %)",
+                                "source": "calcul local (zones de consolidation)"} if zones else absent("aucune zone détectée"))
+        else:
+            for cle in ("tendance", "rsi", "ecart_mm100", "ecart_mm200", "volatilite", "niveau_cle"):
+                c[cle] = absent("données techniques indisponibles aujourd'hui")
+        x = cot.get(devise)
+        c["cot"] = ({**absent(None), "valeur": x["net"], "unite": "contrats", "date": x["date"], "var_1s": x.get("variation_semaine"),
+                     "percentile_52s": x.get("percentile_52s"), "extreme": x.get("extreme"),
+                     "source": "CFTC (COT legacy, positions nettes non commerciales)"}
+                    if x else absent("non couvert par la CFTC" if devise == "CNY" else "COT indisponible aujourd'hui"))
+        lignes.append({"devise": devise, "cellules": c})
+    courbes = [(d, [[h[0], round(h[1] / 1000, 1)] for h in (cot.get(d) or {}).get("historique", [])]) for d in ("EUR", "JPY", "GBP", "AUD")]
+    graphes = [graphique_serie("Positions nettes des spéculateurs (COT), 26 semaines", "milliers de contrats", courbes, "CFTC"),
+               graphique_barres("Percentile 52 semaines du positionnement net (COT)", "percentile",
+                                [(d, (cot.get(d) or {}).get("percentile_52s")) for d in DEVISES], "CFTC",
+                                "≥ 90 ou ≤ 10 : positionnement extrême")]
+    return {"numero": 7, "titre": "Price action et flux",
+            "colonnes": [{"id": "tendance", "libelle": "Tendance", "unite": None}, {"id": "rsi", "libelle": "RSI", "unite": ""},
+                         {"id": "ecart_mm100", "libelle": "Écart MM100", "unite": "%"}, {"id": "ecart_mm200", "libelle": "Écart MM200", "unite": "%"},
+                         {"id": "volatilite", "libelle": "Volatilité 20 j", "unite": "%"}, {"id": "niveau_cle", "libelle": "Niveau clé", "unite": None},
+                         {"id": "cot", "libelle": "COT net", "unite": "contrats"}],
+            "lignes": lignes, "graphiques": graphes,
+            "notes": ["Force de la devise (paires inversées pour USD/JPY, USD/CHF, USD/CAD, USD/CNH) ; USD = indice synthétique.",
+                      "COT : positions des spéculateurs (non commerciaux) ; percentile sur 52 semaines, extrême ≥ 90 ou ≤ 10.",
+                      "Volatilité : percentile sur 90 jours seulement (historique de prix gratuit limité)."]}
+
+
+# ------------------------------------------------------------- engrenage 8
+def engrenage_8(historiques: dict, registre: dict) -> dict:
+    series = historiques.get("series") or {}
+    stocks = _serie(historiques, "eia_stocks")
+    instruments = []
+    if stocks:
+        d0, v0 = stocks[-1]
+        semaine = date.fromisoformat(d0).isocalendar()[1]
+        meme_semaine = [v for d, v in stocks if date.fromisoformat(d).isocalendar()[1] == semaine
+                        and int(d[:4]) < int(d0[:4]) and int(d[:4]) >= int(d0[:4]) - 5]
+        moy = statistics.mean(meme_semaine) if len(meme_semaine) >= 4 else None
+        cel = stats(stocks, "niveau", (series.get("eia_stocks") or {}).get("source", "EIA"))
+        cel.update({"valeur": round(v0 / 1000, 1), "unite": "M barils",
+                    "ecart_moyenne_5a": None if moy is None else round((v0 - moy) / 1000, 1),
+                    "ecart_moyenne_5a_pct": None if moy is None else round((v0 / moy - 1) * 100, 1),
+                    "moyenne_5a": None if moy is None else round(moy / 1000, 1),
+                    "note": f"moyenne des {len(meme_semaine)} mêmes semaines des 5 années précédentes" if moy else "moins de 4 années comparables"})
+        instruments.append({"id": "eia_stocks", "libelle": "Stocks de brut US (hors réserve stratégique)", "cellule": cel})
+    else:
+        instruments.append({"id": "eia_stocks", "libelle": "Stocks de brut US", "cellule": absent("EIA indisponible aujourd'hui")})
+    prod = _serie(historiques, "eia_production")
+    instruments.append({"id": "eia_production", "libelle": "Production de brut US",
+                        "cellule": (stats(prod, "niveau", (series.get("eia_production") or {}).get("source", "EIA")) | {"unite": "milliers b/j"})
+                        if prod else absent("EIA indisponible aujourd'hui")})
+    for nom, lib in (("wti", "Pétrole WTI"), ("brent", "Pétrole Brent"), ("indice_or", "Indice or (proxy)")):
+        pts = _serie(historiques, nom)
+        cel = stats(pts, "niveau", (series.get(nom) or {}).get("source", "FRED")) if pts else absent("série indisponible")
+        from agents.agent_engrenages import saut_atypique
+        recents = [p for p in pts if p[0] >= (date.today() - timedelta(days=30)).isoformat()]
+        saut = saut_atypique({"dates": [d for d, _ in recents], "valeurs": [v for _, v in recents]})
+        if saut:
+            cel["alerte"] = f"série heurtée : {saut} en une séance (chiffres officiels)"
+        instruments.append({"id": nom, "libelle": lib, "cellule": cel})
+    balances = []
+    for devise in DEVISES:
+        actuel = ((registre.get("cases") or {}).get(f"{devise}|balance_commerciale") or {}).get("actuel") or {}
+        balances.append({"devise": devise, "valeur": actuel.get("valeur"), "consensus": actuel.get("consensus"),
+                         "date": actuel.get("date_pub") or actuel.get("periode"), "source": actuel.get("source") or "ForexFactory",
+                         "raison": None if actuel.get("valeur") else "non publiée dans le registre"})
+    graphe_stocks = []
+    if stocks:
+        recents = [p for p in stocks if p[0] >= (date.fromisoformat(stocks[-1][0]) - timedelta(days=182)).isoformat()]
+        moyennes = []
+        for d, _ in recents:
+            sem, an = date.fromisoformat(d).isocalendar()[1], int(d[:4])
+            vals = [v for dd, v in stocks if date.fromisoformat(dd).isocalendar()[1] == sem and an - 5 <= int(dd[:4]) < an]
+            if len(vals) >= 4:
+                moyennes.append([d, round(statistics.mean(vals) / 1000, 1)])
+        graphe_stocks = [("Stocks", [[d, round(v / 1000, 1)] for d, v in recents]), ("Moyenne 5 ans (même semaine)", moyennes)]
+    graphes = [graphique_serie("Stocks de brut US contre moyenne 5 ans, 26 semaines", "M barils", graphe_stocks, "EIA"),
+               graphique_barres("Variation sur 4 semaines", "%",
+                                [(i["libelle"], i["cellule"].get("var_4s")) for i in instruments if i["id"] != "eia_stocks"],
+                                "EIA, FRED")]
+    return {"numero": 8, "titre": "Offre et demande", "instruments": instruments, "balances": balances, "graphiques": graphes,
+            "termes_echange": absent("pas de série gratuite des termes de l'échange (AUD, CAD, NZD) accessible automatiquement"),
+            "notes": ["Stocks EIA : écart à la moyenne des 5 années précédentes pour la même semaine.",
+                      "Balances commerciales : monnaies et unités propres à chaque pays (non comparables directement).",
+                      "Indice or (proxy) : NASDAQ QGLDI, pas le cours spot."]}
+
+
 # ------------------------------------------------------------------- sortie
-def construire(historiques: dict, registre: dict, technique: dict, config: dict) -> dict:
+def construire(historiques: dict, registre: dict, technique: dict, config: dict, rapport: dict | None = None,
+               flux: dict | None = None, news: dict | None = None, dossier_rapports: str | Path | None = None) -> dict:
     sortie = {"version_schema": VERSION_SCHEMA, "genere_le": datetime.now(timezone.utc).isoformat(timespec="seconds"),
               "debut_historique": historiques.get("debut"), "erreurs_collecte": historiques.get("erreurs", []),
               "engrenages": {}}
-    for numero, fonction in (("2", lambda: engrenage_2(historiques, registre, config)),
-                             ("3", lambda: engrenage_3(historiques, registre, config)),
-                             ("5", lambda: engrenage_5(historiques, technique))):
+    etapes = [("2", lambda: engrenage_2(historiques, registre, config), lambda e: graphiques_2(e, historiques)),
+              ("3", lambda: engrenage_3(historiques, registre, config), lambda e: graphiques_3(registre, config, e)),
+              ("4", lambda: engrenage_4(historiques, news), None),
+              ("5", lambda: engrenage_5(historiques, technique), lambda e: graphiques_5(e, historiques)),
+              ("6", lambda: engrenage_6(news), None),
+              ("7", lambda: engrenage_7(technique, flux), None),
+              ("8", lambda: engrenage_8(historiques, registre), None)]
+    for numero, fonction, graphes in etapes:
         try:
-            sortie["engrenages"][numero] = fonction()
+            e = fonction()
+            if graphes:
+                try:
+                    e["graphiques"] = graphes(e)
+                except Exception as exc:  # noqa: BLE001 — un graphique en échec n'efface pas le tableau
+                    log.exception("Graphiques engrenage %s en échec", numero)
+                    e["graphiques"] = [{"type": "serie", "titre": "Graphiques", "raison": f"calcul en échec : {exc}"[:150]}]
+            sortie["engrenages"][numero] = e
         except Exception as exc:  # noqa: BLE001 — un engrenage en échec n'affecte que lui
             log.exception("Dossier engrenage %s en échec", numero)
             sortie["engrenages"][numero] = {"numero": int(numero), "indisponible": f"calcul en échec : {exc}"[:200]}
+    try:
+        sortie["engrenages"]["1"] = engrenage_1(rapport, Path(dossier_rapports) if dossier_rapports else None, sortie["engrenages"])
+    except Exception as exc:  # noqa: BLE001
+        log.exception("Dossier engrenage 1 en échec")
+        sortie["engrenages"]["1"] = {"numero": 1, "indisponible": f"calcul en échec : {exc}"[:200]}
+    sortie["engrenages"] = dict(sorted(sortie["engrenages"].items(), key=lambda kv: int(kv[0])))
     return sortie
 
 
-def ecrire(racine: str | Path, historiques: dict, registre: dict, technique: dict, config: dict) -> Path | None:
+def ecrire(racine: str | Path, historiques: dict, registre: dict, technique: dict, config: dict, rapport: dict | None = None,
+           flux: dict | None = None, news: dict | None = None, dossier_rapports: str | Path | None = None) -> dict | None:
+    """Écrit docs/data/dossiers.json et retourne le contenu (None en cas d'échec, jamais d'exception)."""
     try:
-        donnees = construire(historiques, registre, technique, config)
+        donnees = construire(historiques, registre, technique, config, rapport, flux, news, dossier_rapports)
         chemin = Path(racine) / config.get("publication_web", {}).get("dossier_docs", "docs") / "data" / "dossiers.json"
         chemin.write_text(json.dumps(donnees, ensure_ascii=False, indent=1), encoding="utf-8")
-        return chemin
+        return donnees
     except Exception as exc:  # noqa: BLE001
         log.error("dossiers.json non écrit : %s", exc)
         return None

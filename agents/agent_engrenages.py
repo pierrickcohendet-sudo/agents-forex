@@ -63,6 +63,48 @@ _RE_OR = re.compile(r"\b(?:le cours de l'or|le prix de l'or|du cours de l'or|du 
                     re.IGNORECASE)
 
 
+_RE_RECORD = re.compile(r"\b(records?)\b", re.IGNORECASE)
+_REMPLACEMENTS_ENVOL = [
+    (re.compile(r"\bs['’]est envol[ée]e?s?\b", re.IGNORECASE), "a progressé"),
+    (re.compile(r"\bs['’]envolent\b", re.IGNORECASE), "progressent"),
+    (re.compile(r"\bs['’]envol(?:e|ait|era)\b", re.IGNORECASE), "progresse"),
+    (re.compile(r"\bl['’]envolée\b"), "la hausse"),
+    (re.compile(r"\bL['’]envolée\b"), "La hausse"),
+    (re.compile(r"\bune envolée\b", re.IGNORECASE), "une hausse"),
+    (re.compile(r"\benvolées?\b", re.IGNORECASE), "hausse"),
+]
+
+
+def justifications(dossiers: dict | None) -> dict[int, dict[str, bool]]:
+    """Par engrenage : « record » justifié si un indicateur est à un extrême sur 5 ans (percentile 0 ou
+    100, ou 0/100 sur 52 semaines pour le COT) ; « s'envole » si une hausse d'au moins 10 % sur
+    4 semaines existe sur une série non heurtée. Calcul sur les dossiers chiffrés (Python)."""
+    resultat = {}
+    for n, e in ((dossiers or {}).get("engrenages") or {}).items():
+        cellules = [c for l in e.get("lignes", []) for c in (l.get("cellules") or {}).values() if isinstance(c, dict)]
+        cellules += [i.get("cellule") or {} for i in e.get("instruments", [])]
+        record = any(c.get("percentile_5a") in (0, 100) or c.get("percentile_52s") in (0, 100) for c in cellules)
+        envol = any(c.get("var_4s") is not None and c.get("unite") not in ("%", "pb") and c["var_4s"] >= 10 and not c.get("alerte")
+                    for c in cellules)
+        resultat[int(n)] = {"record": record, "envol": envol}
+    return resultat
+
+
+def moderer_vocabulaire(texte: str, permis: dict[str, bool]) -> tuple[str, int]:
+    """Remplace « record » et « s'envole » quand les chiffres ne le justifient pas. (texte, nb de remplacements)."""
+    if not texte:
+        return texte, 0
+    n = 0
+    if not permis.get("record"):
+        texte, k = _RE_RECORD.subn(lambda m: "extrêmes" if m.group(1).lower().endswith("s") else "extrême", texte)
+        n += k
+    if not permis.get("envol"):
+        for motif, rempl in _REMPLACEMENTS_ENVOL:
+            texte, k = motif.subn(rempl, texte)
+            n += k
+    return texte, n
+
+
 def nommer_or(texte: str) -> str:
     """Nous n'avons qu'un indice or : jamais « l'or » ni « le cours de l'or » dans un texte publié."""
     return _RE_OR.sub("l'indice or (proxy)", texte or "") if texte else texte
@@ -416,7 +458,7 @@ def choisir_concept(concepts: list[dict], texte_du_jour: str, chemin_etat: Path,
 
 # ------------------------------------------------------------------ normalisation
 def normaliser(brut: dict, sig: dict[int, dict], conflits_py: list[dict], concept: dict | None,
-               config: dict) -> dict:
+               config: dict, justif: dict[int, dict[str, bool]] | None = None) -> dict:
     controles: list[str] = []
     retraits = 0
     devises_ok = set(config.get("devises", {}))
@@ -526,6 +568,32 @@ def normaliser(brut: dict, sig: dict[int, dict], conflits_py: list[dict], concep
                           "cycle": concept.get("cycle"), "pertinence": concept.get("pertinence")}
     if retraits:
         controles.append(f"{retraits} phrase(s) retirée(s) : formulation d'ordre d'achat/vente")
+    # Vocabulaire : « record » / « s'envole » seulement si les dossiers chiffrés le justifient.
+    justif = justif or {}
+    tout = {"record": any(v.get("record") for v in justif.values()), "envol": any(v.get("envol") for v in justif.values())}
+    moderes = 0
+    for e in engrenages:
+        permis = justif.get(e["numero"], {})
+        for cle in ("diagnostic", "comprendre", "desk"):
+            e[cle], k = moderer_vocabulaire(e[cle], permis)
+            moderes += k
+        e["direction"]["texte"], k = moderer_vocabulaire(e["direction"]["texte"], permis)
+        moderes += k
+        e["conviction"]["justification"], k = moderer_vocabulaire(e["conviction"]["justification"], permis)
+        moderes += k
+    for c in chaines:
+        for m in c["maillons"]:
+            m["texte"], k = moderer_vocabulaire(m["texte"], justif.get(m["engrenage"], tout))
+            moderes += k
+    for c in conflits:
+        c["texte"], k = moderer_vocabulaire(c["texte"], tout)
+        moderes += k
+    if concept_sortie:
+        for cle in ("explication", "exemple"):
+            concept_sortie[cle], k = moderer_vocabulaire(concept_sortie[cle], tout)
+            moderes += k
+    if moderes:
+        controles.append(f"{moderes} mot(s) « record » / « s'envole » remplacé(s) : non justifiés par les percentiles ou les variations")
     return {"engrenages": engrenages, "chaines": chaines, "conflits": conflits, "concept": concept_sortie,
             "controles": controles}
 
@@ -590,7 +658,8 @@ def generer(config: dict, llm: FournisseurLLM, donnees: dict, macro: dict, catal
                 brut = extraire_json(llm.appeler_llm(prompt, systeme=systeme))
                 if not isinstance(brut, dict) or not brut.get("engrenages"):
                     raise ValueError("réponse sans engrenages")
-                sortie = normaliser(brut, sig, conflits_py, concept, config)
+                sortie = normaliser(brut, sig, conflits_py, concept, config,
+                                    justifications((extras or {}).get("dossiers")))
                 sortie.update({"statut": "ok", "tentatives": precedentes + 1, "genere_le": horodatage,
                                "redige_par": attribution_modele(), "version": "quotidienne"})
                 return sortie

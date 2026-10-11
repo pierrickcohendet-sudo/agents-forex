@@ -32,6 +32,9 @@ Signale les engrenages en conflit : c'est souvent là que se cachent les retourn
 ## Règles
 - Or : tu ne disposes que d'un indice (NASDAQ QGLDI). Écris toujours « indice or (proxy) », jamais
   « l'or », « le cours de l'or » ni « le prix de l'or ».
+- N'écris « record » que pour un indicateur au plus haut ou au plus bas sur 5 ans (percentile 0 ou 100
+  dans les dossiers chiffrés), et « s'envole » que pour une hausse d'au moins 10 % sur 4 semaines
+  d'une série non signalée « heurtée ». Sinon : « progresse », « recule », « au plus haut depuis… ».
 - Jamais de chiffre absent des données fournies ; jamais d'identifiant de source inventé (null).
 - Un engrenage sans donnée exploitable aujourd'hui : écris « Données insuffisantes aujourd'hui. »
   plutôt qu'un texte générique.

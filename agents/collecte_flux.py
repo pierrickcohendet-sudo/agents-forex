@@ -70,6 +70,7 @@ def _cot(aujourdhui: date) -> dict:
             "net_pct_oi": round(100 * net / oi, 1) if oi else None, "percentile_52s": percentile,
             "semaines": len(historique),
             "extreme": None if percentile is None else ("long" if percentile >= 90 else "short" if percentile <= 10 else None),
+            "historique": [[l[0], l[1]] for l in reversed(lignes[:26])],   # 26 semaines, ordre chronologique
         }
     return resultat
 
