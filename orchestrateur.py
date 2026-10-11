@@ -35,10 +35,10 @@ from pathlib import Path
 import yaml
 from dotenv import load_dotenv
 
-from agents import (agent_critique, agent_engrenages, agent_redacteur, agent_strategiste, agent_synthese,
+from agents import (agent_critique, agent_dossier_hebdo, agent_engrenages, agent_redacteur, agent_strategiste, agent_synthese,
                     collecte_calendrier, collecte_flux, collecte_historiques, collecte_macro, collecte_news,
                     collecte_technique)
-from core import (collecte_cache, controle_qualite, dossiers, evaluation, hebdo, marche_taux, overrides,
+from core import (collecte_cache, controle_qualite, dossiers, evaluation, hebdo, marche_taux, overrides, precedents,
                   publication_web,
                   registre_macro, saisies_manuelles, site_donnees, tableau_macro)
 from core.llm import creer_fournisseur, journal_appels, reinitialiser_journal
@@ -120,6 +120,68 @@ def _charger_rapport_existant(dossier_rapports: Path) -> dict | None:
         return None
 
 
+def _lire_cache(dossier: Path, nom: str) -> dict:
+    """Dernier cache d'une collecte (quel que soit le jour) : le mode --hebdo ne recollecte pas."""
+    try:
+        return json.loads((dossier / f"collecte_{nom}.json").read_text(encoding="utf-8")).get("donnees") or {}
+    except (OSError, ValueError):
+        return {}
+
+
+def mode_hebdo(config: dict, donnees_dir: Path, dossier_rapports: Path, arguments) -> int:
+    """Dossier hebdomadaire d'économiste : chiffres (Python) puis texte (LLM, un appel par engrenage + synthèse)."""
+    log.info("=== Dossier hebdomadaire des 8 engrenages — semaine %s ===", agent_dossier_hebdo.semaine_iso())
+    docs_data = RACINE / config["publication_web"]["dossier_docs"] / "data"
+    chemin = docs_data / "dossiers_hebdo.json"
+    try:
+        existant = json.loads(chemin.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        existant = None
+    if not agent_dossier_hebdo.a_faire(existant):
+        log.info("--hebdo : dossier de la semaine déjà complet — rien à faire")
+        return 0
+    cache = donnees_dir / "cache"
+    historiques = etape("collecte historiques 5 ans", collecte_cache.avec_cache, "historiques", cache, date.today(), True,
+                        collecte_historiques.collecter, config, defaut={"series": {}, "erreurs": ["étape en échec"]})
+    try:
+        rapport = json.loads((docs_data / "latest.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        rapport = None
+    registre = registre_macro.charger(donnees_dir / "registre_macro.json")
+    les_dossiers = etape("dossiers des engrenages (chiffres)", dossiers.ecrire, RACINE, historiques, registre,
+                         _lire_cache(cache, "technique"), config, rapport, _lire_cache(cache, "flux"),
+                         _lire_cache(cache, "news"), dossier_rapports, defaut=None)
+    if not les_dossiers:
+        notifier_echec("dossier hebdo", "dossiers chiffrés indisponibles — aucun appel LLM lancé")
+        return 1
+    les_precedents = {str(n): etape(f"précédents engrenage {n}", precedents.pour_engrenage, historiques, str(n), defaut=[])
+                      for n in range(1, 9)}
+    reinitialiser_journal()
+    try:
+        llm = creer_fournisseur(config)
+    except Exception:  # noqa: BLE001
+        log.exception("Fournisseur LLM indisponible")
+        return 1
+    contenu = agent_dossier_hebdo.generer(config, llm, les_dossiers, les_precedents, rapport, existant)
+    anciens = ((existant or {}).get("meta") or {}).get("appels_llm", []) if (existant or {}).get("semaine") == contenu["semaine"] else []
+    contenu["meta"] = {"appels_llm": (anciens + journal_appels())[-60:],
+                       "quota_llm": llm.etat_quota() if hasattr(llm, "etat_quota") else None}
+    chemin.write_text(json.dumps(contenu, ensure_ascii=False, indent=1), encoding="utf-8")
+    archive = donnees_dir / "hebdo" / f"engrenages_{contenu['semaine']}.json"
+    archive.parent.mkdir(parents=True, exist_ok=True)
+    archive.write_text(json.dumps(contenu, ensure_ascii=False, indent=1), encoding="utf-8")
+    ok = sum(1 for e in contenu["engrenages"].values() if e.get("statut") == "ok")
+    log.info("Dossier hebdo : %d engrenage(s) rédigé(s) sur 8, synthèse %s, %d appel(s) LLM", ok,
+             (contenu.get("synthese") or {}).get("statut"), len(journal_appels()))
+    if not arguments.sans_notion:
+        etape("publication Notion (dossier hebdo)", agent_redacteur.publier_dossier_hebdo, config, contenu,
+              RACINE / "config.yaml")
+    if not arguments.sans_web and config.get("publication_web", {}).get("actif", True):
+        etape("git push (dossier hebdo)", publication_web.pousser_git, config["publication_web"], RACINE,
+              "dossier hebdomadaire des engrenages")
+    return 0
+
+
 def main() -> int:
     parseur = argparse.ArgumentParser(description="Pipeline de rapport FX quotidien")
     parseur.add_argument("--type", choices=["auto", "quotidien", "hebdomadaire", "mensuel"],
@@ -130,6 +192,10 @@ def main() -> int:
                               "réutilise le cache de scraping, upsert (jamais de doublon).")
     parseur.add_argument("--sans-notion", action="store_true")
     parseur.add_argument("--sans-web", action="store_true")
+    parseur.add_argument("--hebdo", action="store_true",
+                         help="Dossier hebdomadaire d'économiste des 8 engrenages (dimanche) : un appel LLM par "
+                              "engrenage + synthèse finale, à partir des chiffres déjà calculés ; ne refait que ce "
+                              "qui manque pour la semaine en cours.")
     arguments = parseur.parse_args()
 
     load_dotenv(RACINE / ".env")
@@ -138,6 +204,9 @@ def main() -> int:
     initialiser_logs(donnees_dir / "logs")
     dossier_rapports = donnees_dir / "rapports"
     dossier_rapports.mkdir(parents=True, exist_ok=True)
+
+    if arguments.hebdo:
+        return mode_hebdo(config, donnees_dir, dossier_rapports, arguments)
 
     type_rapport = type_de_rapport(arguments.type)
     log.info("=== Pipeline FX — rapport %s du %s%s ===", type_rapport, date.today().isoformat(),

@@ -423,3 +423,15 @@ secret `EIA_API_KEY`, repli sur la clé publique `DEMO_KEY`). Or : FRED n'a plus
 utilise l'indice NASDAQ QGLDI, toujours étiqueté « proxy, pas le cours spot ». Les trois ont été vérifiées
 depuis GitHub Actions le 2026-10-10 (`data/diagnostics/sources_palier2.json`). Une source en échec donne
 « sources indisponibles aujourd'hui » dans l'engrenage concerné, jamais une valeur inventée.
+
+**Dossier hebdomadaire d'économiste** (`python orchestrateur.py --hebdo`, cron du dimanche 07:15 UTC ou
+`workflow_dispatch` avec `hebdo = true`). Un appel LLM par engrenage (5 blocs : le constat, le mécanisme, ce
+qui pourrait tout changer, les implications par devise, un précédent utile ; + 📘 / 🎯) puis une synthèse
+finale : 9 appels par semaine (jusqu'à 18 si des réponses JSON doivent être redemandées), via la chaîne de
+modèles, le disjoncteur et le compteur de quota. Le modèle ne reçoit que `docs/data/dossiers.json` et les
+précédents ; Python retire toute phrase citant un chiffre absent des tableaux. Précédents (`core/precedents.py`) :
+épisodes des 5 dernières années à ± 1 écart-type du niveau actuel de l'indicateur clé, espacés de 4 semaines,
+médiane de la force de la devise à 1, 3 et 6 mois (taux de change Fed H.10 via FRED) et référence « tous
+épisodes » ; sous 5 cas, « précédents insuffisants » imposé. Sorties : `docs/data/dossiers_hebdo.json`
+(vue « Hebdo » de l'onglet 8 engrenages), `data/hebdo/engrenages_AAAA-Www.json`, page Notion « dossier hebdo ».
+Une relance la même semaine ne refait que ce qui manque.

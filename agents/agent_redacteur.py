@@ -169,10 +169,15 @@ def _obtenir_data_source(client: Client, database_id: str) -> str:
     return data_source_id
 
 
+TYPE_DOSSIER_HEBDO = "dossier hebdo"
+
+
 def _trouver_entree(client: Client, data_source_id: str, date_rapport: str) -> dict | None:
+    # La page du dossier hebdomadaire (dimanche) n'est jamais prise pour un rapport quotidien.
     resultat = client.data_sources.query(
         data_source_id,
-        filter={"property": "Date", "date": {"equals": date_rapport}},
+        filter={"and": [{"property": "Date", "date": {"equals": date_rapport}},
+                        {"property": "Type", "select": {"does_not_equal": TYPE_DOSSIER_HEBDO}}]},
         page_size=1,
     )
     return resultat["results"][0] if resultat.get("results") else None
@@ -919,4 +924,103 @@ def publier(config: dict, rapport: dict, chemin_config: str | Path | None = None
     client.blocks.children.append(page["id"], children=[
         nb.titre(2, NOTES_TITRE), {"type": "paragraph", "paragraph": {"rich_text": []}}])
     log.info("Entrée Notion du %s créée : %s", date_rapport, page.get("url"))
+    return page.get("url")
+
+
+
+# ------------------------------------------------------- dossier hebdomadaire
+BLOCS_HEBDO = (("constat", "Le constat"), ("mecanisme", "Le mécanisme"),
+               ("ce_qui_pourrait_tout_changer", "Ce qui pourrait tout changer"))
+
+
+def _blocs_dossier_hebdo(contenu: dict) -> list[dict]:
+    blocs = [nb.paragraphe_gris(ANCRE_TEXTE)]
+    syn = contenu.get("synthese") or {}
+    blocs.append(nb.titre(1, f"Dossier d'économiste — semaine {contenu.get('semaine')}"))
+    if syn.get("statut") == "ok":
+        blocs.append(nb.callout([nb.rt("Thème de la semaine\n", gras=True), nb.rt(syn.get("theme_semaine", ""))],
+                                "🧭", "blue_background"))
+        for c in syn.get("chaines", []):
+            texte = " → ".join(f"{m['texte']} ({m['engrenage']})" for m in c.get("maillons", []))
+            blocs.append(nb.callout([nb.rt(f"Chaîne de transmission — {c.get('titre') or 'de la semaine'}\n", gras=True),
+                                     nb.rt(texte)], "🔗", "blue_background"))
+        if syn.get("conflits"):
+            blocs.append(nb.callout([nb.rt("Engrenages en conflit\n", gras=True)]
+                                    + [nb.rt(f"({c['engrenages'][0]}) contre ({c['engrenages'][1]}) : {c['texte']}\n")
+                                       for c in syn["conflits"] if len(c.get("engrenages", [])) >= 2], "⚖️", "orange_background"))
+        blocs.append(nb.callout([nb.rt("Ce qui pourrait tout changer la semaine prochaine\n", gras=True),
+                                 nb.rt(syn.get("ce_qui_pourrait_tout_changer", ""))], "🎯", "purple_background"))
+    else:
+        blocs.append(nb.callout([nb.rt("Synthèse de la semaine indisponible — ", gras=True),
+                                 nb.rt(str(syn.get("raison", "non générée")), couleur="gray")], "⏸", "gray_background"))
+    for n in sorted((contenu.get("engrenages") or {}), key=int):
+        e = contenu["engrenages"][n]
+        enfants = []
+        if e.get("statut") != "ok":
+            enfants.append(nb.callout([nb.rt("Dossier indisponible cette semaine — ", gras=True),
+                                       nb.rt(str(e.get("raison", "")), couleur="gray")], "⏸", "gray_background"))
+        else:
+            for cle, titre in BLOCS_HEBDO:
+                enfants.append(nb.paragraphe([nb.rt(f"{titre} : ", gras=True), nb.rt(e.get(cle, ""))]))
+            for i in e.get("implications", []):
+                enfants.append(nb.puce([nb.rt(f"{i['devise']} : ", gras=True), nb.rt(i["texte"])]))
+            enfants.append(nb.paragraphe([nb.rt("Un précédent utile : ", gras=True), nb.rt(e.get("precedent", ""))]
+                                         + ([nb.rt("  (texte calculé, imposé)", couleur="gray", italique=True)] if e.get("precedent_impose") else [])))
+            if e.get("comprendre"):
+                enfants.append(nb.paragraphe([nb.rt("📘 Comprendre : ", gras=True), nb.rt(e["comprendre"])]))
+            if e.get("desk"):
+                enfants.append(nb.paragraphe([nb.rt("🎯 Ce que regarde un desk : ", gras=True), nb.rt(e["desk"])]))
+            if e.get("controles"):
+                enfants.append(nb.paragraphe([nb.rt("Contrôles : ", gras=True, couleur="orange"),
+                                              nb.rt(" · ".join(e["controles"]), couleur="gray")]))
+            enfants.append(nb.paragraphe_gris(f"Rédigé par {(e.get('redige_par') or {}).get('libelle', 'modèle inconnu')} "
+                                              "à partir des seuls chiffres des dossiers (calcul Python)."))
+        blocs.append(nb.toggle([nb.rt(f"{n}. {e.get('nom') or ''}", gras=True)], enfants[:90]))
+    blocs.append(nb.paragraphe_gris("Aide à la décision uniquement — aucun signal d'achat/vente. Chiffres : site, onglet 8 engrenages."))
+    return blocs
+
+
+def publier_dossier_hebdo(config: dict, contenu: dict, chemin_config: str | Path | None = None) -> str | None:
+    """Upsert de la page « dossier hebdo » de la semaine (retrouvée par son titre) ; notes préservées."""
+    cfg = config.get("notion", {})
+    cle = os.environ.get("NOTION_API_KEY", "").strip()
+    if not cfg.get("actif", True) or not cle:
+        log.info("Publication Notion du dossier hebdo sautée (désactivée ou clé absente)")
+        return None
+    client = Client(auth=cle)
+    database_id = _obtenir_database(client, cfg, chemin_config)
+    if not database_id:
+        return None
+    ds = _obtenir_data_source(client, database_id)
+    titre = f"FX — dossier économiste {contenu['semaine']}"
+    res = client.data_sources.query(ds, filter={"property": "Nom", "title": {"equals": titre}}, page_size=1)
+    proprietes = {"Nom": {"title": [{"type": "text", "text": {"content": titre}}]},
+                  "Date": {"date": {"start": date.today().isoformat()}},
+                  "Semaine": {"rich_text": [{"type": "text", "text": {"content": contenu["semaine"]}}]},
+                  "Type": {"select": {"name": TYPE_DOSSIER_HEBDO}}}
+    blocs = _blocs_dossier_hebdo(contenu)
+    if res.get("results"):
+        page = res["results"][0]
+        client.pages.update(page["id"], properties=proprietes)
+        enfants = _lister_enfants(client, page["id"])
+        idx_notes = next((i for i, b in enumerate(enfants)
+                          if b.get("type") == "heading_2" and _texte_bloc(b).startswith("📝")), len(enfants))
+        anciens = enfants[:idx_notes]
+        apres = anciens[-1]["id"] if anciens else None
+        # Nouveau contenu d'abord (après l'ancien), puis suppression de l'ancien : jamais de page vidée.
+        for i in range(0, len(blocs), 90):
+            parametres = {"children": blocs[i:i + 90]}
+            if apres:
+                parametres["after"] = apres
+            apres = client.blocks.children.append(page["id"], **parametres)["results"][-1]["id"]
+        for b in anciens:
+            client.blocks.delete(b["id"])
+        log.info("Page Notion du dossier hebdo mise à jour (notes préservées) : %s", page.get("url"))
+        return page.get("url")
+    page = client.pages.create(parent={"type": "data_source_id", "data_source_id": ds},
+                               icon={"type": "emoji", "emoji": "📚"}, properties=proprietes)
+    for i in range(0, len(blocs), 90):
+        client.blocks.children.append(page["id"], children=blocs[i:i + 90])
+    client.blocks.children.append(page["id"], children=[nb.titre(2, NOTES_TITRE), {"type": "paragraph", "paragraph": {"rich_text": []}}])
+    log.info("Page Notion du dossier hebdo créée : %s", page.get("url"))
     return page.get("url")

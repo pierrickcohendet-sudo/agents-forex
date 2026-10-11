@@ -104,7 +104,7 @@ class Engrenages(unittest.TestCase):
 class Audit(unittest.TestCase):
     def test_or_toujours_indice_proxy(self):
         self.assertEqual(ae.nommer_or("Le cours de l'or monte ; l'orientation reste."),
-                         "l'indice or (proxy) monte ; l'orientation reste.")
+                         "L'indice or (proxy) monte ; l'orientation reste.")
         self.assertEqual(ae.nommer_or("l'indice or (proxy) recule"), "l'indice or (proxy) recule")
 
     def test_serie_heurtee_signalee(self):

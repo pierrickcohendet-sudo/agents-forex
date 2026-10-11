@@ -23,10 +23,15 @@ on:
   schedule:
     - cron: "15 5 * * 1-5"    # run complet (matin)
     - cron: "15 6-21 * * 1-5" # compléments horaires 06:15 -> 21:15 UTC
+    - cron: "15 7 * * 0"      # dimanche : dossier hebdomadaire des 8 engrenages (--hebdo)
   workflow_dispatch:
     inputs:
       completer:
         description: "Passage de complément (--completer) plutôt qu'un run complet"
+        type: boolean
+        default: false
+      hebdo:
+        description: "Dossier hebdomadaire des 8 engrenages (--hebdo) : un appel LLM par engrenage + synthèse"
         type: boolean
         default: false
 
@@ -63,7 +68,11 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
           ARGS=""
-          if [ "${{ github.event_name }}" = "schedule" ] && [ "${{ github.event.schedule }}" != "15 5 * * 1-5" ]; then
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "${{ github.event.schedule }}" = "15 7 * * 0" ]; then
+            ARGS="--hebdo"
+          elif [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ github.event.inputs.hebdo }}" = "true" ]; then
+            ARGS="--hebdo"
+          elif [ "${{ github.event_name }}" = "schedule" ] && [ "${{ github.event.schedule }}" != "15 5 * * 1-5" ]; then
             ARGS="--completer"
           elif [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ github.event.inputs.completer }}" = "true" ]; then
             ARGS="--completer"

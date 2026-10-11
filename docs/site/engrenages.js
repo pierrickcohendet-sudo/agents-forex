@@ -1,6 +1,7 @@
 /* Onglet « 8 engrenages » : synthèse globale (rapport du jour, synthese_globale.engrenages). */
 import { chargerJson, enErreur, el, indisponible, dateHeure } from "./commun.js";
 import { carteDossiers } from "./dossiers.js";
+import { vueHebdo, selecteurVue } from "./hebdo.js";
 
 const DOLLAR = { haussier: "Dollar ↑", baissier: "Dollar ↓", neutre: "Dollar =" };
 const RISQUE = { risk_on: "Risk on", risk_off: "Risk off", neutre: "Risque neutre" };
@@ -138,7 +139,12 @@ export function carteEngrenagesCompacte(rapport) {
   return c;
 }
 
-export async function pageEngrenages() {
+export async function pageEngrenages(parametre) {
+  if (parametre === "hebdo") return [selecteurVue("hebdo"), ...(await vueHebdo())];
+  return [selecteurVue(""), ...(await pageQuotidienne())];
+}
+
+async function pageQuotidienne() {
   // Les dossiers chiffrés (Python, quotidiens) s'affichent toujours, même sans synthèse rédigée.
   const [rapport, dossiers] = await Promise.all([chargerJson("data/latest.json"), carteDossiers()]);
   if (enErreur(rapport)) return [dossiers, indisponible("Synthèse rédigée", rapport?.__erreur)];

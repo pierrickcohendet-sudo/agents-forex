@@ -57,6 +57,12 @@ SERIES_FRED.update({
     "USD_solde_pib": ("FYFSGDA188S", "FRED (FYFSGDA188S, solde fédéral / PIB)", "%", "annuel"),
     "USD_prime_terme": ("THREEFYTP10", "FRED (THREEFYTP10, prime de terme 10 ans, Kim-Wright)", "%", "quotidien"),
 })
+# Taux de change quotidiens (Fed H.10) pour les précédents historiques : « ce qu'a fait la devise ensuite ».
+# inverse = cotation en unités de devise pour 1 USD (la force de la devise est alors 1 / taux).
+CHANGES_FRED = {"EUR": ("DEXUSEU", False), "GBP": ("DEXUSUK", False), "JPY": ("DEXJPUS", True), "CHF": ("DEXSZUS", True),
+                "CAD": ("DEXCAUS", True), "AUD": ("DEXUSAL", False), "NZD": ("DEXUSNZ", False), "CNY": ("DEXCHUS", True)}
+for _dev, (_sid, _inv) in CHANGES_FRED.items():
+    SERIES_FRED[f"FX_{_dev}"] = (_sid, f"FRED ({_sid}, Fed H.10){' — inversé : force de la devise' if _inv else ''}", "niveau", "quotidien")
 PAYS_FMI = {"EUR": ("DE", "Allemagne"), "GBP": ("GB", "Royaume-Uni"), "JPY": ("JP", "Japon"), "CAD": ("CA", "Canada"),
             "AUD": ("AU", "Australie"), "CNY": ("CN", "Chine")}
 for _dev, (_c, _nom) in PAYS_FMI.items():

@@ -107,7 +107,13 @@ def moderer_vocabulaire(texte: str, permis: dict[str, bool]) -> tuple[str, int]:
 
 def nommer_or(texte: str) -> str:
     """Nous n'avons qu'un indice or : jamais « l'or » ni « le cours de l'or » dans un texte publié."""
-    return _RE_OR.sub("l'indice or (proxy)", texte or "") if texte else texte
+    if not texte:
+        return texte
+
+    def remplacer(m):
+        debut = m.start() == 0 or texte[:m.start()].rstrip()[-1:] in ".!?"
+        return "L'indice or (proxy)" if debut else "l'indice or (proxy)"
+    return _RE_OR.sub(remplacer, texte)
 def _variation(serie: dict | None, jours: int = 7) -> tuple[float, float, str] | None:
     """(dernière valeur, variation en %, date) sur `jours` jours calendaires, depuis une série
     {dates, valeurs} (graphiques_marche)."""
