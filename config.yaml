@@ -258,7 +258,7 @@ tableau_macro:
   #   d'équivalent (pas de cellule vide silencieuse).
   correspondances:
     taux_directeur:
-      USD: { ff: [{ id: 1,   nom: "Federal Funds Rate" }] }
+      USD: { ff: [{ id: 1,   nom: "Federal Funds Rate" }], etiquette: "borne haute de la fourchette" }   # ForexFactory publie la borne HAUTE de la fourchette cible de la Fed
       EUR: { ff: [{ id: 12,  nom: "Main Refinancing Rate" }] }
       GBP: { ff: [{ id: 15,  nom: "Official Bank Rate" }] }
       JPY: { ff: [{ id: 641, nom: "BOJ Policy Rate" }] }
@@ -488,7 +488,9 @@ fred:
     core_pce:      PCEPILFE
     pib_us:        GDP
     nfp:           PAYEMS
-    taux_fed:      FEDFUNDS
+    taux_fed:      DFF        # taux effectif QUOTIDIEN (FEDFUNDS = moyenne mensuelle, en retard d'un mois)
+    fed_cible_basse: DFEDTARL
+    fed_cible_haute: DFEDTARU
     rendement_10y: DGS10
     rendement_2y:  DGS2
     vix:           VIXCLS
@@ -497,7 +499,7 @@ fred:
     sp500:         SP500
 
 # Taux directeurs de repli, mis à jour À LA MAIN (date obligatoire).
-# L'USD est rafraîchi automatiquement via FRED (FEDFUNDS).
+# L'USD est rafraîchi automatiquement via FRED (DFF, taux effectif quotidien).
 taux_directeurs:
   USD: { taux: 3.75, date: "2026-01-15" }
   EUR: { taux: 2.40, date: "2026-01-15" }

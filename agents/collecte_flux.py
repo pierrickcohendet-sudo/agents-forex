@@ -104,7 +104,7 @@ def _or(cle_fred: str) -> dict:
     fin = date.fromisoformat(d)
     ref = next(((dd, vv) for dd, vv in obs if (fin - date.fromisoformat(dd)).days >= 7), None)
     return {"date": d, "serie": SERIE_OR, "valeur": v,
-            "libelle": "Indice or NASDAQ QGLDI (proxy, pas le cours spot)",
+            "libelle": "Indice or (proxy) — NASDAQ QGLDI, pas le cours spot",
             "variation_7j_pct": None if not ref else round((v / ref[1] - 1) * 100, 2)}
 
 

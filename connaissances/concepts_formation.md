@@ -21,7 +21,7 @@ Définition : L'écart entre taux longs et taux courts d'un même pays. Une cour
 
 ## valeur_refuge — Valeur refuge
 Mots-clés : refuge, vix, risk off, aversion, jpy, chf, usd, or, guerre, crise
-Définition : Les actifs vers lesquels les capitaux fuient en cas de stress (dollar, yen, franc suisse, or). Ils montent quand le risque global augmente, même sans bonne nouvelle propre.
+Définition : Les actifs vers lesquels les capitaux fuient en cas de stress (dollar, yen, franc suisse ; l'indice or (proxy) sert de repère pour le métal). Ils montent quand le risque global augmente, même sans bonne nouvelle propre.
 
 ## differentiel_taux — Différentiel de taux
 Mots-clés : différentiel, spread, 2 ans, taux directeur, écart de taux, carry

@@ -59,6 +59,13 @@ SCHEMA = """{
 
 
 # ----------------------------------------------------------------- utilitaires
+_RE_OR = re.compile(r"\b(?:le cours de l'or|le prix de l'or|du cours de l'or|du prix de l'or|l'or)\b(?! \(proxy\))",
+                    re.IGNORECASE)
+
+
+def nommer_or(texte: str) -> str:
+    """Nous n'avons qu'un indice or : jamais « l'or » ni « le cours de l'or » dans un texte publié."""
+    return _RE_OR.sub("l'indice or (proxy)", texte or "") if texte else texte
 def _variation(serie: dict | None, jours: int = 7) -> tuple[float, float, str] | None:
     """(dernière valeur, variation en %, date) sur `jours` jours calendaires, depuis une série
     {dates, valeurs} (graphiques_marche)."""
@@ -73,6 +80,20 @@ def _variation(serie: dict | None, jours: int = 7) -> tuple[float, float, str] |
     if ref in (None, 0):
         return None
     return valeurs[-1], round((valeurs[-1] / ref - 1) * 100, 2), dates[-1]
+
+
+def saut_atypique(serie: dict | None, seuil_pct: float = 8.0, n: int = 10) -> str | None:
+    """« +18,0 % le 02/10 » si une variation journalière dépasse le seuil sur les n derniers points."""
+    if not serie or len(serie.get("valeurs") or []) < 2:
+        return None
+    pires = []
+    v, d = serie["valeurs"][-n - 1:], serie["dates"][-n - 1:]
+    for i in range(1, len(v)):
+        if v[i - 1]:
+            pct = (v[i] / v[i - 1] - 1) * 100
+            if abs(pct) >= seuil_pct:
+                pires.append((abs(pct), f"{pct:+.1f} % le {d[i][8:10]}/{d[i][5:7]}".replace(".", ",")))
+    return ", ".join(t for _, t in sorted(pires, reverse=True)[:2]) or None
 
 
 def _dir(valeur: float | None, seuil: float, haut: str, bas: str) -> str | None:
@@ -269,11 +290,16 @@ def signaux(config: dict, donnees: dict, macro: dict, devises: list[dict], biais
     donnees8 = []
     v_wti = _variation(marche.get("wti"))
     if v_wti:
-        donnees8.append({"texte": f"WTI {v_wti[0]} $ le {v_wti[2]} ({v_wti[1]:+.1f} % sur 7 j)",
+        saut = saut_atypique(marche.get("wti"))
+        donnees8.append({"texte": f"WTI {v_wti[0]} $ le {v_wti[2]} ({v_wti[1]:+.1f} % sur 7 j)"
+                                  + (f" — série heurtée ({saut} en une séance)" if saut else ""),
                          "source_id": (series.get("petrole_wti") or {}).get("source_id")})
     v_brent = _variation(marche.get("brent"))
     if v_brent:
-        donnees8.append({"texte": f"Brent {v_brent[0]} $ le {v_brent[2]} ({v_brent[1]:+.1f} % sur 7 j)",
+        saut = saut_atypique(marche.get("brent"))
+        donnees8.append({"texte": f"Brent {v_brent[0]} $ le {v_brent[2]} ({v_brent[1]:+.1f} % sur 7 j)"
+                                  + (f" — série heurtée ({saut} en une séance, chiffres EIA/FRED officiels) : "
+                                     "variation sur 7 j à lire avec prudence" if saut else ""),
                          "source_id": (series.get("petrole_brent") or {}).get("source_id")})
     indisponibles8 = []
     eia = flux.get("eia")
@@ -399,7 +425,7 @@ def normaliser(brut: dict, sig: dict[int, dict], conflits_py: list[dict], concep
         nonlocal retraits
         net, n = _retirer_ordres(_texte(t, maximum))
         retraits += n
-        return net
+        return nommer_or(net)
 
     par_num = {}
     for e in brut.get("engrenages") or []:

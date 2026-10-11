@@ -282,6 +282,11 @@ def appliquer_registre_taux(macro: dict, registre: dict, cfg_tm: dict) -> dict:
         if case.get("statut") == "non_applicable" or actuel.get("valeur_num") is None:
             continue
         avant = taux.get(devise) or {}
+        if devise == "USD" and avant.get("fourchette") and "FRED" in str(avant.get("source")):
+            # La Fed fixe une FOURCHETTE ; ForexFactory n'en publie que la borne haute. Pour comparer
+            # aux taux uniques des autres banques centrales, on garde le taux effectif (DFF, quotidien).
+            avant["borne_haute_registre"] = actuel.get("valeur")
+            continue
         nouveau = {"taux": float(actuel["valeur_num"]), "date": str(actuel.get("date_pub") or ""),
                    "source": "registre macro (ForexFactory, publication officielle)"}
         if avant.get("taux") is not None:

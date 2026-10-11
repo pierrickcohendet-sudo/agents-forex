@@ -99,5 +99,31 @@ class Engrenages(unittest.TestCase):
         self.assertFalse(any("COT" in d["texte"] for d in s[7]["donnees"]))
 
 
+
+
+class Audit(unittest.TestCase):
+    def test_or_toujours_indice_proxy(self):
+        self.assertEqual(ae.nommer_or("Le cours de l'or monte ; l'orientation reste."),
+                         "l'indice or (proxy) monte ; l'orientation reste.")
+        self.assertEqual(ae.nommer_or("l'indice or (proxy) recule"), "l'indice or (proxy) recule")
+
+    def test_serie_heurtee_signalee(self):
+        serie = {"dates": ["2026-09-30", "2026-10-01", "2026-10-02"], "valeurs": [115.9, 114.8, 135.5]}
+        self.assertEqual(ae.saut_atypique(serie), "+18,0 % le 02/10")
+        self.assertIsNone(ae.saut_atypique({"dates": ["2026-10-01", "2026-10-02"], "valeurs": [100, 101]}))
+
+    def test_usd_carry_sur_le_taux_effectif_pas_la_borne_haute(self):
+        from core import marche_taux
+        macro = {"taux_directeurs": {"USD": {"taux": 3.88, "date": "2026-10-08", "source": "FRED (DFF, taux effectif)",
+                                            "fourchette": [3.75, 4.0]},
+                                    "EUR": {"taux": 2.4, "date": "2026-01-15", "source": "config (repli manuel)"}}}
+        registre = {"cases": {"USD|taux_directeur": {"actuel": {"valeur": "4.00%", "valeur_num": 4.0}},
+                              "EUR|taux_directeur": {"actuel": {"valeur": "2.65%", "valeur_num": 2.65}}}}
+        marche_taux.appliquer_registre_taux(macro, registre, {"ordre_devises": ["USD", "EUR"]})
+        self.assertEqual(macro["taux_directeurs"]["USD"]["taux"], 3.88)
+        self.assertEqual(macro["taux_directeurs"]["USD"]["borne_haute_registre"], "4.00%")
+        self.assertEqual(macro["taux_directeurs"]["EUR"]["taux"], 2.65)
+
+
 if __name__ == "__main__":
     unittest.main()

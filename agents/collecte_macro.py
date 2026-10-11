@@ -138,8 +138,11 @@ def collecter(config: dict) -> dict:
         }
     fedfunds = resultat["series"].get("taux_fed")
     if fedfunds:
+        bas, haut = resultat["series"].get("fed_cible_basse"), resultat["series"].get("fed_cible_haute")
         resultat["taux_directeurs"]["USD"] = {
-            "taux": fedfunds["valeur"], "date": fedfunds["date"], "source": "FRED (FEDFUNDS)",
+            "taux": fedfunds["valeur"], "date": fedfunds["date"],
+            "source": f"FRED ({fedfunds['serie_id']}, taux effectif)",
+            "fourchette": [bas["valeur"], haut["valeur"]] if bas and haut else None,
         }
 
     # Différentiels de carry précalculés (signal secondaire, jamais déclencheur seul).

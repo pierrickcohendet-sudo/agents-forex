@@ -30,6 +30,8 @@ maillon, chaque maillon appuyé sur une donnée sourcée et rattaché à son eng
 Signale les engrenages en conflit : c'est souvent là que se cachent les retournements.
 
 ## Règles
+- Or : tu ne disposes que d'un indice (NASDAQ QGLDI). Écris toujours « indice or (proxy) », jamais
+  « l'or », « le cours de l'or » ni « le prix de l'or ».
 - Jamais de chiffre absent des données fournies ; jamais d'identifiant de source inventé (null).
 - Un engrenage sans donnée exploitable aujourd'hui : écris « Données insuffisantes aujourd'hui. »
   plutôt qu'un texte générique.
