@@ -1,9 +1,9 @@
 {
  "version_schema": 1,
- "genere_le": "2026-10-12T13:42:38+00:00",
+ "genere_le": "2026-10-12T15:33:36+00:00",
  "sources": {
-  "rapport": "2026-10-12T13:42:37+00:00",
-  "tableau_macro": "2026-10-12T13:10:40+00:00"
+  "rapport": "2026-10-12T15:33:34+00:00",
+  "tableau_macro": "2026-10-12T15:25:05+00:00"
  },
  "regime": {
   "biais": "risk_off",
@@ -21,10 +21,10 @@
    "USD"
   ],
   "explication": "Écart entre le score de confluence moyen des devises « risque » et celui des devises « refuge » (calcul Python) : au-delà du seuil, Risk On ; en deçà de son opposé, Risk Off ; sinon Neutre.",
-  "driver": "USD domine outrageusement en tête à 84 de score confluence sous un biais risk-off persistant, tandis que les refuges traditionnels JPY et CHF restent curieusement relégués en queue de classement à 26.",
+  "driver": "Biais Risk Off ; USD en tête du classement de confluence.",
   "relecture": "non_evalue",
   "date_rapport": "2026-10-12",
-  "maj": "2026-10-12T13:42:37+00:00",
+  "maj": "2026-10-12T15:33:34+00:00",
   "type_rapport": "hebdomadaire",
   "nb_devises": 9,
   "nb_devises_disponibles": 8,
@@ -79,12 +79,12 @@
    "drapeau": "🇺🇸",
    "cellules": {
     "taux_directeur": {
-     "texte": "4,00 % [borne haute de la fourchette]",
-     "valeur_num": 4.0,
-     "date": "2026-09-16",
-     "source": "ForexFactory",
-     "consensus": "4,00 %",
-     "surprise": "=",
+     "texte": "3,88 % [borne haute de la fourchette]",
+     "valeur_num": 3.88,
+     "date": "2026-10-08",
+     "source": "FRED (DFF, taux effectif)",
+     "consensus": null,
+     "surprise": null,
      "precedent": "3,75 % [borne haute de la fourchette]",
      "manuel": false,
      "etat": "valeur",
@@ -139,10 +139,10 @@
      "raison": null
     },
     "indice_surprise": {
-     "texte": "0,0",
-     "valeur_num": -0.04,
+     "texte": "-0,1",
+     "valeur_num": -0.05,
      "tendance": "baisse",
-     "n": 8,
+     "n": 7,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
      "date": "2026-10-12",
@@ -617,7 +617,7 @@
      "texte": "n/d",
      "valeur_num": null,
      "etat": "absent",
-     "raison": "Analyse CAD impossible : tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) | "
+     "raison": "Analyse CAD impossible : tous les modèles de la chaîne en échec : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: https://generative"
     },
     "biais": {
      "texte": "n/d",
@@ -966,17 +966,17 @@
     "devise": "USD",
     "cellules": {
      "taux_directeur": {
-      "texte": "4,00 % [borne haute de la fourchette]",
-      "valeur_num": 4.0,
-      "date": "2026-09-16",
-      "source": "ForexFactory",
-      "consensus": "4,00 %",
-      "surprise": "=",
+      "texte": "3,88 % [borne haute de la fourchette]",
+      "valeur_num": 3.88,
+      "date": "2026-10-08",
+      "source": "FRED (DFF, taux effectif)",
+      "consensus": null,
+      "surprise": null,
       "precedent": "3,75 % [borne haute de la fourchette]",
       "manuel": false,
       "etat": "valeur",
-      "raison": null,
-      "z": 0.0
+      "raison": "pas de consensus publié pour cette publication",
+      "z": null
      },
      "cpi": {
       "texte": "3,4 %",
@@ -1097,11 +1097,11 @@
      }
     },
     "indice_30j": {
-     "indice": -0.04,
+     "indice": -0.05,
      "precedent": 0.47,
      "tendance": "baisse",
-     "n": 8,
-     "texte": "-0,0 ▼ (n=8)"
+     "n": 7,
+     "texte": "-0,1 ▼ (n=7)"
     }
    },
    {
