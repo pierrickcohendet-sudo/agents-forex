@@ -4,7 +4,7 @@
   "type_rapport": "hebdomadaire",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-10-12T15:33:34+00:00",
+  "genere_le": "2026-10-12T23:12:11+00:00",
   "appels_llm": [
    {
     "heure": "13:19",
@@ -266,6 +266,78 @@
     "tokens_total": 1221,
     "ok": false,
     "etiquette": "commentaire_classement"
+   },
+   {
+    "heure": "23:04",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 5038,
+    "tokens_message": 17569,
+    "tokens_total": 22607,
+    "ok": true,
+    "etiquette": "analyse:CAD"
+   },
+   {
+    "heure": "23:04",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 0,
+    "tokens_message": 1240,
+    "tokens_total": 1240,
+    "ok": true,
+    "etiquette": "commentaire_classement"
+   },
+   {
+    "heure": "23:05",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 7206,
+    "tokens_total": 8766,
+    "ok": false,
+    "etiquette": "synthese:GBP"
+   },
+   {
+    "heure": "23:08",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 7206,
+    "tokens_total": 8766,
+    "ok": false,
+    "etiquette": "synthese:GBP"
+   },
+   {
+    "heure": "23:08",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 7206,
+    "tokens_total": 8766,
+    "ok": false,
+    "etiquette": "synthese:GBP"
+   },
+   {
+    "heure": "23:09",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 7206,
+    "tokens_total": 8766,
+    "ok": false,
+    "etiquette": "synthese:GBP"
+   },
+   {
+    "heure": "23:10",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 6313,
+    "tokens_total": 7873,
+    "ok": false,
+    "etiquette": "synthese:JPY"
+   },
+   {
+    "heure": "23:10",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 6313,
+    "tokens_total": 7873,
+    "ok": false,
+    "etiquette": "synthese:JPY"
    }
   ],
   "quota_llm": {
@@ -277,15 +349,15 @@
    ],
    "modeles": {
     "gemini-3.5-flash": {
-     "appels_aujourdhui": 12,
+     "appels_aujourdhui": 20,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-10-10T23:59:59+00:00",
-     "appels_ce_run": 3,
-     "reussites_ce_run": 0,
+     "appels_ce_run": 5,
+     "reussites_ce_run": 2,
      "sauts_ce_run": 21
     },
     "gemini-3.8-flash": {
-     "appels_aujourdhui": 16,
+     "appels_aujourdhui": 20,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-10-10T23:59:59+00:00",
      "appels_ce_run": 3,
@@ -304,12 +376,12 @@
   },
   "appels_par_modele": {
    "gemini-3.5-flash": {
-    "appels": 6,
-    "echecs": 6
+    "appels": 11,
+    "echecs": 9
    },
    "gemini-3.8-flash": {
-    "appels": 9,
-    "echecs": 7
+    "appels": 12,
+    "echecs": 10
    },
    "gemini-3.5-flash-lite": {
     "appels": 14,
@@ -382,12 +454,45 @@
       "ignores": 24
      }
     ]
+   },
+   {
+    "heure": "23:12",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": true,
+    "appels_total": 26,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": true,
+      "cause": "3 échecs consécutifs — 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:ge",
+      "ouvert_a_l_appel": 5,
+      "echecs_consecutifs": 3,
+      "ignores": 21
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": true,
+      "cause": "quota journalier épuisé — plafond gratuit du jour atteint pour gemini-3.8-flash (compteur local)",
+      "ouvert_a_l_appel": 5,
+      "echecs_consecutifs": 3,
+      "ignores": 21
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 24
+     }
+    ]
    }
   ]
  },
  "synthese_globale": {
   "biais_macro_global": "risk_off",
-  "commentaire": "Biais Risk Off ; USD en tête du classement de confluence.",
+  "commentaire": "USD largement en tête à 84 points sous un biais risk-off persistant, devançant un classement au statu quo parfait vs J-1 où GBP et AUD cohabitent à 44 points devant l'axe EUR/JPY/CHF à 26 et un CAD ancré en lanterne rouge à 16.",
   "etat_du_monde": {
    "situation_economique": {
     "texte": "L'activité mondiale fait face à une persistance des tensions inflationnistes, illustrée par la hausse de l'inflation en Inde à 5.54% en septembre au-dessus des attentes. Les marchés évoluent sous la contrainte d'une liquidité réduite en raison de la fermeture des marchés obligataires américains ce lundi. La persistance des pressions énergétiques pèse sur l'ensemble des perspectives macroéconomiques.",
@@ -993,11 +1098,15 @@
     "devise": "NZD",
     "score_confluence": 26,
     "risk_on_off": "on"
+   },
+   {
+    "rang": 9,
+    "devise": "CAD",
+    "score_confluence": 16,
+    "risk_on_off": "on"
    }
   ],
-  "devises_indisponibles": [
-   "CAD"
-  ]
+  "devises_indisponibles": []
  },
  "devises": [
   {
@@ -2133,9 +2242,9 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint",
-    "tentatives": 2,
-    "genere_le": "2026-10-12T15:31:54+00:00"
+    "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/mode | gemini-3.8-flash : 503 Server Error: ",
+    "tentatives": 3,
+    "genere_le": "2026-10-12T23:09:08+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.35,
@@ -2396,8 +2505,8 @@
    "synthese_approfondie": {
     "statut": "indisponible",
     "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint",
-    "tentatives": 2,
-    "genere_le": "2026-10-12T15:32:14+00:00"
+    "tentatives": 3,
+    "genere_le": "2026-10-12T23:10:31+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.03,
@@ -2653,8 +2762,8 @@
    "synthese_approfondie": {
     "statut": "indisponible",
     "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint",
-    "tentatives": 2,
-    "genere_le": "2026-10-12T15:32:34+00:00"
+    "tentatives": 3,
+    "genere_le": "2026-10-12T23:10:51+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.27,
@@ -2696,20 +2805,113 @@
   {
    "devise": "CAD",
    "risk_on_off": "on",
-   "score_confluence": null,
-   "analyse_indisponible": true,
-   "raison_indisponibilite": "Analyse CAD impossible : tous les modèles de la chaîne en échec : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: https://generative",
+   "redige_par": {
+    "modele": "gemini-3.5-flash",
+    "libelle": "Flash 3.5"
+   },
+   "score_confluence": 16,
+   "detail_score": [
+    {
+     "indicateur": "taux_directeur",
+     "sens": -1,
+     "poids": 20,
+     "justification": "Taux directeur fixé à 2.25 %, soit sous la médiane du G8 à 2.75 %, ce qui pèse sur l'attractivité relative de la devise.",
+     "source_id": "src_015"
+    },
+    {
+     "indicateur": "cpi_surprise",
+     "sens": 0,
+     "poids": 15,
+     "justification": "Aucune publication d'inflation canadienne figurant au calendrier aujourd'hui pour calculer un écart au consensus.",
+     "source_id": null
+    },
+    {
+     "indicateur": "yield_curve",
+     "sens": -1,
+     "poids": 12,
+     "justification": "Courbe US en bear steepening (spread 10Y-2Y à +0.47 %) stimulant les rendements et le dollar américain au détriment du CAD.",
+     "source_id": "src_014"
+    },
+    {
+     "indicateur": "vix",
+     "sens": -1,
+     "poids": 10,
+     "justification": "VIX s'affiche à 15.41 en hausse de +2.19 %, matérialisant un climat de marché prudent défavorable aux devises pro-cycliques.",
+     "source_id": "src_010"
+    },
+    {
+     "indicateur": "dxy",
+     "sens": -1,
+     "poids": 10,
+     "justification": "Indice dollar synthétique en hausse à 103.17 avec un RSI à 69.9, exerçant une pression baissière sur la paire inversée.",
+     "source_id": "src_025"
+    },
+    {
+     "indicateur": "pmi_surprise",
+     "sens": 0,
+     "poids": 10,
+     "justification": "Pas de publication de PMI canadien aujourd'hui pour évaluer une surprise macroéconomique.",
+     "source_id": null
+    },
+    {
+     "indicateur": "differentiel_taux",
+     "sens": -1,
+     "poids": 8,
+     "justification": "Spread obligataire à 2 ans défavorable de -151 pb par rapport aux États-Unis (3.24 % contre 4.75 %), pénalisant le portage du CAD.",
+     "source_id": "src_016"
+    },
+    {
+     "indicateur": "rsi",
+     "sens": -1,
+     "poids": 8,
+     "justification": "RSI journalier à 31.3 sous le niveau neutre des 50, confirmant un momentum baissier actif à court terme.",
+     "source_id": "src_021"
+    },
+    {
+     "indicateur": "trendline",
+     "sens": 0,
+     "poids": 7,
+     "justification": "Aucune ligne de tendance validée à au moins trois points de contact sur la configuration technique actuelle.",
+     "source_id": "src_021"
+    }
+   ],
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
-    "sens": "range",
-    "commentaire": "analyse indisponible (Analyse CAD impossible : tous les modèles de la chaîne en échec : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: https://generative)",
-    "source_id": null
+    "sens": "haussier",
+    "commentaire": "Structure weekly orientée à la hausse selon la théorie de Dow avec des hauts et des bas successivement plus hauts.",
+    "source_id": "src_021"
    },
-   "detail_score": [],
-   "opportunites": [],
-   "menaces": [],
-   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse CAD impossible : tous les modèles de la chaîne en échec : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: https://generative.",
+   "carry": {
+    "taux_directeur": 2.25,
+    "differentiel_vs_mediane_g8": -0.5,
+    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   },
+   "opportunites": [
+    {
+     "texte": "Hausse marquée des cours énergétiques avec un Brent à 125.44 $/b et un WTI à 96.24 $/b suite aux tensions géopolitiques au Moyen-Orient, apportant un soutien fondamental à la devise exportatrice.",
+     "source_id": "src_011",
+     "non_sourcee": false
+    },
+    {
+     "texte": "Tendance hebdomadaire de fond toujours haussière sur USD/CAD inversé selon la théorie de Dow, conservant un biais de fond constructif.",
+     "source_id": "src_021",
+     "non_sourcee": false
+    }
+   ],
+   "menaces": [
+    {
+     "texte": "Désavantage important de portage face au dollar américain, matérialisé par un écart de -151 pb sur les rendements à 2 ans.",
+     "source_id": "src_016",
+     "non_sourcee": false
+    },
+    {
+     "texte": "Blocage technique sous la zone de résistance à 0.70208 (4 impacts) amplifié par un RSI en zone de faiblesse à 31.3.",
+     "source_id": "src_021",
+     "non_sourcee": false
+    }
+   ],
+   "synthese_une_phrase": "Pénalisé par un différentiel de taux très défavorable face au dollar et un momentum baissier à court terme, le dollar canadien reste comprimé sous résistance malgré le soutien des cours pétroliers élevés.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -2824,15 +3026,22 @@
    ],
    "contexte_geopolitique": {
     "banque_centrale_pourquoi": {
-     "texte": "",
-     "source_id": null
+     "texte": "La Banque du Canada maintient une posture dépendante des données après avoir abaissé son taux directeur à 2.25 %, évaluant le ralentissement économique et l'inflation avant les prochaines prises de parole de Tiff Macklem.",
+     "source_id": "src_015"
     },
-    "evenements": []
+    "evenements": [
+     {
+      "texte": "Interventions publiques prévues du gouverneur Tiff Macklem et des membres du Conseil des gouverneurs de la BoC cette semaine.",
+      "source_id": "src_030",
+      "non_sourcee": false
+     }
+    ]
    },
-   "carry": {
-    "taux_directeur": 2.25,
-    "differentiel_vs_mediane_g8": -0.5,
-    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   "synthese_approfondie": {
+    "statut": "indisponible",
+    "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint",
+    "tentatives": 1,
+    "genere_le": "2026-10-12T23:11:11+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.43,
@@ -2863,6 +3072,10 @@
     },
     {
      "date": "2026-10-11",
+     "score": 16
+    },
+    {
+     "date": "2026-10-12",
      "score": 16
     }
    ]
@@ -3084,8 +3297,8 @@
    "synthese_approfondie": {
     "statut": "indisponible",
     "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint",
-    "tentatives": 2,
-    "genere_le": "2026-10-12T15:32:54+00:00"
+    "tentatives": 3,
+    "genere_le": "2026-10-12T23:11:31+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.52,
@@ -3335,8 +3548,8 @@
    "synthese_approfondie": {
     "statut": "indisponible",
     "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint",
-    "tentatives": 2,
-    "genere_le": "2026-10-12T15:33:14+00:00"
+    "tentatives": 3,
+    "genere_le": "2026-10-12T23:11:51+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.27,
@@ -3610,8 +3823,8 @@
    "synthese_approfondie": {
     "statut": "indisponible",
     "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint",
-    "tentatives": 2,
-    "genere_le": "2026-10-12T15:33:34+00:00"
+    "tentatives": 3,
+    "genere_le": "2026-10-12T23:12:11+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.21,
@@ -5323,6 +5536,90 @@
    "source": "ForexFactory (registre macro)",
    "detail": "CNY — Ventes au détail",
    "date": "2026-09-15",
+   "url": null
+  },
+  {
+   "id": "src_240",
+   "source": "ForexFactory (calendrier)",
+   "detail": "CAD — CPI m/m",
+   "date": "2026-10-19",
+   "url": null
+  },
+  {
+   "id": "src_241",
+   "source": "ForexFactory (calendrier)",
+   "detail": "CAD — Median CPI y/y",
+   "date": "2026-10-19",
+   "url": null
+  },
+  {
+   "id": "src_242",
+   "source": "ForexFactory (calendrier)",
+   "detail": "CAD — Overnight Rate",
+   "date": "2026-10-28",
+   "url": null
+  },
+  {
+   "id": "src_243",
+   "source": "ForexFactory (calendrier)",
+   "detail": "CAD — GDP m/m",
+   "date": "2026-10-30",
+   "url": null
+  },
+  {
+   "id": "src_244",
+   "source": "ForexFactory (registre macro)",
+   "detail": "CAD — CPI annuel",
+   "date": "2026-09-14",
+   "url": null
+  },
+  {
+   "id": "src_245",
+   "source": "ForexFactory (registre macro)",
+   "detail": "CAD — CPI core annuel",
+   "date": "2026-09-14",
+   "url": null
+  },
+  {
+   "id": "src_246",
+   "source": "ForexFactory (registre macro)",
+   "detail": "CAD — PIB trimestriel",
+   "date": "2026-09-29",
+   "url": null
+  },
+  {
+   "id": "src_247",
+   "source": "ForexFactory (registre macro)",
+   "detail": "CAD — PMI manufacturier",
+   "date": "2026-10-01",
+   "url": null
+  },
+  {
+   "id": "src_248",
+   "source": "ForexFactory (registre macro)",
+   "detail": "CAD — PMI services",
+   "date": "2026-10-06",
+   "url": null
+  },
+  {
+   "id": "src_249",
+   "source": "ForexFactory (registre macro)",
+   "detail": "CAD — Taux de chômage",
+   "date": "2026-10-09",
+   "url": null
+  },
+  {
+   "id": "src_250",
+   "source": "ForexFactory (registre macro)",
+   "detail": "CAD — Variation de l'emploi",
+   "date": "2026-10-09",
+   "url": null
+  },
+  {
+   "id": "src_251",
+   "source": "ForexFactory (registre macro)",
+   "detail": "CAD — Ventes au détail",
+   "date": "2026-09-24",
    "url": null
   }
  ],
@@ -7852,14 +8149,14 @@
   "conforme": false,
   "nb_anomalies": 8,
   "anomalies": [
-   "CAD : analyse indisponible aujourd'hui (Analyse CAD impossible : tous les modèles de la chaîne en échec : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: https://generative) — exclue du classement",
-   "GBP : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash )",
+   "GBP : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : gemini-3.5-flash : 503 Server Error: Service Unavailable fo)",
    "JPY : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash )",
    "CHF : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash )",
+   "CAD : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash )",
    "AUD : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash )",
    "NZD : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash )",
    "CNY : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash )",
-   "prompt LLM volumineux : 15 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 22607 à 15:29 UTC, modèle gemini-3.5-flash) — le contexte envoyé au LLM a regrossi"
+   "prompt LLM volumineux : 16 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 22607 à 15:29 UTC, modèle gemini-3.5-flash) — le contexte envoyé au LLM a regrossi"
   ]
  },
  "analyse_weekly": {
@@ -7957,6 +8254,25 @@
     "indicateurs_instables": {}
    },
    "commentaire": "Score 26 → 26 sur 1 jour(s) ; cohérence directionnelle : 100.0 %."
+  },
+  "CAD": {
+   "semaine_iso": "2026-W42",
+   "metriques": {
+    "nb_jours": 1,
+    "trajectoire": [
+     {
+      "date": "2026-10-12",
+      "score": 16
+     }
+    ],
+    "score_debut": 16,
+    "score_fin": 16,
+    "variation_score": 0,
+    "ecart_type_score": 0.0,
+    "coherence_directionnelle_pct": 100.0,
+    "indicateurs_instables": {}
+   },
+   "commentaire": "Score 16 → 16 sur 1 jour(s) ; cohérence directionnelle : 100.0 %."
   },
   "AUD": {
    "semaine_iso": "2026-W42",
