@@ -1,7 +1,7 @@
 {
  "version_schema": 1,
- "genere_le": "2026-10-11T14:01:23+00:00",
- "debut_historique": "2021-08-10",
+ "genere_le": "2026-10-12T13:42:37+00:00",
+ "debut_historique": "2021-08-11",
  "erreurs_collecte": [],
  "engrenages": {
   "1": {
@@ -11,7 +11,7 @@
     {
      "libelle": "Régime de risque (biais calculé)",
      "texte": "Risk Off",
-     "detail": "écart de score risque − refuge : -15.3 pts",
+     "detail": "écart de score risque − refuge : -10.3 pts",
      "source": "calcul Python (scores de confluence)"
     },
     {
@@ -29,7 +29,7 @@
     },
     {
      "libelle": "Score de confluence USD",
-     "texte": "80",
+     "texte": "84",
      "detail": "0-100, calcul Python",
      "source": "rapport du jour"
     }
@@ -42,22 +42,28 @@
      "ecart": 37
     },
     {
-     "date": "2026-09-26",
+     "date": "2026-09-21",
+     "biais": "risk_off",
+     "score_usd": 65,
+     "ecart": -10
+    },
+    {
+     "date": "2026-09-28",
      "biais": "neutre",
      "score_usd": null,
      "ecart": null
     },
     {
-     "date": "2026-10-03",
+     "date": "2026-10-05",
      "biais": "risk_off",
      "score_usd": 88,
-     "ecart": -17.0
+     "ecart": -15.0
     },
     {
-     "date": "2026-10-11",
+     "date": "2026-10-12",
      "biais": "risk_off",
-     "score_usd": 80,
-     "ecart": -15.3
+     "score_usd": 84,
+     "ecart": -10.3
     }
    ],
    "graphiques": [
@@ -74,12 +80,16 @@
          37
         ],
         [
-         "2026-10-03",
-         -17.0
+         "2026-09-21",
+         -10
         ],
         [
-         "2026-10-11",
-         -15.3
+         "2026-10-05",
+         -15.0
+        ],
+        [
+         "2026-10-12",
+         -10.3
         ]
        ]
       }
@@ -94,7 +104,7 @@
      "barres": [
       {
        "nom": "USD",
-       "valeur": 80
+       "valeur": 84
       },
       {
        "nom": "EUR",
@@ -110,11 +120,7 @@
       },
       {
        "nom": "CHF",
-       "valeur": 30
-      },
-      {
-       "nom": "CAD",
-       "valeur": 16
+       "valeur": 26
       },
       {
        "nom": "AUD",
@@ -122,16 +128,18 @@
       },
       {
        "nom": "NZD",
-       "valeur": 30
+       "valeur": 26
       },
       {
        "nom": "CNY",
-       "valeur": 40
+       "valeur": 36
       }
      ],
      "source": "calcul Python",
      "note": null,
-     "absentes": [],
+     "absentes": [
+      "CAD"
+     ],
      "raison": null
     }
    ],
@@ -281,27 +289,27 @@
        "raison_percentile": "dernière donnée OCDE au 2026-01 : trop ancienne pour un percentile"
       },
       "taux_2a": {
-       "valeur": 3.08,
+       "valeur": 3.09,
        "unite": "%",
-       "date": "2026-10-09",
+       "date": "2026-10-12",
        "source": "Bundesbank (Allemagne 2 ans)",
        "frequence": "quotidien",
        "raison": null,
-       "var_1s": 6.0,
-       "var_4s": -9.0,
+       "var_1s": 7.0,
+       "var_4s": -14.0,
        "percentile_5a": 95,
-       "n_5a": 261,
+       "n_5a": 262,
        "raison_percentile": null
       },
       "ecart_2a_directeur": {
-       "valeur": 43.0,
+       "valeur": 44.0,
        "raison": null,
        "source": "calcul : taux 2 ans − taux directeur du registre",
        "percentile_5a": null,
-       "var_1s": 6.0,
-       "var_4s": -9.0,
+       "var_1s": 7.0,
+       "var_4s": -14.0,
        "unite": "pb",
-       "date": "2026-10-09",
+       "date": "2026-10-12",
        "raison_percentile": "pas d'historique quotidien du taux directeur",
        "lecture": "le marché intègre des hausses"
       },
@@ -317,35 +325,31 @@
        "raison_percentile": "historique de l'inflation core trop court dans le registre"
       },
       "pente_2_10": {
-       "valeur": 45.0,
+       "valeur": 44.0,
        "unite": "pb",
-       "date": "2026-10-09",
+       "date": "2026-10-12",
        "source": "calcul : 10 ans − 2 ans",
        "frequence": "quotidien",
        "raison": null,
-       "var_1s": -2.0,
-       "var_4s": 6.0,
-       "percentile_5a": 56,
-       "n_5a": 261,
+       "var_1s": -5.0,
+       "var_4s": 8.0,
+       "percentile_5a": 53,
+       "n_5a": 262,
        "raison_percentile": null
       },
       "ecart_2a_us": {
-       "valeur": -167.0,
+       "valeur": -166.0,
        "unite": "pb",
-       "date": "2026-10-09",
+       "date": "2026-10-12",
        "source": "calcul : 2 ans local − 2 ans US (DGS2)",
        "frequence": "quotidien",
        "raison": null,
-       "var_1s": 14.0,
-       "var_4s": -21.0,
-       "percentile_5a": 62,
-       "n_5a": 261,
+       "var_1s": 16.0,
+       "var_4s": -24.0,
+       "percentile_5a": 64,
+       "n_5a": 262,
        "raison_percentile": null,
        "serie_90j": [
-        [
-         "2026-07-13",
-         -160.0
-        ],
         [
          "2026-07-14",
          -143.0
@@ -601,6 +605,10 @@
         [
          "2026-10-09",
          -167.0
+        ],
+        [
+         "2026-10-12",
+         -166.0
         ]
        ]
       },
@@ -1622,10 +1630,6 @@
        "nom": "EUR",
        "points": [
         [
-         "2026-07-13",
-         -160.0
-        ],
-        [
          "2026-07-14",
          -143.0
         ],
@@ -1880,6 +1884,10 @@
         [
          "2026-10-09",
          -167.0
+        ],
+        [
+         "2026-10-12",
+         -166.0
         ]
        ]
       },
@@ -2476,20 +2484,20 @@
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "date": "2026-10-11",
+       "date": "2026-10-12",
        "tendance": "baisse",
        "n": 8,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
       },
       "dispersion": {
-       "valeur": 1.09,
+       "valeur": 1.22,
        "raison": null,
        "source": "calcul Python (écart-type des surprises 30 j)",
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "n": 10,
+       "n": 8,
        "raison_percentile": "historique trop court"
       },
       "publications": {
@@ -2561,7 +2569,7 @@
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "date": "2026-10-11",
+       "date": "2026-10-12",
        "tendance": "hausse",
        "n": 11,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
@@ -2644,20 +2652,20 @@
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "date": "2026-10-11",
+       "date": "2026-10-12",
        "tendance": "baisse",
        "n": 11,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
       },
       "dispersion": {
-       "valeur": 0.67,
+       "valeur": 0.7,
        "raison": null,
        "source": "calcul Python (écart-type des surprises 30 j)",
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "n": 12,
+       "n": 11,
        "raison_percentile": "historique trop court"
       },
       "publications": {
@@ -2678,11 +2686,11 @@
          "consensus": "5.0%"
         },
         {
-         "indicateur": "Balance commerciale",
-         "date": "2026-09-11",
-         "surprise": 0.53,
-         "reel": "-21.0B",
-         "consensus": "-22.6B"
+         "indicateur": "PMI services",
+         "date": "2026-10-05",
+         "surprise": 0.4,
+         "reel": "52.1",
+         "consensus": "51.7"
         }
        ],
        "source": "registre macro (ForexFactory)",
@@ -2728,7 +2736,7 @@
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "date": "2026-10-11",
+       "date": "2026-10-12",
        "tendance": "stable",
        "n": 7,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
@@ -2812,7 +2820,7 @@
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "date": "2026-10-11",
+       "date": "2026-10-12",
        "tendance": "baisse",
        "n": 5,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
@@ -2890,7 +2898,7 @@
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "date": "2026-10-11",
+       "date": "2026-10-12",
        "tendance": "baisse",
        "n": 8,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
@@ -2974,7 +2982,7 @@
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "date": "2026-10-11",
+       "date": "2026-10-12",
        "tendance": "baisse",
        "n": 7,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
@@ -3058,7 +3066,7 @@
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "date": "2026-10-11",
+       "date": "2026-10-12",
        "tendance": "hausse",
        "n": 2,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
@@ -3126,7 +3134,7 @@
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "date": "2026-10-11",
+       "date": "2026-10-12",
        "tendance": "baisse",
        "n": 5,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
@@ -3208,27 +3216,27 @@
        "nom": "USD",
        "points": [
         [
-         "2026-09-06",
+         "2026-09-07",
          0.72
         ],
         [
-         "2026-09-13",
+         "2026-09-14",
          0.47
         ],
         [
-         "2026-09-20",
+         "2026-09-21",
          0.46
         ],
         [
-         "2026-09-27",
+         "2026-09-28",
          0.46
         ],
         [
-         "2026-10-04",
-         0.07
+         "2026-10-05",
+         0.05
         ],
         [
-         "2026-10-11",
+         "2026-10-12",
          -0.04
         ]
        ]
@@ -3237,51 +3245,51 @@
        "nom": "AUD",
        "points": [
         [
-         "2026-07-12",
+         "2026-07-13",
          2.67
         ],
         [
-         "2026-07-19",
+         "2026-07-20",
          2.67
         ],
         [
-         "2026-08-09",
+         "2026-08-10",
          2.0
         ],
         [
-         "2026-08-16",
+         "2026-08-17",
          2.0
         ],
         [
-         "2026-08-23",
+         "2026-08-24",
          2.0
         ],
         [
-         "2026-08-30",
+         "2026-08-31",
          2.33
         ],
         [
-         "2026-09-06",
+         "2026-09-07",
          1.07
         ],
         [
-         "2026-09-13",
+         "2026-09-14",
          1.07
         ],
         [
-         "2026-09-20",
+         "2026-09-21",
          1.07
         ],
         [
-         "2026-09-27",
+         "2026-09-28",
          -0.04
         ],
         [
-         "2026-10-04",
+         "2026-10-05",
          -0.52
         ],
         [
-         "2026-10-11",
+         "2026-10-12",
          -0.52
         ]
        ]
@@ -3290,27 +3298,27 @@
        "nom": "CAD",
        "points": [
         [
-         "2026-09-06",
+         "2026-09-07",
          0.08
         ],
         [
-         "2026-09-13",
-         0.08
-        ],
-        [
-         "2026-09-20",
+         "2026-09-14",
          0.06
         ],
         [
-         "2026-09-27",
-         0.08
-        ],
-        [
-         "2026-10-04",
+         "2026-09-21",
          0.06
         ],
         [
-         "2026-10-11",
+         "2026-09-28",
+         0.08
+        ],
+        [
+         "2026-10-05",
+         0.06
+        ],
+        [
+         "2026-10-12",
          -0.43
         ]
        ]
@@ -3319,23 +3327,23 @@
        "nom": "GBP",
        "points": [
         [
-         "2026-09-13",
+         "2026-09-14",
          0.53
         ],
         [
-         "2026-09-20",
+         "2026-09-21",
          0.45
         ],
         [
-         "2026-09-27",
+         "2026-09-28",
          0.4
         ],
         [
-         "2026-10-04",
+         "2026-10-05",
          0.36
         ],
         [
-         "2026-10-11",
+         "2026-10-12",
          0.35
         ]
        ]
@@ -3509,14 +3517,14 @@
       "taux_10a": {
        "valeur": 3.53,
        "unite": "%",
-       "date": "2026-10-09",
+       "date": "2026-10-12",
        "source": "Bundesbank (Allemagne 10 ans)",
        "frequence": "quotidien",
        "raison": null,
-       "var_1s": 4.0,
-       "var_4s": -3.0,
+       "var_1s": 2.0,
+       "var_4s": -6.0,
        "percentile_5a": 99,
-       "n_5a": 261,
+       "n_5a": 262,
        "raison_percentile": null
       },
       "prime_terme": {
@@ -3559,14 +3567,14 @@
        "alerte": "dernière année disponible : 2024"
       },
       "taux_10a": {
-       "valeur": 5.3852,
+       "valeur": 5.4292,
        "unite": "%",
-       "date": "2026-10-07",
+       "date": "2026-10-08",
        "source": "Banque d'Angleterre (par yield 10 ans, IUDMNPY)",
        "frequence": "quotidien",
        "raison": null,
-       "var_1s": 1.4,
-       "var_4s": 19.3,
+       "var_1s": 6.3,
+       "var_4s": 11.0,
        "percentile_5a": 100,
        "n_5a": 262,
        "raison_percentile": null
@@ -3869,14 +3877,7 @@
      }
     }
    ],
-   "actualites": [
-    {
-     "titre": "After France, is Italy next? Goldman Sachs flags bond risks as Rome's deficit widens",
-     "source": "cnbc_world",
-     "date": "2026-10-11",
-     "lien": "https://www.cnbc.com/2026/10/11/italy-government-bonds-sovereign-debt-giorgia-meloni.html"
-    }
-   ],
+   "actualites": [],
    "graphiques": [
     {
      "type": "serie",
@@ -4148,10 +4149,6 @@
        "nom": "EUR",
        "points": [
         [
-         "2026-07-13",
-         3.14
-        ],
-        [
          "2026-07-14",
          3.18
         ],
@@ -4406,16 +4403,16 @@
         [
          "2026-10-09",
          3.53
+        ],
+        [
+         "2026-10-12",
+         3.53
         ]
        ]
       },
       {
        "nom": "GBP",
        "points": [
-        [
-         "2026-07-09",
-         4.892
-        ],
         [
          "2026-07-10",
          4.8681
@@ -4667,6 +4664,10 @@
         [
          "2026-10-07",
          5.3852
+        ],
+        [
+         "2026-10-08",
+         5.4292
         ]
        ]
       },
@@ -5393,13 +5394,13 @@
     ],
     "matrice": {
      "EUR": {
-      "GBP": 0.85,
+      "GBP": 0.84,
       "JPY": 0.37,
-      "CHF": 0.31,
-      "CAD": 0.58,
+      "CHF": 0.3,
+      "CAD": 0.57,
       "AUD": 0.6,
       "NZD": 0.82,
-      "CNY": 0.13,
+      "CNY": 0.12,
       "USD": -0.84,
       "VIX": -0.31,
       "Indice dollar large (Fed)": -0.66,
@@ -5410,14 +5411,14 @@
       "Rendement 10 ans US": -0.25
      },
      "GBP": {
-      "EUR": 0.85,
-      "JPY": 0.36,
-      "CHF": 0.4,
+      "EUR": 0.84,
+      "JPY": 0.35,
+      "CHF": 0.38,
       "CAD": 0.48,
-      "AUD": 0.66,
-      "NZD": 0.76,
-      "CNY": 0.28,
-      "USD": -0.86,
+      "AUD": 0.65,
+      "NZD": 0.75,
+      "CNY": 0.26,
+      "USD": -0.85,
       "VIX": -0.28,
       "Indice dollar large (Fed)": -0.61,
       "Indice or (proxy)": 0.25,
@@ -5428,11 +5429,11 @@
      },
      "JPY": {
       "EUR": 0.37,
-      "GBP": 0.36,
-      "CHF": 0.22,
-      "CAD": 0.32,
+      "GBP": 0.35,
+      "CHF": 0.24,
+      "CAD": 0.3,
       "AUD": 0.4,
-      "NZD": 0.46,
+      "NZD": 0.47,
       "CNY": -0.08,
       "USD": -0.57,
       "VIX": -0.44,
@@ -5444,10 +5445,10 @@
       "Rendement 10 ans US": -0.36
      },
      "CHF": {
-      "EUR": 0.31,
-      "GBP": 0.4,
-      "JPY": 0.22,
-      "CAD": 0.5,
+      "EUR": 0.3,
+      "GBP": 0.38,
+      "JPY": 0.24,
+      "CAD": 0.47,
       "AUD": 0.63,
       "NZD": 0.47,
       "CNY": 0.24,
@@ -5461,14 +5462,14 @@
       "Rendement 10 ans US": -0.52
      },
      "CAD": {
-      "EUR": 0.58,
+      "EUR": 0.57,
       "GBP": 0.48,
-      "JPY": 0.32,
-      "CHF": 0.5,
-      "AUD": 0.42,
-      "NZD": 0.46,
-      "CNY": -0.03,
-      "USD": -0.64,
+      "JPY": 0.3,
+      "CHF": 0.47,
+      "AUD": 0.41,
+      "NZD": 0.45,
+      "CNY": -0.05,
+      "USD": -0.62,
       "VIX": -0.25,
       "Indice dollar large (Fed)": -0.37,
       "Indice or (proxy)": 0.43,
@@ -5479,10 +5480,10 @@
      },
      "AUD": {
       "EUR": 0.6,
-      "GBP": 0.66,
+      "GBP": 0.65,
       "JPY": 0.4,
       "CHF": 0.63,
-      "CAD": 0.42,
+      "CAD": 0.41,
       "NZD": 0.77,
       "CNY": 0.4,
       "USD": -0.86,
@@ -5496,12 +5497,12 @@
      },
      "NZD": {
       "EUR": 0.82,
-      "GBP": 0.76,
-      "JPY": 0.46,
+      "GBP": 0.75,
+      "JPY": 0.47,
       "CHF": 0.47,
-      "CAD": 0.46,
+      "CAD": 0.45,
       "AUD": 0.77,
-      "CNY": 0.13,
+      "CNY": 0.12,
       "USD": -0.9,
       "VIX": -0.55,
       "Indice dollar large (Fed)": -0.48,
@@ -5512,14 +5513,14 @@
       "Rendement 10 ans US": -0.51
      },
      "CNY": {
-      "EUR": 0.13,
-      "GBP": 0.28,
+      "EUR": 0.12,
+      "GBP": 0.26,
       "JPY": -0.08,
       "CHF": 0.24,
-      "CAD": -0.03,
+      "CAD": -0.05,
       "AUD": 0.4,
-      "NZD": 0.13,
-      "USD": -0.29,
+      "NZD": 0.12,
+      "USD": -0.28,
       "VIX": -0.08,
       "Indice dollar large (Fed)": -0.23,
       "Indice or (proxy)": 0.08,
@@ -5530,13 +5531,13 @@
      },
      "USD": {
       "EUR": -0.84,
-      "GBP": -0.86,
+      "GBP": -0.85,
       "JPY": -0.57,
       "CHF": -0.65,
-      "CAD": -0.64,
+      "CAD": -0.62,
       "AUD": -0.86,
       "NZD": -0.9,
-      "CNY": -0.29,
+      "CNY": -0.28,
       "VIX": 0.51,
       "Indice dollar large (Fed)": 0.62,
       "Indice or (proxy)": -0.51,
@@ -5666,7 +5667,7 @@
      }
     },
     "seances": 30,
-    "derniere_seance": "2026-10-11",
+    "derniere_seance": "2026-10-12",
     "changements_de_signe": [],
     "source": "calcul Python : rendements quotidiens (log) des devises (force, Twelve Data) et des séries FRED ; variations en points pour les taux"
    },
@@ -6783,7 +6784,7 @@
    "titre": "Géopolitique",
    "evenements": [
     {
-     "titre": "Trump says he is 'going to look at' joining Saudi Arabia in the fight against Iran-backed Houthis after deadly airport strike",
+     "titre": "Brent tops $106 after deadly Saudi airport attack, Ukraine says Russia violated energy ceasefire",
      "canal": "energie",
      "canaux": [
       "energie",
@@ -6798,11 +6799,30 @@
       "EUR"
      ],
      "source": "cnbc_world",
-     "date": "2026-10-11",
-     "lien": "https://www.cnbc.com/2026/10/11/trump-saudi-arabia-iran-houthis.html"
+     "date": "2026-10-12",
+     "lien": "https://www.cnbc.com/2026/10/12/oil-prics-today-iran-us-saudi-arabia-crude-.html"
     },
     {
-     "titre": "Putin relayed Iran war proposal to Trump, Kremlin says",
+     "titre": "Saudi Arabia says drones and missiles still targeting kingdom as Iran-backed Houthis step up attacks",
+     "canal": "energie",
+     "canaux": [
+      "energie",
+      "refuge"
+     ],
+     "mecanisme": "choc d'offre énergétique : prix du pétrole et du gaz, inflation importée",
+     "devises": [
+      "CAD",
+      "NZD",
+      "AUD",
+      "JPY",
+      "EUR"
+     ],
+     "source": "cnbc_world",
+     "date": "2026-10-12",
+     "lien": "https://www.cnbc.com/2026/10/12/us-iran-war-trump-hormuz-saudi.html"
+    },
+    {
+     "titre": "Zelenskyy accuses Russia of violating Trump’s energy ceasefire as drone attacks continue",
      "canal": "refuge",
      "canaux": [
       "refuge"
@@ -6814,15 +6834,46 @@
       "CHF"
      ],
      "source": "cnbc_world",
-     "date": "2026-10-10",
-     "lien": "https://www.cnbc.com/2026/10/10/putin-trump-iran-war-russia-diesel.html"
+     "date": "2026-10-12",
+     "lien": "https://www.cnbc.com/2026/10/12/russia-ukraine-energy-ceasefire-trump.html"
     },
     {
-     "titre": "Attack on Riyadh airport killed 12 people and wounded more than 300, Saudi authorities say",
+     "titre": "Nobel prize in economics awarded to Robert E. Hall and Michael Woodford",
+     "canal": "refuge",
+     "canaux": [
+      "refuge"
+     ],
+     "mecanisme": "conflit armé : fuite vers les valeurs refuges",
+     "devises": [
+      "USD",
+      "JPY",
+      "CHF"
+     ],
+     "source": "cnbc_world",
+     "date": "2026-10-12",
+     "lien": "https://www.cnbc.com/2026/10/12/nobel-economics-prize-winner-woodford-hall.html"
+    },
+    {
+     "titre": "Intel, Broadcom CEOs warn capital crunch could become AI's biggest bottleneck",
+     "canal": "refuge",
+     "canaux": [
+      "refuge"
+     ],
+     "mecanisme": "conflit armé : fuite vers les valeurs refuges",
+     "devises": [
+      "USD",
+      "JPY",
+      "CHF"
+     ],
+     "source": "cnbc_world",
+     "date": "2026-10-12",
+     "lien": "https://www.cnbc.com/2026/10/12/intel-broadcom-ceos-warn-capital-crunch-could-become-ai-bottleneck.html"
+    },
+    {
+     "titre": "investingLive European session wrap: Oil rebounds, dollar firms as US bond market holiday keeps traders cautious",
      "canal": "energie",
      "canaux": [
-      "energie",
-      "refuge"
+      "energie"
      ],
      "mecanisme": "choc d'offre énergétique : prix du pétrole et du gaz, inflation importée",
      "devises": [
@@ -6832,9 +6883,25 @@
       "JPY",
       "EUR"
      ],
-     "source": "cnbc_world",
-     "date": "2026-10-10",
-     "lien": "https://www.cnbc.com/2026/10/10/the-airport-in-the-saudi-capital-has-been-attacked-again-officials.html"
+     "source": "investinglive",
+     "date": "2026-10-12",
+     "lien": "https://investinglive.com/news/investinglive-european-session-wrap-oil-rebounds-dollar-firms-as-us-bond-market-holiday-keeps-traders-cautious/"
+    },
+    {
+     "titre": "investingLive Asia-Pacific market news: Gulf strikes, truce doubts,",
+     "canal": "refuge",
+     "canaux": [
+      "refuge"
+     ],
+     "mecanisme": "conflit armé : fuite vers les valeurs refuges",
+     "devises": [
+      "USD",
+      "JPY",
+      "CHF"
+     ],
+     "source": "investinglive",
+     "date": "2026-10-12",
+     "lien": "https://investinglive.com/news/investinglive-asia-pacific-market-news-gulf-strikes-truce-doubts/"
     }
    ],
    "graphiques": [
@@ -6850,7 +6917,7 @@
      "barres": [
       {
        "nom": "Énergie",
-       "valeur": 2
+       "valeur": 3
       },
       {
        "nom": "Commerce",
@@ -6862,7 +6929,7 @@
       },
       {
        "nom": "Refuge (conflits)",
-       "valeur": 3
+       "valeur": 6
       },
       {
        "nom": "Politique intérieure",
@@ -6934,7 +7001,7 @@
        "texte": "baissier"
       },
       "rsi": {
-       "valeur": 66.2,
+       "valeur": 69.9,
        "raison": null,
        "source": "calcul local (RSI 14, daily)",
        "percentile_5a": null,
@@ -6945,7 +7012,7 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm100": {
-       "valeur": 1.27,
+       "valeur": 1.45,
        "raison": null,
        "source": "calcul local (MM100, force de la devise)",
        "percentile_5a": null,
@@ -6955,12 +7022,14 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm200": {
-       "valeur": null,
-       "raison": "moyenne indisponible (historique de prix trop court)",
-       "source": null,
+       "valeur": 1.68,
+       "raison": null,
+       "source": "calcul local (MM200, force de la devise)",
        "percentile_5a": null,
        "var_1s": null,
-       "var_4s": null
+       "var_4s": null,
+       "unite": "%",
+       "raison_percentile": "non calculé"
       },
       "volatilite": {
        "valeur": 2.9,
@@ -6970,7 +7039,7 @@
        "var_1s": null,
        "var_4s": null,
        "unite": "% annualisé",
-       "percentile_90j": 9,
+       "percentile_90j": 10,
        "raison_percentile": "percentile sur 90 jours seulement (historique de prix Twelve Data limité à 90 séances)"
       },
       "niveau_cle": {
@@ -6980,7 +7049,7 @@
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
-       "texte": "resistance 100.69909 (+0.16 %)"
+       "texte": "support 103.14782 (-0.02 %)"
       },
       "cot": {
        "valeur": 12011,
@@ -7009,7 +7078,7 @@
        "texte": "range"
       },
       "rsi": {
-       "valeur": 25.1,
+       "valeur": 23.2,
        "raison": null,
        "source": "calcul local (RSI 14, daily)",
        "percentile_5a": null,
@@ -7020,7 +7089,7 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm100": {
-       "valeur": -2.42,
+       "valeur": -2.59,
        "raison": null,
        "source": "calcul local (MM100, force de la devise)",
        "percentile_5a": null,
@@ -7030,12 +7099,14 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm200": {
-       "valeur": null,
-       "raison": "moyenne indisponible (historique de prix trop court)",
-       "source": null,
+       "valeur": -3.15,
+       "raison": null,
+       "source": "calcul local (MM200, force de la devise)",
        "percentile_5a": null,
        "var_1s": null,
-       "var_4s": null
+       "var_4s": null,
+       "unite": "%",
+       "raison_percentile": "non calculé"
       },
       "volatilite": {
        "valeur": 4.2,
@@ -7045,7 +7116,7 @@
        "var_1s": null,
        "var_4s": null,
        "unite": "% annualisé",
-       "percentile_90j": 87,
+       "percentile_90j": 86,
        "raison_percentile": "percentile sur 90 jours seulement (historique de prix Twelve Data limité à 90 séances)"
       },
       "niveau_cle": {
@@ -7055,7 +7126,7 @@
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
-       "texte": "resistance 1.13732 (+1.53 %)"
+       "texte": "resistance 1.13732 (+1.73 %)"
       },
       "cot": {
        "valeur": -99332,
@@ -7084,7 +7155,7 @@
        "texte": "haussier"
       },
       "rsi": {
-       "valeur": 40.6,
+       "valeur": 41.2,
        "raison": null,
        "source": "calcul local (RSI 14, daily)",
        "percentile_5a": null,
@@ -7095,7 +7166,7 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm100": {
-       "valeur": -1.43,
+       "valeur": -1.4,
        "raison": null,
        "source": "calcul local (MM100, force de la devise)",
        "percentile_5a": null,
@@ -7105,12 +7176,14 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm200": {
-       "valeur": null,
-       "raison": "moyenne indisponible (historique de prix trop court)",
-       "source": null,
+       "valeur": -1.32,
+       "raison": null,
+       "source": "calcul local (MM200, force de la devise)",
        "percentile_5a": null,
        "var_1s": null,
-       "var_4s": null
+       "var_4s": null,
+       "unite": "%",
+       "raison_percentile": "non calculé"
       },
       "volatilite": {
        "valeur": 4.5,
@@ -7120,7 +7193,7 @@
        "var_1s": null,
        "var_4s": null,
        "unite": "% annualisé",
-       "percentile_90j": 83,
+       "percentile_90j": 81,
        "raison_percentile": "percentile sur 90 jours seulement (historique de prix Twelve Data limité à 90 séances)"
       },
       "niveau_cle": {
@@ -7130,7 +7203,7 @@
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
-       "texte": "resistance 1.32549 (+0.17 %)"
+       "texte": "resistance 1.32549 (+0.14 %)"
       },
       "cot": {
        "valeur": -97611,
@@ -7159,7 +7232,7 @@
        "texte": "haussier"
       },
       "rsi": {
-       "valeur": 40.5,
+       "valeur": 37.5,
        "raison": null,
        "source": "calcul local (RSI 14, daily)",
        "percentile_5a": null,
@@ -7170,7 +7243,7 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm100": {
-       "valeur": 0.48,
+       "valeur": 0.16,
        "raison": null,
        "source": "calcul local (MM100, force de la devise)",
        "percentile_5a": null,
@@ -7180,22 +7253,24 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm200": {
-       "valeur": null,
-       "raison": "moyenne indisponible (historique de prix trop court)",
-       "source": null,
+       "valeur": 0.32,
+       "raison": null,
+       "source": "calcul local (MM200, force de la devise)",
        "percentile_5a": null,
        "var_1s": null,
-       "var_4s": null
+       "var_4s": null,
+       "unite": "%",
+       "raison_percentile": "non calculé"
       },
       "volatilite": {
-       "valeur": 4.9,
+       "valeur": 5.0,
        "raison": null,
        "source": "calcul local : volatilité réalisée 20 séances",
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
        "unite": "% annualisé",
-       "percentile_90j": 6,
+       "percentile_90j": 11,
        "raison_percentile": "percentile sur 90 jours seulement (historique de prix Twelve Data limité à 90 séances)"
       },
       "niveau_cle": {
@@ -7205,7 +7280,7 @@
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
-       "texte": "resistance 0.00632 (+0.13 %)"
+       "texte": "support 0.0063 (-0.01 %)"
       },
       "cot": {
        "valeur": 62325,
@@ -7234,7 +7309,7 @@
        "texte": "haussier"
       },
       "rsi": {
-       "valeur": 42.2,
+       "valeur": 36.8,
        "raison": null,
        "source": "calcul local (RSI 14, daily)",
        "percentile_5a": null,
@@ -7245,7 +7320,7 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm100": {
-       "valeur": -1.87,
+       "valeur": -2.17,
        "raison": null,
        "source": "calcul local (MM100, force de la devise)",
        "percentile_5a": null,
@@ -7255,12 +7330,14 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm200": {
-       "valeur": null,
-       "raison": "moyenne indisponible (historique de prix trop court)",
-       "source": null,
+       "valeur": -3.58,
+       "raison": null,
+       "source": "calcul local (MM200, force de la devise)",
        "percentile_5a": null,
        "var_1s": null,
-       "var_4s": null
+       "var_4s": null,
+       "unite": "%",
+       "raison_percentile": "non calculé"
       },
       "volatilite": {
        "valeur": 4.0,
@@ -7270,7 +7347,7 @@
        "var_1s": null,
        "var_4s": null,
        "unite": "% annualisé",
-       "percentile_90j": 3,
+       "percentile_90j": 7,
        "raison_percentile": "percentile sur 90 jours seulement (historique de prix Twelve Data limité à 90 séances)"
       },
       "niveau_cle": {
@@ -7280,7 +7357,7 @@
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
-       "texte": "resistance 1.20581 (+0.08 %)"
+       "texte": "support 1.19802 (-0.22 %)"
       },
       "cot": {
        "valeur": -23740,
@@ -7309,7 +7386,7 @@
        "texte": "haussier"
       },
       "rsi": {
-       "valeur": 32.2,
+       "valeur": 31.3,
        "raison": null,
        "source": "calcul local (RSI 14, daily)",
        "percentile_5a": null,
@@ -7320,7 +7397,7 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm100": {
-       "valeur": -1.68,
+       "valeur": -1.71,
        "raison": null,
        "source": "calcul local (MM100, force de la devise)",
        "percentile_5a": null,
@@ -7330,12 +7407,14 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm200": {
-       "valeur": null,
-       "raison": "moyenne indisponible (historique de prix trop court)",
-       "source": null,
+       "valeur": -2.26,
+       "raison": null,
+       "source": "calcul local (MM200, force de la devise)",
        "percentile_5a": null,
        "var_1s": null,
-       "var_4s": null
+       "var_4s": null,
+       "unite": "%",
+       "raison_percentile": "non calculé"
       },
       "volatilite": {
        "valeur": 2.9,
@@ -7345,7 +7424,7 @@
        "var_1s": null,
        "var_4s": null,
        "unite": "% annualisé",
-       "percentile_90j": 27,
+       "percentile_90j": 23,
        "raison_percentile": "percentile sur 90 jours seulement (historique de prix Twelve Data limité à 90 séances)"
       },
       "niveau_cle": {
@@ -7355,7 +7434,7 @@
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
-       "texte": "resistance 0.70208 (+0.08 %)"
+       "texte": "resistance 0.70208 (+0.12 %)"
       },
       "cot": {
        "valeur": -90163,
@@ -7381,10 +7460,10 @@
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
-       "texte": "range"
+       "texte": "haussier"
       },
       "rsi": {
-       "valeur": 41.3,
+       "valeur": 38.1,
        "raison": null,
        "source": "calcul local (RSI 14, daily)",
        "percentile_5a": null,
@@ -7395,7 +7474,7 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm100": {
-       "valeur": -1.0,
+       "valeur": -1.22,
        "raison": null,
        "source": "calcul local (MM100, force de la devise)",
        "percentile_5a": null,
@@ -7405,12 +7484,14 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm200": {
-       "valeur": null,
-       "raison": "moyenne indisponible (historique de prix trop court)",
-       "source": null,
+       "valeur": -1.36,
+       "raison": null,
+       "source": "calcul local (MM200, force de la devise)",
        "percentile_5a": null,
        "var_1s": null,
-       "var_4s": null
+       "var_4s": null,
+       "unite": "%",
+       "raison_percentile": "non calculé"
       },
       "volatilite": {
        "valeur": 5.3,
@@ -7430,7 +7511,7 @@
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
-       "texte": "resistance 0.69939 (+0.12 %)"
+       "texte": "support 0.69637 (-0.09 %)"
       },
       "cot": {
        "valeur": -98588,
@@ -7459,7 +7540,7 @@
        "texte": "haussier"
       },
       "rsi": {
-       "valeur": 35.3,
+       "valeur": 30.5,
        "raison": null,
        "source": "calcul local (RSI 14, daily)",
        "percentile_5a": null,
@@ -7470,7 +7551,7 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm100": {
-       "valeur": -3.14,
+       "valeur": -3.48,
        "raison": null,
        "source": "calcul local (MM100, force de la devise)",
        "percentile_5a": null,
@@ -7480,22 +7561,24 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm200": {
-       "valeur": null,
-       "raison": "moyenne indisponible (historique de prix trop court)",
-       "source": null,
+       "valeur": -3.71,
+       "raison": null,
+       "source": "calcul local (MM200, force de la devise)",
        "percentile_5a": null,
        "var_1s": null,
-       "var_4s": null
+       "var_4s": null,
+       "unite": "%",
+       "raison_percentile": "non calculé"
       },
       "volatilite": {
-       "valeur": 5.1,
+       "valeur": 4.9,
        "raison": null,
        "source": "calcul local : volatilité réalisée 20 séances",
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
        "unite": "% annualisé",
-       "percentile_90j": 9,
+       "percentile_90j": 4,
        "raison_percentile": "percentile sur 90 jours seulement (historique de prix Twelve Data limité à 90 séances)"
       },
       "niveau_cle": {
@@ -7505,7 +7588,7 @@
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
-       "texte": "resistance 0.56204 (+0.05 %)"
+       "texte": "resistance 0.56015 (+0.08 %)"
       },
       "cot": {
        "valeur": -29346,
@@ -7534,7 +7617,7 @@
        "texte": "haussier"
       },
       "rsi": {
-       "valeur": 62.7,
+       "valeur": 57.6,
        "raison": null,
        "source": "calcul local (RSI 14, daily)",
        "percentile_5a": null,
@@ -7545,7 +7628,7 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm100": {
-       "valeur": 0.78,
+       "valeur": 0.65,
        "raison": null,
        "source": "calcul local (MM100, force de la devise)",
        "percentile_5a": null,
@@ -7555,12 +7638,14 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm200": {
-       "valeur": null,
-       "raison": "moyenne indisponible (historique de prix trop court)",
-       "source": null,
+       "valeur": 1.21,
+       "raison": null,
+       "source": "calcul local (MM200, force de la devise)",
        "percentile_5a": null,
        "var_1s": null,
-       "var_4s": null
+       "var_4s": null,
+       "unite": "%",
+       "raison_percentile": "non calculé"
       },
       "volatilite": {
        "valeur": 1.7,
@@ -7580,7 +7665,7 @@
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
-       "texte": "support 0.14939 (-0.09 %)"
+       "texte": "resistance 0.14943 (+0.04 %)"
       },
       "cot": {
        "valeur": null,
