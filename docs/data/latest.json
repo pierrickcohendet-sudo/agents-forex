@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-10-13T14:24:08+00:00",
+  "genere_le": "2026-10-13T20:28:46+00:00",
   "appels_llm": [
    {
     "heure": "12:50",
@@ -248,6 +248,60 @@
     "tokens_total": 8590,
     "ok": false,
     "etiquette": "synthese:GBP"
+   },
+   {
+    "heure": "20:21",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 7160,
+    "tokens_total": 8720,
+    "ok": false,
+    "etiquette": "synthese:EUR"
+   },
+   {
+    "heure": "20:21",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 7160,
+    "tokens_total": 8720,
+    "ok": false,
+    "etiquette": "synthese:EUR"
+   },
+   {
+    "heure": "20:22",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 7160,
+    "tokens_total": 8720,
+    "ok": false,
+    "etiquette": "synthese:EUR"
+   },
+   {
+    "heure": "20:22",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 7160,
+    "tokens_total": 8720,
+    "ok": false,
+    "etiquette": "synthese:EUR"
+   },
+   {
+    "heure": "20:23",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 6964,
+    "tokens_total": 8524,
+    "ok": false,
+    "etiquette": "synthese:GBP"
+   },
+   {
+    "heure": "20:26",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 6964,
+    "tokens_total": 8524,
+    "ok": false,
+    "etiquette": "synthese:GBP"
    }
   ],
   "quota_llm": {
@@ -259,7 +313,7 @@
    ],
    "modeles": {
     "gemini-3.5-flash": {
-     "appels_aujourdhui": 12,
+     "appels_aujourdhui": 18,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-10-10T23:59:59+00:00",
      "appels_ce_run": 3,
@@ -267,7 +321,7 @@
      "sauts_ce_run": 14
     },
     "gemini-3.8-flash": {
-     "appels_aujourdhui": 13,
+     "appels_aujourdhui": 18,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-10-10T23:59:59+00:00",
      "appels_ce_run": 3,
@@ -286,12 +340,12 @@
   },
   "appels_par_modele": {
    "gemini-3.5-flash": {
-    "appels": 6,
-    "echecs": 6
+    "appels": 9,
+    "echecs": 9
    },
    "gemini-3.8-flash": {
-    "appels": 7,
-    "echecs": 6
+    "appels": 10,
+    "echecs": 9
    },
    "gemini-3.5-flash-lite": {
     "appels": 14,
@@ -351,6 +405,39 @@
       "modele": "gemini-3.8-flash",
       "ouvert": true,
       "cause": "3 échecs consécutifs — 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:",
+      "ouvert_a_l_appel": 3,
+      "echecs_consecutifs": 3,
+      "ignores": 14
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 17
+     }
+    ]
+   },
+   {
+    "heure": "20:28",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": true,
+    "appels_total": 17,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": true,
+      "cause": "3 échecs consécutifs — 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:",
+      "ouvert_a_l_appel": 3,
+      "echecs_consecutifs": 3,
+      "ignores": 14
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": true,
+      "cause": "3 échecs consécutifs — HTTPSConnectionPool(host='generativelanguage.googleapis.com', port=443): Read timed out. (read timeout=180)",
       "ouvert_a_l_appel": 3,
       "echecs_consecutifs": 3,
       "ignores": 14
@@ -1680,8 +1767,8 @@
    "synthese_approfondie": {
     "statut": "indisponible",
     "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/mode | gemini-3.8-flash : 503 Server Error: ",
-    "tentatives": 2,
-    "genere_le": "2026-10-13T14:20:45+00:00"
+    "tentatives": 3,
+    "genere_le": "2026-10-13T20:22:52+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.14,
@@ -1937,8 +2024,8 @@
    "synthese_approfondie": {
     "statut": "indisponible",
     "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint",
-    "tentatives": 2,
-    "genere_le": "2026-10-13T14:22:08+00:00"
+    "tentatives": 3,
+    "genere_le": "2026-10-13T20:26:46+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.35,
@@ -2194,8 +2281,8 @@
    "synthese_approfondie": {
     "statut": "indisponible",
     "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint",
-    "tentatives": 2,
-    "genere_le": "2026-10-13T14:22:28+00:00"
+    "tentatives": 3,
+    "genere_le": "2026-10-13T20:27:06+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.03,
@@ -2451,8 +2538,8 @@
    "synthese_approfondie": {
     "statut": "indisponible",
     "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint",
-    "tentatives": 2,
-    "genere_le": "2026-10-13T14:22:48+00:00"
+    "tentatives": 3,
+    "genere_le": "2026-10-13T20:27:26+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.27,
@@ -2719,8 +2806,8 @@
    "synthese_approfondie": {
     "statut": "indisponible",
     "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint",
-    "tentatives": 2,
-    "genere_le": "2026-10-13T14:23:08+00:00"
+    "tentatives": 3,
+    "genere_le": "2026-10-13T20:27:46+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.43,
@@ -2976,8 +3063,8 @@
    "synthese_approfondie": {
     "statut": "indisponible",
     "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint",
-    "tentatives": 2,
-    "genere_le": "2026-10-13T14:23:28+00:00"
+    "tentatives": 3,
+    "genere_le": "2026-10-13T20:28:06+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.52,
@@ -3227,8 +3314,8 @@
    "synthese_approfondie": {
     "statut": "indisponible",
     "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint",
-    "tentatives": 2,
-    "genere_le": "2026-10-13T14:23:48+00:00"
+    "tentatives": 3,
+    "genere_le": "2026-10-13T20:28:26+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.27,
@@ -3512,8 +3599,8 @@
    "synthese_approfondie": {
     "statut": "indisponible",
     "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint",
-    "tentatives": 2,
-    "genere_le": "2026-10-13T14:24:08+00:00"
+    "tentatives": 3,
+    "genere_le": "2026-10-13T20:28:46+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.21,
