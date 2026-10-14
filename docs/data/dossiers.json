@@ -1,7 +1,7 @@
 {
  "version_schema": 1,
- "genere_le": "2026-10-13T20:28:46+00:00",
- "debut_historique": "2021-08-12",
+ "genere_le": "2026-10-14T00:36:45+00:00",
+ "debut_historique": "2021-08-13",
  "erreurs_collecte": [],
  "engrenages": {
   "1": {
@@ -11,25 +11,25 @@
     {
      "libelle": "Régime de risque (biais calculé)",
      "texte": "Risk Off",
-     "detail": "écart de score risque − refuge : -10.0 pts",
+     "detail": "écart de score risque − refuge : -23.7 pts",
      "source": "calcul Python (scores de confluence)"
     },
     {
      "libelle": "Cohérence des engrenages chiffrés",
-     "texte": "1 accord(s), 0 désaccord(s)",
+     "texte": "0 accord(s), 1 désaccord(s)",
      "detail": "engrenages 2, 3, 5 et 7 comparés à la direction du thème (dollar et risque)",
      "source": "règles Python des 8 engrenages",
      "raison": null
     },
     {
      "libelle": "Indice de surprise global (moyenne 9 devises)",
-     "texte": "-0,02",
+     "texte": "-0,04",
      "detail": "9 devise(s) avec un indice",
      "source": "calcul Python (registre macro, 30 j)"
     },
     {
      "libelle": "Score de confluence USD",
-     "texte": "74",
+     "texte": "84",
      "detail": "0-100, calcul Python",
      "source": "rapport du jour"
     }
@@ -42,28 +42,28 @@
      "ecart": 37
     },
     {
-     "date": "2026-09-22",
+     "date": "2026-09-23",
+     "biais": "risk_on",
+     "score_usd": 59,
+     "ecart": 10.7
+    },
+    {
+     "date": "2026-09-30",
      "biais": "neutre",
      "score_usd": null,
      "ecart": null
     },
     {
-     "date": "2026-09-29",
-     "biais": "neutre",
-     "score_usd": null,
-     "ecart": null
+     "date": "2026-10-07",
+     "biais": "risk_off",
+     "score_usd": 95,
+     "ecart": -30.7
     },
     {
-     "date": "2026-10-06",
+     "date": "2026-10-14",
      "biais": "risk_off",
-     "score_usd": 90,
-     "ecart": -16.3
-    },
-    {
-     "date": "2026-10-13",
-     "biais": "risk_off",
-     "score_usd": 74,
-     "ecart": -10.0
+     "score_usd": 84,
+     "ecart": -23.7
     }
    ],
    "graphiques": [
@@ -80,12 +80,16 @@
          37
         ],
         [
-         "2026-10-06",
-         -16.3
+         "2026-09-23",
+         10.7
         ],
         [
-         "2026-10-13",
-         -10.0
+         "2026-10-07",
+         -30.7
+        ],
+        [
+         "2026-10-14",
+         -23.7
         ]
        ]
       }
@@ -100,19 +104,15 @@
      "barres": [
       {
        "nom": "USD",
-       "valeur": 74
+       "valeur": 84
       },
       {
        "nom": "EUR",
-       "valeur": 12
+       "valeur": 31
       },
       {
        "nom": "GBP",
        "valeur": 44
-      },
-      {
-       "nom": "JPY",
-       "valeur": 27
       },
       {
        "nom": "CHF",
@@ -120,15 +120,15 @@
       },
       {
        "nom": "CAD",
-       "valeur": 28
+       "valeur": 16
       },
       {
        "nom": "AUD",
-       "valeur": 39
+       "valeur": 56
       },
       {
        "nom": "NZD",
-       "valeur": 30
+       "valeur": 22
       },
       {
        "nom": "CNY",
@@ -137,7 +137,9 @@
      ],
      "source": "calcul Python",
      "note": null,
-     "absentes": [],
+     "absentes": [
+      "JPY"
+     ],
      "raison": null
     }
    ],
@@ -192,7 +194,7 @@
       "taux_directeur": {
        "valeur": 3.88,
        "unite": "%",
-       "date": "2026-10-08",
+       "date": "2026-10-12",
        "source": "FRED (DFF, taux effectif)",
        "frequence": "quotidien",
        "raison": null,
@@ -204,29 +206,29 @@
        "note": "fourchette cible : borne haute 3.88% (ForexFactory)"
       },
       "taux_2a": {
-       "valeur": 4.75,
+       "valeur": 4.8,
        "unite": "%",
-       "date": "2026-10-08",
+       "date": "2026-10-09",
        "source": "FRED (DGS2)",
        "frequence": "quotidien",
        "raison": null,
        "var_1s": -3.0,
-       "var_4s": 19.0,
-       "percentile_5a": 87,
-       "n_5a": 262,
+       "var_4s": 17.0,
+       "percentile_5a": 88,
+       "n_5a": 261,
        "raison_percentile": null
       },
       "ecart_2a_directeur": {
-       "valeur": 87.0,
+       "valeur": 92.0,
        "unite": "pb",
-       "date": "2026-10-08",
+       "date": "2026-10-09",
        "source": "calcul : DGS2 − DFF",
        "frequence": "quotidien",
        "raison": null,
        "var_1s": -3.0,
-       "var_4s": -6.0,
-       "percentile_5a": 82,
-       "n_5a": 262,
+       "var_4s": -8.0,
+       "percentile_5a": 84,
+       "n_5a": 261,
        "raison_percentile": null,
        "lecture": "le marché intègre des hausses"
       },
@@ -242,16 +244,16 @@
        "raison_percentile": "historique de l'inflation core trop court dans le registre"
       },
       "pente_2_10": {
-       "valeur": 47.0,
+       "valeur": 44.0,
        "unite": "pb",
-       "date": "2026-10-08",
+       "date": "2026-10-09",
        "source": "calcul : 10 ans − 2 ans",
        "frequence": "quotidien",
        "raison": null,
-       "var_1s": 1.0,
-       "var_4s": 8.0,
-       "percentile_5a": 72,
-       "n_5a": 262,
+       "var_1s": -1.0,
+       "var_4s": 11.0,
+       "percentile_5a": 69,
+       "n_5a": 261,
        "raison_percentile": null
       },
       "ecart_2a_us": {
@@ -336,15 +338,15 @@
        "raison_percentile": null
       },
       "ecart_2a_us": {
-       "valeur": -165.0,
+       "valeur": -170.0,
        "unite": "pb",
        "date": "2026-10-13",
        "source": "calcul : 2 ans local − 2 ans US (DGS2)",
        "frequence": "quotidien",
        "raison": null,
-       "var_1s": 6.0,
-       "var_4s": -24.0,
-       "percentile_5a": 65,
+       "var_1s": 1.0,
+       "var_4s": -29.0,
+       "percentile_5a": 61,
        "n_5a": 262,
        "raison_percentile": null,
        "serie_90j": [
@@ -598,15 +600,15 @@
         ],
         [
          "2026-10-09",
-         -167.0
+         -172.0
         ],
         [
          "2026-10-12",
-         -166.0
+         -171.0
         ],
         [
          "2026-10-13",
-         -165.0
+         -170.0
         ]
        ]
       },
@@ -690,16 +692,16 @@
      "devise": "JPY",
      "cellules": {
       "taux_directeur": {
-       "valeur": 1.228,
+       "valeur": 1.227,
        "unite": "%",
-       "date": "2026-10-08",
+       "date": "2026-10-09",
        "source": "Banque du Japon (call rate non garanti au jour le jour)",
        "frequence": "quotidien",
        "raison": null,
-       "var_1s": 0.1,
-       "var_4s": 25.1,
+       "var_1s": 0.0,
+       "var_4s": 25.0,
        "percentile_5a": 100,
-       "n_5a": 262,
+       "n_5a": 261,
        "raison_percentile": null,
        "note": "objectif publié « <1.25% » (ForexFactory) : une borne, pas un taux"
       },
@@ -717,7 +719,7 @@
        "raison_percentile": null
       },
       "ecart_2a_directeur": {
-       "valeur": 72.4,
+       "valeur": 72.5,
        "raison": null,
        "source": "calcul : taux 2 ans − taux directeur du registre",
        "percentile_5a": null,
@@ -1097,27 +1099,27 @@
        "note_percentile": "percentile du taux du registre parmi le taux au jour le jour OCDE (mensuel, proxy) sur 5 ans"
       },
       "taux_2a": {
-       "valeur": 3.24,
+       "valeur": 3.18,
        "unite": "%",
-       "date": "2026-10-08",
+       "date": "2026-10-09",
        "source": "Banque du Canada (Valet, 2 ans)",
        "frequence": "quotidien",
        "raison": null,
-       "var_1s": -3.0,
-       "var_4s": -7.0,
-       "percentile_5a": 57,
-       "n_5a": 262,
+       "var_1s": -7.0,
+       "var_4s": -17.0,
+       "percentile_5a": 55,
+       "n_5a": 261,
        "raison_percentile": null
       },
       "ecart_2a_directeur": {
-       "valeur": 99.0,
+       "valeur": 93.0,
        "raison": null,
        "source": "calcul : taux 2 ans − taux directeur du registre",
        "percentile_5a": null,
-       "var_1s": -3.0,
-       "var_4s": -7.0,
+       "var_1s": -7.0,
+       "var_4s": -17.0,
        "unite": "pb",
-       "date": "2026-10-08",
+       "date": "2026-10-09",
        "raison_percentile": "pas d'historique quotidien du taux directeur",
        "lecture": "le marché intègre des hausses"
       },
@@ -1133,35 +1135,31 @@
        "raison_percentile": "historique de l'inflation core trop court dans le registre"
       },
       "pente_2_10": {
-       "valeur": 69.0,
+       "valeur": 68.0,
        "unite": "pb",
-       "date": "2026-10-08",
+       "date": "2026-10-09",
        "source": "calcul : 10 ans − 2 ans",
        "frequence": "quotidien",
        "raison": null,
-       "var_1s": 2.0,
-       "var_4s": 6.0,
-       "percentile_5a": 83,
-       "n_5a": 262,
+       "var_1s": 0.0,
+       "var_4s": 8.0,
+       "percentile_5a": 81,
+       "n_5a": 261,
        "raison_percentile": null
       },
       "ecart_2a_us": {
-       "valeur": -151.0,
+       "valeur": -162.0,
        "unite": "pb",
-       "date": "2026-10-08",
+       "date": "2026-10-09",
        "source": "calcul : 2 ans local − 2 ans US (DGS2)",
        "frequence": "quotidien",
        "raison": null,
-       "var_1s": 0.0,
-       "var_4s": -26.0,
-       "percentile_5a": 2,
-       "n_5a": 262,
+       "var_1s": -4.0,
+       "var_4s": -34.0,
+       "percentile_5a": 0,
+       "n_5a": 261,
        "raison_percentile": null,
        "serie_90j": [
-        [
-         "2026-07-10",
-         -139.0
-        ],
         [
          "2026-07-13",
          -138.0
@@ -1405,6 +1403,10 @@
         [
          "2026-10-08",
          -151.0
+        ],
+        [
+         "2026-10-09",
+         -162.0
         ]
        ]
       },
@@ -1877,15 +1879,15 @@
         ],
         [
          "2026-10-09",
-         -167.0
+         -172.0
         ],
         [
          "2026-10-12",
-         -166.0
+         -171.0
         ],
         [
          "2026-10-13",
-         -165.0
+         -170.0
         ]
        ]
       },
@@ -2138,10 +2140,6 @@
        "nom": "CAD",
        "points": [
         [
-         "2026-07-10",
-         -139.0
-        ],
-        [
          "2026-07-13",
          -138.0
         ],
@@ -2384,6 +2382,10 @@
         [
          "2026-10-08",
          -151.0
+        ],
+        [
+         "2026-10-09",
+         -162.0
         ]
        ]
       }
@@ -2410,7 +2412,7 @@
       },
       {
        "nom": "JPY",
-       "valeur": 1.228
+       "valeur": 1.227
       },
       {
        "nom": "CHF",
@@ -2482,7 +2484,7 @@
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "date": "2026-10-13",
+       "date": "2026-10-14",
        "tendance": "baisse",
        "n": 7,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
@@ -2567,7 +2569,7 @@
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "date": "2026-10-13",
+       "date": "2026-10-14",
        "tendance": "hausse",
        "n": 11,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
@@ -2650,7 +2652,7 @@
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "date": "2026-10-13",
+       "date": "2026-10-14",
        "tendance": "baisse",
        "n": 11,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
@@ -2734,7 +2736,7 @@
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "date": "2026-10-13",
+       "date": "2026-10-14",
        "tendance": "stable",
        "n": 7,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
@@ -2818,7 +2820,7 @@
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "date": "2026-10-13",
+       "date": "2026-10-14",
        "tendance": "baisse",
        "n": 5,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
@@ -2889,16 +2891,16 @@
      "devise": "CAD",
      "cellules": {
       "indice_surprise": {
-       "valeur": -0.43,
+       "valeur": -0.62,
        "raison": null,
        "source": "calcul Python (registre macro, 30 j)",
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "date": "2026-10-13",
+       "date": "2026-10-14",
        "tendance": "baisse",
-       "n": 8,
+       "n": 6,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
       },
       "dispersion": {
@@ -2980,7 +2982,7 @@
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "date": "2026-10-13",
+       "date": "2026-10-14",
        "tendance": "baisse",
        "n": 7,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
@@ -3064,7 +3066,7 @@
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "date": "2026-10-13",
+       "date": "2026-10-14",
        "tendance": "hausse",
        "n": 2,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
@@ -3132,7 +3134,7 @@
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "date": "2026-10-13",
+       "date": "2026-10-14",
        "tendance": "baisse",
        "n": 5,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
@@ -3214,89 +3216,32 @@
        "nom": "USD",
        "points": [
         [
-         "2026-09-01",
+         "2026-09-02",
          -0.6
         ],
         [
-         "2026-09-08",
+         "2026-09-09",
          0.72
         ],
         [
-         "2026-09-15",
-         0.47
-        ],
-        [
-         "2026-09-22",
+         "2026-09-16",
          0.55
         ],
         [
-         "2026-09-29",
+         "2026-09-23",
          0.55
         ],
         [
-         "2026-10-06",
+         "2026-09-30",
+         0.75
+        ],
+        [
+         "2026-10-07",
          -0.04
         ],
         [
-         "2026-10-13",
+         "2026-10-14",
          -0.05
-        ]
-       ]
-      },
-      {
-       "nom": "AUD",
-       "points": [
-        [
-         "2026-07-14",
-         2.67
-        ],
-        [
-         "2026-07-21",
-         2.67
-        ],
-        [
-         "2026-08-04",
-         2.0
-        ],
-        [
-         "2026-08-11",
-         2.0
-        ],
-        [
-         "2026-08-18",
-         2.0
-        ],
-        [
-         "2026-08-25",
-         2.0
-        ],
-        [
-         "2026-09-01",
-         2.33
-        ],
-        [
-         "2026-09-08",
-         1.07
-        ],
-        [
-         "2026-09-15",
-         1.07
-        ],
-        [
-         "2026-09-22",
-         1.07
-        ],
-        [
-         "2026-09-29",
-         -0.14
-        ],
-        [
-         "2026-10-06",
-         -0.52
-        ],
-        [
-         "2026-10-13",
-         -0.52
         ]
        ]
       },
@@ -3304,28 +3249,89 @@
        "nom": "CAD",
        "points": [
         [
-         "2026-09-08",
+         "2026-09-02",
+         0.0
+        ],
+        [
+         "2026-09-09",
          0.08
         ],
         [
-         "2026-09-15",
+         "2026-09-16",
          0.06
         ],
         [
-         "2026-09-22",
+         "2026-09-23",
          0.06
         ],
         [
-         "2026-09-29",
+         "2026-09-30",
          0.07
         ],
         [
-         "2026-10-06",
+         "2026-10-07",
          -0.28
         ],
         [
-         "2026-10-13",
-         -0.43
+         "2026-10-14",
+         -0.62
+        ]
+       ]
+      },
+      {
+       "nom": "AUD",
+       "points": [
+        [
+         "2026-07-15",
+         2.67
+        ],
+        [
+         "2026-07-22",
+         2.67
+        ],
+        [
+         "2026-08-05",
+         2.0
+        ],
+        [
+         "2026-08-12",
+         2.0
+        ],
+        [
+         "2026-08-19",
+         2.0
+        ],
+        [
+         "2026-08-26",
+         2.0
+        ],
+        [
+         "2026-09-02",
+         1.53
+        ],
+        [
+         "2026-09-09",
+         1.07
+        ],
+        [
+         "2026-09-16",
+         1.07
+        ],
+        [
+         "2026-09-23",
+         1.07
+        ],
+        [
+         "2026-09-30",
+         -0.39
+        ],
+        [
+         "2026-10-07",
+         -0.52
+        ],
+        [
+         "2026-10-14",
+         -0.52
         ]
        ]
       },
@@ -3333,23 +3339,23 @@
        "nom": "GBP",
        "points": [
         [
-         "2026-09-15",
-         0.58
+         "2026-09-16",
+         0.32
         ],
         [
-         "2026-09-22",
-         0.45
-        ],
-        [
-         "2026-09-29",
+         "2026-09-23",
          0.4
         ],
         [
-         "2026-10-06",
+         "2026-09-30",
+         0.39
+        ],
+        [
+         "2026-10-07",
          0.36
         ],
         [
-         "2026-10-13",
+         "2026-10-14",
          0.35
         ]
        ]
@@ -3385,7 +3391,7 @@
       },
       {
        "nom": "CAD",
-       "valeur": -0.43
+       "valeur": -0.62
       },
       {
        "nom": "AUD",
@@ -3464,27 +3470,27 @@
        "alerte": null
       },
       "taux_10a": {
-       "valeur": 5.22,
+       "valeur": 5.24,
        "unite": "%",
-       "date": "2026-10-08",
+       "date": "2026-10-09",
        "source": "FRED (DGS10)",
        "frequence": "quotidien",
        "raison": null,
-       "var_1s": -2.0,
-       "var_4s": 27.0,
+       "var_1s": -4.0,
+       "var_4s": 28.0,
        "percentile_5a": 100,
-       "n_5a": 262,
+       "n_5a": 261,
        "raison_percentile": null
       },
       "prime_terme": {
-       "valeur": 1.0847,
+       "valeur": 1.0729,
        "unite": "%",
-       "date": "2026-10-02",
+       "date": "2026-10-09",
        "source": "FRED (THREEFYTP10, prime de terme 10 ans, Kim-Wright)",
        "frequence": "quotidien",
        "raison": null,
-       "var_1s": 6.4,
-       "var_4s": 19.6,
+       "var_1s": -1.2,
+       "var_4s": 11.2,
        "percentile_5a": 100,
        "n_5a": 261,
        "raison_percentile": null
@@ -3719,16 +3725,16 @@
        "alerte": "dernière année disponible : 2024"
       },
       "taux_10a": {
-       "valeur": 3.93,
+       "valeur": 3.86,
        "unite": "%",
-       "date": "2026-10-08",
+       "date": "2026-10-09",
        "source": "Banque du Canada (Valet, 10 ans)",
        "frequence": "quotidien",
        "raison": null,
-       "var_1s": -1.0,
-       "var_4s": -1.0,
-       "percentile_5a": 97,
-       "n_5a": 262,
+       "var_1s": -7.0,
+       "var_4s": -9.0,
+       "percentile_5a": 96,
+       "n_5a": 261,
        "raison_percentile": null
       },
       "prime_terme": {
@@ -3883,20 +3889,7 @@
      }
     }
    ],
-   "actualites": [
-    {
-     "titre": "In charts: How one of the world's biggest economies got trapped by debt",
-     "source": "cnbc_world",
-     "date": "2026-10-13",
-     "lien": "https://www.cnbc.com/2026/10/13/france-2027-budget-debt.html"
-    },
-    {
-     "titre": "IMF warns bond yields could see a 'disorderly' spike as debt, inflation risks worsen",
-     "source": "cnbc_world",
-     "date": "2026-10-13",
-     "lien": "https://www.cnbc.com/2026/10/13/treasury-yields-imf-debt-inflation-.html"
-    }
-   ],
+   "actualites": [],
    "graphiques": [
     {
      "type": "serie",
@@ -3906,10 +3899,6 @@
       {
        "nom": "USD",
        "points": [
-        [
-         "2026-07-10",
-         4.56
-        ],
         [
          "2026-07-13",
          4.62
@@ -4161,6 +4150,10 @@
         [
          "2026-10-08",
          5.22
+        ],
+        [
+         "2026-10-09",
+         5.24
         ]
        ]
       },
@@ -4939,10 +4932,6 @@
        "nom": "CAD",
        "points": [
         [
-         "2026-07-10",
-         3.51
-        ],
-        [
          "2026-07-13",
          3.56
         ],
@@ -5185,6 +5174,10 @@
         [
          "2026-10-08",
          3.93
+        ],
+        [
+         "2026-10-09",
+         3.86
         ]
        ]
       }
@@ -5250,16 +5243,16 @@
      "libelle": "VIX",
      "unite_affichage": "pts",
      "cellule": {
-      "valeur": 14.84,
+      "valeur": 15.21,
       "unite": "niveau",
-      "date": "2026-10-09",
+      "date": "2026-10-12",
       "source": "FRED (VIXCLS)",
       "frequence": "quotidien",
       "raison": null,
-      "var_1s": -3.07,
-      "var_4s": -6.31,
-      "percentile_5a": 23,
-      "n_5a": 261,
+      "var_1s": -2.0,
+      "var_4s": -11.05,
+      "percentile_5a": 29,
+      "n_5a": 262,
       "raison_percentile": null
      }
     },
@@ -5268,15 +5261,15 @@
      "libelle": "Indice dollar large (Fed)",
      "unite_affichage": "indice",
      "cellule": {
-      "valeur": 121.3848,
+      "valeur": 121.6023,
       "unite": "niveau",
-      "date": "2026-10-02",
+      "date": "2026-10-09",
       "source": "FRED (DTWEXBGS, indice dollar large de la Fed)",
       "frequence": "quotidien",
       "raison": null,
-      "var_1s": 0.88,
-      "var_4s": 2.8,
-      "percentile_5a": 63,
+      "var_1s": 0.18,
+      "var_4s": 2.87,
+      "percentile_5a": 66,
       "n_5a": 261,
       "raison_percentile": null
      }
@@ -5342,14 +5335,14 @@
      "libelle": "S&P 500",
      "unite_affichage": "indice",
      "cellule": {
-      "valeur": 7807.24,
+      "valeur": 7805.45,
       "unite": "niveau",
-      "date": "2026-10-12",
+      "date": "2026-10-13",
       "source": "FRED (SP500)",
       "frequence": "quotidien",
       "raison": null,
-      "var_1s": 0.43,
-      "var_4s": 2.46,
+      "var_1s": -0.17,
+      "var_4s": 2.9,
       "percentile_5a": 100,
       "n_5a": 262,
       "raison_percentile": null
@@ -5360,16 +5353,16 @@
      "libelle": "Rendement 10 ans US",
      "unite_affichage": "%",
      "cellule": {
-      "valeur": 5.22,
+      "valeur": 5.24,
       "unite": "%",
-      "date": "2026-10-08",
+      "date": "2026-10-09",
       "source": "FRED (DGS10)",
       "frequence": "quotidien",
       "raison": null,
-      "var_1s": -2.0,
-      "var_4s": 27.0,
+      "var_1s": -4.0,
+      "var_4s": 28.0,
       "percentile_5a": 100,
-      "n_5a": 262,
+      "n_5a": 261,
       "raison_percentile": null
      }
     },
@@ -5378,16 +5371,16 @@
      "libelle": "Rendement 2 ans US",
      "unite_affichage": "%",
      "cellule": {
-      "valeur": 4.75,
+      "valeur": 4.8,
       "unite": "%",
-      "date": "2026-10-08",
+      "date": "2026-10-09",
       "source": "FRED (DGS2)",
       "frequence": "quotidien",
       "raison": null,
       "var_1s": -3.0,
-      "var_4s": 19.0,
-      "percentile_5a": 87,
-      "n_5a": 262,
+      "var_4s": 17.0,
+      "percentile_5a": 88,
+      "n_5a": 261,
       "raison_percentile": null
      }
     }
@@ -5414,66 +5407,66 @@
     "matrice": {
      "EUR": {
       "GBP": 0.86,
-      "JPY": 0.42,
+      "JPY": 0.38,
       "CHF": 0.38,
-      "CAD": 0.62,
+      "CAD": 0.64,
       "AUD": 0.64,
       "NZD": 0.84,
-      "CNY": 0.21,
+      "CNY": 0.3,
       "USD": -0.86,
-      "VIX": -0.33,
-      "Indice dollar large (Fed)": -0.66,
+      "VIX": -0.39,
+      "Indice dollar large (Fed)": -0.65,
       "Indice or (proxy)": 0.4,
       "Pétrole WTI": 0.02,
       "Pétrole Brent": 0.14,
-      "S&P 500": 0.29,
-      "Rendement 10 ans US": -0.25
+      "S&P 500": 0.31,
+      "Rendement 10 ans US": -0.24
      },
      "GBP": {
       "EUR": 0.86,
-      "JPY": 0.4,
-      "CHF": 0.44,
-      "CAD": 0.52,
-      "AUD": 0.68,
-      "NZD": 0.78,
-      "CNY": 0.34,
-      "USD": -0.86,
-      "VIX": -0.3,
-      "Indice dollar large (Fed)": -0.61,
+      "JPY": 0.38,
+      "CHF": 0.43,
+      "CAD": 0.53,
+      "AUD": 0.69,
+      "NZD": 0.8,
+      "CNY": 0.38,
+      "USD": -0.87,
+      "VIX": -0.32,
+      "Indice dollar large (Fed)": -0.62,
       "Indice or (proxy)": 0.24,
       "Pétrole WTI": 0.03,
       "Pétrole Brent": 0.13,
       "S&P 500": 0.33,
-      "Rendement 10 ans US": -0.24
+      "Rendement 10 ans US": -0.23
      },
      "JPY": {
-      "EUR": 0.42,
-      "GBP": 0.4,
-      "CHF": 0.29,
-      "CAD": 0.37,
-      "AUD": 0.44,
-      "NZD": 0.51,
-      "CNY": -0.04,
-      "USD": -0.61,
-      "VIX": -0.43,
-      "Indice dollar large (Fed)": -0.5,
+      "EUR": 0.38,
+      "GBP": 0.38,
+      "CHF": 0.27,
+      "CAD": 0.34,
+      "AUD": 0.42,
+      "NZD": 0.46,
+      "CNY": 0.03,
+      "USD": -0.58,
+      "VIX": -0.44,
+      "Indice dollar large (Fed)": -0.47,
       "Indice or (proxy)": 0.41,
       "Pétrole WTI": -0.24,
       "Pétrole Brent": -0.11,
-      "S&P 500": 0.45,
+      "S&P 500": 0.46,
       "Rendement 10 ans US": -0.36
      },
      "CHF": {
       "EUR": 0.38,
-      "GBP": 0.44,
-      "JPY": 0.29,
-      "CAD": 0.54,
+      "GBP": 0.43,
+      "JPY": 0.27,
+      "CAD": 0.52,
       "AUD": 0.66,
-      "NZD": 0.53,
-      "CNY": 0.3,
+      "NZD": 0.55,
+      "CNY": 0.33,
       "USD": -0.69,
-      "VIX": -0.39,
-      "Indice dollar large (Fed)": -0.25,
+      "VIX": -0.41,
+      "Indice dollar large (Fed)": -0.2,
       "Indice or (proxy)": 0.48,
       "Pétrole WTI": -0.09,
       "Pétrole Brent": 0.0,
@@ -5481,123 +5474,123 @@
       "Rendement 10 ans US": -0.52
      },
      "CAD": {
-      "EUR": 0.62,
-      "GBP": 0.52,
-      "JPY": 0.37,
-      "CHF": 0.54,
-      "AUD": 0.46,
-      "NZD": 0.52,
-      "CNY": 0.03,
+      "EUR": 0.64,
+      "GBP": 0.53,
+      "JPY": 0.34,
+      "CHF": 0.52,
+      "AUD": 0.48,
+      "NZD": 0.53,
+      "CNY": 0.07,
       "USD": -0.68,
-      "VIX": -0.23,
+      "VIX": -0.29,
       "Indice dollar large (Fed)": -0.37,
       "Indice or (proxy)": 0.42,
       "Pétrole WTI": 0.02,
       "Pétrole Brent": -0.08,
-      "S&P 500": 0.19,
+      "S&P 500": 0.22,
       "Rendement 10 ans US": -0.38
      },
      "AUD": {
       "EUR": 0.64,
-      "GBP": 0.68,
-      "JPY": 0.44,
+      "GBP": 0.69,
+      "JPY": 0.42,
       "CHF": 0.66,
-      "CAD": 0.46,
-      "NZD": 0.8,
-      "CNY": 0.46,
+      "CAD": 0.48,
+      "NZD": 0.81,
+      "CNY": 0.54,
       "USD": -0.87,
-      "VIX": -0.62,
-      "Indice dollar large (Fed)": -0.53,
+      "VIX": -0.64,
+      "Indice dollar large (Fed)": -0.5,
       "Indice or (proxy)": 0.46,
       "Pétrole WTI": -0.11,
       "Pétrole Brent": -0.14,
       "S&P 500": 0.64,
-      "Rendement 10 ans US": -0.56
+      "Rendement 10 ans US": -0.55
      },
      "NZD": {
       "EUR": 0.84,
-      "GBP": 0.78,
-      "JPY": 0.51,
-      "CHF": 0.53,
-      "CAD": 0.52,
-      "AUD": 0.8,
-      "CNY": 0.24,
+      "GBP": 0.8,
+      "JPY": 0.46,
+      "CHF": 0.55,
+      "CAD": 0.53,
+      "AUD": 0.81,
+      "CNY": 0.4,
       "USD": -0.92,
-      "VIX": -0.57,
-      "Indice dollar large (Fed)": -0.48,
+      "VIX": -0.59,
+      "Indice dollar large (Fed)": -0.44,
       "Indice or (proxy)": 0.41,
       "Pétrole WTI": -0.05,
       "Pétrole Brent": -0.11,
-      "S&P 500": 0.57,
-      "Rendement 10 ans US": -0.51
+      "S&P 500": 0.56,
+      "Rendement 10 ans US": -0.5
      },
      "CNY": {
-      "EUR": 0.21,
-      "GBP": 0.34,
-      "JPY": -0.04,
-      "CHF": 0.3,
-      "CAD": 0.03,
-      "AUD": 0.46,
-      "NZD": 0.24,
-      "USD": -0.35,
-      "VIX": -0.11,
-      "Indice dollar large (Fed)": -0.23,
+      "EUR": 0.3,
+      "GBP": 0.38,
+      "JPY": 0.03,
+      "CHF": 0.33,
+      "CAD": 0.07,
+      "AUD": 0.54,
+      "NZD": 0.4,
+      "USD": -0.44,
+      "VIX": -0.21,
+      "Indice dollar large (Fed)": -0.22,
       "Indice or (proxy)": 0.05,
       "Pétrole WTI": 0.17,
       "Pétrole Brent": -0.07,
-      "S&P 500": 0.2,
-      "Rendement 10 ans US": -0.27
+      "S&P 500": 0.34,
+      "Rendement 10 ans US": -0.26
      },
      "USD": {
       "EUR": -0.86,
-      "GBP": -0.86,
-      "JPY": -0.61,
+      "GBP": -0.87,
+      "JPY": -0.58,
       "CHF": -0.69,
       "CAD": -0.68,
       "AUD": -0.87,
       "NZD": -0.92,
-      "CNY": -0.35,
-      "VIX": 0.54,
-      "Indice dollar large (Fed)": 0.62,
+      "CNY": -0.44,
+      "VIX": 0.58,
+      "Indice dollar large (Fed)": 0.59,
       "Indice or (proxy)": -0.5,
       "Pétrole WTI": 0.08,
       "Pétrole Brent": 0.04,
-      "S&P 500": -0.57,
+      "S&P 500": -0.58,
       "Rendement 10 ans US": 0.52
      },
      "VIX": {
-      "EUR": -0.33,
-      "GBP": -0.3,
-      "JPY": -0.43,
-      "CHF": -0.39,
-      "CAD": -0.23,
-      "AUD": -0.62,
-      "NZD": -0.57,
-      "CNY": -0.11,
-      "USD": 0.54,
-      "Indice dollar large (Fed)": 0.29,
-      "Indice or (proxy)": -0.7,
+      "EUR": -0.39,
+      "GBP": -0.32,
+      "JPY": -0.44,
+      "CHF": -0.41,
+      "CAD": -0.29,
+      "AUD": -0.64,
+      "NZD": -0.59,
+      "CNY": -0.21,
+      "USD": 0.58,
+      "Indice dollar large (Fed)": 0.25,
+      "Indice or (proxy)": -0.71,
       "Pétrole WTI": 0.47,
       "Pétrole Brent": 0.29,
       "S&P 500": -0.78,
       "Rendement 10 ans US": 0.49
      },
      "Indice dollar large (Fed)": {
-      "EUR": -0.66,
-      "GBP": -0.61,
-      "JPY": -0.5,
-      "CHF": -0.25,
+      "EUR": -0.65,
+      "GBP": -0.62,
+      "JPY": -0.47,
+      "CHF": -0.2,
       "CAD": -0.37,
-      "AUD": -0.53,
-      "NZD": -0.48,
-      "CNY": -0.23,
-      "USD": 0.62,
-      "VIX": 0.29,
+      "AUD": -0.5,
+      "NZD": -0.44,
+      "CNY": -0.22,
+      "USD": 0.59,
+      "VIX": 0.25,
       "Indice or (proxy)": -0.25,
-      "Pétrole WTI": 0.27,
-      "Pétrole Brent": -0.25,
+      "Pétrole WTI": 0.26,
+      "Pétrole Brent": -0.16,
       "S&P 500": -0.35,
-      "Rendement 10 ans US": 0.15
+      "Rendement 10 ans US": 0.19
      },
      "Indice or (proxy)": {
       "EUR": 0.4,
@@ -5609,12 +5602,12 @@
       "NZD": 0.41,
       "CNY": 0.05,
       "USD": -0.5,
-      "VIX": -0.7,
+      "VIX": -0.71,
       "Indice dollar large (Fed)": -0.25,
       "Pétrole WTI": -0.5,
       "Pétrole Brent": -0.39,
       "S&P 500": 0.55,
-      "Rendement 10 ans US": -0.49
+      "Rendement 10 ans US": -0.48
      },
      "Pétrole WTI": {
       "EUR": 0.02,
@@ -5627,7 +5620,7 @@
       "CNY": 0.17,
       "USD": 0.08,
       "VIX": 0.47,
-      "Indice dollar large (Fed)": 0.27,
+      "Indice dollar large (Fed)": 0.26,
       "Indice or (proxy)": -0.5,
       "Pétrole Brent": 0.46,
       "S&P 500": -0.48,
@@ -5644,22 +5637,22 @@
       "CNY": -0.07,
       "USD": 0.04,
       "VIX": 0.29,
-      "Indice dollar large (Fed)": -0.25,
+      "Indice dollar large (Fed)": -0.16,
       "Indice or (proxy)": -0.39,
       "Pétrole WTI": 0.46,
       "S&P 500": -0.28,
       "Rendement 10 ans US": 0.48
      },
      "S&P 500": {
-      "EUR": 0.29,
+      "EUR": 0.31,
       "GBP": 0.33,
-      "JPY": 0.45,
+      "JPY": 0.46,
       "CHF": 0.51,
-      "CAD": 0.19,
+      "CAD": 0.22,
       "AUD": 0.64,
-      "NZD": 0.57,
-      "CNY": 0.2,
-      "USD": -0.57,
+      "NZD": 0.56,
+      "CNY": 0.34,
+      "USD": -0.58,
       "VIX": -0.78,
       "Indice dollar large (Fed)": -0.35,
       "Indice or (proxy)": 0.55,
@@ -5668,25 +5661,25 @@
       "Rendement 10 ans US": -0.54
      },
      "Rendement 10 ans US": {
-      "EUR": -0.25,
-      "GBP": -0.24,
+      "EUR": -0.24,
+      "GBP": -0.23,
       "JPY": -0.36,
       "CHF": -0.52,
       "CAD": -0.38,
-      "AUD": -0.56,
-      "NZD": -0.51,
-      "CNY": -0.27,
+      "AUD": -0.55,
+      "NZD": -0.5,
+      "CNY": -0.26,
       "USD": 0.52,
       "VIX": 0.49,
-      "Indice dollar large (Fed)": 0.15,
-      "Indice or (proxy)": -0.49,
+      "Indice dollar large (Fed)": 0.19,
+      "Indice or (proxy)": -0.48,
       "Pétrole WTI": 0.3,
       "Pétrole Brent": 0.48,
       "S&P 500": -0.54
      }
     },
     "seances": 30,
-    "derniere_seance": "2026-10-13",
+    "derniere_seance": "2026-10-14",
     "changements_de_signe": [],
     "source": "calcul Python : rendements quotidiens (log) des devises (force, Twelve Data) et des séries FRED ; variations en points pour les taux"
    },
@@ -5705,260 +5698,260 @@
        "nom": "Indice dollar large",
        "points": [
         [
-         "2026-07-06",
+         "2026-07-13",
          100.0
         ],
         [
-         "2026-07-07",
-         99.98
-        ],
-        [
-         "2026-07-08",
-         100.24
-        ],
-        [
-         "2026-07-09",
-         99.93
-        ],
-        [
-         "2026-07-10",
-         99.73
-        ],
-        [
-         "2026-07-13",
-         99.92
-        ],
-        [
          "2026-07-14",
-         99.7
-        ],
-        [
-         "2026-07-15",
-         99.56
-        ],
-        [
-         "2026-07-16",
-         99.58
-        ],
-        [
-         "2026-07-17",
-         99.75
-        ],
-        [
-         "2026-07-20",
-         99.76
-        ],
-        [
-         "2026-07-21",
-         99.79
-        ],
-        [
-         "2026-07-22",
          99.78
         ],
         [
-         "2026-07-23",
-         100.06
+         "2026-07-15",
+         99.64
         ],
         [
-         "2026-07-24",
-         99.9
+         "2026-07-16",
+         99.66
         ],
         [
-         "2026-07-27",
-         99.95
-        ],
-        [
-         "2026-07-28",
+         "2026-07-17",
          99.83
         ],
         [
+         "2026-07-20",
+         99.83
+        ],
+        [
+         "2026-07-21",
+         99.86
+        ],
+        [
+         "2026-07-22",
+         99.86
+        ],
+        [
+         "2026-07-23",
+         100.14
+        ],
+        [
+         "2026-07-24",
+         99.97
+        ],
+        [
+         "2026-07-27",
+         100.03
+        ],
+        [
+         "2026-07-28",
+         99.9
+        ],
+        [
          "2026-07-29",
-         99.96
+         100.04
         ],
         [
          "2026-07-30",
-         99.04
+         99.12
         ],
         [
          "2026-07-31",
-         99.06
+         99.14
         ],
         [
          "2026-08-03",
-         99.06
+         99.13
         ],
         [
          "2026-08-04",
-         98.98
+         99.05
         ],
         [
          "2026-08-05",
-         98.8
+         98.88
         ],
         [
          "2026-08-06",
-         98.9
+         98.98
         ],
         [
          "2026-08-07",
-         98.54
+         98.61
         ],
         [
          "2026-08-10",
-         98.58
+         98.66
         ],
         [
          "2026-08-11",
-         98.63
+         98.71
         ],
         [
          "2026-08-12",
-         98.58
+         98.66
         ],
         [
          "2026-08-13",
-         98.63
+         98.71
         ],
         [
          "2026-08-14",
-         98.4
+         98.48
         ],
         [
          "2026-08-17",
-         98.33
+         98.4
         ],
         [
          "2026-08-18",
-         98.47
+         98.54
         ],
         [
          "2026-08-19",
-         97.93
+         98.01
         ],
         [
          "2026-08-20",
-         97.86
+         97.94
         ],
         [
          "2026-08-21",
-         97.71
+         97.78
         ],
         [
          "2026-08-24",
-         97.92
+         97.99
         ],
         [
          "2026-08-25",
-         97.84
+         97.92
         ],
         [
          "2026-08-26",
-         98.02
+         98.1
         ],
         [
          "2026-08-27",
-         97.95
+         98.03
         ],
         [
          "2026-08-28",
-         98.27
+         98.35
         ],
         [
          "2026-08-31",
-         98.12
-        ],
-        [
-         "2026-09-01",
          98.2
         ],
         [
+         "2026-09-01",
+         98.27
+        ],
+        [
          "2026-09-02",
-         98.09
+         98.17
         ],
         [
          "2026-09-03",
-         97.76
-        ],
-        [
-         "2026-09-04",
-         97.71
-        ],
-        [
-         "2026-09-08",
-         97.58
-        ],
-        [
-         "2026-09-09",
-         97.56
-        ],
-        [
-         "2026-09-10",
-         97.72
-        ],
-        [
-         "2026-09-11",
          97.83
         ],
         [
+         "2026-09-04",
+         97.79
+        ],
+        [
+         "2026-09-08",
+         97.66
+        ],
+        [
+         "2026-09-09",
+         97.63
+        ],
+        [
+         "2026-09-10",
+         97.79
+        ],
+        [
+         "2026-09-11",
+         97.91
+        ],
+        [
          "2026-09-14",
-         98.23
+         98.3
         ],
         [
          "2026-09-15",
-         98.38
+         98.46
         ],
         [
          "2026-09-16",
-         98.42
+         98.49
         ],
         [
          "2026-09-17",
-         98.77
+         98.85
         ],
         [
          "2026-09-18",
-         98.91
+         98.98
         ],
         [
          "2026-09-21",
-         98.81
+         98.89
         ],
         [
          "2026-09-22",
-         98.97
+         99.05
         ],
         [
          "2026-09-23",
-         99.41
+         99.48
         ],
         [
          "2026-09-24",
-         99.77
+         99.84
         ],
         [
          "2026-09-25",
-         99.58
+         99.66
         ],
         [
          "2026-09-28",
-         99.88
+         99.96
         ],
         [
          "2026-09-29",
-         100.16
+         100.24
         ],
         [
          "2026-09-30",
-         100.11
+         100.19
         ],
         [
          "2026-10-01",
-         100.79
+         100.87
         ],
         [
          "2026-10-02",
-         100.46
+         100.53
+        ],
+        [
+         "2026-10-05",
+         100.44
+        ],
+        [
+         "2026-10-06",
+         100.13
+        ],
+        [
+         "2026-10-07",
+         100.43
+        ],
+        [
+         "2026-10-08",
+         100.58
+        ],
+        [
+         "2026-10-09",
+         100.71
         ]
        ]
       },
@@ -6488,260 +6481,260 @@
        "nom": "S&P 500",
        "points": [
         [
-         "2026-07-14",
+         "2026-07-15",
          100.0
         ],
         [
-         "2026-07-15",
-         100.38
-        ],
-        [
          "2026-07-16",
-         99.87
+         99.49
         ],
         [
          "2026-07-17",
-         98.86
+         98.49
         ],
         [
          "2026-07-20",
-         98.67
+         98.29
         ],
         [
          "2026-07-21",
-         99.54
+         99.17
         ],
         [
          "2026-07-22",
-         99.41
+         99.03
         ],
         [
          "2026-07-23",
-         98.21
+         97.83
         ],
         [
          "2026-07-24",
-         98.26
+         97.88
         ],
         [
          "2026-07-27",
-         98.27
+         97.9
         ],
         [
          "2026-07-28",
-         98.48
+         98.1
         ],
         [
          "2026-07-29",
-         96.98
+         96.62
         ],
         [
          "2026-07-30",
-         98.6
+         98.22
         ],
         [
          "2026-07-31",
-         99.29
+         98.91
         ],
         [
          "2026-08-03",
-         100.75
+         100.37
         ],
         [
          "2026-08-04",
-         102.56
+         102.17
         ],
         [
          "2026-08-05",
-         102.39
+         102.0
         ],
         [
          "2026-08-06",
-         102.21
+         101.82
         ],
         [
          "2026-08-07",
-         102.84
-        ],
-        [
-         "2026-08-10",
-         102.78
-        ],
-        [
-         "2026-08-11",
          102.45
         ],
         [
+         "2026-08-10",
+         102.39
+        ],
+        [
+         "2026-08-11",
+         102.06
+        ],
+        [
          "2026-08-12",
-         102.72
+         102.33
         ],
         [
          "2026-08-13",
-         103.39
+         102.99
         ],
         [
          "2026-08-14",
-         103.21
+         102.82
         ],
         [
          "2026-08-17",
-         102.67
+         102.28
         ],
         [
          "2026-08-18",
-         101.96
+         101.58
         ],
         [
          "2026-08-19",
-         102.18
+         101.79
         ],
         [
          "2026-08-20",
-         101.29
+         100.91
         ],
         [
          "2026-08-21",
-         101.73
+         101.35
         ],
         [
          "2026-08-24",
-         101.45
+         101.06
         ],
         [
          "2026-08-25",
-         101.77
+         101.39
         ],
         [
          "2026-08-26",
-         101.75
+         101.36
         ],
         [
          "2026-08-27",
-         102.48
+         102.09
         ],
         [
          "2026-08-28",
-         102.23
+         101.84
         ],
         [
          "2026-08-31",
-         101.89
-        ],
-        [
-         "2026-09-01",
-         101.16
-        ],
-        [
-         "2026-09-02",
-         101.63
-        ],
-        [
-         "2026-09-03",
-         102.71
-        ],
-        [
-         "2026-09-04",
-         102.32
-        ],
-        [
-         "2026-09-08",
-         101.72
-        ],
-        [
-         "2026-09-09",
-         101.23
-        ],
-        [
-         "2026-09-10",
-         100.64
-        ],
-        [
-         "2026-09-11",
          101.5
         ],
         [
+         "2026-09-01",
+         100.78
+        ],
+        [
+         "2026-09-02",
+         101.24
+        ],
+        [
+         "2026-09-03",
+         102.32
+        ],
+        [
+         "2026-09-04",
+         101.93
+        ],
+        [
+         "2026-09-08",
+         101.34
+        ],
+        [
+         "2026-09-09",
+         100.84
+        ],
+        [
+         "2026-09-10",
+         100.25
+        ],
+        [
+         "2026-09-11",
+         101.12
+        ],
+        [
          "2026-09-14",
-         101.01
+         100.63
         ],
         [
          "2026-09-15",
-         100.56
+         100.18
         ],
         [
          "2026-09-16",
-         100.11
+         99.73
         ],
         [
          "2026-09-17",
-         101.25
+         100.86
         ],
         [
          "2026-09-18",
-         101.42
+         101.03
         ],
         [
          "2026-09-21",
-         102.93
+         102.54
         ],
         [
          "2026-09-22",
-         102.93
+         102.54
         ],
         [
          "2026-09-23",
-         102.15
+         101.76
         ],
         [
          "2026-09-24",
-         102.13
+         101.74
         ],
         [
          "2026-09-25",
-         102.65
+         102.26
         ],
         [
          "2026-09-28",
-         101.86
+         101.47
         ],
         [
          "2026-09-29",
-         101.69
+         101.3
         ],
         [
          "2026-09-30",
-         101.43
+         101.05
         ],
         [
          "2026-10-01",
-         101.63
+         101.24
         ],
         [
          "2026-10-02",
-         102.37
+         101.99
         ],
         [
          "2026-10-05",
-         103.05
+         102.66
         ],
         [
          "2026-10-06",
-         103.65
+         103.26
         ],
         [
          "2026-10-07",
-         103.42
+         103.03
         ],
         [
          "2026-10-08",
-         102.94
+         102.55
         ],
         [
          "2026-10-09",
-         103.55
+         103.16
         ],
         [
          "2026-10-12",
-         103.5
+         103.1
+        ],
+        [
+         "2026-10-13",
+         103.08
         ]
        ]
       }
@@ -6756,11 +6749,11 @@
      "barres": [
       {
        "nom": "USD",
-       "valeur": -0.57
+       "valeur": -0.58
       },
       {
        "nom": "EUR",
-       "valeur": 0.29
+       "valeur": 0.31
       },
       {
        "nom": "GBP",
@@ -6768,7 +6761,7 @@
       },
       {
        "nom": "JPY",
-       "valeur": 0.45
+       "valeur": 0.46
       },
       {
        "nom": "CHF",
@@ -6776,7 +6769,7 @@
       },
       {
        "nom": "CAD",
-       "valeur": 0.19
+       "valeur": 0.22
       },
       {
        "nom": "AUD",
@@ -6784,11 +6777,11 @@
       },
       {
        "nom": "NZD",
-       "valeur": 0.57
+       "valeur": 0.56
       },
       {
        "nom": "CNY",
-       "valeur": 0.2
+       "valeur": 0.34
       }
      ],
      "source": "calcul Python (rendements quotidiens)",
@@ -6803,7 +6796,7 @@
    "titre": "Géopolitique",
    "evenements": [
     {
-     "titre": "Anthropic warns AI models could soon copy themselves across home devices",
+     "titre": "Airport attacks put aviation in crosshairs of geopolitical conflicts",
      "canal": "refuge",
      "canaux": [
       "refuge"
@@ -6816,39 +6809,25 @@
      ],
      "source": "cnbc_world",
      "date": "2026-10-13",
-     "lien": "https://www.cnbc.com/2026/10/13/anthropic-ai-models-self-replication-smart-devices.html"
+     "lien": "https://www.cnbc.com/2026/10/13/riyadh-airport-attacks-aviation.html"
     },
     {
-     "titre": "Iran reportedly fortifies nuclear sites as it prepares for possible U.S. strikes after midterms",
-     "canal": "refuge",
+     "titre": "investingLive Americas FX news wrap 13 Oct: Dollar retreats as traders await CPI; oil rises and stocks slip",
+     "canal": "energie",
      "canaux": [
-      "refuge"
+      "energie"
      ],
-     "mecanisme": "conflit armé : fuite vers les valeurs refuges",
+     "mecanisme": "choc d'offre énergétique : prix du pétrole et du gaz, inflation importée",
      "devises": [
-      "USD",
+      "CAD",
+      "NZD",
+      "AUD",
       "JPY",
-      "CHF"
+      "EUR"
      ],
-     "source": "cnbc_world",
+     "source": "investinglive",
      "date": "2026-10-13",
-     "lien": "https://www.cnbc.com/2026/10/13/iran-us-war-houthis-saudi-arabia-airport.html"
-    },
-    {
-     "titre": "IMF warns bond yields could see a 'disorderly' spike as debt, inflation risks worsen",
-     "canal": "refuge",
-     "canaux": [
-      "refuge"
-     ],
-     "mecanisme": "conflit armé : fuite vers les valeurs refuges",
-     "devises": [
-      "USD",
-      "JPY",
-      "CHF"
-     ],
-     "source": "cnbc_world",
-     "date": "2026-10-13",
-     "lien": "https://www.cnbc.com/2026/10/13/treasury-yields-imf-debt-inflation-.html"
+     "lien": "https://investinglive.com/news/investinglive-americas-fx-news-wrap-13-oct-dollar-retreats-as-traders-await-cpi-oil-rises-and-stocks-slip/"
     },
     {
      "titre": "investingLive European news wrap: Risk sentiment improves as oil prices ease",
@@ -6901,58 +6880,6 @@
      "source": "investinglive",
      "date": "2026-10-13",
      "lien": "https://investinglive.com/news/just-32-countries-now-drive-95-of-global-growth-as-ai-widens-the-gap-imf-warns/"
-    },
-    {
-     "titre": "investingLive Americas FX news wrap 12 Oct: USD climbs, EURUSD hits a 2026 low as oil rises and stocks finish mixed",
-     "canal": "energie",
-     "canaux": [
-      "energie"
-     ],
-     "mecanisme": "choc d'offre énergétique : prix du pétrole et du gaz, inflation importée",
-     "devises": [
-      "CAD",
-      "NZD",
-      "AUD",
-      "JPY",
-      "EUR"
-     ],
-     "source": "investinglive",
-     "date": "2026-10-12",
-     "lien": "https://investinglive.com/news/investinglive-americas-fx-news-wrap-12-oct-usd-climbs-eurusd-hits-a-2026-low-as-oil-rises-and-stocks-finish-mixed/"
-    },
-    {
-     "titre": "investingLive European session wrap: Oil rebounds, dollar firms as US bond market holiday keeps traders cautious",
-     "canal": "energie",
-     "canaux": [
-      "energie"
-     ],
-     "mecanisme": "choc d'offre énergétique : prix du pétrole et du gaz, inflation importée",
-     "devises": [
-      "CAD",
-      "NZD",
-      "AUD",
-      "JPY",
-      "EUR"
-     ],
-     "source": "investinglive",
-     "date": "2026-10-12",
-     "lien": "https://investinglive.com/news/investinglive-european-session-wrap-oil-rebounds-dollar-firms-as-us-bond-market-holiday-keeps-traders-cautious/"
-    },
-    {
-     "titre": "investingLive Asia-Pacific market news: Gulf strikes, truce doubts,",
-     "canal": "refuge",
-     "canaux": [
-      "refuge"
-     ],
-     "mecanisme": "conflit armé : fuite vers les valeurs refuges",
-     "devises": [
-      "USD",
-      "JPY",
-      "CHF"
-     ],
-     "source": "investinglive",
-     "date": "2026-10-12",
-     "lien": "https://investinglive.com/news/investinglive-asia-pacific-market-news-gulf-strikes-truce-doubts/"
     }
    ],
    "graphiques": [
@@ -6968,7 +6895,7 @@
      "barres": [
       {
        "nom": "Énergie",
-       "valeur": 4
+       "valeur": 3
       },
       {
        "nom": "Commerce",
@@ -6980,7 +6907,7 @@
       },
       {
        "nom": "Refuge (conflits)",
-       "valeur": 5
+       "valeur": 2
       },
       {
        "nom": "Politique intérieure",
@@ -7052,7 +6979,7 @@
        "texte": "baissier"
       },
       "rsi": {
-       "valeur": 61.6,
+       "valeur": 60.1,
        "raison": null,
        "source": "calcul local (RSI 14, daily)",
        "percentile_5a": null,
@@ -7063,7 +6990,7 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm100": {
-       "valeur": 1.29,
+       "valeur": 1.24,
        "raison": null,
        "source": "calcul local (MM100, force de la devise)",
        "percentile_5a": null,
@@ -7073,7 +7000,7 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm200": {
-       "valeur": 1.52,
+       "valeur": 1.47,
        "raison": null,
        "source": "calcul local (MM200, force de la devise)",
        "percentile_5a": null,
@@ -7083,7 +7010,7 @@
        "raison_percentile": "non calculé"
       },
       "volatilite": {
-       "valeur": 2.6,
+       "valeur": 2.5,
        "raison": null,
        "source": "calcul local : volatilité réalisée 20 séances",
        "percentile_5a": null,
@@ -7100,7 +7027,7 @@
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
-       "texte": "support 103.09039 (-0.09 %)"
+       "texte": "support 103.03943 (-0.04 %)"
       },
       "cot": {
        "valeur": 12011,
@@ -7129,7 +7056,7 @@
        "texte": "range"
       },
       "rsi": {
-       "valeur": 30.1,
+       "valeur": 33.1,
        "raison": null,
        "source": "calcul local (RSI 14, daily)",
        "percentile_5a": null,
@@ -7140,7 +7067,7 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm100": {
-       "valeur": -2.47,
+       "valeur": -2.33,
        "raison": null,
        "source": "calcul local (MM100, force de la devise)",
        "percentile_5a": null,
@@ -7150,7 +7077,7 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm200": {
-       "valeur": -3.04,
+       "valeur": -2.91,
        "raison": null,
        "source": "calcul local (MM200, force de la devise)",
        "percentile_5a": null,
@@ -7160,14 +7087,14 @@
        "raison_percentile": "non calculé"
       },
       "volatilite": {
-       "valeur": 4.2,
+       "valeur": 4.3,
        "raison": null,
        "source": "calcul local : volatilité réalisée 20 séances",
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
        "unite": "% annualisé",
-       "percentile_90j": 96,
+       "percentile_90j": 100,
        "raison_percentile": "percentile sur 90 jours seulement (historique de prix Twelve Data limité à 90 séances)"
       },
       "niveau_cle": {
@@ -7177,7 +7104,7 @@
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
-       "texte": "resistance 1.13732 (+1.63 %)"
+       "texte": "resistance 1.13732 (+1.51 %)"
       },
       "cot": {
        "valeur": -99332,
@@ -7206,7 +7133,7 @@
        "texte": "haussier"
       },
       "rsi": {
-       "valeur": 44.7,
+       "valeur": 46.5,
        "raison": null,
        "source": "calcul local (RSI 14, daily)",
        "percentile_5a": null,
@@ -7217,7 +7144,7 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm100": {
-       "valeur": -1.3,
+       "valeur": -1.21,
        "raison": null,
        "source": "calcul local (MM100, force de la devise)",
        "percentile_5a": null,
@@ -7227,7 +7154,7 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm200": {
-       "valeur": -1.23,
+       "valeur": -1.14,
        "raison": null,
        "source": "calcul local (MM200, force de la devise)",
        "percentile_5a": null,
@@ -7254,7 +7181,7 @@
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
-       "texte": "resistance 1.32549 (+0.05 %)"
+       "texte": "support 1.32549 (-0.04 %)"
       },
       "cot": {
        "valeur": -97611,
@@ -7283,7 +7210,7 @@
        "texte": "haussier"
       },
       "rsi": {
-       "valeur": 44.6,
+       "valeur": 42.4,
        "raison": null,
        "source": "calcul local (RSI 14, daily)",
        "percentile_5a": null,
@@ -7294,7 +7221,7 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm100": {
-       "valeur": 0.48,
+       "valeur": 0.32,
        "raison": null,
        "source": "calcul local (MM100, force de la devise)",
        "percentile_5a": null,
@@ -7314,7 +7241,7 @@
        "raison_percentile": "non calculé"
       },
       "volatilite": {
-       "valeur": 4.9,
+       "valeur": 4.5,
        "raison": null,
        "source": "calcul local : volatilité réalisée 20 séances",
        "percentile_5a": null,
@@ -7331,7 +7258,7 @@
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
-       "texte": "resistance 0.00632 (+0.02 %)"
+       "texte": "resistance 0.00632 (+0.12 %)"
       },
       "cot": {
        "valeur": 62325,
@@ -7360,7 +7287,7 @@
        "texte": "haussier"
       },
       "rsi": {
-       "valeur": 41.1,
+       "valeur": 39.8,
        "raison": null,
        "source": "calcul local (RSI 14, daily)",
        "percentile_5a": null,
@@ -7371,7 +7298,7 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm100": {
-       "valeur": -2.03,
+       "valeur": -2.06,
        "raison": null,
        "source": "calcul local (MM100, force de la devise)",
        "percentile_5a": null,
@@ -7381,7 +7308,7 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm200": {
-       "valeur": -3.46,
+       "valeur": -3.51,
        "raison": null,
        "source": "calcul local (MM200, force de la devise)",
        "percentile_5a": null,
@@ -7391,14 +7318,14 @@
        "raison_percentile": "non calculé"
       },
       "volatilite": {
-       "valeur": 4.1,
+       "valeur": 3.9,
        "raison": null,
        "source": "calcul local : volatilité réalisée 20 séances",
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
        "unite": "% annualisé",
-       "percentile_90j": 10,
+       "percentile_90j": 1,
        "raison_percentile": "percentile sur 90 jours seulement (historique de prix Twelve Data limité à 90 séances)"
       },
       "niveau_cle": {
@@ -7408,7 +7335,7 @@
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
-       "texte": "resistance 1.20581 (+0.32 %)"
+       "texte": "support 1.19799 (-0.26 %)"
       },
       "cot": {
        "valeur": -23740,
@@ -7437,7 +7364,7 @@
        "texte": "haussier"
       },
       "rsi": {
-       "valeur": 37.6,
+       "valeur": 42.8,
        "raison": null,
        "source": "calcul local (RSI 14, daily)",
        "percentile_5a": null,
@@ -7448,7 +7375,7 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm100": {
-       "valeur": -1.59,
+       "valeur": -1.38,
        "raison": null,
        "source": "calcul local (MM100, force de la devise)",
        "percentile_5a": null,
@@ -7458,7 +7385,7 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm200": {
-       "valeur": -2.13,
+       "valeur": -1.91,
        "raison": null,
        "source": "calcul local (MM200, force de la devise)",
        "percentile_5a": null,
@@ -7468,14 +7395,14 @@
        "raison_percentile": "non calculé"
       },
       "volatilite": {
-       "valeur": 3.1,
+       "valeur": 3.3,
        "raison": null,
        "source": "calcul local : volatilité réalisée 20 séances",
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
        "unite": "% annualisé",
-       "percentile_90j": 36,
+       "percentile_90j": 47,
        "raison_percentile": "percentile sur 90 jours seulement (historique de prix Twelve Data limité à 90 séances)"
       },
       "niveau_cle": {
@@ -7485,7 +7412,7 @@
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
-       "texte": "resistance 0.70208 (+0.00 %)"
+       "texte": "support 0.70329 (-0.04 %)"
       },
       "cot": {
        "valeur": -90163,
@@ -7514,7 +7441,7 @@
        "texte": "haussier"
       },
       "rsi": {
-       "valeur": 42.0,
+       "valeur": 44.0,
        "raison": null,
        "source": "calcul local (RSI 14, daily)",
        "percentile_5a": null,
@@ -7525,7 +7452,7 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm100": {
-       "valeur": -1.11,
+       "valeur": -1.0,
        "raison": null,
        "source": "calcul local (MM100, force de la devise)",
        "percentile_5a": null,
@@ -7535,7 +7462,7 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm200": {
-       "valeur": -1.25,
+       "valeur": -1.15,
        "raison": null,
        "source": "calcul local (MM200, force de la devise)",
        "percentile_5a": null,
@@ -7545,14 +7472,14 @@
        "raison_percentile": "non calculé"
       },
       "volatilite": {
-       "valeur": 4.3,
+       "valeur": 4.2,
        "raison": null,
        "source": "calcul local : volatilité réalisée 20 séances",
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
        "unite": "% annualisé",
-       "percentile_90j": 6,
+       "percentile_90j": 3,
        "raison_percentile": "percentile sur 90 jours seulement (historique de prix Twelve Data limité à 90 séances)"
       },
       "niveau_cle": {
@@ -7562,7 +7489,7 @@
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
-       "texte": "support 0.69637 (-0.21 %)"
+       "texte": "resistance 0.69939 (+0.11 %)"
       },
       "cot": {
        "valeur": -98588,
@@ -7591,7 +7518,7 @@
        "texte": "haussier"
       },
       "rsi": {
-       "valeur": 38.6,
+       "valeur": 39.4,
        "raison": null,
        "source": "calcul local (RSI 14, daily)",
        "percentile_5a": null,
@@ -7602,7 +7529,7 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm100": {
-       "valeur": -3.16,
+       "valeur": -3.1,
        "raison": null,
        "source": "calcul local (MM100, force de la devise)",
        "percentile_5a": null,
@@ -7612,7 +7539,7 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm200": {
-       "valeur": -3.4,
+       "valeur": -3.35,
        "raison": null,
        "source": "calcul local (MM200, force de la devise)",
        "percentile_5a": null,
@@ -7639,7 +7566,7 @@
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
-       "texte": "resistance 0.56186 (+0.08 %)"
+       "texte": "resistance 0.56186 (+0.04 %)"
       },
       "cot": {
        "valeur": -29346,
@@ -7668,7 +7595,7 @@
        "texte": "haussier"
       },
       "rsi": {
-       "valeur": 59.2,
+       "valeur": 58.8,
        "raison": null,
        "source": "calcul local (RSI 14, daily)",
        "percentile_5a": null,
@@ -7679,7 +7606,7 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm100": {
-       "valeur": 0.68,
+       "valeur": 0.65,
        "raison": null,
        "source": "calcul local (MM100, force de la devise)",
        "percentile_5a": null,
@@ -7689,7 +7616,7 @@
        "raison_percentile": "non calculé"
       },
       "ecart_mm200": {
-       "valeur": 1.23,
+       "valeur": 1.21,
        "raison": null,
        "source": "calcul local (MM200, force de la devise)",
        "percentile_5a": null,
@@ -7716,7 +7643,7 @@
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
-       "texte": "support 0.14943 (-0.00 %)"
+       "texte": "resistance 0.14943 (+0.01 %)"
       },
       "cot": {
        "valeur": null,
