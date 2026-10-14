@@ -1,0 +1,548 @@
+{
+ "semaine": "2026-W42",
+ "genere_le": "2026-10-14T09:01:31+00:00",
+ "donnees_du": "2026-10-14T09:01:31+00:00",
+ "engrenages": {
+  "1": {
+   "statut": "indisponible",
+   "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/mode | gemini-3.8-flash : quota du jour atte",
+   "precedents": [
+    {
+     "indicateur": null,
+     "suffisant": false,
+     "texte": "Précédents insuffisants : le thème est la synthèse des autres engrenages : pas d'indicateur unique à comparer."
+    }
+   ]
+  },
+  "2": {
+   "statut": "indisponible",
+   "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : quota du jour atteint | gemini-3.5-flash-lite : quota du jour atteint",
+   "precedents": [
+    {
+     "indicateur": "Écart de taux 2 ans EUR − US (pb)",
+     "devise": "EUR",
+     "minimum_cas": 5,
+     "source": "calcul Python : séries des dossiers (FRED, Bundesbank, MoF Japon, BoC) et taux de change Fed H.10 / indice dollar large",
+     "valeur_actuelle": -170.0,
+     "date": "2026-10-13",
+     "ecart_type": 40.21,
+     "fenetre": [
+      -210.21,
+      -129.79
+     ],
+     "cas": {
+      "1m": {
+       "n": 47,
+       "mediane_pct": 0.32,
+       "hausses": 27
+      },
+      "3m": {
+       "n": 46,
+       "mediane_pct": 0.16,
+       "hausses": 24
+      },
+      "6m": {
+       "n": 43,
+       "mediane_pct": -0.06,
+       "hausses": 20
+      }
+     },
+     "reference_tous_episodes": {
+      "1m": {
+       "n": 65,
+       "mediane_pct": 0.05
+      },
+      "3m": {
+       "n": 64,
+       "mediane_pct": -0.21
+      },
+      "6m": {
+       "n": 61,
+       "mediane_pct": 0.57
+      }
+     },
+     "suffisant": true,
+     "texte": "Depuis 2021, 47 épisodes où « Écart de taux 2 ans EUR − US (pb) » était entre -210,21 et -129,79 (aujourd'hui -170,00) : EUR médiane +0,32 % à 1 mois (47 cas), +0,16 % à 3 mois (46 cas), -0,06 % à 6 mois (43 cas). Tous épisodes confondus : +0,05 % à 1 mois."
+    },
+    {
+     "indicateur": "Écart de taux 2 ans JPY − US (pb)",
+     "devise": "JPY",
+     "minimum_cas": 5,
+     "source": "calcul Python : séries des dossiers (FRED, Bundesbank, MoF Japon, BoC) et taux de change Fed H.10 / indice dollar large",
+     "valeur_actuelle": -292.8,
+     "date": "2026-09-30",
+     "ecart_type": 121.04,
+     "fenetre": [
+      -413.84,
+      -171.76
+     ],
+     "cas": {
+      "1m": {
+       "n": 38,
+       "mediane_pct": -0.62,
+       "hausses": 14
+      },
+      "3m": {
+       "n": 37,
+       "mediane_pct": -2.66,
+       "hausses": 8
+      },
+      "6m": {
+       "n": 34,
+       "mediane_pct": -3.15,
+       "hausses": 12
+      }
+     },
+     "reference_tous_episodes": {
+      "1m": {
+       "n": 65,
+       "mediane_pct": -0.51
+      },
+      "3m": {
+       "n": 64,
+       "mediane_pct": -2.52
+      },
+      "6m": {
+       "n": 61,
+       "mediane_pct": -4.07
+      }
+     },
+     "suffisant": true,
+     "texte": "Depuis 2021, 38 épisodes où « Écart de taux 2 ans JPY − US (pb) » était entre -413,84 et -171,76 (aujourd'hui -292,80) : JPY médiane -0,62 % à 1 mois (38 cas), -2,66 % à 3 mois (37 cas), -3,15 % à 6 mois (34 cas). Tous épisodes confondus : -0,51 % à 1 mois."
+    },
+    {
+     "indicateur": "Écart de taux 2 ans CAD − US (pb)",
+     "devise": "CAD",
+     "minimum_cas": 5,
+     "source": "calcul Python : séries des dossiers (FRED, Bundesbank, MoF Japon, BoC) et taux de change Fed H.10 / indice dollar large",
+     "valeur_actuelle": -162.0,
+     "date": "2026-10-09",
+     "ecart_type": 54.27,
+     "fenetre": [
+      -216.27,
+      -107.73
+     ],
+     "cas": {
+      "1m": {
+       "n": 17,
+       "mediane_pct": 0.16,
+       "hausses": 11
+      },
+      "3m": {
+       "n": 15,
+       "mediane_pct": 0.91,
+       "hausses": 9
+      },
+      "6m": {
+       "n": 13,
+       "mediane_pct": 1.94,
+       "hausses": 9
+      }
+     },
+     "reference_tous_episodes": {
+      "1m": {
+       "n": 66,
+       "mediane_pct": -0.09
+      },
+      "3m": {
+       "n": 64,
+       "mediane_pct": -0.6
+      },
+      "6m": {
+       "n": 61,
+       "mediane_pct": -1.07
+      }
+     },
+     "suffisant": true,
+     "texte": "Depuis 2021, 17 épisodes où « Écart de taux 2 ans CAD − US (pb) » était entre -216,27 et -107,73 (aujourd'hui -162,00) : CAD médiane +0,16 % à 1 mois (17 cas), +0,91 % à 3 mois (15 cas), +1,94 % à 6 mois (13 cas). Tous épisodes confondus : -0,09 % à 1 mois."
+    }
+   ]
+  },
+  "3": {
+   "statut": "indisponible",
+   "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : quota du jour atteint | gemini-3.5-flash-lite : quota du jour atteint",
+   "precedents": [
+    {
+     "indicateur": "Inflation core US sur un an (%)",
+     "devise": "USD",
+     "minimum_cas": 5,
+     "source": "calcul Python : séries des dossiers (FRED, Bundesbank, MoF Japon, BoC) et taux de change Fed H.10 / indice dollar large",
+     "valeur_actuelle": 2.45,
+     "date": "2026-08-01",
+     "ecart_type": 1.33,
+     "fenetre": [
+      1.12,
+      3.78
+     ],
+     "cas": {
+      "1m": {
+       "n": 27,
+       "mediane_pct": -0.16,
+       "hausses": 12
+      },
+      "3m": {
+       "n": 27,
+       "mediane_pct": 0.42,
+       "hausses": 17
+      },
+      "6m": {
+       "n": 25,
+       "mediane_pct": -0.16,
+       "hausses": 12
+      }
+     },
+     "reference_tous_episodes": {
+      "1m": {
+       "n": 57,
+       "mediane_pct": -0.07
+      },
+      "3m": {
+       "n": 57,
+       "mediane_pct": 0.42
+      },
+      "6m": {
+       "n": 55,
+       "mediane_pct": 0.08
+      }
+     },
+     "suffisant": true,
+     "texte": "Depuis 2021, 27 épisodes où « Inflation core US sur un an (%) » était entre 1,12 et 3,78 (aujourd'hui 2,45) : USD médiane -0,16 % à 1 mois (27 cas), +0,42 % à 3 mois (27 cas), -0,16 % à 6 mois (25 cas). Tous épisodes confondus : -0,07 % à 1 mois."
+    }
+   ]
+  },
+  "4": {
+   "statut": "indisponible",
+   "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : quota du jour atteint | gemini-3.5-flash-lite : quota du jour atteint",
+   "precedents": [
+    {
+     "indicateur": "Rendement 10 ans US (%)",
+     "devise": "USD",
+     "minimum_cas": 5,
+     "source": "calcul Python : séries des dossiers (FRED, Bundesbank, MoF Japon, BoC) et taux de change Fed H.10 / indice dollar large",
+     "valeur_actuelle": 5.24,
+     "date": "2026-10-09",
+     "ecart_type": 0.94,
+     "fenetre": [
+      4.3,
+      6.18
+     ],
+     "cas": {
+      "1m": {
+       "n": 22,
+       "mediane_pct": -0.19,
+       "hausses": 8
+      },
+      "3m": {
+       "n": 21,
+       "mediane_pct": -0.85,
+       "hausses": 8
+      },
+      "6m": {
+       "n": 18,
+       "mediane_pct": -0.79,
+       "hausses": 5
+      }
+     },
+     "reference_tous_episodes": {
+      "1m": {
+       "n": 65,
+       "mediane_pct": -0.13
+      },
+      "3m": {
+       "n": 64,
+       "mediane_pct": 0.4
+      },
+      "6m": {
+       "n": 61,
+       "mediane_pct": 0.66
+      }
+     },
+     "suffisant": true,
+     "texte": "Depuis 2021, 22 épisodes où « Rendement 10 ans US (%) » était entre 4,30 et 6,18 (aujourd'hui 5,24) : USD médiane -0,19 % à 1 mois (22 cas), -0,85 % à 3 mois (21 cas), -0,79 % à 6 mois (18 cas). Tous épisodes confondus : -0,13 % à 1 mois."
+    }
+   ]
+  },
+  "5": {
+   "statut": "indisponible",
+   "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : quota du jour atteint | gemini-3.5-flash-lite : quota du jour atteint",
+   "precedents": [
+    {
+     "indicateur": "VIX",
+     "devise": "AUD",
+     "minimum_cas": 5,
+     "source": "calcul Python : séries des dossiers (FRED, Bundesbank, MoF Japon, BoC) et taux de change Fed H.10 / indice dollar large",
+     "valeur_actuelle": 15.21,
+     "date": "2026-10-12",
+     "ecart_type": 5.29,
+     "fenetre": [
+      9.92,
+      20.5
+     ],
+     "cas": {
+      "1m": {
+       "n": 51,
+       "mediane_pct": 0.06,
+       "hausses": 26
+      },
+      "3m": {
+       "n": 50,
+       "mediane_pct": 0.23,
+       "hausses": 26
+      },
+      "6m": {
+       "n": 47,
+       "mediane_pct": 0.31,
+       "hausses": 26
+      }
+     },
+     "reference_tous_episodes": {
+      "1m": {
+       "n": 66,
+       "mediane_pct": -0.17
+      },
+      "3m": {
+       "n": 64,
+       "mediane_pct": -0.01
+      },
+      "6m": {
+       "n": 61,
+       "mediane_pct": -0.32
+      }
+     },
+     "suffisant": true,
+     "texte": "Depuis 2021, 51 épisodes où « VIX » était entre 9,92 et 20,50 (aujourd'hui 15,21) : AUD médiane +0,06 % à 1 mois (51 cas), +0,23 % à 3 mois (50 cas), +0,31 % à 6 mois (47 cas). Tous épisodes confondus : -0,17 % à 1 mois."
+    },
+    {
+     "indicateur": "VIX",
+     "devise": "JPY",
+     "minimum_cas": 5,
+     "source": "calcul Python : séries des dossiers (FRED, Bundesbank, MoF Japon, BoC) et taux de change Fed H.10 / indice dollar large",
+     "valeur_actuelle": 15.21,
+     "date": "2026-10-12",
+     "ecart_type": 5.29,
+     "fenetre": [
+      9.92,
+      20.5
+     ],
+     "cas": {
+      "1m": {
+       "n": 51,
+       "mediane_pct": -0.67,
+       "hausses": 20
+      },
+      "3m": {
+       "n": 50,
+       "mediane_pct": -2.58,
+       "hausses": 15
+      },
+      "6m": {
+       "n": 47,
+       "mediane_pct": -3.41,
+       "hausses": 14
+      }
+     },
+     "reference_tous_episodes": {
+      "1m": {
+       "n": 66,
+       "mediane_pct": -0.69
+      },
+      "3m": {
+       "n": 64,
+       "mediane_pct": -2.69
+      },
+      "6m": {
+       "n": 61,
+       "mediane_pct": -3.18
+      }
+     },
+     "suffisant": true,
+     "texte": "Depuis 2021, 51 épisodes où « VIX » était entre 9,92 et 20,50 (aujourd'hui 15,21) : JPY médiane -0,67 % à 1 mois (51 cas), -2,58 % à 3 mois (50 cas), -3,41 % à 6 mois (47 cas). Tous épisodes confondus : -0,69 % à 1 mois."
+    }
+   ]
+  },
+  "6": {
+   "statut": "indisponible",
+   "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : quota du jour atteint | gemini-3.5-flash-lite : quota du jour atteint",
+   "precedents": [
+    {
+     "indicateur": null,
+     "suffisant": false,
+     "texte": "Précédents insuffisants : pas de série chiffrée de la géopolitique."
+    }
+   ]
+  },
+  "7": {
+   "statut": "indisponible",
+   "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : quota du jour atteint | gemini-3.5-flash-lite : quota du jour atteint",
+   "precedents": [
+    {
+     "indicateur": "Variation sur 4 semaines de l'indice dollar large (%)",
+     "devise": "USD",
+     "minimum_cas": 5,
+     "source": "calcul Python : séries des dossiers (FRED, Bundesbank, MoF Japon, BoC) et taux de change Fed H.10 / indice dollar large",
+     "valeur_actuelle": 2.87,
+     "date": "2026-10-09",
+     "ecart_type": 1.43,
+     "fenetre": [
+      1.44,
+      4.3
+     ],
+     "cas": {
+      "1m": {
+       "n": 21,
+       "mediane_pct": -0.21,
+       "hausses": 9
+      },
+      "3m": {
+       "n": 21,
+       "mediane_pct": 0.12,
+       "hausses": 11
+      },
+      "6m": {
+       "n": 20,
+       "mediane_pct": -0.81,
+       "hausses": 9
+      }
+     },
+     "reference_tous_episodes": {
+      "1m": {
+       "n": 64,
+       "mediane_pct": 0.07
+      },
+      "3m": {
+       "n": 63,
+       "mediane_pct": 0.34
+      },
+      "6m": {
+       "n": 60,
+       "mediane_pct": 0.36
+      }
+     },
+     "suffisant": true,
+     "texte": "Depuis 2021, 21 épisodes où « Variation sur 4 semaines de l'indice dollar large (%) » était entre 1,44 et 4,30 (aujourd'hui 2,87) : USD médiane -0,21 % à 1 mois (21 cas), +0,12 % à 3 mois (21 cas), -0,81 % à 6 mois (20 cas). Tous épisodes confondus : +0,07 % à 1 mois."
+    }
+   ]
+  },
+  "8": {
+   "statut": "indisponible",
+   "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : quota du jour atteint | gemini-3.5-flash-lite : quota du jour atteint",
+   "precedents": [
+    {
+     "indicateur": "Pétrole WTI ($/baril)",
+     "devise": "CAD",
+     "minimum_cas": 5,
+     "source": "calcul Python : séries des dossiers (FRED, Bundesbank, MoF Japon, BoC) et taux de change Fed H.10 / indice dollar large",
+     "valeur_actuelle": 96.24,
+     "date": "2026-10-06",
+     "ecart_type": 13.55,
+     "fenetre": [
+      82.69,
+      109.79
+     ],
+     "cas": {
+      "1m": {
+       "n": 24,
+       "mediane_pct": -0.48,
+       "hausses": 11
+      },
+      "3m": {
+       "n": 23,
+       "mediane_pct": -1.11,
+       "hausses": 7
+      },
+      "6m": {
+       "n": 21,
+       "mediane_pct": -2.4,
+       "hausses": 5
+      }
+     },
+     "reference_tous_episodes": {
+      "1m": {
+       "n": 65,
+       "mediane_pct": -0.1
+      },
+      "3m": {
+       "n": 64,
+       "mediane_pct": -0.6
+      },
+      "6m": {
+       "n": 61,
+       "mediane_pct": -1.07
+      }
+     },
+     "suffisant": true,
+     "texte": "Depuis 2021, 24 épisodes où « Pétrole WTI ($/baril) » était entre 82,69 et 109,79 (aujourd'hui 96,24) : CAD médiane -0,48 % à 1 mois (24 cas), -1,11 % à 3 mois (23 cas), -2,40 % à 6 mois (21 cas). Tous épisodes confondus : -0,10 % à 1 mois."
+    }
+   ]
+  }
+ },
+ "synthese": {
+  "statut": "indisponible",
+  "raison": "0 engrenage(s) rédigé(s) sur 8 (minimum 5)"
+ },
+ "meta": {
+  "appels_llm": [
+   {
+    "heure": "09:02",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 887,
+    "tokens_message": 709,
+    "tokens_total": 1596,
+    "ok": false,
+    "etiquette": "hebdo:1"
+   },
+   {
+    "heure": "09:02",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 887,
+    "tokens_message": 709,
+    "tokens_total": 1596,
+    "ok": false,
+    "etiquette": "hebdo:1"
+   },
+   {
+    "heure": "09:03",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 887,
+    "tokens_message": 3802,
+    "tokens_total": 4689,
+    "ok": false,
+    "etiquette": "hebdo:2"
+   }
+  ],
+  "quota_llm": {
+   "date": "2026-10-14",
+   "ordre": [
+    "gemini-3.5-flash",
+    "gemini-3.8-flash",
+    "gemini-3.5-flash-lite"
+   ],
+   "modeles": {
+    "gemini-3.5-flash": {
+     "appels_aujourdhui": 12,
+     "plafond_jour": 20,
+     "epuise_jusqu_a": "2026-10-10T23:59:59+00:00",
+     "appels_ce_run": 3,
+     "reussites_ce_run": 0,
+     "sauts_ce_run": 13
+    },
+    "gemini-3.8-flash": {
+     "appels_aujourdhui": 20,
+     "plafond_jour": 20,
+     "epuise_jusqu_a": "2026-10-14T23:59:59+00:00",
+     "appels_ce_run": 0,
+     "reussites_ce_run": 0,
+     "sauts_ce_run": 16
+    },
+    "gemini-3.5-flash-lite": {
+     "appels_aujourdhui": 20,
+     "plafond_jour": 20,
+     "epuise_jusqu_a": null,
+     "appels_ce_run": 0,
+     "reussites_ce_run": 0,
+     "sauts_ce_run": 16
+    }
+   }
+  }
+ }
+}
