@@ -93,7 +93,7 @@ centrale étiquetée « proj. BC » (Fed SEP via FRED).
 « réel » (vérifié le 2026-10-06) ; seule la page web `forexfactory.com/calendar?month=…` les expose (JSON
 embarqué, `ebaseId` stable) — testée depuis GitHub Actions (`data/diagnostics/ff_actions.json`). Faible
 empreinte : robots.txt, un 403 n'est jamais retenté, **plafond** `forexfactory.plafond_requetes_par_jour`
-(6 : créneaux 05:15 et 19:15 UTC, mois suivants lus seulement si des dates manquent, mises à jour ciblées
+(6 : créneaux 08:15 et 19:15 UTC, mois suivants lus seulement si des dates manquent, mises à jour ciblées
 ≥ 15 min après une publication d'impact fort/moyen dont le « réel » manque). FRED : repli des valeurs US
 absentes et contrôle croisé (divergence). Registre permanent `data/registre_macro.json` (historique par case,
 indépendant de la fenêtre LLM de 7 jours) ; amorçage : `python scripts/initialiser_registre.py` (une fois).
@@ -259,8 +259,8 @@ quelques passages l'après-midi/soir) :
   **informatif seulement** : au-delà, une ligne de log signale « dernier
   passage de la journée », mais rien n'empêche un lancement manuel plus tard.
 
-Le workflow GitHub Actions déclenche un run complet le matin (05:15 UTC) puis
-un passage `--completer` toutes les heures de 06:15 à 21:15 UTC (jours ouvrés),
+Le workflow GitHub Actions déclenche un run complet le matin (08:15 UTC, après la remise à zéro des quotas Gemini) puis
+un passage `--completer` toutes les heures de 09:15 à 21:15 UTC (jours ouvrés),
 automatiquement, sans intervention manuelle — voir
 `.github/workflows/rapport.yml`.
 
@@ -333,8 +333,8 @@ markdown dans ce dossier. **Aucun code à toucher.** Même logique pour :
 3. **Settings → Pages** : Source = « Deploy from a branch », branche `main`,
    dossier `/docs`. C'est tout : le site est servi sur
    `https://<user>.github.io/<repo>/`.
-4. Le workflow `.github/workflows/rapport.yml` tourne à 05:15 UTC (run complet)
-   puis toutes les heures de 06:15 à 21:15 UTC (passages `--completer` automatiques, jours
+4. Le workflow `.github/workflows/rapport.yml` tourne à 08:15 UTC (run complet)
+   puis toutes les heures de 09:15 à 21:15 UTC (passages `--completer` automatiques, jours
    ouvrés, modifiable) — ces passages rattrapent seuls les devises encore
    « analyse indisponible » après le matin, aucune intervention manuelle
    requise. Le pipeline committe lui-même `docs/data/` (site), `data/rapports/`,

@@ -589,7 +589,7 @@ def mettre_a_jour(config: dict, racine: str | Path, chemin_config: str | Path | 
     donnees = racine / config["chemins"]["donnees"]
     chemin_reg, chemin_sai = donnees / "registre_macro.json", donnees / "overrides" / "saisies_notion.json"
     maintenant = maintenant or datetime.now(timezone.utc)
-    jour = date.today()
+    jour = maintenant.date()   # suit l'horloge injectée (tests) ; en production : aujourd'hui UTC
     registre, saisies = rm.charger(chemin_reg), sm.charger(chemin_sai)
     avant = (json.dumps(registre, sort_keys=True), json.dumps(saisies, sort_keys=True))
     resultat: dict = {"ff": None, "notion": None}

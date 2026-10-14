@@ -15,7 +15,7 @@ import statistics
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
-from core import controles_macro, registre_macro as rm, vue_ensemble
+from core import controles_macro, registre_macro as rm, tuiles, vue_ensemble
 
 log = logging.getLogger(__name__)
 
@@ -356,7 +356,7 @@ def engrenage_5(historiques: dict, technique: dict) -> dict:
         series_c[libelle] = _rendements([p for p in _serie(historiques, nom)
                                          if p[0] >= (date.today() - timedelta(days=140)).isoformat()], unite == "%")
     noms = [n for n in series_c if series_c[n]]
-    matrice, changements, fins = {}, [], []
+    matrice, matrice_prec, changements, fins = {}, {}, [], []
     for i, a in enumerate(noms):
         for b in noms[i + 1:]:
             communes = sorted(set(series_c[a]) & set(series_c[b]))
@@ -367,6 +367,8 @@ def engrenage_5(historiques: dict, technique: dict) -> dict:
             r0 = _correlation([series_c[a][d] for d in prec], [series_c[b][d] for d in prec])
             matrice.setdefault(a, {})[b] = r
             matrice.setdefault(b, {})[a] = r
+            matrice_prec.setdefault(a, {})[b] = r0
+            matrice_prec.setdefault(b, {})[a] = r0
             if r is not None and r0 is not None and abs(r) >= 0.3 and abs(r0) >= 0.3 and (r > 0) != (r0 > 0):
                 changements.append({"paire": [a, b], "avant": r0, "maintenant": r})
     vix = next((l["cellule"] for l in lignes if l["id"] == "vix"), {})
@@ -375,7 +377,7 @@ def engrenage_5(historiques: dict, technique: dict) -> dict:
         regime = ("tension (VIX au-dessus du 80e percentile 5 ans)" if vix["percentile_5a"] >= 80 else
                   "calme (VIX sous le 20e percentile 5 ans)" if vix["percentile_5a"] <= 20 else "intermédiaire")
     return {"numero": 5, "titre": "Interconnexions de marchés", "instruments": lignes,
-            "correlations": {"noms": noms, "matrice": matrice, "seances": 30,
+            "correlations": {"noms": noms, "matrice": matrice, "matrice_precedente": matrice_prec, "seances": 30,
                              "derniere_seance": max(fins) if fins else None, "changements_de_signe": changements,
                              "source": "calcul Python : rendements quotidiens (log) des devises (force, Twelve Data) et des séries FRED ; "
                                        "variations en points pour les taux"},
@@ -772,6 +774,24 @@ def construire(historiques: dict, registre: dict, technique: dict, config: dict,
         log.exception("Dossier engrenage 1 en échec")
         sortie["engrenages"]["1"] = {"numero": 1, "indisponible": f"calcul en échec : {exc}"[:200]}
     sortie["engrenages"] = dict(sorted(sortie["engrenages"].items(), key=lambda kv: int(kv[0])))
+    # Tuiles de chiffres clés et carte de chaleur (refonte V2, palier 2) : une tuile en échec n'efface rien d'autre
+    fabriques = {"2": lambda e: tuiles.tuiles_2(e, historiques),
+                 "3": lambda e: tuiles.tuiles_3(e, historiques, registre, config),
+                 "5": lambda e: tuiles.tuiles_5(e, historiques)}
+    for numero, fabrique in fabriques.items():
+        e = sortie["engrenages"].get(numero)
+        if not e or e.get("indisponible"):
+            continue
+        try:
+            e["tuiles"] = fabrique(e)
+        except Exception as exc:  # noqa: BLE001
+            log.exception("Tuiles engrenage %s en échec", numero)
+            e["tuiles_indisponibles"] = f"calcul en échec : {exc}"[:150]
+    try:
+        if sortie["engrenages"].get("5") and not sortie["engrenages"]["5"].get("indisponible"):
+            sortie["engrenages"]["5"]["matrice_chaleur"] = tuiles.matrice_chaleur(sortie["engrenages"]["5"])
+    except Exception:  # noqa: BLE001
+        log.exception("Carte de chaleur des corrélations en échec")
     try:   # bandeau du thème, 8 cartes et chaînes (refonte V2, palier 1) : calcul Python, sans LLM
         sortie["vue_ensemble"] = vue_ensemble.calculer(sortie["engrenages"], historiques, technique, rapport)
     except Exception as exc:  # noqa: BLE001

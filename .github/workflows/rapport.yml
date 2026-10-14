@@ -3,10 +3,10 @@
 # mémoire entre exécutions — GitHub Actions est sans état).
 #
 # Déclenchements par jour ouvré :
-# - 05:15 UTC : run COMPLET (collecte + analyse des 9 devises). --type reste
+# - 08:15 UTC : run COMPLET (après la remise à zéro des quotas Gemini) (collecte + analyse des 9 devises). --type reste
 #   "auto" (défaut de orchestrateur.py) pour laisser l'auto-détection hebdo
 #   (lundi) / mensuel (le 1er) fonctionner normalement.
-# - 06:15 -> 21:15 UTC, TOUTES LES HEURES (16 passages) : COMPLÉMENT
+# - 09:15 -> 21:15 UTC, TOUTES LES HEURES (13 passages) : COMPLÉMENT
 #   (--completer). Les 503 Gemini étant transitoires, multiplier les essais
 #   étalés dans la journée est la parade gratuite. Chaque passage ne retente
 #   que ce qui est encore indisponible (devises "analyse indisponible", état du
@@ -21,8 +21,9 @@ name: rapport-fx
 
 on:
   schedule:
-    - cron: "15 5 * * 1-5"    # run complet (matin)
-    - cron: "15 6-21 * * 1-5" # compléments horaires 06:15 -> 21:15 UTC
+    - cron: "15 8 * * 1-5"    # run complet (matin) : APRÈS la remise à zéro des quotas Gemini
+                              # (minuit heure du Pacifique = 07:00 UTC l'été, 08:00 UTC l'hiver)
+    - cron: "15 9-21 * * 1-5" # compléments horaires 09:15 -> 21:15 UTC (après le run complet)
     - cron: "15 7 * * 0"      # dimanche : dossier hebdomadaire des 8 engrenages (--hebdo)
   workflow_dispatch:
     inputs:
@@ -72,7 +73,7 @@ jobs:
             ARGS="--hebdo"
           elif [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ github.event.inputs.hebdo }}" = "true" ]; then
             ARGS="--hebdo"
-          elif [ "${{ github.event_name }}" = "schedule" ] && [ "${{ github.event.schedule }}" != "15 5 * * 1-5" ]; then
+          elif [ "${{ github.event_name }}" = "schedule" ] && [ "${{ github.event.schedule }}" != "15 8 * * 1-5" ]; then
             ARGS="--completer"
           elif [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ github.event.inputs.completer }}" = "true" ]; then
             ARGS="--completer"

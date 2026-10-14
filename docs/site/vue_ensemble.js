@@ -72,6 +72,12 @@ function bandeau(v) {
     return c;
   }
   c.appendChild(el("h2", "eg-theme", t.titre));
+  if (t.titre_impose) c.appendChild(el("p", "eg-impose", "Titre imposé par le calcul : moins de 3 engrenages vont dans le sens du thème, aucun thème fort n'est annoncé."));
+  if (t.texte_python) {
+    const p = el("p", "eg-theme-texte", t.texte_python);
+    p.appendChild(el("span", "source", " — calcul Python"));
+    c.appendChild(p);
+  }
   if (t.texte) {
     const p = el("p", "eg-theme-texte", t.texte);
     if (t.texte_redige_par) p.appendChild(el("span", "source", ` — formulé par ${t.texte_redige_par} à partir des chiffres Python`));
@@ -86,9 +92,10 @@ function bandeau(v) {
     if (txt) puces.appendChild(el("span", `eg-puce dir-${cls}`, txt));
   stats.appendChild(boite("Direction", puces));
   const coh = t.coherence;
-  const vCoh = el("span", "eg-gros tabulaire", coh ? `${coh.alignes}/${coh.sur}` : "n/d");
-  vCoh.title = coh ? `${coh.regle} Alignés : ${coh.engrenages_alignes.join(", ") || "aucun"}.` : "";
-  stats.appendChild(boite("Cohérence", vCoh, el("span", "eg-petit", coh ? (coh.engrenages_alignes.length ? `alignés : ${coh.engrenages_alignes.join(", ")}` : "aucun engrenage aligné") : "")));
+  const vCoh = el("span", "eg-gros tabulaire", coh ? (coh.libelle || `${coh.alignes} sur ${coh.evaluables ?? coh.sur} évaluables`) : "n/d");
+  vCoh.title = coh ? coh.regle : "";
+  const detailCoh = !coh ? "" : `alignés : ${coh.engrenages_alignes.join(", ") || "aucun"} · évaluables : ${(coh.engrenages_evaluables || []).join(", ") || "aucun"}`;
+  stats.appendChild(boite("Cohérence", vCoh, el("span", "eg-petit", detailCoh)));
   stats.appendChild(boite("Conviction", points(d.conviction || 0), el("span", "eg-petit", CONVICTION[d.conviction || 0])));
   c.appendChild(stats);
   if (coh) c.appendChild(el("p", "note", `Cohérence : ${coh.regle}`));

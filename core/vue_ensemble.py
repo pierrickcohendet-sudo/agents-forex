@@ -19,8 +19,17 @@ DOLLAR = {"haussier": "Dollar ↑", "baissier": "Dollar ↓", "neutre": "Dollar 
 RISQUE = {"risk_on": "Risk on", "risk_off": "Risk off", "neutre": "Risque neutre"}
 POINTS_CONVICTION = {"faible": 1, "moyen": 2, "eleve": 3}
 JOURS_COURBE = 30
+SEUIL_THEME_FORT = 3   # moins de 3 engrenages alignés : « Signaux mixtes », jamais un thème fort
+TITRE_SIGNAUX_MIXTES = "Signaux mixtes"
+# Vocabulaire d'un thème « fort » : retiré du texte du modèle quand la cohérence est sous le seuil.
+import re as _re
+_THEME_FORT = _re.compile(
+    r"\b(?:th[èe]me (?:fort|dominant|clair|net|bien [ée]tabli|install[ée])|domin\w*|marqu[ée]e?s?|"
+    r"nette(?:ment)?|net|clairement|franc(?:he)?(?:ment)?|solide(?:ment)?|consolid\w*|sans ambigu[ïi]t[ée]|"
+    r"s'impose\w*|unanim\w*|tous les engrenages)\b", _re.IGNORECASE)
 REGLE_COHERENCE = ("engrenage 2 à 8 aligné si sa direction dollar est celle du thème ; à défaut de direction "
-                   "dollar, si sa direction risque est celle du thème. Neutre ou non déterminé : non aligné.")
+                   "dollar, si sa direction risque est celle du thème. Évaluable = engrenage qui a une direction "
+                   "comparable à celle du thème. Moins de 3 alignés : « Signaux mixtes ».")
 
 
 def _fr(v: float | None, d: int = 2) -> str:
@@ -253,7 +262,28 @@ def coherence(par_num: dict) -> dict:
         details.append({"numero": n, "aligne": ok, "critere": critere, "direction": d["libelle"]})
         if ok:
             alignes.append(n)
-    return {"alignes": len(alignes), "sur": 7, "engrenages_alignes": alignes, "detail": details, "regle": REGLE_COHERENCE}
+    evaluables = [x["numero"] for x in details if x["critere"]]
+    return {"alignes": len(alignes), "evaluables": len(evaluables), "sur": 7, "engrenages_alignes": alignes,
+            "engrenages_evaluables": evaluables, "theme_fort": len(alignes) >= SEUIL_THEME_FORT,
+            "libelle": f"{len(alignes)} sur {len(evaluables)} évaluable{'s' if len(evaluables) > 1 else ''}",
+            "detail": details, "regle": REGLE_COHERENCE}
+
+
+def moderer_theme_fort(texte: str | None) -> tuple[str | None, int]:
+    """Retire les phrases qui annoncent un thème fort (cohérence sous le seuil). -> (texte, nb retirées)."""
+    if not texte:
+        return texte, 0
+    phrases = _re.split(r"(?<=[.!?])\s+", str(texte).strip())
+    gardees = [x for x in phrases if not _THEME_FORT.search(x)]
+    return (" ".join(gardees) or None), len(phrases) - len(gardees)
+
+
+def phrase_signaux_mixtes(coh: dict, theme_dir: dict) -> str:
+    sens = theme_dir.get("libelle") or "non déterminé"
+    if not coh["evaluables"]:
+        return f"Aucun autre engrenage n'a de direction comparable à celle du thème calculé ({sens}) : pas de thème confirmé."
+    return (f"Les engrenages ne s'accordent pas : {coh['libelle']} vont dans le sens du thème calculé ({sens}), "
+            f"sous le seuil de {SEUIL_THEME_FORT} pour parler d'un thème établi.")
 
 
 def _titre_theme(theme: dict, rapport: dict | None) -> str:
@@ -297,9 +327,16 @@ def calculer(dossiers_engrenages: dict, historiques: dict | None, technique: dic
     theme_dir = _direction(par_num.get(1))
     diag1 = (par_num.get(1) or {}).get("diagnostic")
     texte = None if (par_num.get(1) or {}).get("donnees_insuffisantes") else _phrases(diag1)
-    theme = {"titre": _titre_theme(theme_dir, rapport) if par_num else None,
+    coh = coherence(par_num) if par_num else None
+    titre, texte_python, retirees = (_titre_theme(theme_dir, rapport) if par_num else None), None, 0
+    if coh and not coh["theme_fort"]:          # règle Python : le modèle ne peut pas annoncer un thème fort
+        titre = TITRE_SIGNAUX_MIXTES
+        texte, retirees = moderer_theme_fort(texte)
+        texte_python = phrase_signaux_mixtes(coh, theme_dir)
+    theme = {"titre": titre, "titre_impose": bool(coh and not coh["theme_fort"]), "texte_python": texte_python,
+             "phrases_retirees": retirees,
              "texte": texte, "texte_redige_par": (eng.get("redige_par") or {}).get("libelle") if texte else None,
-             "direction": theme_dir, "coherence": coherence(par_num) if par_num else None,
+             "direction": theme_dir, "coherence": coh,
              "raison": None if par_num else "synthèse des engrenages pas encore disponible pour ce rapport",
              "date_rapport": ((rapport or {}).get("meta") or {}).get("date_rapport")}
     return {"theme": theme, "cartes": cartes,

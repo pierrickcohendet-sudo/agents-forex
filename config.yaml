@@ -129,7 +129,7 @@ tableau_macro:
     # Créneaux de collecte (UTC) : un créneau est « dû » dès que l'heure est
     # passée et qu'aucune requête n'a eu lieu depuis. Les passages horaires
     # --completer déclenchent donc la collecte de 19:15 même si le cron glisse.
-    creneaux_utc: ["05:15", "19:15"]
+    creneaux_utc: ["08:15", "19:15"]   # 08:15 = run complet du matin (après la remise à zéro Gemini)
     # Au PREMIER créneau du jour : si des cases n'ont pas de date de prochaine
     # publication, on lit le mois suivant, puis (si encore des trous, ex. PIB
     # trimestriel) le mois d'après — jamais plus, jamais sans besoin.

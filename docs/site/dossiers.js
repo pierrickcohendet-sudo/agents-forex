@@ -132,20 +132,38 @@ function s(tag, attrs, texte) {
   return n;
 }
 
+/* Couleur FIXE par entité (une devise garde sa couleur d'un graphique à l'autre). */
+const COULEUR_ENTITE = { USD: "var(--accent)", EUR: "#7C3AED", GBP: "#0F9488", JPY: "#C2410C", CHF: "#BE123C",
+  CAD: "#DB2777", AUD: "#15803D", NZD: "#0284C7", CNY: "#A16207" };
+const couleur = (nom, i) => COULEUR_ENTITE[nom] || COULEURS[i % COULEURS.length];
+
+/* Étiquettes en bout de ligne : positions verticales écartées d'au moins `ecart` px, dans le cadre. */
+function etiquettesSansChevauchement(ys, ecart, haut, bas) {
+  const ordre = ys.map((y, i) => ({ y, i })).sort((a, b) => a.y - b.y);
+  for (let k = 1; k < ordre.length; k++) if (ordre[k].y - ordre[k - 1].y < ecart) ordre[k].y = ordre[k - 1].y + ecart;
+  const depasse = ordre.length ? ordre[ordre.length - 1].y - bas : 0;
+  if (depasse > 0) ordre.forEach(o => { o.y = Math.max(haut, o.y - depasse); });
+  const sortie = []; ordre.forEach(o => { sortie[o.i] = o.y; });
+  return sortie;
+}
+
 function graphiqueSerie(g) {
   const cadre = el("figure", "graphique");
   cadre.appendChild(el("figcaption", null, `${g.titre}${g.unite ? ` (${g.unite})` : ""}`));
   if (!g.courbes?.length) { cadre.appendChild(el("p", "indisponible", `Indisponible : ${g.raison || "pas de données"}.`)); return cadre; }
-  const L = 320, H = 150, m = { g: 38, d: 8, h: 8, b: 20 };
+  const L = 360, H = 170, m = { g: 38, d: 52, h: 10, b: 20 };
   const tous = g.courbes.flatMap(c => c.points);
   const dates = tous.map(p => p[0]).sort();
   const t0 = Date.parse(dates[0]), t1 = Date.parse(dates[dates.length - 1]) || t0 + 1;
   const vals = tous.map(p => p[1]); let min = Math.min(...vals), max = Math.max(...vals);
   if (min === max) { min -= 1; max += 1; }
+  const marge = (max - min) * 0.06; min -= marge; max += marge;
   const x = d => m.g + (Date.parse(d) - t0) / (t1 - t0 || 1) * (L - m.g - m.d);
   const y = v => m.h + (max - v) / (max - min) * (H - m.h - m.b);
-  const svg = s("svg", { viewBox: `0 0 ${L} ${H}`, class: "graphique-svg", role: "img", "aria-label": g.titre });
-  for (const v of [max, (max + min) / 2, min]) {
+  const derniers = g.courbes.map(c => c.points[c.points.length - 1]);
+  const svg = s("svg", { viewBox: `0 0 ${L} ${H}`, class: "graphique-svg", role: "img",
+    "aria-label": `${g.titre}. Dernières valeurs : ${g.courbes.map((c, i) => `${c.nom} ${nombre(derniers[i][1], 2)}`).join(", ")}.` });
+  for (const v of [max - marge, (max + min) / 2, min + marge]) {
     svg.appendChild(s("line", { x1: m.g, x2: L - m.d, y1: y(v), y2: y(v), class: "grille" }));
     svg.appendChild(s("text", { x: m.g - 4, y: y(v) + 3, "text-anchor": "end", class: "axe" }, nombre(v, Math.abs(max - min) < 5 ? 2 : 0)));
   }
@@ -154,14 +172,20 @@ function graphiqueSerie(g) {
   svg.appendChild(s("text", { x: L - m.d, y: H - 5, "text-anchor": "end", class: "axe" }, dateCourte(dates[dates.length - 1]).slice(0, 5)));
   g.courbes.forEach((c, i) => {
     const d = c.points.map((p, k) => `${k ? "L" : "M"}${x(p[0]).toFixed(1)} ${y(p[1]).toFixed(1)}`).join(" ");
-    svg.appendChild(s("path", { d, fill: "none", stroke: COULEURS[i % COULEURS.length], "stroke-width": 1.8, "vector-effect": "non-scaling-stroke" }));
+    svg.appendChild(s("path", { d, fill: "none", stroke: couleur(c.nom, i), "stroke-width": 1.8, "vector-effect": "non-scaling-stroke" }));
+    svg.appendChild(s("circle", { cx: x(derniers[i][0]), cy: y(derniers[i][1]), r: 2.6, fill: couleur(c.nom, i) }));
+  });
+  const ys = etiquettesSansChevauchement(derniers.map(p => y(p[1])), 11, m.h + 4, H - m.b);
+  g.courbes.forEach((c, i) => {
+    const t = s("text", { x: L - m.d + 5, y: ys[i] + 3.5, class: "etiquette-fin" }, String(c.nom).slice(0, 9));
+    t.setAttribute("fill", couleur(c.nom, i));
+    svg.appendChild(t);
   });
   cadre.appendChild(svg);
   const legende = el("div", "legende");
   g.courbes.forEach((c, i) => {
-    const derniere = c.points[c.points.length - 1];
-    const item = el("span"); const pastil = el("i"); pastil.style.background = COULEURS[i % COULEURS.length];
-    item.append(pastil, document.createTextNode(` ${c.nom} ${nombre(derniere[1], 2)}`));
+    const item = el("span"); const pastil = el("i"); pastil.style.background = couleur(c.nom, i);
+    item.append(pastil, document.createTextNode(` ${c.nom} ${nombre(derniers[i][1], 2)}`));
     legende.appendChild(item);
   });
   cadre.appendChild(legende);
@@ -185,9 +209,9 @@ function graphiqueBarres(g) {
     svg.appendChild(s("text", { x: gauche - 6, y: yb + 12, "text-anchor": "end", class: "axe" }, `${DRAPEAUX[b.nom] ? DRAPEAUX[b.nom] + " " : ""}${b.nom}`.slice(0, 22)));
     const x0 = Math.min(x(0), x(b.valeur)), largeur = Math.max(1, Math.abs(x(b.valeur) - x(0)));
     svg.appendChild(s("rect", { x: x0, y: yb + 2, width: largeur, height: hauteurBarre - 6, rx: 2,
-                                fill: b.valeur < 0 ? "var(--negatif)" : "var(--accent)" }));
+                                fill: b.valeur < 0 ? "var(--negatif)" : (COULEUR_ENTITE[b.nom] || "var(--accent)") }));
     svg.appendChild(s("text", { x: b.valeur < 0 ? x0 - 3 : x0 + largeur + 3, y: yb + 12, "text-anchor": b.valeur < 0 ? "end" : "start", class: "axe" },
-                      nombre(b.valeur, Math.abs(b.valeur) < 10 ? 2 : 0)));
+                      `${b.valeur > 0 && vals.some(v => v < 0) ? "+" : ""}${nombre(b.valeur, Math.abs(b.valeur) < 10 ? 2 : 0)}`));
   });
   cadre.appendChild(svg);
   if (g.absentes?.length) cadre.appendChild(el("p", "note", `Sans donnée : ${g.absentes.join(", ")}.`));
@@ -199,6 +223,97 @@ function graphiques(e) {
   const zone = el("div", "graphiques");
   for (const g of e.graphiques || []) zone.appendChild(g.type === "barres" ? graphiqueBarres(g) : graphiqueSerie(g));
   return zone;
+}
+
+/* ------------------------------------------------------------ tuiles (palier 2) */
+function miniCourbe(courbe, libelle) {
+  const pts = courbe?.points || [];
+  if (pts.length < 2) return el("p", "tk-sans", courbe?.raison ? `Pas de courbe : ${courbe.raison}.` : "Pas de courbe.");
+  const L = 120, H = 26, v = pts.map(p => p[1]);
+  let mn = Math.min(...v), mx = Math.max(...v); if (mn === mx) { mn -= 1; mx += 1; }
+  const yy = a => (H - 3 - (a - mn) / (mx - mn) * (H - 6)).toFixed(1);
+  const svg = s("svg", { viewBox: `0 0 ${L} ${H}`, preserveAspectRatio: "none", class: "tk-courbe", role: "img",
+    "aria-label": `${libelle} : ${courbe.periode}, de ${nombre(v[0], 2)} à ${nombre(v[v.length - 1], 2)}` });
+  svg.appendChild(s("polyline", { points: pts.map((p, i) => `${(i / (pts.length - 1) * L).toFixed(1)},${yy(p[1])}`).join(" "),
+    fill: "none", stroke: "var(--accent)", "stroke-width": 1.7, "vector-effect": "non-scaling-stroke" }));
+  svg.appendChild(s("circle", { cx: L, cy: yy(v[v.length - 1]), r: 2.4, fill: "var(--accent)" }));
+  return svg;
+}
+
+function tuileChiffre(t) {
+  const c = el("div", "tk");
+  const tete = el("div", "tk-tete");
+  tete.appendChild(el("span", "tk-libelle", t.libelle));
+  const info = el("button", "tk-info", "i"); info.type = "button";
+  info.setAttribute("aria-label", `Source et date : ${t.libelle}`); info.setAttribute("aria-expanded", "false");
+  tete.appendChild(info); c.appendChild(tete);
+  const v = el("div", "tk-valeur tabulaire", t.texte ?? "n/d");
+  if (t.texte === null || t.texte === undefined) v.classList.add("tk-nd");
+  c.appendChild(v);
+  if (t.raison) c.appendChild(el("div", "tk-raison", t.raison));
+  if (t.variation) {
+    const val = t.variation.valeur;
+    c.appendChild(el("div", `tk-var tabulaire ${val > 0 ? "pos" : val < 0 ? "neg" : ""}`, t.variation.texte));
+  }
+  c.appendChild(miniCourbe(t.courbe, t.libelle));
+  if (t.percentile_5a !== null && t.percentile_5a !== undefined) {
+    const p = t.percentile_5a, extreme = p >= 85 || p <= 15;
+    const rail = el("div", `tk-rail${extreme ? " extreme" : ""}`);
+    rail.setAttribute("role", "img"); rail.setAttribute("aria-label", `percentile 5 ans : ${p}`);
+    const r = el("i"); r.style.width = `${p}%`; rail.append(r, el("u"));
+    c.appendChild(rail);
+    const lig = el("div", "tk-pct tabulaire", `percentile 5 ans : ${p}`);
+    if (extreme) lig.appendChild(el("span", "tk-extreme", "extrême"));
+    c.appendChild(lig);
+  } else if (t.valeur !== null && t.valeur !== undefined) {
+    c.appendChild(el("div", "tk-pct", `percentile n/d${t.raison_percentile ? ` — ${t.raison_percentile}` : ""}`));
+  }
+  const detail = el("div", "tk-detail");
+  detail.hidden = true;
+  detail.textContent = [t.source && `Source : ${t.source}`, t.date && `donnée du ${String(t.date).length > 7 ? dateCourte(t.date) : t.date}`,
+    t.n_5a && `percentile sur ${t.n_5a} observations`, t.courbe?.periode && t.courbe.points?.length > 1 && `courbe : ${t.courbe.periode}`,
+    t.lecture].filter(Boolean).join(" · ");
+  c.appendChild(detail);
+  if (t.date) c.appendChild(el("div", "tk-date", `au ${String(t.date).length > 7 ? dateCourte(t.date) : t.date}`));
+  info.addEventListener("click", () => { detail.hidden = !detail.hidden; info.setAttribute("aria-expanded", String(!detail.hidden)); });
+  return c;
+}
+
+function grilleTuiles(e) {
+  if (e.tuiles_indisponibles) return el("p", "indisponible", `Chiffres clés indisponibles : ${e.tuiles_indisponibles}.`);
+  if (!e.tuiles?.length) return null;
+  const g = el("div", "tk-grille");
+  g.setAttribute("aria-label", "Chiffres clés");
+  for (const t of e.tuiles) g.appendChild(tuileChiffre(t));
+  return g;
+}
+
+/* Carte de chaleur : couleur ET valeur signée (la couleur ne porte jamais seule le sens). */
+function carteChaleur(mc) {
+  if (!mc) return null;
+  const bloc = el("div", "chaleur");
+  bloc.appendChild(el("h3", null, `Matrice de corrélations, ${mc.seances} séances`));
+  const lignes = mc.lignes.map(l => {
+    const tr = el("tr");
+    tr.appendChild(el("td", null, `${DRAPEAUX[l.devise] || ""} ${l.devise}`));
+    l.valeurs.forEach((v, i) => {
+      const td = el("td", "chaleur-case tabulaire");
+      if (v === null || v === undefined) { td.appendChild(el("span", "nd", "n/d")); td.title = l.raison || "moins de 15 séances communes"; }
+      else {
+        td.textContent = `${v > 0 ? "+" : ""}${nombre(v, 2)}`;
+        const force = Math.min(1, Math.abs(v)) * 55;
+        td.style.background = `color-mix(in srgb, ${v >= 0 ? "var(--positif)" : "var(--negatif)"} ${force.toFixed(0)}%, var(--carte))`;
+        const avant = l.precedentes?.[i];
+        td.title = `${l.devise} / ${mc.colonnes[i]} : ${nombre(v, 2)}${avant !== null && avant !== undefined ? ` (30 séances précédentes : ${nombre(avant, 2)})` : ""}`;
+      }
+      td.setAttribute("data-label", mc.colonnes[i]);
+      tr.appendChild(td);
+    });
+    return tr;
+  });
+  bloc.appendChild(tableau(["Devise", ...mc.colonnes], lignes));
+  bloc.appendChild(el("p", "note", `${mc.lecture} Dernière séance : ${dateCourte(mc.derniere_seance)}. Source : ${mc.source}`));
+  return bloc;
 }
 
 /* -------------------------------------------------------- contenus spécifiques */
@@ -274,14 +389,19 @@ function contenuEngrenage(n, e) {
   const bloc = el("div", "dossier-contenu");
   if (!e) { bloc.appendChild(el("p", "indisponible", "Dossier non calculé aujourd'hui.")); return bloc; }
   if (e.indisponible) { bloc.appendChild(el("p", "indisponible", `Indisponible : ${e.indisponible}.`)); return bloc; }
+  const riche = n === 2 || n === 3 || n === 5;   // palier 2 : tuiles, deux graphiques, tableau (+ carte de chaleur)
   const parties = n === 1 ? contenuTheme(e) : n === 4 ? contenuFiscal(e) : n === 6 ? contenuGeopolitique(e) : n === 8 ? contenuOffre(e) : [];
-  if (n === 2 || n === 3 || n === 7) parties.push(tableauDevises(e));
-  if (n === 5) {
-    if (e.regime_volatilite) parties.push(el("p", "note", `Volatilité implicite (VIX) : régime ${e.regime_volatilite}.`));
-    parties.push(tableauInstruments(e.instruments));
+  if (riche) {
+    const t = grilleTuiles(e); if (t) bloc.appendChild(t);
+    if (n === 5 && e.regime_volatilite) bloc.appendChild(el("p", "note", `Volatilité implicite (VIX) : régime ${e.regime_volatilite}.`));
+    bloc.appendChild(graphiques(e));
+    bloc.appendChild(el("h3", null, n === 5 ? "Marchés suivis" : n === 2 ? "Grille des banques centrales" : "Données par devise"));
   }
+  if (n === 2 || n === 3 || n === 7) parties.push(tableauDevises(e));
+  if (n === 5) parties.push(tableauInstruments(e.instruments));
   for (const p of parties) bloc.appendChild(p);
-  bloc.appendChild(graphiques(e));
+  if (n === 5) { const h = carteChaleur(e.matrice_chaleur); if (h) bloc.appendChild(h); }
+  if (!riche) bloc.appendChild(graphiques(e));
   if (n === 5 && e.correlations) {
     const c = e.correlations;
     bloc.appendChild(el("p", "note", c.changements_de_signe?.length

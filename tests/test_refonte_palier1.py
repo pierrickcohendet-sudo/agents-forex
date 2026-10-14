@@ -181,9 +181,40 @@ class VueEnsemble(unittest.TestCase):
         coh = v["theme"]["coherence"]
         self.assertEqual((coh["alignes"], coh["sur"]), (3, 7))                 # 2 et 7 (dollar), 4 (risque faute de dollar)
         self.assertEqual(coh["engrenages_alignes"], [2, 4, 7])
+        self.assertEqual((coh["evaluables"], coh["libelle"]), (5, "3 sur 5 évaluables"))   # 6 et 8 sans direction
+        self.assertTrue(coh["theme_fort"])
+        self.assertFalse(v["theme"]["titre_impose"])
         self.assertEqual(v["theme"]["titre"], "Aversion au risque, dollar en tête")
         self.assertEqual(v["theme"]["texte"], "Diagnostic 1. Deuxième phrase. Troisième.")
         self.assertEqual(v["theme"]["direction"]["conviction"], 2)
+
+    def test_moins_de_trois_alignes_titre_signaux_mixtes_impose(self):
+        r = rapport({1: ("haussier", "risk_off", "faible"), 2: ("neutre", None, "faible"), 3: ("neutre", None, "faible"),
+                     5: ("neutre", "neutre", "moyen"), 7: ("neutre", "risk_on", "moyen")})
+        eng = r["synthese_globale"]["engrenages"]["engrenages"]
+        eng[0]["diagnostic"] = ("Le risk off domine nettement avec un score USD dominant à 84. "
+                                "Les marchés attendent le CPI américain.")
+        v = ve.calculer({}, self.HIST, None, r)
+        t = v["theme"]
+        self.assertEqual(t["titre"], "Signaux mixtes")
+        self.assertTrue(t["titre_impose"])
+        self.assertEqual(t["coherence"]["libelle"], "0 sur 4 évaluables")
+        self.assertEqual(t["texte"], "Les marchés attendent le CPI américain.")   # phrase « domine » retirée
+        self.assertEqual(t["phrases_retirees"], 1)
+        self.assertIn("0 sur 4 évaluables", t["texte_python"])
+
+    def test_agent_impose_signaux_mixtes_au_texte_du_modele(self):
+        sortie = {"engrenages": [
+            {"numero": 1, "diagnostic": "Un thème dominant de risk off se consolide.", "donnees_insuffisantes": False,
+             "direction": {"dollar": "haussier", "risque": "risk_off", "texte": "Le dollar s'impose nettement."}},
+            {"numero": 2, "direction": {"dollar": "haussier"}}, {"numero": 3, "direction": {"dollar": "baissier"}}]}
+        ae.imposer_signaux_mixtes(sortie)
+        e1 = sortie["engrenages"][0]
+        self.assertEqual(sortie["titre_theme_impose"], "Signaux mixtes")
+        self.assertEqual(sortie["coherence"]["libelle"], "1 sur 2 évaluables")
+        self.assertIn("Les engrenages ne s'accordent pas", e1["diagnostic"])     # texte Python de remplacement
+        self.assertEqual(e1["direction"]["texte"], "")
+        self.assertTrue(any("thème fort" in c for c in sortie["controles"]))
 
     def test_huit_cartes_chiffres_dates_et_mini_courbes(self):
         v = ve.calculer({}, self.HIST, None, rapport({1: ("haussier", "risk_off", "faible")}))
