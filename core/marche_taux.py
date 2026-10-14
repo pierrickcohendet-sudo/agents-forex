@@ -268,7 +268,32 @@ def resume_pour_analyse(registre: dict, cfg_tm: dict) -> dict:
     return resultat
 
 
-def appliquer_registre_taux(macro: dict, registre: dict, cfg_tm: dict) -> dict:
+# Taux directeurs dont la banque centrale publie elle-même la série de marché au jour le jour, utilisée
+# quand le registre n'a qu'une BORNE (JPY « <1.25% ») : jamais le repli manuel de config.yaml.
+SERIES_BANQUE_CENTRALE = {
+    "JPY": ("JPY_taux_effectif", "Banque du Japon (STRDCLUCON, taux d'appel au jour le jour non garanti)"),
+}
+FRAICHEUR_MAX_JOURS = 10
+
+
+def _taux_banque_centrale(historiques: dict | None, devise: str) -> dict | None:
+    if devise not in SERIES_BANQUE_CENTRALE or not historiques:
+        return None
+    cle, source = SERIES_BANQUE_CENTRALE[devise]
+    points = (((historiques.get("series") or {}).get(cle) or {}).get("points")) or []
+    if not points:
+        return None
+    jour, valeur = points[-1][0], points[-1][1]
+    try:
+        from datetime import date as _d
+        if (_d.today() - _d.fromisoformat(str(jour)[:10])).days > FRAICHEUR_MAX_JOURS:
+            return None
+    except ValueError:
+        return None
+    return {"taux": round(float(valeur), 3), "date": str(jour)[:10], "source": source}
+
+
+def appliquer_registre_taux(macro: dict, registre: dict, cfg_tm: dict, historiques: dict | None = None) -> dict:
     """Taux directeurs OFFICIELS du registre macro (dernière publication ForexFactory) à la place
     des valeurs de repli de config.yaml (et du FEDFUNDS mensuel pour l'USD) ; recalcule le carry
     (médiane G8 et différentiels). La config ne reste en repli que si le registre n'a pas de valeur
@@ -279,9 +304,19 @@ def appliquer_registre_taux(macro: dict, registre: dict, cfg_tm: dict) -> dict:
     for devise in cfg_tm.get("ordre_devises", list(taux)):
         case = (registre.get("cases") or {}).get(rm.cle("taux_directeur", devise)) or {}
         actuel = case.get("actuel") or {}
-        if case.get("statut") == "non_applicable" or actuel.get("valeur_num") is None:
-            continue
         avant = taux.get(devise) or {}
+        if case.get("statut") == "non_applicable" or actuel.get("valeur_num") is None:
+            bc = _taux_banque_centrale(historiques, devise)
+            if bc:   # registre non numérique (borne) : série officielle de la banque centrale
+                if actuel.get("valeur"):
+                    bc["borne_registre"] = actuel.get("valeur")
+                if avant.get("taux") is not None:
+                    bc["repli_precedent"] = {"taux": avant["taux"], "date": avant.get("date"),
+                                             "source": avant.get("source")}
+                taux[devise] = bc
+                if avant.get("taux") != bc["taux"]:
+                    modifs[devise] = {"avant": avant.get("taux"), "apres": bc["taux"], "source": bc["source"]}
+            continue
         if devise == "USD" and avant.get("fourchette") and "FRED" in str(avant.get("source")):
             # La Fed fixe une FOURCHETTE ; ForexFactory n'en publie que la borne haute. Pour comparer
             # aux taux uniques des autres banques centrales, on garde le taux effectif (DFF, quotidien).

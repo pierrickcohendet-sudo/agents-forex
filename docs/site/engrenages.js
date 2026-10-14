@@ -1,7 +1,8 @@
 /* Onglet « 8 engrenages » : synthèse globale (rapport du jour, synthese_globale.engrenages). */
 import { chargerJson, enErreur, el, indisponible, dateHeure } from "./commun.js";
 import { carteDossiers } from "./dossiers.js";
-import { vueHebdo, selecteurVue } from "./hebdo.js";
+import { vueHebdo } from "./hebdo.js";
+import { vueEnsemble, selecteurPeriode } from "./vue_ensemble.js";
 
 const DOLLAR = { haussier: "Dollar ↑", baissier: "Dollar ↓", neutre: "Dollar =" };
 const RISQUE = { risk_on: "Risk on", risk_off: "Risk off", neutre: "Risque neutre" };
@@ -94,6 +95,8 @@ function ficheEngrenage(e, sources) {
   if (e.non_source) diag.appendChild(el("span", "tag-alerte", " [non sourcé]"));
   else { const src = sourceTexte(sources, e.source_ids); if (src) diag.appendChild(el("span", "source", ` — ${src}`)); }
   corps.appendChild(diag);
+  if (e.donnees_insuffisantes) corps.appendChild(el("p", "note",
+    "Pas de texte du modèle pour cet engrenage aujourd'hui : ses chiffres, graphiques et tableaux Python restent affichés dans le dossier ci-dessus."));
   if (!e.donnees_insuffisantes) {
     const dir = el("p", "texte"); dir.appendChild(el("strong", null, "Direction : "));
     dir.appendChild(document.createTextNode(`${directionCourte(e.direction)}. ${e.direction?.texte || ""}`));
@@ -140,28 +143,33 @@ export function carteEngrenagesCompacte(rapport) {
 }
 
 export async function pageEngrenages(parametre) {
-  if (parametre === "hebdo") return [selecteurVue("hebdo"), ...(await vueHebdo())];
-  return [selecteurVue(""), ...(await pageQuotidienne())];
+  if (parametre === "hebdo") return [selecteurPeriode("hebdo"), ...(await vueHebdo())];
+  return [selecteurPeriode(""), ...(await pageQuotidienne())];
 }
 
 async function pageQuotidienne() {
-  // Les dossiers chiffrés (Python, quotidiens) s'affichent toujours, même sans synthèse rédigée.
-  const [rapport, dossiers] = await Promise.all([chargerJson("data/latest.json"), carteDossiers()]);
-  if (enErreur(rapport)) return [dossiers, indisponible("Synthèse rédigée", rapport?.__erreur)];
+  // Vue d'ensemble et dossiers chiffrés (Python, quotidiens) : toujours affichés, même sans texte rédigé.
+  const [rapport, d] = await Promise.all([chargerJson("data/latest.json"), chargerJson("data/dossiers.json")]);
+  let vue = { marquer: () => {} };
+  const dossier = await carteDossiers({ actif: 1, surChoix: n => vue.marquer(n) });
+  vue = vueEnsemble(enErreur(d) ? { indisponible: d?.__erreur } : d.vue_ensemble, 1, (n, defiler) => {
+    vue.marquer(n); dossier.choisir(n);
+    if (defiler) dossier.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+  });
+  const blocs = [...vue.noeuds, dossier];
+  if (enErreur(rapport)) return [...blocs, indisponible("Analyse rédigée", rapport?.__erreur)];
   const eng = rapport.synthese_globale?.engrenages;
-  if (!eng) return [dossiers, indisponible("Synthèse rédigée", "pas encore générée pour ce rapport (premier run complet à venir)")];
-  if (eng.statut !== "ok") return [dossiers, indisponible("Synthèse rédigée", String(eng.raison || eng.statut).replace(/^indisponible\s*:\s*/i, ""))];
+  if (!eng) return [...blocs, indisponible("Analyse rédigée", "pas encore générée pour ce rapport (premier run complet à venir)")];
+  if (eng.statut !== "ok") return [...blocs, indisponible("Analyse rédigée", String(eng.raison || eng.statut).replace(/^indisponible\s*:\s*/i, ""))];
   const sources = new Map((rapport.sources_citees || []).map(s => [s.id, s]));
   const tete = el("section", "carte");
-  tete.appendChild(el("h2", null, "Les 8 engrenages"));
-  tete.appendChild(el("p", "sous-titre", `Rapport du ${rapport.meta?.date_rapport} · rédigé par ${eng.redige_par?.libelle || "modèle inconnu"} le ${dateHeure(eng.genere_le)}. Les directions et convictions sont calculées en Python quand les données le permettent ; le modèle formule.`));
-  tete.appendChild(tableauRecap(eng));
-  for (const b of chaines(eng)) tete.appendChild(b);
+  tete.appendChild(el("h2", null, "Analyse rédigée du jour"));
+  tete.appendChild(el("p", "sous-titre", `Rapport du ${rapport.meta?.date_rapport} · rédigé par ${eng.redige_par?.libelle || "modèle inconnu"} le ${dateHeure(eng.genere_le)}. Un engrenage sans texte garde ses chiffres, graphiques et tableaux Python ci-dessus.`));
   const fiches = (eng.engrenages || []).map(e => ficheEngrenage(e, sources));
   const fin = el("section", "carte");
   const cpt = concept(eng, sources);
   if (cpt) fin.appendChild(cpt);
   if ((eng.controles || []).length) fin.appendChild(el("p", "tag-alerte", `Points de vigilance : ${eng.controles.join(" · ")}`));
   fin.appendChild(el("p", "note", "Aide à la décision uniquement : aucun signal d'achat ou de vente."));
-  return [dossiers, tete, ...fiches, fin];
+  return [...blocs, tete, ...fiches, fin];
 }

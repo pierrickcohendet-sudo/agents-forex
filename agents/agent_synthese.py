@@ -26,7 +26,7 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 from core.llm import (MESSAGE_QUOTA_ATTEINT, FournisseurLLM, QuotaAtteint, attribution_modele,
-                      definir_etiquette, extraire_json)
+                      definir_etiquette, extraire_json, repli_modele_suivant)
 from core.secrets import masquer_secrets
 
 log = logging.getLogger(__name__)
@@ -475,6 +475,7 @@ def _synthetiser_devise(llm: FournisseurLLM, systeme: str, config: dict, devise:
         except QuotaAtteint:
             raise   # plus aucun modèle disponible aujourd'hui : inutile de retenter
         except Exception as exc:  # noqa: BLE001 — JSON invalide, schéma incomplet ou erreur API : on retente
+            repli_modele_suivant(llm)   # JSON ou schéma invalide : nouvel essai sur le modèle suivant
             derniere = exc
             log.warning("Synthèse %s, essai %d/%d en échec : %s", devise, essai, tentatives,
                         masquer_secrets(str(exc)))

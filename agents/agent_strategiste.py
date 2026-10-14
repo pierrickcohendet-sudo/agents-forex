@@ -19,7 +19,7 @@ from pathlib import Path
 
 from core import overrides, scoring
 from core.llm import (MESSAGE_QUOTA_ATTEINT, FournisseurLLM, QuotaAtteint, attribution_modele,
-                      definir_etiquette, extraire_json)
+                      definir_etiquette, extraire_json, repli_modele_suivant)
 from core.secrets import masquer_secrets
 
 log = logging.getLogger(__name__)
@@ -510,6 +510,7 @@ def _analyser_devise(llm: FournisseurLLM, systeme: str, config: dict, devise: st
         except QuotaAtteint:
             raise   # inutile de retenter : plus aucun modèle disponible aujourd'hui
         except Exception as exc:  # noqa: BLE001 — parsing JSON ou erreur API : on retente
+            repli_modele_suivant(llm)   # JSON ou schéma invalide : nouvel essai sur le modèle suivant
             derniere_erreur = exc
             log.warning("Analyse %s, essai %d/%d en échec : %s", devise, essai, tentatives,
                        masquer_secrets(str(exc)))

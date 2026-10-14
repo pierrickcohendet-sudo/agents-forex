@@ -40,7 +40,7 @@ import os
 import re
 import time
 from abc import ABC, abstractmethod
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 import requests
@@ -153,10 +153,32 @@ def _delai_reprise_s(rep_texte: str) -> float | None:
     return None
 
 
+def _fuseau_pacifique():
+    try:
+        from zoneinfo import ZoneInfo
+        return ZoneInfo("America/Los_Angeles")
+    except Exception:  # noqa: BLE001 — base tz absente : approximation heure d'été (UTC-7)
+        return timezone(timedelta(hours=-7))
+
+
+def jour_quota_google(instant: datetime) -> date:
+    """Jour de quota gratuit Gemini : date à Los Angeles (remise à zéro à minuit Pacifique)."""
+    return instant.astimezone(_fuseau_pacifique()).date()
+
+
+def prochaine_remise_a_zero(instant: datetime) -> datetime:
+    """Prochain minuit heure du Pacifique, exprimé en UTC."""
+    tz = _fuseau_pacifique()
+    local = instant.astimezone(tz)
+    minuit = datetime.combine(local.date() + timedelta(days=1), datetime.min.time(), tzinfo=tz)
+    return minuit.astimezone(timezone.utc)
+
+
 class RegistreQuotas:
     """Compteur d'appels (requêtes HTTP envoyées) par modèle et par jour, persistant dans un
     fichier d'état (versionné avec data/cache : partagé entre les runs GitHub Actions).
-    Remis à zéro au changement de jour UTC ; un 429 « PerDay » marque en plus le modèle épuisé
+    Remis à zéro au changement de jour HEURE DU PACIFIQUE (minuit à Mountain View = 07:00 UTC l'été,
+    08:00 UTC l'hiver), comme les quotas gratuits Google ; un 429 « PerDay » marque en plus le modèle épuisé
     jusqu'à l'heure de reprise donnée par l'API (source de vérité). Un plafond local atteint
     n'est JAMAIS dépassé : l'appel est refusé avant l'envoi."""
 
@@ -171,6 +193,9 @@ class RegistreQuotas:
     def _maintenant() -> datetime:
         return datetime.now(timezone.utc)
 
+    def _jour_quota(self) -> str:
+        return jour_quota_google(self._maintenant()).isoformat()
+
     def _charger(self) -> None:
         brut = {}
         if self.chemin and self.chemin.exists():
@@ -178,7 +203,7 @@ class RegistreQuotas:
                 brut = json.loads(self.chemin.read_text(encoding="utf-8"))
             except (OSError, ValueError):
                 brut = {}
-        jour = self._maintenant().date().isoformat()
+        jour = self._jour_quota()
         modeles = brut.get("modeles", {}) if isinstance(brut, dict) else {}
         if brut.get("date") != jour:   # nouveau jour : compteurs à zéro, épuisements encore valides conservés
             modeles = {m: {"appels": 0, "epuise_jusqu_a": v.get("epuise_jusqu_a")} for m, v in modeles.items()}
@@ -218,8 +243,7 @@ class RegistreQuotas:
     def marquer_epuise(self, modele: str, delai_s: float | None) -> None:
         e = self._entree(modele)
         delai = delai_s if delai_s else max(
-            (datetime.combine(self._maintenant().date() + timedelta(days=1), datetime.min.time(),
-                              tzinfo=timezone.utc) - self._maintenant()).total_seconds(), 60)
+            (prochaine_remise_a_zero(self._maintenant()) - self._maintenant()).total_seconds(), 60)
         e["epuise_jusqu_a"] = (self._maintenant() + timedelta(seconds=delai)).isoformat(timespec="seconds")
         plafond = self.plafonds.get(modele)
         if plafond:
@@ -635,6 +659,16 @@ class FournisseurChaine(FournisseurLLM):
         self.disjoncteur_actif = bool(disjoncteur_actif)
         self.seuil_echecs = max(1, int(seuil_echecs))
         self.appels_total = 0
+        self.dernier_servi: str | None = None
+        self._a_eviter: set[str] = set()
+        self.replis_json = 0
+
+    def eviter_dernier_modele(self) -> None:
+        """Réponse inexploitable (JSON invalide, schéma incomplet) : le PROCHAIN appel commence par
+        le modèle suivant de la chaîne ; le modèle fautif n'est plus qu'un dernier recours."""
+        if self.dernier_servi:
+            self._a_eviter.add(self.dernier_servi)
+            self.replis_json += 1
 
     def _echec(self, m: dict, exc: Exception, msg: str) -> None:
         m["echecs"] += 1
@@ -648,7 +682,12 @@ class FournisseurChaine(FournisseurLLM):
         self.appels_total += 1
         raisons: list[str] = []
         autre_echec = False
-        for m in self.maillons:
+        a_eviter, self._a_eviter = self._a_eviter, set()
+        ordre = [m for m in self.maillons if m["modele"] not in a_eviter] + \
+                [m for m in self.maillons if m["modele"] in a_eviter]
+        if a_eviter:
+            raisons.append("réponse précédente inexploitable : " + ", ".join(sorted(a_eviter)) + " passé en dernier")
+        for m in ordre:
             if m["ouvert"]:
                 m["ignores"] += 1
                 raisons.append(f"{m['modele']} : ignoré (disjoncteur)")
@@ -663,6 +702,7 @@ class FournisseurChaine(FournisseurLLM):
                 texte = m["fournisseur"].appeler_llm(prompt, systeme=systeme)
                 m["echecs"] = 0
                 m["reussites"] += 1
+                self.dernier_servi = m["modele"]
                 if raisons:
                     log.warning("Appel servi par %s après : %s", m["modele"], " | ".join(raisons))
                 return texte
@@ -679,6 +719,7 @@ class FournisseurChaine(FournisseurLLM):
     def etat_disjoncteur(self) -> dict:
         return {"actif": self.disjoncteur_actif, "seuil_echecs": self.seuil_echecs,
                 "ouvert": any(m["ouvert"] for m in self.maillons), "appels_total": self.appels_total,
+                "replis_json_modele_suivant": self.replis_json,
                 "modeles": [{"modele": m["modele"], "ouvert": m["ouvert"], "cause": m["cause"],
                              "ouvert_a_l_appel": m["ouvert_a_l_appel"], "echecs_consecutifs": m["echecs"],
                              "ignores": m["ignores"]} for m in self.maillons]}
@@ -780,6 +821,14 @@ def creer_fournisseur(config: dict) -> FournisseurLLM:
                                   seuil_echecs=cfg_disj.get("seuil_echecs_consecutifs", 3))
 
 
+def repli_modele_suivant(llm: FournisseurLLM) -> None:
+    """À appeler quand la réponse est inexploitable : le nouvel essai ira au modèle suivant de la chaîne
+    (sans effet sur un fournisseur unique)."""
+    eviter = getattr(llm, "eviter_dernier_modele", None)
+    if callable(eviter):
+        eviter()
+
+
 def extraire_json(texte: str) -> dict | list:
     """Parse le JSON d'une réponse LLM, en tolérant les clôtures ```json ... ```."""
     texte = texte.strip()
@@ -794,14 +843,88 @@ def extraire_json(texte: str) -> dict | list:
     repare = _retirer_virgules_finales(texte)
     try:
         return json.loads(repare)
-    except json.JSONDecodeError:
-        # Dernier recours : isoler le premier objet/tableau JSON complet.
-        for ouvrant, fermant in (("{", "}"), ("[", "]")):
-            debut = repare.find(ouvrant)
-            fin = repare.rfind(fermant)
-            if debut != -1 and fin > debut:
-                return json.loads(repare[debut : fin + 1])
-        raise
+    except json.JSONDecodeError as exc:
+        erreur = exc
+    # Texte autour, clôtures au milieu, clés sans guillemets, guillemets typographiques : réparations de
+    # FORME uniquement. Une réponse TRONQUÉE n'est jamais refermée (elle passerait pour complète en perdant
+    # du contenu) : elle reste invalide et l'appelant redemande au modèle suivant.
+    for candidat in _candidats_json(texte):
+        try:
+            return json.loads(candidat)
+        except json.JSONDecodeError:
+            continue
+    raise erreur
+
+
+def _candidats_json(texte: str):
+    debut = min([i for i in (texte.find("{"), texte.find("[")) if i != -1], default=-1)
+    if debut == -1:
+        return
+    corps = _bloc_equilibre(texte, debut)
+    for etape in (lambda t: t, _guillemets_droits, _cles_entre_guillemets):
+        corps = _retirer_virgules_finales(etape(corps))
+        yield corps
+
+
+def _bloc_equilibre(texte: str, debut: int) -> str:
+    """Du premier { ou [ à son fermant correspondant (hors chaînes) ; tout le reste si non fermé."""
+    pile, dans_chaine, echappe = [], False, False
+    for i in range(debut, len(texte)):
+        c = texte[i]
+        if dans_chaine:
+            if echappe:
+                echappe = False
+            elif c == "\\":
+                echappe = True
+            elif c == '"':
+                dans_chaine = False
+            continue
+        if c == '"':
+            dans_chaine = True
+        elif c in "{[":
+            pile.append(c)
+        elif c in "}]":
+            if pile:
+                pile.pop()
+            if not pile:
+                return texte[debut:i + 1]
+    return texte[debut:]
+
+
+def _guillemets_droits(t: str) -> str:
+    """Guillemets typographiques utilisés COMME délimiteurs JSON (après { , : [ ou avant : , } ])."""
+    t = re.sub(r'([{\[,:]\s*)[“”]', r'\1"', t)
+    return re.sub(r'[“”](\s*[:,}\]])', r'"\1', t)
+
+
+def _cles_entre_guillemets(t: str) -> str:
+    """{constat: "x"} -> {"constat": "x"} (clés nues, hors chaînes)."""
+    sortie, dans_chaine, echappe, i = [], False, False, 0
+    while i < len(t):
+        c = t[i]
+        if dans_chaine:
+            sortie.append(c)
+            if echappe:
+                echappe = False
+            elif c == "\\":
+                echappe = True
+            elif c == '"':
+                dans_chaine = False
+            i += 1
+            continue
+        if c == '"':
+            dans_chaine = True
+            sortie.append(c)
+            i += 1
+            continue
+        m = re.match(r"([{,]\s*)([A-Za-z_]\w*)(\s*:)", t[i:])
+        if m:
+            sortie.append(f'{m.group(1)}"{m.group(2)}"{m.group(3)}')
+            i += m.end()
+            continue
+        sortie.append(c)
+        i += 1
+    return "".join(sortie)
 
 
 def _retirer_virgules_finales(texte: str) -> str:

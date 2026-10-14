@@ -1,6 +1,6 @@
 {
  "version_schema": 1,
- "genere_le": "2026-10-14T11:57:58+00:00",
+ "genere_le": "2026-10-14T13:28:45+00:00",
  "debut_historique": "2021-08-13",
  "erreurs_collecte": [],
  "engrenages": {
@@ -8602,5 +8602,920 @@
     "Indice or (proxy) : NASDAQ QGLDI, pas le cours spot."
    ]
   }
+ },
+ "vue_ensemble": {
+  "theme": {
+   "titre": "Aversion au risque, dollar en tête",
+   "texte": "Le biais global s'établit en mode risk off avec un score USD dominant à 84 et l'AUD à 56, reflétant une aversion au risque marquée. Les marchés surveillent les publications d'inflation pour ajuster leurs anticipations.",
+   "texte_redige_par": "Flash-Lite 3.5",
+   "direction": {
+    "dollar": "haussier",
+    "risque": "risk_off",
+    "libelle": "Dollar ↑ · Risk off",
+    "classe": "dn",
+    "origine": "calcul Python",
+    "conviction": 1,
+    "conviction_niveau": "faible"
+   },
+   "coherence": {
+    "alignes": 0,
+    "sur": 7,
+    "engrenages_alignes": [],
+    "detail": [
+     {
+      "numero": 2,
+      "aligne": false,
+      "critere": "dollar",
+      "direction": "Dollar ="
+     },
+     {
+      "numero": 3,
+      "aligne": false,
+      "critere": "dollar",
+      "direction": "Dollar ="
+     },
+     {
+      "numero": 4,
+      "aligne": false,
+      "critere": null,
+      "direction": "non déterminée"
+     },
+     {
+      "numero": 5,
+      "aligne": false,
+      "critere": "dollar",
+      "direction": "Dollar = · Risque neutre"
+     },
+     {
+      "numero": 6,
+      "aligne": false,
+      "critere": null,
+      "direction": "non déterminée"
+     },
+     {
+      "numero": 7,
+      "aligne": false,
+      "critere": "dollar",
+      "direction": "Dollar = · Risk on"
+     },
+     {
+      "numero": 8,
+      "aligne": false,
+      "critere": null,
+      "direction": "non déterminée"
+     }
+    ],
+    "regle": "engrenage 2 à 8 aligné si sa direction dollar est celle du thème ; à défaut de direction dollar, si sa direction risque est celle du thème. Neutre ou non déterminé : non aligné."
+   },
+   "raison": null,
+   "date_rapport": "2026-10-14"
+  },
+  "cartes": [
+   {
+    "numero": 1,
+    "titre": "Thème macro",
+    "chiffre": {
+     "libelle": "Score USD",
+     "valeur": 84,
+     "texte": "84",
+     "unite": "",
+     "date": "2026-10-14",
+     "source": "calcul Python (scores de confluence)",
+     "raison": null
+    },
+    "ligne": "USD 84, AUD 56, CAD 16 : écart de 68 points entre extrêmes.",
+    "courbe": {
+     "points": [
+      [
+       "2026-09-07",
+       37.0
+      ],
+      [
+       "2026-09-23",
+       10.7
+      ],
+      [
+       "2026-10-07",
+       -30.7
+      ],
+      [
+       "2026-10-14",
+       -23.7
+      ]
+     ],
+     "periode": "4 semaines",
+     "source": "rapports quotidiens (écart de score risque − refuge)",
+     "raison": null
+    },
+    "direction": {
+     "dollar": "haussier",
+     "risque": "risk_off",
+     "libelle": "Dollar ↑ · Risk off",
+     "classe": "dn",
+     "origine": "calcul Python",
+     "conviction": 1,
+     "conviction_niveau": "faible"
+    }
+   },
+   {
+    "numero": 2,
+    "titre": "Politique monétaire",
+    "chiffre": {
+     "libelle": "Rendement 2 ans US",
+     "valeur": 4.8,
+     "texte": "4,80 %",
+     "unite": "%",
+     "date": "2026-10-09",
+     "source": "FRED (DGS2)",
+     "raison": null
+    },
+    "ligne": "Fed à 3,88 % effectif, 2 ans −3 pb sur 7 jours.",
+    "courbe": {
+     "points": [
+      [
+       "2026-09-09",
+       4.43
+      ],
+      [
+       "2026-09-10",
+       4.56
+      ],
+      [
+       "2026-09-11",
+       4.63
+      ],
+      [
+       "2026-09-14",
+       4.65
+      ],
+      [
+       "2026-09-15",
+       4.67
+      ],
+      [
+       "2026-09-16",
+       4.74
+      ],
+      [
+       "2026-09-17",
+       4.67
+      ],
+      [
+       "2026-09-18",
+       4.76
+      ],
+      [
+       "2026-09-21",
+       4.76
+      ],
+      [
+       "2026-09-22",
+       4.71
+      ],
+      [
+       "2026-09-23",
+       4.85
+      ],
+      [
+       "2026-09-24",
+       4.87
+      ],
+      [
+       "2026-09-25",
+       4.81
+      ],
+      [
+       "2026-09-28",
+       4.92
+      ],
+      [
+       "2026-09-29",
+       4.89
+      ],
+      [
+       "2026-09-30",
+       4.88
+      ],
+      [
+       "2026-10-01",
+       4.78
+      ],
+      [
+       "2026-10-02",
+       4.83
+      ],
+      [
+       "2026-10-05",
+       4.84
+      ],
+      [
+       "2026-10-06",
+       4.79
+      ],
+      [
+       "2026-10-07",
+       4.77
+      ],
+      [
+       "2026-10-08",
+       4.75
+      ],
+      [
+       "2026-10-09",
+       4.8
+      ]
+     ],
+     "periode": "30 jours",
+     "source": "FRED (DGS2)",
+     "raison": null
+    },
+    "direction": {
+     "dollar": "neutre",
+     "risque": null,
+     "libelle": "Dollar =",
+     "classe": "nd",
+     "origine": "calcul Python",
+     "conviction": 1,
+     "conviction_niveau": "faible"
+    }
+   },
+   {
+    "numero": 3,
+    "titre": "Données économiques",
+    "chiffre": {
+     "libelle": "Surprise USD (30 j)",
+     "valeur": -0.05,
+     "texte": "−0,05",
+     "unite": "",
+     "date": "2026-10-14",
+     "source": "calcul Python (registre macro, 30 j)",
+     "raison": null
+    },
+    "ligne": "Plus fortes surprises ailleurs : CAD −0,62, AUD −0,52.",
+    "courbe": {
+     "points": [
+      [
+       "2026-09-16",
+       0.55
+      ],
+      [
+       "2026-09-23",
+       0.55
+      ],
+      [
+       "2026-09-30",
+       0.75
+      ],
+      [
+       "2026-10-07",
+       -0.04
+      ],
+      [
+       "2026-10-14",
+       -0.05
+      ]
+     ],
+     "periode": "30 jours",
+     "source": "calcul Python (registre macro, 30 j)",
+     "raison": null
+    },
+    "direction": {
+     "dollar": "neutre",
+     "risque": null,
+     "libelle": "Dollar =",
+     "classe": "nd",
+     "origine": "calcul Python",
+     "conviction": 1,
+     "conviction_niveau": "faible"
+    }
+   },
+   {
+    "numero": 4,
+    "titre": "Politique fiscale",
+    "chiffre": {
+     "libelle": "Prime de terme 10 ans US",
+     "valeur": 1.0729,
+     "texte": "1,07 %",
+     "unite": "%",
+     "date": "2026-10-09",
+     "source": "FRED (THREEFYTP10, Kim-Wright)",
+     "raison": null
+    },
+    "ligne": "10 ans US 5,24 %, dette fédérale / PIB 122,6 % (2026-01).",
+    "courbe": {
+     "points": [
+      [
+       "2026-09-09",
+       0.9002
+      ],
+      [
+       "2026-09-10",
+       0.9481
+      ],
+      [
+       "2026-09-11",
+       0.961
+      ],
+      [
+       "2026-09-14",
+       0.959
+      ],
+      [
+       "2026-09-15",
+       0.9641
+      ],
+      [
+       "2026-09-16",
+       0.9719
+      ],
+      [
+       "2026-09-17",
+       0.9396
+      ],
+      [
+       "2026-09-18",
+       0.9595
+      ],
+      [
+       "2026-09-21",
+       0.9416
+      ],
+      [
+       "2026-09-22",
+       0.9344
+      ],
+      [
+       "2026-09-23",
+       0.9932
+      ],
+      [
+       "2026-09-24",
+       1.0259
+      ],
+      [
+       "2026-09-25",
+       1.0209
+      ],
+      [
+       "2026-09-28",
+       1.0468
+      ],
+      [
+       "2026-09-29",
+       1.058
+      ],
+      [
+       "2026-09-30",
+       1.0773
+      ],
+      [
+       "2026-10-01",
+       1.065
+      ],
+      [
+       "2026-10-02",
+       1.0847
+      ],
+      [
+       "2026-10-05",
+       1.0965
+      ],
+      [
+       "2026-10-06",
+       1.0844
+      ],
+      [
+       "2026-10-07",
+       1.0863
+      ],
+      [
+       "2026-10-08",
+       1.0694
+      ],
+      [
+       "2026-10-09",
+       1.0729
+      ]
+     ],
+     "periode": "30 jours",
+     "source": "FRED (THREEFYTP10)",
+     "raison": null
+    },
+    "direction": {
+     "dollar": null,
+     "risque": null,
+     "libelle": "non déterminée",
+     "classe": "nd",
+     "origine": null,
+     "conviction": 0,
+     "conviction_niveau": null
+    }
+   },
+   {
+    "numero": 5,
+    "titre": "Interconnexions de marchés",
+    "chiffre": {
+     "libelle": "Indice dollar large (Fed)",
+     "valeur": 121.6023,
+     "texte": "121,6",
+     "unite": "",
+     "date": "2026-10-09",
+     "source": "FRED (DTWEXBGS)",
+     "raison": null
+    },
+    "ligne": "Indice dollar +0,18 % sur 7 jours, VIX à 15,2.",
+    "courbe": {
+     "points": [
+      [
+       "2026-09-09",
+       117.8834
+      ],
+      [
+       "2026-09-10",
+       118.0787
+      ],
+      [
+       "2026-09-11",
+       118.2126
+      ],
+      [
+       "2026-09-14",
+       118.6923
+      ],
+      [
+       "2026-09-15",
+       118.8822
+      ],
+      [
+       "2026-09-16",
+       118.9206
+      ],
+      [
+       "2026-09-17",
+       119.3489
+      ],
+      [
+       "2026-09-18",
+       119.5133
+      ],
+      [
+       "2026-09-21",
+       119.4014
+      ],
+      [
+       "2026-09-22",
+       119.5933
+      ],
+      [
+       "2026-09-23",
+       120.1169
+      ],
+      [
+       "2026-09-24",
+       120.5521
+      ],
+      [
+       "2026-09-25",
+       120.33
+      ],
+      [
+       "2026-09-28",
+       120.6958
+      ],
+      [
+       "2026-09-29",
+       121.0296
+      ],
+      [
+       "2026-09-30",
+       120.9693
+      ],
+      [
+       "2026-10-01",
+       121.7882
+      ],
+      [
+       "2026-10-02",
+       121.3848
+      ],
+      [
+       "2026-10-05",
+       121.2708
+      ],
+      [
+       "2026-10-06",
+       120.8976
+      ],
+      [
+       "2026-10-07",
+       121.2558
+      ],
+      [
+       "2026-10-08",
+       121.4469
+      ],
+      [
+       "2026-10-09",
+       121.6023
+      ]
+     ],
+     "periode": "30 jours",
+     "source": "FRED (DTWEXBGS)",
+     "raison": null
+    },
+    "direction": {
+     "dollar": "neutre",
+     "risque": "neutre",
+     "libelle": "Dollar = · Risque neutre",
+     "classe": "nd",
+     "origine": "calcul Python",
+     "conviction": 2,
+     "conviction_niveau": "moyen"
+    }
+   },
+   {
+    "numero": 6,
+    "titre": "Géopolitique",
+    "chiffre": {
+     "libelle": "Événements retenus",
+     "valeur": 5.0,
+     "texte": "5",
+     "unite": "",
+     "date": "2026-10-13",
+     "source": "fil d'actualité classé par canal (calcul Python)",
+     "raison": null
+    },
+    "ligne": "Canaux : énergie 3, refuge (conflits) 2.",
+    "courbe": {
+     "points": [],
+     "periode": "30 jours",
+     "source": null,
+     "raison": "pas de série chiffrée gratuite pour la géopolitique"
+    },
+    "direction": {
+     "dollar": null,
+     "risque": null,
+     "libelle": "non déterminée",
+     "classe": "nd",
+     "origine": null,
+     "conviction": 0,
+     "conviction_niveau": null
+    }
+   },
+   {
+    "numero": 7,
+    "titre": "Price action et flux",
+    "chiffre": {
+     "libelle": "Indice USD synthétique",
+     "valeur": 103.07769,
+     "texte": "103,08",
+     "unite": "",
+     "date": "2026-10-14",
+     "source": "calcul local (Twelve Data)",
+     "raison": null
+    },
+    "ligne": "RSI USD 60,1, −0,02 % sur 5 jours ; COT extrême : EUR (vendeur), GBP (vendeur), JPY (acheteur) et 2 autre(s).",
+    "courbe": {
+     "points": [
+      [
+       "2026-09-14",
+       101.0317
+      ],
+      [
+       "2026-09-15",
+       101.2281
+      ],
+      [
+       "2026-09-16",
+       101.8637
+      ],
+      [
+       "2026-09-17",
+       101.712
+      ],
+      [
+       "2026-09-18",
+       101.672
+      ],
+      [
+       "2026-09-19",
+       101.688
+      ],
+      [
+       "2026-09-20",
+       101.7051
+      ],
+      [
+       "2026-09-21",
+       101.8124
+      ],
+      [
+       "2026-09-22",
+       101.8608
+      ],
+      [
+       "2026-09-23",
+       102.4987
+      ],
+      [
+       "2026-09-24",
+       102.7198
+      ],
+      [
+       "2026-09-25",
+       102.5498
+      ],
+      [
+       "2026-09-26",
+       102.5742
+      ],
+      [
+       "2026-09-27",
+       102.597
+      ],
+      [
+       "2026-09-28",
+       102.647
+      ],
+      [
+       "2026-09-29",
+       102.8361
+      ],
+      [
+       "2026-09-30",
+       103.0006
+      ],
+      [
+       "2026-10-01",
+       103.2392
+      ],
+      [
+       "2026-10-02",
+       103.0745
+      ],
+      [
+       "2026-10-03",
+       103.0775
+      ],
+      [
+       "2026-10-04",
+       103.0989
+      ],
+      [
+       "2026-10-05",
+       103.1764
+      ],
+      [
+       "2026-10-06",
+       102.9774
+      ],
+      [
+       "2026-10-07",
+       103.2749
+      ],
+      [
+       "2026-10-08",
+       103.1537
+      ],
+      [
+       "2026-10-09",
+       103.1015
+      ],
+      [
+       "2026-10-10",
+       103.113
+      ],
+      [
+       "2026-10-11",
+       103.1442
+      ],
+      [
+       "2026-10-12",
+       103.4448
+      ],
+      [
+       "2026-10-13",
+       103.1193
+      ],
+      [
+       "2026-10-14",
+       103.0777
+      ]
+     ],
+     "periode": "30 jours",
+     "source": "calcul local (Twelve Data)",
+     "raison": null
+    },
+    "direction": {
+     "dollar": "neutre",
+     "risque": "risk_on",
+     "libelle": "Dollar = · Risk on",
+     "classe": "up",
+     "origine": "calcul Python",
+     "conviction": 2,
+     "conviction_niveau": "moyen"
+    }
+   },
+   {
+    "numero": 8,
+    "titre": "Offre et demande",
+    "chiffre": {
+     "libelle": "Stocks de brut US",
+     "valeur": 424.134,
+     "texte": "424,1 M",
+     "unite": "M barils",
+     "date": "2026-10-02",
+     "source": "EIA (WCESTUS1, hors réserve stratégique)",
+     "raison": null
+    },
+    "ligne": "Stocks −3,2 M de barils sur la semaine, Brent à 125,44 $.",
+    "courbe": {
+     "points": [
+      [
+       "2026-04-03",
+       464.717
+      ],
+      [
+       "2026-04-10",
+       463.804
+      ],
+      [
+       "2026-04-17",
+       465.729
+      ],
+      [
+       "2026-04-24",
+       459.495
+      ],
+      [
+       "2026-05-01",
+       457.182
+      ],
+      [
+       "2026-05-08",
+       452.876
+      ],
+      [
+       "2026-05-15",
+       445.013
+      ],
+      [
+       "2026-05-22",
+       441.686
+      ],
+      [
+       "2026-05-29",
+       433.712
+      ],
+      [
+       "2026-06-05",
+       426.485
+      ],
+      [
+       "2026-06-12",
+       418.222
+      ],
+      [
+       "2026-06-19",
+       412.134
+      ],
+      [
+       "2026-06-26",
+       408.359
+      ],
+      [
+       "2026-07-03",
+       411.357
+      ],
+      [
+       "2026-07-10",
+       409.665
+      ],
+      [
+       "2026-07-17",
+       411.675
+      ],
+      [
+       "2026-07-24",
+       404.508
+      ],
+      [
+       "2026-07-31",
+       406.987
+      ],
+      [
+       "2026-08-07",
+       424.41
+      ],
+      [
+       "2026-08-14",
+       428.815
+      ],
+      [
+       "2026-08-21",
+       428.91
+      ],
+      [
+       "2026-08-28",
+       424.46
+      ],
+      [
+       "2026-09-04",
+       424.069
+      ],
+      [
+       "2026-09-11",
+       423.429
+      ],
+      [
+       "2026-09-18",
+       426.398
+      ],
+      [
+       "2026-09-25",
+       427.32
+      ],
+      [
+       "2026-10-02",
+       424.134
+      ]
+     ],
+     "periode": "26 semaines",
+     "source": "EIA (WCESTUS1)",
+     "raison": null
+    },
+    "direction": {
+     "dollar": null,
+     "risque": null,
+     "libelle": "non déterminée",
+     "classe": "nd",
+     "origine": null,
+     "conviction": 2,
+     "conviction_niveau": "moyen"
+    }
+   }
+  ],
+  "chaines": [
+   {
+    "titre": "Transmission des prix de l'énergie vers les devises matières premières",
+    "maillons": [
+     {
+      "engrenage": 8,
+      "texte": "Le Brent progresse à 125.44 $ sur une série heurtée, traduisant des tensions sur l'offre pétrolière.",
+      "non_sourcee": false
+     },
+     {
+      "engrenage": 8,
+      "texte": "Les stocks de brut US reculent à 424.1 millions de barils, confirmant la dynamique de consommation.",
+      "non_sourcee": false
+     },
+     {
+      "engrenage": 1,
+      "texte": "Le dollar canadien profite de ces flux de matières premières au sein du classement des scores de devises.",
+      "non_sourcee": false
+     }
+    ]
+   },
+   {
+    "titre": "Impact des anticipations d'inflation sur les taux et le dollar",
+    "maillons": [
+     {
+      "engrenage": 2,
+      "texte": "Le rendement US à 2 ans recule à 4.80% après la publication des taux directeurs.",
+      "non_sourcee": false
+     },
+     {
+      "engrenage": 5,
+      "texte": "La courbe des taux US 10-2 ans se maintient à +0.44 pt dans une configuration de bear steepening.",
+      "non_sourcee": false
+     },
+     {
+      "engrenage": 7,
+      "texte": "L'indice USD synthétique accuse un repli de 0.02% sur 5 jours avec un positionnement spéculatif modéré.",
+      "non_sourcee": false
+     }
+    ]
+   }
+  ],
+  "conflits": [
+   {
+    "engrenages": [
+     1,
+     7
+    ],
+    "texte": "Thème macro (risk_off) contre Price action et flux (risk_on) sur le risque global",
+    "origine": "modèle"
+   },
+   {
+    "engrenages": [
+     2,
+     3
+    ],
+    "texte": "Divergence entre des taux directeurs fermes et des indices de surprise macroéconomique modérés pour l'USD.",
+    "origine": "modèle"
+   }
+  ],
+  "statut_texte": "ok",
+  "redige_par": "Flash-Lite 3.5"
  }
 }

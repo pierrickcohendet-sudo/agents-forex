@@ -323,7 +323,7 @@ def main() -> int:
     # le carry et les différentiels sont recalculés. La config reste le repli si le registre
     # n'a pas de valeur numérique pour la devise.
     etape("taux directeurs (registre)", marche_taux.appliquer_registre_taux, macro,
-          registre_macro.charger(donnees_dir / "registre_macro.json"), config["tableau_macro"])
+          registre_macro.charger(donnees_dir / "registre_macro.json"), config["tableau_macro"], historiques)
 
     if not technique["devises"] and not macro["series"]:
         notifier_echec("collecte", "aucune donnée technique NI macro — rapport annulé")

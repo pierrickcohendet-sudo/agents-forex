@@ -19,7 +19,7 @@ from pathlib import Path
 
 from agents.agent_synthese import _Catalogue, _ids, _norm, _retirer_ordres, _texte
 from core.llm import (MESSAGE_QUOTA_ATTEINT, FournisseurLLM, QuotaAtteint, attribution_modele,
-                      definir_etiquette, extraire_json)
+                      definir_etiquette, extraire_json, repli_modele_suivant)
 from core.secrets import masquer_secrets
 
 log = logging.getLogger(__name__)
@@ -41,6 +41,7 @@ CONVICTIONS = ("faible", "moyen", "eleve")
 TEXTE_INSUFFISANT = "Données insuffisantes aujourd'hui."
 RISQUE, REFUGE = ("AUD", "NZD", "CAD"), ("JPY", "CHF")
 SANS_REGLE = (4, 6, 8)   # engrenages sans direction calculable en Python
+MIN_ENGRENAGES_REPONSE = 6   # en dessous : réponse jugée incomplète, redemandée au modèle suivant
 
 SCHEMA = """{
   "engrenages": [{"numero": 1-8,
@@ -174,6 +175,50 @@ def _conviction(n_donnees: int, direction_definie: bool, force: int) -> str | No
 
 
 # ------------------------------------------------------------ signaux Python
+
+def _donnees_fiscales(dossiers: dict, cat: "_Catalogue") -> list[dict]:
+    """Engrenage 4 : 10 ans (variation 4 semaines), prime de terme US et dette / PIB, repris du dossier."""
+    e = ((dossiers or {}).get("engrenages") or {}).get("4") or {}
+    sortie = []
+    for ligne in e.get("lignes") or []:
+        dev, cel = ligne.get("devise"), ligne.get("cellules") or {}
+        morceaux, src, date_ = [], None, None
+        t = cel.get("taux_10a") or {}
+        if t.get("valeur") is not None:
+            morceaux.append(f"10 ans {t['valeur']:.2f} %" + (f" ({t['var_4s']:+.0f} pb sur 4 semaines)"
+                                                         if t.get("var_4s") is not None else ""))
+            src, date_ = t.get("source"), t.get("date")
+        pt = cel.get("prime_terme") or {}
+        if pt.get("valeur") is not None:
+            morceaux.append(f"prime de terme 10 ans {pt['valeur']:.2f} %")
+        dp = cel.get("dette_pib") or {}
+        if dp.get("valeur") is not None:
+            morceaux.append(f"dette / PIB {dp['valeur']} % ({dp.get('date')})")
+            src, date_ = src or dp.get("source"), date_ or dp.get("date")
+        if morceaux:
+            sortie.append({"texte": f"{dev} : " + ", ".join(morceaux),
+                           "source_id": cat.src(src or "dossier des engrenages", f"{dev} — politique fiscale", date_)})
+    return sortie
+
+
+def _donnees_geopolitiques(dossiers: dict, cat: "_Catalogue") -> list[dict]:
+    """Engrenage 6 : décompte des titres du jour par canal et 3 titres datés (dossier, sans LLM)."""
+    e = ((dossiers or {}).get("engrenages") or {}).get("6") or {}
+    sortie = []
+    for g in e.get("graphiques") or []:
+        if g.get("type") == "barres" and g.get("barres"):
+            comptes = ", ".join(f"{b['nom']} {b['valeur']}" for b in g["barres"] if b.get("valeur"))
+            if comptes:
+                sortie.append({"texte": "Titres du jour par canal de transmission : " + comptes,
+                               "source_id": cat.src("Calcul Python (fil d'actualité)", "titres classés par canal",
+                                                    date.today().isoformat())})
+    for ev in (e.get("evenements") or [])[:3]:
+        sortie.append({"texte": f"{ev.get('titre')} — canal {ev.get('canal')} ({', '.join(ev.get('devises') or [])})",
+                       "source_id": cat.src(ev.get("source") or "actualité", str(ev.get("titre"))[:80], ev.get("date"),
+                                            ev.get("lien"))})
+    return sortie
+
+
 def signaux(config: dict, donnees: dict, macro: dict, devises: list[dict], biais: str | None,
             extras: dict, cat: _Catalogue) -> dict[int, dict]:
     """{numéro: {dollar, risque, devises, regle, donnees: [{texte, source_id}], conviction}}.
@@ -245,8 +290,11 @@ def signaux(config: dict, donnees: dict, macro: dict, devises: list[dict], biais
                                 "source_id": id_ind}] if vals else [],
                    "force": _force(i_usd, 0.3)}
 
-    # 4. Politique fiscale : actualité seulement (pas de série chiffrée gratuite fiable branchée)
-    resultat[4] = {"dollar": None, "risque": None, "devises": [], "donnees": [], "force": 0,
+    # 4. Politique fiscale : pas de règle de direction, mais les chiffres du dossier (10 ans, prime de
+    # terme, dette / PIB) sont fournis au modèle — jamais une entrée vide quand le dossier en a.
+    dossiers = (extras or {}).get("dossiers") or {}
+    resultat[4] = {"dollar": None, "risque": None, "devises": [], "donnees": _donnees_fiscales(dossiers, cat),
+                   "force": 0,
                    "regle": "aucune règle chiffrée : lecture de l'actualité par le LLM (conviction plafonnée à « moyen »)"}
 
     # 5. Interconnexions : VIX (risque), indice dollar large (dollar), S&P 500
@@ -290,8 +338,9 @@ def signaux(config: dict, donnees: dict, macro: dict, devises: list[dict], biais
                    "donnees": donnees5, "indisponibles": indisponibles5, "force": max(_force(v_dollar[1] if v_dollar else None, 0.5),
                                                      2 if risque5 == "risk_off" and vix.get("valeur", 0) >= 30 else 1 if risque5 else 0)}
 
-    # 6. Géopolitique : actualité seulement
-    resultat[6] = {"dollar": None, "risque": None, "devises": [], "donnees": [], "force": 0,
+    # 6. Géopolitique : titres datés classés par canal de transmission (dossier, calcul Python)
+    resultat[6] = {"dollar": None, "risque": None, "devises": [], "donnees": _donnees_geopolitiques(dossiers, cat),
+                   "force": 0,
                    "regle": "aucune règle chiffrée : actualité avec mécanisme économique (conviction plafonnée à « moyen »)"}
 
     # 7. Price action : indice USD synthétique (5 j) et devises risque vs refuge
@@ -664,6 +713,8 @@ def generer(config: dict, llm: FournisseurLLM, donnees: dict, macro: dict, catal
                 brut = extraire_json(llm.appeler_llm(prompt, systeme=systeme))
                 if not isinstance(brut, dict) or not brut.get("engrenages"):
                     raise ValueError("réponse sans engrenages")
+                if len([e for e in brut["engrenages"] if isinstance(e, dict)]) < MIN_ENGRENAGES_REPONSE:
+                    raise ValueError(f"réponse incomplète ({len(brut['engrenages'])} engrenage(s) sur 8)")
                 sortie = normaliser(brut, sig, conflits_py, concept, config,
                                     justifications((extras or {}).get("dossiers")))
                 sortie.update({"statut": "ok", "tentatives": precedentes + 1, "genere_le": horodatage,
@@ -672,6 +723,7 @@ def generer(config: dict, llm: FournisseurLLM, donnees: dict, macro: dict, catal
             except QuotaAtteint:
                 raise
             except Exception as exc:  # noqa: BLE001
+                repli_modele_suivant(llm)   # JSON ou schéma invalide : nouvel essai sur le modèle suivant
                 derniere = exc
                 log.warning("8 engrenages, essai %d en échec : %s", essai, masquer_secrets(str(exc)))
         raise RuntimeError(masquer_secrets(str(derniere)))

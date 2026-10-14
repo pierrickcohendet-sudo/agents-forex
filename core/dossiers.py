@@ -15,7 +15,7 @@ import statistics
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
-from core import controles_macro, registre_macro as rm
+from core import controles_macro, registre_macro as rm, vue_ensemble
 
 log = logging.getLogger(__name__)
 
@@ -772,6 +772,11 @@ def construire(historiques: dict, registre: dict, technique: dict, config: dict,
         log.exception("Dossier engrenage 1 en échec")
         sortie["engrenages"]["1"] = {"numero": 1, "indisponible": f"calcul en échec : {exc}"[:200]}
     sortie["engrenages"] = dict(sorted(sortie["engrenages"].items(), key=lambda kv: int(kv[0])))
+    try:   # bandeau du thème, 8 cartes et chaînes (refonte V2, palier 1) : calcul Python, sans LLM
+        sortie["vue_ensemble"] = vue_ensemble.calculer(sortie["engrenages"], historiques, technique, rapport)
+    except Exception as exc:  # noqa: BLE001
+        log.exception("Vue d'ensemble des engrenages en échec")
+        sortie["vue_ensemble"] = {"indisponible": f"calcul en échec : {exc}"[:200]}
     return sortie
 
 

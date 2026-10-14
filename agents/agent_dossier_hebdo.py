@@ -23,7 +23,7 @@ from pathlib import Path
 from agents.agent_engrenages import (NOMS, justifications, moderer_vocabulaire, nommer_or)
 from agents.agent_synthese import _retirer_ordres, _texte
 from core.llm import (MESSAGE_QUOTA_ATTEINT, FournisseurLLM, QuotaAtteint, attribution_modele,
-                      definir_etiquette, extraire_json)
+                      definir_etiquette, extraire_json, repli_modele_suivant)
 from core.secrets import masquer_secrets
 
 log = logging.getLogger(__name__)
@@ -224,6 +224,7 @@ def _appeler(llm: FournisseurLLM, systeme: str, prompt: str, tentatives: int, no
         except QuotaAtteint:
             raise
         except Exception as exc:  # noqa: BLE001
+            repli_modele_suivant(llm)   # JSON ou schéma invalide : nouvel essai sur le modèle suivant
             derniere = exc
             log.warning("Dossier hebdo : essai en échec (%s)", masquer_secrets(str(exc)))
     raise RuntimeError(masquer_secrets(str(derniere)))

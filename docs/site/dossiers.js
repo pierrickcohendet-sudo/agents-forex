@@ -297,23 +297,33 @@ function contenuEngrenage(n, e) {
 const NOMS = { 1: "Thème macro", 2: "Politique monétaire", 3: "Données économiques", 4: "Politique fiscale",
                5: "Interconnexions de marchés", 6: "Géopolitique", 7: "Price action et flux", 8: "Offre et demande" };
 
-export async function carteDossiers() {
+const COURTS = { 1: "Thème", 2: "Monétaire", 3: "Données", 4: "Fiscale", 5: "Marchés", 6: "Géopolitique", 7: "Flux", 8: "Offre" };
+
+/* `options.actif` : engrenage ouvert au départ ; `options.surChoix(n)` : appelé à chaque changement.
+   La carte expose `choisir(n)` pour être pilotée depuis la vue d'ensemble. */
+export async function carteDossiers(options = {}) {
   const d = await chargerJson("data/dossiers.json");
   const c = el("section", "carte");
-  c.appendChild(el("h2", null, "Dossiers chiffrés"));
+  c.id = "dossier-engrenage";
+  c.choisir = () => {};
+  c.appendChild(el("h2", null, "Dossier de l'engrenage"));
   if (enErreur(d)) { c.appendChild(el("p", "indisponible", `Indisponible : ${d?.__erreur || "dossiers.json absent"}.`)); return c; }
   c.appendChild(el("p", "sous-titre", `Calcul Python quotidien, sans LLM · généré ${dateHeure(d.genere_le)} · percentile = position de la valeur actuelle parmi les 5 dernières années (p90 : plus haut que 90 % du temps). Touchez une case pour le détail.`));
   const selecteur = el("div", "selecteur-engrenages");
   const zone = el("div");
-  let actif = 2;
+  selecteur.setAttribute("role", "group");
+  selecteur.setAttribute("aria-label", "Choisir l'engrenage");
+  let actif = options.actif || 1;
   const boutons = [];
   for (let n = 1; n <= 8; n++) {
-    const b = el("button", "bouton", String(n));
+    const b = el("button", "bouton", `${n} ${COURTS[n]}`);
     b.type = "button"; b.title = NOMS[n];
+    b.setAttribute("aria-label", `Engrenage ${n} : ${NOMS[n]}`);
     if (!d.engrenages?.[n] || d.engrenages[n].indisponible) b.classList.add("bientot");
-    b.addEventListener("click", () => { actif = n; rendre(); });
+    b.addEventListener("click", () => { actif = n; rendre(); options.surChoix?.(n); });
     boutons.push(b); selecteur.appendChild(b);
   }
+  c.choisir = n => { actif = n; rendre(); };
   function rendre() {
     boutons.forEach((b, i) => b.setAttribute("aria-pressed", String(i + 1 === actif)));
     zone.replaceChildren(el("h3", "dossier-titre", `${actif}. ${NOMS[actif]}`), contenuEngrenage(actif, d.engrenages?.[actif]));
