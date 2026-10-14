@@ -361,3 +361,41 @@ a.bouton[aria-pressed="true"] { background: var(--accent); color: #fff; border-c
 .chaleur-case { text-align: center; font-weight: 600; min-width: 62px; }
 .chaleur th:not(:first-child) { text-align: center; }
 .chaleur-pct { display: block; font-size: 10.5px; font-weight: 400; color: var(--texte-2); }
+.vide-maj { margin: 6px 0 0; padding: 10px 12px; background: var(--carte-2); border-radius: var(--rayon); font-size: 13.5px; color: var(--texte-2); } .vide-maj strong { color: var(--texte); }
+
+/* ------------------------------------------- interactivité (refonte V2, palier 5) */
+.selecteur-collant { position: sticky; top: var(--entete-h, 0px); z-index: 6; background: var(--carte); margin: 0 -16px 8px; padding: 8px 16px 4px;
+  border-bottom: 1px solid var(--trait); display: flex; flex-wrap: wrap; align-items: center; gap: 0 12px; }
+.selecteur-collant .selecteur-engrenages { margin: 0 0 4px; }
+.aide-clavier { font-size: 12px; color: var(--texte-2); }
+@media (hover: none) { .aide-clavier { display: none; } }
+#dossier-engrenage { scroll-margin-top: calc(var(--entete-h, 0px) + 8px); }
+.periodes { display: inline-flex; border: 1px solid var(--trait); border-radius: var(--rayon); margin-bottom: 6px; overflow: hidden; }
+.periodes .periode { font: inherit; font-size: 12px; background: var(--carte); color: var(--texte); border: 0; border-right: 1px solid var(--trait); padding: 3px 10px; cursor: pointer; }
+.periodes .periode:last-child { border-right: 0; }
+.periodes .periode[aria-pressed="true"] { background: var(--texte); color: var(--fond); font-weight: 600; }
+.graphique-zone { position: relative; touch-action: pan-y; }
+.graphique-svg .curseur { stroke: var(--texte); stroke-opacity: .45; stroke-width: 1; vector-effect: non-scaling-stroke; }
+.graphique-svg .point-curseur { stroke: var(--carte); stroke-width: 1.5; }
+.graphique-svg .capte { cursor: crosshair; }
+.infobulle { position: absolute; top: 4px; z-index: 3; pointer-events: none; display: grid; gap: 2px; white-space: nowrap;
+  background: var(--carte); border: 1px solid var(--trait); border-radius: var(--rayon); padding: 6px 9px; font-size: 12px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .18); }
+.infobulle[hidden] { display: none; }
+.infobulle i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; }
+.infobulle small { color: var(--texte-2); }
+.aide-graphique { color: var(--texte-2); font-style: italic; }
+@media (hover: none) { .aide-graphique::after { content: ""; } }
+@media (prefers-reduced-motion: no-preference) {
+  .graphique-svg .trace { stroke-dasharray: 1; stroke-dashoffset: 1; animation: trace .9s ease-out forwards; }
+  @keyframes trace { to { stroke-dashoffset: 0; } }
+  .fondu { animation: fondu .35s ease-out both; }
+  @keyframes fondu { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .tk { transition: transform .15s, border-color .15s; }
+  .tk:hover { transform: translateY(-2px); border-color: var(--accent); }
+}
+@media (max-width: 720px) {
+  .selecteur-collant .selecteur-engrenages { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; max-width: 100%; }
+  .selecteur-collant .selecteur-engrenages::-webkit-scrollbar { display: none; }
+  .selecteur-collant .bouton { flex: none; }
+}

@@ -53,7 +53,8 @@ SCHEMA_SYNTHESE = """{
 
 
 # ----------------------------------------------------------------- contexte
-_CLES_INUTILES = {"serie_90j", "points", "courbes", "barres", "historique", "lien"}
+_CLES_INUTILES = {"serie_90j", "serie_1an", "serie_mensuelle", "courbe_120j", "courbe", "points", "courbes", "barres",
+                  "historique", "lien", "tuiles", "matrice_precedente"}
 
 
 def _alleger(valeur):

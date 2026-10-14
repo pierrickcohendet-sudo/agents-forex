@@ -30,7 +30,8 @@ function appliquerTheme(t) {
 /* ---------------------------------------------------------------- routage */
 async function afficher() {
   const hash = (location.hash || "#synthese").slice(1);
-  const [id, parametre] = hash.split("/");
+  // Lien direct vers un dossier d'engrenage : #g=N (équivaut à #engrenages/g=N)
+  const [id, parametre] = /^g=[1-8]$/.test(hash) ? ["engrenages", hash] : hash.split("/");
   const onglet = ONGLETS[id] ? id : "synthese";
   document.querySelectorAll(".onglets a").forEach(a => {
     if (a.dataset.onglet === onglet) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
@@ -58,7 +59,7 @@ async function afficher() {
   }
   if ((location.hash || "#synthese").slice(1) !== hash) return;   // l'utilisateur a changé d'onglet entre-temps
   main.replaceChildren(...blocs);
-  if (parametre) document.getElementById(`fiche-${parametre}`)?.scrollIntoView();
+  if (parametre && !parametre.startsWith("g=")) document.getElementById(`fiche-${parametre}`)?.scrollIntoView();
   else window.scrollTo(0, 0);
 }
 
@@ -71,7 +72,12 @@ async function initialiser() {
   document.getElementById("bouton-theme").addEventListener("click", () => {
     appliquerTheme(CYCLE_THEME[(CYCLE_THEME.indexOf(themeCourant()) + 1) % CYCLE_THEME.length]);
   });
+  // #g=N mis à jour par le sélecteur via history.replaceState : pas d'événement hashchange, pas de rechargement
   window.addEventListener("hashchange", afficher);
+  const entete = document.querySelector(".entete");
+  const hauteur = () => document.documentElement.style.setProperty("--entete-h",
+    `${entete && getComputedStyle(entete).position === "sticky" ? entete.offsetHeight : 0}px`);
+  hauteur(); window.addEventListener("resize", hauteur);
   const site = await chargerJson("data/site.json");
   if (!enErreur(site)) {
     const r = site.regime || {};

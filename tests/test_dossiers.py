@@ -88,7 +88,7 @@ class Engrenages(unittest.TestCase):
         l = {x["devise"]: x["cellules"] for x in e["lignes"]}
         self.assertEqual(l["EUR"]["taux_reel"]["valeur"], 0.15)                       # 2,65 − 2,5
         self.assertIsNotNone(l["EUR"]["ecart_2a_us"]["percentile_5a"])
-        self.assertTrue(l["EUR"]["ecart_2a_us"]["serie_90j"])
+        self.assertTrue(l["EUR"]["ecart_2a_us"]["serie_1an"])
         self.assertIn("indisponible", l["JPY"]["taux_directeur"]["raison"])          # sans série BoJ : n/d, jamais « <1.25% » deviné
         self.assertIn("pas de rendement 2 ans", l["GBP"]["ecart_2a_us"]["raison"])
         self.assertEqual(l["USD"]["prochaine_reunion"]["texte"], "2026-10-28")

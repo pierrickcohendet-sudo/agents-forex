@@ -22,7 +22,7 @@ from datetime import date, timedelta
 
 import requests
 
-from core import correlations
+from core import historique_5ans
 from core.secrets import masquer_secrets
 
 log = logging.getLogger(__name__)
@@ -184,7 +184,7 @@ def collecter(config: dict) -> dict:
             points = fonction()
             if not points:
                 raise RuntimeError("aucune observation")
-            if nom in correlations.SERIES_NECESSAIRES:
+            if nom in historique_5ans.SERIES:
                 bruts[nom] = points
             resultat["series"][nom] = {"source": source, "unite": unite, "frequence": frequence,
                                        "points": compacter(points, frequence, aujourdhui)}
@@ -193,15 +193,17 @@ def collecter(config: dict) -> dict:
 
     if cle:
         for nom, (serie, source, unite, freq) in SERIES_FRED.items():
-            ajouter(nom, lambda s=serie, f=freq: _fred(s, cle, debut_mensuel if f in ("mensuel", "trimestriel") else
-                                                      aujourdhui - timedelta(days=12 * 366) if f == "annuel" else debut),
+            # séries de l'historique quotidien 5 ans : 300 jours d'amorçage en plus (MM200 calculable sur 5 ans pleins)
+            debut_serie = aujourdhui - timedelta(days=historique_5ans.FENETRE_JOURS) if nom in historique_5ans.SERIES else debut
+            ajouter(nom, lambda s=serie, f=freq, d=debut_serie: _fred(s, cle, debut_mensuel if f in ("mensuel", "trimestriel") else
+                                                                    aujourdhui - timedelta(days=12 * 366) if f == "annuel" else d),
                     source, unite, freq)
     else:
         resultat["erreurs"].append("FRED_API_KEY absente : séries FRED non collectées")
-    try:
-        resultat["correlations_5a"] = correlations.calculer(bruts, aujourdhui)
-    except Exception as exc:  # noqa: BLE001 — n'affecte que les corrélations
-        resultat["erreurs"].append(masquer_secrets(f"corrélations glissantes 5 ans : {exc}")[:200])
+    try:   # historique quotidien 5 ans (fenêtre glissante, taille stable) : RSI, volatilité, corrélations…
+        resultat["historique_5ans"] = historique_5ans.enregistrer(bruts)
+    except Exception as exc:  # noqa: BLE001 — n'affecte que les calculs longs
+        resultat["erreurs"].append(masquer_secrets(f"historique quotidien 5 ans : {exc}")[:200])
 
     # Taux au jour le jour OFFICIELS, quotidiens : Banque du Japon (call rate non garanti) et
     # Banque d'Angleterre (SONIA) — historique du taux directeur effectif, comme DFF pour l'USD.

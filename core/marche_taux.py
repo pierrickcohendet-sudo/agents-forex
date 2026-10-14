@@ -272,7 +272,11 @@ def resume_pour_analyse(registre: dict, cfg_tm: dict) -> dict:
 # quand le registre n'a qu'une BORNE (JPY « <1.25% ») : jamais le repli manuel de config.yaml.
 SERIES_BANQUE_CENTRALE = {
     "JPY": ("JPY_taux_effectif", "Banque du Japon (STRDCLUCON, taux d'appel au jour le jour non garanti)"),
+    "EUR": ("EUR_taux_depot", "FRED (ECBDFR, taux de la facilité de dépôt de la BCE)"),
 }
+# Devises dont la série officielle PRIME sur le registre même quand celui-ci est numérique : pour l'EUR,
+# ForexFactory publie le taux de refinancement principal, 15 pb au-dessus du taux de dépôt qui pilote le marché.
+SERIE_PRIORITAIRE = {"EUR"}
 FRAICHEUR_MAX_JOURS = 10
 
 
@@ -305,6 +309,17 @@ def appliquer_registre_taux(macro: dict, registre: dict, cfg_tm: dict, historiqu
         case = (registre.get("cases") or {}).get(rm.cle("taux_directeur", devise)) or {}
         actuel = case.get("actuel") or {}
         avant = taux.get(devise) or {}
+        if devise in SERIE_PRIORITAIRE and case.get("statut") != "non_applicable":
+            bc = _taux_banque_centrale(historiques, devise)
+            if bc:
+                if actuel.get("valeur"):
+                    bc["registre"] = f"{actuel.get('valeur')} (taux de refinancement, ForexFactory)"
+                if avant.get("taux") is not None:
+                    bc["repli_precedent"] = {"taux": avant["taux"], "date": avant.get("date"), "source": avant.get("source")}
+                taux[devise] = bc
+                if avant.get("taux") != bc["taux"]:
+                    modifs[devise] = {"avant": avant.get("taux"), "apres": bc["taux"], "source": bc["source"]}
+                continue
         if case.get("statut") == "non_applicable" or actuel.get("valeur_num") is None:
             bc = _taux_banque_centrale(historiques, devise)
             if bc:   # registre non numérique (borne) : série officielle de la banque centrale

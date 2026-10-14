@@ -83,7 +83,7 @@ def pousser_git(config_web: dict, racine_projet: str | Path = ".",
          racine=racine)
     # Fichiers du Tableau macro : ajoutés un par un (git add échoue en bloc si l'un
     # des chemins n'existe pas encore).
-    for optionnel in ("data/registre_macro.json", "data/overrides/saisies_notion.json"):
+    for optionnel in ("data/registre_macro.json", "data/overrides/saisies_notion.json", "data/archives"):
         if (racine / optionnel).exists():
             _git("add", optionnel, racine=racine)
     commit = _git("commit", "-m", message, racine=racine)

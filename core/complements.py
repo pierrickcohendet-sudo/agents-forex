@@ -249,8 +249,8 @@ def complements_6(e: dict, historiques: dict) -> None:
         tuiles.append(tuile(f"reaction_{nom.lower()}", lib, cel, _fenetre(pts, 30)))
     e["tuiles"] = tuiles
     brent, orr = _points(historiques, "brent"), _points(historiques, "indice_or")
-    e["graphiques"][0] = _graphique_serie("Brent et indice or (proxy) rebasés à 100, 90 jours", "base 100",
-                                          [("Brent", _fenetre(brent, 90)), ("Or (proxy)", _fenetre(orr, 90))],
+    e["graphiques"][0] = _graphique_serie("Brent et indice or (proxy) rebasés à 100", "base 100",
+                                          [("Brent", _fenetre(brent, 366)), ("Or (proxy)", _fenetre(orr, 366))],
                                           "FRED (DCOILBRENTEU, NASDAQQGLDI)", base_100=True)
 
 
@@ -272,21 +272,34 @@ def rsi_serie(dates: list[str], clotures: list[float], periode: int = 14) -> lis
     return sortie
 
 
-def complements_7(e: dict, technique: dict, flux: dict | None) -> None:
+def complements_7(e: dict, technique: dict, flux: dict | None, h5=None) -> None:
     c = {l["devise"]: l.get("cellules") or {} for l in e.get("lignes") or []}
     graphes = (technique or {}).get("graphiques") or {}
     rsi = {d: rsi_serie(g.get("dates") or [], g.get("clotures") or []) for d, g in graphes.items()}
+    source_rsi = ("calcul local (Twelve Data, force de la devise) ; RSI recalculé sur les 90 clôtures disponibles : "
+                  "amorçage plus court que le RSI du tableau, écart possible d'un à deux points")
+    if h5 is not None and h5.disponible:   # RSI sur 1 an depuis l'historique 5 ans (même calcul que le tableau)
+        from core import historique_5ans
+        limite = (date.today() - timedelta(days=366)).isoformat()
+        long = {d: [[x, v] for x, v in historique_5ans.rsi(h5.force(d, technique)) if x >= limite] for d in DEVISES}
+        if any(long.values()):
+            rsi = {d: v for d, v in long.items() if v}
+            source_rsi = "calcul Python : RSI 14 sur 5 ans de cours quotidiens (Fed H.10 prolongée par Twelve Data ; USD = indice dollar large)"
     usd = c.get("USD") or {}
     jour_tech = ((graphes.get("USD") or {}).get("dates") or [None])[-1]
     r_usd = rsi.get("USD", [])
-    tuiles = [tuile("rsi_usd", "RSI 14 de l'USD", {**(usd.get("rsi") or {}), "unite": "rsi", "date": jour_tech,
-                                                   "variation": _variation_points(r_usd, 28, "pts", 1),
-                                                   "raison_percentile": "historique de prix de 90 séances"},
-                    r_usd[-31:], "30 séances"),
-              tuile("mm200_usd", "USD : écart à la MM200", {**(usd.get("ecart_mm200") or {}), "date": jour_tech}, None,
-                    raison_courbe="moyenne mobile non historisée"),
-              tuile("vol_usd", "USD : volatilité réalisée 20 j", {**(usd.get("volatilite") or {}), "date": jour_tech}, None,
-                    raison_courbe="volatilité non historisée")]
+    rsi_cel = usd.get("rsi") or {}
+    courbe_rsi = rsi_cel.get("courbe_120j") or r_usd[-31:]
+    tuiles = [tuile("rsi_usd", "RSI 14 de l'USD", {"date": jour_tech, "raison_percentile": "historique de prix de 90 séances",
+                                                   **rsi_cel, "unite": "rsi",
+                                                   "variation": _variation_points(courbe_rsi, 28, "pts", 1)},
+                    courbe_rsi, "120 jours" if rsi_cel.get("courbe_120j") else "30 séances"),
+              tuile("mm200_usd", "USD : écart à la MM200", {"date": jour_tech, **(usd.get("ecart_mm200") or {})},
+                    (usd.get("ecart_mm200") or {}).get("courbe_120j"), "120 jours",
+                    raison_courbe="historique quotidien 5 ans indisponible"),
+              tuile("vol_usd", "USD : volatilité réalisée 20 j", {"date": jour_tech, **(usd.get("volatilite") or {})},
+                    (usd.get("volatilite") or {}).get("courbe_120j"), "120 jours",
+                    raison_courbe="historique quotidien 5 ans indisponible")]
     sur = [d for d in DEVISES if ((c.get(d) or {}).get("rsi") or {}).get("valeur") is not None and c[d]["rsi"]["valeur"] >= 70]
     sous = [d for d in DEVISES if ((c.get(d) or {}).get("rsi") or {}).get("valeur") is not None and c[d]["rsi"]["valeur"] <= 30]
     n_rsi = sum(1 for d in DEVISES if ((c.get(d) or {}).get("rsi") or {}).get("valeur") is not None)
@@ -296,6 +309,17 @@ def complements_7(e: dict, technique: dict, flux: dict | None) -> None:
               None, raison_courbe="non historisé",
               lecture=f"surachat (≥ 70) : {', '.join(sur) or 'aucune'} ; survente (≤ 30) : {', '.join(sous) or 'aucune'}")
     t["texte"] = f"{len(sur)} / {len(sous)}"
+    if h5 is not None and h5.disponible:   # historisé : décompte quotidien sur le RSI 5 ans des 9 devises
+        from core import historique_5ans
+        par_jour: dict[str, int] = {}
+        for d in DEVISES:
+            for jour, v in historique_5ans.rsi(h5.force(d, technique)):
+                par_jour[jour] = par_jour.get(jour, 0) + int(v >= 70 or v <= 30)
+        serie = sorted(par_jour.items())
+        if serie:
+            res = historique_5ans.resume(serie, valeur=len(sur) + len(sous))
+            t.update({"percentile_5a": res["percentile_5a"], "n_5a": res["n_5a"], "raison_percentile": res["raison_percentile"],
+                      "courbe": {"points": res["courbe"], "periode": "120 jours (RSI 5 ans)", "raison": None}})
     tuiles.append(t)
     cot = (flux or {}).get("cot") or {}
     for devise in ("AUD", "EUR", "JPY"):
@@ -309,10 +333,8 @@ def complements_7(e: dict, technique: dict, flux: dict | None) -> None:
         tuiles.append(tt)
     e["tuiles"] = tuiles
     extremes = sorted((d for d in rsi if rsi[d] and d != "USD"), key=lambda d: -abs(rsi[d][-1][1] - 50))[:2]
-    e["graphiques"][0] = _graphique_serie("RSI 14, 90 jours (USD et les 2 devises les plus éloignées de 50)", "RSI",
-                                          [(d, rsi[d]) for d in ["USD"] + extremes if rsi.get(d)],
-                                          "calcul local (Twelve Data, force de la devise) ; RSI recalculé sur les 90 clôtures disponibles : "
-                                          "amorçage plus court que le RSI du tableau, écart possible d'un à deux points")
+    e["graphiques"][0] = _graphique_serie("RSI 14 (USD et les 2 devises les plus éloignées de 50)", "RSI",
+                                          [(d, rsi[d]) for d in ["USD"] + extremes if rsi.get(d)], source_rsi)
 
 
 # ------------------------------------------------------------- engrenage 8

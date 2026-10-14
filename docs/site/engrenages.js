@@ -144,18 +144,32 @@ export function carteEngrenagesCompacte(rapport) {
 
 export async function pageEngrenages(parametre) {
   if (parametre === "hebdo") return [selecteurPeriode("hebdo"), ...(await vueHebdo())];
-  return [selecteurPeriode(""), ...(await pageQuotidienne())];
+  const demande = /^g=([1-8])$/.exec(parametre || "");
+  return [selecteurPeriode(""), ...(await pageQuotidienne(demande ? Number(demande[1]) : null))];
 }
 
-async function pageQuotidienne() {
+/* Flèches ← → : engrenage précédent / suivant (hors champ de saisie, sans touche de modification). */
+let dossierCourant = null;
+document.addEventListener("keydown", ev => {
+  if (!dossierCourant?.isConnected || ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey) return;
+  if (ev.target.closest?.("input, textarea, select, [contenteditable], dialog[open]")) return;
+  if (ev.key === "ArrowRight") { ev.preventDefault(); dossierCourant.decaler(1); }
+  if (ev.key === "ArrowLeft") { ev.preventDefault(); dossierCourant.decaler(-1); }
+});
+const sansAnimation = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+async function pageQuotidienne(engrenageDemande = null) {
   // Vue d'ensemble et dossiers chiffrés (Python, quotidiens) : toujours affichés, même sans texte rédigé.
   const [rapport, d] = await Promise.all([chargerJson("data/latest.json"), chargerJson("data/dossiers.json")]);
   let vue = { marquer: () => {} };
-  const dossier = await carteDossiers({ actif: 1, surChoix: n => vue.marquer(n) });
-  vue = vueEnsemble(enErreur(d) ? { indisponible: d?.__erreur } : d.vue_ensemble, 1, (n, defiler) => {
+  const depart = engrenageDemande || 1;
+  const dossier = await carteDossiers({ actif: depart, surChoix: n => vue.marquer(n) });
+  dossierCourant = dossier;
+  vue = vueEnsemble(enErreur(d) ? { indisponible: d?.__erreur } : d.vue_ensemble, depart, (n, defiler) => {
     vue.marquer(n); dossier.choisir(n);
-    if (defiler) dossier.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+    if (defiler) dossier.scrollIntoView({ behavior: sansAnimation() ? "auto" : "smooth", block: "start" });
   });
+  if (engrenageDemande) setTimeout(() => dossier.scrollIntoView({ block: "start" }), 60);   // lien partagé #g=N
   const blocs = [...vue.noeuds, dossier];
   if (enErreur(rapport)) return [...blocs, indisponible("Analyse rédigée", rapport?.__erreur)];
   const eng = rapport.synthese_globale?.engrenages;

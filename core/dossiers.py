@@ -15,7 +15,7 @@ import statistics
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
-from core import complements, controles_macro, registre_macro as rm, tuiles, vue_ensemble
+from core import archive_quotidienne, complements, controles_macro, historique_5ans, registre_macro as rm, tuiles, vue_ensemble
 
 log = logging.getLogger(__name__)
 
@@ -229,8 +229,8 @@ def engrenage_2(historiques: dict, registre: dict, config: dict) -> dict:
         elif s2:
             serie = difference(s2, us2)
             c["ecart_2a_us"] = stats(serie, "pb", "calcul : 2 ans local − 2 ans US (DGS2)")
-            limite = (date.fromisoformat(serie[-1][0]) - timedelta(days=90)).isoformat()
-            c["ecart_2a_us"]["serie_90j"] = [[d, v] for d, v in serie if d >= limite]
+            limite = (date.fromisoformat(serie[-1][0]) - timedelta(days=366)).isoformat()
+            c["ecart_2a_us"]["serie_1an"] = [[d, v] for d, v in serie if d >= limite]
         else:
             c["ecart_2a_us"] = absent("pas de rendement 2 ans pour ce pays")
         prev = case.get("prevision") or {}
@@ -416,15 +416,10 @@ def _90j(points: list[tuple[str, float]], jours: int = 90) -> list[list]:
 
 
 def graphique_serie(titre: str, unite: str, lignes: list[tuple[str, list]], source: str, base_100: bool = False) -> dict:
-    """Série temporelle multi-courbes (90 jours). base_100 : chaque courbe rebasée à 100 au début."""
-    sortie = []
-    for nom, points in lignes:
-        if len(points) < 2:
-            continue
-        if base_100 and points[0][1]:
-            points = [[d, round(v / points[0][1] * 100, 2)] for d, v in points]
-        sortie.append({"nom": nom, "points": points})
-    return {"type": "serie", "titre": titre, "unite": unite, "courbes": sortie, "source": source,
+    """Série temporelle multi-courbes (jusqu'à 1 an : le site propose 30 j / 90 j / 1 an). base_100 : valeurs
+    brutes, le site rebase chaque courbe à 100 au début de la période affichée."""
+    sortie = [{"nom": nom, "points": points} for nom, points in lignes if len(points) >= 2]
+    return {"type": "serie", "titre": titre, "unite": unite, "courbes": sortie, "source": source, "base_100": base_100,
             "raison": None if sortie else "séries indisponibles"}
 
 
@@ -436,8 +431,8 @@ def graphique_barres(titre: str, unite: str, valeurs: list[tuple[str, float | No
 
 def graphiques_2(e: dict, historiques: dict) -> list[dict]:
     lignes = {l["devise"]: l["cellules"] for l in e["lignes"]}
-    courbes = [(d, lignes[d]["ecart_2a_us"].get("serie_90j") or []) for d in DEVISES if d != "USD"]
-    return [graphique_serie("Écart de taux 2 ans face aux États-Unis, 90 jours", "pb", courbes,
+    courbes = [(d, lignes[d]["ecart_2a_us"].get("serie_1an") or []) for d in DEVISES if d != "USD"]
+    return [graphique_serie("Écart de taux 2 ans face aux États-Unis", "pb", courbes,
                             "calcul : 2 ans local − 2 ans US (DGS2)"),
             graphique_barres("Taux directeur par devise", "%",
                              [(d, lignes[d]["taux_directeur"].get("valeur")) for d in DEVISES],
@@ -457,20 +452,20 @@ def graphiques_3(registre: dict, config: dict, e: dict) -> list[dict]:
     actuels = {d: lignes[d]["indice_surprise"].get("valeur") for d in DEVISES}
     choix = ["USD"] + [d for d, _ in sorted(((d, abs(v)) for d, v in actuels.items() if v is not None and d != "USD"),
                                              key=lambda x: -x[1])[:3]]
-    return [graphique_serie("Indice de surprise 30 j glissant, 90 jours (USD + 3 devises les plus surprenantes)", "écarts",
+    return [graphique_serie("Indice de surprise 30 j glissant (USD + 3 devises les plus surprenantes)", "écarts",
                             [(d, historique[d]) for d in choix], "calcul Python (registre macro)"),
             graphique_barres("Indice de surprise 30 j par devise", "écarts", [(d, actuels[d]) for d in DEVISES],
                              "calcul Python (registre macro)")]
 
 
 def graphiques_5(e: dict, historiques: dict) -> list[dict]:
-    courbes = [(lib, _90j(_serie(historiques, nom))) for nom, lib in
+    courbes = [(lib, _90j(_serie(historiques, nom), 366)) for nom, lib in
                (("dollar_large", "Indice dollar large"), ("indice_or", "Indice or (proxy)"), ("wti", "WTI"), ("sp500", "S&P 500"))]
     matrice = (e.get("correlations") or {}).get("matrice") or {}
     c5 = (historiques.get("correlations_5a") or {}).get("paires") or {}
     valeurs = [(d, (c5.get(f"{d}|S&P 500") or {}).get("valeur")) for d in DEVISES] if c5 else \
               [(d, (matrice.get(d) or {}).get("S&P 500")) for d in DEVISES]
-    return [graphique_serie("Marchés rebasés à 100, 90 jours", "base 100", courbes, "FRED", base_100=True),
+    return [graphique_serie("Marchés rebasés à 100", "base 100", courbes, "FRED", base_100=True),
             graphique_barres("Corrélation 30 séances de chaque devise avec le S&P 500", "corrélation", valeurs,
                              (historiques.get("correlations_5a") or {}).get("source") if c5 else "calcul Python (rendements quotidiens)",
                              "positif : la devise monte avec les actions (devise « risque »)")]
@@ -588,8 +583,8 @@ def engrenage_4(historiques: dict, news: dict | None) -> dict:
         titre = (a.get("titre") or "")
         if any(m in titre.lower() for m in MOTS_BUDGET):
             actus.append({"titre": titre, "source": a.get("source"), "date": (a.get("date") or "")[:10], "lien": a.get("lien")})
-    graphes = [graphique_serie("Rendements 10 ans, 90 jours", "%",
-                               [(d, _90j(_serie(historiques, f"{d}_10a"))) for d in ("USD", "EUR", "GBP", "JPY", "CAD")
+    graphes = [graphique_serie("Rendements 10 ans", "%",
+                               [(d, _90j(_serie(historiques, f"{d}_10a"), 366)) for d in ("USD", "EUR", "GBP", "JPY", "CAD")
                                 if (series.get(f"{d}_10a") or {}).get("frequence") == "quotidien"], "FRED, Bundesbank, BoE, MoF Japon, BoC"),
                graphique_barres("Dette publique / PIB (dernière année FMI)", "% PIB",
                                 [(d, (next(l for l in lignes if l["devise"] == d)["cellules"]["dette_pib"]).get("valeur")) for d in DEVISES],
@@ -600,6 +595,8 @@ def engrenage_4(historiques: dict, news: dict | None) -> dict:
                          {"id": "taux_10a", "libelle": "Rendement 10 ans", "unite": "%"},
                          {"id": "prime_terme", "libelle": "Prime de terme 10 ans", "unite": "%"}],
             "lignes": lignes, "actualites": actus[:10], "graphiques": graphes,
+            "actualites_maj": datetime.now(timezone.utc).isoformat(timespec="minutes"),
+            "actualites_nb_titres_lus": len((news or {}).get("articles", []) or []),
             "notes": ["Dette et solde publics : FMI (annuel, avec 1 à 3 ans de retard) ; EUR = Allemagne. Pas de série gratuite pour CHF et NZD.",
                       "Prime de terme : modèle Kim-Wright (Fed, via FRED), États-Unis seulement.",
                       "Actualités budgétaires : titres des flux RSS contenant un mot-clé budgétaire (source et date)."]}
@@ -766,8 +763,46 @@ def engrenage_8(historiques: dict, registre: dict) -> dict:
 
 
 # ------------------------------------------------------------------- sortie
+def appliquer_historique_5ans(engrenages: dict, h5, technique: dict | None) -> None:
+    """Dossiers 5 et 7 : matrice de corrélations et indicateurs techniques recalculés sur l'historique quotidien
+    5 ans (module partagé core/historique_5ans.py), avec percentile 5 ans. Sans fichier : rien ne change."""
+    if h5 is None or not h5.disponible:
+        return
+    e5 = engrenages.get("5")
+    if e5 and not e5.get("indisponible"):
+        m = historique_5ans.matrice(h5, technique)
+        if m:
+            e5["correlations"] = m
+    e7 = engrenages.get("7")
+    if e7 and not e7.get("indisponible"):
+        for ligne in e7.get("lignes") or []:
+            ind = historique_5ans.indicateurs_techniques(h5, ligne["devise"], technique)
+            c = ligne["cellules"]
+            source = ("indice dollar large de la Fed (DTWEXBGS), 5 ans quotidiens" if ligne["devise"] == "USD" else
+                      "Fed H.10 prolongée par Twelve Data, 5 ans quotidiens")
+            for cle, unite, libelle in (("rsi", "", "RSI 14"), ("ecart_mm100", "%", "écart à la MM100"),
+                                        ("ecart_mm200", "%", "écart à la MM200"), ("volatilite", "% annualisé", "volatilité 20 séances")):
+                x = ind.get(cle) or {}
+                if x.get("valeur") is None:
+                    continue   # sans série 5 ans : la cellule Twelve Data (90 séances) reste, avec sa raison
+                cel = {**absent(None), "valeur": x["valeur"], "unite": unite, "date": x["date"],
+                       "percentile_5a": x["percentile_5a"], "n_5a": x["n_5a"], "raison_percentile": x["raison_percentile"],
+                       "courbe_120j": x["courbe"], "source": f"calcul Python ({libelle}) : {source}"}
+                if cle == "rsi":
+                    cel["signal"] = "surachat" if x["valeur"] >= 70 else "survente" if x["valeur"] <= 30 else None
+                c[cle] = cel
+        e7.setdefault("notes", []).append("RSI, écarts aux moyennes mobiles et volatilité : calculés sur 5 ans de cours quotidiens "
+                                          "(percentile = rang de la valeur du jour parmi les 5 ans) ; USD = indice dollar large de la Fed.")
+
+
 def construire(historiques: dict, registre: dict, technique: dict, config: dict, rapport: dict | None = None,
-               flux: dict | None = None, news: dict | None = None, dossier_rapports: str | Path | None = None) -> dict:
+               flux: dict | None = None, news: dict | None = None, dossier_rapports: str | Path | None = None,
+               h5=None) -> dict:
+    if h5 is not None and h5.disponible:   # corrélations 5 ans calculées par le module partagé
+        try:
+            historiques = {**historiques, "correlations_5a": historique_5ans.correlations(h5, technique)}
+        except Exception:  # noqa: BLE001
+            log.exception("Corrélations 5 ans en échec")
     sortie = {"version_schema": VERSION_SCHEMA, "genere_le": datetime.now(timezone.utc).isoformat(timespec="seconds"),
               "debut_historique": historiques.get("debut"), "erreurs_collecte": historiques.get("erreurs", []),
               "engrenages": {}}
@@ -797,6 +832,10 @@ def construire(historiques: dict, registre: dict, technique: dict, config: dict,
         log.exception("Dossier engrenage 1 en échec")
         sortie["engrenages"]["1"] = {"numero": 1, "indisponible": f"calcul en échec : {exc}"[:200]}
     sortie["engrenages"] = dict(sorted(sortie["engrenages"].items(), key=lambda kv: int(kv[0])))
+    try:
+        appliquer_historique_5ans(sortie["engrenages"], h5, technique)
+    except Exception:  # noqa: BLE001
+        log.exception("Historique 5 ans : dossiers 5 et 7 non enrichis")
     # Tuiles de chiffres clés et carte de chaleur (refonte V2, palier 2) : une tuile en échec n'efface rien d'autre
     fabriques = {"2": lambda e: tuiles.tuiles_2(e, historiques),
                  "3": lambda e: tuiles.tuiles_3(e, historiques, registre, config),
@@ -814,7 +853,7 @@ def construire(historiques: dict, registre: dict, technique: dict, config: dict,
     complements_par = {"1": lambda e: complements.complements_1(e, rapport, historiques, dossier_rapports, sortie["engrenages"]),
                        "4": lambda e: complements.complements_4(e, historiques),
                        "6": lambda e: complements.complements_6(e, historiques),
-                       "7": lambda e: complements.complements_7(e, technique, flux),
+                       "7": lambda e: complements.complements_7(e, technique, flux, h5),
                        "8": lambda e: complements.complements_8(e, historiques, registre)}
     for numero, fabrique in complements_par.items():
         e = sortie["engrenages"].get(numero)
@@ -842,7 +881,13 @@ def ecrire(racine: str | Path, historiques: dict, registre: dict, technique: dic
            flux: dict | None = None, news: dict | None = None, dossier_rapports: str | Path | None = None) -> dict | None:
     """Écrit docs/data/dossiers.json et retourne le contenu (None en cas d'échec, jamais d'exception)."""
     try:
-        donnees = construire(historiques, registre, technique, config, rapport, flux, news, dossier_rapports)
+        donnees = construire(historiques, registre, technique, config, rapport, flux, news, dossier_rapports,
+                             historique_5ans.charger())
+        try:   # archive quotidienne des valeurs non historisées, puis mini-courbes tirées de l'archive
+            archive = archive_quotidienne.archiver(donnees["engrenages"])
+            archive_quotidienne.completer_tuiles(donnees["engrenages"], archive)
+        except Exception:  # noqa: BLE001
+            log.exception("Archive quotidienne des indicateurs en échec")
         chemin = Path(racine) / config.get("publication_web", {}).get("dossier_docs", "docs") / "data" / "dossiers.json"
         chemin.write_text(json.dumps(donnees, ensure_ascii=False, indent=1), encoding="utf-8")
         return donnees

@@ -160,49 +160,114 @@ function etiquettesSansChevauchement(ys, ecart, haut, bas) {
   return sortie;
 }
 
+const JOUR_MS = 864e5;
+const PERIODES = [[30, "30 j"], [90, "90 j"], [366, "1 an"]];
+
+/* Graphique en lignes interactif (refonte §7) : périodes 30 j / 90 j / 1 an selon la profondeur des données,
+   curseur vertical + points + infobulle au survol ou au toucher, tracé animé (sauf prefers-reduced-motion),
+   étiquettes en bout de ligne sans chevauchement, couleur fixe par entité. Séries « base 100 » rebasées au
+   début de la période affichée. */
 function graphiqueSerie(g) {
   const cadre = el("figure", "graphique");
   cadre.appendChild(el("figcaption", null, `${g.titre}${g.unite ? ` (${g.unite})` : ""}`));
   if (!g.courbes?.length) { cadre.appendChild(el("p", "indisponible", `Indisponible : ${g.raison || "pas de données"}.`)); return cadre; }
-  const L = 360, H = 170, m = { g: 38, d: 52, h: 10, b: 20 };
-  const tous = g.courbes.flatMap(c => c.points);
-  const dates = tous.map(p => p[0]).sort();
-  const t0 = Date.parse(dates[0]), t1 = Date.parse(dates[dates.length - 1]) || t0 + 1;
-  const vals = tous.map(p => p[1]); let min = Math.min(...vals), max = Math.max(...vals);
-  if (min === max) { min -= 1; max += 1; }
-  const marge = (max - min) * 0.06; min -= marge; max += marge;
-  const x = d => m.g + (Date.parse(d) - t0) / (t1 - t0 || 1) * (L - m.g - m.d);
-  const y = v => m.h + (max - v) / (max - min) * (H - m.h - m.b);
-  const derniers = g.courbes.map(c => c.points[c.points.length - 1]);
-  const svg = s("svg", { viewBox: `0 0 ${L} ${H}`, class: "graphique-svg", role: "img",
-    "aria-label": `${g.titre}. Dernières valeurs : ${g.courbes.map((c, i) => `${c.nom} ${nombre(derniers[i][1], 2)}`).join(", ")}.` });
-  for (const v of [max - marge, (max + min) / 2, min + marge]) {
-    svg.appendChild(s("line", { x1: m.g, x2: L - m.d, y1: y(v), y2: y(v), class: "grille" }));
-    svg.appendChild(s("text", { x: m.g - 4, y: y(v) + 3, "text-anchor": "end", class: "axe" }, nombre(v, Math.abs(max - min) < 5 ? 2 : 0)));
+  const fin = Math.max(...g.courbes.map(c => Date.parse(c.points[c.points.length - 1][0])));
+  const debut = Math.min(...g.courbes.map(c => Date.parse(c.points[0][0])));
+  const etendue = (fin - debut) / JOUR_MS;
+  const options = PERIODES.filter(([j], i) => i === 0 || etendue > PERIODES[i - 1][0] * 1.15);
+  let periode = options.length > 1 ? (options.find(([j]) => j === 90) || options[options.length - 1])[0] : null;
+  const barre = el("div", "periodes");
+  if (options.length > 1) {
+    barre.setAttribute("role", "group"); barre.setAttribute("aria-label", `Période du graphique « ${g.titre} »`);
+    for (const [j, lib] of options) {
+      const b = el("button", "periode", lib); b.type = "button"; b.dataset.jours = j;
+      b.addEventListener("click", () => { periode = j; dessiner(); });
+      barre.appendChild(b);
+    }
+    cadre.appendChild(barre);
   }
-  if (min < 0 && max > 0) svg.appendChild(s("line", { x1: m.g, x2: L - m.d, y1: y(0), y2: y(0), class: "zero" }));
-  svg.appendChild(s("text", { x: m.g, y: H - 5, class: "axe" }, dateCourte(dates[0]).slice(0, 5)));
-  svg.appendChild(s("text", { x: L - m.d, y: H - 5, "text-anchor": "end", class: "axe" }, dateCourte(dates[dates.length - 1]).slice(0, 5)));
-  g.courbes.forEach((c, i) => {
-    const d = c.points.map((p, k) => `${k ? "L" : "M"}${x(p[0]).toFixed(1)} ${y(p[1]).toFixed(1)}`).join(" ");
-    svg.appendChild(s("path", { d, fill: "none", stroke: couleur(c.nom, i), "stroke-width": 1.8, "vector-effect": "non-scaling-stroke" }));
-    svg.appendChild(s("circle", { cx: x(derniers[i][0]), cy: y(derniers[i][1]), r: 2.6, fill: couleur(c.nom, i) }));
-  });
-  const ys = etiquettesSansChevauchement(derniers.map(p => y(p[1])), 11, m.h + 4, H - m.b);
-  g.courbes.forEach((c, i) => {
-    const t = s("text", { x: L - m.d + 5, y: ys[i] + 3.5, class: "etiquette-fin" }, String(c.nom).slice(0, 9));
-    t.setAttribute("fill", couleur(c.nom, i));
-    svg.appendChild(t);
-  });
-  cadre.appendChild(svg);
+  const zone = el("div", "graphique-zone");
+  const bulle = el("div", "infobulle"); bulle.hidden = true;
   const legende = el("div", "legende");
-  g.courbes.forEach((c, i) => {
-    const item = el("span"); const pastil = el("i"); pastil.style.background = couleur(c.nom, i);
-    item.append(pastil, document.createTextNode(` ${c.nom} ${nombre(derniers[i][1], 2)}`));
-    legende.appendChild(item);
-  });
-  cadre.appendChild(legende);
-  cadre.appendChild(el("p", "note", `Source : ${g.source}`));
+  const note = el("p", "note", `Source : ${g.source}${g.base_100 ? " · rebasé à 100 au début de la période affichée" : ""}`);
+  cadre.append(zone, legende, note);
+
+  function dessiner() {
+    barre.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(Number(b.dataset.jours) === periode)));
+    const borne = periode ? fin - periode * JOUR_MS : -Infinity;
+    const courbes = g.courbes.map((c, i) => {
+      let pts = c.points.filter(p => Date.parse(p[0]) >= borne);
+      if (g.base_100 && pts.length && pts[0][1]) pts = pts.map(p => [p[0], Math.round(p[1] / pts[0][1] * 10000) / 100]);
+      return { nom: c.nom, couleur: couleur(c.nom, i), pts };
+    }).filter(c => c.pts.length >= 2);
+    if (!courbes.length) { zone.replaceChildren(el("p", "indisponible", "Pas assez de points sur cette période.")); legende.replaceChildren(); return; }
+    const L = 360, H = 170, m = { g: 38, d: 52, h: 10, b: 20 };
+    const t0 = Math.min(...courbes.map(c => Date.parse(c.pts[0][0]))), t1 = Math.max(...courbes.map(c => Date.parse(c.pts[c.pts.length - 1][0])));
+    const vals = courbes.flatMap(c => c.pts.map(p => p[1]));
+    let min = Math.min(...vals), max = Math.max(...vals);
+    if (min === max) { min -= 1; max += 1; }
+    const marge = (max - min) * 0.06; min -= marge; max += marge;
+    const x = t => m.g + (t - t0) / ((t1 - t0) || 1) * (L - m.g - m.d);
+    const y = v => m.h + (max - v) / (max - min) * (H - m.h - m.b);
+    const derniers = courbes.map(c => c.pts[c.pts.length - 1]);
+    const svg = s("svg", { viewBox: `0 0 ${L} ${H}`, class: "graphique-svg", role: "img",
+      "aria-label": `${g.titre}, du ${dateCourte(new Date(t0).toISOString().slice(0, 10))} au ${dateCourte(new Date(t1).toISOString().slice(0, 10))}. Dernières valeurs : ${courbes.map((c, i) => `${c.nom} ${nombre(derniers[i][1], 2)}`).join(", ")}.` });
+    for (const v of [max - marge, (max + min) / 2, min + marge]) {
+      svg.appendChild(s("line", { x1: m.g, x2: L - m.d, y1: y(v), y2: y(v), class: "grille" }));
+      svg.appendChild(s("text", { x: m.g - 4, y: y(v) + 3, "text-anchor": "end", class: "axe" }, nombre(v, Math.abs(max - min) < 5 ? 2 : 0)));
+    }
+    if (min < 0 && max > 0) svg.appendChild(s("line", { x1: m.g, x2: L - m.d, y1: y(0), y2: y(0), class: "zero" }));
+    if (g.base_100 && min < 100 && max > 100) svg.appendChild(s("line", { x1: m.g, x2: L - m.d, y1: y(100), y2: y(100), class: "zero" }));
+    svg.appendChild(s("text", { x: m.g, y: H - 5, class: "axe" }, dateCourte(new Date(t0).toISOString().slice(0, 10)).slice(0, 5)));
+    svg.appendChild(s("text", { x: L - m.d, y: H - 5, "text-anchor": "end", class: "axe" }, dateCourte(new Date(t1).toISOString().slice(0, 10)).slice(0, 5)));
+    courbes.forEach((c, i) => {
+      const d = c.pts.map((p, k) => `${k ? "L" : "M"}${x(Date.parse(p[0])).toFixed(1)} ${y(p[1]).toFixed(1)}`).join(" ");
+      svg.appendChild(s("path", { d, fill: "none", stroke: c.couleur, "stroke-width": 1.8, "vector-effect": "non-scaling-stroke", class: "trace", pathLength: 1 }));
+      svg.appendChild(s("circle", { cx: x(Date.parse(derniers[i][0])), cy: y(derniers[i][1]), r: 2.6, fill: c.couleur }));
+    });
+    const ys = etiquettesSansChevauchement(derniers.map(p => y(p[1])), 11, m.h + 4, H - m.b);
+    courbes.forEach((c, i) => {
+      const t = s("text", { x: L - m.d + 5, y: ys[i] + 3.5, class: "etiquette-fin" }, String(c.nom).slice(0, 9));
+      t.setAttribute("fill", c.couleur); svg.appendChild(t);
+    });
+    // Curseur : ligne verticale + un point par courbe à la date la plus proche
+    const curseur = s("line", { y1: m.h, y2: H - m.b, class: "curseur" }); curseur.style.visibility = "hidden";
+    const points = courbes.map(c => { const p = s("circle", { r: 3.6, fill: c.couleur, class: "point-curseur" }); p.style.visibility = "hidden"; return p; });
+    svg.append(curseur, ...points);
+    const capte = s("rect", { x: m.g, y: m.h, width: L - m.g - m.d, height: H - m.h - m.b, fill: "transparent", class: "capte" });
+    svg.appendChild(capte);
+    const proche = (pts, t) => { let best = pts[0]; for (const p of pts) if (Math.abs(Date.parse(p[0]) - t) < Math.abs(Date.parse(best[0]) - t)) best = p; return best; };
+    function montrer(ev) {
+      const r = svg.getBoundingClientRect();
+      const vx = (ev.clientX - r.left) / r.width * L;
+      const t = t0 + Math.max(0, Math.min(1, (vx - m.g) / (L - m.g - m.d))) * (t1 - t0);
+      const choisis = courbes.map(c => proche(c.pts, t));
+      const tx = x(Date.parse(choisis[0][0]));
+      curseur.setAttribute("x1", tx); curseur.setAttribute("x2", tx); curseur.style.visibility = "visible";
+      choisis.forEach((p, i) => { points[i].setAttribute("cx", x(Date.parse(p[0]))); points[i].setAttribute("cy", y(p[1])); points[i].style.visibility = "visible"; });
+      bulle.replaceChildren(el("strong", null, dateCourte(choisis[0][0])));
+      choisis.forEach((p, i) => {
+        const ligne = el("span"); const pastil = el("i"); pastil.style.background = courbes[i].couleur;
+        ligne.append(pastil, document.createTextNode(` ${courbes[i].nom} `), el("b", "tabulaire", nombre(p[1], 2)));
+        if (p[0] !== choisis[0][0]) ligne.appendChild(el("small", null, ` (${dateCourte(p[0]).slice(0, 5)})`));
+        bulle.appendChild(ligne);
+      });
+      bulle.hidden = false;
+      const zr = zone.getBoundingClientRect(), px = ev.clientX - zr.left;
+      bulle.style.left = `${Math.max(4, Math.min(px + 12, zr.width - bulle.offsetWidth - 4))}px`;
+    }
+    function cacher() { curseur.style.visibility = "hidden"; points.forEach(p => { p.style.visibility = "hidden"; }); bulle.hidden = true; }
+    capte.addEventListener("pointermove", montrer);
+    capte.addEventListener("pointerdown", montrer);
+    capte.addEventListener("pointerleave", cacher);
+    zone.replaceChildren(svg, bulle);
+    legende.replaceChildren(...courbes.map((c, i) => {
+      const item = el("span"); const pastil = el("i"); pastil.style.background = c.couleur;
+      item.append(pastil, document.createTextNode(` ${c.nom} ${nombre(derniers[i][1], 2)}`));
+      return item;
+    }), el("span", "aide-graphique", "survolez ou touchez le graphique pour lire les valeurs"));
+  }
+  dessiner();
   return cadre;
 }
 
@@ -385,7 +450,12 @@ function contenuFiscal(e) {
   const bloc = [tableauDevises(e)];
   bloc.push(el("h3", null, "Dossier budgétaire du jour"));
   const db = e.dossier_budgetaire || [];
-  if (!db.length) bloc.push(el("p", "note", "Aucun titre budgétaire dans les flux du jour (recherche par mots-clés : budget, déficit, dette, adjudication, relance…)."));
+  if (!db.length) {
+    const vide = el("p", "vide-maj");
+    vide.appendChild(el("strong", null, "Aucun titre budgétaire aujourd'hui."));
+    vide.appendChild(document.createTextNode(` Mise à jour : ${dateHeure(e.actualites_maj)}${e.actualites_nb_titres_lus !== undefined ? ` · ${e.actualites_nb_titres_lus} titres lus` : ""} · mots-clés : budget, déficit, dette, adjudication, relance…`));
+    bloc.push(vide);
+  }
   else bloc.push(tableau(["Pays", "Sujet", "Mécanisme", "Devises", "Source"], db.map(a => {
     const tr = el("tr");
     tr.appendChild(el("td", null, a.pays));
@@ -488,15 +558,27 @@ export async function carteDossiers(options = {}) {
     b.type = "button"; b.title = NOMS[n];
     b.setAttribute("aria-label", `Engrenage ${n} : ${NOMS[n]}`);
     if (!d.engrenages?.[n] || d.engrenages[n].indisponible) b.classList.add("bientot");
-    b.addEventListener("click", () => { actif = n; rendre(); options.surChoix?.(n); });
+    b.addEventListener("click", () => { c.choisir(n); options.surChoix?.(n); });
     boutons.push(b); selecteur.appendChild(b);
   }
-  c.choisir = n => { actif = n; rendre(); };
+  // Sélecteur collant en haut de l'écran pendant le défilement ; ← → changent d'engrenage ; adresse #g=N partageable
+  const collant = el("div", "selecteur-collant");
+  collant.append(selecteur, el("span", "aide-clavier", "← → pour changer d'engrenage"));
+  c.choisir = n => {
+    actif = Math.min(8, Math.max(1, n));
+    rendre();
+    if (options.memoriser !== false) history.replaceState(null, "", `#g=${actif}`);
+  };
+  c.decaler = delta => { const n = ((actif - 1 + delta + 8) % 8) + 1; c.choisir(n); options.surChoix?.(n); boutons[n - 1].focus({ preventScroll: true }); };
   function rendre() {
     boutons.forEach((b, i) => b.setAttribute("aria-pressed", String(i + 1 === actif)));
+    const bActif = boutons[actif - 1];   // bouton actif visible dans la rangée défilante (téléphone), sans faire défiler la page
+    const centrer = () => { selecteur.scrollLeft = Math.max(0, bActif.offsetLeft - selecteur.offsetLeft - (selecteur.clientWidth - bActif.offsetWidth) / 2); };
+    centrer(); setTimeout(centrer, 80);   // second passage : la carte vient d'être insérée dans la page
+    zone.classList.remove("fondu"); void zone.offsetWidth; zone.classList.add("fondu");   // relance l'animation
     zone.replaceChildren(el("h3", "dossier-titre", `${actif}. ${NOMS[actif]}`), contenuEngrenage(actif, d.engrenages?.[actif]));
   }
-  c.appendChild(selecteur); c.appendChild(zone);
+  c.appendChild(collant); c.appendChild(zone);
   if ((d.erreurs_collecte || []).length) c.appendChild(el("p", "tag-alerte", `Séries indisponibles aujourd'hui : ${d.erreurs_collecte.join(" ; ")}`));
   rendre();
   return c;
