@@ -1,9 +1,9 @@
 {
  "version_schema": 1,
- "genere_le": "2026-10-14T11:59:26+00:00",
+ "genere_le": "2026-10-14T18:42:22+00:00",
  "sources": {
-  "rapport": "2026-10-14T11:57:58+00:00",
-  "tableau_macro": "2026-10-14T11:51:55+00:00"
+  "rapport": "2026-10-14T18:40:54+00:00",
+  "tableau_macro": "2026-10-14T18:34:28+00:00"
  },
  "regime": {
   "biais": "risk_off",
@@ -21,10 +21,10 @@
    "USD"
   ],
   "explication": "Écart entre le score de confluence moyen des devises « risque » et celui des devises « refuge » (calcul Python) : au-delà du seuil, Risk On ; en deçà de son opposé, Risk Off ; sinon Neutre.",
-  "driver": "USD largement en tête à 84 points dans un environnement risk-off persistant, le classement confirme la résistance atypique de l'AUD (56) portée par son portage, tandis que le reste du bloc matières premières (NZD 22, CAD 16) demeure lourdement sanctionné.",
+  "driver": "Biais Risk Off ; USD en tête du classement de confluence.",
   "relecture": "non_evalue",
   "date_rapport": "2026-10-14",
-  "maj": "2026-10-14T11:57:58+00:00",
+  "maj": "2026-10-14T18:40:54+00:00",
   "type_rapport": "quotidien",
   "nb_devises": 9,
   "nb_devises_disponibles": 8,
@@ -91,12 +91,12 @@
      "raison": null
     },
     "cpi": {
-     "texte": "3,4 %",
-     "valeur_num": 3.4,
-     "date": "2026-09-11",
+     "texte": "3,7 %",
+     "valeur_num": 3.7,
+     "date": "2026-10-14",
      "source": "ForexFactory",
-     "consensus": "3,4 %",
-     "surprise": "=",
+     "consensus": "3,6 %",
+     "surprise": "▲",
      "precedent": "3,4 %",
      "manuel": false,
      "etat": "valeur",
@@ -139,10 +139,10 @@
      "raison": null
     },
     "indice_surprise": {
-     "texte": "-0,1",
-     "valeur_num": -0.05,
+     "texte": "+0,2",
+     "valeur_num": 0.25,
      "tendance": "baisse",
-     "n": 7,
+     "n": 9,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
      "date": "2026-10-14",
@@ -172,13 +172,13 @@
    "drapeau": "🇪🇺",
    "cellules": {
     "taux_directeur": {
-     "texte": "2,65 %",
+     "texte": "2,65 % [taux de refinancement principal (le site utilise le taux de dépôt ECBDFR pour le portage et les dossiers)]",
      "valeur_num": 2.65,
      "date": "2026-09-10",
      "source": "ForexFactory",
      "consensus": "2,65 %",
      "surprise": "=",
-     "precedent": "2,40 %",
+     "precedent": "2,40 % [taux de refinancement principal (le site utilise le taux de dépôt ECBDFR pour le portage et les dossiers)]",
      "manuel": false,
      "etat": "valeur",
      "raison": null
@@ -431,7 +431,7 @@
      "texte": "n/d",
      "valeur_num": null,
      "etat": "absent",
-     "raison": "Analyse JPY impossible : tous les modèles de la chaîne en échec : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: https://generative"
+     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)"
     },
     "biais": {
      "texte": "n/d",
@@ -979,30 +979,30 @@
       "z": null
      },
      "cpi": {
-      "texte": "3,4 %",
-      "valeur_num": 3.4,
-      "date": "2026-09-11",
+      "texte": "3,7 %",
+      "valeur_num": 3.7,
+      "date": "2026-10-14",
       "source": "ForexFactory",
-      "consensus": "3,4 %",
-      "surprise": "=",
+      "consensus": "3,6 %",
+      "surprise": "▲",
       "precedent": "3,4 %",
       "manuel": false,
       "etat": "valeur",
       "raison": null,
-      "z": 0.0
+      "z": 1.0
      },
      "cpi_core": {
-      "texte": "2,4 %",
-      "valeur_num": 2.4,
-      "date": "2026-09-11",
+      "texte": "2,6 %",
+      "valeur_num": 2.6,
+      "date": "2026-10-14",
       "source": "ForexFactory",
-      "consensus": "2,4 %",
-      "surprise": "=",
-      "precedent": "2,5 %",
+      "consensus": "2,5 %",
+      "surprise": "▲",
+      "precedent": "2,4 %",
       "manuel": false,
       "etat": "valeur",
       "raison": null,
-      "z": 0.0
+      "z": 1.0
      },
      "pib": {
       "texte": "2,2 %",
@@ -1097,24 +1097,24 @@
      }
     },
     "indice_30j": {
-     "indice": -0.05,
+     "indice": 0.25,
      "precedent": 0.47,
      "tendance": "baisse",
-     "n": 7,
-     "texte": "-0,1 ▼ (n=7)"
+     "n": 9,
+     "texte": "+0,2 ▼ (n=9)"
     }
    },
    {
     "devise": "EUR",
     "cellules": {
      "taux_directeur": {
-      "texte": "2,65 %",
+      "texte": "2,65 % [taux de refinancement principal (le site utilise le taux de dépôt ECBDFR pour le portage et les dossiers)]",
       "valeur_num": 2.65,
       "date": "2026-09-10",
       "source": "ForexFactory",
       "consensus": "2,65 %",
       "surprise": "=",
-      "precedent": "2,40 %",
+      "precedent": "2,40 % [taux de refinancement principal (le site utilise le taux de dépôt ECBDFR pour le portage et les dossiers)]",
       "manuel": false,
       "etat": "valeur",
       "raison": null,
