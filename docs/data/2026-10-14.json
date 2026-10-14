@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-10-14T00:36:45+00:00",
+  "genere_le": "2026-10-14T11:57:58+00:00",
   "appels_llm": [
    {
     "heure": "00:26",
@@ -239,6 +239,42 @@
     "tokens_total": 7805,
     "ok": true,
     "etiquette": "synthese:CNY"
+   },
+   {
+    "heure": "11:57",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 5038,
+    "tokens_message": 18627,
+    "tokens_total": 23665,
+    "ok": false,
+    "etiquette": "analyse:JPY"
+   },
+   {
+    "heure": "11:57",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 5038,
+    "tokens_message": 18627,
+    "tokens_total": 23665,
+    "ok": false,
+    "etiquette": "analyse:JPY"
+   },
+   {
+    "heure": "11:57",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 0,
+    "tokens_message": 1201,
+    "tokens_total": 1201,
+    "ok": true,
+    "etiquette": "commentaire_classement"
+   },
+   {
+    "heure": "11:58",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 0,
+    "tokens_message": 31530,
+    "tokens_total": 31530,
+    "ok": false,
+    "etiquette": "critique"
    }
   ],
   "quota_llm": {
@@ -250,35 +286,35 @@
    ],
    "modeles": {
     "gemini-3.5-flash": {
-     "appels_aujourdhui": 6,
+     "appels_aujourdhui": 19,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-10-10T23:59:59+00:00",
-     "appels_ce_run": 3,
-     "reussites_ce_run": 0,
-     "sauts_ce_run": 20
+     "appels_ce_run": 4,
+     "reussites_ce_run": 1,
+     "sauts_ce_run": 0
     },
     "gemini-3.8-flash": {
      "appels_aujourdhui": 20,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-10-14T23:59:59+00:00",
-     "appels_ce_run": 3,
-     "reussites_ce_run": 2,
-     "sauts_ce_run": 20
+     "appels_ce_run": 0,
+     "reussites_ce_run": 0,
+     "sauts_ce_run": 3
     },
     "gemini-3.5-flash-lite": {
      "appels_aujourdhui": 20,
      "plafond_jour": 20,
      "epuise_jusqu_a": null,
-     "appels_ce_run": 20,
-     "reussites_ce_run": 20,
-     "sauts_ce_run": 1
+     "appels_ce_run": 0,
+     "reussites_ce_run": 0,
+     "sauts_ce_run": 3
     }
    }
   },
   "appels_par_modele": {
    "gemini-3.5-flash": {
-    "appels": 3,
-    "echecs": 3
+    "appels": 7,
+    "echecs": 6
    },
    "gemini-3.8-flash": {
     "appels": 3,
@@ -322,12 +358,46 @@
       "ignores": 1
      }
     ]
+   },
+   {
+    "heure": "11:58",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 4,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 1,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 3
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 3
+     }
+    ]
    }
-  ]
+  ],
+  "notion_url": "https://app.notion.com/p/FX-2026-10-14-quotidien-3f965bc6466181d38717dcc89b1284b5"
  },
  "synthese_globale": {
   "biais_macro_global": "risk_off",
-  "commentaire": "USD domine outrageusement en tête à 84 de score confluence sous un biais risk_off persistant, tandis que l'AUD rebondit curieusement à la deuxième place malgré l'aversion au risque.",
+  "commentaire": "USD largement en tête à 84 points dans un environnement risk-off persistant, le classement confirme la résistance atypique de l'AUD (56) portée par son portage, tandis que le reste du bloc matières premières (NZD 22, CAD 16) demeure lourdement sanctionné.",
   "etat_du_monde": {
    "situation_economique": {
     "texte": "Les marchés actions américains reculent et la volatilité progresse légèrement sur fond d'attente du rapport sur l'inflation aux États-Unis, tandis que la croissance singapourienne du troisième trimestre ralentit tout en battant les estimations. En zone euro, l'inflation allemande de septembre confirme sa lecture finale stable, alors que le FMI met en garde contre une concentration de la croissance mondiale et l'impact de l'intelligence artificielle sur l'emploi.",
@@ -2353,18 +2423,18 @@
    "risk_on_off": "off",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "Analyse JPY impossible : Expecting property name enclosed in double quotes: line 84 column 5 (char 3229)",
+   "raison_indisponibilite": "Analyse JPY impossible : tous les modèles de la chaîne en échec : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: https://generative",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (Analyse JPY impossible : Expecting property name enclosed in double quotes: line 84 column 5 (char 3229))",
+    "commentaire": "analyse indisponible (Analyse JPY impossible : tous les modèles de la chaîne en échec : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: https://generative)",
     "source_id": null
    },
    "detail_score": [],
    "opportunites": [],
    "menaces": [],
-   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse JPY impossible : Expecting property name enclosed in double quotes: line 84 column 5 (char 3229).",
+   "synthese_une_phrase": "Analyse indisponible aujourd'hui : Analyse JPY impossible : tous les modèles de la chaîne en échec : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: https://generative.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -4755,10 +4825,10 @@
     "genere_le": "2026-10-14T00:36:45+00:00"
    },
    "indice_surprise_30j": {
-    "indice": -0.21,
+    "indice": -0.15,
     "precedent": 0.33,
     "tendance": "baisse",
-    "n": 5
+    "n": 7
    },
    "historique_score_7j": [
     {
@@ -9015,8 +9085,8 @@
     "taux_pct": 100.0
    },
    "Prévision": {
-    "valeur": 12,
-    "explique": 105,
+    "valeur": 10,
+    "explique": 107,
     "vide": 0,
     "total": 117,
     "taux_pct": 100.0
@@ -9073,10 +9143,10 @@
     "n": 2
    },
    "CNY": {
-    "indice": -0.21,
+    "indice": -0.15,
     "precedent": 0.33,
     "tendance": "baisse",
-    "n": 5
+    "n": 7
    }
   }
  },
@@ -9084,8 +9154,8 @@
   "conforme": false,
   "nb_anomalies": 2,
   "anomalies": [
-   "JPY : analyse indisponible aujourd'hui (Analyse JPY impossible : Expecting property name enclosed in double quotes: line 84 column 5 (char 3229)) — exclue du classement",
-   "prompt LLM volumineux : 14 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 20442 à 00:26 UTC, modèle gemini-3.5-flash) — le contexte envoyé au LLM a regrossi"
+   "JPY : analyse indisponible aujourd'hui (Analyse JPY impossible : tous les modèles de la chaîne en échec : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: https://generative) — exclue du classement",
+   "prompt LLM volumineux : 17 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 31530 à 11:58 UTC, modèle gemini-3.5-flash) — le contexte envoyé au LLM a regrossi"
   ]
  },
  "critique": {
@@ -9094,6 +9164,6 @@
   "suggestions_connaissances": [],
   "validation": "non_evalue",
   "indisponible": true,
-  "note": "relecture non effectuée (tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : q)"
+  "note": "relecture non effectuée (tous les modèles de la chaîne en échec : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v)"
  }
 }

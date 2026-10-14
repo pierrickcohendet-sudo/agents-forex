@@ -1,9 +1,9 @@
 {
  "version_schema": 1,
- "genere_le": "2026-10-14T00:36:48+00:00",
+ "genere_le": "2026-10-14T11:59:26+00:00",
  "sources": {
-  "rapport": "2026-10-14T00:36:45+00:00",
-  "tableau_macro": "2026-10-14T00:18:46+00:00"
+  "rapport": "2026-10-14T11:57:58+00:00",
+  "tableau_macro": "2026-10-14T11:51:55+00:00"
  },
  "regime": {
   "biais": "risk_off",
@@ -21,15 +21,15 @@
    "USD"
   ],
   "explication": "Écart entre le score de confluence moyen des devises « risque » et celui des devises « refuge » (calcul Python) : au-delà du seuil, Risk On ; en deçà de son opposé, Risk Off ; sinon Neutre.",
-  "driver": "USD domine outrageusement en tête à 84 de score confluence sous un biais risk_off persistant, tandis que l'AUD rebondit curieusement à la deuxième place malgré l'aversion au risque.",
+  "driver": "USD largement en tête à 84 points dans un environnement risk-off persistant, le classement confirme la résistance atypique de l'AUD (56) portée par son portage, tandis que le reste du bloc matières premières (NZD 22, CAD 16) demeure lourdement sanctionné.",
   "relecture": "non_evalue",
   "date_rapport": "2026-10-14",
-  "maj": "2026-10-14T00:36:45+00:00",
+  "maj": "2026-10-14T11:57:58+00:00",
   "type_rapport": "quotidien",
   "nb_devises": 9,
   "nb_devises_disponibles": 8,
-  "notion_url": "https://www.notion.so/f55a99e090404d419c8f594a96610fb7",
-  "notion_page_du_jour": false
+  "notion_url": "https://app.notion.com/p/FX-2026-10-14-quotidien-3f965bc6466181d38717dcc89b1284b5",
+  "notion_page_du_jour": true
  },
  "colonnes_cles": [
   {
@@ -81,7 +81,7 @@
     "taux_directeur": {
      "texte": "3,88 % [borne haute de la fourchette]",
      "valeur_num": 3.88,
-     "date": "2026-10-08",
+     "date": "2026-10-12",
      "source": "FRED (DFF, taux effectif)",
      "consensus": null,
      "surprise": null,
@@ -431,7 +431,7 @@
      "texte": "n/d",
      "valeur_num": null,
      "etat": "absent",
-     "raison": "Analyse JPY impossible : Expecting property name enclosed in double quotes: line 84 column 5 (char 3229)"
+     "raison": "Analyse JPY impossible : tous les modèles de la chaîne en échec : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: https://generative"
     },
     "biais": {
      "texte": "n/d",
@@ -830,13 +830,13 @@
      "raison": null
     },
     "cpi": {
-     "texte": "0,8 %",
-     "valeur_num": 0.8,
-     "date": "2026-09-09",
+     "texte": "0,9 %",
+     "valeur_num": 0.9,
+     "date": "2026-10-14",
      "source": "ForexFactory",
-     "consensus": "0,8 %",
-     "surprise": "=",
-     "precedent": "0,5 %",
+     "consensus": "1,0 %",
+     "surprise": "▼",
+     "precedent": "0,8 %",
      "manuel": false,
      "etat": "valeur",
      "raison": null
@@ -878,10 +878,10 @@
      "raison": "aucune source gratuite exploitable"
     },
     "indice_surprise": {
-     "texte": "-0,2",
-     "valeur_num": -0.21,
+     "texte": "-0,1",
+     "valeur_num": -0.15,
      "tendance": "baisse",
-     "n": 5,
+     "n": 7,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
      "date": "2026-10-14",
@@ -968,7 +968,7 @@
      "taux_directeur": {
       "texte": "3,88 % [borne haute de la fourchette]",
       "valeur_num": 3.88,
-      "date": "2026-10-08",
+      "date": "2026-10-12",
       "source": "FRED (DFF, taux effectif)",
       "consensus": null,
       "surprise": null,
@@ -2115,17 +2115,17 @@
       "z": 0.0
      },
      "cpi": {
-      "texte": "0,8 %",
-      "valeur_num": 0.8,
-      "date": "2026-09-09",
+      "texte": "0,9 %",
+      "valeur_num": 0.9,
+      "date": "2026-10-14",
       "source": "ForexFactory",
-      "consensus": "0,8 %",
-      "surprise": "=",
-      "precedent": "0,5 %",
+      "consensus": "1,0 %",
+      "surprise": "▼",
+      "precedent": "0,8 %",
       "manuel": false,
       "etat": "valeur",
       "raison": null,
-      "z": 0.0
+      "z": -1.0
      },
      "cpi_core": {
       "texte": "n/d",
@@ -2219,25 +2219,25 @@
       "z": -1.0
      },
      "balance_commerciale": {
-      "texte": "809B",
-      "valeur_num": 809000000000.0,
-      "date": "2026-09-08",
+      "texte": "906B",
+      "valeur_num": 906000000000.0,
+      "date": "2026-10-14",
       "source": "ForexFactory",
-      "consensus": "805B",
+      "consensus": "790B",
       "surprise": "▲",
-      "precedent": "767B",
+      "precedent": "809B",
       "manuel": false,
       "etat": "valeur",
       "raison": null,
-      "z": 1.33
+      "z": 3.0
      }
     },
     "indice_30j": {
-     "indice": -0.21,
+     "indice": -0.15,
      "precedent": 0.33,
      "tendance": "baisse",
-     "n": 5,
-     "texte": "-0,2 ▼ (n=5)"
+     "n": 7,
+     "texte": "-0,1 ▼ (n=7)"
     }
    }
   ],
