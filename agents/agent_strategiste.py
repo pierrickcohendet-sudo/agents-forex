@@ -400,11 +400,18 @@ def _tableau_indicateurs(config: dict, devise: str, donnees: dict,
             usd = donnees["technique"].get("USD") or {}
             variation = usd.get("variation_5j_pct")
             ligne(indicateur, nom, None if variation is None else f"{variation:+.2f} %",
-                  source="calcul local (Twelve Data)", date_donnee=auj.isoformat())
+                  source="indice USD synthétique (Twelve Data), même série que le dossier 7", date_donnee=auj.isoformat())
         elif indicateur == "rsi":
             if technique.get("rsi") is not None:
-                ligne(indicateur, nom, f"{technique['rsi']} ({technique.get('rsi_lecture', '')})",
-                      source="calcul local (Twelve Data)", date_donnee=auj.isoformat())
+                # Même valeur que le dossier 7 : série unique 5 ans (core/historique_5ans.py), source et date écrites
+                src = technique.get("indicateurs_source") or {}
+                pct = (src.get("percentiles") or {}).get("rsi")
+                ligne(indicateur, nom, f"{technique['rsi']} ({technique.get('rsi_lecture', '')})"
+                      + (f" · percentile 5 ans {pct}" if pct is not None else ""),
+                      source=("série unique 5 ans (Twelve Data raccordé à la Fed H.10)" if src.get("date")
+                              else "calcul local (Twelve Data, 230 séances)"),
+                      date_donnee=src.get("date") or auj.isoformat(),
+                      note=src.get("explication") or src.get("raison") or "")
             else:
                 ligne(indicateur, nom, None, source="Twelve Data", note="données techniques indisponibles")
         elif indicateur == "trendline":

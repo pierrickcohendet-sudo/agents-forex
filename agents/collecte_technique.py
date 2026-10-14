@@ -113,7 +113,7 @@ def _zones_consolidation(serie: pd.Series, tolerance: float = 0.0035,
 
 def collecter(config: dict) -> dict:
     cle = os.environ.get("TWELVE_DATA_API_KEY", "").strip()
-    resultat: dict = {"devises": {}, "graphiques": {}, "correlations": {},
+    resultat: dict = {"devises": {}, "graphiques": {}, "correlations": {}, "historique": {},
                       "prix_cloture": {}, "erreurs": []}
     if not cle:
         resultat["erreurs"].append("TWELVE_DATA_API_KEY absente — collecte technique sautée")
@@ -204,6 +204,10 @@ def collecter(config: dict) -> dict:
             "clotures": [round(float(v), 5) for v in serie.tail(nb_points)],
         }
         resultat["prix_cloture"][devise] = round(dernier, 5)
+        # Série force complète (toutes les séances reçues) : raccordée à l'historique Fed H.10 par
+        # core/historique_5ans.py, qui calcule ensuite les indicateurs affichés partout sur le site.
+        resultat["historique"][devise] = {"dates": [d.strftime("%Y-%m-%d") for d in serie.index],
+                                          "clotures": [round(float(v), 6) for v in serie]}
 
     log.info("Collecte technique : %d devise(s), %d erreur(s)",
              len(resultat["devises"]), len(resultat["erreurs"]))

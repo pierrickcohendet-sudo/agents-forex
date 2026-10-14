@@ -405,6 +405,64 @@ function carteChaleur(mc) {
   return bloc;
 }
 
+/* ------------------------------------------- tableau des conséquences (§9a, calcul Python) */
+const LECTURE_CLASSE = { Soutien: "pos", Pression: "neg" };
+function mouvement(x, unite) {
+  if (!x || x.mediane === null || x.mediane === undefined) return el("span", "nd", `n/d${x?.raison ? ` (${x.raison})` : ""}`);
+  const span = el("span", `tabulaire ${x.mediane > 0 ? "pos" : x.mediane < 0 ? "neg" : ""}`,
+    `${x.mediane > 0 ? "+" : ""}${nombre(x.mediane, unite === "pb" ? 0 : 2)} ${unite}`);
+  span.appendChild(el("small", "mi-n", ` · ${x.n} cas`));
+  return span;
+}
+function tableauConsequences(c) {
+  if (!c) return null;
+  const bloc = el("div", "consequences");
+  bloc.appendChild(el("h3", null, "Tableau des conséquences (5 ans)"));
+  const m = c.moteur || {};
+  if (m.raison) {
+    bloc.appendChild(el("p", "indisponible", `Moteur : ${m.libelle}. n/d : ${m.raison}.`));
+    bloc.appendChild(el("p", "note", c.note));
+    return bloc;
+  }
+  bloc.appendChild(el("p", "sous-titre",
+    `Moteur : ${m.libelle} · variation sur le dernier mois ${m.variation_1m > 0 ? "+" : ""}${nombre(m.variation_1m, 2)} ${m.unite} (au ${dateCourte(m.date)}) · source : ${m.source} · depuis le ${dateCourte(m.debut)}`));
+  const lignes = c.lignes.map(l => {
+    const tr = el("tr");
+    tr.appendChild(el("td", null, l.actif));
+    if (l.sensibilite === undefined) {
+      const td = el("td", "nd", `n/d : ${l.raison}`); td.colSpan = 5; tr.appendChild(td);
+      return tr;
+    }
+    const sens = el("td", "tabulaire");
+    if (l.sensibilite === null) sens.appendChild(el("span", "nd", "n/d"));
+    else {
+      sens.textContent = `${l.sensibilite > 0 ? "+" : ""}${nombre(l.sensibilite, 2)}`;
+      const force = Math.min(1, Math.abs(l.sensibilite)) * 45;
+      sens.style.background = `color-mix(in srgb, ${l.sensibilite >= 0 ? "var(--positif)" : "var(--negatif)"} ${force.toFixed(0)}%, var(--carte))`;
+      sens.title = `corrélation sur ${l.n_mois} mois`;
+    }
+    tr.appendChild(sens);
+    const h = el("td"); h.appendChild(mouvement(l.si_hausse, l.unite)); tr.appendChild(h);
+    const b = el("td"); b.appendChild(mouvement(l.si_baisse, l.unite)); tr.appendChild(b);
+    const f = el("td", "tabulaire");
+    if (l.fiabilite?.part === null || l.fiabilite?.part === undefined) { f.appendChild(el("span", "nd", "n/d")); f.title = l.fiabilite?.raison || ""; f.appendChild(el("small", "mi-n", ` ${l.fiabilite?.raison || ""}`)); }
+    else { f.textContent = `${l.fiabilite.part} %`; f.appendChild(el("small", "mi-n", ` · ${l.fiabilite.n} cas`)); }
+    tr.appendChild(f);
+    const a = el("td", LECTURE_CLASSE[l.aujourdhui?.lecture] || "");
+    a.appendChild(el("strong", null, l.aujourdhui?.lecture || "n/d"));
+    if (l.aujourdhui?.raison) a.appendChild(el("small", "conseq-raison", l.aujourdhui.raison));
+    tr.appendChild(a);
+    return tr;
+  });
+  const entetes = ["Actif", "Sensibilité", "Si le moteur monte", "Si le moteur baisse", "Fiabilité", "Aujourd'hui"];
+  const cadre = tableau(entetes, lignes);
+  const t = cadre.querySelector("table"); t.classList.add("rtab");   // une carte par ligne sous 600 px
+  t.querySelectorAll("tbody tr").forEach(tr => [...tr.cells].forEach((td, i) => td.setAttribute("data-label", td.colSpan > 1 ? "" : entetes[i])));
+  bloc.appendChild(cadre);
+  bloc.appendChild(el("p", "note", `${c.methode} ${c.note}`));
+  return bloc;
+}
+
 /* -------------------------------------------------------- contenus spécifiques */
 const ACCORD = { oui: "pos", non: "neg" };
 const CONV = { faible: "faible", moyen: "moyenne", eleve: "élevée" };
@@ -519,6 +577,7 @@ function contenuEngrenage(n, e) {
   if (n === 5) parties.push(tableauInstruments(e.instruments));
   for (const p of parties) bloc.appendChild(p);
   if (n === 5) { const h = carteChaleur(e.matrice_chaleur); if (h) bloc.appendChild(h); }
+  const conseq = tableauConsequences(e.consequences); if (conseq) bloc.appendChild(conseq);
   if (!riche) bloc.appendChild(graphiques(e));
   if (n === 5 && e.correlations) {
     const c = e.correlations;

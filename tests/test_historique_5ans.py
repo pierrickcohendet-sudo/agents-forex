@@ -32,15 +32,39 @@ class Stockage(unittest.TestCase):
         self.assertEqual(h.serie("vix")[-1][0], (AUJ + timedelta(days=1)).isoformat())
         self.assertFalse(h5.charger(Path(tempfile.mkdtemp()) / "absent.json").disponible)
 
-    def test_force_inversee_et_prolongee_par_twelve_data(self):
-        h = h5.Historique.depuis_points({"FX_JPY": [("2026-10-08", 150.0), ("2026-10-09", 160.0)],
+    def test_raccord_twelve_data_prioritaire_et_fed_remise_a_l_echelle(self):
+        h = h5.Historique.depuis_points({"FX_JPY": [("2026-10-07", 150.0), ("2026-10-08", 150.0), ("2026-10-09", 160.0)],
                                          "dollar_large": [("2026-10-09", 120.0)]})
-        technique = {"graphiques": {"JPY": {"dates": ["2026-10-09", "2026-10-12"], "clotures": [0.00625, 0.0064]}}}
+        technique = {"historique": {"JPY": {"dates": ["2026-10-08", "2026-10-12"], "clotures": [0.0070, 0.0064]}}}
         f = h.force("JPY", technique)
-        self.assertEqual(f[0], ("2026-10-08", 1 / 150))
-        self.assertEqual(f[-1], ("2026-10-12", 0.0064))                       # seulement après la dernière date Fed
-        self.assertEqual(len(f), 3)
-        self.assertEqual(h.force("USD"), [("2026-10-09", 120.0)])
+        self.assertEqual([d for d, _ in f], ["2026-10-07", "2026-10-08", "2026-10-12"])   # Twelve Data dès sa 1re séance
+        self.assertAlmostEqual(f[0][1], 0.0070)                                           # Fed remise à l'échelle : pas de saut
+        self.assertEqual(f[-1], ("2026-10-12", 0.0064))
+        self.assertEqual(h.force("JPY")[0], ("2026-10-07", 1 / 150))                      # sans Twelve Data : Fed seule
+
+    def test_usd_synthetique_meme_definition_que_la_collecte(self):
+        pts = {f"FX_{d}": [("2026-10-01", 1.0), ("2026-10-02", 1.01)] for d in h5.DEVISES if d != "USD" and d not in h5.INVERSEES}
+        pts.update({f"FX_{d}": [("2026-10-01", 1.0), ("2026-10-02", 1 / 1.01)] for d in h5.INVERSEES})
+        usd = h5.Historique.depuis_points(pts).force("USD")
+        self.assertAlmostEqual(usd[-1][1], 100 * (1 - 0.01), places=6)                    # toutes les devises +1 % : USD −1 %
+
+
+class Harmonisation(unittest.TestCase):
+    def test_une_seule_valeur_partout(self):
+        n = 1500
+        fed = [((date(2026, 10, 14) - timedelta(days=n - i)).isoformat(), 1.1 + 0.05 * math.sin(i / 25)) for i in range(n)]
+        h = h5.Historique.depuis_points({"FX_EUR": fed})
+        technique = {"devises": {"EUR": {"rsi": 99.0, "dernier": fed[-1][1]}}, "historique": {}}
+        changes = h5.harmoniser_technique(technique, h)
+        eur = technique["devises"]["EUR"]
+        ind = h5.indicateurs_techniques(h, "EUR", technique)
+        self.assertEqual(eur["rsi"], ind["rsi"]["valeur"])                               # même valeur que le dossier 7
+        self.assertEqual(eur["ecart_mm200_pct"], ind["ecart_mm200"]["valeur"])
+        self.assertEqual(eur["volatilite_20j"], ind["volatilite"]["valeur"])
+        self.assertIn("EUR", changes)
+        self.assertIn("Twelve Data", eur["indicateurs_source"]["source"])
+        self.assertIn("Retenu", eur["indicateurs_source"]["explication"])
+        self.assertEqual(h5.harmoniser_technique({"devises": {"EUR": {"rsi": 50}}}, h5.Historique(None)), {})
 
 
 class Indicateurs(unittest.TestCase):

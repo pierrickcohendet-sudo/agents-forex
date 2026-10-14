@@ -1,6 +1,6 @@
 /* Vue d'ensemble des 8 engrenages (refonte V2, palier 1) : bandeau du thème, 8 cartes avec
    mini-courbes, chaînes de transmission. Données : dossiers.json → vue_ensemble (calcul Python). */
-import { el, dateCourte } from "./commun.js";
+import { el, dateCourte, ouvrirDetail, DRAPEAUX } from "./commun.js";
 
 const SVG = "http://www.w3.org/2000/svg";
 function s(tag, attrs) {
@@ -154,8 +154,61 @@ function chaines(v) {
   return c;
 }
 
+/* ------------------------------------------------ matrice d'impact (§8) */
+const FLECHES = { 2: "▲▲", 1: "▲", 0: "·", "-1": "▼", "-2": "▼▼" };
+const COURTS_ENG = { 1: "Thème", 2: "Monétaire", 3: "Données", 4: "Fiscale", 5: "Marchés", 6: "Géopolitique", 7: "Flux", 8: "Offre" };
+function detailCase(devise, c) {
+  const noeuds = [el("p", "mi-detail-valeur", `${FLECHES[c.valeur]} ${c.libelle} (${c.valeur > 0 ? "+" : ""}${String(c.valeur).replace("-", "−")})`)];
+  if (c.regles.length) {
+    for (const r of c.regles) {
+      const b = el("div", "mi-regle");
+      b.appendChild(el("strong", null, r.regle));
+      b.appendChild(el("p", null, `Chiffre du jour : ${r.chiffre} · source : ${r.source || "—"} · donnée du ${r.date ? dateCourte(r.date) : "—"}`));
+      noeuds.push(b);
+    }
+    if (c.bornee) noeuds.push(el("p", "note", "Somme des règles bornée à ±2."));
+  } else noeuds.push(el("p", "note", `Valeur 0 : ${c.raison}.`));
+  noeuds.push(el("p", "note", "Règles modifiables dans config.yaml (matrice_impact). Aide à la lecture, jamais une recommandation."));
+  ouvrirDetail(`${devise} × engrenage ${c.engrenage} (${COURTS_ENG[c.engrenage]})`, noeuds);
+}
+
+export function matriceImpact(m) {
+  const c = el("section", "carte");
+  if (!m || m.indisponible) { c.appendChild(el("p", "indisponible", `Matrice d'impact indisponible : ${m?.indisponible || "absente de dossiers.json"}.`)); return c; }
+  const defile = el("div", "defile");
+  const t = el("table", "dense mi-table");
+  t.setAttribute("aria-label", "Impact de chaque engrenage sur chaque devise, de −2 à +2");
+  const tete = el("tr");
+  tete.appendChild(el("th", null, "Devise"));
+  for (let n = 1; n <= 8; n++) { const th = el("th", "mi-col", `${n}`); th.appendChild(el("span", "mi-col-nom", COURTS_ENG[n])); tete.appendChild(th); }
+  tete.appendChild(el("th", null, "Bilan"));
+  const thead = el("thead"); thead.appendChild(tete); t.appendChild(thead);
+  const corps = el("tbody");
+  for (const l of m.lignes) {
+    const tr = el("tr");
+    tr.appendChild(el("th", "mi-devise", `${DRAPEAUX[l.devise] || ""} ${l.devise}`));
+    for (const cas of l.cases) {
+      const td = el("td", `mi-case v${cas.valeur}`);
+      const b = el("button", "mi-bouton");
+      b.type = "button";
+      b.setAttribute("aria-label", `${l.devise}, engrenage ${cas.engrenage} : ${cas.libelle}. Voir la règle.`);
+      b.append(el("span", "mi-fleche", FLECHES[cas.valeur]), el("span", "mi-libelle", cas.libelle));
+      b.addEventListener("click", () => detailCase(l.devise, cas));
+      td.appendChild(b); tr.appendChild(td);
+    }
+    const bilan = el("td", `mi-bilan ${l.lecture === "soutenue" ? "pos" : l.lecture === "sous pression" ? "neg" : ""}`);
+    bilan.append(el("strong", "tabulaire", `${l.bilan > 0 ? "+" : ""}${String(l.bilan).replace("-", "−")}`), el("span", "mi-lecture", l.lecture));
+    tr.appendChild(bilan);
+    corps.appendChild(tr);
+  }
+  t.appendChild(corps); defile.appendChild(t); c.appendChild(defile);
+  c.appendChild(el("p", "note", m.legende));
+  if (!m.theme_fort) c.appendChild(el("p", "note", "Signaux mixtes : les règles du thème global (colonne 1) ne s'appliquent pas aujourd'hui."));
+  return c;
+}
+
 /* Retourne les nœuds de la vue d'ensemble ; `choisir(n, defiler)` ouvre le dossier n. */
-export function vueEnsemble(v, actif, choisir) {
+export function vueEnsemble(v, actif, choisir, matrice = null) {
   if (!v || v.indisponible) {
     const c = el("section", "carte");
     c.appendChild(el("p", "indisponible", `Vue d'ensemble indisponible : ${v?.indisponible || "absente de dossiers.json"}.`));
@@ -167,7 +220,9 @@ export function vueEnsemble(v, actif, choisir) {
   const sec = (titre, sous) => { const d = el("div", "eg-section"); d.append(el("h2", null, titre), el("span", null, sous)); return d; };
   return {
     noeuds: [bandeau(v), sec("Vue d'ensemble", "un coup d'œil sur les 8 moteurs · touchez une carte pour ouvrir son dossier"), grille,
-             sec("Chaînes de transmission", "comment les engrenages s'entraînent aujourd'hui"), chaines(v)],
+             sec("Chaînes de transmission", "comment les engrenages s'entraînent aujourd'hui"), chaines(v),
+             sec("Impact sur chaque devise", "les 8 engrenages croisés avec les 9 devises · touchez une case pour voir la règle"),
+             matriceImpact(matrice)],
     marquer: n => cartes.forEach((b, i) => b.setAttribute("aria-pressed", String(i + 1 === n))),
   };
 }

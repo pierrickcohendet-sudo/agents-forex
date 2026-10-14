@@ -259,7 +259,7 @@ tableau_macro:
   correspondances:
     taux_directeur:
       USD: { ff: [{ id: 1,   nom: "Federal Funds Rate" }], etiquette: "borne haute de la fourchette" }   # ForexFactory publie la borne HAUTE de la fourchette cible de la Fed
-      EUR: { ff: [{ id: 12,  nom: "Main Refinancing Rate" }] }
+      EUR: { ff: [{ id: 12,  nom: "Main Refinancing Rate" }], etiquette: "taux de refinancement principal (le site utilise le taux de dépôt ECBDFR pour le portage et les dossiers)" }   # 15 pb au-dessus du taux de dépôt
       GBP: { ff: [{ id: 15,  nom: "Official Bank Rate" }] }
       JPY: { ff: [{ id: 641, nom: "BOJ Policy Rate" }] }
       CHF: { ff: [{ id: 834, nom: "SNB Policy Rate" }] }
@@ -575,3 +575,111 @@ completer:
 
 chemins:
   donnees: data
+
+# --- Matrice d'impact (refonte 8 engrenages, §8) ------------------------------
+# Une case = effet de l'engrenage sur la devise, de -2 à +2, CALCULÉ en Python avec
+# ces règles (modifiables ici, aucun LLM). Deux formes :
+#  - par_devise : le signal a une valeur par devise ; le premier palier vérifié
+#    donne les points de CETTE devise ([opérateur, seuil, points]).
+#  - cas : le signal est unique ; le premier cas vérifié donne des points à
+#    plusieurs devises ({si: [opérateur, seuil], effets: {DEV: points}}).
+# Plusieurs règles d'un même engrenage s'additionnent, la case est bornée à ±2.
+# Une devise sans règle ou un signal sans donnée vaut 0, avec la raison.
+# Lecture : + = soutien pour la devise, - = pression. Jamais une recommandation.
+matrice_impact:
+  bilan: { soutenue: 3, pression: -3 }
+  regles:
+    "1":
+      - signal: theme_risque
+        exige_theme_fort: true          # « Signaux mixtes » : aucun effet du thème
+        texte: "régime de risque du thème global"
+        cas:
+          - { si: ["==", "risk_off"], effets: { USD: 1, JPY: 1, CHF: 1, AUD: -1, NZD: -1, CAD: -1 } }
+          - { si: ["==", "risk_on"], effets: { USD: -1, JPY: -1, CHF: -1, AUD: 1, NZD: 1, CAD: 1 } }
+      - signal: theme_dollar
+        exige_theme_fort: true
+        texte: "direction du dollar dans le thème global"
+        cas:
+          - { si: ["==", "haussier"], effets: { USD: 1 } }
+          - { si: ["==", "baissier"], effets: { USD: -1 } }
+    "2":
+      - signal: ecart_2a_us_var_4s
+        par_devise: true
+        unite: pb
+        texte: "écart de taux 2 ans face aux États-Unis, variation sur 4 semaines"
+        paliers: [[">=", 30, 2], [">=", 15, 1], ["<=", -30, -2], ["<=", -15, -1]]
+      - signal: us2a_var_4s
+        unite: pb
+        texte: "rendement 2 ans US, variation sur 4 semaines"
+        cas:
+          - { si: [">=", 30], effets: { USD: 2 } }
+          - { si: [">=", 15], effets: { USD: 1 } }
+          - { si: ["<=", -30], effets: { USD: -2 } }
+          - { si: ["<=", -15], effets: { USD: -1 } }
+    "3":
+      - signal: surprise_30j
+        par_devise: true
+        unite: écarts
+        texte: "indice de surprise macro 30 jours"
+        paliers: [[">=", 1.0, 2], [">=", 0.5, 1], ["<=", -1.0, -2], ["<=", -0.5, -1]]
+    "4":
+      - signal: prime_terme_var_4s
+        unite: pb
+        texte: "prime de terme 10 ans US, variation sur 4 semaines (prime de risque budgétaire)"
+        cas:
+          - { si: [">=", 20], effets: { USD: -1 } }
+      - signal: btp_bund_var_3m
+        unite: pb
+        texte: "écart Italie − Allemagne 10 ans, variation sur 3 mois"
+        cas:
+          - { si: [">=", 25], effets: { EUR: -1 } }
+          - { si: ["<=", -25], effets: { EUR: 1 } }
+    "5":
+      - signal: vix
+        unite: pts
+        texte: "niveau du VIX"
+        cas:
+          - { si: [">=", 30], effets: { USD: 1, JPY: 2, CHF: 2, AUD: -2, NZD: -2, CAD: -1 } }
+          - { si: [">=", 25], effets: { USD: 1, JPY: 1, CHF: 1, AUD: -1, NZD: -1, CAD: -1 } }
+          - { si: ["<=", 14], effets: { JPY: -1, CHF: -1, AUD: 1, NZD: 1 } }
+      - signal: sp500_var_4s
+        unite: "%"
+        texte: "S&P 500, variation sur 4 semaines"
+        cas:
+          - { si: [">=", 4], effets: { AUD: 1, NZD: 1 } }
+          - { si: ["<=", -4], effets: { AUD: -1, NZD: -1, JPY: 1 } }
+    "6":
+      - signal: titres_refuge
+        unite: titres
+        texte: "titres du jour au canal « refuge (conflits) »"
+        cas:
+          - { si: [">=", 3], effets: { USD: 1, JPY: 1, CHF: 1 } }
+      - signal: titres_energie
+        unite: titres
+        texte: "titres du jour au canal « énergie »"
+        cas:
+          - { si: [">=", 3], effets: { CAD: 1, JPY: -1, EUR: -1 } }
+    "7":
+      - signal: ecart_mm200
+        par_devise: true
+        unite: "%"
+        texte: "écart du cours à sa moyenne mobile 200 jours (tendance)"
+        paliers: [[">=", 2, 1], ["<=", -2, -1]]
+      - signal: cot_percentile_52s
+        par_devise: true
+        unite: percentile
+        texte: "positionnement spéculatif COT, lecture contrarienne (extrêmes)"
+        paliers: [[">=", 90, -1], ["<=", 10, 1]]
+    "8":
+      - signal: brent_var_4s
+        unite: "%"
+        texte: "Brent, variation sur 4 semaines"
+        cas:
+          - { si: [">=", 10], effets: { CAD: 1, JPY: -1, EUR: -1 } }
+          - { si: ["<=", -10], effets: { CAD: -1, JPY: 1 } }
+      - signal: stocks_ecart_pct
+        unite: "%"
+        texte: "stocks de brut US contre la moyenne 5 ans de la même semaine"
+        cas:
+          - { si: ["<=", -5], effets: { CAD: 1 } }
+          - { si: [">=", 5], effets: { CAD: -1 } }

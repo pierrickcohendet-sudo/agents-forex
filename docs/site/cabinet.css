@@ -399,3 +399,40 @@ a.bouton[aria-pressed="true"] { background: var(--accent); color: #fff; border-c
   .selecteur-collant .selecteur-engrenages::-webkit-scrollbar { display: none; }
   .selecteur-collant .bouton { flex: none; }
 }
+.pourquoi-source summary { cursor: pointer; font-size: 11.5px; color: var(--accent); } .pourquoi-source p { margin: 4px 0 0; font-size: 12px; max-width: 46ch; white-space: normal; }
+
+/* ------------------------------------------- matrice d'impact (refonte V2, palier 6) */
+.mi-table th.mi-col { text-align: center; }
+.mi-col-nom { display: block; font-weight: 400; font-size: 10.5px; color: var(--texte-2); }
+.mi-devise { white-space: nowrap; }
+.mi-case { padding: 0 !important; text-align: center; min-width: 64px; }
+.mi-case.v2 { background: color-mix(in srgb, var(--positif) 45%, var(--carte)); }
+.mi-case.v1 { background: color-mix(in srgb, var(--positif) 20%, var(--carte)); }
+.mi-case.v-1 { background: color-mix(in srgb, var(--negatif) 20%, var(--carte)); }
+.mi-case.v-2 { background: color-mix(in srgb, var(--negatif) 45%, var(--carte)); }
+.mi-bouton { all: unset; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; width: 100%; padding: 6px 4px; cursor: pointer; }
+.mi-bouton:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.mi-fleche { font-weight: 700; letter-spacing: 1px; }
+.mi-libelle { font-size: 10.5px; color: var(--texte-2); }
+.mi-case.v2 .mi-libelle, .mi-case.v-2 .mi-libelle { color: var(--texte); }
+.mi-bilan { text-align: center; white-space: nowrap; }
+.mi-bilan strong { display: block; }
+.mi-lecture { font-size: 11px; }
+.mi-detail-valeur { font-weight: 700; font-size: 16px; margin: 0 0 8px; }
+.mi-regle { border-left: 3px solid var(--accent); padding: 4px 10px; margin: 6px 0; }
+.mi-regle p { margin: 2px 0 0; font-size: 13px; color: var(--texte-2); }
+
+/* ------------------------------------------- tableau des conséquences (palier 7, calcul) */
+.consequences h3 { margin: 18px 0 4px; }
+.mi-n { color: var(--texte-2); font-size: 11px; font-weight: 400; }
+.conseq-raison { display: block; font-size: 11px; color: var(--texte-2); font-weight: 400; max-width: 34ch; white-space: normal; }
+@media (max-width: 600px) {
+  table.rtab thead { display: none; }
+  table.rtab, table.rtab tbody { display: block; }
+  table.rtab tr { display: block; border-bottom: 1px solid var(--trait); padding: 6px 10px; }
+  table.rtab td { display: flex; justify-content: space-between; gap: 12px; border: 0; padding: 3px 0; text-align: right; background-clip: padding-box; }
+  table.rtab td::before { content: attr(data-label); color: var(--texte-2); font-size: 12px; text-align: left; flex: none; }
+  table.rtab td:first-child { font-weight: 700; }
+  table.rtab .conseq-raison { max-width: 24ch; }
+  .defile:has(table.rtab) { border: 1px solid var(--trait); }
+}

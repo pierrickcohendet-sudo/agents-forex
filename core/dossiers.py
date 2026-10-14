@@ -15,7 +15,7 @@ import statistics
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
-from core import archive_quotidienne, complements, controles_macro, historique_5ans, registre_macro as rm, tuiles, vue_ensemble
+from core import archive_quotidienne, complements, consequences, controles_macro, historique_5ans, matrice_impact, registre_macro as rm, tuiles, vue_ensemble
 
 log = logging.getLogger(__name__)
 
@@ -778,21 +778,21 @@ def appliquer_historique_5ans(engrenages: dict, h5, technique: dict | None) -> N
         for ligne in e7.get("lignes") or []:
             ind = historique_5ans.indicateurs_techniques(h5, ligne["devise"], technique)
             c = ligne["cellules"]
-            source = ("indice dollar large de la Fed (DTWEXBGS), 5 ans quotidiens" if ligne["devise"] == "USD" else
-                      "Fed H.10 prolongée par Twelve Data, 5 ans quotidiens")
+            source = historique_5ans.SOURCE_INDICATEURS
             for cle, unite, libelle in (("rsi", "", "RSI 14"), ("ecart_mm100", "%", "écart à la MM100"),
                                         ("ecart_mm200", "%", "écart à la MM200"), ("volatilite", "% annualisé", "volatilité 20 séances")):
                 x = ind.get(cle) or {}
                 if x.get("valeur") is None:
                     continue   # sans série 5 ans : la cellule Twelve Data (90 séances) reste, avec sa raison
                 cel = {**absent(None), "valeur": x["valeur"], "unite": unite, "date": x["date"],
+                       "explication_source": historique_5ans.EXPLICATION_RACCORD,
                        "percentile_5a": x["percentile_5a"], "n_5a": x["n_5a"], "raison_percentile": x["raison_percentile"],
                        "courbe_120j": x["courbe"], "source": f"calcul Python ({libelle}) : {source}"}
                 if cle == "rsi":
                     cel["signal"] = "surachat" if x["valeur"] >= 70 else "survente" if x["valeur"] <= 30 else None
                 c[cle] = cel
-        e7.setdefault("notes", []).append("RSI, écarts aux moyennes mobiles et volatilité : calculés sur 5 ans de cours quotidiens "
-                                          "(percentile = rang de la valeur du jour parmi les 5 ans) ; USD = indice dollar large de la Fed.")
+        e7.setdefault("notes", []).append("RSI, écarts aux moyennes mobiles et volatilité : série unique 5 ans, mêmes valeurs que "
+                                          "l'onglet Devises. " + historique_5ans.EXPLICATION_RACCORD)
 
 
 def construire(historiques: dict, registre: dict, technique: dict, config: dict, rapport: dict | None = None,
@@ -832,6 +832,13 @@ def construire(historiques: dict, registre: dict, technique: dict, config: dict,
         log.exception("Dossier engrenage 1 en échec")
         sortie["engrenages"]["1"] = {"numero": 1, "indisponible": f"calcul en échec : {exc}"[:200]}
     sortie["engrenages"] = dict(sorted(sortie["engrenages"].items(), key=lambda kv: int(kv[0])))
+    try:   # tableau des conséquences (§9a) : corrélations et médianes sur 5 ans, sans LLM
+        if h5 is not None and h5.disponible:
+            for numero, tableau_c in consequences.calculer(h5, historiques, technique).items():
+                if sortie["engrenages"].get(numero) and not sortie["engrenages"][numero].get("indisponible"):
+                    sortie["engrenages"][numero]["consequences"] = tableau_c
+    except Exception:  # noqa: BLE001
+        log.exception("Tableau des conséquences en échec")
     try:
         appliquer_historique_5ans(sortie["engrenages"], h5, technique)
     except Exception:  # noqa: BLE001
@@ -871,6 +878,11 @@ def construire(historiques: dict, registre: dict, technique: dict, config: dict,
         log.exception("Carte de chaleur des corrélations en échec")
     try:   # bandeau du thème, 8 cartes et chaînes (refonte V2, palier 1) : calcul Python, sans LLM
         sortie["vue_ensemble"] = vue_ensemble.calculer(sortie["engrenages"], historiques, technique, rapport)
+        try:   # matrice d'impact 9 devises × 8 engrenages (règles de config.yaml, calcul Python)
+            sortie["matrice_impact"] = matrice_impact.calculer(config, sortie["engrenages"], sortie["vue_ensemble"])
+        except Exception as exc:  # noqa: BLE001
+            log.exception("Matrice d'impact en échec")
+            sortie["matrice_impact"] = {"indisponible": f"calcul en échec : {exc}"[:200]}
     except Exception as exc:  # noqa: BLE001
         log.exception("Vue d'ensemble des engrenages en échec")
         sortie["vue_ensemble"] = {"indisponible": f"calcul en échec : {exc}"[:200]}

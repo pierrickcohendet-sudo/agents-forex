@@ -28,8 +28,16 @@ INVERSEES = {"JPY", "CHF", "CAD", "CNY"}            # Fed H.10 : unités de devi
 SERIES = {**{f"FX_{d}": f"FRED (Fed H.10, {d})" for d in DEVISES if d != "USD"},
           "dollar_large": "FRED (DTWEXBGS, indice dollar large de la Fed)", "vix": "FRED (VIXCLS)",
           "sp500": "FRED (SP500)", "brent": "FRED (DCOILBRENTEU)", "wti": "FRED (DCOILWTICO)",
-          "indice_or": "FRED (NASDAQQGLDI, indice or proxy)", "USD_10a": "FRED (DGS10)", "USD_2a": "FRED (DGS2)"}
-EN_POINTS = {"USD_10a", "USD_2a"}                     # taux : variations en points, pas en logarithme
+          "indice_or": "FRED (NASDAQQGLDI, indice or proxy)", "USD_10a": "FRED (DGS10)", "USD_2a": "FRED (DGS2)",
+          "USD_taux_effectif": "FRED (DFF)", "USD_prime_terme": "FRED (THREEFYTP10, prime de terme 10 ans)"}
+EN_POINTS = {"USD_10a", "USD_2a", "USD_taux_effectif", "USD_prime_terme"}
+SOURCE_INDICATEURS = ("Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la "
+                      "profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition "
+                      "sur toute la période")
+EXPLICATION_RACCORD = ("Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi "
+                       "à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car "
+                       "c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à "
+                       "l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.")                     # taux : variations en points, pas en logarithme
 SEANCES_CORR = 30
 MIN_FENETRES = 200
 JOURS_COURBE = 120
@@ -88,19 +96,47 @@ class Historique:
     def source(self, nom: str) -> str | None:
         return ((self.contenu.get("series") or {}).get(nom) or {}).get("source")
 
+    def _fed(self, devise: str) -> list[tuple[str, float]]:
+        """Force Fed H.10 seule (dollars US par unité de devise)."""
+        return [(d, (1 / v if devise in INVERSEES else v)) for d, v in self.serie(f"FX_{devise}") if v]
+
+    def _usd_synthetique_fed(self) -> list[tuple[str, float]]:
+        """Indice USD synthétique sur l'historique Fed : rendement = − moyenne des rendements des 8 autres devises
+        (même définition que la collecte technique), base 100 au premier jour."""
+        rend: dict[str, list[float]] = {}
+        for devise in DEVISES:
+            if devise == "USD":
+                continue
+            pts = self._fed(devise)
+            for (_, a), (d, b) in zip(pts, pts[1:]):
+                if a:
+                    rend.setdefault(d, []).append(b / a - 1)
+        niveau, sortie = 100.0, []
+        for d in sorted(rend):
+            if len(rend[d]) >= 6:                 # au moins 6 devises publiées ce jour-là
+                niveau *= 1 - statistics.mean(rend[d])
+                sortie.append((d, niveau))
+        return sortie
+
+    @staticmethod
+    def _twelve(devise: str, technique: dict | None) -> list[tuple[str, float]]:
+        t = (technique or {}).get("historique", {}).get(devise) or (technique or {}).get("graphiques", {}).get(devise) or {}
+        return [(str(d)[:10], float(v)) for d, v in zip(t.get("dates") or [], t.get("clotures") or []) if v]
+
     def force(self, devise: str, technique: dict | None = None) -> list[tuple[str, float]]:
-        """Dollars US par unité de devise (USD : indice dollar large), prolongée par Twelve Data au-delà de la
-        dernière date Fed H.10 (la force Twelve Data est la même grandeur pour les devises hors USD)."""
-        if devise == "USD":
-            return self.serie("dollar_large")
-        brute = self.serie(f"FX_{devise}")
-        pts = [(d, (1 / v if devise in INVERSEES else v)) for d, v in brute if v]
-        g = ((technique or {}).get("graphiques") or {}).get(devise) or {}
-        if pts:
-            fin = pts[-1][0]
-            pts += [(str(d)[:10], float(v)) for d, v in zip(g.get("dates") or [], g.get("clotures") or [])
-                    if v and str(d)[:10] > fin]
-        return pts
+        """Série unique de la devise (dollars US par unité ; USD = indice synthétique) : Twelve Data pour toutes
+        ses séances, Fed H.10 avant la première séance Twelve Data, remise à l'échelle au point de raccord."""
+        fed = self._usd_synthetique_fed() if devise == "USD" else self._fed(devise)
+        twelve = self._twelve(devise, technique)
+        if not twelve:
+            return fed
+        debut = twelve[0][0]
+        avant = [p for p in fed if p[0] < debut]
+        ref = [p for p in fed if p[0] <= debut]
+        if not avant or not ref:
+            return twelve
+        facteur = twelve[0][1] / ref[-1][1]
+        return [(d, v * facteur) for d, v in avant] + twelve
 
 
 def charger(chemin: Path | str = CHEMIN) -> Historique:
@@ -149,7 +185,7 @@ def volatilite(points: list[tuple[str, float]], n: int = 20) -> list[tuple[str, 
 
 
 def resume(serie: list[tuple[str, float]], valeur: float | None = None, aujourdhui: date | None = None,
-           jours_courbe: int = JOURS_COURBE) -> dict:
+           jours_courbe: int = JOURS_COURBE, decimales: int = 2) -> dict:
     """Valeur (la dernière ou celle fournie), percentile parmi les 5 dernières années de la série, courbe récente."""
     if not serie:
         return {"valeur": None, "raison": "série 5 ans indisponible"}
@@ -159,7 +195,7 @@ def resume(serie: list[tuple[str, float]], valeur: float | None = None, aujourdh
     v0 = serie[-1][1] if valeur is None else valeur
     pct = round(100 * sum(1 for v in fen if v <= v0) / len(fen)) if len(fen) >= MIN_FENETRES else None
     limite = (date.fromisoformat(serie[-1][0]) - timedelta(days=jours_courbe)).isoformat()
-    return {"valeur": round(v0, 2), "date": serie[-1][0], "percentile_5a": pct, "n_5a": len(fen),
+    return {"valeur": round(v0, decimales), "date": serie[-1][0], "percentile_5a": pct, "n_5a": len(fen),
             "raison_percentile": None if pct is not None else f"moins de {MIN_FENETRES} observations sur 5 ans ({len(fen)})",
             "debut_5a": fen and serie[-len(fen)][0], "courbe": [[d, round(v, 2)] for d, v in serie if d >= limite]}
 
@@ -258,10 +294,44 @@ def matrice(h: Historique, technique: dict | None = None, seances: int = SEANCES
 
 
 def indicateurs_techniques(h: Historique, devise: str, technique: dict | None = None) -> dict:
-    """RSI 14, écarts aux MM100 et MM200, volatilité 20 j : valeur du jour ET percentile 5 ans, même série."""
+    """RSI 14, écarts aux MM100 et MM200, volatilité 20 j : valeur du jour ET percentile 5 ans, sur la série
+    unique de la devise. C'est la SEULE source de ces indicateurs sur le site (onglet Devises, dossier 7)."""
     pts = h.force(devise, technique)
     if len(pts) < 260:
         raison = "historique quotidien 5 ans indisponible" if not pts else f"historique trop court ({len(pts)} séances)"
         return {k: {"valeur": None, "raison": raison} for k in ("rsi", "ecart_mm100", "ecart_mm200", "volatilite")}
-    return {"rsi": resume(rsi(pts)), "ecart_mm100": resume(ecart_moyenne(pts, 100)),
-            "ecart_mm200": resume(ecart_moyenne(pts, 200)), "volatilite": resume(volatilite(pts, 20))}
+    sortie = {"rsi": resume(rsi(pts), decimales=1), "ecart_mm100": resume(ecart_moyenne(pts, 100)),
+              "ecart_mm200": resume(ecart_moyenne(pts, 200)), "volatilite": resume(volatilite(pts, 20), decimales=1)}
+    for n in (100, 200):
+        sortie[f"mm{n}"] = round(statistics.mean(v for _, v in pts[-n:]), 5)
+    sortie["dernier"] = round(pts[-1][1], 5)
+    sortie["date"] = pts[-1][0]
+    return sortie
+
+
+def harmoniser_technique(technique: dict, h: Historique) -> dict:
+    """Remplace dans la collecte technique les indicateurs de chaque devise par ceux de la série unique 5 ans
+    (même valeur ensuite pour les scores, l'analyse, l'onglet Devises et le dossier 7). Retourne
+    {devise: {avant, apres}} pour le RSI quand il change (journal)."""
+    changes = {}
+    if not h.disponible:
+        return changes
+    for devise, t in ((technique or {}).get("devises") or {}).items():
+        ind = indicateurs_techniques(h, devise, technique)
+        if (ind.get("rsi") or {}).get("valeur") is None:
+            t["indicateurs_source"] = {"source": "Twelve Data (230 séances)", "raison": ind["rsi"].get("raison"),
+                                       "percentiles": None}
+            continue
+        r = ind["rsi"]["valeur"]
+        if t.get("rsi") is not None and round(t["rsi"], 1) != r:
+            changes[devise] = {"avant": t["rsi"], "apres": r}
+        t.update({"rsi": r,
+                  "rsi_lecture": ("surachat" if r > 70 else "survente" if r < 30 else
+                                  "momentum haussier" if r > 50 else "momentum baissier"),
+                  "mm100": ind["mm100"], "mm200": ind["mm200"],
+                  "prix_vs_mm200": "au-dessus" if t.get("dernier", ind["dernier"]) > ind["mm200"] else "en dessous",
+                  "ecart_mm100_pct": ind["ecart_mm100"]["valeur"], "ecart_mm200_pct": ind["ecart_mm200"]["valeur"],
+                  "volatilite_20j": ind["volatilite"]["valeur"],
+                  "indicateurs_source": {"source": SOURCE_INDICATEURS, "date": ind["date"], "explication": EXPLICATION_RACCORD,
+                                         "percentiles": {k: ind[k]["percentile_5a"] for k in ("rsi", "ecart_mm100", "ecart_mm200", "volatilite")}}})
+    return changes

@@ -52,7 +52,13 @@ function tableauIndicateurs(lignes) {
     tr.appendChild(el("td", null, l.prevision ?? "—"));
     tr.appendChild(el("td", null, l.precedent ?? "—"));
     tr.appendChild(el("td", null, l.date ? `${dateCourte(l.date)}${l.anciennete_jours > 7 ? ` (J-${l.anciennete_jours})` : ""}` : "—"));
-    tr.appendChild(el("td", "source-cellule", l.source || (v ? "—" : l.note || "—")));
+    const tds = el("td", "source-cellule", l.source || (v ? "—" : l.note || "—"));
+    if (v && l.note) {   // choix de la source expliqué (ex. série unique 5 ans pour le RSI)
+      const pourquoi = el("details", "pourquoi-source");
+      pourquoi.append(el("summary", null, "pourquoi cette source"), el("p", null, l.note));
+      tds.appendChild(pourquoi);
+    }
+    tr.appendChild(tds);
     corps.appendChild(tr);
   }
   t.appendChild(corps);
@@ -167,8 +173,37 @@ function fiche(d, cles, sources, ouverte) {
   return f;
 }
 
+/* UNE valeur par indicateur sur tout le site : les indicateurs techniques de chaque devise (RSI, écarts aux
+   moyennes mobiles, volatilité) viennent de la série unique 5 ans (core/historique_5ans.py), publiée dans
+   dossiers.json (dossier 7) ; la même cellule alimente le dossier 7 et cet onglet. */
+function techniqueUnique(dossiers, devise) {
+  const ligne = (dossiers?.engrenages?.["7"]?.lignes || []).find(l => l.devise === devise);
+  return ligne?.cellules || null;
+}
+const FMT_TECH = {
+  rsi: c => `${String(c.valeur).replace(".", ",")}${c.signal ? ` (${c.signal})` : ""}`,
+  ecart_mm200: c => `${c.valeur > 0 ? "+" : ""}${String(c.valeur).replace(".", ",")} %`,
+  ecart_mm100: c => `${c.valeur > 0 ? "+" : ""}${String(c.valeur).replace(".", ",")} %`,
+  volatilite: c => `${String(c.valeur).replace(".", ",")} % annualisée`,
+};
+function lignesTechniques(cellules, lignesRapport) {
+  if (!cellules) return lignesRapport;
+  const sortie = lignesRapport.filter(l => l.indicateur !== "rsi");
+  const ajout = [["rsi", "RSI 14 (quotidien)"], ["ecart_mm200", "Écart à la moyenne mobile 200 jours"],
+                 ["ecart_mm100", "Écart à la moyenne mobile 100 jours"], ["volatilite", "Volatilité réalisée 20 j"]];
+  for (const [cle, nom] of ajout) {
+    const c = cellules[cle];
+    if (!c || c.valeur === null || c.valeur === undefined) continue;
+    sortie.push({ indicateur: cle, nom, valeur: `${FMT_TECH[cle](c)}${c.percentile_5a !== null && c.percentile_5a !== undefined ? ` · percentile 5 ans ${c.percentile_5a}` : ""}`,
+                  prevision: null, precedent: null, date: c.date, anciennete_jours: null,
+                  source: "série unique 5 ans (Twelve Data raccordé à la Fed H.10) — même valeur que le dossier 7",
+                  note: c.explication_source || "" });
+  }
+  return sortie;
+}
+
 export async function pageDevises(parametre) {
-  const [rapport, site] = await Promise.all([chargerJson("data/latest.json"), chargerJson("data/site.json")]);
+  const [rapport, site, dossiers] = await Promise.all([chargerJson("data/latest.json"), chargerJson("data/site.json"), chargerJson("data/dossiers.json")]);
   if (enErreur(rapport)) return [indisponible("Devises", rapport?.__erreur || "rapport du jour absent")];
   const sources = new Map((rapport.sources_citees || []).map(s => [s.id, s]));
   const cles = new Map(((enErreur(site) ? {} : site).indicateurs_cles || []).map(l => [l.devise, l]));
@@ -178,5 +213,7 @@ export async function pageDevises(parametre) {
   const nav = el("nav", "puces-devises");
   for (const d of rapport.devises || []) { const a = el("a", null, `${DRAPEAUX[d.devise] || ""} ${d.devise}`); a.href = `#devises/${d.devise}`; nav.appendChild(a); }
   tete.appendChild(nav);
-  return [tete, ...(rapport.devises || []).map(d => fiche(d, cles.get(d.devise), sources, d.devise === parametre))];
+  const dos = enErreur(dossiers) ? null : dossiers;
+  return [tete, ...(rapport.devises || []).map(d => fiche({ ...d, indicateurs_tableau: lignesTechniques(techniqueUnique(dos, d.devise), d.indicateurs_tableau || []) },
+                                                           cles.get(d.devise), sources, d.devise === parametre))];
 }

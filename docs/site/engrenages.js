@@ -168,7 +168,7 @@ async function pageQuotidienne(engrenageDemande = null) {
   vue = vueEnsemble(enErreur(d) ? { indisponible: d?.__erreur } : d.vue_ensemble, depart, (n, defiler) => {
     vue.marquer(n); dossier.choisir(n);
     if (defiler) dossier.scrollIntoView({ behavior: sansAnimation() ? "auto" : "smooth", block: "start" });
-  });
+  }, enErreur(d) ? null : d.matrice_impact);
   if (engrenageDemande) setTimeout(() => dossier.scrollIntoView({ block: "start" }), 60);   // lien partagé #g=N
   const blocs = [...vue.noeuds, dossier];
   if (enErreur(rapport)) return [...blocs, indisponible("Analyse rédigée", rapport?.__erreur)];
