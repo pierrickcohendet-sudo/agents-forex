@@ -22,6 +22,7 @@ from datetime import date, timedelta
 
 import requests
 
+from core import correlations
 from core.secrets import masquer_secrets
 
 log = logging.getLogger(__name__)
@@ -45,6 +46,11 @@ SERIES_FRED = {
     "sp500": ("SP500", "FRED (SP500)", "indice", "quotidien"),
     "USD_core_indice": ("CPILFESL", "FRED (CPILFESL)", "indice", "mensuel"),
     "USD_chomage": ("UNRATE", "FRED (UNRATE)", "%", "mensuel"),
+    # Taux de la facilité de dépôt de la BCE (quotidien) : le taux directeur effectif de la zone euro
+    "EUR_taux_depot": ("ECBDFR", "FRED (ECBDFR, taux de la facilité de dépôt de la BCE)", "%", "quotidien"),
+    # Écart Italie − Allemagne : rendements 10 ans OCDE mensuels (pas de série quotidienne gratuite)
+    "ITA_10a_mensuel": ("IRLTLT01ITM156N", "OCDE via FRED (IRLTLT01ITM156N, 10 ans Italie, mensuel)", "%", "mensuel"),
+    "DEU_10a_mensuel": ("IRLTLT01DEM156N", "OCDE via FRED (IRLTLT01DEM156N, 10 ans Allemagne, mensuel)", "%", "mensuel"),
 }
 for _dev, _c in PAYS_OCDE.items():
     if _dev != "USD":
@@ -171,12 +177,15 @@ def collecter(config: dict) -> dict:
     debut_mensuel = aujourdhui - timedelta(days=int(365.25 * (ANNEES + 1)) + 62)   # +1 an : glissement annuel
     cle = os.environ.get("FRED_API_KEY", "").strip()
     resultat: dict = {"series": {}, "erreurs": [], "debut": debut.isoformat()}
+    bruts: dict[str, list] = {}   # séries quotidiennes COMPLÈTES gardées en mémoire pour les corrélations 5 ans
 
     def ajouter(nom, fonction, source, unite, frequence):
         try:
             points = fonction()
             if not points:
                 raise RuntimeError("aucune observation")
+            if nom in correlations.SERIES_NECESSAIRES:
+                bruts[nom] = points
             resultat["series"][nom] = {"source": source, "unite": unite, "frequence": frequence,
                                        "points": compacter(points, frequence, aujourdhui)}
         except Exception as exc:  # noqa: BLE001 — une série en échec n'affecte qu'elle
@@ -189,6 +198,10 @@ def collecter(config: dict) -> dict:
                     source, unite, freq)
     else:
         resultat["erreurs"].append("FRED_API_KEY absente : séries FRED non collectées")
+    try:
+        resultat["correlations_5a"] = correlations.calculer(bruts, aujourdhui)
+    except Exception as exc:  # noqa: BLE001 — n'affecte que les corrélations
+        resultat["erreurs"].append(masquer_secrets(f"corrélations glissantes 5 ans : {exc}")[:200])
 
     # Taux au jour le jour OFFICIELS, quotidiens : Banque du Japon (call rate non garanti) et
     # Banque d'Angleterre (SONIA) — historique du taux directeur effectif, comme DFF pour l'USD.

@@ -203,18 +203,20 @@ class VueEnsemble(unittest.TestCase):
         self.assertEqual(t["phrases_retirees"], 1)
         self.assertIn("0 sur 4 évaluables", t["texte_python"])
 
-    def test_agent_impose_signaux_mixtes_au_texte_du_modele(self):
+    def test_agent_impose_le_titre_sans_toucher_les_analyses_par_engrenage(self):
+        diag = "Un thème dominant de risk off se consolide."
         sortie = {"engrenages": [
-            {"numero": 1, "diagnostic": "Un thème dominant de risk off se consolide.", "donnees_insuffisantes": False,
+            {"numero": 1, "diagnostic": diag, "donnees_insuffisantes": False,
              "direction": {"dollar": "haussier", "risque": "risk_off", "texte": "Le dollar s'impose nettement."}},
-            {"numero": 2, "direction": {"dollar": "haussier"}}, {"numero": 3, "direction": {"dollar": "baissier"}}]}
+            {"numero": 2, "direction": {"dollar": "haussier"}, "diagnostic": "Le 2 ans domine nettement."},
+            {"numero": 3, "direction": {"dollar": "baissier"}}]}
         ae.imposer_signaux_mixtes(sortie)
-        e1 = sortie["engrenages"][0]
         self.assertEqual(sortie["titre_theme_impose"], "Signaux mixtes")
         self.assertEqual(sortie["coherence"]["libelle"], "1 sur 2 évaluables")
-        self.assertIn("Les engrenages ne s'accordent pas", e1["diagnostic"])     # texte Python de remplacement
-        self.assertEqual(e1["direction"]["texte"], "")
-        self.assertTrue(any("thème fort" in c for c in sortie["controles"]))
+        self.assertEqual(sortie["engrenages"][0]["diagnostic"], diag)                 # analyses intactes
+        self.assertEqual(sortie["engrenages"][0]["direction"]["texte"], "Le dollar s'impose nettement.")
+        self.assertEqual(sortie["engrenages"][1]["diagnostic"], "Le 2 ans domine nettement.")
+        self.assertNotIn("controles", sortie)
 
     def test_huit_cartes_chiffres_dates_et_mini_courbes(self):
         v = ve.calculer({}, self.HIST, None, rapport({1: ("haussier", "risk_off", "faible")}))

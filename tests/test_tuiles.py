@@ -56,7 +56,8 @@ class Tuile(unittest.TestCase):
         self.assertTrue(8 <= len(t) <= 12)
         self.assertEqual(t["us2a_dir"]["unite"], "pb")
         self.assertGreater(len(t["us2a_dir"]["courbe"]["points"]), 20)
-        self.assertEqual(t["bce"]["texte"], "2,65 %")
+        self.assertEqual(t["bce"]["texte"], "2,65 %")                       # sans ECBDFR : repli registre, nommé comme tel
+        self.assertEqual(t["bce"]["libelle"], "BCE, taux de refinancement (registre)")
         self.assertIn("décision", t["bce"]["courbe"]["raison"])
 
     def test_dossier_5_tuiles_et_correlations_avec_variation(self):

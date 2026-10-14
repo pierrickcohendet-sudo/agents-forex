@@ -15,7 +15,7 @@ import statistics
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
-from core import controles_macro, registre_macro as rm, tuiles, vue_ensemble
+from core import complements, controles_macro, registre_macro as rm, tuiles, vue_ensemble
 
 log = logging.getLogger(__name__)
 
@@ -137,8 +137,11 @@ def engrenage_2(historiques: dict, registre: dict, config: dict) -> dict:
         effectif = {"USD": ("USD_taux_effectif", "FRED (DFF, taux effectif)",
                             f"fourchette cible : borne haute {actuel.get('valeur')} (ForexFactory)"),
                     "JPY": ("JPY_taux_effectif", "Banque du Japon (call rate non garanti au jour le jour)",
-                            f"objectif publié « {actuel.get('valeur')} » (ForexFactory) : une borne, pas un taux")}
-        if devise in effectif:
+                            f"objectif publié « {actuel.get('valeur')} » (ForexFactory) : une borne, pas un taux"),
+                    "EUR": ("EUR_taux_depot", "FRED (ECBDFR, taux de la facilité de dépôt de la BCE)",
+                            f"ForexFactory publie le taux de refinancement principal ({actuel.get('valeur')}), "
+                            "15 pb au-dessus du taux de dépôt qui pilote le marché")}
+        if devise in effectif and (devise != "EUR" or _serie(historiques, "EUR_taux_depot")):   # EUR sans ECBDFR : registre (refinancement)
             nom_serie, source_eff, note = effectif[devise]
             serie_eff = _serie(historiques, nom_serie)
             c["taux_directeur"] = stats(serie_eff, "%", source_eff) if serie_eff else \
@@ -199,9 +202,15 @@ def engrenage_2(historiques: dict, registre: dict, config: dict) -> dict:
                                                   else "pas de mouvement intégré net")
         else:
             c["ecart_2a_directeur"] = absent("taux 2 ans ou taux directeur indisponible")
-        # Taux réel = directeur − inflation core a/a (registre)
+        # Taux réel = directeur − inflation core a/a. USD : série mensuelle 5 ans (DFF − CPILFESL a/a)
         core, d_core = _registre_valeur(cases.get(f"{devise}|cpi_core"))
-        if directeur is not None and core is not None:
+        reel_us = taux_reel_us(historiques) if devise == "USD" else []
+        if reel_us:
+            c["taux_reel"] = stats([(d, v) for d, v in reel_us], "%",
+                                   "calcul : DFF (moyenne du mois) − CPI core a/a (FRED CPILFESL)", "mensuel")
+            c["taux_reel"].update({"serie_mensuelle": [[d, v] for d, v in reel_us[-13:]],
+                                   "note": f"mois de référence de l'inflation : {reel_us[-1][0][:7]}"})
+        elif directeur is not None and core is not None:
             c["taux_reel"] = {**absent(None), "valeur": round(directeur - core, 2), "unite": "%", "date": d_core,
                               "source": "calcul : taux directeur − CPI core a/a (registre)",
                               "raison_percentile": "historique de l'inflation core trop court dans le registre"}
@@ -233,6 +242,16 @@ def engrenage_2(historiques: dict, registre: dict, config: dict) -> dict:
             "notes": ["USD : taux effectif quotidien de la Fed (DFF) ; ForexFactory publie la borne haute de la fourchette.",
                       "Percentile du taux directeur hors USD : calculé parmi les taux au jour le jour OCDE (mensuels, proxy).",
                       "2 ans − directeur négatif : le marché anticipe des baisses ; positif : des hausses."]}
+
+
+def taux_reel_us(historiques: dict) -> list[tuple[str, float]]:
+    """[(mois, DFF moyen du mois − CPI core a/a du même mois)] sur l'historique disponible (5 ans et plus)."""
+    dff = _serie(historiques, "USD_taux_effectif")
+    glissement = glissement_annuel(_serie(historiques, "USD_core_indice"))
+    par_mois: dict[str, list[float]] = {}
+    for d, v in dff:
+        par_mois.setdefault(d[:7], []).append(v)
+    return [(d, round(statistics.mean(par_mois[d[:7]]) - g, 2)) for d, g in glissement if par_mois.get(d[:7])]
 
 
 # ------------------------------------------------------------- engrenage 3
@@ -448,10 +467,13 @@ def graphiques_5(e: dict, historiques: dict) -> list[dict]:
     courbes = [(lib, _90j(_serie(historiques, nom))) for nom, lib in
                (("dollar_large", "Indice dollar large"), ("indice_or", "Indice or (proxy)"), ("wti", "WTI"), ("sp500", "S&P 500"))]
     matrice = (e.get("correlations") or {}).get("matrice") or {}
+    c5 = (historiques.get("correlations_5a") or {}).get("paires") or {}
+    valeurs = [(d, (c5.get(f"{d}|S&P 500") or {}).get("valeur")) for d in DEVISES] if c5 else \
+              [(d, (matrice.get(d) or {}).get("S&P 500")) for d in DEVISES]
     return [graphique_serie("Marchés rebasés à 100, 90 jours", "base 100", courbes, "FRED", base_100=True),
-            graphique_barres("Corrélation 30 séances de chaque devise avec le S&P 500", "corrélation",
-                             [(d, (matrice.get(d) or {}).get("S&P 500")) for d in DEVISES],
-                             "calcul Python (rendements quotidiens)", "positif : la devise monte avec les actions (devise « risque »)")]
+            graphique_barres("Corrélation 30 séances de chaque devise avec le S&P 500", "corrélation", valeurs,
+                             (historiques.get("correlations_5a") or {}).get("source") if c5 else "calcul Python (rendements quotidiens)",
+                             "positif : la devise monte avec les actions (devise « risque »)")]
 
 
 # ------------------------------------------------------------- engrenage 1
@@ -473,6 +495,7 @@ def engrenage_1(rapport: dict | None, dossier_rapports: Path | None, dossiers_ca
             if ref.get(cle) in oppose:
                 accords += int(calc.get(cle) == ref.get(cle))
                 desaccords += int(calc.get(cle) == oppose[ref[cle]])
+    coh = vue_ensemble.coherence({x["numero"]: x for x in eng if x.get("numero")}) if eng else None
     indices = [l["cellules"]["indice_surprise"]["valeur"] for l in (dossiers_calcules.get("3") or {}).get("lignes", [])
                if l["cellules"]["indice_surprise"].get("valeur") is not None]
     # Évolution sur 4 semaines : rapports archivés (un par semaine)
@@ -501,9 +524,9 @@ def engrenage_1(rapport: dict | None, dossier_rapports: Path | None, dossiers_ca
     lignes = [
         {"libelle": "Régime de risque (biais calculé)", "texte": {"risk_on": "Risk On", "risk_off": "Risk Off", "neutre": "Neutre"}.get(sg.get("biais_macro_global"), "n/d"),
          "detail": f"écart de score risque − refuge : {_ecart_regime(scores)} pts", "source": "calcul Python (scores de confluence)"},
-        {"libelle": "Cohérence des engrenages chiffrés", "texte": f"{accords} accord(s), {desaccords} désaccord(s)" if ref else "n/d",
-         "detail": "engrenages 2, 3, 5 et 7 comparés à la direction du thème (dollar et risque)",
-         "source": "règles Python des 8 engrenages", "raison": None if ref else "synthèse 8 engrenages absente de ce rapport"},
+        {"libelle": "Cohérence des engrenages", "texte": coh["libelle"] if coh else "n/d",
+         "detail": "règle unique de la page (voir « Qui suit le thème ? »)" if coh else "",
+         "source": "règles Python des 8 engrenages", "raison": None if coh else "synthèse 8 engrenages absente de ce rapport"},
         {"libelle": "Indice de surprise global (moyenne 9 devises)", "texte": f"{statistics.mean(indices):+.2f}".replace(".", ",") if indices else "n/d",
          "detail": f"{len(indices)} devise(s) avec un indice", "source": "calcul Python (registre macro, 30 j)"},
         {"libelle": "Score de confluence USD", "texte": str(scores.get("USD")) if scores.get("USD") is not None else "n/d",
@@ -787,9 +810,24 @@ def construire(historiques: dict, registre: dict, technique: dict, config: dict,
         except Exception as exc:  # noqa: BLE001
             log.exception("Tuiles engrenage %s en échec", numero)
             e["tuiles_indisponibles"] = f"calcul en échec : {exc}"[:150]
+    # Palier 3 : dossiers 1, 4, 6, 7 et 8 (tuiles, graphiques et tableaux manquants)
+    complements_par = {"1": lambda e: complements.complements_1(e, rapport, historiques, dossier_rapports, sortie["engrenages"]),
+                       "4": lambda e: complements.complements_4(e, historiques),
+                       "6": lambda e: complements.complements_6(e, historiques),
+                       "7": lambda e: complements.complements_7(e, technique, flux),
+                       "8": lambda e: complements.complements_8(e, historiques, registre)}
+    for numero, fabrique in complements_par.items():
+        e = sortie["engrenages"].get(numero)
+        if not e or e.get("indisponible"):
+            continue
+        try:
+            fabrique(e)
+        except Exception as exc:  # noqa: BLE001
+            log.exception("Compléments engrenage %s en échec", numero)
+            e["tuiles_indisponibles"] = f"calcul en échec : {exc}"[:150]
     try:
         if sortie["engrenages"].get("5") and not sortie["engrenages"]["5"].get("indisponible"):
-            sortie["engrenages"]["5"]["matrice_chaleur"] = tuiles.matrice_chaleur(sortie["engrenages"]["5"])
+            sortie["engrenages"]["5"]["matrice_chaleur"] = tuiles.matrice_chaleur(sortie["engrenages"]["5"], historiques)
     except Exception:  # noqa: BLE001
         log.exception("Carte de chaleur des corrélations en échec")
     try:   # bandeau du thème, 8 cartes et chaînes (refonte V2, palier 1) : calcul Python, sans LLM

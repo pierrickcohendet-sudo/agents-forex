@@ -53,6 +53,20 @@ def texte_valeur(v: float | None, unite: str | None) -> str | None:
         return _signe(v, 2)
     if unite == "part":
         return f"{_fr(v, 0)} %"
+    if unite in ("nombre", "score", "semaines"):
+        return _fr(v, 0)
+    if unite == "M barils":
+        return f"{_fr(v, 1)} M"
+    if unite == "milliers b/j":
+        return f"{_fr(v, 0)} k b/j"
+    if unite == "contrats":
+        return _signe(v, 0)
+    if unite == "rsi":
+        return _fr(v, 1)
+    if unite in ("% annualisé", "% PIB"):
+        return f"{_fr(v, 1)} %"
+    if unite == "$":
+        return f"{_fr(v, 2)} $"
     return _fr(v, 2 if abs(v) < 100 else 1 if abs(v) < 1000 else 0)
 
 
@@ -62,15 +76,12 @@ def tuile(ident: str, libelle: str, cel: dict | None, courbe: list[list] | None 
     cel = cel or {}
     u = unite or cel.get("unite")
     v = cel.get("valeur")
-    variation = None
+    variation = cel.get("variation")   # variation explicite (période propre à la tuile) : prioritaire
     for cle, per in (("var_4s", "4 semaines"), ("var_1s", "1 semaine")):
-        if cel.get(cle) is not None:
-            unite_var = "pb" if u in ("%", "pb") else "%"
+        if variation is None and cel.get(cle) is not None:
+            unite_var = "pb" if u in ("%", "pb") else "contrats" if u == "contrats" else "%"
             variation = {"valeur": cel[cle], "unite": unite_var, "periode": per,
-                         "texte": f"{_signe(cel[cle], 0 if unite_var == 'pb' else 2)} {unite_var} sur {per}"}
-            break
-    if variation is None and cel.get("variation") is not None:
-        variation = cel["variation"]
+                         "texte": f"{_signe(cel[cle], 0 if unite_var in ('pb', 'contrats') else 2)} {unite_var} sur {per}"}
     if variation is None and cel.get("tendance_3m") is not None:
         variation = {"valeur": cel["tendance_3m"], "unite": "pt", "periode": "3 mois",
                      "texte": f"{_signe(cel['tendance_3m'])} pt sur 3 mois"}
@@ -79,6 +90,9 @@ def tuile(ident: str, libelle: str, cel: dict | None, courbe: list[list] | None 
             "unite": u, "date": cel.get("date"), "frequence": cel.get("frequence"), "age_jours": _age(cel.get("date")), "source": cel.get("source"),
             "raison": None if v is not None else (cel.get("raison") or "donnée indisponible"),
             "variation": variation, "percentile_5a": cel.get("percentile_5a"), "n_5a": cel.get("n_5a"),
+            "percentile_autre": ({"valeur": cel["percentile_52s"], "libelle": "52 semaines"} if cel.get("percentile_52s") is not None
+                                 else {"valeur": cel["percentile_90j"], "libelle": "90 jours"} if cel.get("percentile_90j") is not None
+                                 else None),
             "raison_percentile": None if cel.get("percentile_5a") is not None else
             (cel.get("raison_percentile") or ("pas de série longue" if v is not None else None)),
             "courbe": {"points": courbe, "periode": periode,
@@ -101,6 +115,15 @@ def _difference(a: list[list], b: list[list], facteur: float = 100) -> list[list
     return sortie
 
 
+def _avec_variation_mensuelle(cel: dict | None) -> dict | None:
+    """Série mensuelle : variation sur 3 mois (en pb pour un taux) tirée de la série jointe à la cellule."""
+    if not cel or not cel.get("serie_mensuelle") or len(cel["serie_mensuelle"]) < 4:
+        return cel
+    pts = cel["serie_mensuelle"]
+    d = round((pts[-1][1] - pts[-4][1]) * 100)
+    return {**cel, "variation": {"valeur": d, "unite": "pb", "periode": "3 mois", "texte": f"{_signe(d, 0)} pb sur 3 mois"}}
+
+
 # ------------------------------------------------------------- engrenage 2
 def tuiles_2(e: dict, historiques: dict) -> list[dict]:
     c = _cellules(e)
@@ -111,10 +134,13 @@ def tuiles_2(e: dict, historiques: dict) -> list[dict]:
         tuile("fed", "Taux effectif Fed", usd.get("taux_directeur"), _fenetre(dff, 30)),
         tuile("us2a", "Rendement 2 ans US", usd.get("taux_2a"), _fenetre(us2, 30)),
         tuile("us2a_dir", "2 ans US − taux effectif", usd.get("ecart_2a_directeur"), _fenetre(_difference(us2, dff), 30)),
-        tuile("taux_reel_us", "Taux réel US (directeur − core)", usd.get("taux_reel"), None,
-              raison_courbe="inflation core mensuelle : pas de série quotidienne"),
+        tuile("taux_reel_us", "Taux réel US (directeur − core)", _avec_variation_mensuelle(usd.get("taux_reel")),
+              (usd.get("taux_reel") or {}).get("serie_mensuelle"), "12 mois (mensuel)",
+              raison_courbe="série mensuelle indisponible"),
         tuile("pente_us", "Courbe 2-10 ans US", usd.get("pente_2_10"), _fenetre(_difference(us10, us2), 30)),
-        tuile("bce", "BCE, taux de dépôt", eur.get("taux_directeur"), None, raison_courbe=decision),
+        tuile("bce", "BCE, taux de dépôt" if "ECBDFR" in str((eur.get("taux_directeur") or {}).get("source"))
+              else "BCE, taux de refinancement (registre)", eur.get("taux_directeur"), _fenetre(_points(historiques, "EUR_taux_depot"), 30),
+              raison_courbe=decision),
         tuile("eur2a", "Rendement 2 ans allemand", eur.get("taux_2a"), _fenetre(_points(historiques, "EUR_2a"), 30)),
         tuile("boe", "BoE, taux directeur", gbp.get("taux_directeur"), _fenetre(_points(historiques, "GBP_taux_effectif"), 30),
               "30 jours (SONIA quotidien)"),
@@ -193,9 +219,25 @@ def tuiles_3(e: dict, historiques: dict, registre: dict, config: dict) -> list[d
 # ------------------------------------------------------------- engrenage 5
 COLONNES_CHALEUR = [("VIX", "VIX"), ("S&P 500", "S&P 500"), ("Pétrole Brent", "Brent"),
                     ("Indice or (proxy)", "Or (proxy)"), ("Rendement 10 ans US", "10 ans US")]
+LECTURE_CORR = ("corrélation des rendements quotidiens de la force de chaque devise avec l'actif, sur 30 séances "
+                "(+1 : bougent ensemble, −1 : en sens inverse). Corrélation n'est pas causalité.")
 
 
-def matrice_chaleur(e: dict) -> dict:
+def matrice_chaleur(e: dict, historiques: dict | None = None) -> dict:
+    """Devises × actifs. Source prioritaire : corrélations glissantes calculées sur 5 ans de prix (avec percentile) ;
+    à défaut, la matrice du jour du dossier (prix Twelve Data, 90 séances, sans percentile), en le disant."""
+    c5 = ((historiques or {}).get("correlations_5a") or {})
+    if c5.get("paires"):
+        lignes = []
+        for devise in DEVISES:
+            cases = [c5["paires"].get(f"{devise}|{col}") or {} for col, _ in COLONNES_CHALEUR]
+            lignes.append({"devise": devise, "valeurs": [x.get("valeur") for x in cases],
+                           "precedentes": [x.get("precedente") for x in cases],
+                           "percentiles": [x.get("percentile_5a") for x in cases],
+                           "raison": None if any(cases) else "série de change indisponible"})
+        return {"colonnes": [lib for _, lib in COLONNES_CHALEUR], "lignes": lignes, "seances": c5.get("seances", 30),
+                "derniere_seance": c5.get("derniere_seance"), "source": c5.get("source"), "percentile_5a": True,
+                "lecture": LECTURE_CORR + " Percentile : rang de la corrélation du jour parmi toutes les fenêtres de 30 séances des 5 ans."}
     corr = (e or {}).get("correlations") or {}
     m, prec = corr.get("matrice") or {}, corr.get("matrice_precedente") or {}
     lignes = []
@@ -205,23 +247,31 @@ def matrice_chaleur(e: dict) -> dict:
         lignes.append({"devise": devise, "valeurs": valeurs, "precedentes": avant,
                        "raison": None if any(v is not None for v in valeurs) else "série de force indisponible"})
     return {"colonnes": [lib for _, lib in COLONNES_CHALEUR], "lignes": lignes, "seances": corr.get("seances", 30),
-            "derniere_seance": corr.get("derniere_seance"), "source": corr.get("source"),
-            "lecture": "corrélation des rendements quotidiens de la force de chaque devise avec l'actif, sur 30 séances "
-                       "(+1 : bougent ensemble, −1 : en sens inverse). Corrélation n'est pas causalité."}
+            "derniere_seance": corr.get("derniere_seance"), "source": corr.get("source"), "percentile_5a": False,
+            "lecture": LECTURE_CORR + " Corrélations 5 ans indisponibles aujourd'hui : matrice du jour sans percentile."}
 
 
-def _tuile_correlation(e: dict, a: str, b: str, libelle: str, lecture: str) -> dict:
-    corr = (e or {}).get("correlations") or {}
-    r = ((corr.get("matrice") or {}).get(a) or {}).get(b)
-    r0 = ((corr.get("matrice_precedente") or {}).get(a) or {}).get(b)
-    cel = {"valeur": r, "unite": "corrélation", "date": corr.get("derniere_seance"), "source": corr.get("source"),
-           "raison": None if r is not None else "moins de 15 séances communes",
-           "raison_percentile": "corrélation glissante : pas de percentile 5 ans"}
+def _tuile_correlation(e: dict, historiques: dict | None, a: str, b: str, libelle: str, lecture: str) -> dict:
+    x = (((historiques or {}).get("correlations_5a") or {}).get("paires") or {}).get(f"{a}|{b}")
+    if x:
+        cel = {"valeur": x["valeur"], "unite": "corrélation", "date": x["date"],
+               "source": ((historiques or {}).get("correlations_5a") or {}).get("source"),
+               "percentile_5a": x.get("percentile_5a"), "n_5a": x.get("n_5a"), "raison_percentile": x.get("raison_percentile")}
+        r, r0, courbe, periode = x["valeur"], x.get("precedente"), x.get("courbe"), "120 jours (corrélation glissante)"
+        lecture = f"{lecture} · extrêmes des 5 ans : {_fr(x.get('min_5a'))} à {_fr(x.get('max_5a'))}"
+    else:
+        corr = (e or {}).get("correlations") or {}
+        r = ((corr.get("matrice") or {}).get(a) or {}).get(b)
+        r0 = ((corr.get("matrice_precedente") or {}).get(a) or {}).get(b)
+        cel = {"valeur": r, "unite": "corrélation", "date": corr.get("derniere_seance"), "source": corr.get("source"),
+               "raison": None if r is not None else "moins de 15 séances communes",
+               "raison_percentile": "corrélations 5 ans indisponibles aujourd'hui"}
+        courbe, periode = None, "30 jours"
     if r is not None and r0 is not None:
         cel["variation"] = {"valeur": round(r - r0, 2), "unite": "corrélation", "periode": "30 séances précédentes",
-                            "texte": f"{_signe(round(r - r0, 2))} vs 30 séances précédentes (r = {_fr(r0)})"}
-    return tuile(f"corr_{a}_{b}".lower().replace(" ", "_"), libelle, cel, None,
-                 raison_courbe="corrélation glissante non historisée", lecture=lecture)
+                            "texte": f"{_signe(round(r - r0, 2))} vs 30 séances plus tôt (r = {_fr(r0)})"}
+    return tuile(f"corr_{a}_{b}".lower().replace(" ", "_"), libelle, cel, courbe, periode,
+                 raison_courbe="corrélations 5 ans indisponibles aujourd'hui", lecture=lecture)
 
 
 def tuiles_5(e: dict, historiques: dict) -> list[dict]:
@@ -234,8 +284,8 @@ def tuiles_5(e: dict, historiques: dict) -> list[dict]:
         u = "%" if c.get("unite") == "%" else None
         sortie.append(tuile(ident, lib, c, _fenetre(_points(historiques, ident), 30), unite=u,
                             lecture=c.get("alerte")))
-    sortie.append(_tuile_correlation(e, "AUD", "S&P 500", "Corrélation AUD / S&P 500",
+    sortie.append(_tuile_correlation(e, historiques, "AUD", "S&P 500", "Corrélation AUD / S&P 500",
                                      "positive : l'AUD se comporte en devise « risque »"))
-    sortie.append(_tuile_correlation(e, "JPY", "VIX", "Corrélation JPY / VIX",
+    sortie.append(_tuile_correlation(e, historiques, "JPY", "VIX", "Corrélation JPY / VIX",
                                      "positive : le yen joue son rôle de refuge quand la volatilité monte"))
     return sortie

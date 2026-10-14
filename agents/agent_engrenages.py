@@ -221,27 +221,14 @@ def _donnees_geopolitiques(dossiers: dict, cat: "_Catalogue") -> list[dict]:
 
 
 def imposer_signaux_mixtes(sortie: dict) -> None:
-    """Cohérence calculée sous le seuil : titre « Signaux mixtes » imposé et phrases annonçant un thème
-    fort retirées du texte de l'engrenage 1 (le modèle ne peut pas contredire le calcul)."""
+    """Cohérence calculée sous le seuil : titre « Signaux mixtes » imposé au thème global. Le filtre du
+    vocabulaire de thème fort ne s'applique qu'au paragraphe du thème global (bandeau, core/vue_ensemble.py) :
+    les analyses par engrenage, y compris celle de l'engrenage 1, restent telles que rédigées."""
     par_num = {e["numero"]: e for e in sortie.get("engrenages") or []}
     coh = vue_ensemble.coherence(par_num)
     sortie["coherence"] = {k: v for k, v in coh.items() if k != "detail"}
-    if coh["theme_fort"] or 1 not in par_num:
-        return
-    sortie["titre_theme_impose"] = vue_ensemble.TITRE_SIGNAUX_MIXTES
-    e1 = par_num[1]
-    total = 0
-    for cle, conteneur in (("diagnostic", e1), ("texte", e1.get("direction") or {})):
-        texte, n = vue_ensemble.moderer_theme_fort(conteneur.get(cle))
-        if n:
-            total += n
-            conteneur[cle] = texte or ""
-    if total:
-        sortie.setdefault("controles", []).append(
-            f"engrenage 1 : {total} phrase(s) annonçant un thème fort retirée(s) (cohérence {coh['libelle']}, "
-            f"seuil {vue_ensemble.SEUIL_THEME_FORT})")
-    if not e1.get("diagnostic") and not e1.get("donnees_insuffisantes"):
-        e1["diagnostic"] = vue_ensemble.phrase_signaux_mixtes(coh, vue_ensemble._direction(e1))
+    if not coh["theme_fort"]:
+        sortie["titre_theme_impose"] = vue_ensemble.TITRE_SIGNAUX_MIXTES
 
 
 def signaux(config: dict, donnees: dict, macro: dict, devises: list[dict], biais: str | None,
@@ -730,8 +717,9 @@ def generer(config: dict, llm: FournisseurLLM, donnees: dict, macro: dict, catal
             "2 phrases max par champ). Reprends chaque direction_calculee telle quelle quand elle n'est pas "
             "null. Une à trois chaînes de transmission, chaque maillon rattaché à un engrenage et à un "
             "source_id. Décris les conflits_detectes et ajoute ceux que tu vois. Explique le concept_du_jour "
-            "simplement avec un exemple tiré de ces données. Si coherence_calculee.theme_fort est false, "
-            "n'annonce AUCUN thème fort, dominant ou net : écris que les signaux sont mixtes.\n"
+            "simplement avec un exemple tiré de ces données. Si coherence_calculee.theme_fort est false, le "
+            "diagnostic de l'engrenage 1 (thème global) n'annonce AUCUN thème fort, dominant ou net : il dit que "
+            "les signaux sont mixtes. Les autres engrenages décrivent librement leurs propres données.\n"
             f"Réponds STRICTEMENT selon ce schéma JSON :\n{SCHEMA}\n"
             "SEULS les source_id de catalogue_sources existent : null plutôt qu'inventer.\n\n"
             "DONNÉES DU JOUR (JSON) :\n" + json.dumps(contexte, ensure_ascii=False, default=str))

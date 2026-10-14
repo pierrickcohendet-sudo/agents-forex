@@ -89,6 +89,18 @@ function tableau(entetes, lignes) {
   return defile;
 }
 
+const CHALEUR_7 = {
+  rsi: c => c?.valeur == null ? null : Math.max(-1, Math.min(1, (c.valeur - 50) / 25)),
+  ecart_mm100: c => c?.valeur == null ? null : Math.max(-1, Math.min(1, c.valeur / 4)),
+  ecart_mm200: c => c?.valeur == null ? null : Math.max(-1, Math.min(1, c.valeur / 6)),
+  cot: c => c?.percentile_52s == null ? null : (c.percentile_52s - 50) / 50,
+};
+function colorer(td, intensite) {
+  if (intensite === null || intensite === undefined) return;
+  const force = Math.abs(intensite) * 45;
+  td.style.background = `color-mix(in srgb, ${intensite >= 0 ? "var(--positif)" : "var(--negatif)"} ${force.toFixed(0)}%, var(--carte))`;
+}
+
 function tableauDevises(e) {
   const lignes = e.lignes.map(l => {
     const tr = el("tr");
@@ -103,6 +115,7 @@ function tableauDevises(e) {
         for (const p of liste) td.appendChild(el("div", p.surprise > 0 ? "pos" : p.surprise < 0 ? "neg" : "",
           `${p.indicateur} : ${p.reel} vs ${p.consensus} (${signe(p.surprise, 2)})`));
       } else remplirCellule(td, c, col.unite, `${l.devise} — ${col.libelle}`);
+      if (e.numero === 7 && CHALEUR_7[col.id]) colorer(td, CHALEUR_7[col.id](c));
       tr.appendChild(td);
     }
     return tr;
@@ -265,6 +278,15 @@ function tuileChiffre(t) {
     const lig = el("div", "tk-pct tabulaire", `percentile 5 ans : ${p}`);
     if (extreme) lig.appendChild(el("span", "tk-extreme", "extrême"));
     c.appendChild(lig);
+  } else if (t.percentile_autre) {
+    const p = t.percentile_autre.valeur, extreme = p >= 90 || p <= 10;
+    const rail = el("div", `tk-rail${extreme ? " extreme" : ""}`);
+    rail.setAttribute("role", "img"); rail.setAttribute("aria-label", `percentile ${t.percentile_autre.libelle} : ${p}`);
+    const r = el("i"); r.style.width = `${p}%`; rail.append(r, el("u"));
+    c.appendChild(rail);
+    const lig = el("div", "tk-pct tabulaire", `percentile ${t.percentile_autre.libelle} : ${p} (pas de série sur 5 ans)`);
+    if (extreme) lig.appendChild(el("span", "tk-extreme", "extrême"));
+    c.appendChild(lig);
   } else if (t.valeur !== null && t.valeur !== undefined) {
     c.appendChild(el("div", "tk-pct", `percentile n/d${t.raison_percentile ? ` — ${t.raison_percentile}` : ""}`));
   }
@@ -301,10 +323,12 @@ function carteChaleur(mc) {
       if (v === null || v === undefined) { td.appendChild(el("span", "nd", "n/d")); td.title = l.raison || "moins de 15 séances communes"; }
       else {
         td.textContent = `${v > 0 ? "+" : ""}${nombre(v, 2)}`;
+        const pc = l.percentiles?.[i];
+        if (pc !== null && pc !== undefined) td.appendChild(el("span", "chaleur-pct", `p${pc}`));
         const force = Math.min(1, Math.abs(v)) * 55;
         td.style.background = `color-mix(in srgb, ${v >= 0 ? "var(--positif)" : "var(--negatif)"} ${force.toFixed(0)}%, var(--carte))`;
         const avant = l.precedentes?.[i];
-        td.title = `${l.devise} / ${mc.colonnes[i]} : ${nombre(v, 2)}${avant !== null && avant !== undefined ? ` (30 séances précédentes : ${nombre(avant, 2)})` : ""}`;
+        td.title = `${l.devise} / ${mc.colonnes[i]} : ${nombre(v, 2)}${avant !== null && avant !== undefined ? ` (30 séances plus tôt : ${nombre(avant, 2)})` : ""}${pc !== null && pc !== undefined ? ` · percentile 5 ans : ${pc}` : ""}`;
       }
       td.setAttribute("data-label", mc.colonnes[i]);
       tr.appendChild(td);
@@ -317,8 +341,27 @@ function carteChaleur(mc) {
 }
 
 /* -------------------------------------------------------- contenus spécifiques */
+const ACCORD = { oui: "pos", non: "neg" };
+const CONV = { faible: "faible", moyen: "moyenne", eleve: "élevée" };
+function tableauSuivi(s) {
+  if (!s) return [];
+  const bloc = [el("h3", null, `Qui suit le thème ? (${s.theme || "thème non déterminé"})`)];
+  if (s.raison) { bloc.push(el("p", "indisponible", `Indisponible : ${s.raison}.`)); return bloc; }
+  bloc.push(tableau(["Engrenage", "Direction", "Accord avec le thème", "Critère", "Conviction"], s.lignes.map(x => {
+    const tr = el("tr");
+    tr.appendChild(el("td", null, `${x.numero}. ${x.nom}`));
+    tr.appendChild(el("td", null, x.direction));
+    tr.appendChild(el("td", ACCORD[x.accord] || "", x.accord));
+    tr.appendChild(el("td", null, x.critere || "—"));
+    tr.appendChild(el("td", null, CONV[x.conviction] || "—"));
+    return tr;
+  })));
+  if (s.regle) bloc.push(el("p", "note", s.regle));
+  return bloc;
+}
+
 function contenuTheme(e) {
-  const bloc = [];
+  const bloc = [...tableauSuivi(e.suivi_theme), el("h3", null, "Indicateurs du thème")];
   bloc.push(tableau(["Indicateur", "Valeur", "Détail", "Source"], e.indicateurs.map(i => {
     const tr = el("tr");
     tr.appendChild(el("td", null, i.libelle));
@@ -340,16 +383,19 @@ function contenuTheme(e) {
 
 function contenuFiscal(e) {
   const bloc = [tableauDevises(e)];
-  bloc.push(el("h3", null, "Actualités budgétaires du jour"));
-  if (!e.actualites?.length) bloc.push(el("p", "note", "Aucun titre budgétaire dans les flux du jour."));
-  else {
-    const ul = el("ul", "liste-actus");
-    for (const a of e.actualites) {
-      const li = el("li"); const lien = el("a", null, a.titre); lien.href = a.lien || "#"; lien.target = "_blank"; lien.rel = "noopener";
-      li.append(lien, el("span", "source", ` — ${a.source}, ${dateCourte(a.date)}`)); ul.appendChild(li);
-    }
-    bloc.push(ul);
-  }
+  bloc.push(el("h3", null, "Dossier budgétaire du jour"));
+  const db = e.dossier_budgetaire || [];
+  if (!db.length) bloc.push(el("p", "note", "Aucun titre budgétaire dans les flux du jour (recherche par mots-clés : budget, déficit, dette, adjudication, relance…)."));
+  else bloc.push(tableau(["Pays", "Sujet", "Mécanisme", "Devises", "Source"], db.map(a => {
+    const tr = el("tr");
+    tr.appendChild(el("td", null, a.pays));
+    const td = el("td", "texte-long"); const lien = el("a", null, a.sujet); lien.href = a.lien || "#"; lien.target = "_blank"; lien.rel = "noopener";
+    td.appendChild(lien); tr.appendChild(td);
+    tr.appendChild(el("td", "texte-long", a.mecanisme));
+    tr.appendChild(el("td", null, (a.devises || []).join(", ") || "—"));
+    tr.appendChild(el("td", "source-cellule", `${a.source || "—"}, ${dateCourte(a.date)}`));
+    return tr;
+  })));
   return bloc;
 }
 
@@ -389,13 +435,15 @@ function contenuEngrenage(n, e) {
   const bloc = el("div", "dossier-contenu");
   if (!e) { bloc.appendChild(el("p", "indisponible", "Dossier non calculé aujourd'hui.")); return bloc; }
   if (e.indisponible) { bloc.appendChild(el("p", "indisponible", `Indisponible : ${e.indisponible}.`)); return bloc; }
-  const riche = n === 2 || n === 3 || n === 5;   // palier 2 : tuiles, deux graphiques, tableau (+ carte de chaleur)
+  const riche = Boolean(e.tuiles?.length || e.tuiles_indisponibles);   // tuiles, deux graphiques, tableau(x)
   const parties = n === 1 ? contenuTheme(e) : n === 4 ? contenuFiscal(e) : n === 6 ? contenuGeopolitique(e) : n === 8 ? contenuOffre(e) : [];
   if (riche) {
     const t = grilleTuiles(e); if (t) bloc.appendChild(t);
     if (n === 5 && e.regime_volatilite) bloc.appendChild(el("p", "note", `Volatilité implicite (VIX) : régime ${e.regime_volatilite}.`));
     bloc.appendChild(graphiques(e));
-    bloc.appendChild(el("h3", null, n === 5 ? "Marchés suivis" : n === 2 ? "Grille des banques centrales" : "Données par devise"));
+    const titres = { 2: "Grille des banques centrales", 3: "Données par devise", 4: "Finances publiques par pays", 5: "Marchés suivis",
+                     6: "Événements retenus", 7: "Tableau technique par devise (carte de chaleur)", 8: "Matières premières suivies" };
+    if (titres[n]) bloc.appendChild(el("h3", null, titres[n]));
   }
   if (n === 2 || n === 3 || n === 7) parties.push(tableauDevises(e));
   if (n === 5) parties.push(tableauInstruments(e.instruments));
