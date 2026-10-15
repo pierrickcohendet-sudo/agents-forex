@@ -15,15 +15,23 @@
 #   scraping des 6 sites (cache du jour, core/scraping.py) ni une collecte API
 #   déjà complète (core/collecte_cache.py). --type reste "auto" : un lundi ou le
 #   1er du mois, forcer "quotidien" écraserait meta.type_rapport.
-# Heure de déclenchement des cron GitHub Actions : peut glisser de quelques
-# minutes (voire sauter une exécution) aux heures de forte charge.
+# - 08:45 UTC : SECOURS — run complet seulement si le rapport du jour n'existe pas
+#   (le run de 08:15 n'a pas eu lieu) ; sinon le job s'arrête aussitôt.
+# - RATTRAPAGE : tout passage planifié de semaine fait un run complet s'il n'existe
+#   pas encore de rapport pour la date du jour (étape « Décider du mode »).
+# Heure de déclenchement des cron GitHub Actions : peut glisser de plusieurs heures,
+# voire ne jamais se produire aux heures de forte charge (15/10/2026 : aucun passage
+# planifié créé entre 22:16 la veille et 12:36 UTC). D'où le secours et le rattrapage.
 name: rapport-fx
 
 on:
   schedule:
     - cron: "15 8 * * 1-5"    # run complet (matin) : APRÈS la remise à zéro des quotas Gemini
                               # (minuit heure du Pacifique = 07:00 UTC l'été, 08:00 UTC l'hiver)
-    - cron: "15 9-21 * * 1-5" # compléments horaires 09:15 -> 21:15 UTC (après le run complet)
+    - cron: "45 8 * * 1-5"    # SECOURS : ne fait quelque chose que si le run de 08:15 n'a pas eu lieu
+                              # (pas de rapport du jour) ; sinon le job s'arrête aussitôt
+    - cron: "15 9-21 * * 1-5" # compléments horaires 09:15 -> 21:15 UTC (après le run complet) ;
+                              # RATTRAPAGE : sans rapport du jour, le passage fait un run complet
     - cron: "15 7 * * 0"      # dimanche : dossier hebdomadaire des 8 engrenages (--hebdo)
   workflow_dispatch:
     inputs:
@@ -50,15 +58,54 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Décision AVANT toute installation : hebdo, complet, complément ou rien.
+      # Rattrapage : les crons GitHub sont parfois retardés de plusieurs heures ou jamais
+      # déclenchés (15/10/2026 : aucun passage planifié créé avant 12:36 UTC). Tout passage
+      # planifié de semaine fait donc un run COMPLET s'il n'existe pas encore de rapport
+      # pour la date du jour (data/rapports/AAAA-MM-JJ.json, date UTC comme l'orchestrateur).
+      - name: Décider du mode
+        id: decision
+        run: |
+          JOUR=$(date -u +%F)
+          RAPPORT="data/rapports/${JOUR}.json"
+          EVT="${{ github.event_name }}"
+          CRON="${{ github.event.schedule }}"
+          MODE="complet"
+          if [ "$EVT" = "schedule" ] && [ "$CRON" = "15 7 * * 0" ]; then
+            MODE="hebdo"
+          elif [ "$EVT" = "workflow_dispatch" ] && [ "${{ github.event.inputs.hebdo }}" = "true" ]; then
+            MODE="hebdo"
+          elif [ "$EVT" = "workflow_dispatch" ] && [ "${{ github.event.inputs.completer }}" = "true" ]; then
+            MODE="completer"
+          elif [ "$EVT" = "schedule" ] && [ "$CRON" = "45 8 * * 1-5" ]; then
+            if [ -f "$RAPPORT" ]; then
+              MODE="rien"
+              echo "Secours 08:45 : le rapport du ${JOUR} existe déjà (run de 08:15 passé) — rien à faire."
+            else
+              echo "Secours 08:45 : aucun rapport du ${JOUR} — le run de 08:15 n'a pas eu lieu, run complet."
+            fi
+          elif [ "$EVT" = "schedule" ] && [ "$CRON" != "15 8 * * 1-5" ]; then
+            if [ -f "$RAPPORT" ]; then
+              MODE="completer"
+            else
+              echo "Rattrapage : aucun rapport complet du ${JOUR} — run complet au lieu d'un complément."
+            fi
+          fi
+          echo "Événement : ${EVT} ${CRON} -> mode : ${MODE}"
+          echo "mode=${MODE}" >> "$GITHUB_OUTPUT"
+
       - uses: actions/setup-python@v5
+        if: steps.decision.outputs.mode != 'rien'
         with:
           python-version: "3.12"
           cache: pip
 
       - name: Installer les dépendances
+        if: steps.decision.outputs.mode != 'rien'
         run: pip install -r requirements.txt
 
       - name: Générer le rapport
+        if: steps.decision.outputs.mode != 'rien'
         env:
           TWELVE_DATA_API_KEY: ${{ secrets.TWELVE_DATA_API_KEY }}
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
@@ -68,16 +115,11 @@ jobs:
           NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-          ARGS=""
-          if [ "${{ github.event_name }}" = "schedule" ] && [ "${{ github.event.schedule }}" = "15 7 * * 0" ]; then
-            ARGS="--hebdo"
-          elif [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ github.event.inputs.hebdo }}" = "true" ]; then
-            ARGS="--hebdo"
-          elif [ "${{ github.event_name }}" = "schedule" ] && [ "${{ github.event.schedule }}" != "15 8 * * 1-5" ]; then
-            ARGS="--completer"
-          elif [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ github.event.inputs.completer }}" = "true" ]; then
-            ARGS="--completer"
-          fi
+          case "${{ steps.decision.outputs.mode }}" in
+            hebdo) ARGS="--hebdo" ;;
+            completer) ARGS="--completer" ;;
+            *) ARGS="" ;;
+          esac
           echo "Lancement : python orchestrateur.py $ARGS"
           python orchestrateur.py $ARGS
         # Le commit + push de docs/data, data/rapports, data/cache et data/hebdo
