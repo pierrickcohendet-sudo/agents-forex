@@ -105,8 +105,9 @@ class Indicateurs(unittest.TestCase):
 
     def test_matrice_complete_et_changements_de_signe(self):
         n = 400
-        base = quotidien(n, lambda i: 100 * math.exp(0.01 * math.sin(i * 1.3) + 0.002 * i))
-        h = h5.Historique.depuis_points({"FX_AUD": base, "sp500": base, "vix": quotidien(n, lambda i: 20 + math.cos(i * 0.7))})
+        ouvres = lambda pts: [(d, v) for d, v in pts if date.fromisoformat(d).weekday() < 5]   # format réel
+        base = ouvres(quotidien(n, lambda i: 100 * math.exp(0.01 * math.sin(i * 1.3) + 0.002 * i)))
+        h = h5.Historique.depuis_points({"FX_AUD": base, "sp500": base, "vix": ouvres(quotidien(n, lambda i: 20 + math.cos(i * 0.7)))})
         m = h5.matrice(h)
         self.assertEqual(m["matrice"]["AUD"]["S&P 500"], 1.0)
         self.assertIn("matrice_precedente", m)

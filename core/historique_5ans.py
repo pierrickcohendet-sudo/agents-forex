@@ -127,7 +127,8 @@ class Historique:
     def force(self, devise: str, technique: dict | None = None) -> list[tuple[str, float]]:
         """Série unique de la devise (dollars US par unité ; USD = indice synthétique) : Twelve Data pour toutes
         ses séances, Fed H.10 avant la première séance Twelve Data, remise à l'échelle au point de raccord."""
-        fed = self._usd_synthetique_fed() if devise == "USD" else self._fed(devise)
+        fed = [(d, v) for d, v in (self._usd_synthetique_fed() if devise == "USD" else self._fed(devise))
+               if date.fromisoformat(d).weekday() < 5]
         # jours ouvrés seulement : Twelve Data renvoie parfois le samedi avec la clôture du vendredi
         twelve = [(d, v) for d, v in self._twelve(devise, technique) if date.fromisoformat(d).weekday() < 5]
         if not twelve:

@@ -30,6 +30,8 @@ class CorrelationsCinqAns(unittest.TestCase):
                       "FX_AUD": jours(n, lambda i: prix[i] / 150),            # bouge exactement avec le S&P
                       "FX_JPY": jours(n, lambda i: 15000 / prix[i]),          # coté en JPY par USD : force = 1/x
                       "vix": jours(n, lambda i: 20 + bruit[i])}
+        # données au format réel : jours ouvrés seulement (comme Fed H.10 et FRED)
+        self.bruts = {k: [(d, v) for d, v in pts if date.fromisoformat(d).weekday() < 5] for k, pts in self.bruts.items()}
 
     def test_correlation_glissante_valeur_percentile_et_courbe(self):
         c = cr.calculer(self.bruts, date.today())
