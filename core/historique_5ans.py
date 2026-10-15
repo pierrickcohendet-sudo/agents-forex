@@ -128,7 +128,8 @@ class Historique:
         """Série unique de la devise (dollars US par unité ; USD = indice synthétique) : Twelve Data pour toutes
         ses séances, Fed H.10 avant la première séance Twelve Data, remise à l'échelle au point de raccord."""
         fed = self._usd_synthetique_fed() if devise == "USD" else self._fed(devise)
-        twelve = self._twelve(devise, technique)
+        # jours ouvrés seulement : Twelve Data renvoie parfois le samedi avec la clôture du vendredi
+        twelve = [(d, v) for d, v in self._twelve(devise, technique) if date.fromisoformat(d).weekday() < 5]
         if not twelve:
             return fed
         debut = twelve[0][0]
@@ -162,6 +163,18 @@ def rsi(points: list[tuple[str, float]], periode: int = 14) -> list[tuple[str, f
             mg = (mg * (periode - 1) + gains[i - 1]) / periode
             mp = (mp * (periode - 1) + pertes[i - 1]) / periode
         sortie.append((points[i][0], round(100.0 if mp == 0 else 100 - 100 / (1 + mg / mp), 2)))
+    return sortie
+
+
+def moyenne_mobile(points: list[tuple[str, float]], n: int) -> list[tuple[str, float]]:
+    """Moyenne mobile simple de n séances (même fenêtre que ecart_moyenne)."""
+    sortie, somme = [], 0.0
+    for i, (d, v) in enumerate(points):
+        somme += v
+        if i >= n:
+            somme -= points[i - n][1]
+        if i >= n - 1:
+            sortie.append((d, somme / n))
     return sortie
 
 

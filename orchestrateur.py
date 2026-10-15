@@ -38,7 +38,7 @@ from dotenv import load_dotenv
 from agents import (agent_critique, agent_dossier_hebdo, agent_engrenages, agent_redacteur, agent_strategiste, agent_synthese,
                     collecte_calendrier, collecte_flux, collecte_historiques, collecte_macro, collecte_news,
                     collecte_technique)
-from core import (collecte_cache, controle_qualite, dossiers, evaluation, hebdo, historique_5ans, impact, marche_taux, overrides, precedents,
+from core import (collecte_cache, controle_qualite, cours, dossiers, evaluation, hebdo, historique_5ans, impact, marche_taux, overrides, precedents,
                   publication_web,
                   registre_macro, saisies_manuelles, site_donnees, tableau_macro)
 from core.llm import creer_fournisseur, journal_appels, reinitialiser_journal
@@ -320,6 +320,8 @@ def main() -> int:
     dossiers_jour = etape("dossiers des engrenages (dossiers.json)", dossiers.ecrire, RACINE, historiques,
                           registre_macro.charger(donnees_dir / "registre_macro.json"), technique, config,
                           None, flux, news, dossier_rapports, defaut=None)
+    # Cours des 9 devises (page Devises) : même série que le RSI et la MM200 -> docs/data/cours.json
+    etape("cours des devises (cours.json)", cours.ecrire, RACINE, historique_5ans.charger(), technique, config, defaut=None)
     # Simulateur d'impact (§12, palier 11) : études d'événements sur 5 ans, sans LLM -> docs/data/impact.json
     etape("simulateur d'impact (impact.json)", impact.ecrire, RACINE, historique_5ans.charger(), technique,
           registre_macro.charger(donnees_dir / "registre_macro.json"), config, defaut=None)

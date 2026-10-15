@@ -67,6 +67,21 @@ class Harmonisation(unittest.TestCase):
         self.assertEqual(h5.harmoniser_technique({"devises": {"EUR": {"rsi": 50}}}, h5.Historique(None)), {})
 
 
+class Cours(unittest.TestCase):
+    def test_graphique_et_indicateurs_meme_moyenne_mobile_sans_week_end(self):
+        from core import cours
+        n = 1500
+        fed = [((date(2026, 10, 9) - timedelta(days=n - i)).isoformat(), 1.1 + 0.05 * math.sin(i / 25)) for i in range(n)]
+        h = h5.Historique.depuis_points({"FX_EUR": fed})
+        technique = {"devises": {"EUR": {"rsi": 50, "dernier": 1.1}},
+                     "historique": {"EUR": {"dates": ["2026-10-09", "2026-10-10", "2026-10-12"], "clotures": [1.1, 1.1, 1.12]}}}
+        self.assertNotIn("2026-10-10", [d for d, _ in h.force("EUR", technique)])        # samedi retiré à la source
+        h5.harmoniser_technique(technique, h)
+        c = cours.calculer(h, technique)["devises"]["EUR"]
+        self.assertAlmostEqual(c["mm200"][-1][1], technique["devises"]["EUR"]["mm200"], places=5)
+        self.assertLessEqual(len(c["points"]), 262)
+
+
 class Indicateurs(unittest.TestCase):
     def test_rsi_moyenne_volatilite_et_percentile(self):
         pts = quotidien(2000, lambda i: 100 * math.exp(0.01 * math.sin(i / 5)))

@@ -1,5 +1,6 @@
 /* Onglet Devises : une fiche par devise (9), analyse du jour, indicateurs, synthèse approfondie. */
 import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, DRAPEAUX , enBref } from "./commun.js";
+import { graphiqueSerie } from "./dossiers.js";
 
 const BIAIS = { haussier: "Haussier", baissier: "Baissier", neutre: "Neutre" };
 const PROFIL = { on: "Risk On", off: "Risk Off", neutre: "Neutre" };
@@ -210,6 +211,68 @@ function lignesTechniques(cellules, lignesRapport) {
   return sortie;
 }
 
+/* ------------------------------------------------ cartes graphiques (palier C) */
+const NOMS = { USD: "Dollar US", EUR: "Euro", GBP: "Livre sterling", JPY: "Yen", CHF: "Franc suisse", CAD: "Dollar canadien",
+               AUD: "Dollar australien", NZD: "Dollar néo-zélandais", CNY: "Yuan" };
+const COURT_ENG = { 1: "Thème", 2: "Monétaire", 3: "Données", 4: "Fiscale", 5: "Marchés", 6: "Géopolitique", 7: "Flux", 8: "Offre" };
+const virgule = (v, d = 1) => String(Number(v).toFixed(d)).replace(".", ",").replace("-", "−");
+function cellule(dos, n, devise, cle) {
+  return ((dos?.engrenages?.[String(n)]?.lignes || []).find(l => l.devise === devise)?.cellules || {})[cle] || null;
+}
+function indicateurCarte(libelle, texte, detail) {
+  const d = el("div", "dc-ind");
+  d.append(el("span", null, libelle), el("b", "tabulaire", texte ?? "n/d"));
+  if (detail) d.title = detail;
+  return d;
+}
+/* Les deux moteurs du jour : cases non nulles de la matrice d'impact, les plus fortes d'abord. */
+function moteurs(dos, devise) {
+  const ligne = (dos?.matrice_impact?.lignes || []).find(l => l.devise === devise);
+  if (!ligne) return [];
+  return ligne.cases.filter(c => c.valeur !== 0).sort((a, b) => Math.abs(b.valeur) - Math.abs(a.valeur)).slice(0, 2);
+}
+function carteDevise(d, dos, coursDev, cles, rapportDev) {
+  const c = el("article", "dc-carte");
+  const tete = el("div", "dc-tete");
+  tete.append(el("span", "dc-code", d), el("span", "dc-nom", NOMS[d]));
+  const score = rapportDev?.score_confluence;
+  tete.appendChild(el("span", "dc-score tabulaire", score === null || score === undefined ? "score n/d" : `${score}/100`));
+  const biais = cles?.cellules?.biais?.code;
+  if (biais) tete.appendChild(el("span", `dc-pastille ${biais === "haussier" ? "pos" : biais === "baissier" ? "neg" : ""}`, BIAIS[biais] || biais));
+  c.appendChild(tete);
+  if (coursDev?.points?.length) {
+    c.appendChild(graphiqueSerie({ titre: "Force de la devise, base 100", unite: null, base_100: true, base_commune: true,
+      courbes: [{ nom: d, points: coursDev.points, couleur: "var(--accent)" },
+                { nom: "MM200", points: coursDev.mm200 || [], couleur: "var(--texte-2)", pointille: true }],
+      source: `${coursDev.libelle} — ${coursDev.source || "série unique 5 ans"} ; moyenne mobile 200 jours en pointillé` }));
+  } else c.appendChild(el("p", "indisponible", `Graphique n/d : ${coursDev?.raison || "cours.json indisponible"}.`));
+  const ind = el("div", "dc-inds");
+  const rsi = cellule(dos, 7, d, "rsi"), mm = cellule(dos, 7, d, "ecart_mm200"), vol = cellule(dos, 7, d, "volatilite"),
+        cot = cellule(dos, 7, d, "cot"), taux = cellule(dos, 2, d, "taux_directeur");
+  ind.append(
+    indicateurCarte("RSI 14", rsi?.valeur !== undefined && rsi?.valeur !== null ? `${virgule(rsi.valeur)}${rsi.percentile_5a !== null && rsi.percentile_5a !== undefined ? ` · p${rsi.percentile_5a}` : ""}` : null, rsi?.source),
+    indicateurCarte("Écart MM200", mm?.valeur !== undefined && mm?.valeur !== null ? `${mm.valeur > 0 ? "+" : ""}${virgule(mm.valeur, 2)} %` : null, mm?.source),
+    indicateurCarte("Volatilité 20 j", vol?.valeur !== undefined && vol?.valeur !== null ? `${virgule(vol.valeur)} % · p${vol.percentile_5a ?? "—"}` : null, vol?.source),
+    indicateurCarte("COT", cot?.valeur !== undefined && cot?.valeur !== null ? `${cot.valeur > 0 ? "+" : ""}${Number(cot.valeur).toLocaleString("fr-FR")} · p52 ${cot.percentile_52s ?? "—"}` : (cot?.raison ? "n/d" : null),
+                    cot?.raison || (cot?.date ? `CFTC, au ${dateCourte(cot.date)}` : null)),
+    indicateurCarte("Taux directeur", taux?.valeur !== undefined && taux?.valeur !== null ? `${virgule(taux.valeur, 2)} %` : null, taux?.source));
+  c.appendChild(ind);
+  const mots = moteurs(dos, d);
+  const bloc = el("div", "dc-moteurs");
+  bloc.appendChild(el("span", "dc-lab", "Moteurs du jour"));
+  if (!mots.length) bloc.appendChild(el("p", "note", "Aucune case active dans la matrice d'impact aujourd'hui."));
+  for (const m of mots) {
+    const r = m.regles?.[0];
+    bloc.appendChild(el("p", `dc-moteur ${m.valeur > 0 ? "pos" : "neg"}`,
+      `${m.valeur > 0 ? "▲" : "▼"} ${m.engrenage}. ${COURT_ENG[m.engrenage]} : ${r ? `${r.regle.split(" ≥")[0].split(" ≤")[0]} (${r.chiffre})` : m.libelle}`));
+  }
+  c.appendChild(bloc);
+  const ouvrir = el("a", "dc-ouvrir", "Ouvrir l'analyse et les points de vigilance");
+  ouvrir.href = `#devises/${d}`;
+  c.appendChild(ouvrir);
+  return c;
+}
+
 export async function pageDevises(parametre) {
   const [rapport, site, dossiers] = await Promise.all([chargerJson("data/latest.json"), chargerJson("data/site.json"), chargerJson("data/dossiers.json")]);
   if (enErreur(rapport)) return [indisponible("Devises", rapport?.__erreur || "rapport du jour absent")];
@@ -222,6 +285,11 @@ export async function pageDevises(parametre) {
   for (const d of rapport.devises || []) { const a = el("a", null, `${DRAPEAUX[d.devise] || ""} ${d.devise}`); a.href = `#devises/${d.devise}`; nav.appendChild(a); }
   tete.appendChild(nav);
   const dos = enErreur(dossiers) ? null : dossiers;
-  return [tete, ...(rapport.devises || []).map(d => fiche({ ...d, indicateurs_tableau: lignesTechniques(techniqueUnique(dos, d.devise), d.indicateurs_tableau || []) },
+  const cours = await chargerJson("data/cours.json");   // chargé par cette page seulement
+  const grille = el("div", "dc-grille");
+  const parDevise = new Map((rapport.devises || []).map(d => [d.devise, d]));
+  for (const d of Object.keys(NOMS)) grille.appendChild(carteDevise(d, dos, enErreur(cours) ? null : cours.devises?.[d], cles.get(d), parDevise.get(d)));
+  const note = el("p", "note", "Indicateurs : série unique 5 ans (mêmes valeurs que le dossier 7 et le tableau de chaque fiche), survol pour la source. Moteurs : cases les plus fortes de la matrice d'impact. Aide à la décision, jamais un ordre.");
+  return [tete, grille, note, ...(rapport.devises || []).map(d => fiche({ ...d, indicateurs_tableau: lignesTechniques(techniqueUnique(dos, d.devise), d.indicateurs_tableau || []) },
                                                            cles.get(d.devise), sources, d.devise === parametre))];
 }

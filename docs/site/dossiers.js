@@ -167,7 +167,7 @@ const PERIODES = [[30, "30 j"], [90, "90 j"], [366, "1 an"]];
    curseur vertical + points + infobulle au survol ou au toucher, tracé animé (sauf prefers-reduced-motion),
    étiquettes en bout de ligne sans chevauchement, couleur fixe par entité. Séries « base 100 » rebasées au
    début de la période affichée. */
-function graphiqueSerie(g) {
+export function graphiqueSerie(g) {
   const cadre = el("figure", "graphique");
   cadre.appendChild(el("figcaption", null, `${g.titre}${g.unite ? ` (${g.unite})` : ""}`));
   if (!g.courbes?.length) { cadre.appendChild(el("p", "indisponible", `Indisponible : ${g.raison || "pas de données"}.`)); return cadre; }
@@ -195,10 +195,13 @@ function graphiqueSerie(g) {
   function dessiner() {
     barre.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(Number(b.dataset.jours) === periode)));
     const borne = periode ? fin - periode * JOUR_MS : -Infinity;
+    // Base 100 commune : toutes les courbes divisées par le 1er point visible de la 1re (cours et sa moyenne mobile)
+    const ref = g.base_commune ? (g.courbes[0].points.find(p => Date.parse(p[0]) >= borne) || [])[1] : null;
     const courbes = g.courbes.map((c, i) => {
       let pts = c.points.filter(p => Date.parse(p[0]) >= borne);
-      if (g.base_100 && pts.length && pts[0][1]) pts = pts.map(p => [p[0], Math.round(p[1] / pts[0][1] * 10000) / 100]);
-      return { nom: c.nom, couleur: couleur(c.nom, i), pts };
+      if (g.base_100 && ref) pts = pts.map(p => [p[0], Math.round(p[1] / ref * 10000) / 100]);
+      else if (g.base_100 && pts.length && pts[0][1]) pts = pts.map(p => [p[0], Math.round(p[1] / pts[0][1] * 10000) / 100]);
+      return { nom: c.nom, couleur: c.couleur || couleur(c.nom, i), pts, pointille: c.pointille };
     }).filter(c => c.pts.length >= 2);
     if (!courbes.length) { zone.replaceChildren(el("p", "indisponible", "Pas assez de points sur cette période.")); legende.replaceChildren(); return; }
     const L = 360, H = 170, m = { g: 38, d: 52, h: 10, b: 20 };
@@ -222,7 +225,9 @@ function graphiqueSerie(g) {
     svg.appendChild(s("text", { x: L - m.d, y: H - 5, "text-anchor": "end", class: "axe" }, dateCourte(new Date(t1).toISOString().slice(0, 10)).slice(0, 5)));
     courbes.forEach((c, i) => {
       const d = c.pts.map((p, k) => `${k ? "L" : "M"}${x(Date.parse(p[0])).toFixed(1)} ${y(p[1]).toFixed(1)}`).join(" ");
-      svg.appendChild(s("path", { d, fill: "none", stroke: c.couleur, "stroke-width": 1.8, "vector-effect": "non-scaling-stroke", class: "trace", pathLength: 1 }));
+      svg.appendChild(s("path", c.pointille
+        ? { d, fill: "none", stroke: c.couleur, "stroke-width": 1.5, "vector-effect": "non-scaling-stroke", "stroke-dasharray": "4 3" }
+        : { d, fill: "none", stroke: c.couleur, "stroke-width": 1.8, "vector-effect": "non-scaling-stroke", class: "trace", pathLength: 1 }));
       svg.appendChild(s("circle", { cx: x(Date.parse(derniers[i][0])), cy: y(derniers[i][1]), r: 2.6, fill: c.couleur }));
     });
     const ys = etiquettesSansChevauchement(derniers.map(p => y(p[1])), 11, m.h + 4, H - m.b);

@@ -536,3 +536,25 @@ svg .sc-scenario-point { fill: var(--alerte); stroke: var(--carte); stroke-width
 .sc-legende { margin: 0; }
 .sc-tag.neutre { color: var(--texte-2); }
 .sc-contre { border: 1px solid var(--alerte); color: var(--alerte); background: color-mix(in srgb, var(--alerte) 10%, var(--carte)); border-radius: var(--rayon); padding: 8px 12px; font-weight: 700; margin: 10px 0 0; }
+
+/* ------------------------------------------- page Devises : 9 cartes graphiques (palier C) */
+.dc-grille { display: grid; gap: 12px; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0 0 14px; }
+@media (max-width: 980px) { .dc-grille { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .dc-grille { grid-template-columns: minmax(0, 1fr); } }
+.dc-carte { background: var(--carte); border: 1px solid var(--trait); border-radius: var(--rayon); padding: 12px 14px; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.dc-tete { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.dc-code { font: 700 1.2rem var(--serif); }
+.dc-nom { color: var(--texte-2); font-size: 13px; flex: 1; min-width: 0; }
+.dc-score { font-weight: 700; }
+.dc-pastille { font-size: 12px; font-weight: 700; border: 1px solid currentColor; border-radius: 999px; padding: 0 8px; color: var(--texte-2); }
+.dc-pastille.pos { color: var(--positif); } .dc-pastille.neg { color: var(--negatif); }
+.dc-carte figure.graphique { padding: 6px; background: var(--carte-2); }
+.dc-carte figure.graphique figcaption { font-size: 12px; }
+.dc-inds { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 6px; }
+.dc-ind { background: var(--carte-2); border-radius: var(--rayon); padding: 6px 8px; display: flex; flex-direction: column; min-width: 0; }
+.dc-ind span { font-size: 12px; color: var(--texte-2); }
+.dc-ind b { font-size: 13px; overflow-wrap: anywhere; }
+.dc-lab { font-size: 12px; font-weight: 700; color: var(--texte-2); text-transform: uppercase; letter-spacing: .05em; }
+.dc-moteur { margin: 2px 0 0; font-size: 13px; }
+.dc-moteur.pos { color: var(--positif); } .dc-moteur.neg { color: var(--negatif); }
+.dc-ouvrir { font-size: 13px; margin-top: auto; }
