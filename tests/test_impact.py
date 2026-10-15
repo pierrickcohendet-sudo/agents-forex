@@ -136,6 +136,20 @@ class PublicationsLongues(unittest.TestCase):
         self.assertEqual(len(r["JPY"]["reponses_tous"]), 1)
 
 
+class LectureClassique(unittest.TestCase):
+    def test_comparaison_du_signe_mesure(self):
+        sortie = {"couples": {
+            "vix|JPY": {"scenarios": {"hausse|1": {"mois": {"mediane": -0.78}}, "baisse|1": {"mois": {"mediane": -0.3}}}},
+            "vix|USD": {"scenarios": {"hausse|1": {"mois": {"mediane": 0.41}}}},
+            "vix|CNY": {"scenarios": {"hausse|1": {"mois": {"mediane": 0.15}}}}}}
+        impact.comparer_lecture_classique(sortie, CONFIG)
+        c = sortie["couples"]
+        self.assertEqual(c["vix|JPY"]["scenarios"]["hausse|1"]["mois"]["lecture_classique"], {"attendu": 1, "conforme": False})
+        self.assertEqual(c["vix|JPY"]["scenarios"]["baisse|1"]["mois"]["lecture_classique"], {"attendu": -1, "conforme": True})
+        self.assertTrue(c["vix|USD"]["scenarios"]["hausse|1"]["mois"]["lecture_classique"]["conforme"])
+        self.assertIsNone(c["vix|CNY"]["scenarios"]["hausse|1"]["mois"]["lecture_classique"]["attendu"])   # pas de lecture classique
+
+
 class SourceUnique(unittest.TestCase):
     def test_meme_sensibilite_que_le_tableau_des_consequences(self):
         n = 5 * 365 + 40

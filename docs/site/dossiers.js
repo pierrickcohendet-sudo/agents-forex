@@ -473,6 +473,19 @@ function tableConsequences(lignes) {
   return cadre;
 }
 /* Tableau des conséquences : trié par sensibilité absolue décroissante ; lignes sans sens attendu regroupées et repliées. */
+/* Lien vers le simulateur : « exact » seulement si l'indicateur du simulateur EST le moteur du tableau ;
+   « proche » sinon (nommé) ; pas de bouton s'il n'existe aucun indicateur raisonnablement proche. */
+const SIMULATEUR = { 2: ["us2a", "Rendement 2 ans US", false], 3: ["cpi_core_us", "CPI core US (variation de la publication)", false],
+                     4: ["us10a", "Rendement 10 ans US", false], 5: ["vix", "VIX", true], 6: ["brent", "Brent", true],
+                     8: ["brent", "Brent", false] };
+function boutonSimulateur(numero) {
+  const x = SIMULATEUR[numero];
+  if (!x) return null;
+  const lien = el("a", "bouton simuler", x[2] ? "Simuler ce moteur" : `Simuler un indicateur proche : ${x[1]}`);
+  lien.href = `#scenarios/i=${x[0]}`;
+  return lien;
+}
+
 function tableauConsequences(c, numero) {
   if (!c) return null;
   const bloc = el("div", "consequences");
@@ -480,6 +493,7 @@ function tableauConsequences(c, numero) {
   const m = c.moteur || {};
   if (m.raison) {
     bloc.appendChild(el("p", "indisponible", `Moteur : ${m.libelle}. n/d : ${m.raison}.`));
+    const b0 = boutonSimulateur(numero); if (b0) bloc.appendChild(b0);
     bloc.appendChild(el("p", "note", c.note));
     return bloc;
   }
@@ -497,11 +511,7 @@ function tableauConsequences(c, numero) {
   }
   bloc.appendChild(el("p", "note", "Aujourd'hui : Soutien ou Pression seulement si la borne basse de Wilson à 90 % de la part de cas favorables dépasse 50 % ; sinon « Indice faible » avec le nombre de cas ; « Neutre » si le moteur reste dans ±1 écart-type. Raison complète au survol ou au focus de la pastille."));
   bloc.appendChild(el("p", "note", `${c.methode} ${c.note}`));
-  if (numero) {
-    const lien = el("a", "bouton simuler", "Simuler ce moteur");
-    lien.href = `#scenarios/g=${numero}`;
-    bloc.appendChild(lien);
-  }
+  const b = boutonSimulateur(numero); if (b) bloc.appendChild(b);
   return bloc;
 }
 

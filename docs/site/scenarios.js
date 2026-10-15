@@ -215,10 +215,23 @@ function detail(imp, st, ind, devise) {
     hz.appendChild(bte);
   }
   noeuds.push(el("h3", null, "Même scénario sur les trois horizons"), hz);
+  // Mécanisme pédagogique : affiché tel quel SEULEMENT si la médiane mesurée suit la lecture classique (comparaison faite en Python)
+  const lc = r?.lecture_classique || {};
   const meca = el("div", "sc-boite sc-meca");
-  meca.appendChild(el("strong", null, `Le mécanisme, en trois temps${st.sens === "baisse" ? " (décrit pour une hausse : lis-le à l'envers)" : ""}`));
-  const ol = el("ol"); for (const t of MECANISMES[ind.id] || []) ol.appendChild(el("li", null, t)); meca.appendChild(ol);
-  meca.appendChild(el("p", "note", `${devise} en particulier : ${NOTES_DEVISE[devise]}`));
+  if (lc.conforme === true) {
+    meca.appendChild(el("strong", null, `Le mécanisme, en trois temps${st.sens === "baisse" ? " (décrit pour une hausse : lis-le à l'envers)" : ""}`));
+    const ol = el("ol"); for (const t of MECANISMES[ind.id] || []) ol.appendChild(el("li", null, t)); meca.appendChild(ol);
+    meca.appendChild(el("p", "note", `${devise} en particulier : ${NOTES_DEVISE[devise]}`));
+  } else if (lc.conforme === false) {
+    noeuds.push(el("p", "sc-contre", "Ce résultat va à l'encontre de la lecture classique : ne pas appliquer le mécanisme."));
+    meca.appendChild(el("strong", null, "Lecture"));
+    meca.appendChild(el("p", null, `La lecture classique attend ${lc.attendu > 0 ? "une hausse" : "une baisse"} de ${devise} dans ce scénario ; sur les épisodes passés, la médiane ${LIB_HZ[st.hz]} est de signe opposé. Seul le résultat mesuré est montré ici, avec sa fourchette et son nombre de cas.`));
+  } else {
+    meca.appendChild(el("strong", null, "Lecture"));
+    meca.appendChild(el("p", null, lc.attendu === null || lc.attendu === undefined
+      ? `Pas de lecture classique établie pour ${devise} face à cet indicateur : seul le résultat mesuré compte.`
+      : "Médiane nulle ou indisponible : rien à comparer avec la lecture classique."));
+  }
   if (x?.couple?.sensibilite !== null && x?.couple?.sensibilite !== undefined) meca.appendChild(el("p", "note",
     `Sensibilité ${ind.type === "publication" ? "(corrélation entre la variation publiée et la réaction du jour)" : "(corrélation des variations sur 1 mois, la même que dans le tableau des conséquences)"} : ${fm(x.couple.sensibilite, 2, "")}.`));
   noeuds.push(meca);

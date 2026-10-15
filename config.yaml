@@ -683,3 +683,23 @@ matrice_impact:
         cas:
           - { si: ["<=", -5], effets: { CAD: 1 } }
           - { si: [">=", 5], effets: { CAD: -1 } }
+
+# --- Simulateur d'impact : lecture classique (refonte §12) ---------------------
+# Sens attendu « dans les manuels » pour une HAUSSE de l'indicateur (une baisse inverse
+# le signe) : +1 la devise s'apprécie, -1 elle se déprécie ; devise absente = pas de
+# lecture classique. Python compare le signe de la médiane mesurée à cette lecture :
+# le mécanisme pédagogique n'est affiché que si les deux concordent.
+simulateur:
+  lecture_classique:
+    us2a:         { USD: 1, EUR: -1, GBP: -1, JPY: -1, CHF: -1, CAD: -1, AUD: -1, NZD: -1, CNY: -1 }
+    us10a:        { USD: 1, EUR: -1, GBP: -1, JPY: -1, CHF: -1, CAD: -1, AUD: -1, NZD: -1, CNY: -1 }
+    oblig_us:     { USD: -1, EUR: 1, GBP: 1, JPY: 1, CHF: 1, CAD: 1, AUD: 1, NZD: 1, CNY: 1 }
+    fed:          { USD: 1, EUR: -1, GBP: -1, JPY: -1, CHF: -1, CAD: -1, AUD: -1, NZD: -1, CNY: -1 }
+    pib_us:       { USD: 1, EUR: -1, GBP: -1, JPY: -1, CHF: -1 }
+    cpi_core_us:  { USD: 1, EUR: -1, GBP: -1, JPY: -1, CHF: -1, AUD: -1, NZD: -1 }
+    cpi_us:       { USD: 1, EUR: -1, JPY: -1 }
+    vix:          { USD: 1, EUR: -1, GBP: -1, JPY: 1, CHF: 1, CAD: -1, AUD: -1, NZD: -1 }
+    dollar_large: { USD: 1, EUR: -1, GBP: -1, JPY: -1, CHF: -1, CAD: -1, AUD: -1, NZD: -1, CNY: -1 }
+    brent:        { CAD: 1, JPY: -1, EUR: -1 }
+    or:           { USD: -1, CHF: 1, AUD: 1 }
+    sp500:        { USD: -1, JPY: -1, CHF: -1, GBP: 1, CAD: 1, AUD: 1, NZD: 1 }

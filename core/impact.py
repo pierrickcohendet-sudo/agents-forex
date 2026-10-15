@@ -317,11 +317,35 @@ def calculer(h: h5m.Historique, technique: dict | None = None, registre: dict | 
     return sortie
 
 
+def comparer_lecture_classique(sortie: dict, config: dict | None) -> None:
+    """Pour chaque scénario et horizon : le signe de la médiane mesurée est-il celui de la lecture classique
+    (config.yaml, simulateur.lecture_classique ; une baisse inverse le signe) ? Le site n'affiche le mécanisme
+    pédagogique que si oui ; sinon un avertissement « à l'encontre de la lecture classique »."""
+    lectures = (((config or {}).get("simulateur") or {}).get("lecture_classique")) or {}
+    for cle, couple in (sortie.get("couples") or {}).items():
+        ind, devise = cle.split("|")
+        classique = (lectures.get(ind) or {}).get(devise)
+        for jeu in ("scenarios", "scenarios_5ans"):
+            for nom, sc in (couple.get(jeu) or {}).items():
+                attendu = None if not classique else classique * (1 if nom.startswith("hausse") else -1)
+                for hz in HORIZONS:
+                    r = sc.get(hz) or {}
+                    if not r:
+                        continue
+                    if attendu is None:
+                        r["lecture_classique"] = {"attendu": None, "conforme": None}
+                    elif r.get("mediane") in (None, 0):
+                        r["lecture_classique"] = {"attendu": attendu, "conforme": None}
+                    else:
+                        r["lecture_classique"] = {"attendu": attendu, "conforme": (r["mediane"] > 0) == (attendu > 0)}
+
+
 def ecrire(racine: str | Path, h: h5m.Historique, technique: dict | None, registre: dict | None, config: dict) -> dict | None:
     """Écrit docs/data/impact.json ; None en cas d'échec (jamais d'exception)."""
     try:
         from core import impact_long
         donnees = calculer(h, technique, registre, config, long=impact_long.charger())
+        comparer_lecture_classique(donnees, config)
         chemin = Path(racine) / config.get("publication_web", {}).get("dossier_docs", "docs") / "data" / "impact.json"
         chemin.write_text(json.dumps(donnees, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
         return donnees
