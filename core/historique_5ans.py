@@ -29,7 +29,8 @@ SERIES = {**{f"FX_{d}": f"FRED (Fed H.10, {d})" for d in DEVISES if d != "USD"},
           "dollar_large": "FRED (DTWEXBGS, indice dollar large de la Fed)", "vix": "FRED (VIXCLS)",
           "sp500": "FRED (SP500)", "brent": "FRED (DCOILBRENTEU)", "wti": "FRED (DCOILWTICO)",
           "indice_or": "FRED (NASDAQQGLDI, indice or proxy)", "USD_10a": "FRED (DGS10)", "USD_2a": "FRED (DGS2)",
-          "USD_taux_effectif": "FRED (DFF)", "USD_prime_terme": "FRED (THREEFYTP10, prime de terme 10 ans)"}
+          "USD_taux_effectif": "FRED (DFF)", "USD_prime_terme": "FRED (THREEFYTP10, prime de terme 10 ans)",
+          "oblig_us_tlt": "Twelve Data (TLT, ETF obligations d'État US 20 ans et plus)"}
 EN_POINTS = {"USD_10a", "USD_2a", "USD_taux_effectif", "USD_prime_terme"}
 SOURCE_INDICATEURS = ("Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la "
                       "profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition "

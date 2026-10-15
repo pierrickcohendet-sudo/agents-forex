@@ -143,6 +143,17 @@ def _boj(code: str, debut: date) -> list[tuple[str, float]]:
             for d, v in zip(valeurs["SURVEY_DATES"], valeurs["VALUES"]) if v is not None]
 
 
+def _twelve(symbole: str, debut: date, cle: str) -> list[tuple[str, float]]:
+    """Clôtures quotidiennes Twelve Data (une requête), ex. TLT : ETF d'obligations d'État US à long terme."""
+    jours = (date.today() - debut).days
+    rep = _get("https://api.twelvedata.com/time_series", symbol=symbole, interval="1day",
+               outputsize=min(5000, int(jours * 5 / 7) + 20), apikey=cle)
+    donnees = rep.json()
+    if donnees.get("status") != "ok":
+        raise RuntimeError(f"Twelve Data {symbole} : {donnees.get('message', 'réponse invalide')}")
+    return sorted((v["datetime"][:10], float(v["close"])) for v in donnees.get("values", []) if v.get("close"))
+
+
 def _eia(series: list[str], cle: str) -> dict[str, list[tuple[str, float]]]:
     """Stocks / production hebdomadaires EIA sur 6 ans (une requête pour toutes les séries)."""
     rep = _get("https://api.eia.gov/v2/petroleum/sum/sndw/data/", api_key=cle, frequency="weekly", **{
@@ -200,16 +211,19 @@ def collecter(config: dict) -> dict:
                     source, unite, freq)
     else:
         resultat["erreurs"].append("FRED_API_KEY absente : séries FRED non collectées")
-    try:   # historique quotidien 5 ans (fenêtre glissante, taille stable) : RSI, volatilité, corrélations…
-        resultat["historique_5ans"] = historique_5ans.enregistrer(bruts)
-    except Exception as exc:  # noqa: BLE001 — n'affecte que les calculs longs
-        resultat["erreurs"].append(masquer_secrets(f"historique quotidien 5 ans : {exc}")[:200])
 
     # Taux au jour le jour OFFICIELS, quotidiens : Banque du Japon (call rate non garanti) et
     # Banque d'Angleterre (SONIA) — historique du taux directeur effectif, comme DFF pour l'USD.
     ajouter("JPY_taux_effectif", lambda: _boj("STRDCLUCON", debut),
             "Banque du Japon (STRDCLUCON, call rate non garanti au jour le jour)", "%", "quotidien")
     ajouter("GBP_taux_effectif", lambda: _boe("IUDSOIA", debut), "Banque d'Angleterre (IUDSOIA, SONIA)", "%", "quotidien")
+    # Obligations d'État US à long terme (prix) : ETF TLT, Twelve Data (simulateur d'impact)
+    cle_twelve = os.environ.get("TWELVE_DATA_API_KEY", "").strip()
+    if cle_twelve:
+        ajouter("oblig_us_tlt", lambda: _twelve("TLT", aujourdhui - timedelta(days=historique_5ans.FENETRE_JOURS), cle_twelve),
+                "Twelve Data (TLT, ETF obligations d'État US 20 ans et plus)", "$", "quotidien")
+    else:
+        resultat["erreurs"].append("TWELVE_DATA_API_KEY absente : obligations US (TLT) non collectées")
     # Pétrole : stocks commerciaux de brut et production US, hebdomadaires sur 6 ans (moyenne 5 ans)
     cle_eia = os.environ.get("EIA_API_KEY", "").strip() or "DEMO_KEY"
     try:
@@ -236,5 +250,9 @@ def collecter(config: dict) -> dict:
             if lecteur:
                 ajouter(f"{devise}_{maturite}", lambda s=spec, l=lecteur: l(s), spec.get("source", spec.get("type")),
                         "%", "mensuel" if spec.get("type") == "fred_mensuel" else "quotidien")
+    try:   # historique quotidien 5 ans (fenêtre glissante, taille stable) : RSI, volatilité, corrélations…
+        resultat["historique_5ans"] = historique_5ans.enregistrer(bruts)
+    except Exception as exc:  # noqa: BLE001 — n'affecte que les calculs longs
+        resultat["erreurs"].append(masquer_secrets(f"historique quotidien 5 ans : {exc}")[:200])
     log.info("Historiques : %d série(s), %d erreur(s)", len(resultat["series"]), len(resultat["erreurs"]))
     return resultat

@@ -18,7 +18,7 @@ import math
 import statistics
 from datetime import date, timedelta
 
-from core import historique_5ans as h5m
+from core import historique_5ans as h5m, impact
 
 HORIZON_JOURS = 30
 ESPACEMENT_JOURS = 30
@@ -53,25 +53,7 @@ MOTEURS_ND = {1: ("score de confluence USD", "scores archivés depuis août 2026
 
 
 # ----------------------------------------------------------------- séries
-class _Serie:
-    """Série datée avec lecture de la dernière valeur connue à une date (recherche dichotomique)."""
-
-    def __init__(self, points: list[tuple[str, float]], unite: str):
-        self.points = sorted((str(d)[:10], float(v)) for d, v in points if v is not None)
-        self.dates = [d for d, _ in self.points]
-        self.unite = unite   # "%" : variation logarithmique en % ; "pb" ou "pts" : différence
-
-    def a(self, jour: str) -> float | None:
-        i = bisect.bisect_right(self.dates, jour)
-        return self.points[i - 1][1] if i else None
-
-    def variation(self, debut: str, fin: str) -> float | None:
-        a, b = self.a(debut), self.a(fin)
-        if a is None or b is None:
-            return None
-        if self.unite == "%":
-            return math.log(b / a) * 100 if a > 0 and b > 0 else None
-        return (b - a) * (100 if self.unite == "pb" else 1)
+_Serie = impact.Serie   # même classe que le simulateur d'impact (une seule source de vérité)
 
 
 def _plus(jour: str, jours: int) -> str:
@@ -119,8 +101,8 @@ def moteurs(h: h5m.Historique, historiques: dict) -> dict:
 
 def actif(h: h5m.Historique, historiques: dict, technique: dict | None, nom: str) -> tuple[_Serie | None, str | None]:
     if nom in DEVISES:
-        pts = h.force(nom, technique)
-        return (_Serie(pts, "%"), None) if pts else (None, "série de change 5 ans indisponible")
+        s = impact.serie_devise(h, nom, technique)
+        return (s, None) if s.points else (None, "série de change 5 ans indisponible")
     if nom in MARCHES:
         cle, unite = MARCHES[nom]
         pts = h.serie(cle)
@@ -143,16 +125,8 @@ def _mensuels(debut: str, fin: str) -> list[str]:
 
 
 def ligne_actif(moteur: _Serie, cible: _Serie, debut: str, fin: str) -> dict:
-    # Sensibilité : variations sur 1 mois, points non chevauchants
-    paires = []
-    for j in _mensuels(debut, fin)[1:]:
-        dm, da = moteur.variation(_plus(j, -HORIZON_JOURS), j), cible.variation(_plus(j, -HORIZON_JOURS), j)
-        if dm is not None and da is not None:
-            paires.append((dm, da))
-    try:
-        sensibilite = round(statistics.correlation([p[0] for p in paires], [p[1] for p in paires]), 2) if len(paires) >= 12 else None
-    except statistics.StatisticsError:
-        sensibilite = None
+    # Sensibilité : fonction PARTAGÉE avec le simulateur d'impact (core/impact.py), même chiffre des deux côtés
+    sensibilite, n_mois = impact.sensibilite(moteur, cible, debut, fin, HORIZON_JOURS)
     # Épisodes : variation du moteur sur 1 mois d'au moins 1 écart-type, espacés de 30 jours, suite connue
     variations = [(d, moteur.variation(_plus(d, -HORIZON_JOURS), d)) for d in moteur.dates if debut <= d <= fin]
     variations = [(d, v) for d, v in variations if v is not None]
@@ -182,7 +156,7 @@ def ligne_actif(moteur: _Serie, cible: _Serie, debut: str, fin: str) -> dict:
         signe = 1 if sensibilite > 0 else -1
         bons = sum(1 for x in hausses if x * signe > 0) + sum(1 for x in baisses if x * signe < 0)
         fiab = {"part": round(100 * bons / n), "n": n, "bons": bons, "borne_wilson_90": borne_basse_wilson(bons, n), "raison": None}
-    return {"sensibilite": sensibilite, "n_mois": len(paires), "si_hausse": mediane(hausses), "si_baisse": mediane(baisses),
+    return {"sensibilite": sensibilite, "n_mois": n_mois, "si_hausse": mediane(hausses), "si_baisse": mediane(baisses),
             "fiabilite": fiab, "sigma_moteur": round(sigma, 2)}
 
 
