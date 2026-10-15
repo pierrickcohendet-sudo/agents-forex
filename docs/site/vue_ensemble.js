@@ -62,14 +62,94 @@ export function selecteurPeriode(active) {
   return c;
 }
 
-function bandeau(v) {
+/* ------------------------------------------------ roue des 8 engrenages (palier 8) */
+const COURTS_ROUE = ["Thème", "Monétaire", "Données", "Fiscale", "Marchés", "Géopolitique", "Flux", "Offre"];
+const COULEUR_DIR = { up: "var(--positif)", dn: "var(--negatif)", nd: "var(--neutre)" };
+const polaire = (cx, cy, r, a) => [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+function arc(cx, cy, r0, r1, a0, a1) {
+  const [x0, y0] = polaire(cx, cy, r1, a0), [x1, y1] = polaire(cx, cy, r1, a1), [x2, y2] = polaire(cx, cy, r0, a1), [x3, y3] = polaire(cx, cy, r0, a0);
+  const g = a1 - a0 > Math.PI ? 1 : 0;
+  return `M${x0.toFixed(1)} ${y0.toFixed(1)}A${r1} ${r1} 0 ${g} 1 ${x1.toFixed(1)} ${y1.toFixed(1)}L${x2.toFixed(1)} ${y2.toFixed(1)}A${r0} ${r0} 0 ${g} 0 ${x3.toFixed(1)} ${y3.toFixed(1)}Z`;
+}
+function texteSvg(attrs, contenu) { const t = svgEl("text", attrs); t.textContent = contenu; return t; }
+function svgEl(tag, attrs) { const n = document.createElementNS(SVG, tag); for (const [k, v] of Object.entries(attrs || {})) n.setAttribute(k, v); return n; }
+function coupe(texte, max) {
+  const mots = String(texte || "").split(" "), lignes = [""];
+  for (const m of mots) { if ((lignes[lignes.length - 1] + " " + m).trim().length > max) lignes.push(m); else lignes[lignes.length - 1] = (lignes[lignes.length - 1] + " " + m).trim(); }
+  return lignes.slice(0, 3);
+}
+
+/* Roue : un secteur par engrenage ; couleur = direction (calcul Python), épaisseur = conviction (1 à 3), hachures grises
+   = aucune direction déterminée. Centre : thème du jour (« Signaux mixtes » sous le seuil) et cohérence. Survol ou focus :
+   le centre décrit l'engrenage ; clic ou Entrée : ouvre son dossier. */
+function roue(v, choisir) {
+  const W = 500, H = 420, cx = 250, cy = 210, r0 = 88, pas = 21;
+  const svg = svgEl("svg", { viewBox: `0 0 ${W} ${H}`, class: "roue", role: "group", "aria-label": "Roue des 8 engrenages : direction et conviction de chacun ; touchez un secteur pour ouvrir son dossier" });
+  const defs = svgEl("defs");
+  const motif = svgEl("pattern", { id: "hachures-roue", width: 7, height: 7, patternUnits: "userSpaceOnUse", patternTransform: "rotate(45)" });
+  motif.append(svgEl("rect", { width: 7, height: 7, fill: "var(--carte-2)" }), svgEl("line", { x1: 0, y1: 0, x2: 0, y2: 7, stroke: "var(--neutre)", "stroke-width": 2.4 }));
+  defs.appendChild(motif); svg.appendChild(defs);
+  for (const rr of [r0 + pas, r0 + 2 * pas, r0 + 3 * pas]) svg.appendChild(svgEl("circle", { cx, cy, r: rr, fill: "none", stroke: "var(--trait)", "stroke-dasharray": "2 5" }));
+  const centre = svgEl("g", { class: "roue-centre", "aria-live": "polite" });
+  const t = v.theme || {}, coh = t.coherence;
+  function centreTheme() {
+    centre.replaceChildren();
+    const impose = t.titre_impose;
+    centre.appendChild(texteSvg({ x: cx, y: cy - 36, "text-anchor": "middle", class: "roue-surtitre" }, "THÈME DU JOUR"));
+    coupe(t.titre || "Thème non déterminé", 14).forEach((l, i) => centre.appendChild(texteSvg({ x: cx, y: cy - 14 + i * 18, "text-anchor": "middle", class: `roue-titre${impose ? " impose" : ""}` }, l)));
+    centre.appendChild(texteSvg({ x: cx, y: cy + 26, "text-anchor": "middle", class: "roue-sous" }, t.direction?.libelle || ""));
+    if (coh) {
+      centre.appendChild(texteSvg({ x: cx, y: cy + 42, "text-anchor": "middle", class: "roue-sous" }, "cohérence"));
+      centre.appendChild(texteSvg({ x: cx, y: cy + 57, "text-anchor": "middle", class: "roue-sous" }, coh.libelle));
+    }
+  }
+  function centreEngrenage(c) {
+    centre.replaceChildren();
+    const d = c.direction || {};
+    centre.appendChild(texteSvg({ x: cx, y: cy - 30, "text-anchor": "middle", class: "roue-surtitre" }, `ENGRENAGE ${c.numero}`));
+    coupe(c.titre, 14).forEach((l, i) => centre.appendChild(texteSvg({ x: cx, y: cy - 8 + i * 18, "text-anchor": "middle", class: "roue-titre" }, l)));
+    const ct = texteSvg({ x: cx, y: cy + 32, "text-anchor": "middle", class: "roue-sous" }, d.libelle || "non déterminée");
+    ct.setAttribute("fill", COULEUR_DIR[d.classe] || "var(--texte-2)");
+    centre.appendChild(ct);
+    centre.appendChild(texteSvg({ x: cx, y: cy + 50, "text-anchor": "middle", class: "roue-sous" }, `conviction ${CONVICTION[d.conviction || 0]}`));
+  }
+  (v.cartes || []).forEach((c, i) => {
+    const d = c.direction || {};
+    const sansDirection = !d.dollar && !d.risque;
+    const a0 = -Math.PI / 2 + i * Math.PI / 4 + 0.035, a1 = -Math.PI / 2 + (i + 1) * Math.PI / 4 - 0.035, am = (a0 + a1) / 2;
+    const r1 = r0 + pas * Math.max(1, d.conviction || 0);
+    const g = svgEl("g", { class: "roue-secteur", tabindex: 0, role: "button",
+      "aria-label": `Engrenage ${c.numero}, ${c.titre} : ${d.libelle || "direction non déterminée"}, conviction ${CONVICTION[d.conviction || 0]}. Ouvrir le dossier.` });
+    g.style.animationDelay = `${i * 60}ms`;
+    g.appendChild(svgEl("path", { d: arc(cx, cy, r0, r1, a0, a1), fill: sansDirection ? "url(#hachures-roue)" : (COULEUR_DIR[d.classe] || "var(--neutre)"),
+                                 stroke: "var(--carte)", "stroke-width": 1.5, class: sansDirection ? "sans-direction" : "" }));
+    const [nx, ny] = polaire(cx, cy, (r0 + r1) / 2, am);
+    g.appendChild(texteSvg({ x: nx, y: ny + 5, "text-anchor": "middle", class: `roue-num${sansDirection ? " sombre" : ""}` }, String(c.numero)));
+    const [lx, ly] = polaire(cx, cy, r0 + 3 * pas + 16, am), cos = Math.cos(am);
+    g.appendChild(texteSvg({ x: lx, y: ly + 4, "text-anchor": Math.abs(cos) < 0.2 ? "middle" : cos > 0 ? "start" : "end", class: "roue-etiquette" }, COURTS_ROUE[i]));
+    g.addEventListener("mouseenter", () => centreEngrenage(c)); g.addEventListener("focus", () => centreEngrenage(c));
+    g.addEventListener("mouseleave", centreTheme); g.addEventListener("blur", centreTheme);
+    g.addEventListener("click", () => choisir(c.numero, true));
+    g.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); choisir(c.numero, true); } });
+    svg.appendChild(g);
+  });
+  centreTheme();
+  svg.appendChild(centre);
+  const cadre = el("div", "roue-cadre");
+  cadre.appendChild(svg);
+  cadre.appendChild(el("p", "roue-legende", "Vert : soutien · rouge : pression ou risk off · gris : neutre · hachures : aucune direction déterminée · épaisseur : conviction · touchez un secteur"));
+  return cadre;
+}
+
+function bandeau(v, choisir) {
   const t = v.theme || {};
-  const c = el("section", "carte eg-bandeau");
+  const c = el("div", "eg-bandeau");
+  const enveloppe = x => { const h = el("section", "carte eg-hero"); h.append(roue(v, choisir), x); return h; };
   c.appendChild(el("div", "eg-sur-titre", `THÈME DU JOUR${t.date_rapport ? ` · ${dateCourte(t.date_rapport)}` : ""}`));
   if (!t.titre) {
     c.appendChild(el("h2", "eg-theme", "Thème non déterminé"));
     c.appendChild(el("p", "indisponible", `Indisponible : ${t.raison || "synthèse absente"}.`));
-    return c;
+    return enveloppe(c);
   }
   c.appendChild(el("h2", "eg-theme", t.titre));
   if (t.titre_impose) c.appendChild(el("p", "eg-impose", "Titre imposé par le calcul : moins de 3 engrenages vont dans le sens du thème, aucun thème fort n'est annoncé."));
@@ -99,7 +179,7 @@ function bandeau(v) {
   stats.appendChild(boite("Conviction", points(d.conviction || 0), el("span", "eg-petit", CONVICTION[d.conviction || 0])));
   c.appendChild(stats);
   if (coh) c.appendChild(el("p", "note", `Cohérence : ${coh.regle}`));
-  return c;
+  return enveloppe(c);
 }
 
 function carte(c, actif, choisir) {
@@ -220,7 +300,7 @@ export function vueEnsemble(v, actif, choisir, matrice = null) {
   grille.append(...cartes);
   const sec = (titre, sous) => { const d = el("div", "eg-section"); d.append(el("h2", null, titre), el("span", null, sous)); return d; };
   return {
-    noeuds: [bandeau(v), sec("Vue d'ensemble", "un coup d'œil sur les 8 moteurs · touchez une carte pour ouvrir son dossier"), grille,
+    noeuds: [bandeau(v, choisir), sec("Vue d'ensemble", "un coup d'œil sur les 8 moteurs · touchez une carte pour ouvrir son dossier"), grille,
              sec("Chaînes de transmission", "comment les engrenages s'entraînent aujourd'hui"), chaines(v),
              sec("Impact sur chaque devise", "les 8 engrenages croisés avec les 9 devises · touchez une case pour voir la règle"),
              matriceImpact(matrice)],

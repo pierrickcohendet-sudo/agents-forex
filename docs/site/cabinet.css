@@ -558,3 +558,30 @@ svg .sc-scenario-point { fill: var(--alerte); stroke: var(--carte); stroke-width
 .dc-moteur { margin: 2px 0 0; font-size: 13px; }
 .dc-moteur.pos { color: var(--positif); } .dc-moteur.neg { color: var(--negatif); }
 .dc-ouvrir { font-size: 13px; margin-top: auto; }
+
+/* ------------------------------------------- roue des 8 engrenages (palier 8) */
+.eg-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 18px; align-items: center; padding: 18px 20px; }
+@media (max-width: 880px) { .eg-hero { grid-template-columns: minmax(0, 1fr); } }
+.eg-hero .eg-bandeau { padding: 0; }
+.roue-cadre { max-width: 500px; margin: 0 auto; width: 100%; }
+.roue { display: block; width: 100%; height: auto; }
+.roue-secteur { cursor: pointer; outline: none; transform-origin: 250px 210px; }
+.roue-secteur path { opacity: .82; transition: opacity .15s, filter .15s; }
+.roue-secteur:hover path, .roue-secteur:focus-visible path { opacity: 1; filter: brightness(1.1); stroke: var(--texte); stroke-width: 2.5; }
+.roue-secteur path.sans-direction { opacity: 1; }
+.roue-num { font: 700 14px var(--sans); fill: #fff; pointer-events: none; }
+.roue-num.sombre { fill: var(--texte); }
+.roue-etiquette { font: 600 13px var(--sans); fill: var(--texte); pointer-events: none; }
+.roue-surtitre { font: 700 11px var(--sans); fill: var(--texte-2); letter-spacing: .08em; }
+.roue-titre { font: 700 15px var(--serif); fill: var(--texte); }
+.roue-titre.impose { fill: var(--alerte); }
+.roue-sous { font: 600 11.5px var(--sans); fill: var(--texte-2); }
+.roue-legende { text-align: center; font-size: 12px; color: var(--texte-2); margin: 4px 0 0; }
+@media (prefers-reduced-motion: no-preference) {
+  .roue-secteur { animation: pop-roue .5s cubic-bezier(.2, .8, .3, 1.2) both; }
+  @keyframes pop-roue { from { opacity: 0; transform: scale(.7) rotate(-12deg); } to { opacity: 1; transform: none; } }
+}
+@media (max-width: 600px) {   /* la roue est réduite à ~65 % : polices du SVG agrandies pour rester lisibles */
+  .roue-etiquette { font-size: 14.5px; } .roue-num { font-size: 16px; }
+  .roue-titre { font-size: 17px; } .roue-sous { font-size: 13px; } .roue-surtitre { font-size: 12px; }
+}
