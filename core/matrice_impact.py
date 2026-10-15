@@ -63,7 +63,7 @@ def signaux(engrenages: dict, vue: dict | None) -> dict:
         sortie["btp_bund_var_3m"] = (bb["variation"]["valeur"], bb.get("source"), bb.get("date"))
     vix = _instrument(g.get("5"), "vix")
     if vix.get("valeur") is not None:
-        sortie["vix"] = (vix["valeur"], vix.get("source"), vix.get("date"))
+        sortie["vix"] = (vix["valeur"], vix.get("source"), vix.get("date"), vix.get("alerte"))
     sp = _instrument(g.get("5"), "sp500")
     if sp.get("var_4s") is not None:
         sortie["sp500_var_4s"] = (sp["var_4s"], sp.get("source"), sp.get("date"))
@@ -74,8 +74,8 @@ def signaux(engrenages: dict, vue: dict | None) -> dict:
     sortie["ecart_mm200"] = _par_devise(g.get("7"), "ecart_mm200")
     sortie["cot_percentile_52s"] = _par_devise(g.get("7"), "cot", "percentile_52s")
     br = _instrument(g.get("8"), "brent")
-    if br.get("var_4s") is not None:
-        sortie["brent_var_4s"] = (br["var_4s"], br.get("source"), br.get("date"))
+    if br.get("var_4s") is not None:   # 4e élément : alerte « série heurtée » (le signal compte alors pour 0)
+        sortie["brent_var_4s"] = (br["var_4s"], br.get("source"), br.get("date"), br.get("alerte"))
     st = _instrument(g.get("8"), "eia_stocks")
     if st.get("ecart_moyenne_5a_pct") is not None:
         sortie["stocks_ecart_pct"] = (st["ecart_moyenne_5a_pct"], st.get("source"), st.get("date"))
@@ -142,6 +142,9 @@ def calculer(config: dict, engrenages: dict, vue: dict | None) -> dict:
                     if valeur is None or isinstance(valeur, dict):
                         raisons.append(f"{texte} : donnée indisponible")
                         continue
+                    if len(valeur) > 3 and valeur[3] and "heurt" in str(valeur[3]):
+                        raisons.append(f"{texte} : {_fmt(valeur[0], unite)}, compté 0 car {valeur[3]}")
+                        continue
                     cas = next((c for c in r.get("cas") or [] if _verifie(c["si"], valeur[0])), None)
                     pts = (cas or {}).get("effets", {}).get(devise)
                     if not pts:
@@ -160,7 +163,9 @@ def calculer(config: dict, engrenages: dict, vue: dict | None) -> dict:
         seuils = cfg.get("bilan") or {"soutenue": 3, "pression": -3}
         lignes.append({"devise": devise, "cases": cases, "bilan": total,
                        "lecture": "soutenue" if total >= seuils["soutenue"] else "sous pression" if total <= seuils["pression"] else "neutre"})
+    actives = sum(1 for l in lignes for c in l["cases"] if c["valeur"] != 0)
     return {"lignes": lignes, "seuils_bilan": cfg.get("bilan"), "theme_fort": theme_fort,
+            "cases_actives": actives, "cases_total": len(lignes) * 8,
             "legende": "▲▲ soutien fort (+2) · ▲ soutien (+1) · · neutre (0) · ▼ pression (−1) · ▼▼ pression forte (−2). "
                        "Chaque case applique une règle écrite dans config.yaml au chiffre du jour ; bilan = somme des 8 cases "
                        f"(soutenue ≥ {(cfg.get('bilan') or {}).get('soutenue', 3)}, sous pression ≤ {(cfg.get('bilan') or {}).get('pression', -3)}). "

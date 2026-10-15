@@ -1,6 +1,6 @@
 {
  "version_schema": 1,
- "genere_le": "2026-10-14T22:21:34+00:00",
+ "genere_le": "2026-10-15T10:32:00+00:00",
  "debut_historique": "2021-08-13",
  "erreurs_collecte": [],
  "engrenages": {
@@ -23,7 +23,7 @@
     },
     {
      "libelle": "Indice de surprise global (moyenne 9 devises)",
-     "texte": "-0,00",
+     "texte": "-0,01",
      "detail": "9 devise(s) avec un indice",
      "source": "calcul Python (registre macro, 30 j)"
     },
@@ -42,22 +42,22 @@
      "ecart": 37
     },
     {
-     "date": "2026-09-23",
-     "biais": "risk_on",
-     "score_usd": 59,
-     "ecart": 10.7
-    },
-    {
-     "date": "2026-09-30",
+     "date": "2026-09-24",
      "biais": "neutre",
      "score_usd": null,
      "ecart": null
     },
     {
-     "date": "2026-10-07",
+     "date": "2026-10-01",
+     "biais": "neutre",
+     "score_usd": null,
+     "ecart": null
+    },
+    {
+     "date": "2026-10-08",
      "biais": "risk_off",
-     "score_usd": 95,
-     "ecart": -30.7
+     "score_usd": 88,
+     "ecart": -22.3
     },
     {
      "date": "2026-10-14",
@@ -387,7 +387,7 @@
      "unite": "score",
      "date": "2026-10-14",
      "frequence": null,
-     "age_jours": 0,
+     "age_jours": 1,
      "source": "calcul Python (score de confluence 0-100)",
      "raison": null,
      "variation": {
@@ -472,7 +472,7 @@
      "unite": "score",
      "date": "2026-10-14",
      "frequence": null,
-     "age_jours": 0,
+     "age_jours": 1,
      "source": "calcul Python (score de confluence 0-100)",
      "raison": null,
      "variation": {
@@ -561,7 +561,7 @@
      "unite": "score",
      "date": "2026-10-14",
      "frequence": null,
-     "age_jours": 0,
+     "age_jours": 1,
      "source": "calcul Python (score de confluence 0-100)",
      "raison": null,
      "variation": null,
@@ -633,7 +633,7 @@
      "unite": "score",
      "date": "2026-10-14",
      "frequence": null,
-     "age_jours": 0,
+     "age_jours": 1,
      "source": "calcul Python (USD − CAD)",
      "raison": null,
      "variation": {
@@ -738,51 +738,59 @@
      "unite": "nombre",
      "date": "2026-10-14",
      "frequence": null,
-     "age_jours": 0,
+     "age_jours": 1,
      "source": "règles Python des 8 engrenages",
      "raison": null,
      "variation": null,
      "percentile_5a": null,
      "n_5a": null,
      "percentile_autre": null,
-     "raison_percentile": "archive quotidienne trop courte pour un percentile (1 jour(s))",
+     "raison_percentile": "archive quotidienne trop courte pour un percentile (2 jour(s))",
      "courbe": {
       "points": [
        [
         "2026-10-14",
         0
+       ],
+       [
+        "2026-10-15",
+        0
        ]
       ],
       "periode": "depuis le début de l'archive quotidienne",
-      "raison": "archive trop récente (1 jour(s)) : archivé chaque jour depuis le 14/10/2026"
+      "raison": null
      },
      "lecture": "0 sur 4 évaluables"
     },
     {
      "id": "surprise_globale",
      "libelle": "Surprise globale (moyenne 9 devises)",
-     "valeur": -0.0,
-     "texte": "−0,00",
+     "valeur": -0.01,
+     "texte": "−0,01",
      "unite": "écarts",
      "date": "2026-10-14",
      "frequence": null,
-     "age_jours": 0,
+     "age_jours": 1,
      "source": "calcul Python (registre macro, 30 j)",
      "raison": null,
      "variation": null,
      "percentile_5a": null,
      "n_5a": null,
      "percentile_autre": null,
-     "raison_percentile": "archive quotidienne trop courte pour un percentile (1 jour(s))",
+     "raison_percentile": "archive quotidienne trop courte pour un percentile (2 jour(s))",
      "courbe": {
       "points": [
        [
         "2026-10-14",
         -0.0
+       ],
+       [
+        "2026-10-15",
+        -0.01
        ]
       ],
       "periode": "depuis le début de l'archive quotidienne",
-      "raison": "archive trop récente (1 jour(s)) : archivé chaque jour depuis le 14/10/2026"
+      "raison": null
      },
      "lecture": null
     },
@@ -794,7 +802,7 @@
      "unite": "semaines",
      "date": "2026-10-14",
      "frequence": null,
-     "age_jours": 0,
+     "age_jours": 1,
      "source": "rapports archivés (biais calculé)",
      "raison": null,
      "variation": null,
@@ -817,7 +825,7 @@
      "unite": "niveau",
      "date": "2026-10-13",
      "frequence": "quotidien",
-     "age_jours": 1,
+     "age_jours": 2,
      "source": "FRED (VIXCLS)",
      "raison": null,
      "variation": {
@@ -4991,11 +4999,11 @@
      "unite": "pb",
      "date": "2026-10-09",
      "variation_1m": 12.0,
-     "debut": "2021-10-14"
+     "debut": "2021-10-15"
     },
     "lignes": [
      {
-      "sensibilite": 0.45,
+      "sensibilite": 0.43,
       "n_mois": 60,
       "si_hausse": {
        "mediane": 0.24,
@@ -5010,18 +5018,20 @@
       "fiabilite": {
        "part": 53,
        "n": 32,
+       "bons": 17,
+       "borne_wilson_90": 38.9,
        "raison": null
       },
-      "sigma_moteur": 34.75,
+      "sigma_moteur": 34.76,
       "actif": "USD",
       "unite": "%",
       "aujourdhui": {
        "lecture": "Neutre",
-       "raison": "moteur dans ±1 écart−type sur 1 mois (+12,00 contre ±34,75)"
+       "raison": "moteur calme : +12,00 sur 1 mois, dans ±1 écart−type (±34,76)"
       }
      },
      {
-      "sensibilite": -0.43,
+      "sensibilite": -0.4,
       "n_mois": 60,
       "si_hausse": {
        "mediane": 0.25,
@@ -5036,18 +5046,20 @@
       "fiabilite": {
        "part": 44,
        "n": 32,
+       "bons": 14,
+       "borne_wilson_90": 30.4,
        "raison": null
       },
-      "sigma_moteur": 34.75,
+      "sigma_moteur": 34.76,
       "actif": "EUR",
       "unite": "%",
       "aujourdhui": {
        "lecture": "Neutre",
-       "raison": "moteur dans ±1 écart−type sur 1 mois (+12,00 contre ±34,75)"
+       "raison": "moteur calme : +12,00 sur 1 mois, dans ±1 écart−type (±34,76)"
       }
      },
      {
-      "sensibilite": -0.59,
+      "sensibilite": -0.55,
       "n_mois": 60,
       "si_hausse": {
        "mediane": -0.37,
@@ -5062,18 +5074,20 @@
       "fiabilite": {
        "part": 56,
        "n": 32,
+       "bons": 18,
+       "borne_wilson_90": 41.9,
        "raison": null
       },
-      "sigma_moteur": 34.75,
+      "sigma_moteur": 34.76,
       "actif": "JPY",
       "unite": "%",
       "aujourdhui": {
        "lecture": "Neutre",
-       "raison": "moteur dans ±1 écart−type sur 1 mois (+12,00 contre ±34,75)"
+       "raison": "moteur calme : +12,00 sur 1 mois, dans ±1 écart−type (±34,76)"
       }
      },
      {
-      "sensibilite": -0.38,
+      "sensibilite": -0.3,
       "n_mois": 60,
       "si_hausse": {
        "mediane": -0.61,
@@ -5088,18 +5102,20 @@
       "fiabilite": {
        "part": 53,
        "n": 32,
+       "bons": 17,
+       "borne_wilson_90": 38.9,
        "raison": null
       },
-      "sigma_moteur": 34.75,
+      "sigma_moteur": 34.76,
       "actif": "GBP",
       "unite": "%",
       "aujourdhui": {
        "lecture": "Neutre",
-       "raison": "moteur dans ±1 écart−type sur 1 mois (+12,00 contre ±34,75)"
+       "raison": "moteur calme : +12,00 sur 1 mois, dans ±1 écart−type (±34,76)"
       }
      },
      {
-      "sensibilite": -0.21,
+      "sensibilite": -0.23,
       "n_mois": 60,
       "si_hausse": {
        "mediane": 0.1,
@@ -5114,18 +5130,20 @@
       "fiabilite": {
        "part": 50,
        "n": 32,
+       "bons": 16,
+       "borne_wilson_90": 36.0,
        "raison": null
       },
-      "sigma_moteur": 34.75,
+      "sigma_moteur": 34.76,
       "actif": "AUD",
       "unite": "%",
       "aujourdhui": {
        "lecture": "Neutre",
-       "raison": "moteur dans ±1 écart−type sur 1 mois (+12,00 contre ±34,75)"
+       "raison": "moteur calme : +12,00 sur 1 mois, dans ±1 écart−type (±34,76)"
       }
      },
      {
-      "sensibilite": -0.14,
+      "sensibilite": -0.18,
       "n_mois": 60,
       "si_hausse": {
        "mediane": 1.2,
@@ -5140,18 +5158,20 @@
       "fiabilite": {
        "part": 44,
        "n": 32,
+       "bons": 14,
+       "borne_wilson_90": 30.4,
        "raison": null
       },
-      "sigma_moteur": 34.75,
+      "sigma_moteur": 34.76,
       "actif": "S&P 500",
       "unite": "%",
       "aujourdhui": {
        "lecture": "Neutre",
-       "raison": "moteur dans ±1 écart−type sur 1 mois (+12,00 contre ±34,75)"
+       "raison": "moteur calme : +12,00 sur 1 mois, dans ±1 écart−type (±34,76)"
       }
      },
      {
-      "sensibilite": -0.25,
+      "sensibilite": -0.21,
       "n_mois": 60,
       "si_hausse": {
        "mediane": -0.44,
@@ -5166,18 +5186,20 @@
       "fiabilite": {
        "part": 47,
        "n": 32,
+       "bons": 15,
+       "borne_wilson_90": 33.2,
        "raison": null
       },
-      "sigma_moteur": 34.75,
+      "sigma_moteur": 34.76,
       "actif": "Or (proxy)",
       "unite": "%",
       "aujourdhui": {
        "lecture": "Neutre",
-       "raison": "moteur dans ±1 écart−type sur 1 mois (+12,00 contre ±34,75)"
+       "raison": "moteur calme : +12,00 sur 1 mois, dans ±1 écart−type (±34,76)"
       }
      },
      {
-      "sensibilite": 0.7,
+      "sensibilite": 0.67,
       "n_mois": 60,
       "si_hausse": {
        "mediane": 1.0,
@@ -5192,14 +5214,16 @@
       "fiabilite": {
        "part": 47,
        "n": 32,
+       "bons": 15,
+       "borne_wilson_90": 33.2,
        "raison": null
       },
-      "sigma_moteur": 34.75,
+      "sigma_moteur": 34.76,
       "actif": "10 ans US",
       "unite": "pb",
       "aujourdhui": {
        "lecture": "Neutre",
-       "raison": "moteur dans ±1 écart−type sur 1 mois (+12,00 contre ±34,75)"
+       "raison": "moteur calme : +12,00 sur 1 mois, dans ±1 écart−type (±34,76)"
       }
      }
     ],
@@ -5215,7 +5239,7 @@
      "unite": "%",
      "date": "2026-10-12",
      "frequence": "quotidien",
-     "age_jours": 2,
+     "age_jours": 3,
      "source": "FRED (DFF, taux effectif)",
      "raison": null,
      "variation": {
@@ -5368,7 +5392,7 @@
      "unite": "%",
      "date": "2026-10-09",
      "frequence": "quotidien",
-     "age_jours": 5,
+     "age_jours": 6,
      "source": "FRED (DGS2)",
      "raison": null,
      "variation": {
@@ -5489,7 +5513,7 @@
      "unite": "pb",
      "date": "2026-10-09",
      "frequence": "quotidien",
-     "age_jours": 5,
+     "age_jours": 6,
      "source": "calcul : DGS2 − DFF",
      "raison": null,
      "variation": {
@@ -5610,7 +5634,7 @@
      "unite": "%",
      "date": "2026-09-01",
      "frequence": "mensuel",
-     "age_jours": 43,
+     "age_jours": 44,
      "source": "calcul : DFF (moyenne du mois) − CPI core a/a (FRED CPILFESL)",
      "raison": null,
      "variation": {
@@ -5691,7 +5715,7 @@
      "unite": "pb",
      "date": "2026-10-09",
      "frequence": "quotidien",
-     "age_jours": 5,
+     "age_jours": 6,
      "source": "calcul : 10 ans − 2 ans",
      "raison": null,
      "variation": {
@@ -5812,7 +5836,7 @@
      "unite": "%",
      "date": "2026-10-14",
      "frequence": "quotidien",
-     "age_jours": 0,
+     "age_jours": 1,
      "source": "FRED (ECBDFR, taux de la facilité de dépôt de la BCE)",
      "raison": null,
      "variation": {
@@ -5965,7 +5989,7 @@
      "unite": "%",
      "date": "2026-10-14",
      "frequence": "quotidien",
-     "age_jours": 0,
+     "age_jours": 1,
      "source": "Bundesbank (Allemagne 2 ans)",
      "raison": null,
      "variation": {
@@ -6086,7 +6110,7 @@
      "unite": "%",
      "date": "2026-09-17",
      "frequence": "quotidien",
-     "age_jours": 27,
+     "age_jours": 28,
      "source": "registre macro (ForexFactory)",
      "raison": null,
      "variation": {
@@ -6199,7 +6223,7 @@
      "unite": "%",
      "date": "2026-10-09",
      "frequence": "quotidien",
-     "age_jours": 5,
+     "age_jours": 6,
      "source": "Banque du Japon (call rate non garanti au jour le jour)",
      "raison": null,
      "variation": {
@@ -6308,7 +6332,7 @@
      "unite": "%",
      "date": "2026-09-30",
      "frequence": "quotidien",
-     "age_jours": 14,
+     "age_jours": 15,
      "source": "Ministère des Finances du Japon (JGB 2 ans)",
      "raison": null,
      "variation": {
@@ -6417,7 +6441,7 @@
      "unite": "%",
      "date": "2026-09-29",
      "frequence": "mensuel",
-     "age_jours": 15,
+     "age_jours": 16,
      "source": "registre macro (ForexFactory)",
      "raison": null,
      "variation": {
@@ -6481,7 +6505,7 @@
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "date": "2026-10-14",
+       "date": "2026-10-15",
        "tendance": "baisse",
        "n": 9,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
@@ -6559,16 +6583,16 @@
      "devise": "EUR",
      "cellules": {
       "indice_surprise": {
-       "valeur": 0.14,
+       "valeur": 0.12,
        "raison": null,
        "source": "calcul Python (registre macro, 30 j)",
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "date": "2026-10-14",
+       "date": "2026-10-15",
        "tendance": "hausse",
-       "n": 11,
+       "n": 10,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
       },
       "dispersion": {
@@ -6642,16 +6666,16 @@
      "devise": "GBP",
      "cellules": {
       "indice_surprise": {
-       "valeur": 0.35,
+       "valeur": 0.28,
        "raison": null,
        "source": "calcul Python (registre macro, 30 j)",
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "date": "2026-10-14",
+       "date": "2026-10-15",
        "tendance": "baisse",
-       "n": 11,
+       "n": 9,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
       },
       "dispersion": {
@@ -6726,16 +6750,16 @@
      "devise": "JPY",
      "cellules": {
       "indice_surprise": {
-       "valeur": -0.03,
+       "valeur": -0.29,
        "raison": null,
        "source": "calcul Python (registre macro, 30 j)",
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "date": "2026-10-14",
-       "tendance": "stable",
-       "n": 7,
+       "date": "2026-10-15",
+       "tendance": "baisse",
+       "n": 6,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
       },
       "dispersion": {
@@ -6817,7 +6841,7 @@
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "date": "2026-10-14",
+       "date": "2026-10-15",
        "tendance": "baisse",
        "n": 5,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
@@ -6895,20 +6919,20 @@
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "date": "2026-10-14",
+       "date": "2026-10-15",
        "tendance": "baisse",
        "n": 6,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
       },
       "dispersion": {
-       "valeur": 1.14,
+       "valeur": 1.29,
        "raison": null,
        "source": "calcul Python (écart-type des surprises 30 j)",
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "n": 8,
+       "n": 6,
        "raison_percentile": "historique trop court"
       },
       "publications": {
@@ -6979,7 +7003,7 @@
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "date": "2026-10-14",
+       "date": "2026-10-15",
        "tendance": "baisse",
        "n": 7,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
@@ -7063,7 +7087,7 @@
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "date": "2026-10-14",
+       "date": "2026-10-15",
        "tendance": "hausse",
        "n": 2,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
@@ -7124,16 +7148,16 @@
      "devise": "CNY",
      "cellules": {
       "indice_surprise": {
-       "valeur": -0.15,
+       "valeur": 0.15,
        "raison": null,
        "source": "calcul Python (registre macro, 30 j)",
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "date": "2026-10-14",
-       "tendance": "baisse",
-       "n": 7,
+       "date": "2026-10-15",
+       "tendance": "hausse",
+       "n": 5,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
       },
       "dispersion": {
@@ -7213,31 +7237,31 @@
        "nom": "USD",
        "points": [
         [
-         "2026-09-02",
-         -0.6
+         "2026-09-03",
+         0.29
         ],
         [
-         "2026-09-09",
+         "2026-09-10",
          0.72
         ],
         [
-         "2026-09-16",
+         "2026-09-17",
          0.55
         ],
         [
-         "2026-09-23",
+         "2026-09-24",
          0.55
         ],
         [
-         "2026-09-30",
-         0.75
+         "2026-10-01",
+         0.78
         ],
         [
-         "2026-10-07",
+         "2026-10-08",
          -0.04
         ],
         [
-         "2026-10-14",
+         "2026-10-15",
          0.25
         ]
        ]
@@ -7246,31 +7270,31 @@
        "nom": "CAD",
        "points": [
         [
-         "2026-09-02",
-         0.0
+         "2026-09-03",
+         -0.2
         ],
         [
-         "2026-09-09",
+         "2026-09-10",
          0.08
         ],
         [
-         "2026-09-16",
+         "2026-09-17",
          0.06
         ],
         [
-         "2026-09-23",
-         0.06
+         "2026-09-24",
+         0.08
         ],
         [
-         "2026-09-30",
+         "2026-10-01",
          0.07
         ],
         [
-         "2026-10-07",
+         "2026-10-08",
          -0.28
         ],
         [
-         "2026-10-14",
+         "2026-10-15",
          -0.62
         ]
        ]
@@ -7279,81 +7303,85 @@
        "nom": "AUD",
        "points": [
         [
-         "2026-07-15",
+         "2026-07-16",
          2.67
         ],
         [
-         "2026-07-22",
+         "2026-07-23",
          2.67
         ],
         [
-         "2026-08-05",
+         "2026-08-06",
          2.0
         ],
         [
-         "2026-08-12",
+         "2026-08-13",
          2.0
         ],
         [
-         "2026-08-19",
+         "2026-08-20",
          2.0
         ],
         [
-         "2026-08-26",
-         2.0
+         "2026-08-27",
+         2.33
         ],
         [
-         "2026-09-02",
-         1.53
-        ],
-        [
-         "2026-09-09",
+         "2026-09-03",
          1.07
         ],
         [
-         "2026-09-16",
+         "2026-09-10",
          1.07
         ],
         [
-         "2026-09-23",
+         "2026-09-17",
          1.07
         ],
         [
-         "2026-09-30",
+         "2026-09-24",
+         0.39
+        ],
+        [
+         "2026-10-01",
          -0.39
         ],
         [
-         "2026-10-07",
+         "2026-10-08",
          -0.52
         ],
         [
-         "2026-10-14",
+         "2026-10-15",
          -0.52
         ]
        ]
       },
       {
-       "nom": "GBP",
+       "nom": "JPY",
        "points": [
         [
-         "2026-09-16",
-         0.32
+         "2026-09-10",
+         0.0
         ],
         [
-         "2026-09-23",
-         0.4
+         "2026-09-17",
+         -0.0
         ],
         [
-         "2026-09-30",
-         0.39
+         "2026-09-24",
+         -0.18
         ],
         [
-         "2026-10-07",
-         0.36
+         "2026-10-01",
+         -0.02
         ],
         [
-         "2026-10-14",
-         0.35
+         "2026-10-08",
+         -0.03
+        ],
+        [
+         "2026-10-15",
+         -0.29
         ]
        ]
       }
@@ -7373,15 +7401,15 @@
       },
       {
        "nom": "EUR",
-       "valeur": 0.14
+       "valeur": 0.12
       },
       {
        "nom": "GBP",
-       "valeur": 0.35
+       "valeur": 0.28
       },
       {
        "nom": "JPY",
-       "valeur": -0.03
+       "valeur": -0.29
       },
       {
        "nom": "CHF",
@@ -7401,7 +7429,7 @@
       },
       {
        "nom": "CNY",
-       "valeur": -0.15
+       "valeur": 0.15
       }
      ],
      "source": "calcul Python (registre macro)",
@@ -7425,7 +7453,7 @@
      "valeur": 0.25,
      "texte": "+0,25",
      "unite": "écarts",
-     "date": "2026-10-14",
+     "date": "2026-10-15",
      "frequence": null,
      "age_jours": 0,
      "source": "calcul Python (registre macro, 30 j)",
@@ -7443,31 +7471,31 @@
      "courbe": {
       "points": [
        [
-        "2026-09-02",
-        -0.6
+        "2026-09-03",
+        0.29
        ],
        [
-        "2026-09-09",
+        "2026-09-10",
         0.72
        ],
        [
-        "2026-09-16",
+        "2026-09-17",
         0.55
        ],
        [
-        "2026-09-23",
+        "2026-09-24",
         0.55
        ],
        [
-        "2026-09-30",
-        0.75
+        "2026-10-01",
+        0.78
        ],
        [
-        "2026-10-07",
+        "2026-10-08",
         -0.04
        ],
        [
-        "2026-10-14",
+        "2026-10-15",
         0.25
        ]
       ],
@@ -7479,10 +7507,10 @@
     {
      "id": "surprise_gbp",
      "libelle": "Surprise GBP (30 j)",
-     "valeur": 0.35,
-     "texte": "+0,35",
+     "valeur": 0.28,
+     "texte": "+0,28",
      "unite": "écarts",
-     "date": "2026-10-14",
+     "date": "2026-10-15",
      "frequence": null,
      "age_jours": 0,
      "source": "calcul Python (registre macro, 30 j)",
@@ -7500,24 +7528,24 @@
      "courbe": {
       "points": [
        [
-        "2026-09-16",
-        0.32
+        "2026-09-17",
+        0.25
        ],
        [
-        "2026-09-23",
+        "2026-09-24",
         0.4
        ],
        [
-        "2026-09-30",
-        0.39
-       ],
-       [
-        "2026-10-07",
+        "2026-10-01",
         0.36
        ],
        [
-        "2026-10-14",
-        0.35
+        "2026-10-08",
+        0.36
+       ],
+       [
+        "2026-10-15",
+        0.28
        ]
       ],
       "periode": "90 jours (hebdomadaire)",
@@ -7531,7 +7559,7 @@
      "valeur": -0.62,
      "texte": "−0,62",
      "unite": "écarts",
-     "date": "2026-10-14",
+     "date": "2026-10-15",
      "frequence": null,
      "age_jours": 0,
      "source": "calcul Python (registre macro, 30 j)",
@@ -7549,31 +7577,31 @@
      "courbe": {
       "points": [
        [
-        "2026-09-02",
-        0.0
+        "2026-09-03",
+        -0.2
        ],
        [
-        "2026-09-09",
+        "2026-09-10",
         0.08
        ],
        [
-        "2026-09-16",
+        "2026-09-17",
         0.06
        ],
        [
-        "2026-09-23",
-        0.06
+        "2026-09-24",
+        0.08
        ],
        [
-        "2026-09-30",
+        "2026-10-01",
         0.07
        ],
        [
-        "2026-10-07",
+        "2026-10-08",
         -0.28
        ],
        [
-        "2026-10-14",
+        "2026-10-15",
         -0.62
        ]
       ],
@@ -7588,7 +7616,7 @@
      "valeur": -0.52,
      "texte": "−0,52",
      "unite": "écarts",
-     "date": "2026-10-14",
+     "date": "2026-10-15",
      "frequence": null,
      "age_jours": 0,
      "source": "calcul Python (registre macro, 30 j)",
@@ -7606,55 +7634,55 @@
      "courbe": {
       "points": [
        [
-        "2026-07-15",
+        "2026-07-16",
         2.67
        ],
        [
-        "2026-07-22",
+        "2026-07-23",
         2.67
        ],
        [
-        "2026-08-05",
+        "2026-08-06",
         2.0
        ],
        [
-        "2026-08-12",
+        "2026-08-13",
         2.0
        ],
        [
-        "2026-08-19",
+        "2026-08-20",
         2.0
        ],
        [
-        "2026-08-26",
-        2.0
+        "2026-08-27",
+        2.33
        ],
        [
-        "2026-09-02",
-        1.53
-       ],
-       [
-        "2026-09-09",
+        "2026-09-03",
         1.07
        ],
        [
-        "2026-09-16",
+        "2026-09-10",
         1.07
        ],
        [
-        "2026-09-23",
+        "2026-09-17",
         1.07
        ],
        [
-        "2026-09-30",
+        "2026-09-24",
+        0.39
+       ],
+       [
+        "2026-10-01",
         -0.39
        ],
        [
-        "2026-10-07",
+        "2026-10-08",
         -0.52
        ],
        [
-        "2026-10-14",
+        "2026-10-15",
         -0.52
        ]
       ],
@@ -7671,7 +7699,7 @@
      "unite": "%",
      "date": "2026-10-14",
      "frequence": null,
-     "age_jours": 0,
+     "age_jours": 1,
      "source": "registre macro (ForexFactory)",
      "raison": null,
      "variation": null,
@@ -7747,7 +7775,7 @@
      "unite": "%",
      "date": "2026-09-15",
      "frequence": null,
-     "age_jours": 29,
+     "age_jours": 30,
      "source": "registre macro (ForexFactory)",
      "raison": null,
      "variation": null,
@@ -7823,7 +7851,7 @@
      "unite": "%",
      "date": "2026-09-24",
      "frequence": null,
-     "age_jours": 20,
+     "age_jours": 21,
      "source": "registre macro (ForexFactory)",
      "raison": null,
      "variation": null,
@@ -7894,13 +7922,13 @@
     {
      "id": "part_positives",
      "libelle": "Publications au-dessus du consensus",
-     "valeur": 37,
-     "texte": "37 %",
+     "valeur": 38,
+     "texte": "38 %",
      "unite": "part",
-     "date": "2026-10-14",
+     "date": "2026-10-15",
      "frequence": null,
      "age_jours": 0,
-     "source": "calcul Python (registre macro, 67 publications avec consensus sur 30 jours)",
+     "source": "calcul Python (registre macro, 65 publications avec consensus sur 30 jours)",
      "raison": null,
      "variation": null,
      "percentile_5a": null,
@@ -11084,7 +11112,7 @@
      "raison": null
     }
    ],
-   "actualites_maj": "2026-10-14T22:21+00:00",
+   "actualites_maj": "2026-10-15T10:32+00:00",
    "actualites_nb_titres_lus": 30,
    "notes": [
     "Dette et solde publics : FMI (annuel, avec 1 à 3 ans de retard) ; EUR = Allemagne. Pas de série gratuite pour CHF et NZD.",
@@ -11098,14 +11126,14 @@
      "unite": "pb",
      "date": "2026-10-09",
      "variation_1m": 17.27,
-     "debut": "2021-10-14"
+     "debut": "2021-10-15"
     },
     "lignes": [
      {
       "sensibilite": 0.57,
       "n_mois": 60,
       "si_hausse": {
-       "mediane": 0.69,
+       "mediane": 0.7,
        "n": 20,
        "raison": null
       },
@@ -11117,18 +11145,21 @@
       "fiabilite": {
        "part": 62,
        "n": 32,
+       "bons": 20,
+       "borne_wilson_90": 48.0,
        "raison": null
       },
       "sigma_moteur": 14.71,
       "actif": "USD",
       "unite": "%",
       "aujourdhui": {
-       "lecture": "Soutien",
-       "raison": "moteur en hausse de plus d'1 écart-type sur 1 mois ; médiane historique de l'actif +0,69 %, sens vérifié dans 62 % des 32 cas"
+       "lecture": "Indice faible",
+       "n": 32,
+       "raison": "moteur en hausse de plus d'1 écart-type sur 1 mois ; sens attendu vérifié dans 62 % des 32 cas ; borne basse de Wilson à 90 % : 48,0 % (doit dépasser 50 %)"
       }
      },
      {
-      "sensibilite": -0.46,
+      "sensibilite": -0.44,
       "n_mois": 60,
       "si_hausse": {
        "mediane": -0.48,
@@ -11143,6 +11174,8 @@
       "fiabilite": {
        "part": 66,
        "n": 32,
+       "bons": 21,
+       "borne_wilson_90": 51.1,
        "raison": null
       },
       "sigma_moteur": 14.71,
@@ -11150,11 +11183,12 @@
       "unite": "%",
       "aujourdhui": {
        "lecture": "Pression",
-       "raison": "moteur en hausse de plus d'1 écart-type sur 1 mois ; médiane historique de l'actif −0,48 %, sens vérifié dans 66 % des 32 cas"
+       "n": 32,
+       "raison": "moteur en hausse de plus d'1 écart-type sur 1 mois ; sens attendu vérifié dans 66 % des 32 cas (borne basse de Wilson à 90 % : 51,1 %) ; médiane historique de l'actif −0,48 %"
       }
      },
      {
-      "sensibilite": -0.68,
+      "sensibilite": -0.66,
       "n_mois": 60,
       "si_hausse": {
        "mediane": -0.99,
@@ -11167,20 +11201,23 @@
        "raison": null
       },
       "fiabilite": {
-       "part": 66,
+       "part": 62,
        "n": 32,
+       "bons": 20,
+       "borne_wilson_90": 48.0,
        "raison": null
       },
       "sigma_moteur": 14.71,
       "actif": "JPY",
       "unite": "%",
       "aujourdhui": {
-       "lecture": "Pression",
-       "raison": "moteur en hausse de plus d'1 écart-type sur 1 mois ; médiane historique de l'actif −0,99 %, sens vérifié dans 66 % des 32 cas"
+       "lecture": "Indice faible",
+       "n": 32,
+       "raison": "moteur en hausse de plus d'1 écart-type sur 1 mois ; sens attendu vérifié dans 62 % des 32 cas ; borne basse de Wilson à 90 % : 48,0 % (doit dépasser 50 %)"
       }
      },
      {
-      "sensibilite": -0.63,
+      "sensibilite": -0.61,
       "n_mois": 60,
       "si_hausse": {
        "mediane": -0.38,
@@ -11195,18 +11232,21 @@
       "fiabilite": {
        "part": 56,
        "n": 32,
+       "bons": 18,
+       "borne_wilson_90": 41.9,
        "raison": null
       },
       "sigma_moteur": 14.71,
       "actif": "CHF",
       "unite": "%",
       "aujourdhui": {
-       "lecture": "Pression",
-       "raison": "moteur en hausse de plus d'1 écart-type sur 1 mois ; médiane historique de l'actif −0,38 %, sens vérifié dans 56 % des 32 cas"
+       "lecture": "Indice faible",
+       "n": 32,
+       "raison": "moteur en hausse de plus d'1 écart-type sur 1 mois ; sens attendu vérifié dans 56 % des 32 cas ; borne basse de Wilson à 90 % : 41,9 % (doit dépasser 50 %)"
       }
      },
      {
-      "sensibilite": -0.29,
+      "sensibilite": -0.3,
       "n_mois": 60,
       "si_hausse": {
        "mediane": 0.5,
@@ -11221,18 +11261,21 @@
       "fiabilite": {
        "part": 53,
        "n": 32,
+       "bons": 17,
+       "borne_wilson_90": 38.9,
        "raison": null
       },
       "sigma_moteur": 14.71,
       "actif": "S&P 500",
       "unite": "%",
       "aujourdhui": {
-       "lecture": "Neutre",
-       "raison": "moteur en hausse de plus d'1 écart-type, mais la médiane historique (+0,50 %) contredit le sens de la sensibilité : lecture non tranchée"
+       "lecture": "Indice faible",
+       "n": 32,
+       "raison": "moteur en hausse de plus d'1 écart-type sur 1 mois ; sens attendu vérifié dans 53 % des 32 cas, mais la médiane historique (+0,50 %) contredit le sens de la sensibilité"
       }
      },
      {
-      "sensibilite": -0.27,
+      "sensibilite": -0.23,
       "n_mois": 60,
       "si_hausse": {
        "mediane": 0.72,
@@ -11247,21 +11290,24 @@
       "fiabilite": {
        "part": 41,
        "n": 32,
+       "bons": 13,
+       "borne_wilson_90": 27.6,
        "raison": null
       },
       "sigma_moteur": 14.71,
       "actif": "Or (proxy)",
       "unite": "%",
       "aujourdhui": {
-       "lecture": "Neutre",
-       "raison": "moteur en hausse de plus d'1 écart-type, mais la médiane historique (+0,72 %) contredit le sens de la sensibilité : lecture non tranchée"
+       "lecture": "Indice faible",
+       "n": 32,
+       "raison": "moteur en hausse de plus d'1 écart-type sur 1 mois ; sens attendu vérifié dans 41 % des 32 cas, mais la médiane historique (+0,72 %) contredit le sens de la sensibilité"
       }
      },
      {
-      "sensibilite": 0.95,
+      "sensibilite": 0.93,
       "n_mois": 60,
       "si_hausse": {
-       "mediane": 6.0,
+       "mediane": 5.5,
        "n": 20,
        "raison": null
       },
@@ -11271,20 +11317,23 @@
        "raison": null
       },
       "fiabilite": {
-       "part": 53,
+       "part": 50,
        "n": 32,
+       "bons": 16,
+       "borne_wilson_90": 36.0,
        "raison": null
       },
       "sigma_moteur": 14.71,
       "actif": "10 ans US",
       "unite": "pb",
       "aujourdhui": {
-       "lecture": "Neutre",
-       "raison": "moteur en hausse de plus d'1 écart-type, mais fiabilité de 53 % seulement (seuil 55 %)"
+       "lecture": "Indice faible",
+       "n": 32,
+       "raison": "moteur en hausse de plus d'1 écart-type sur 1 mois ; sens attendu vérifié dans 50 % des 32 cas ; borne basse de Wilson à 90 % : 36,0 % (doit dépasser 50 %)"
       }
      },
      {
-      "sensibilite": 0.05,
+      "sensibilite": 0.07,
       "n_mois": 60,
       "si_hausse": {
        "mediane": -0.73,
@@ -11299,6 +11348,7 @@
       "fiabilite": {
        "part": null,
        "n": 32,
+       "sans_sens": true,
        "raison": "pas de sens attendu (sensibilité nulle ou non calculable)"
       },
       "sigma_moteur": 14.71,
@@ -11458,7 +11508,7 @@
      "unite": "%",
      "date": "2026-10-09",
      "frequence": "quotidien",
-     "age_jours": 5,
+     "age_jours": 6,
      "source": "FRED (DGS10)",
      "raison": null,
      "variation": {
@@ -11579,7 +11629,7 @@
      "unite": "%",
      "date": "2026-10-14",
      "frequence": "quotidien",
-     "age_jours": 0,
+     "age_jours": 1,
      "source": "Bundesbank (Allemagne 10 ans)",
      "raison": null,
      "variation": {
@@ -11700,7 +11750,7 @@
      "unite": "%",
      "date": "2026-10-12",
      "frequence": "quotidien",
-     "age_jours": 2,
+     "age_jours": 3,
      "source": "Banque d'Angleterre (par yield 10 ans, IUDMNPY)",
      "raison": null,
      "variation": {
@@ -11813,7 +11863,7 @@
      "unite": "%",
      "date": "2026-09-30",
      "frequence": "quotidien",
-     "age_jours": 14,
+     "age_jours": 15,
      "source": "Ministère des Finances du Japon (JGB 10 ans)",
      "raison": null,
      "variation": {
@@ -11922,7 +11972,7 @@
      "unite": "%",
      "date": "2026-10-09",
      "frequence": "quotidien",
-     "age_jours": 5,
+     "age_jours": 6,
      "source": "FRED (THREEFYTP10, prime de terme 10 ans, Kim-Wright)",
      "raison": null,
      "variation": {
@@ -12043,7 +12093,7 @@
      "unite": "pb",
      "date": "2026-08-01",
      "frequence": "mensuel",
-     "age_jours": 74,
+     "age_jours": 75,
      "source": "calcul : 10 ans Italie − 10 ans Allemagne (OCDE via FRED, mensuels)",
      "raison": null,
      "variation": {
@@ -15013,11 +15063,11 @@
      "unite": "pts",
      "date": "2026-10-13",
      "variation_1m": -0.57,
-     "debut": "2021-10-14"
+     "debut": "2021-10-15"
     },
     "lignes": [
      {
-      "sensibilite": 0.44,
+      "sensibilite": 0.45,
       "n_mois": 60,
       "si_hausse": {
        "mediane": -0.66,
@@ -15032,6 +15082,8 @@
       "fiabilite": {
        "part": 42,
        "n": 38,
+       "bons": 16,
+       "borne_wilson_90": 29.9,
        "raison": null
       },
       "sigma_moteur": 5.14,
@@ -15039,11 +15091,11 @@
       "unite": "%",
       "aujourdhui": {
        "lecture": "Neutre",
-       "raison": "moteur dans ±1 écart−type sur 1 mois (−0,57 contre ±5,14)"
+       "raison": "moteur calme : −0,57 sur 1 mois, dans ±1 écart−type (±5,14)"
       }
      },
      {
-      "sensibilite": -0.08,
+      "sensibilite": -0.09,
       "n_mois": 60,
       "si_hausse": {
        "mediane": -0.66,
@@ -15058,6 +15110,7 @@
       "fiabilite": {
        "part": null,
        "n": 38,
+       "sans_sens": true,
        "raison": "pas de sens attendu (sensibilité nulle ou non calculable)"
       },
       "sigma_moteur": 5.14,
@@ -15065,11 +15118,11 @@
       "unite": "%",
       "aujourdhui": {
        "lecture": "Neutre",
-       "raison": "moteur dans ±1 écart−type sur 1 mois (−0,57 contre ±5,14)"
+       "raison": "moteur calme : −0,57 sur 1 mois, dans ±1 écart−type (±5,14)"
       }
      },
      {
-      "sensibilite": -0.36,
+      "sensibilite": -0.38,
       "n_mois": 60,
       "si_hausse": {
        "mediane": 1.2,
@@ -15084,6 +15137,8 @@
       "fiabilite": {
        "part": 45,
        "n": 38,
+       "bons": 17,
+       "borne_wilson_90": 32.3,
        "raison": null
       },
       "sigma_moteur": 5.14,
@@ -15091,11 +15146,11 @@
       "unite": "%",
       "aujourdhui": {
        "lecture": "Neutre",
-       "raison": "moteur dans ±1 écart−type sur 1 mois (−0,57 contre ±5,14)"
+       "raison": "moteur calme : −0,57 sur 1 mois, dans ±1 écart−type (±5,14)"
       }
      },
      {
-      "sensibilite": -0.53,
+      "sensibilite": -0.55,
       "n_mois": 60,
       "si_hausse": {
        "mediane": 1.49,
@@ -15110,6 +15165,8 @@
       "fiabilite": {
        "part": 39,
        "n": 38,
+       "bons": 15,
+       "borne_wilson_90": 27.6,
        "raison": null
       },
       "sigma_moteur": 5.14,
@@ -15117,11 +15174,11 @@
       "unite": "%",
       "aujourdhui": {
        "lecture": "Neutre",
-       "raison": "moteur dans ±1 écart−type sur 1 mois (−0,57 contre ±5,14)"
+       "raison": "moteur calme : −0,57 sur 1 mois, dans ±1 écart−type (±5,14)"
       }
      },
      {
-      "sensibilite": -0.52,
+      "sensibilite": -0.48,
       "n_mois": 60,
       "si_hausse": {
        "mediane": 1.6,
@@ -15136,6 +15193,8 @@
       "fiabilite": {
        "part": 42,
        "n": 38,
+       "bons": 16,
+       "borne_wilson_90": 29.9,
        "raison": null
       },
       "sigma_moteur": 5.14,
@@ -15143,11 +15202,11 @@
       "unite": "%",
       "aujourdhui": {
        "lecture": "Neutre",
-       "raison": "moteur dans ±1 écart−type sur 1 mois (−0,57 contre ±5,14)"
+       "raison": "moteur calme : −0,57 sur 1 mois, dans ±1 écart−type (±5,14)"
       }
      },
      {
-      "sensibilite": -0.47,
+      "sensibilite": -0.53,
       "n_mois": 60,
       "si_hausse": {
        "mediane": 0.87,
@@ -15162,6 +15221,8 @@
       "fiabilite": {
        "part": 45,
        "n": 38,
+       "bons": 17,
+       "borne_wilson_90": 32.3,
        "raison": null
       },
       "sigma_moteur": 5.14,
@@ -15169,11 +15230,11 @@
       "unite": "%",
       "aujourdhui": {
        "lecture": "Neutre",
-       "raison": "moteur dans ±1 écart−type sur 1 mois (−0,57 contre ±5,14)"
+       "raison": "moteur calme : −0,57 sur 1 mois, dans ±1 écart−type (±5,14)"
       }
      },
      {
-      "sensibilite": -0.77,
+      "sensibilite": -0.79,
       "n_mois": 60,
       "si_hausse": {
        "mediane": 2.65,
@@ -15188,6 +15249,8 @@
       "fiabilite": {
        "part": 55,
        "n": 38,
+       "bons": 21,
+       "borne_wilson_90": 42.1,
        "raison": null
       },
       "sigma_moteur": 5.14,
@@ -15195,11 +15258,11 @@
       "unite": "%",
       "aujourdhui": {
        "lecture": "Neutre",
-       "raison": "moteur dans ±1 écart−type sur 1 mois (−0,57 contre ±5,14)"
+       "raison": "moteur calme : −0,57 sur 1 mois, dans ±1 écart−type (±5,14)"
       }
      },
      {
-      "sensibilite": -0.31,
+      "sensibilite": -0.35,
       "n_mois": 60,
       "si_hausse": {
        "mediane": 0.61,
@@ -15214,6 +15277,8 @@
       "fiabilite": {
        "part": 45,
        "n": 38,
+       "bons": 17,
+       "borne_wilson_90": 32.3,
        "raison": null
       },
       "sigma_moteur": 5.14,
@@ -15221,7 +15286,7 @@
       "unite": "%",
       "aujourdhui": {
        "lecture": "Neutre",
-       "raison": "moteur dans ±1 écart−type sur 1 mois (−0,57 contre ±5,14)"
+       "raison": "moteur calme : −0,57 sur 1 mois, dans ±1 écart−type (±5,14)"
       }
      }
     ],
@@ -15237,7 +15302,7 @@
      "unite": "niveau",
      "date": "2026-10-09",
      "frequence": "quotidien",
-     "age_jours": 5,
+     "age_jours": 6,
      "source": "FRED (DTWEXBGS, indice dollar large de la Fed)",
      "raison": null,
      "variation": {
@@ -15358,7 +15423,7 @@
      "unite": "niveau",
      "date": "2026-10-13",
      "frequence": "quotidien",
-     "age_jours": 1,
+     "age_jours": 2,
      "source": "FRED (VIXCLS)",
      "raison": null,
      "variation": {
@@ -15475,7 +15540,7 @@
      "unite": "niveau",
      "date": "2026-10-13",
      "frequence": "quotidien",
-     "age_jours": 1,
+     "age_jours": 2,
      "source": "FRED (SP500)",
      "raison": null,
      "variation": {
@@ -15592,7 +15657,7 @@
      "unite": "%",
      "date": "2026-10-09",
      "frequence": "quotidien",
-     "age_jours": 5,
+     "age_jours": 6,
      "source": "FRED (DGS10)",
      "raison": null,
      "variation": {
@@ -15713,7 +15778,7 @@
      "unite": "niveau",
      "date": "2026-10-13",
      "frequence": "quotidien",
-     "age_jours": 1,
+     "age_jours": 2,
      "source": "FRED (NASDAQQGLDI) — indice or (proxy)",
      "raison": null,
      "variation": {
@@ -15830,7 +15895,7 @@
      "unite": "niveau",
      "date": "2026-10-06",
      "frequence": "quotidien",
-     "age_jours": 8,
+     "age_jours": 9,
      "source": "FRED (DCOILBRENTEU)",
      "raison": null,
      "variation": {
@@ -15947,7 +16012,7 @@
      "unite": "niveau",
      "date": "2026-10-06",
      "frequence": "quotidien",
-     "age_jours": 8,
+     "age_jours": 9,
      "source": "FRED (DCOILWTICO)",
      "raison": null,
      "variation": {
@@ -16060,7 +16125,7 @@
      "unite": "corrélation",
      "date": "2026-10-13",
      "frequence": null,
-     "age_jours": 1,
+     "age_jours": 2,
      "source": "calcul Python : corrélation glissante sur 30 séances communes des rendements quotidiens, 5 ans de prix (FRED : Fed H.10 pour les devises, DTWEXBGS pour l'USD, VIXCLS, SP500, DCOILBRENTEU, NASDAQQGLDI, DGS10)",
      "raison": null,
      "variation": {
@@ -16070,7 +16135,7 @@
       "texte": "+0,16 vs 30 séances plus tôt (r = 0,48)"
      },
      "percentile_5a": 90,
-     "n_5a": 1244,
+     "n_5a": 1243,
      "percentile_autre": null,
      "raison_percentile": null,
      "courbe": {
@@ -16425,7 +16490,7 @@
      "unite": "corrélation",
      "date": "2026-10-13",
      "frequence": null,
-     "age_jours": 1,
+     "age_jours": 2,
      "source": "calcul Python : corrélation glissante sur 30 séances communes des rendements quotidiens, 5 ans de prix (FRED : Fed H.10 pour les devises, DTWEXBGS pour l'USD, VIXCLS, SP500, DCOILBRENTEU, NASDAQQGLDI, DGS10)",
      "raison": null,
      "variation": {
@@ -16435,7 +16500,7 @@
       "texte": "+0,20 vs 30 séances plus tôt (r = −0,65)"
      },
      "percentile_5a": 8,
-     "n_5a": 1249,
+     "n_5a": 1248,
      "percentile_autre": null,
      "raison_percentile": null,
      "courbe": {
@@ -16847,7 +16912,7 @@
       ],
       "percentiles": [
        19,
-       66,
+       65,
        74,
        59,
        63
@@ -16949,7 +17014,7 @@
        51,
        37,
        18,
-       68,
+       67,
        16
       ],
       "raison": null
@@ -18240,11 +18305,11 @@
      "unite": "%",
      "date": "2026-10-06",
      "variation_1m": 20.45,
-     "debut": "2021-10-14"
+     "debut": "2021-10-15"
     },
     "lignes": [
      {
-      "sensibilite": 0.07,
+      "sensibilite": 0.12,
       "n_mois": 60,
       "si_hausse": {
        "mediane": -0.84,
@@ -18257,20 +18322,23 @@
        "raison": null
       },
       "fiabilite": {
-       "part": null,
+       "part": 45,
        "n": 33,
-       "raison": "pas de sens attendu (sensibilité nulle ou non calculable)"
+       "bons": 15,
+       "borne_wilson_90": 32.1,
+       "raison": null
       },
       "sigma_moteur": 12.02,
       "actif": "CAD",
       "unite": "%",
       "aujourdhui": {
-       "lecture": "n/d",
-       "raison": "pas de sens attendu (sensibilité nulle ou non calculable)"
+       "lecture": "Indice faible",
+       "n": 33,
+       "raison": "moteur en hausse de plus d'1 écart-type sur 1 mois ; sens attendu vérifié dans 45 % des 33 cas, mais la médiane historique (−0,84 %) contredit le sens de la sensibilité"
       }
      },
      {
-      "sensibilite": -0.15,
+      "sensibilite": -0.11,
       "n_mois": 60,
       "si_hausse": {
        "mediane": -1.2,
@@ -18283,20 +18351,23 @@
        "raison": null
       },
       "fiabilite": {
-       "part": 48,
+       "part": 45,
        "n": 33,
+       "bons": 15,
+       "borne_wilson_90": 32.1,
        "raison": null
       },
       "sigma_moteur": 12.02,
       "actif": "JPY",
       "unite": "%",
       "aujourdhui": {
-       "lecture": "Neutre",
-       "raison": "moteur en hausse de plus d'1 écart-type, mais fiabilité de 48 % seulement (seuil 55 %)"
+       "lecture": "Indice faible",
+       "n": 33,
+       "raison": "moteur en hausse de plus d'1 écart-type sur 1 mois ; sens attendu vérifié dans 45 % des 33 cas ; borne basse de Wilson à 90 % : 32,1 % (doit dépasser 50 %)"
       }
      },
      {
-      "sensibilite": -0.2,
+      "sensibilite": -0.08,
       "n_mois": 60,
       "si_hausse": {
        "mediane": -1.02,
@@ -18309,23 +18380,24 @@
        "raison": null
       },
       "fiabilite": {
-       "part": 48,
+       "part": null,
        "n": 33,
-       "raison": null
+       "sans_sens": true,
+       "raison": "pas de sens attendu (sensibilité nulle ou non calculable)"
       },
       "sigma_moteur": 12.02,
       "actif": "EUR",
       "unite": "%",
       "aujourdhui": {
-       "lecture": "Neutre",
-       "raison": "moteur en hausse de plus d'1 écart-type, mais fiabilité de 48 % seulement (seuil 55 %)"
+       "lecture": "n/d",
+       "raison": "pas de sens attendu (sensibilité nulle ou non calculable)"
       }
      },
      {
-      "sensibilite": 0.14,
+      "sensibilite": 0.07,
       "n_mois": 60,
       "si_hausse": {
-       "mediane": 0.62,
+       "mediane": 0.65,
        "n": 15,
        "raison": null
       },
@@ -18335,20 +18407,21 @@
        "raison": null
       },
       "fiabilite": {
-       "part": 52,
+       "part": null,
        "n": 33,
-       "raison": null
+       "sans_sens": true,
+       "raison": "pas de sens attendu (sensibilité nulle ou non calculable)"
       },
       "sigma_moteur": 12.02,
       "actif": "USD",
       "unite": "%",
       "aujourdhui": {
-       "lecture": "Neutre",
-       "raison": "moteur en hausse de plus d'1 écart-type, mais fiabilité de 52 % seulement (seuil 55 %)"
+       "lecture": "n/d",
+       "raison": "pas de sens attendu (sensibilité nulle ou non calculable)"
       }
      },
      {
-      "sensibilite": -0.03,
+      "sensibilite": 0.04,
       "n_mois": 60,
       "si_hausse": {
        "mediane": -0.79,
@@ -18363,6 +18436,7 @@
       "fiabilite": {
        "part": null,
        "n": 33,
+       "sans_sens": true,
        "raison": "pas de sens attendu (sensibilité nulle ou non calculable)"
       },
       "sigma_moteur": 12.02,
@@ -18374,7 +18448,7 @@
       }
      },
      {
-      "sensibilite": -0.29,
+      "sensibilite": -0.13,
       "n_mois": 60,
       "si_hausse": {
        "mediane": -1.3,
@@ -18389,6 +18463,8 @@
       "fiabilite": {
        "part": 73,
        "n": 33,
+       "bons": 24,
+       "borne_wilson_90": 58.6,
        "raison": null
       },
       "sigma_moteur": 12.02,
@@ -18396,11 +18472,12 @@
       "unite": "%",
       "aujourdhui": {
        "lecture": "Pression",
-       "raison": "moteur en hausse de plus d'1 écart-type sur 1 mois ; médiane historique de l'actif −1,30 %, sens vérifié dans 73 % des 33 cas"
+       "n": 33,
+       "raison": "moteur en hausse de plus d'1 écart-type sur 1 mois ; sens attendu vérifié dans 73 % des 33 cas (borne basse de Wilson à 90 % : 58,6 %) ; médiane historique de l'actif −1,30 %"
       }
      },
      {
-      "sensibilite": -0.05,
+      "sensibilite": 0.03,
       "n_mois": 60,
       "si_hausse": {
        "mediane": 0.06,
@@ -18415,6 +18492,7 @@
       "fiabilite": {
        "part": null,
        "n": 33,
+       "sans_sens": true,
        "raison": "pas de sens attendu (sensibilité nulle ou non calculable)"
       },
       "sigma_moteur": 12.02,
@@ -18439,16 +18517,19 @@
        "raison": null
       },
       "fiabilite": {
-       "part": 48,
+       "part": 45,
        "n": 33,
+       "bons": 15,
+       "borne_wilson_90": 32.1,
        "raison": null
       },
       "sigma_moteur": 12.02,
       "actif": "10 ans US",
       "unite": "pb",
       "aujourdhui": {
-       "lecture": "Neutre",
-       "raison": "moteur en hausse de plus d'1 écart-type, mais fiabilité de 48 % seulement (seuil 55 %)"
+       "lecture": "Indice faible",
+       "n": 33,
+       "raison": "moteur en hausse de plus d'1 écart-type sur 1 mois ; sens attendu vérifié dans 45 % des 33 cas ; borne basse de Wilson à 90 % : 32,1 % (doit dépasser 50 %)"
       }
      }
     ],
@@ -18462,7 +18543,7 @@
      "valeur": 3,
      "texte": "3",
      "unite": "nombre",
-     "date": "2026-10-14",
+     "date": "2026-10-15",
      "frequence": null,
      "age_jours": 0,
      "source": "flux RSS du jour, classement par mots-clés (Python)",
@@ -18471,16 +18552,20 @@
      "percentile_5a": null,
      "n_5a": null,
      "percentile_autre": null,
-     "raison_percentile": "archive quotidienne trop courte pour un percentile (1 jour(s))",
+     "raison_percentile": "archive quotidienne trop courte pour un percentile (2 jour(s))",
      "courbe": {
       "points": [
        [
         "2026-10-14",
         3
+       ],
+       [
+        "2026-10-15",
+        3
        ]
       ],
       "periode": "depuis le début de l'archive quotidienne",
-      "raison": "archive trop récente (1 jour(s)) : archivé chaque jour depuis le 14/10/2026"
+      "raison": null
      },
      "lecture": null
     },
@@ -18490,7 +18575,7 @@
      "valeur": 0,
      "texte": "0",
      "unite": "nombre",
-     "date": "2026-10-14",
+     "date": "2026-10-15",
      "frequence": null,
      "age_jours": 0,
      "source": "flux RSS du jour, classement par mots-clés (Python)",
@@ -18499,16 +18584,20 @@
      "percentile_5a": null,
      "n_5a": null,
      "percentile_autre": null,
-     "raison_percentile": "archive quotidienne trop courte pour un percentile (1 jour(s))",
+     "raison_percentile": "archive quotidienne trop courte pour un percentile (2 jour(s))",
      "courbe": {
       "points": [
        [
         "2026-10-14",
         0
+       ],
+       [
+        "2026-10-15",
+        0
        ]
       ],
       "periode": "depuis le début de l'archive quotidienne",
-      "raison": "archive trop récente (1 jour(s)) : archivé chaque jour depuis le 14/10/2026"
+      "raison": null
      },
      "lecture": null
     },
@@ -18518,7 +18607,7 @@
      "valeur": 0,
      "texte": "0",
      "unite": "nombre",
-     "date": "2026-10-14",
+     "date": "2026-10-15",
      "frequence": null,
      "age_jours": 0,
      "source": "flux RSS du jour, classement par mots-clés (Python)",
@@ -18527,16 +18616,20 @@
      "percentile_5a": null,
      "n_5a": null,
      "percentile_autre": null,
-     "raison_percentile": "archive quotidienne trop courte pour un percentile (1 jour(s))",
+     "raison_percentile": "archive quotidienne trop courte pour un percentile (2 jour(s))",
      "courbe": {
       "points": [
        [
         "2026-10-14",
         0
+       ],
+       [
+        "2026-10-15",
+        0
        ]
       ],
       "periode": "depuis le début de l'archive quotidienne",
-      "raison": "archive trop récente (1 jour(s)) : archivé chaque jour depuis le 14/10/2026"
+      "raison": null
      },
      "lecture": null
     },
@@ -18546,7 +18639,7 @@
      "valeur": 2,
      "texte": "2",
      "unite": "nombre",
-     "date": "2026-10-14",
+     "date": "2026-10-15",
      "frequence": null,
      "age_jours": 0,
      "source": "flux RSS du jour, classement par mots-clés (Python)",
@@ -18555,16 +18648,20 @@
      "percentile_5a": null,
      "n_5a": null,
      "percentile_autre": null,
-     "raison_percentile": "archive quotidienne trop courte pour un percentile (1 jour(s))",
+     "raison_percentile": "archive quotidienne trop courte pour un percentile (2 jour(s))",
      "courbe": {
       "points": [
        [
         "2026-10-14",
         2
+       ],
+       [
+        "2026-10-15",
+        2
        ]
       ],
       "periode": "depuis le début de l'archive quotidienne",
-      "raison": "archive trop récente (1 jour(s)) : archivé chaque jour depuis le 14/10/2026"
+      "raison": null
      },
      "lecture": null
     },
@@ -18574,7 +18671,7 @@
      "valeur": 0,
      "texte": "0",
      "unite": "nombre",
-     "date": "2026-10-14",
+     "date": "2026-10-15",
      "frequence": null,
      "age_jours": 0,
      "source": "flux RSS du jour, classement par mots-clés (Python)",
@@ -18583,16 +18680,20 @@
      "percentile_5a": null,
      "n_5a": null,
      "percentile_autre": null,
-     "raison_percentile": "archive quotidienne trop courte pour un percentile (1 jour(s))",
+     "raison_percentile": "archive quotidienne trop courte pour un percentile (2 jour(s))",
      "courbe": {
       "points": [
        [
         "2026-10-14",
         0
+       ],
+       [
+        "2026-10-15",
+        0
        ]
       ],
       "periode": "depuis le début de l'archive quotidienne",
-      "raison": "archive trop récente (1 jour(s)) : archivé chaque jour depuis le 14/10/2026"
+      "raison": null
      },
      "lecture": null
     },
@@ -18604,7 +18705,7 @@
      "unite": "niveau",
      "date": "2026-10-06",
      "frequence": "quotidien",
-     "age_jours": 8,
+     "age_jours": 9,
      "source": "FRED (DCOILBRENTEU)",
      "raison": null,
      "variation": {
@@ -18721,7 +18822,7 @@
      "unite": "niveau",
      "date": "2026-10-13",
      "frequence": "quotidien",
-     "age_jours": 1,
+     "age_jours": 2,
      "source": "FRED (NASDAQQGLDI) — indice or (proxy)",
      "raison": null,
      "variation": {
@@ -18838,7 +18939,7 @@
      "unite": "niveau",
      "date": "2026-10-09",
      "frequence": "quotidien",
-     "age_jours": 5,
+     "age_jours": 6,
      "source": "FRED (DEXJPUS, Fed H.10) — inversé : force de la devise",
      "raison": null,
      "variation": {
@@ -18959,7 +19060,7 @@
      "unite": "niveau",
      "date": "2026-10-09",
      "frequence": "quotidien",
-     "age_jours": 5,
+     "age_jours": 6,
      "source": "FRED (DEXSZUS, Fed H.10) — inversé : force de la devise",
      "raison": null,
      "variation": {
@@ -19137,7 +19238,7 @@
        "unite": "",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1320,
+       "n_5a": 1319,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -19637,7 +19738,7 @@
        "unite": "%",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1320,
+       "n_5a": 1319,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -20136,7 +20237,7 @@
        "unite": "%",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1320,
+       "n_5a": 1319,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -20635,7 +20736,7 @@
        "unite": "% annualisé",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1320,
+       "n_5a": 1319,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -21169,7 +21270,7 @@
        "unite": "",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1321,
+       "n_5a": 1320,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -21669,7 +21770,7 @@
        "unite": "%",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1321,
+       "n_5a": 1320,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -22168,7 +22269,7 @@
        "unite": "%",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1321,
+       "n_5a": 1320,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -22667,7 +22768,7 @@
        "unite": "% annualisé",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1321,
+       "n_5a": 1320,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -23201,7 +23302,7 @@
        "unite": "",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1321,
+       "n_5a": 1320,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -23701,7 +23802,7 @@
        "unite": "%",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1321,
+       "n_5a": 1320,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -24200,7 +24301,7 @@
        "unite": "%",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1321,
+       "n_5a": 1320,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -24699,7 +24800,7 @@
        "unite": "% annualisé",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1321,
+       "n_5a": 1320,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -25233,7 +25334,7 @@
        "unite": "",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1321,
+       "n_5a": 1320,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -25733,7 +25834,7 @@
        "unite": "%",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1321,
+       "n_5a": 1320,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -26232,7 +26333,7 @@
        "unite": "%",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1321,
+       "n_5a": 1320,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -26731,7 +26832,7 @@
        "unite": "% annualisé",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1321,
+       "n_5a": 1320,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -27265,7 +27366,7 @@
        "unite": "",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1321,
+       "n_5a": 1320,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -27765,7 +27866,7 @@
        "unite": "%",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1321,
+       "n_5a": 1320,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -28264,7 +28365,7 @@
        "unite": "%",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1321,
+       "n_5a": 1320,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -28763,7 +28864,7 @@
        "unite": "% annualisé",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1321,
+       "n_5a": 1320,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -29297,7 +29398,7 @@
        "unite": "",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1321,
+       "n_5a": 1320,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -29797,7 +29898,7 @@
        "unite": "%",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1321,
+       "n_5a": 1320,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -30296,7 +30397,7 @@
        "unite": "%",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1321,
+       "n_5a": 1320,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -30795,7 +30896,7 @@
        "unite": "% annualisé",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1321,
+       "n_5a": 1320,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -31329,7 +31430,7 @@
        "unite": "",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1321,
+       "n_5a": 1320,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -31829,7 +31930,7 @@
        "unite": "%",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1321,
+       "n_5a": 1320,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -32328,7 +32429,7 @@
        "unite": "%",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1321,
+       "n_5a": 1320,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -32827,7 +32928,7 @@
        "unite": "% annualisé",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1321,
+       "n_5a": 1320,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -33361,7 +33462,7 @@
        "unite": "",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1321,
+       "n_5a": 1320,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -33861,7 +33962,7 @@
        "unite": "%",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1321,
+       "n_5a": 1320,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -34360,7 +34461,7 @@
        "unite": "%",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1321,
+       "n_5a": 1320,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -34859,7 +34960,7 @@
        "unite": "% annualisé",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1321,
+       "n_5a": 1320,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -35393,7 +35494,7 @@
        "unite": "",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1321,
+       "n_5a": 1320,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -35887,13 +35988,13 @@
        "valeur": 0.55,
        "raison": null,
        "source": "calcul Python (écart à la MM100) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
-       "percentile_5a": 55,
+       "percentile_5a": 54,
        "var_1s": null,
        "var_4s": null,
        "unite": "%",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1321,
+       "n_5a": 1320,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -36392,7 +36493,7 @@
        "unite": "%",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1321,
+       "n_5a": 1320,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -36891,7 +36992,7 @@
        "unite": "% annualisé",
        "date": "2026-10-14",
        "explication_source": "Deux sources existent : Twelve Data (cours de clôture du jour, 230 séances) et la Fed H.10 (taux de midi à New York, 5 ans, publiés avec une semaine de retard). Retenu : Twelve Data partout où il existe, car c'est le cours du jour ; la Fed H.10 ne sert qu'à prolonger l'historique vers le passé, remise à l'échelle au point de raccord pour ne créer aucun saut. Un seul chiffre est affiché partout.",
-       "n_5a": 1321,
+       "n_5a": 1320,
        "raison_percentile": null,
        "courbe_120j": [
         [
@@ -41355,7 +41456,7 @@
      "unite": "rsi",
      "date": "2026-10-14",
      "frequence": null,
-     "age_jours": 0,
+     "age_jours": 1,
      "source": "calcul Python (RSI 14) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
      "raison": null,
      "variation": {
@@ -41365,7 +41466,7 @@
       "texte": "+0,6 pts sur 4 semaines"
      },
      "percentile_5a": 93,
-     "n_5a": 1320,
+     "n_5a": 1319,
      "percentile_autre": null,
      "raison_percentile": null,
      "courbe": {
@@ -41868,12 +41969,12 @@
      "unite": "%",
      "date": "2026-10-14",
      "frequence": null,
-     "age_jours": 0,
+     "age_jours": 1,
      "source": "calcul Python (écart à la MM200) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
      "raison": null,
      "variation": null,
      "percentile_5a": 78,
-     "n_5a": 1320,
+     "n_5a": 1319,
      "percentile_autre": null,
      "raison_percentile": null,
      "courbe": {
@@ -42376,12 +42477,12 @@
      "unite": "% annualisé",
      "date": "2026-10-14",
      "frequence": null,
-     "age_jours": 0,
+     "age_jours": 1,
      "source": "calcul Python (volatilité 20 séances) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
      "raison": null,
      "variation": null,
      "percentile_5a": 1,
-     "n_5a": 1320,
+     "n_5a": 1319,
      "percentile_autre": null,
      "raison_percentile": null,
      "courbe": {
@@ -42882,14 +42983,14 @@
      "valeur": 2,
      "texte": "1 / 1",
      "unite": "nombre",
-     "date": "2026-10-14",
+     "date": "2026-10-15",
      "frequence": null,
      "age_jours": 0,
      "source": "calcul local (RSI 14 de 9 devise(s))",
      "raison": null,
      "variation": null,
      "percentile_5a": 89,
-     "n_5a": 1321,
+     "n_5a": 1320,
      "percentile_autre": null,
      "raison_percentile": null,
      "courbe": {
@@ -43392,7 +43493,7 @@
      "unite": "contrats",
      "date": "2026-10-06",
      "frequence": null,
-     "age_jours": 8,
+     "age_jours": 9,
      "source": "CFTC (COT legacy, positions nettes non commerciales)",
      "raison": null,
      "variation": {
@@ -43529,7 +43630,7 @@
      "unite": "contrats",
      "date": "2026-10-06",
      "frequence": null,
-     "age_jours": 8,
+     "age_jours": 9,
      "source": "CFTC (COT legacy, positions nettes non commerciales)",
      "raison": null,
      "variation": {
@@ -43666,7 +43767,7 @@
      "unite": "contrats",
      "date": "2026-10-06",
      "frequence": null,
-     "age_jours": 8,
+     "age_jours": 9,
      "source": "CFTC (COT legacy, positions nettes non commerciales)",
      "raison": null,
      "variation": {
@@ -44478,11 +44579,11 @@
      "unite": "pts",
      "date": "2026-10-02",
      "variation_1m": -1.33,
-     "debut": "2021-10-14"
+     "debut": "2021-10-15"
     },
     "lignes": [
      {
-      "sensibilite": 0.48,
+      "sensibilite": 0.33,
       "n_mois": 23,
       "si_hausse": {
        "mediane": -0.33,
@@ -44504,11 +44605,11 @@
       "unite": "%",
       "aujourdhui": {
        "lecture": "Neutre",
-       "raison": "moteur dans ±1 écart−type sur 1 mois (−1,33 contre ±2,85)"
+       "raison": "moteur calme : −1,33 sur 1 mois, dans ±1 écart−type (±2,85)"
       }
      },
      {
-      "sensibilite": -0.32,
+      "sensibilite": -0.15,
       "n_mois": 23,
       "si_hausse": {
        "mediane": -0.76,
@@ -44530,11 +44631,11 @@
       "unite": "%",
       "aujourdhui": {
        "lecture": "Neutre",
-       "raison": "moteur dans ±1 écart−type sur 1 mois (−1,33 contre ±2,85)"
+       "raison": "moteur calme : −1,33 sur 1 mois, dans ±1 écart−type (±2,85)"
       }
      },
      {
-      "sensibilite": 0.26,
+      "sensibilite": 0.08,
       "n_mois": 23,
       "si_hausse": {
        "mediane": 0.49,
@@ -44549,18 +44650,19 @@
       "fiabilite": {
        "part": null,
        "n": 10,
-       "raison": "échantillon insuffisant (10 cas, minimum 20)"
+       "sans_sens": true,
+       "raison": "pas de sens attendu (sensibilité nulle ou non calculable)"
       },
       "sigma_moteur": 2.85,
       "actif": "JPY",
       "unite": "%",
       "aujourdhui": {
        "lecture": "Neutre",
-       "raison": "moteur dans ±1 écart−type sur 1 mois (−1,33 contre ±2,85)"
+       "raison": "moteur calme : −1,33 sur 1 mois, dans ±1 écart−type (±2,85)"
       }
      },
      {
-      "sensibilite": 0.39,
+      "sensibilite": 0.43,
       "n_mois": 23,
       "si_hausse": {
        "mediane": -0.97,
@@ -44582,11 +44684,11 @@
       "unite": "%",
       "aujourdhui": {
        "lecture": "Neutre",
-       "raison": "moteur dans ±1 écart−type sur 1 mois (−1,33 contre ±2,85)"
+       "raison": "moteur calme : −1,33 sur 1 mois, dans ±1 écart−type (±2,85)"
       }
      },
      {
-      "sensibilite": -0.12,
+      "sensibilite": -0.17,
       "n_mois": 23,
       "si_hausse": {
        "mediane": 1.2,
@@ -44608,11 +44710,11 @@
       "unite": "%",
       "aujourdhui": {
        "lecture": "Neutre",
-       "raison": "moteur dans ±1 écart−type sur 1 mois (−1,33 contre ±2,85)"
+       "raison": "moteur calme : −1,33 sur 1 mois, dans ±1 écart−type (±2,85)"
       }
      },
      {
-      "sensibilite": 0.22,
+      "sensibilite": 0.15,
       "n_mois": 23,
       "si_hausse": {
        "mediane": 1.73,
@@ -44634,7 +44736,7 @@
       "unite": "%",
       "aujourdhui": {
        "lecture": "Neutre",
-       "raison": "moteur dans ±1 écart−type sur 1 mois (−1,33 contre ±2,85)"
+       "raison": "moteur calme : −1,33 sur 1 mois, dans ±1 écart−type (±2,85)"
       }
      }
     ],
@@ -44650,7 +44752,7 @@
      "unite": "M barils",
      "date": "2026-10-02",
      "frequence": "quotidien",
-     "age_jours": 12,
+     "age_jours": 13,
      "source": "EIA (WCESTUS1, stocks de brut hors réserve stratégique)",
      "raison": null,
      "variation": {
@@ -44787,7 +44889,7 @@
      "unite": "M barils",
      "date": "2026-10-02",
      "frequence": null,
-     "age_jours": 12,
+     "age_jours": 13,
      "source": "EIA (WCESTUS1, stocks de brut hors réserve stratégique)",
      "raison": null,
      "variation": null,
@@ -44810,7 +44912,7 @@
      "unite": "milliers b/j",
      "date": "2026-10-02",
      "frequence": "quotidien",
-     "age_jours": 12,
+     "age_jours": 13,
      "source": "EIA (WCRFPUS2, production de brut US)",
      "raison": null,
      "variation": {
@@ -44947,7 +45049,7 @@
      "unite": "niveau",
      "date": "2026-10-06",
      "frequence": "quotidien",
-     "age_jours": 8,
+     "age_jours": 9,
      "source": "FRED (DCOILWTICO)",
      "raison": null,
      "variation": {
@@ -45060,7 +45162,7 @@
      "unite": "niveau",
      "date": "2026-10-06",
      "frequence": "quotidien",
-     "age_jours": 8,
+     "age_jours": 9,
      "source": "FRED (DCOILBRENTEU)",
      "raison": null,
      "variation": {
@@ -45177,7 +45279,7 @@
      "unite": "niveau",
      "date": "2026-10-13",
      "frequence": "quotidien",
-     "age_jours": 1,
+     "age_jours": 2,
      "source": "FRED (NASDAQQGLDI) — indice or (proxy)",
      "raison": null,
      "variation": {
@@ -45294,7 +45396,7 @@
      "unite": "$",
      "date": "2026-10-06",
      "frequence": "quotidien",
-     "age_jours": 8,
+     "age_jours": 9,
      "source": "calcul : Brent − WTI (FRED, mêmes séances)",
      "raison": null,
      "variation": {
@@ -45407,7 +45509,7 @@
      "unite": "Md CAD",
      "date": "2026-10-06",
      "frequence": null,
-     "age_jours": 8,
+     "age_jours": 9,
      "source": "registre macro (ForexFactory)",
      "raison": null,
      "variation": null,
@@ -45664,7 +45766,7 @@
      "valeur": 0.25,
      "texte": "+0,25",
      "unite": "",
-     "date": "2026-10-14",
+     "date": "2026-10-15",
      "source": "calcul Python (registre macro, 30 j)",
      "raison": null
     },
@@ -45672,23 +45774,23 @@
     "courbe": {
      "points": [
       [
-       "2026-09-16",
+       "2026-09-17",
        0.55
       ],
       [
-       "2026-09-23",
+       "2026-09-24",
        0.55
       ],
       [
-       "2026-09-30",
-       0.75
+       "2026-10-01",
+       0.78
       ],
       [
-       "2026-10-07",
+       "2026-10-08",
        -0.04
       ],
       [
-       "2026-10-14",
+       "2026-10-15",
        0.25
       ]
      ],
@@ -46456,7 +46558,7 @@
       "valeur": 0,
       "libelle": "Neutre",
       "regles": [],
-      "raison": "indice de surprise macro 30 jours : +0,14, sous les seuils",
+      "raison": "indice de surprise macro 30 jours : +0,12, sous les seuils",
       "bornee": false
      },
      {
@@ -46484,7 +46586,7 @@
         "regle": "titres du jour au canal « énergie » ≥ 3 titres → −1 pour EUR",
         "chiffre": "3 titres",
         "source": "flux RSS du jour, classement par mots-clés (Python)",
-        "date": "2026-10-14",
+        "date": "2026-10-15",
         "points": -1
        }
       ],
@@ -46516,23 +46618,15 @@
      },
      {
       "engrenage": 8,
-      "valeur": -1,
-      "libelle": "Pression",
-      "regles": [
-       {
-        "regle": "Brent, variation sur 4 semaines ≥ 10,00 % → −1 pour EUR",
-        "chiffre": "+18,21 %",
-        "source": "FRED (DCOILBRENTEU)",
-        "date": "2026-10-06",
-        "points": -1
-       }
-      ],
-      "raison": null,
+      "valeur": 0,
+      "libelle": "Neutre",
+      "regles": [],
+      "raison": "Brent, variation sur 4 semaines : +18,21 %, compté 0 car série heurtée : +18,0 % le 02/10 en une séance (chiffres officiels)",
       "bornee": false
      }
     ],
-    "bilan": -3,
-    "lecture": "sous pression"
+    "bilan": -2,
+    "lecture": "neutre"
    },
    {
     "devise": "GBP",
@@ -46558,7 +46652,7 @@
       "valeur": 0,
       "libelle": "Neutre",
       "regles": [],
-      "raison": "indice de surprise macro 30 jours : +0,35, sous les seuils",
+      "raison": "indice de surprise macro 30 jours : +0,28, sous les seuils",
       "bornee": false
      },
      {
@@ -46652,7 +46746,7 @@
       "valeur": 0,
       "libelle": "Neutre",
       "regles": [],
-      "raison": "indice de surprise macro 30 jours : −0,03, sous les seuils",
+      "raison": "indice de surprise macro 30 jours : −0,29, sous les seuils",
       "bornee": false
      },
      {
@@ -46680,7 +46774,7 @@
         "regle": "titres du jour au canal « énergie » ≥ 3 titres → −1 pour JPY",
         "chiffre": "3 titres",
         "source": "flux RSS du jour, classement par mots-clés (Python)",
-        "date": "2026-10-14",
+        "date": "2026-10-15",
         "points": -1
        }
       ],
@@ -46705,22 +46799,14 @@
      },
      {
       "engrenage": 8,
-      "valeur": -1,
-      "libelle": "Pression",
-      "regles": [
-       {
-        "regle": "Brent, variation sur 4 semaines ≥ 10,00 % → −1 pour JPY",
-        "chiffre": "+18,21 %",
-        "source": "FRED (DCOILBRENTEU)",
-        "date": "2026-10-06",
-        "points": -1
-       }
-      ],
-      "raison": null,
+      "valeur": 0,
+      "libelle": "Neutre",
+      "regles": [],
+      "raison": "Brent, variation sur 4 semaines : +18,21 %, compté 0 car série heurtée : +18,0 % le 02/10 en une séance (chiffres officiels)",
       "bornee": false
      }
     ],
-    "bilan": -5,
+    "bilan": -4,
     "lecture": "sous pression"
    },
    {
@@ -46845,7 +46931,7 @@
         "regle": "indice de surprise macro 30 jours ≤ −0,50 → −1",
         "chiffre": "−0,62",
         "source": "calcul Python (registre macro, 30 j)",
-        "date": "2026-10-14",
+        "date": "2026-10-15",
         "points": -1
        }
       ],
@@ -46877,7 +46963,7 @@
         "regle": "titres du jour au canal « énergie » ≥ 3 titres → +1 pour CAD",
         "chiffre": "3 titres",
         "source": "flux RSS du jour, classement par mots-clés (Python)",
-        "date": "2026-10-14",
+        "date": "2026-10-15",
         "points": 1
        }
       ],
@@ -46902,22 +46988,14 @@
      },
      {
       "engrenage": 8,
-      "valeur": 1,
-      "libelle": "Soutien",
-      "regles": [
-       {
-        "regle": "Brent, variation sur 4 semaines ≥ 10,00 % → +1 pour CAD",
-        "chiffre": "+18,21 %",
-        "source": "FRED (DCOILBRENTEU)",
-        "date": "2026-10-06",
-        "points": 1
-       }
-      ],
-      "raison": null,
+      "valeur": 0,
+      "libelle": "Neutre",
+      "regles": [],
+      "raison": "Brent, variation sur 4 semaines : +18,21 %, compté 0 car série heurtée : +18,0 % le 02/10 en une séance (chiffres officiels); stocks de brut US contre la moyenne 5 ans de la même semaine : −0,60 %, aucun effet sur CAD",
       "bornee": false
      }
     ],
-    "bilan": -1,
+    "bilan": -2,
     "lecture": "neutre"
    },
    {
@@ -46948,7 +47026,7 @@
         "regle": "indice de surprise macro 30 jours ≤ −0,50 → −1",
         "chiffre": "−0,52",
         "source": "calcul Python (registre macro, 30 j)",
-        "date": "2026-10-14",
+        "date": "2026-10-15",
         "points": -1
        }
       ],
@@ -47110,7 +47188,7 @@
       "valeur": 0,
       "libelle": "Neutre",
       "regles": [],
-      "raison": "indice de surprise macro 30 jours : −0,15, sous les seuils",
+      "raison": "indice de surprise macro 30 jours : +0,15, sous les seuils",
       "bornee": false
      },
      {
@@ -47163,6 +47241,8 @@
    "pression": -3
   },
   "theme_fort": false,
+  "cases_actives": 15,
+  "cases_total": 72,
   "legende": "▲▲ soutien fort (+2) · ▲ soutien (+1) · · neutre (0) · ▼ pression (−1) · ▼▼ pression forte (−2). Chaque case applique une règle écrite dans config.yaml au chiffre du jour ; bilan = somme des 8 cases (soutenue ≥ 3, sous pression ≤ -3). Aide à la lecture, jamais une recommandation d'achat ou de vente."
  }
 }

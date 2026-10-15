@@ -42,6 +42,8 @@ export async function pageTableau() {
   defile.appendChild(table);
   c.appendChild(defile);
   const compteur = el("p", "note"); c.appendChild(compteur);
+  if (JSON.stringify(t.lignes || []).includes("taux de refinancement")) c.appendChild(el("p", "note",
+    "EUR, « taux de refinancement » : taux principal publié par ForexFactory. Le site utilise le taux de dépôt de la BCE (ECBDFR, 15 pb plus bas) pour le portage et les dossiers des engrenages."));
 
   const lignes = t.lignes || [];
   function valeurTri(l, cle) {

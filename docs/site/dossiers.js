@@ -275,7 +275,8 @@ function graphiqueBarres(g) {
   const cadre = el("figure", "graphique");
   cadre.appendChild(el("figcaption", null, `${g.titre}${g.unite ? ` (${g.unite})` : ""}`));
   if (!g.barres?.length) { cadre.appendChild(el("p", "indisponible", `Indisponible : ${g.raison || "pas de données"}.`)); return cadre; }
-  const hauteurBarre = 18, L = 320, gauche = 92, droite = 44;
+  const hauteurBarre = 18, L = 320, droite = 44;
+  const gauche = Math.min(110, 14 + 6.2 * Math.max(...g.barres.map(b => String(b.nom).length)));   // étiquette = code seul
   const H = g.barres.length * hauteurBarre + 6;
   const vals = g.barres.map(b => b.valeur);
   const min = Math.min(0, ...vals), max = Math.max(0, ...vals);
@@ -284,12 +285,15 @@ function graphiqueBarres(g) {
   svg.appendChild(s("line", { x1: x(0), x2: x(0), y1: 0, y2: H, class: "zero" }));
   g.barres.forEach((b, i) => {
     const yb = 3 + i * hauteurBarre;
-    svg.appendChild(s("text", { x: gauche - 6, y: yb + 12, "text-anchor": "end", class: "axe" }, `${DRAPEAUX[b.nom] ? DRAPEAUX[b.nom] + " " : ""}${b.nom}`.slice(0, 22)));
+    svg.appendChild(s("text", { x: gauche - 6, y: yb + 12, "text-anchor": "end", class: "axe" }, String(b.nom).slice(0, 18)));
     const x0 = Math.min(x(0), x(b.valeur)), largeur = Math.max(1, Math.abs(x(b.valeur) - x(0)));
+    // Une teinte par signe (charte du thème) quand le graphique a des valeurs négatives ; sinon la couleur d'accent.
+    const signe = vals.some(v => v < 0);
     svg.appendChild(s("rect", { x: x0, y: yb + 2, width: largeur, height: hauteurBarre - 6, rx: 2,
-                                fill: b.valeur < 0 ? "var(--negatif)" : (COULEUR_ENTITE[b.nom] || "var(--accent)") }));
-    svg.appendChild(s("text", { x: b.valeur < 0 ? x0 - 3 : x0 + largeur + 3, y: yb + 12, "text-anchor": b.valeur < 0 ? "end" : "start", class: "axe" },
-                      `${b.valeur > 0 && vals.some(v => v < 0) ? "+" : ""}${nombre(b.valeur, Math.abs(b.valeur) < 10 ? 2 : 0)}`));
+                                fill: b.valeur < 0 ? "var(--negatif)" : signe ? "var(--positif)" : "var(--accent)" }));
+    // Valeur toujours à droite de l'axe zéro pour une barre négative : jamais sur l'étiquette de gauche.
+    svg.appendChild(s("text", { x: b.valeur < 0 ? x(0) + 3 : x0 + largeur + 3, y: yb + 12, "text-anchor": "start", class: "axe valeur-barre" },
+                      `${b.valeur > 0 && signe ? "+" : ""}${nombre(b.valeur, Math.abs(b.valeur) < 10 ? 2 : 0)}`.replace("-", "−")));
   });
   cadre.appendChild(svg);
   if (g.absentes?.length) cadre.appendChild(el("p", "note", `Sans donnée : ${g.absentes.join(", ")}.`));
@@ -306,7 +310,7 @@ function graphiques(e) {
 /* ------------------------------------------------------------ tuiles (palier 2) */
 function miniCourbe(courbe, libelle) {
   const pts = courbe?.points || [];
-  if (pts.length < 2) return el("p", "tk-sans", courbe?.raison ? `Pas de courbe : ${courbe.raison}.` : "Pas de courbe.");
+  if (pts.length < 2) return el("div", "tk-sans", "courbe n/d");   // raison complète dans le « i »
   const L = 120, H = 26, v = pts.map(p => p[1]);
   let mn = Math.min(...v), mx = Math.max(...v); if (mn === mx) { mn -= 1; mx += 1; }
   const yy = a => (H - 3 - (a - mn) / (mx - mn) * (H - 6)).toFixed(1);
@@ -318,50 +322,59 @@ function miniCourbe(courbe, libelle) {
   return svg;
 }
 
+function rail(p, libelle, extreme) {
+  const r = el("div", `tk-rail${extreme ? " extreme" : ""}`);
+  r.setAttribute("role", "img"); r.setAttribute("aria-label", `percentile ${libelle} : ${p}`);
+  const i = el("i"); i.style.width = `${p}%`; r.append(i, el("u"));
+  return r;
+}
+
+/* Tuile sobre : chaque « n/d » tient sur une ligne ; toutes les raisons vont dans le panneau « i ». */
 function tuileChiffre(t) {
   const c = el("div", "tk");
   const tete = el("div", "tk-tete");
   tete.appendChild(el("span", "tk-libelle", t.libelle));
   const info = el("button", "tk-info", "i"); info.type = "button";
-  info.setAttribute("aria-label", `Source et date : ${t.libelle}`); info.setAttribute("aria-expanded", "false");
+  info.setAttribute("aria-label", `Source, date et raisons : ${t.libelle}`); info.setAttribute("aria-expanded", "false");
   tete.appendChild(info); c.appendChild(tete);
   const v = el("div", "tk-valeur tabulaire", t.texte ?? "n/d");
   if (t.texte === null || t.texte === undefined) v.classList.add("tk-nd");
   c.appendChild(v);
-  if (t.raison) c.appendChild(el("div", "tk-raison", t.raison));
-  if (t.variation) {
-    const val = t.variation.valeur;
-    c.appendChild(el("div", `tk-var tabulaire ${val > 0 ? "pos" : val < 0 ? "neg" : ""}`, t.variation.texte));
-  }
+  const val = t.variation?.valeur;
+  c.appendChild(el("div", `tk-var tabulaire ${val > 0 ? "pos" : val < 0 ? "neg" : ""}`, t.variation ? t.variation.texte : "variation n/d"));
   c.appendChild(miniCourbe(t.courbe, t.libelle));
   if (t.percentile_5a !== null && t.percentile_5a !== undefined) {
     const p = t.percentile_5a, extreme = p >= 85 || p <= 15;
-    const rail = el("div", `tk-rail${extreme ? " extreme" : ""}`);
-    rail.setAttribute("role", "img"); rail.setAttribute("aria-label", `percentile 5 ans : ${p}`);
-    const r = el("i"); r.style.width = `${p}%`; rail.append(r, el("u"));
-    c.appendChild(rail);
+    c.appendChild(rail(p, "5 ans", extreme));
     const lig = el("div", "tk-pct tabulaire", `percentile 5 ans : ${p}`);
     if (extreme) lig.appendChild(el("span", "tk-extreme", "extrême"));
     c.appendChild(lig);
   } else if (t.percentile_autre) {
     const p = t.percentile_autre.valeur, extreme = p >= 90 || p <= 10;
-    const rail = el("div", `tk-rail${extreme ? " extreme" : ""}`);
-    rail.setAttribute("role", "img"); rail.setAttribute("aria-label", `percentile ${t.percentile_autre.libelle} : ${p}`);
-    const r = el("i"); r.style.width = `${p}%`; rail.append(r, el("u"));
-    c.appendChild(rail);
-    const lig = el("div", "tk-pct tabulaire", `percentile ${t.percentile_autre.libelle} : ${p} (pas de série sur 5 ans)`);
+    c.appendChild(rail(p, t.percentile_autre.libelle, extreme));
+    const lig = el("div", "tk-pct tabulaire", `percentile ${t.percentile_autre.libelle} : ${p}`);
     if (extreme) lig.appendChild(el("span", "tk-extreme", "extrême"));
     c.appendChild(lig);
-  } else if (t.valeur !== null && t.valeur !== undefined) {
-    c.appendChild(el("div", "tk-pct", `percentile n/d${t.raison_percentile ? ` — ${t.raison_percentile}` : ""}`));
+  } else {
+    c.appendChild(el("div", "tk-rail tk-rail-vide"));
+    c.appendChild(el("div", "tk-pct", "percentile n/d"));
   }
+  c.appendChild(el("div", "tk-date", t.date ? `au ${String(t.date).length > 7 ? dateCourte(t.date) : t.date}` : "date n/d"));
   const detail = el("div", "tk-detail");
   detail.hidden = true;
-  detail.textContent = [t.source && `Source : ${t.source}`, t.date && `donnée du ${String(t.date).length > 7 ? dateCourte(t.date) : t.date}`,
-    t.n_5a && `percentile sur ${t.n_5a} observations`, t.courbe?.periode && t.courbe.points?.length > 1 && `courbe : ${t.courbe.periode}`,
-    t.lecture].filter(Boolean).join(" · ");
+  const lignes = [
+    t.raison && `Valeur n/d : ${t.raison}`,
+    t.source && `Source : ${t.source}`,
+    t.date && `Donnée du ${String(t.date).length > 7 ? dateCourte(t.date) : t.date}`,
+    t.n_5a && `Percentile calculé sur ${t.n_5a} observations`,
+    t.percentile_autre && `Pas de série sur 5 ans : percentile sur ${t.percentile_autre.libelle}`,
+    (t.percentile_5a === null || t.percentile_5a === undefined) && !t.percentile_autre && t.raison_percentile && `Percentile n/d : ${t.raison_percentile}`,
+    t.courbe?.points?.length > 1 ? `Courbe : ${t.courbe.periode}` : t.courbe?.raison && `Courbe n/d : ${t.courbe.raison}`,
+    !t.variation && "Variation n/d sur la période",
+    t.lecture,
+  ].filter(Boolean);
+  for (const l of lignes) detail.appendChild(el("p", null, l));
   c.appendChild(detail);
-  if (t.date) c.appendChild(el("div", "tk-date", `au ${String(t.date).length > 7 ? dateCourte(t.date) : t.date}`));
   info.addEventListener("click", () => { detail.hidden = !detail.hidden; info.setAttribute("aria-expanded", String(!detail.hidden)); });
   return c;
 }
@@ -414,7 +427,53 @@ function mouvement(x, unite) {
   span.appendChild(el("small", "mi-n", ` · ${x.n} cas`));
   return span;
 }
-function tableauConsequences(c) {
+const PASTILLE = { "Soutien": "pos", "Pression": "neg", "Indice faible": "faible", "Neutre": "neutre", "n/d": "nd" };
+function pastilleLecture(a) {
+  const lecture = a?.lecture || "n/d";
+  const b = el("span", `pastille-lecture ${PASTILLE[lecture] || "nd"}`, lecture === "Indice faible" && a?.n ? `Indice faible · ${a.n} cas` : lecture);
+  b.tabIndex = 0;                                   // infobulle accessible au clavier
+  b.title = a?.raison || "";
+  b.setAttribute("aria-label", `${lecture}. ${a?.raison || ""}`);
+  return b;
+}
+function ligneConsequence(l) {
+  const tr = el("tr");
+  tr.appendChild(el("td", null, l.actif));
+  if (l.sensibilite === undefined) {
+    const td = el("td", "nd", `n/d : ${l.raison}`); td.colSpan = 5; tr.appendChild(td);
+    return tr;
+  }
+  const sens = el("td", "tabulaire");
+  if (l.sensibilite === null) sens.appendChild(el("span", "nd", "n/d"));
+  else {
+    sens.textContent = `${l.sensibilite > 0 ? "+" : ""}${nombre(l.sensibilite, 2)}`;
+    const force = Math.min(1, Math.abs(l.sensibilite)) * 45;
+    sens.style.background = `color-mix(in srgb, ${l.sensibilite >= 0 ? "var(--positif)" : "var(--negatif)"} ${force.toFixed(0)}%, var(--carte))`;
+    sens.title = `corrélation sur ${l.n_mois} mois`;
+  }
+  tr.appendChild(sens);
+  const h = el("td"); h.appendChild(mouvement(l.si_hausse, l.unite)); tr.appendChild(h);
+  const b = el("td"); b.appendChild(mouvement(l.si_baisse, l.unite)); tr.appendChild(b);
+  const f = el("td", "tabulaire");
+  if (l.fiabilite?.part === null || l.fiabilite?.part === undefined) { f.appendChild(el("span", "nd", "n/d")); f.title = l.fiabilite?.raison || ""; }
+  else {
+    f.textContent = `${l.fiabilite.part} %`;
+    f.appendChild(el("small", "mi-n", ` · ${l.fiabilite.n} cas`));
+    if (l.fiabilite.borne_wilson_90 !== undefined) f.title = `borne basse de Wilson à 90 % : ${String(l.fiabilite.borne_wilson_90).replace(".", ",")} %`;
+  }
+  tr.appendChild(f);
+  const a = el("td"); a.appendChild(pastilleLecture(l.aujourdhui)); tr.appendChild(a);
+  return tr;
+}
+const ENTETES_CONSEQ = ["Actif", "Sensibilité", "Si le moteur monte", "Si le moteur baisse", "Fiabilité", "Aujourd'hui"];
+function tableConsequences(lignes) {
+  const cadre = tableau(ENTETES_CONSEQ, lignes.map(ligneConsequence));
+  const t = cadre.querySelector("table"); t.classList.add("rtab");   // une carte par ligne sous 600 px
+  t.querySelectorAll("tbody tr").forEach(tr => [...tr.cells].forEach((td, i) => td.setAttribute("data-label", td.colSpan > 1 ? "" : ENTETES_CONSEQ[i])));
+  return cadre;
+}
+/* Tableau des conséquences : trié par sensibilité absolue décroissante ; lignes sans sens attendu regroupées et repliées. */
+function tableauConsequences(c, numero) {
   if (!c) return null;
   const bloc = el("div", "consequences");
   bloc.appendChild(el("h3", null, "Tableau des conséquences (5 ans)"));
@@ -426,40 +485,23 @@ function tableauConsequences(c) {
   }
   bloc.appendChild(el("p", "sous-titre",
     `Moteur : ${m.libelle} · variation sur le dernier mois ${m.variation_1m > 0 ? "+" : ""}${nombre(m.variation_1m, 2)} ${m.unite} (au ${dateCourte(m.date)}) · source : ${m.source} · depuis le ${dateCourte(m.debut)}`));
-  const lignes = c.lignes.map(l => {
-    const tr = el("tr");
-    tr.appendChild(el("td", null, l.actif));
-    if (l.sensibilite === undefined) {
-      const td = el("td", "nd", `n/d : ${l.raison}`); td.colSpan = 5; tr.appendChild(td);
-      return tr;
-    }
-    const sens = el("td", "tabulaire");
-    if (l.sensibilite === null) sens.appendChild(el("span", "nd", "n/d"));
-    else {
-      sens.textContent = `${l.sensibilite > 0 ? "+" : ""}${nombre(l.sensibilite, 2)}`;
-      const force = Math.min(1, Math.abs(l.sensibilite)) * 45;
-      sens.style.background = `color-mix(in srgb, ${l.sensibilite >= 0 ? "var(--positif)" : "var(--negatif)"} ${force.toFixed(0)}%, var(--carte))`;
-      sens.title = `corrélation sur ${l.n_mois} mois`;
-    }
-    tr.appendChild(sens);
-    const h = el("td"); h.appendChild(mouvement(l.si_hausse, l.unite)); tr.appendChild(h);
-    const b = el("td"); b.appendChild(mouvement(l.si_baisse, l.unite)); tr.appendChild(b);
-    const f = el("td", "tabulaire");
-    if (l.fiabilite?.part === null || l.fiabilite?.part === undefined) { f.appendChild(el("span", "nd", "n/d")); f.title = l.fiabilite?.raison || ""; f.appendChild(el("small", "mi-n", ` ${l.fiabilite?.raison || ""}`)); }
-    else { f.textContent = `${l.fiabilite.part} %`; f.appendChild(el("small", "mi-n", ` · ${l.fiabilite.n} cas`)); }
-    tr.appendChild(f);
-    const a = el("td", LECTURE_CLASSE[l.aujourdhui?.lecture] || "");
-    a.appendChild(el("strong", null, l.aujourdhui?.lecture || "n/d"));
-    if (l.aujourdhui?.raison) a.appendChild(el("small", "conseq-raison", l.aujourdhui.raison));
-    tr.appendChild(a);
-    return tr;
-  });
-  const entetes = ["Actif", "Sensibilité", "Si le moteur monte", "Si le moteur baisse", "Fiabilité", "Aujourd'hui"];
-  const cadre = tableau(entetes, lignes);
-  const t = cadre.querySelector("table"); t.classList.add("rtab");   // une carte par ligne sous 600 px
-  t.querySelectorAll("tbody tr").forEach(tr => [...tr.cells].forEach((td, i) => td.setAttribute("data-label", td.colSpan > 1 ? "" : entetes[i])));
-  bloc.appendChild(cadre);
+  const sansSens = l => l.fiabilite?.sans_sens || l.sensibilite === null || l.sensibilite === undefined;
+  const avec = c.lignes.filter(l => !sansSens(l)).sort((a, b) => Math.abs(b.sensibilite) - Math.abs(a.sensibilite));
+  const sans = c.lignes.filter(sansSens);
+  if (avec.length) bloc.appendChild(tableConsequences(avec));
+  if (sans.length) {
+    const d = el("details", "sans-sens");
+    d.appendChild(el("summary", null, `Sans sens attendu (${sans.length})`));
+    d.appendChild(tableConsequences(sans));
+    bloc.appendChild(d);
+  }
+  bloc.appendChild(el("p", "note", "Aujourd'hui : Soutien ou Pression seulement si la borne basse de Wilson à 90 % de la part de cas favorables dépasse 50 % ; sinon « Indice faible » avec le nombre de cas ; « Neutre » si le moteur reste dans ±1 écart-type. Raison complète au survol ou au focus de la pastille."));
   bloc.appendChild(el("p", "note", `${c.methode} ${c.note}`));
+  if (numero) {
+    const lien = el("a", "bouton simuler", "Simuler ce moteur");
+    lien.href = `#scenarios/g=${numero}`;
+    bloc.appendChild(lien);
+  }
   return bloc;
 }
 
@@ -577,7 +619,7 @@ function contenuEngrenage(n, e) {
   if (n === 5) parties.push(tableauInstruments(e.instruments));
   for (const p of parties) bloc.appendChild(p);
   if (n === 5) { const h = carteChaleur(e.matrice_chaleur); if (h) bloc.appendChild(h); }
-  const conseq = tableauConsequences(e.consequences); if (conseq) bloc.appendChild(conseq);
+  const conseq = tableauConsequences(e.consequences, n); if (conseq) bloc.appendChild(conseq);
   if (!riche) bloc.appendChild(graphiques(e));
   if (n === 5 && e.correlations) {
     const c = e.correlations;

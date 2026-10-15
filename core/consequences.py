@@ -24,7 +24,18 @@ HORIZON_JOURS = 30
 ESPACEMENT_JOURS = 30
 MIN_CAS_FIABILITE = 20
 MIN_CAS_MEDIANE = 5
-SEUIL_FIABILITE = 55   # « Aujourd'hui » : Soutien ou Pression seulement si le sens attendu s'est vérifié ≥ 55 % du temps
+Z_WILSON = 1.645   # « Aujourd'hui » : Soutien ou Pression seulement si la borne basse de Wilson à 90 % dépasse 50 %
+
+
+def borne_basse_wilson(bons: int, n: int, z: float = Z_WILSON) -> float | None:
+    """Borne basse de l'intervalle de Wilson (en %) de la part de cas favorables : tient compte de la taille
+    de l'échantillon (12 bons sur 20 = 60 %, mais la borne basse est sous 50 % : indice faible)."""
+    if not n:
+        return None
+    p = bons / n
+    centre = p + z * z / (2 * n)
+    marge = z * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n))
+    return round(100 * (centre - marge) / (1 + z * z / n), 1)
 NOTE = "Corrélation n'est pas causalité : ces chiffres décrivent le passé récent (5 ans), ils ne prévoient rien."
 
 DEVISES = h5m.DEVISES
@@ -164,23 +175,25 @@ def ligne_actif(moteur: _Serie, cible: _Serie, debut: str, fin: str) -> dict:
                 "raison": None if len(cas) >= MIN_CAS_MEDIANE else f"moins de {MIN_CAS_MEDIANE} cas ({len(cas)})"}
 
     if sensibilite is None or abs(sensibilite) < 0.1:
-        fiab = {"part": None, "n": n, "raison": "pas de sens attendu (sensibilité nulle ou non calculable)"}
+        fiab = {"part": None, "n": n, "sans_sens": True, "raison": "pas de sens attendu (sensibilité nulle ou non calculable)"}
     elif n < MIN_CAS_FIABILITE:
         fiab = {"part": None, "n": n, "raison": f"échantillon insuffisant ({n} cas, minimum {MIN_CAS_FIABILITE})"}
     else:
         signe = 1 if sensibilite > 0 else -1
         bons = sum(1 for x in hausses if x * signe > 0) + sum(1 for x in baisses if x * signe < 0)
-        fiab = {"part": round(100 * bons / n), "n": n, "raison": None}
+        fiab = {"part": round(100 * bons / n), "n": n, "bons": bons, "borne_wilson_90": borne_basse_wilson(bons, n), "raison": None}
     return {"sensibilite": sensibilite, "n_mois": len(paires), "si_hausse": mediane(hausses), "si_baisse": mediane(baisses),
             "fiabilite": fiab, "sigma_moteur": round(sigma, 2)}
 
 
 def _aujourdhui(moteur: _Serie, sigma: float | None, ligne: dict, fin: str) -> dict:
+    """Pastille du jour : Soutien / Pression (preuve suffisante), Indice faible (preuve insuffisante),
+    Neutre (moteur calme) ou n/d ; la raison complète va dans l'infobulle."""
     v = moteur.variation(_plus(fin, -HORIZON_JOURS), fin)
     if v is None or not sigma:
         return {"lecture": "n/d", "raison": "variation du moteur sur le dernier mois indisponible"}
     if abs(v) < sigma:
-        return {"lecture": "Neutre", "raison": f"moteur dans ±1 écart-type sur 1 mois ({v:+.2f} contre ±{sigma:.2f})".replace(".", ",").replace("-", "−")}
+        return {"lecture": "Neutre", "raison": f"moteur calme : {v:+.2f} sur 1 mois, dans ±1 écart-type (±{sigma:.2f})".replace(".", ",").replace("-", "−")}
     cote = ligne.get("si_hausse" if v > 0 else "si_baisse") or {}
     fiab = ligne.get("fiabilite") or {}
     if fiab.get("part") is None or cote.get("mediane") is None:
@@ -189,15 +202,16 @@ def _aujourdhui(moteur: _Serie, sigma: float | None, ligne: dict, fin: str) -> d
     unite = ligne.get("unite", "%")
     mediane = f"{cote['mediane']:+.2f} {unite}".replace(".", ",").replace("-", "−")
     attendu = (1 if ligne["sensibilite"] > 0 else -1) * (1 if v > 0 else -1)
+    borne = fiab.get("borne_wilson_90")
+    base = f"moteur en {sens} de plus d'1 écart-type sur 1 mois ; sens attendu vérifié dans {fiab['part']} % des {fiab['n']} cas"
     if cote["mediane"] * attendu <= 0:
-        return {"lecture": "Neutre", "raison": f"moteur en {sens} de plus d'1 écart-type, mais la médiane historique ({mediane}) "
-                                               "contredit le sens de la sensibilité : lecture non tranchée"}
-    if fiab["part"] < SEUIL_FIABILITE:
-        return {"lecture": "Neutre", "raison": f"moteur en {sens} de plus d'1 écart-type, mais fiabilité de {fiab['part']} % "
-                                               f"seulement (seuil {SEUIL_FIABILITE} %)"}
-    return {"lecture": "Soutien" if cote["mediane"] > 0 else "Pression",
-            "raison": f"moteur en {sens} de plus d'1 écart-type sur 1 mois ; médiane historique de l'actif {mediane}, "
-                      f"sens vérifié dans {fiab['part']} % des {fiab['n']} cas"}
+        return {"lecture": "Indice faible", "n": fiab["n"],
+                "raison": f"{base}, mais la médiane historique ({mediane}) contredit le sens de la sensibilité"}
+    if borne is None or borne <= 50:
+        return {"lecture": "Indice faible", "n": fiab["n"],
+                "raison": f"{base} ; borne basse de Wilson à 90 % : {borne} % (doit dépasser 50 %)".replace(".", ",")}
+    return {"lecture": "Soutien" if cote["mediane"] > 0 else "Pression", "n": fiab["n"],
+            "raison": f"{base} (borne basse de Wilson à 90 % : {borne} %) ; médiane historique de l'actif {mediane}".replace(".", ",", 1)}
 
 
 def calculer(h: h5m.Historique, historiques: dict, technique: dict | None = None, aujourdhui: date | None = None) -> dict:

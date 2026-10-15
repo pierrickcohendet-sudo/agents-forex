@@ -1,5 +1,5 @@
 /* Vue « Hebdo » de l'onglet 8 engrenages : dossier d'économiste (docs/data/dossiers_hebdo.json). */
-import { chargerJson, enErreur, el, indisponible, dateHeure } from "./commun.js";
+import { chargerJson, enErreur, el, indisponible, dateHeure, enBref } from "./commun.js";
 
 const BLOCS = [["constat", "Le constat"], ["mecanisme", "Le mécanisme"], ["ce_qui_pourrait_tout_changer", "Ce qui pourrait tout changer"]];
 const raison = t => String(t || "raison inconnue").replace(/^indisponible\s*:\s*/i, "");
@@ -30,6 +30,7 @@ function ficheHebdo(n, e) {
   const d = el("details", "carte fiche");
   const s = el("summary"); s.appendChild(el("span", "fiche-nom", `${n}. ${e.nom || ""}`));
   if (e.statut !== "ok") s.appendChild(el("span", "note", "indisponible"));
+  else { const b = enBref(e.constat); if (b) s.appendChild(b); }
   d.appendChild(s);
   const corps = el("div", "fiche-corps");
   if (e.statut !== "ok") {

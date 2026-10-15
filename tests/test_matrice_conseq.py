@@ -94,13 +94,52 @@ class Consequences(unittest.TestCase):
             self.assertIsNone(l["fiabilite"]["part"])
         self.assertLess(l["fiabilite"]["n"], 20)
 
-    def test_lecture_du_jour_exige_fiabilite_et_coherence(self):
+    def test_lecture_du_jour_regle_de_wilson(self):
         moteur = cq._Serie([("2026-09-10", 10.0), ("2026-10-10", 30.0)], "pts")
-        base = {"sensibilite": -0.5, "unite": "%", "fiabilite": {"part": 70, "n": 25}, "si_hausse": {"mediane": -1.2}}
+        fort = {"part": 80, "n": 30, "bons": 24, "borne_wilson_90": cq.borne_basse_wilson(24, 30)}
+        base = {"sensibilite": -0.5, "unite": "%", "fiabilite": fort, "si_hausse": {"mediane": -1.2}}
         self.assertEqual(cq._aujourdhui(moteur, 5.0, base, "2026-10-10")["lecture"], "Pression")
-        self.assertEqual(cq._aujourdhui(moteur, 5.0, {**base, "fiabilite": {"part": 50, "n": 25}}, "2026-10-10")["lecture"], "Neutre")
-        self.assertEqual(cq._aujourdhui(moteur, 5.0, {**base, "si_hausse": {"mediane": 0.8}}, "2026-10-10")["lecture"], "Neutre")
-        self.assertEqual(cq._aujourdhui(moteur, 50.0, base, "2026-10-10")["lecture"], "Neutre")   # moteur dans ±1σ
+        faible = {"part": 60, "n": 20, "bons": 12, "borne_wilson_90": cq.borne_basse_wilson(12, 20)}
+        l = cq._aujourdhui(moteur, 5.0, {**base, "fiabilite": faible}, "2026-10-10")
+        self.assertEqual((l["lecture"], l["n"]), ("Indice faible", 20))                  # 60 % de 20 cas : preuve insuffisante
+        self.assertIn("Wilson", l["raison"])
+        self.assertEqual(cq._aujourdhui(moteur, 5.0, {**base, "si_hausse": {"mediane": 0.8}}, "2026-10-10")["lecture"], "Indice faible")
+        self.assertEqual(cq._aujourdhui(moteur, 50.0, base, "2026-10-10")["lecture"], "Neutre")   # moteur calme
+
+    def test_borne_basse_de_wilson(self):
+        self.assertLess(cq.borne_basse_wilson(12, 20), 50)
+        self.assertGreater(cq.borne_basse_wilson(24, 33), 50)
+        self.assertIsNone(cq.borne_basse_wilson(0, 0))
+
+
+class MatriceCorrections(unittest.TestCase):
+    def test_serie_heurtee_comptee_zero_et_densite(self):
+        d = dossiers()
+        d["8"] = {"instruments": [{"id": "brent", "cellule": {"var_4s": 18.2, "source": "FRED", "date": "2026-10-06",
+                                                              "alerte": "série heurtée : +18,0 % le 02/10 en une séance"}}]}
+        m = mi.calculer(CONFIG, d, vue())
+        cad = {c["engrenage"]: c for c in next(l for l in m["lignes"] if l["devise"] == "CAD")["cases"]}
+        self.assertEqual(cad[8]["valeur"], 0)
+        self.assertIn("série heurtée", cad[8]["raison"])
+        self.assertEqual(m["cases_total"], 72)
+        self.assertEqual(m["cases_actives"], sum(1 for l in m["lignes"] for c in l["cases"] if c["valeur"]))
+
+
+class TexteAutomatique(unittest.TestCase):
+    def test_texte_python_sans_modele(self):
+        from agents import agent_strategiste as st
+        technique = {"devises": {"JPY": {"rsi": 36.5, "rsi_lecture": "momentum baissier", "ecart_mm200_pct": 0.17,
+                                         "indicateurs_source": {"date": "2026-10-14", "percentiles": {"rsi": 23}}}}}
+        macro = {"flux": {"cot": {"JPY": {"net": 62325, "percentile_52s": 92, "extreme": "long", "date": "2026-10-06"}}},
+                 "taux_obligataires": {"JPY": {"spread_2a_vs_usd_pb": -293}}}
+        r = st.texte_automatique("JPY", technique, macro, {"JPY": {"taux": 1.227, "source": "BoJ", "date": "2026-10-09"}},
+                                 {"differentiels": {"JPY": -1.52}})
+        for morceau in ("RSI 14 à 36,5", "percentile 5 ans 23", "+62 325 contrats", "extrême acheteur", "1,23 %", "−293 pb",
+                        "Score de confluence n/d"):
+            self.assertIn(morceau, r["texte"])
+        self.assertEqual(len(r["sources"]), 3)
+        vide = st.texte_automatique("CNY", {}, {}, {}, {})
+        self.assertIn("Aucune donnée", vide["texte"])
 
 
 if __name__ == "__main__":

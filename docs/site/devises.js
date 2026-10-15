@@ -1,5 +1,5 @@
 /* Onglet Devises : une fiche par devise (9), analyse du jour, indicateurs, synthèse approfondie. */
-import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, DRAPEAUX } from "./commun.js";
+import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, DRAPEAUX , enBref } from "./commun.js";
 
 const BIAIS = { haussier: "Haussier", baissier: "Baissier", neutre: "Neutre" };
 const PROFIL = { on: "Risk On", off: "Risk Off", neutre: "Neutre" };
@@ -71,6 +71,7 @@ function syntheseApprofondie(syn, sources) {
   const modele = syn?.redige_par?.libelle;
   const titre = el("summary", null, "Synthèse approfondie");
   if (syn?.statut === "ok" && modele) titre.appendChild(el("span", "note", ` · rédigée par ${modele}`));
+  if (syn?.statut === "ok") { const b = enBref(syn.these_centrale?.texte); if (b) titre.appendChild(b); }
   bloc.appendChild(titre);
   if (!syn) { bloc.appendChild(el("p", "indisponible", "Synthèse indisponible : non générée pour ce rapport.")); return bloc; }
   if (syn.statut !== "ok") {
@@ -139,14 +140,21 @@ function fiche(d, cles, sources, ouverte) {
   const s = el("summary");
   s.appendChild(el("span", "fiche-nom", `${DRAPEAUX[d.devise] || ""} ${d.devise}`));
   const biais = cles?.cellules?.biais;
-  if (d.score_confluence === null || d.score_confluence === undefined) s.appendChild(el("span", "note", "analyse indisponible"));
+  if ((d.score_confluence === null || d.score_confluence === undefined) && d.texte_automatique) s.appendChild(el("span", "note", "score n/d · texte automatique"));
+  else if (d.score_confluence === null || d.score_confluence === undefined) s.appendChild(el("span", "note", "analyse indisponible"));
   else {
     s.appendChild(el("span", "tabulaire fiche-score", `${d.score_confluence}/100`));
     if (biais?.code) s.appendChild(el("span", `biais ${biais.code}`, BIAIS[biais.code]));
   }
+  { const b = enBref(d.synthese_une_phrase); if (b) s.appendChild(b); }
   f.appendChild(s);
   const corps = el("div", "fiche-corps");
-  if (d.score_confluence === null || d.score_confluence === undefined) {
+  if ((d.score_confluence === null || d.score_confluence === undefined) && d.texte_automatique) {
+    const p = el("p", "phrase");
+    p.append(el("span", "etiquette-auto", "Texte automatique, sans modèle"), document.createTextNode(` ${d.synthese_une_phrase}`));
+    corps.appendChild(p);
+    corps.appendChild(el("p", "note", `Sources : ${(d.texte_automatique_sources || []).join(" · ") || "—"}. Analyse du modèle indisponible : ${raison(d.raison_indisponibilite)} ; nouvel essai au prochain passage.`));
+  } else if (d.score_confluence === null || d.score_confluence === undefined) {
     corps.appendChild(el("p", "indisponible", `Analyse indisponible aujourd'hui : ${raison(d.raison_indisponibilite)}. Les données collectées restent affichées.`));
   } else {
     corps.appendChild(el("p", "phrase", d.synthese_une_phrase || ""));

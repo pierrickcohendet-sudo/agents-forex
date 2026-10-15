@@ -436,3 +436,31 @@ a.bouton[aria-pressed="true"] { background: var(--accent); color: #fff; border-c
   table.rtab .conseq-raison { max-width: 24ch; }
   .defile:has(table.rtab) { border: 1px solid var(--trait); }
 }
+.etiquette-auto { display: inline-block; font-size: 11.5px; font-weight: 700; color: var(--alerte); border: 1px solid currentColor; border-radius: 999px; padding: 0 8px; margin-right: 4px; }
+.mi-densite { font-weight: 600; font-size: 13px; margin: 8px 0 0; }
+
+/* Palier A : tuiles sobres, hauteur uniforme, texte d'au moins 12 px */
+.tk-grille { grid-auto-rows: 1fr; }
+.tk { justify-content: flex-start; }
+.tk-libelle { font-size: 12.5px; }
+.tk-var, .tk-pct, .tk-date, .tk-sans { font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tk-sans { min-height: 26px; margin-top: 4px; display: flex; align-items: center; color: var(--texte-2); }
+.tk-var:not(.pos):not(.neg) { color: var(--texte-2); }
+.tk-rail-vide { background: transparent; border: 1px dashed var(--trait); }
+.tk-extreme { font-size: 12px; }
+.tk-detail { font-size: 12px; }
+.tk-detail p { margin: 0 0 4px; }
+.tk-date { margin-top: auto; padding-top: 2px; }
+
+.pastille-lecture { display: inline-block; font-size: 12px; font-weight: 700; border-radius: 999px; padding: 1px 9px; border: 1px solid currentColor; white-space: nowrap; cursor: help; }
+.pastille-lecture.pos { color: var(--positif); } .pastille-lecture.neg { color: var(--negatif); }
+.pastille-lecture.faible { color: var(--alerte); } .pastille-lecture.neutre, .pastille-lecture.nd { color: var(--texte-2); }
+details.sans-sens { margin-top: 8px; } details.sans-sens summary { cursor: pointer; font-weight: 600; font-size: 13px; color: var(--texte-2); }
+.bouton.simuler { display: inline-block; margin-top: 8px; text-decoration: none; }
+.en-bref { display: block; flex-basis: 100%; font-size: 13px; font-weight: 400; color: var(--texte-2); margin-top: 4px; line-height: 1.4; } .en-bref strong { color: var(--texte); font-weight: 600; }
+.recherche-archives { width: 100%; max-width: 360px; font: inherit; padding: 7px 10px; border: 1px solid var(--trait); border-radius: var(--rayon); background: var(--carte); color: var(--texte); margin-bottom: 10px; }
+details.mois-archives { border-top: 1px solid var(--trait); padding: 6px 0; }
+details.mois-archives summary { cursor: pointer; font-weight: 700; }
+.pastille-regime { font-size: 12px; font-weight: 700; border: 1px solid currentColor; border-radius: 999px; padding: 0 8px; margin: 0 8px; }
+.pastille-regime.pos { color: var(--positif); } .pastille-regime.neg { color: var(--negatif); } .pastille-regime.neutre { color: var(--texte-2); }
+.tk-info { font-size: 12px; width: 20px; height: 20px; }

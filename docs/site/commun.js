@@ -95,3 +95,15 @@ export function rendreTriable(table, valeurDe) {
     });
   });
 }
+
+/* « En bref » : première phrase d'un texte rédigé, visible sur un accordéon replié. */
+export function enBref(texte) {
+  const t = String(texte || "").trim();
+  if (!t) return null;
+  const m = t.match(/^(.+?[.!?])(\s|$)/);
+  const phrase = (m ? m[1] : t).slice(0, 220);
+  const n = el("span", "en-bref");
+  n.appendChild(el("strong", null, "En bref : "));
+  n.appendChild(document.createTextNode(phrase));
+  return n;
+}

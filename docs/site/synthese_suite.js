@@ -95,7 +95,12 @@ function classement(rapport) {
   }
   c.appendChild(ol);
   const absentes = rapport.synthese_globale.devises_indisponibles || [];
-  if (absentes.length) c.appendChild(el("p", "note", `Exclues aujourd'hui (analyse indisponible) : ${absentes.join(", ")}.`));
+  if (absentes.length) {
+    const auto = new Set((rapport.devises || []).filter(d => d.texte_automatique).map(d => d.devise));
+    const avecTexte = absentes.filter(x => auto.has(x)), sans = absentes.filter(x => !auto.has(x));
+    if (avecTexte.length) c.appendChild(el("p", "note", `Sans score aujourd'hui, texte automatique sans modèle : ${avecTexte.join(", ")} (score n/d : il dépend de l'analyse du modèle).`));
+    if (sans.length) c.appendChild(el("p", "note", `Exclues aujourd'hui (analyse indisponible) : ${sans.join(", ")}.`));
+  }
   c.appendChild(el("p", "note", "Profil Risk On / Off : profil structurel de la devise, pas une direction du jour."));
   return c;
 }

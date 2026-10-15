@@ -1,5 +1,5 @@
 /* Onglet « 8 engrenages » : synthèse globale (rapport du jour, synthese_globale.engrenages). */
-import { chargerJson, enErreur, el, indisponible, dateHeure } from "./commun.js";
+import { chargerJson, enErreur, el, indisponible, dateHeure, enBref } from "./commun.js";
 import { carteDossiers } from "./dossiers.js";
 import { vueHebdo } from "./hebdo.js";
 import { vueEnsemble, selecteurPeriode } from "./vue_ensemble.js";
@@ -89,6 +89,7 @@ function ficheEngrenage(e, sources) {
   const s = el("summary");
   s.appendChild(el("span", "fiche-nom", `${e.numero}. ${e.nom}`));
   s.appendChild(el("span", `note ${classeDirection(e.direction)}`, directionCourte(e.direction)));
+  if (!e.donnees_insuffisantes) { const b = enBref(e.diagnostic); if (b) s.appendChild(b); }
   d.appendChild(s);
   const corps = el("div", "fiche-corps");
   const diag = el("p", "texte", e.diagnostic);

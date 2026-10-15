@@ -202,6 +202,7 @@ export function matriceImpact(m) {
     corps.appendChild(tr);
   }
   t.appendChild(corps); defile.appendChild(t); c.appendChild(defile);
+  if (m.cases_total) c.appendChild(el("p", "mi-densite", `${m.cases_actives} cases actives sur ${m.cases_total} : les autres valent 0 (règle non déclenchée, donnée absente ou série heurtée ; raison dans chaque case).`));
   c.appendChild(el("p", "note", m.legende));
   if (!m.theme_fort) c.appendChild(el("p", "note", "Signaux mixtes : les règles du thème global (colonne 1) ne s'appliquent pas aujourd'hui."));
   return c;

@@ -35,21 +35,54 @@ async function jour(date) {
   return [c];
 }
 
+const MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+const CLASSE_REGIME = { risk_on: "pos", risk_off: "neg", neutre: "neutre" };
+
 export async function pageArchives(parametre) {
   if (parametre && /^\d{4}-\d{2}-\d{2}$/.test(parametre)) return jour(parametre);
   const index = await chargerJson("data/index.json");
   if (enErreur(index) || !Array.isArray(index)) return [indisponible("Archives", index?.__erreur || "index.json illisible")];
+  const entrees = index.map(e => (typeof e === "string" ? { date: e } : e)).sort((a, b) => b.date.localeCompare(a.date));
   const c = el("section", "carte");
   c.appendChild(el("h2", null, "Archives"));
-  c.appendChild(el("p", "sous-titre", `${index.length} rapport(s) disponible(s). Touchez un jour pour le lire.`));
-  const ul = el("ul", "archives");
-  for (const e of index) {
-    const entree = typeof e === "string" ? { date: e } : e;
-    const li = el("li"); const a = el("a"); a.href = `#archives/${entree.date}`;
-    a.appendChild(el("span", "tabulaire", dateCourte(entree.date)));
-    a.appendChild(el("span", "note", [TYPES[entree.type] || entree.type, REGIME[entree.biais], RELECTURE[entree.relecture]].filter(Boolean).join(" · ")));
-    li.appendChild(a); ul.appendChild(li);
+  c.appendChild(el("p", "sous-titre", `${entrees.length} rapport(s), regroupés par mois. Touchez un jour pour le lire.`));
+  const recherche = el("input", "recherche-archives");
+  recherche.type = "search"; recherche.placeholder = "Rechercher une date (ex. 14/10 ou 2026-10)";
+  recherche.setAttribute("aria-label", "Rechercher un rapport par date");
+  c.appendChild(recherche);
+  const zone = el("div");
+  const compteur = el("p", "note");
+  c.append(zone, compteur);
+  function rendre() {
+    const q = recherche.value.trim().toLowerCase();
+    const garde = entrees.filter(e => !q || e.date.includes(q) || dateCourte(e.date).includes(q)
+      || `${MOIS[Number(e.date.slice(5, 7)) - 1]} ${e.date.slice(0, 4)}`.includes(q));
+    const parMois = new Map();
+    for (const e of garde) {
+      const cle = e.date.slice(0, 7);
+      if (!parMois.has(cle)) parMois.set(cle, []);
+      parMois.get(cle).push(e);
+    }
+    zone.replaceChildren();
+    let premier = true;
+    for (const [cle, liste] of parMois) {
+      const d = el("details", "mois-archives");
+      d.open = premier || Boolean(q); premier = false;
+      const nomMois = MOIS[Number(cle.slice(5, 7)) - 1];
+      d.appendChild(el("summary", null, `${nomMois[0].toUpperCase()}${nomMois.slice(1)} ${cle.slice(0, 4)} · ${liste.length} rapport(s)`));
+      const ul = el("ul", "archives");
+      for (const e of liste) {
+        const li = el("li"); const a = el("a"); a.href = `#archives/${e.date}`;
+        a.appendChild(el("span", "tabulaire", dateCourte(e.date)));
+        if (e.biais) a.appendChild(el("span", `pastille-regime ${CLASSE_REGIME[e.biais] || "neutre"}`, REGIME[e.biais] || e.biais));
+        a.appendChild(el("span", "note", [TYPES[e.type] || e.type, RELECTURE[e.relecture]].filter(Boolean).join(" · ")));
+        li.appendChild(a); ul.appendChild(li);
+      }
+      d.appendChild(ul); zone.appendChild(d);
+    }
+    compteur.textContent = garde.length ? `${garde.length} rapport(s) affiché(s).` : "Aucun rapport ne correspond à cette date.";
   }
-  c.appendChild(ul);
+  recherche.addEventListener("input", rendre);
+  rendre();
   return [c];
 }

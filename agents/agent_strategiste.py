@@ -545,6 +545,47 @@ def _devise_indisponible(devise: str, raison: str, biais: str = "neutre") -> dic
     }
 
 
+def _fr(v: float, d: int = 1) -> str:
+    return f"{v:.{d}f}".replace(".", ",").replace("-", "−")
+
+
+def texte_automatique(devise: str, technique: dict, macro: dict, taux: dict, carry: dict) -> dict:
+    """Texte 100 % Python quand le modèle n'a pas pu analyser la devise : uniquement des chiffres collectés et
+    calculés (RSI, moyenne mobile 200 jours, COT, taux directeur, écart de taux), chacun avec sa source.
+    Le score de confluence reste n/d : il dépend du jugement du modèle sur chaque indicateur."""
+    phrases, sources = [], []
+    t = (technique or {}).get("devises", {}).get(devise) or {}
+    src = t.get("indicateurs_source") or {}
+    if t.get("rsi") is not None:
+        pct = (src.get("percentiles") or {}).get("rsi")
+        phrases.append(f"RSI 14 à {_fr(t['rsi'])} ({t.get('rsi_lecture', '')}"
+                       + (f", percentile 5 ans {pct}" if pct is not None else "") + ")")
+    if t.get("ecart_mm200_pct") is not None:
+        phrases.append(f"cours {'au-dessus' if t['ecart_mm200_pct'] >= 0 else 'en dessous'} de sa moyenne mobile 200 jours "
+                       f"({'+' if t['ecart_mm200_pct'] > 0 else ''}{_fr(t['ecart_mm200_pct'], 2)} %)")
+    if t:
+        sources.append("technique : série unique 5 ans (Twelve Data + Fed H.10)" + (f", au {src['date']}" if src.get("date") else ""))
+    cot = ((macro or {}).get("flux") or {}).get("cot", {}).get(devise) or {}
+    if cot.get("net") is not None:
+        ext = {"long": ", extrême acheteur", "short": ", extrême vendeur"}.get(cot.get("extreme") or "", "")
+        phrases.append(f"positions nettes des spéculateurs (COT) {cot['net']:+,d} contrats".replace(",", " ")
+                       + (f", percentile 52 semaines {cot['percentile_52s']}{ext}" if cot.get("percentile_52s") is not None else ""))
+        sources.append(f"COT : CFTC, au {cot.get('date')}")
+    td = (taux or {}).get(devise) or {}
+    if td.get("taux") is not None:
+        diff = (carry or {}).get("differentiels", {}).get(devise)
+        phrases.append(f"taux directeur {_fr(td['taux'], 2)} %"
+                       + (f" ({'+' if diff > 0 else ''}{_fr(diff, 2)} pt face à la médiane G8)" if diff is not None else ""))
+        sources.append(f"taux : {td.get('source', '—')}, au {td.get('date', '—')}")
+    spread = (((macro or {}).get("taux_obligataires") or {}).get("valeurs") or (macro or {}).get("taux_obligataires") or {}).get(devise) or {}
+    if spread.get("spread_2a_vs_usd_pb") is not None:
+        phrases.append(f"écart de taux 2 ans face aux États-Unis {spread['spread_2a_vs_usd_pb']:+d} pb".replace("-", "−"))
+    if not phrases:
+        return {"texte": "Aucune donnée chiffrée disponible pour un texte automatique aujourd'hui.", "sources": []}
+    texte = f"{devise} : " + " ; ".join(phrases) + ". Score de confluence n/d : il dépend de l'analyse du modèle, indisponible aujourd'hui."
+    return {"texte": texte, "sources": sources}
+
+
 def _normaliser_contexte_geopolitique(brut: dict) -> dict:
     """Contexte géopolitique & décisions par devise, distinct de l'état du
     monde global et du tableau d'indicateurs : posture de banque centrale
@@ -846,6 +887,10 @@ def analyser(config: dict, llm: FournisseurLLM, technique: dict, macro: dict,
         except RuntimeError as exc:
             raison = MESSAGE_QUOTA_ATTEINT if isinstance(exc, QuotaAtteint) else masquer_secrets(str(exc))[:150]
             entree = _devise_indisponible(devise, raison, biais)
+            # Plutôt que « indisponible » : texte 100 % Python, marqué comme tel (retenté par --completer).
+            auto = texte_automatique(devise, technique, macro, taux, carry)
+            entree.update({"texte_automatique": True, "synthese_une_phrase": auto["texte"],
+                           "texte_automatique_sources": auto["sources"]})
             # Les données collectées ne dépendent pas du LLM : le tableau
             # d'indicateurs et le carry restent affichables même sans analyse.
             entree["indicateurs_tableau"] = _tableau_indicateurs(config, devise, donnees, overrides_devise)
