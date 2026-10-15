@@ -32,6 +32,7 @@ AMPLEURS = (1, 2)
 ESPACEMENT_JOURS = 28
 MIN_CAS = 20
 JOURS_TRAJECTOIRE = 30
+JOURS_TRAJ = (0, 1, 2, 3, 4, 5, 7, 10, 14, 21, 30)   # resserré au début, là où la réaction se joue
 MIN_PAIRES_SENSIBILITE = 12
 SEUIL_SENS = 0.1
 GROUPES = {"taux": "Taux, obligations, croissance, inflation", "marches": "Marchés"}
@@ -39,10 +40,12 @@ INDICATEURS = [
     {"id": "us2a", "libelle": "Rendement 2 ans US", "groupe": "taux", "type": "marche", "serie": "USD_2a", "unite": "pb"},
     {"id": "us10a", "libelle": "Rendement 10 ans US", "groupe": "taux", "type": "marche", "serie": "USD_10a", "unite": "pb"},
     {"id": "oblig_us", "libelle": "Obligations d'État US (ETF TLT, prix)", "groupe": "taux", "type": "marche", "serie": "oblig_us_tlt", "unite": "%"},
-    {"id": "fed", "libelle": "Taux directeur Fed (surprise)", "groupe": "taux", "type": "surprise", "registre": "USD|taux_directeur", "indicateur": "taux_directeur"},
-    {"id": "pib_us", "libelle": "PIB US (surprise)", "groupe": "taux", "type": "surprise", "registre": "USD|pib", "indicateur": "pib"},
-    {"id": "cpi_core_us", "libelle": "CPI core US (surprise)", "groupe": "taux", "type": "surprise", "registre": "USD|cpi_core", "indicateur": "cpi_core"},
-    {"id": "cpi_us", "libelle": "CPI US (surprise)", "groupe": "taux", "type": "surprise", "registre": "USD|cpi", "indicateur": "cpi"},
+    # Indicateurs publiés : « variation de la publication » sur 15 à 20 ans (core/impact_long.py, palier 11b) ; le
+    # consensus ForexFactory (depuis 2026 seulement) ne sert pas, faute de profondeur.
+    {"id": "fed", "libelle": "Taux directeur Fed", "groupe": "taux", "type": "publication", "registre": "USD|taux_directeur"},
+    {"id": "pib_us", "libelle": "PIB US", "groupe": "taux", "type": "publication", "registre": "USD|pib"},
+    {"id": "cpi_core_us", "libelle": "CPI core US", "groupe": "taux", "type": "publication", "registre": "USD|cpi_core"},
+    {"id": "cpi_us", "libelle": "CPI US", "groupe": "taux", "type": "publication", "registre": "USD|cpi"},
     {"id": "brent", "libelle": "Brent", "groupe": "marches", "type": "marche", "serie": "brent", "unite": "%"},
     {"id": "vix", "libelle": "VIX", "groupe": "marches", "type": "marche", "serie": "vix", "unite": "pts"},
     {"id": "dollar_large", "libelle": "Indice dollar large (Fed)", "groupe": "marches", "type": "marche", "serie": "dollar_large", "unite": "%"},
@@ -160,14 +163,14 @@ def reponses(devise: Serie, jour: str) -> dict[str, float | None]:
 
 
 def trajectoire(devise: Serie, jours_chocs: list[str]) -> list[list]:
-    """[[jour, médiane, q25, q75]] de la réponse cumulée de J0 à J+30 (calendaire)."""
+    """[[jour, médiane, q25, q75]] de la réponse cumulée de J0 à J+30 (jours calendaires échantillonnés)."""
     sortie = []
-    for j in range(JOURS_TRAJECTOIRE + 1):
+    for j in JOURS_TRAJ:
         vals = [devise.ecart(devise.a(d), devise.a(_plus(d, j))) for d in jours_chocs
                 if _plus(d, j) <= (devise.dates[-1] if devise.dates else d)]
         vals = [v for v in vals if v is not None]
         if len(vals) >= 3:
-            sortie.append([j, round(statistics.median(vals), 3), round(_quantile(vals, .25), 3), round(_quantile(vals, .75), 3)])
+            sortie.append([j, round(statistics.median(vals), 2), round(_quantile(vals, .25), 2), round(_quantile(vals, .75), 2)])
     return sortie
 
 
@@ -201,8 +204,35 @@ def _surprises(registre: dict, ind: dict, cfg_tm: dict) -> tuple[list[tuple[str,
     return pts, None
 
 
+def _publication(ind: dict, long: dict, registre: dict | None, sortie: dict) -> dict:
+    """Indicateur publié : résultats sur 15 à 20 ans + 5 ans, calculés à la collecte (data/cache/impact_long.json)."""
+    meta = {k: ind[k] for k in ("id", "libelle", "groupe", "type")}
+    meta["etiquette"] = "Variation de la publication"
+    x = ((long or {}).get("indicateurs") or {}).get(ind["id"])
+    prochaine = ((((registre or {}).get("cases") or {}).get(ind["registre"]) or {}).get("prevision") or {}).get("date_pub")
+    meta["prochaine_publication"] = prochaine
+    if not x or x.get("raison"):
+        meta["raison"] = (x or {}).get("raison") or "résultats sur 15 à 20 ans indisponibles (collecte du jour en échec)"
+        return meta
+    dp = x["derniere_publication"]
+    meta.update({"libelle": x["libelle"], "mesure": x["mesure"], "source": x["source"], "unite": "pb" if ind["id"] == "fed" else "pt",
+                 "valeur_actuelle": dp["valeur"], "date": dp["date"], "periode": dp["periode"], "choc_actuel": dp["choc"],
+                 "debut": x["debut"], "n_publications": x["n_publications"], "sigma": x["sigma"], "seuils": x["seuils"],
+                 "profondeur": f"depuis {x['debut'][:4]}", "calcule_le": long.get("calcule_le")})
+    sortie["episodes"][ind["id"]] = {"tous": x["episodes"]}
+    for devise, c in x["couples"].items():
+        sortie["couples"][f"{ind['id']}|{devise}"] = c
+        sortie["nombre_de_cas"].setdefault(ind["id"], {})[devise] = {
+            f"{s}|{k}": c["scenarios"][f"{s}|{k}"]["mois"]["n"] for s in ("hausse", "baisse") for k in AMPLEURS}
+        for cle, sc in c["scenarios"].items():
+            if sc["mois"]["insuffisant"]:
+                s, k = cle.split("|")
+                sortie["insuffisants"].append(f"{ind['id']}|{devise}|{s}|{k}σ ({sc['mois']['n']} cas à 1 mois, depuis {x['debut'][:4]})")
+    return meta
+
+
 def calculer(h: h5m.Historique, technique: dict | None = None, registre: dict | None = None, config: dict | None = None,
-             aujourdhui: date | None = None) -> dict:
+             aujourdhui: date | None = None, long: dict | None = None) -> dict:
     fin = (aujourdhui or date.today()).isoformat()
     debut = (date.fromisoformat(fin) - timedelta(days=int(365.25 * 5))).isoformat()
     cfg_tm = (config or {}).get("tableau_macro") or {}
@@ -210,8 +240,11 @@ def calculer(h: h5m.Historique, technique: dict | None = None, registre: dict | 
     devises = {d: s for d, s in devises.items() if len(s.points) > 260}
     sortie = {"genere_le": datetime.now(timezone.utc).isoformat(timespec="seconds"), "debut": debut, "fin": fin,
               "horizons": HORIZONS, "ampleurs": list(AMPLEURS), "min_cas": MIN_CAS, "groupes": GROUPES, "note": NOTE,
-              "methode": ("Épisodes : variation quotidienne de l'indicateur d'au moins 1 (ou 2) écart(s)-type(s) sur 5 ans, "
-                          "espacés d'au moins 28 jours ; surprises : publié − consensus ForexFactory en écarts habituels. "
+              "methode": ("Marchés : variation quotidienne de l'indicateur d'au moins 1 (ou 2) écart(s)-type(s) sur 5 ans, "
+                          "épisodes espacés d'au moins 28 jours. Indicateurs publiés (CPI, CPI core, PIB, Fed) : « variation "
+                          "de la publication » (écart avec la publication précédente, valeurs telles que publiées, FRED/ALFRED) "
+                          "sur 15 à 20 ans, seuil en écart-type robuste ; Fed : toute décision (1) ou au moins 50 pb (2) ; "
+                          "résultat aussi sur 5 ans. "
                           "Réponse : variation de la force de la devise (en %) à la séance suivante, à 7 et à 30 jours. "
                           "Sens attendu : signe de la sensibilité (corrélation des variations sur 1 mois, la même que dans "
                           "le tableau des conséquences) multiplié par le sens du choc."),
@@ -220,6 +253,9 @@ def calculer(h: h5m.Historique, technique: dict | None = None, registre: dict | 
     for ind in INDICATEURS:
         meta = {k: ind[k] for k in ("id", "libelle", "groupe", "type")}
         try:
+            if ind["type"] == "publication":
+                sortie["indicateurs"].append(_publication(ind, long, registre, sortie))
+                continue
             if ind["type"] == "surprise":
                 pts, raison = _surprises(registre, ind, cfg_tm)
                 case = ((registre or {}).get("cases") or {}).get(ind["registre"]) or {}
@@ -258,7 +294,7 @@ def calculer(h: h5m.Historique, technique: dict | None = None, registre: dict | 
                 couple = {"sensibilite": sens_r, "n_mois": n_mois, "scenarios": {}, "reponses": {}}
                 for k, liste in listes.items():
                     reps = [reponses(cible, d) for d, _ in liste]
-                    couple["reponses"][str(k)] = [[None if r[hz] is None else round(r[hz], 3) for hz in HORIZONS] for r in reps]
+                    couple["reponses"][str(k)] = [[None if r[hz] is None else round(r[hz], 2) for hz in HORIZONS] for r in reps]
                     for sens, signe in (("hausse", 1), ("baisse", -1)):
                         choisis = [(d, r) for (d, x), r in zip(liste, reps) if x * signe > 0]
                         attendu = None if sens_r is None or abs(sens_r) < SEUIL_SENS else (1 if sens_r > 0 else -1) * signe
@@ -281,7 +317,8 @@ def calculer(h: h5m.Historique, technique: dict | None = None, registre: dict | 
 def ecrire(racine: str | Path, h: h5m.Historique, technique: dict | None, registre: dict | None, config: dict) -> dict | None:
     """Écrit docs/data/impact.json ; None en cas d'échec (jamais d'exception)."""
     try:
-        donnees = calculer(h, technique, registre, config)
+        from core import impact_long
+        donnees = calculer(h, technique, registre, config, long=impact_long.charger())
         chemin = Path(racine) / config.get("publication_web", {}).get("dossier_docs", "docs") / "data" / "impact.json"
         chemin.write_text(json.dumps(donnees, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
         return donnees

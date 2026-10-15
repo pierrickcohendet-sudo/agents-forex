@@ -254,5 +254,8 @@ def collecter(config: dict) -> dict:
         resultat["historique_5ans"] = historique_5ans.enregistrer(bruts)
     except Exception as exc:  # noqa: BLE001 — n'affecte que les calculs longs
         resultat["erreurs"].append(masquer_secrets(f"historique quotidien 5 ans : {exc}")[:200])
+    if cle:   # simulateur : indicateurs publiés sur 15 à 20 ans (13 requêtes FRED/ALFRED), cache à taille stable
+        from core import impact_long
+        resultat["impact_long"] = impact_long.collecter_et_ecrire(cle, aujourdhui)
     log.info("Historiques : %d série(s), %d erreur(s)", len(resultat["series"]), len(resultat["erreurs"]))
     return resultat

@@ -67,7 +67,7 @@ class Calcul(unittest.TestCase):
         self.assertLessEqual(hausse["demain"]["q25"], hausse["demain"]["mediane"])
         self.assertGreaterEqual(hausse["demain"]["q75"], hausse["demain"]["mediane"])
         self.assertFalse(hausse["demain"]["insuffisant"])
-        self.assertTrue(len(hausse["trajectoire"]) >= 20)
+        self.assertEqual([p[0] for p in hausse["trajectoire"]], list(impact.JOURS_TRAJ))
         self.assertIn("baisse|1", c["scenarios"])
         self.assertEqual(self.r["nombre_de_cas"]["vix"]["JPY"]["hausse|1"], hausse["mois"]["n"])
 
@@ -84,21 +84,55 @@ class Calcul(unittest.TestCase):
     def test_indicateurs_absents_et_surprises_sans_consensus(self):
         par_id = {i["id"]: i for i in self.r["indicateurs"]}
         self.assertIn("série 5 ans indisponible", par_id["brent"]["raison"])
-        self.assertIn("absent du registre", par_id["cpi_us"]["raison"])
+        self.assertIn("15 à 20 ans indisponibles", par_id["cpi_us"]["raison"])     # sans calcul long : n/d avec la raison
+        self.assertEqual(par_id["cpi_us"]["etiquette"], "Variation de la publication")
         self.assertNotIn("brent|JPY", self.r["couples"])
         self.assertIn("USD", self.r["devises_absentes"])
 
-    def test_surprises_avec_consensus_forexfactory(self):
-        historique_cpi = [{"date_pub": f"2026-{m:02d}-12", "valeur": f"{3 + (m % 3) * 0.1:.1f}%", "consensus": "3.1%"} for m in range(1, 10)]
-        registre = {"cases": {"USD|cpi": {"historique": historique_cpi[:-1], "actuel": historique_cpi[-1],
-                                          "prevision": {"date_pub": "2026-11-13"}}}}
-        r = impact.calculer(historique(), None, registre, CONFIG, FIN)
+    def test_indicateur_publie_fusionne_depuis_le_calcul_long(self):
+        long = {"calcule_le": "2026-10-15", "indicateurs": {"cpi_us": {
+            "libelle": "CPI US — variation de la publication", "mesure": "m/m", "source": "FRED / ALFRED (CPIAUCSL)",
+            "debut": "2004-02-20", "n_publications": 272, "sigma": 0.31, "seuils": {"1": 0.31, "2": 0.62},
+            "derniere_publication": {"date": "2026-10-14", "periode": "2026-09-01", "valeur": 0.649, "choc": 0.253},
+            "episodes": [{"date": "2026-10-14", "choc": 0.253}],
+            "couples": {"JPY": {"sensibilite": -0.15, "n_publications": 270, "reponses_tous": [[0.1, 0.2, 0.3]],
+                                "scenarios": {f"{s}|{k}": {"mois": {"n": 8, "insuffisant": True}} for s in ("hausse", "baisse") for k in (1, 2)},
+                                "scenarios_5ans": {}}}}}}
+        registre = {"cases": {"USD|cpi": {"prevision": {"date_pub": "2026-11-13"}}}}
+        r = impact.calculer(historique(), None, registre, CONFIG, FIN, long=long)
         cpi = next(i for i in r["indicateurs"] if i["id"] == "cpi_us")
-        self.assertEqual(cpi["n_publications"], 9)
-        self.assertIsNotNone(cpi["sigma"])
-        self.assertEqual(cpi["prochaine_publication"], "2026-11-13")
-        self.assertIn("cpi_us|JPY", r["couples"])
-        self.assertTrue(r["couples"]["cpi_us|JPY"]["scenarios"]["hausse|1"]["mois"]["insuffisant"])   # 9 publications < 20
+        self.assertEqual((cpi["etiquette"], cpi["profondeur"], cpi["prochaine_publication"]),
+                         ("Variation de la publication", "depuis 2004", "2026-11-13"))
+        self.assertEqual(r["couples"]["cpi_us|JPY"]["sensibilite"], -0.15)
+        self.assertTrue(any(x.startswith("cpi_us|JPY|hausse|1σ (8 cas") for x in r["insuffisants"]))
+
+
+class PublicationsLongues(unittest.TestCase):
+    def test_valeurs_telles_que_publiees(self):
+        from core import impact_long as il
+        lignes = [  # janvier publié 100 puis révisé 101 ; février publié le 15/03 à 102 (base : janvier 100 ce jour-là)
+            {"date": "2026-01-01", "realtime_start": "2026-02-12", "realtime_end": "2026-03-20", "value": "100"},
+            {"date": "2026-01-01", "realtime_start": "2026-03-21", "realtime_end": "9999-12-31", "value": "101"},
+            {"date": "2026-02-01", "realtime_start": "2026-03-15", "realtime_end": "9999-12-31", "value": "102"}]
+        self.assertEqual(il.tel_que_publie(lignes, False), [("2026-03-15", "2026-02-01", 2.0)])
+        self.assertAlmostEqual(il.tel_que_publie(lignes, True)[0][2], (1.02 ** 4 - 1) * 100, places=2)
+
+    def test_decisions_fed_et_ecart_type_robuste(self):
+        from core import impact_long as il
+        fed = il.decisions_fed([("2008-10-08", 1.5), ("2008-10-29", 1.0), ("2008-12-15", 1.0)],
+                               [("2008-12-16", 0.25), ("2015-12-17", 0.5), ("2015-12-18", 0.5)])
+        self.assertEqual(fed, [("2008-10-29", -50), ("2008-12-16", -75), ("2015-12-17", 25)])
+        self.assertLess(il.sigma_robuste([0.1, -0.1, 0.2, -0.2, 0.0, 33.0, -31.0]), 1)   # extrêmes du PIB 2020 sans effet
+
+    def test_etude_reaction_publication_avant_midi(self):
+        from core import impact_long as il
+        jpy = impact.Serie([("2026-01-05", 1.00), ("2026-01-06", 1.01), ("2026-01-07", 1.01), ("2026-02-20", 1.02)], "%")
+        r = il.etude([("2026-01-06", 1.0)] * 1, {1: 0.5}, {"JPY": jpy}, avant_midi=True)
+        demain = r["JPY"]["scenarios"]["hausse|1"]["demain"]
+        self.assertEqual(demain["n"], 1)
+        self.assertAlmostEqual(demain["mediane"], 0.995, places=2)          # base : séance précédente (05/01)
+        self.assertTrue(demain["insuffisant"])
+        self.assertEqual(len(r["JPY"]["reponses_tous"]), 1)
 
 
 class SourceUnique(unittest.TestCase):
