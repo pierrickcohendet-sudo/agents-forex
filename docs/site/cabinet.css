@@ -464,3 +464,74 @@ details.mois-archives summary { cursor: pointer; font-weight: 700; }
 .pastille-regime { font-size: 12px; font-weight: 700; border: 1px solid currentColor; border-radius: 999px; padding: 0 8px; margin: 0 8px; }
 .pastille-regime.pos { color: var(--positif); } .pastille-regime.neg { color: var(--negatif); } .pastille-regime.neutre { color: var(--texte-2); }
 .tk-info { font-size: 12px; width: 20px; height: 20px; }
+
+/* ------------------------------------------- simulateur d'impact (onglet Scénarios, palier 12) */
+.sc { display: grid; gap: 14px; }
+.sc .carte { margin: 0; }
+.sc-groupes { display: grid; gap: 8px; margin: 12px 0 4px; }
+.sc-ligne { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; margin-top: 8px; }
+.sc-lab { font-weight: 700; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--texte-2); min-width: 92px; }
+.sc-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.sc-chip { font: inherit; font-size: 14px; border: 1px solid var(--trait); background: var(--carte); color: var(--texte); border-radius: 999px; padding: 5px 12px; cursor: pointer; }
+.sc-chip small { font-size: 12px; color: var(--texte-2); }
+.sc-chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+.sc-chip[aria-pressed="true"] small { color: #fff; }
+.sc-chip:disabled { opacity: .5; cursor: not-allowed; }
+.sc-seg button { font: inherit; font-size: 14px; background: var(--carte); color: var(--texte); border: 0; border-right: 1px solid var(--trait); padding: 6px 12px; cursor: pointer; }
+.sc-seg button:last-child { border-right: 0; }
+.sc-seg button[aria-pressed="true"] { background: var(--texte); color: var(--fond); font-weight: 600; }
+.sc-phrase { border-left: 3px solid var(--accent); padding: 2px 0 2px 14px; margin-top: 14px; }
+.sc-phrase p { margin: 0 0 4px; font-size: 16px; }
+.sc-phrase p.note { font-size: 13px; }
+.sc-boites, .sc-horizons { display: grid; gap: 8px; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 8px; }
+.sc-horizons { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 760px) { .sc-boites { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.sc-boite { background: var(--carte-2); border-radius: var(--rayon); padding: 8px 10px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.sc-boite > span:first-child { font-size: 12.5px; color: var(--texte-2); }
+.sc-boite b { font-family: var(--serif); font-size: 1.05rem; overflow-wrap: anywhere; }
+.sc-grille { display: grid; gap: 12px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 940px) { .sc-grille { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .sc-grille { grid-template-columns: minmax(0, 1fr); } }
+.sc-carte { font: inherit; color: inherit; text-align: left; cursor: pointer; background: var(--carte); border: 1px solid var(--trait); border-radius: var(--rayon); padding: 12px 14px; display: grid; gap: 6px; min-width: 0; }
+.sc-carte:hover { border-color: var(--texte); }
+.sc-tete { display: flex; align-items: baseline; gap: 8px; }
+.sc-code { font: 700 1.15rem var(--serif); }
+.sc-nom { font-size: 13px; color: var(--texte-2); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sc-valeur { font: 700 1.4rem var(--serif); }
+.sc-valeur.faible, .sc-gros strong.faible, .sc-boite b.faible { color: var(--texte-2); font-size: 1.1rem; }
+.sc-meta { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12.5px; color: var(--texte-2); }
+.sc-tag { font-size: 12px; font-weight: 600; border: 1px solid currentColor; border-radius: 999px; padding: 0 8px; }
+.sc-tag.pos { color: var(--positif); } .sc-tag.neg { color: var(--negatif); } .sc-tag.faible { color: var(--alerte); }
+.sc-svg { display: block; width: 100%; height: auto; }
+.sc-axe { font-size: 11px; fill: var(--texte-2); font-family: var(--sans); }
+svg .sc-quad { stroke: var(--trait); stroke-dasharray: 2 4; }
+svg .sc-zero { stroke: var(--trait); }
+svg .sc-fourchette { fill: var(--accent); }
+svg .sc-ligne { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+svg .sc-ligne.faible { stroke: var(--texte-2); stroke-dasharray: 4 3; }
+svg .sc-point { fill: var(--accent); stroke: var(--carte); stroke-width: 2; }
+svg .sc-episode { fill: var(--accent); opacity: .45; }
+svg .sc-tendance { stroke: var(--texte); stroke-width: 2; }
+svg .sc-scenario { stroke: var(--alerte); stroke-dasharray: 4 3; }
+svg .sc-scenario-point { fill: var(--alerte); stroke: var(--carte); stroke-width: 2; }
+.sc-chaleur { border-collapse: separate; border-spacing: 3px; min-width: 620px; }
+.sc-chaleur th { font-size: 12.5px; color: var(--texte-2); text-align: center; border: 0; }
+.sc-chaleur th.sc-ligne-ind { text-align: left; color: var(--texte); white-space: nowrap; }
+.sc-chaleur td { padding: 0; border: 0; }
+.sc-case { font: inherit; width: 100%; border: 0; border-radius: 3px; padding: 7px 3px; font-size: 13px; font-weight: 600; background: var(--carte-2); color: var(--texte); cursor: pointer; display: flex; flex-direction: column; align-items: center; }
+.sc-case small { font-size: 11px; font-weight: 400; color: var(--texte-2); }
+.sc-case.faible { color: var(--texte-2); }
+.sc-case.sel { outline: 2px solid var(--texte); outline-offset: -2px; }
+.sc-case:disabled { cursor: default; }
+.detail:has(.sc-detail-tete) { width: min(920px, calc(100vw - 24px)); max-height: 92vh; }
+.sc-gros { background: var(--carte-2); border-radius: var(--rayon); padding: 10px 12px; display: grid; gap: 2px; }
+.sc-gros strong { font: 700 2rem var(--serif); }
+.sc-gros strong.pos { color: var(--positif); } .sc-gros strong.neg { color: var(--negatif); }
+.sc-boite b.pos { color: var(--positif); } .sc-boite b.neg { color: var(--negatif); }
+.sc-deux { display: grid; gap: 14px; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); margin-top: 10px; }
+@media (max-width: 720px) { .sc-deux { grid-template-columns: minmax(0, 1fr); } }
+.sc-meca ol { margin: 6px 0 0; padding-left: 20px; font-size: 14px; display: grid; gap: 4px; }
+.sc-meca { margin-top: 10px; }
+.sc-retenir { border-left: 3px solid var(--alerte); background: var(--carte-2); padding: 8px 12px; font-size: 14px; margin-top: 10px; }
+.sc-legende { margin: 0; }
+.sc-tag.neutre { color: var(--texte-2); }

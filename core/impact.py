@@ -209,12 +209,15 @@ def _publication(ind: dict, long: dict, registre: dict | None, sortie: dict) -> 
     meta = {k: ind[k] for k in ("id", "libelle", "groupe", "type")}
     meta["etiquette"] = "Variation de la publication"
     x = ((long or {}).get("indicateurs") or {}).get(ind["id"])
-    prochaine = ((((registre or {}).get("cases") or {}).get(ind["registre"]) or {}).get("prevision") or {}).get("date_pub")
+    from core import registre_macro
+    prochaine = registre_macro.prochaine_publication(((registre or {}).get("cases") or {}).get(ind["registre"]) or {})
     meta["prochaine_publication"] = prochaine
     if not x or x.get("raison"):
         meta["raison"] = (x or {}).get("raison") or "résultats sur 15 à 20 ans indisponibles (collecte du jour en échec)"
         return meta
     dp = x["derniere_publication"]
+    if prochaine and prochaine[:10] <= dp["date"]:   # le registre garde la date de l'événement déjà publié
+        meta["prochaine_publication"] = None
     meta.update({"libelle": x["libelle"], "mesure": x["mesure"], "source": x["source"], "unite": "pb" if ind["id"] == "fed" else "pt",
                  "valeur_actuelle": dp["valeur"], "date": dp["date"], "periode": dp["periode"], "choc_actuel": dp["choc"],
                  "debut": x["debut"], "n_publications": x["n_publications"], "sigma": x["sigma"], "seuils": x["seuils"],

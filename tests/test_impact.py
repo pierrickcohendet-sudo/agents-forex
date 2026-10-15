@@ -98,11 +98,12 @@ class Calcul(unittest.TestCase):
             "couples": {"JPY": {"sensibilite": -0.15, "n_publications": 270, "reponses_tous": [[0.1, 0.2, 0.3]],
                                 "scenarios": {f"{s}|{k}": {"mois": {"n": 8, "insuffisant": True}} for s in ("hausse", "baisse") for k in (1, 2)},
                                 "scenarios_5ans": {}}}}}}
-        registre = {"cases": {"USD|cpi": {"prevision": {"date_pub": "2026-11-13"}}}}
+        from datetime import datetime, timezone
+        registre = {"cases": {"USD|cpi": {"prevision": {"dateline": int(datetime(2026, 11, 13, 13, 30, tzinfo=timezone.utc).timestamp())}}}}
         r = impact.calculer(historique(), None, registre, CONFIG, FIN, long=long)
         cpi = next(i for i in r["indicateurs"] if i["id"] == "cpi_us")
         self.assertEqual((cpi["etiquette"], cpi["profondeur"], cpi["prochaine_publication"]),
-                         ("Variation de la publication", "depuis 2004", "2026-11-13"))
+                         ("Variation de la publication", "depuis 2004", "2026-11-13T13:30+00:00"))
         self.assertEqual(r["couples"]["cpi_us|JPY"]["sensibilite"], -0.15)
         self.assertTrue(any(x.startswith("cpi_us|JPY|hausse|1σ (8 cas") for x in r["insuffisants"]))
 
