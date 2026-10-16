@@ -98,7 +98,7 @@ class Chaine(unittest.TestCase):
         reg.compter("a")
         self.assertEqual(L.RegistreQuotas(chemin, {"a": 3}).etat()["modeles"]["a"]["appels_aujourdhui"], 2)
         brut = json.loads(chemin.read_text(encoding="utf-8"))
-        brut["date"] = (datetime.now(timezone.utc) - timedelta(days=1)).date().isoformat()
+        brut["date"] = (L.jour_quota_google(datetime.now(timezone.utc)) - timedelta(days=1)).isoformat()   # veille du jour Pacifique
         chemin.write_text(json.dumps(brut), encoding="utf-8")
         self.assertEqual(L.RegistreQuotas(chemin, {"a": 3}).etat()["modeles"]["a"]["appels_aujourdhui"], 0)
 
