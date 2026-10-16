@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-10-16T18:10:01+00:00",
+  "genere_le": "2026-10-16T21:09:25+00:00",
   "appels_llm": [
    {
     "heure": "13:28",
@@ -284,6 +284,15 @@
     "tokens_total": 21312,
     "ok": false,
     "etiquette": "etat_du_monde"
+   },
+   {
+    "heure": "21:09",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 5038,
+    "tokens_message": 19767,
+    "tokens_total": 24805,
+    "ok": false,
+    "etiquette": "analyse:CNY"
    }
   ],
   "quota_llm": {
@@ -295,20 +304,20 @@
    ],
    "modeles": {
     "gemini-3.5-flash": {
-     "appels_aujourdhui": 18,
+     "appels_aujourdhui": 20,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-10-10T23:59:59+00:00",
-     "appels_ce_run": 3,
+     "appels_ce_run": 1,
      "reussites_ce_run": 0,
-     "sauts_ce_run": 20
+     "sauts_ce_run": 6
     },
     "gemini-3.8-flash": {
      "appels_aujourdhui": 20,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-10-16T23:59:59+00:00",
-     "appels_ce_run": 3,
+     "appels_ce_run": 0,
      "reussites_ce_run": 0,
-     "sauts_ce_run": 20
+     "sauts_ce_run": 7
     },
     "gemini-3.5-flash-lite": {
      "appels_aujourdhui": 20,
@@ -316,14 +325,14 @@
      "epuise_jusqu_a": null,
      "appels_ce_run": 0,
      "reussites_ce_run": 0,
-     "sauts_ce_run": 23
+     "sauts_ce_run": 7
     }
    }
   },
   "appels_par_modele": {
    "gemini-3.5-flash": {
-    "appels": 9,
-    "echecs": 9
+    "appels": 10,
+    "echecs": 10
    },
    "gemini-3.8-flash": {
     "appels": 9,
@@ -436,6 +445,40 @@
       "ignores": 23
      }
     ]
+   },
+   {
+    "heure": "21:09",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 7,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 1,
+      "ignores": 6
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 7
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 7
+     }
+    ]
    }
   ]
  },
@@ -445,9 +488,10 @@
   "etat_du_monde": null,
   "engrenages": {
    "statut": "indisponible",
-   "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint",
+   "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+   "quota_atteint": true,
    "tentatives": 3,
-   "genere_le": "2026-10-16T18:07:41+00:00"
+   "genere_le": "2026-10-16T21:09:25+00:00"
   },
   "classement_devises": [
    {
@@ -730,9 +774,10 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint",
+    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+    "quota_atteint": true,
     "tentatives": 3,
-    "genere_le": "2026-10-16T18:07:41+00:00"
+    "genere_le": "2026-10-16T21:09:25+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.28,
@@ -987,9 +1032,10 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint",
+    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+    "quota_atteint": true,
     "tentatives": 3,
-    "genere_le": "2026-10-16T18:08:01+00:00"
+    "genere_le": "2026-10-16T21:09:25+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.03,
@@ -1244,9 +1290,10 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint",
+    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+    "quota_atteint": true,
     "tentatives": 3,
-    "genere_le": "2026-10-16T18:08:21+00:00"
+    "genere_le": "2026-10-16T21:09:25+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.46,
@@ -1495,9 +1542,10 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint",
+    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+    "quota_atteint": true,
     "tentatives": 2,
-    "genere_le": "2026-10-16T18:08:41+00:00"
+    "genere_le": "2026-10-16T21:09:25+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.29,
@@ -1758,9 +1806,10 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint",
+    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+    "quota_atteint": true,
     "tentatives": 2,
-    "genere_le": "2026-10-16T18:09:01+00:00"
+    "genere_le": "2026-10-16T21:09:25+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.27,
@@ -2036,9 +2085,10 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint",
+    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+    "quota_atteint": true,
     "tentatives": 2,
-    "genere_le": "2026-10-16T18:09:21+00:00"
+    "genere_le": "2026-10-16T21:09:25+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.62,
@@ -2303,9 +2353,10 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint",
+    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+    "quota_atteint": true,
     "tentatives": 2,
-    "genere_le": "2026-10-16T18:09:41+00:00"
+    "genere_le": "2026-10-16T21:09:25+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.64,
@@ -2565,9 +2616,10 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint",
+    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+    "quota_atteint": true,
     "tentatives": 2,
-    "genere_le": "2026-10-16T18:10:01+00:00"
+    "genere_le": "2026-10-16T21:09:25+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.14,
@@ -2611,12 +2663,12 @@
    "risk_on_off": "neutre",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "Analyse CNY impossible : tous les modèles de la chaîne en échec : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: https://generative",
+   "raison_indisponibilite": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (Analyse CNY impossible : tous les modèles de la chaîne en échec : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: https://generative)",
+    "commentaire": "analyse indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
     "source_id": null
    },
    "detail_score": [],
@@ -7139,8 +7191,8 @@
     "taux_pct": 100.0
    },
    "Prévision": {
-    "valeur": 16,
-    "explique": 101,
+    "valeur": 21,
+    "explique": 96,
     "vide": 0,
     "total": 117,
     "taux_pct": 100.0
@@ -7208,18 +7260,18 @@
   "conforme": false,
   "nb_anomalies": 12,
   "anomalies": [
-   "CNY : analyse indisponible aujourd'hui (Analyse CNY impossible : tous les modèles de la chaîne en échec : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: https://generative) — exclue du classement",
-   "USD : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash )",
-   "EUR : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash )",
-   "GBP : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash )",
-   "JPY : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash )",
-   "CHF : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash )",
-   "CAD : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash )",
-   "AUD : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash )",
-   "NZD : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash )",
-   "8 engrenages : indisponible (tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash )",
+   "CNY : analyse indisponible aujourd'hui (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)) — exclue du classement",
+   "USD : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+   "EUR : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+   "GBP : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+   "JPY : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+   "CHF : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+   "CAD : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+   "AUD : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+   "NZD : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+   "8 engrenages : indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
    "état du monde absent de la synthèse globale",
-   "prompt LLM volumineux : 31 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 24805 à 18:05 UTC, modèle gemini-3.5-flash) — le contexte envoyé au LLM a regrossi"
+   "prompt LLM volumineux : 32 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 24805 à 18:05 UTC, modèle gemini-3.5-flash) — le contexte envoyé au LLM a regrossi"
   ]
  },
  "critique": {
@@ -7228,6 +7280,6 @@
   "suggestions_connaissances": [],
   "validation": "non_evalue",
   "indisponible": true,
-  "note": "relecture non effectuée (tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : q)"
+  "note": "relecture non effectuée (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit) — gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : quota du)"
  }
 }
