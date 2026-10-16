@@ -28,6 +28,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import os
 import sys
 from datetime import date, datetime, timezone
 from pathlib import Path
@@ -480,9 +481,25 @@ def main() -> int:
     return 0
 
 
+def _sortie_avec_publication(code: int) -> int:
+    """Run rouge si le commit n'a pas été poussé (jamais un vert mensonger) ; raison dans le résumé du run."""
+    if not publication_web.ECHEC_PUSH:
+        return code
+    raison = publication_web.ECHEC_PUSH[-1]
+    resume = os.environ.get("GITHUB_STEP_SUMMARY")
+    if resume:
+        try:
+            with open(resume, "a", encoding="utf-8") as f:
+                f.write(f"## Publication en échec\n\nLe rapport a été calculé mais **n'a pas été poussé** : {raison}\n")
+        except OSError:
+            pass
+    log.error("Publication en échec : %s", raison)
+    return code or 1
+
+
 if __name__ == "__main__":
     try:
-        sys.exit(main())
+        sys.exit(_sortie_avec_publication(main()))
     except KeyboardInterrupt:
         # Sans ceci, un Ctrl+C pendant une pause de scraping ne laisse AUCUNE
         # trace dans le log — le run semble s'être évaporé.

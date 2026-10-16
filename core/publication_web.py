@@ -10,9 +10,25 @@ import json
 import logging
 import os
 import subprocess
+import time
 from pathlib import Path
 
 log = logging.getLogger(__name__)
+
+ESSAIS_PUSH = 4
+PAUSE_PUSH_S = 5.0
+# Fichiers produits par le robot : en cas de conflit au rebase, NOTRE version (celle du run) est gardée.
+DONNEES_ROBOT = ("docs/data/", "data/")
+# Raison du dernier échec de publication (None si aucun) : l'orchestrateur sort alors en erreur (run rouge).
+ECHEC_PUSH: list[str] = []
+
+
+class PushEchoue(RuntimeError):
+    """Le commit du run n'a pas pu être poussé après tous les essais."""
+
+
+class ConflitCode(PushEchoue):
+    """Conflit sur un fichier hors données du robot : jamais résolu automatiquement, pas de nouvel essai."""
 
 
 def ecrire_donnees(rapport: dict, dossier_docs: str | Path) -> Path:
@@ -78,21 +94,72 @@ def pousser_git(config_web: dict, racine_projet: str | Path = ".",
         _git("config", "user.name", "github-actions[bot]", racine=racine)
         _git("config", "user.email", "github-actions[bot]@users.noreply.github.com", racine=racine)
 
-    # config.yaml : porte le database_id Notion écrit au premier run.
-    _git("add", "docs/data", "data/rapports", "data/cache", "data/hebdo", "config.yaml",
-         racine=racine)
-    # Fichiers du Tableau macro : ajoutés un par un (git add échoue en bloc si l'un
-    # des chemins n'existe pas encore).
-    for optionnel in ("data/registre_macro.json", "data/overrides/saisies_notion.json", "data/archives"):
-        if (racine / optionnel).exists():
-            _git("add", optionnel, racine=racine)
+    # config.yaml : porte le database_id Notion écrit au premier run. Chemins ajoutés UN PAR UN :
+    # « git add » échoue en bloc si l'un d'eux n'existe pas encore (rien ne serait alors committé).
+    for chemin in ("docs/data", "data/rapports", "data/cache", "data/hebdo", "config.yaml",
+                   "data/registre_macro.json", "data/overrides/saisies_notion.json", "data/archives"):
+        if (racine / chemin).exists():
+            _git("add", chemin, racine=racine)
     commit = _git("commit", "-m", message, racine=racine)
     if commit.returncode != 0:
         log.info("Rien à committer (%s)", commit.stdout.strip() or commit.stderr.strip())
         return False
-    push = _git("push", racine=racine)
-    if push.returncode != 0:
-        log.error("git push en échec : %s", push.stderr.strip())
-        return False
-    log.info("Dashboard web poussé sur le dépôt")
-    return True
+    branche = _branche(racine)
+    derniere, classe = "", PushEchoue
+    for essai in range(1, ESSAIS_PUSH + 1):
+        try:
+            _rebaser(racine, branche)
+        except ConflitCode as exc:
+            derniere, classe = str(exc), ConflitCode
+            break   # conflit hors données du robot : pas de nouvel essai qui écraserait du code
+        except PushEchoue as exc:   # pull en échec (réseau, dépôt injoignable) : nouvel essai après la pause
+            derniere = str(exc)
+            log.warning("git pull --rebase en échec (essai %d/%d) : %s", essai, ESSAIS_PUSH, derniere)
+            if essai < ESSAIS_PUSH:
+                time.sleep(PAUSE_PUSH_S)
+            continue
+        push = _git("push", "origin", f"HEAD:{branche}", racine=racine)
+        if push.returncode == 0:
+            log.info("Dashboard web poussé sur le dépôt (essai %d/%d)", essai, ESSAIS_PUSH)
+            return True
+        derniere = push.stderr.strip()[:300]
+        log.warning("git push en échec (essai %d/%d) : %s", essai, ESSAIS_PUSH, derniere)
+        if essai < ESSAIS_PUSH:
+            time.sleep(PAUSE_PUSH_S)
+    raison = f"git push impossible après {essai} essai(s) sur {ESSAIS_PUSH} vers {branche} : {derniere}"
+    ECHEC_PUSH.append(raison)
+    log.error(raison)
+    raise classe(raison)
+
+
+def _branche(racine: Path) -> str:
+    nom = _git("rev-parse", "--abbrev-ref", "HEAD", racine=racine).stdout.strip()
+    if nom and nom != "HEAD":
+        return nom
+    return os.environ.get("GITHUB_REF_NAME") or "master"
+
+
+def _rebaser(racine: Path, branche: str) -> None:
+    """git pull --rebase --autostash : rejoue le commit du run au-dessus des commits arrivés entre-temps.
+    Conflit sur docs/data ou data/ : notre version (le commit rejoué) est gardée. Conflit ailleurs : abandon."""
+    pull = _git("pull", "--rebase", "--autostash", "origin", branche, racine=racine)
+    tours = 0
+    while pull.returncode != 0 and tours < 20:
+        tours += 1
+        conflits = [l for l in _git("diff", "--name-only", "--diff-filter=U", racine=racine).stdout.splitlines() if l.strip()]
+        if not conflits:
+            _git("rebase", "--abort", racine=racine)
+            raise PushEchoue(f"git pull --rebase en échec : {(pull.stderr or pull.stdout).strip()[:300]}")
+        hors_donnees = [c for c in conflits if not c.startswith(DONNEES_ROBOT)]
+        if hors_donnees:
+            _git("rebase", "--abort", racine=racine)
+            raise ConflitCode(f"conflit hors données du robot, rebase abandonné : {', '.join(hors_donnees)}")
+        for c in conflits:   # pendant un rebase, « theirs » = le commit rejoué, c'est-à-dire NOTRE version
+            _git("checkout", "--theirs", "--", c, racine=racine)
+            _git("add", "--", c, racine=racine)
+        log.warning("Conflit résolu en gardant la version du run : %s", ", ".join(conflits))
+        pull = subprocess.run(["git", "-c", "core.editor=true", "rebase", "--continue"], cwd=racine,
+                              capture_output=True, text=True, check=False)
+    if pull.returncode != 0:
+        _git("rebase", "--abort", racine=racine)
+        raise PushEchoue("rebase interrompu : trop de conflits successifs")
