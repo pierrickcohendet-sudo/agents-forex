@@ -1,14 +1,14 @@
 {
  "version_schema": 1,
- "genere_le": "2026-10-16T13:40:09+00:00",
+ "genere_le": "2026-10-16T14:04:43+00:00",
  "sources": {
-  "rapport": "2026-10-16T13:39:36+00:00",
-  "tableau_macro": "2026-10-16T13:17:45+00:00"
+  "rapport": "2026-10-16T14:03:45+00:00",
+  "tableau_macro": "2026-10-16T13:41:01+00:00"
  },
  "regime": {
-  "biais": "neutre",
-  "libelle": "Neutre",
-  "ecart_points": null,
+  "biais": "risk_off",
+  "libelle": "Risk Off",
+  "ecart_points": -13.7,
   "seuil_points": 5.0,
   "devises_risque": [
    "AUD",
@@ -21,13 +21,13 @@
    "USD"
   ],
   "explication": "Écart entre le score de confluence moyen des devises « risque » et celui des devises « refuge » (calcul Python) : au-delà du seuil, Risk On ; en deçà de son opposé, Risk Off ; sinon Neutre.",
-  "driver": "Biais neutre ; USD en tête du classement de confluence.",
+  "driver": "Persistance du biais risk-off et domination absolue de l'USD (87) qui surclasse des devises refuges traditionnelles comme le JPY et le CHF, reléguant l'EUR en absolute laggard (22).",
   "relecture": "non_evalue",
   "date_rapport": "2026-10-16",
-  "maj": "2026-10-16T13:39:36+00:00",
+  "maj": "2026-10-16T14:03:45+00:00",
   "type_rapport": "quotidien",
   "nb_devises": 9,
-  "nb_devises_disponibles": 3,
+  "nb_devises_disponibles": 9,
   "notion_url": "https://app.notion.com/p/FX-2026-10-16-quotidien-3fb65bc6466181c8a7f0d67a171a53c6",
   "notion_page_du_jour": true
  },
@@ -149,8 +149,8 @@
      "raison": null
     },
     "score": {
-     "texte": "88",
-     "valeur_num": 88,
+     "texte": "87",
+     "valeur_num": 87,
      "etat": "valeur",
      "source": "score de confluence (calcul Python)",
      "date": "2026-10-16",
@@ -158,7 +158,7 @@
     },
     "biais": {
      "texte": "Haussier",
-     "valeur_num": 88,
+     "valeur_num": 87,
      "code": "haussier",
      "etat": "valeur",
      "profil": "off",
@@ -242,8 +242,8 @@
      "raison": null
     },
     "score": {
-     "texte": "12",
-     "valeur_num": 12,
+     "texte": "22",
+     "valeur_num": 22,
      "etat": "valeur",
      "source": "score de confluence (calcul Python)",
      "date": "2026-10-16",
@@ -251,7 +251,7 @@
     },
     "biais": {
      "texte": "Baissier",
-     "valeur_num": 12,
+     "valeur_num": 22,
      "code": "baissier",
      "etat": "valeur",
      "profil": "neutre",
@@ -335,17 +335,17 @@
      "raison": null
     },
     "score": {
-     "texte": "62",
-     "valeur_num": 62,
+     "texte": "58",
+     "valeur_num": 58,
      "etat": "valeur",
      "source": "score de confluence (calcul Python)",
      "date": "2026-10-16",
      "raison": null
     },
     "biais": {
-     "texte": "Haussier",
-     "valeur_num": 62,
-     "code": "haussier",
+     "texte": "Neutre",
+     "valeur_num": 58,
+     "code": "neutre",
      "etat": "valeur",
      "profil": "neutre",
      "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
@@ -428,16 +428,21 @@
      "raison": null
     },
     "score": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "Analyse JPY impossible : tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite passé en dernier | gemini-3"
+     "texte": "42",
+     "valeur_num": 42,
+     "etat": "valeur",
+     "source": "score de confluence (calcul Python)",
+     "date": "2026-10-16",
+     "raison": null
     },
     "biais": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "score du jour indisponible"
+     "texte": "Neutre",
+     "valeur_num": 42,
+     "code": "neutre",
+     "etat": "valeur",
+     "profil": "off",
+     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
+     "raison": null
     }
    }
   },
@@ -516,16 +521,21 @@
      "raison": null
     },
     "score": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "Analyse CHF impossible : tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite passé en dernier | gemini-3"
+     "texte": "40",
+     "valeur_num": 40,
+     "etat": "valeur",
+     "source": "score de confluence (calcul Python)",
+     "date": "2026-10-16",
+     "raison": null
     },
     "biais": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "score du jour indisponible"
+     "texte": "Baissier",
+     "valeur_num": 40,
+     "code": "baissier",
+     "etat": "valeur",
+     "profil": "off",
+     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
+     "raison": null
     }
    }
   },
@@ -604,16 +614,21 @@
      "raison": null
     },
     "score": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "Analyse CAD impossible : tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite passé en dernier | gemini-3"
+     "texte": "37",
+     "valeur_num": 37,
+     "etat": "valeur",
+     "source": "score de confluence (calcul Python)",
+     "date": "2026-10-16",
+     "raison": null
     },
     "biais": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "score du jour indisponible"
+     "texte": "Baissier",
+     "valeur_num": 37,
+     "code": "baissier",
+     "etat": "valeur",
+     "profil": "on",
+     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
+     "raison": null
     }
    }
   },
@@ -692,16 +707,21 @@
      "raison": null
     },
     "score": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "Analyse AUD impossible : tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite passé en dernier | gemini-3"
+     "texte": "50",
+     "valeur_num": 50,
+     "etat": "valeur",
+     "source": "score de confluence (calcul Python)",
+     "date": "2026-10-16",
+     "raison": null
     },
     "biais": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "score du jour indisponible"
+     "texte": "Neutre",
+     "valeur_num": 50,
+     "code": "neutre",
+     "etat": "valeur",
+     "profil": "on",
+     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
+     "raison": null
     }
    }
   },
@@ -780,16 +800,21 @@
      "raison": null
     },
     "score": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "Analyse NZD impossible : tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite passé en dernier | gemini-3"
+     "texte": "41",
+     "valeur_num": 41,
+     "etat": "valeur",
+     "source": "score de confluence (calcul Python)",
+     "date": "2026-10-16",
+     "raison": null
     },
     "biais": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "score du jour indisponible"
+     "texte": "Neutre",
+     "valeur_num": 41,
+     "code": "neutre",
+     "etat": "valeur",
+     "profil": "on",
+     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
+     "raison": null
     }
    }
   },
@@ -868,16 +893,21 @@
      "raison": null
     },
     "score": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "Analyse CNY impossible : tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite passé en dernier | gemini-3"
+     "texte": "36",
+     "valeur_num": 36,
+     "etat": "valeur",
+     "source": "score de confluence (calcul Python)",
+     "date": "2026-10-16",
+     "raison": null
     },
     "biais": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "score du jour indisponible"
+     "texte": "Baissier",
+     "valeur_num": 36,
+     "code": "baissier",
+     "etat": "valeur",
+     "profil": "neutre",
+     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
+     "raison": null
     }
    }
   }
