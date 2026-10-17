@@ -205,9 +205,11 @@ class RegistreQuotas:
                 brut = {}
         jour = self._jour_quota()
         modeles = brut.get("modeles", {}) if isinstance(brut, dict) else {}
-        if brut.get("date") != jour:   # nouveau jour : compteurs à zéro, épuisements encore valides conservés
+        meme_jour = brut.get("date") == jour
+        if not meme_jour:   # nouveau jour : compteurs à zéro, épuisements encore valides conservés
             modeles = {m: {"appels": 0, "epuise_jusqu_a": v.get("epuise_jusqu_a")} for m, v in modeles.items()}
-        self.donnees = {"date": jour, "modeles": modeles}
+        self.donnees = {"date": jour, "modeles": modeles,
+                        "engrenages_faits": bool(meme_jour and brut.get("engrenages_faits"))}
 
     def _sauver(self) -> None:
         if not self.chemin:
@@ -250,8 +252,27 @@ class RegistreQuotas:
             e["appels"] = max(e["appels"], plafond)
         self._sauver()
 
+    def restants(self, modeles: list[str]) -> int | None:
+        """Appels encore possibles aujourd'hui sur ces modèles (None : un modèle sans plafond local)."""
+        total = 0
+        for m in modeles:
+            plafond = self.plafonds.get(m)
+            if plafond is None:
+                return None
+            total += 0 if self.epuise(m) else max(plafond - self._entree(m)["appels"], 0)
+        return total
+
+    @property
+    def engrenages_faits(self) -> bool:
+        return bool(self.donnees.get("engrenages_faits"))
+
+    def marquer_engrenages_faits(self) -> None:
+        if not self.engrenages_faits:
+            self.donnees["engrenages_faits"] = True
+            self._sauver()
+
     def etat(self) -> dict:
-        return {"date": self.donnees["date"],
+        return {"date": self.donnees["date"], "engrenages_faits": self.engrenages_faits,
                 "modeles": {m: {"appels_aujourdhui": self._entree(m)["appels"], "plafond_jour": self.plafonds.get(m),
                                 "epuise_jusqu_a": self._entree(m).get("epuise_jusqu_a")}
                             for m in self.plafonds}}
@@ -651,7 +672,7 @@ class FournisseurChaine(FournisseurLLM):
     Si aucun modèle n'est disponible : QuotaAtteint (quota) ou RuntimeError (autres échecs)."""
 
     def __init__(self, maillons: list[tuple[str, FournisseurLLM]], registre: RegistreQuotas | None,
-                 disjoncteur_actif: bool = True, seuil_echecs: int = 3):
+                 disjoncteur_actif: bool = True, seuil_echecs: int = 3, reserve_engrenages: int = 0):
         self.maillons = [{"modele": nom, "fournisseur": f, "echecs": 0, "ouvert": False, "cause": None,
                           "ouvert_a_l_appel": None, "ignores": 0, "tentatives": 0, "reussites": 0}
                          for nom, f in maillons]
@@ -662,6 +683,22 @@ class FournisseurChaine(FournisseurLLM):
         self.dernier_servi: str | None = None
         self._a_eviter: set[str] = set()
         self.replis_json = 0
+        # Les N derniers appels du jour sont gardés pour la synthèse des 8 engrenages (étiquette
+        # « engrenages ») tant qu'elle n'a pas réussi aujourd'hui : aucun autre appel ne les consomme.
+        self.reserve_engrenages = max(0, int(reserve_engrenages))
+        self.refus_reserve = 0
+
+    def marquer_engrenages_faits(self) -> None:
+        if self.registre is not None:
+            self.registre.marquer_engrenages_faits()
+
+    def _bloque_par_reserve(self) -> int | None:
+        """Nombre d'appels restants si l'appel courant doit être refusé pour préserver la réserve, sinon None."""
+        if (self.registre is None or not self.reserve_engrenages or self.registre.engrenages_faits
+                or _ETIQUETTE_COURANTE[0].startswith("engrenages")):
+            return None
+        restants = self.registre.restants([m["modele"] for m in self.maillons])
+        return restants if restants is not None and restants <= self.reserve_engrenages else None
 
     def eviter_dernier_modele(self) -> None:
         """Réponse inexploitable (JSON invalide, schéma incomplet) : le PROCHAIN appel commence par
@@ -679,6 +716,11 @@ class FournisseurChaine(FournisseurLLM):
             log.warning("DISJONCTEUR OUVERT : %s ignoré pour le reste de ce run (%s)", m["modele"], m["cause"])
 
     def appeler_llm(self, prompt: str, systeme: str | None = None) -> str:
+        restants = self._bloque_par_reserve()
+        if restants is not None:
+            self.refus_reserve += 1
+            raise QuotaAtteint(f"{MESSAGE_QUOTA_ATTEINT} — {restants} appel(s) restant(s) aujourd'hui, réservés à la "
+                               f"synthèse des engrenages (réserve de {self.reserve_engrenages})")
         self.appels_total += 1
         raisons: list[str] = []
         autre_echec = False
@@ -727,8 +769,14 @@ class FournisseurChaine(FournisseurLLM):
     def etat_quota(self) -> dict:
         """meta.quota_llm : compteur du jour (fichier d'état) + appels de CE run, par modèle."""
         jour = self.registre.etat()["modeles"] if self.registre is not None else {}
-        return {"date": (self.registre.etat()["date"] if self.registre is not None else None),
+        etat = self.registre.etat() if self.registre is not None else {}
+        plafonds = [self.registre.plafonds.get(m["modele"]) for m in self.maillons] if self.registre is not None else []
+        return {"date": etat.get("date"),
                 "ordre": [m["modele"] for m in self.maillons],
+                "appels_aujourdhui": sum(v.get("appels_aujourdhui") or 0 for v in jour.values()),
+                "plafond_jour": sum(plafonds) if plafonds and None not in plafonds else None,
+                "engrenages_faits": etat.get("engrenages_faits"),
+                "reserve_engrenages": self.reserve_engrenages, "refus_reserve_ce_run": self.refus_reserve,
                 "modeles": {m["modele"]: {**jour.get(m["modele"], {}), "appels_ce_run": m["tentatives"],
                                           "reussites_ce_run": m["reussites"], "sauts_ce_run": m["ignores"]}
                             for m in self.maillons}}
@@ -785,7 +833,8 @@ def _creer_chaine(config: dict) -> FournisseurChaine:
     log.info("Chaîne de modèles : %s (quotas du jour : %s)", " -> ".join(m for m, _ in maillons),
              {m: registre.etat()["modeles"][m]["appels_aujourdhui"] for m in plafonds})
     return FournisseurChaine(maillons, registre, disjoncteur_actif=disj.get("actif", True),
-                             seuil_echecs=disj.get("seuil_echecs_consecutifs", 3))
+                             seuil_echecs=disj.get("seuil_echecs_consecutifs", 3),
+                             reserve_engrenages=int(cfg.get("reserve_engrenages", 0)))
 
 
 def creer_fournisseur(config: dict) -> FournisseurLLM:

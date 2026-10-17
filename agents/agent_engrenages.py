@@ -41,7 +41,10 @@ DIRECTIONS_RISQUE = ("risk_on", "risk_off", "neutre")
 CONVICTIONS = ("faible", "moyen", "eleve")
 TEXTE_INSUFFISANT = "Données insuffisantes aujourd'hui."
 RISQUE, REFUGE = ("AUD", "NZD", "CAD"), ("JPY", "CHF")
-SANS_REGLE = (4, 6, 8)   # engrenages sans direction calculable en Python
+SANS_REGLE = (4, 6, 8)   # engrenages dont la direction dollar vient de la case USD de la matrice d'impact
+MATRICE_RISQUE = (6,)    # risque tiré de la matrice : canal « refuge » de la géopolitique seulement
+TEXTE_QUOTA = "Texte indisponible : quota du jour atteint"
+TEXTE_ECHEC = "Texte indisponible : réponse du modèle inexploitable"
 MIN_ENGRENAGES_REPONSE = 6   # en dessous : réponse jugée incomplète, redemandée au modèle suivant
 
 SCHEMA = """{
@@ -253,18 +256,17 @@ def signaux(config: dict, donnees: dict, macro: dict, devises: list[dict], biais
                        f"{devise} — {libelles.get(indicateur, indicateur)}",
                        actuel.get("date_pub") or actuel.get("periode"))
 
-    # 1. Thème macro : biais global (calcul Python) + score de l'USD
+    # 1. Thème macro : résultante des engrenages 2 à 8 (complétée plus bas, voir _theme_python). Les scores de
+    # confluence (rédigés avec le modèle) ne décident plus de la direction : ils restent une donnée affichée.
     id_scores = cat.src("Calcul Python", "scores de confluence et biais global du jour", aujourdhui)
-    usd = scores.get("USD")
     classes = sorted([(s, d) for d, s in scores.items() if s is not None], reverse=True)
     resultat[1] = {
-        "dollar": None if usd is None else ("haussier" if usd >= 60 else "baissier" if usd <= 40 else "neutre"),
-        "risque": biais if biais in DIRECTIONS_RISQUE else None,
+        "dollar": None, "risque": None,
         "devises": list(dict.fromkeys([d for _, d in classes[:2]] + [d for _, d in classes[-2:]])),
-        "regle": "risque = biais global calculé (scores risque vs refuge) ; dollar = score USD (≥ 60 / ≤ 40)",
+        "regle": "",
         "donnees": [{"texte": f"Biais global {biais} ; classement : " +
                      ", ".join(f"{d} {s}" for s, d in classes), "source_id": id_scores}] if classes else [],
-        "force": 2 if usd is not None and (usd >= 70 or usd <= 30) else 1,
+        "force": 0,
     }
 
     # 2. Politique monétaire : dernières décisions + taux 2 ans US (anticipations)
@@ -430,10 +432,14 @@ def signaux(config: dict, donnees: dict, macro: dict, devises: list[dict], biais
                    "donnees": donnees8, "indisponibles": indisponibles8, "force": max(_force(v_wti[1] if v_wti else None, 3),
                                 _force((eia or {}).get("variation_semaine"), 3))}
 
+    _directions_matrice(resultat, dossiers)
+    _theme_python(resultat, cat, aujourdhui)
     for n, s in resultat.items():
         s["donnees"] = [d for d in s["donnees"] if d.get("texte")]
         defini = s["dollar"] not in (None, "neutre") or s["risque"] not in (None, "neutre")
-        s["conviction"] = _conviction(len(s["donnees"]), defini, s.pop("force", 0)) if n not in (4, 6) else None
+        s["conviction"] = _conviction(len(s["donnees"]), defini, s.pop("force", 0))
+        if n in (4, 6) and s["conviction"] == "eleve":   # actualité et fiscalité : conviction plafonnée
+            s["conviction"] = "moyen"
 
     # Thème : conviction = accord des autres engrenages avec la direction du thème (dollar et risque).
     theme = resultat[1]
@@ -452,6 +458,64 @@ def signaux(config: dict, donnees: dict, macro: dict, devises: list[dict], biais
     theme["regle"] += (f" ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème "
                        f"({accords} accord(s), {desaccords} désaccord(s))")
     return resultat
+
+
+def _directions_matrice(resultat: dict[int, dict], dossiers: dict) -> None:
+    """Direction dollar des engrenages 4, 6 et 8 (et des autres quand leur règle manque de données) : case USD
+    de la matrice d'impact (core/matrice_impact.py, règles de config.yaml). Engrenage 6 : risque tiré des cases
+    refuge (JPY, CHF) contre risque (AUD, NZD, CAD). Une case sans règle appliquée mais avec des données du
+    jour vaut « neutre » pour 4, 6 et 8 ; sans matrice, la direction reste non déterminée (jamais devinée)."""
+    mat = (dossiers or {}).get("matrice_impact") or {}
+    cases = {l["devise"]: {c["engrenage"]: c for c in l.get("cases") or []} for l in mat.get("lignes") or []}
+    usd = cases.get("USD")
+    for n in range(2, 9):
+        s = resultat[n]
+        if not usd:
+            if n in SANS_REGLE:
+                s["regle"] = "matrice d'impact indisponible aujourd'hui : direction non calculée"
+            continue
+        case = usd.get(n) or {}
+        if s["dollar"] is None:
+            v = case.get("valeur") or 0
+            if case.get("regles"):
+                s["dollar"] = "haussier" if v > 0 else "baissier" if v < 0 else "neutre"
+            elif n in SANS_REGLE and s["donnees"]:
+                s["dollar"] = "neutre"
+            if s["dollar"] is not None:
+                detail = "; ".join(r["regle"] for r in case.get("regles") or []) or case.get("raison") or "aucune règle déclenchée"
+                s["force"] = max(s.get("force", 0), min(abs(v), 2))
+                s["regle"] = (s["regle"] + " ; " if n not in SANS_REGLE else "") + \
+                    f"dollar : case USD de la matrice d'impact ({case.get('libelle', 'Neutre')} : {detail})"
+        if n in MATRICE_RISQUE and s["risque"] is None:
+            ecart = sum(((cases.get(d) or {}).get(n) or {}).get("valeur") or 0 for d in RISQUE) - \
+                sum(((cases.get(d) or {}).get(n) or {}).get("valeur") or 0 for d in REFUGE)
+            if ecart:
+                s["risque"] = "risk_on" if ecart > 0 else "risk_off"
+                s["regle"] += f" ; risque : matrice d'impact, devises risque − refuge = {ecart:+d}"
+        if n in SANS_REGLE:
+            s["devises"] = s["devises"] or [d for d, c in cases.items() if ((c.get(n) or {}).get("valeur") or 0)][:4]
+
+
+def _theme_python(resultat: dict[int, dict], cat: _Catalogue, aujourdhui: str) -> None:
+    """Thème (engrenage 1), 100 % Python : dollar = majorité des directions dollar des engrenages 2 à 8
+    (égalité : neutre) ; risque = celui de l'engrenage 5 (VIX), à défaut de l'engrenage 7 (flux risque - refuge)."""
+    t = resultat[1]
+    dollars = [resultat[n]["dollar"] for n in range(2, 9) if resultat[n]["dollar"]]
+    h, b = dollars.count("haussier"), dollars.count("baissier")
+    if dollars:
+        t["dollar"] = "haussier" if h > b else "baissier" if b > h else "neutre"
+        t["force"] = 2 if abs(h - b) >= 3 else 1 if h != b else 0
+    source_risque = next((n for n in (5, 7) if resultat[n]["risque"]), None)
+    if source_risque:
+        t["risque"] = resultat[source_risque]["risque"]
+    if dollars or source_risque:
+        t["donnees"].append({"texte": f"Directions dollar des engrenages 2 à 8 : {h} haussière(s), {b} baissière(s), "
+                                      f"{len(dollars) - h - b} neutre(s)"
+                                      + (f" ; risque de l'engrenage {source_risque} : {t['risque']}" if source_risque else ""),
+                             "source_id": cat.src("Calcul Python", "directions des engrenages 2 à 8 (règles Python et matrice d'impact)",
+                                                  aujourdhui)})
+    t["regle"] = ("dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; "
+                  "risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge)")
 
 
 def conflits_detectes(sig: dict[int, dict]) -> list[dict]:
@@ -525,7 +589,8 @@ def choisir_concept(concepts: list[dict], texte_du_jour: str, chemin_etat: Path,
 
 # ------------------------------------------------------------------ normalisation
 def normaliser(brut: dict, sig: dict[int, dict], conflits_py: list[dict], concept: dict | None,
-               config: dict, justif: dict[int, dict[str, bool]] | None = None) -> dict:
+               config: dict, justif: dict[int, dict[str, bool]] | None = None, texte_absent: str | None = None) -> dict:
+    """texte_absent (repli sans modèle) : directions et convictions Python seules, chaque texte remplacé par ce message."""
     controles: list[str] = []
     retraits = 0
     devises_ok = set(config.get("devises", {}))
@@ -553,17 +618,12 @@ def normaliser(brut: dict, sig: dict[int, dict], conflits_py: list[dict], concep
             if valeur_py and valeur_llm and valeur_llm != valeur_py:
                 controles.append(f"engrenage {n} ({nom}) : le modèle proposait « {valeur_llm} » pour le {libelle}, "
                                  f"la règle Python donne « {valeur_py} » (conservée)")
-        # Direction du modèle acceptée UNIQUEMENT pour les engrenages sans règle Python (4, 6, 8) ;
-        # ailleurs, une dimension sans règle reste « non déterminée » plutôt que devinée.
+        # Directions : TOUJOURS Python (règles et matrice d'impact) ; celle du modèle n'est jamais reprise,
+        # une dimension sans règle reste « non déterminée » plutôt que devinée.
         origine_dir = {"dollar": "calcul Python" if dollar else None, "risque": "calcul Python" if risque else None}
-        if n in SANS_REGLE:
-            if dollar is None and llm_dollar in DIRECTIONS_DOLLAR:
-                dollar, origine_dir["dollar"] = llm_dollar, "modèle"
-            if risque is None and llm_risque in DIRECTIONS_RISQUE:
-                risque, origine_dir["risque"] = llm_risque, "modèle"
         diag = propre(e.get("diagnostic"), 700)
-        insuffisant = (not diag) or diag.lower().startswith("données insuffisantes") or \
-                      (n not in (1, 4, 6) and not s.get("donnees"))
+        insuffisant = (not s.get("donnees")) if texte_absent else (
+            (not diag) or diag.lower().startswith("données insuffisantes") or (n not in (1, 4, 6) and not s.get("donnees")))
         conv_llm = _norm((e.get("conviction") or {}).get("niveau")) if isinstance(e.get("conviction"), dict) else ""
         if s.get("conviction") is not None:
             niveau, origine = s["conviction"], "calcul Python"
@@ -571,6 +631,8 @@ def normaliser(brut: dict, sig: dict[int, dict], conflits_py: list[dict], concep
             niveau, origine = ("moyen" if conv_llm == "eleve" else conv_llm), "modèle (plafonnée à « moyen »)"
         else:
             niveau, origine = None, None
+        if insuffisant and texte_absent and n in (1, 4, 6):   # thème, fiscalité, géopolitique : pas de « données insuffisantes »
+            insuffisant = False                                 # sur la seule absence du texte rédigé
         if insuffisant:
             diag = TEXTE_INSUFFISANT
             dollar = dollar if s.get("donnees") else None
@@ -592,6 +654,9 @@ def normaliser(brut: dict, sig: dict[int, dict], conflits_py: list[dict], concep
             "donnees_calculees": s.get("donnees", []),
             "sources_indisponibles": s.get("indisponibles", []),
         })
+        if texte_absent:
+            engrenages[-1]["texte_indisponible"] = texte_absent
+            continue
         if n not in par_num:
             controles.append(f"engrenage {n} ({nom}) absent de la réponse du modèle")
 
@@ -608,7 +673,7 @@ def normaliser(brut: dict, sig: dict[int, dict], conflits_py: list[dict], concep
                                  "source_id": (_ids(m.get("source_id")) or [None])[0]})
         if len(maillons) >= 2:
             chaines.append({"titre": propre(c.get("titre"), 150), "maillons": maillons})
-    if not chaines:
+    if not chaines and not texte_absent:
         controles.append("aucune chaîne de transmission exploitable")
 
     conflits, vus = [], set()
@@ -737,6 +802,7 @@ def generer(config: dict, llm: FournisseurLLM, donnees: dict, macro: dict, catal
                 imposer_signaux_mixtes(sortie)
                 sortie.update({"statut": "ok", "tentatives": precedentes + 1, "genere_le": horodatage,
                                "redige_par": attribution_modele(), "version": "quotidienne"})
+                _liberer_reserve(llm)
                 return sortie
             except QuotaAtteint:
                 raise
@@ -746,10 +812,38 @@ def generer(config: dict, llm: FournisseurLLM, donnees: dict, macro: dict, catal
                 log.warning("8 engrenages, essai %d en échec : %s", essai, masquer_secrets(str(exc)))
         raise RuntimeError(masquer_secrets(str(derniere)))
     except QuotaAtteint:
+        log.warning("8 engrenages : quota du jour atteint — directions et titre calculés en Python, texte en attente")
         return {"statut": "indisponible", "raison": MESSAGE_QUOTA_ATTEINT, "quota_atteint": True,
-                "tentatives": precedentes, "genere_le": horodatage}
+                "tentatives": precedentes, "genere_le": horodatage,
+                **repli_python(config, donnees, macro, catalogue, devises, biais, extras, TEXTE_QUOTA)}
     except Exception as exc:  # noqa: BLE001
         n = precedentes + 1
         statut = "abandonnee" if n >= int(cfg.get("tentatives_max", 4)) else "indisponible"
         log.error("8 engrenages %s (tentative %d) : %s", statut, n, masquer_secrets(str(exc)))
-        return {"statut": statut, "raison": masquer_secrets(str(exc))[:200], "tentatives": n, "genere_le": horodatage}
+        if statut == "abandonnee":
+            _liberer_reserve(llm)
+        return {"statut": statut, "raison": masquer_secrets(str(exc))[:200], "tentatives": n, "genere_le": horodatage,
+                **repli_python(config, donnees, macro, catalogue, devises, biais, extras, TEXTE_ECHEC)}
+
+
+def _liberer_reserve(llm: FournisseurLLM) -> None:
+    """Synthèse réussie (ou abandonnée) aujourd'hui : la réserve d'appels du jour n'a plus d'objet."""
+    marquer = getattr(llm, "marquer_engrenages_faits", None)
+    if callable(marquer):
+        marquer()
+
+
+def repli_python(config: dict, donnees: dict, macro: dict, catalogue: list[dict], devises: list[dict],
+                 biais: str | None, extras: dict | None, message: str) -> dict:
+    """Sans texte du modèle : les 8 directions, les convictions, les conflits et le titre du thème restent
+    calculés (Python) ; chaque texte est remplacé par `message`. Jamais d'exception (vide en dernier recours)."""
+    try:
+        cat = _Catalogue(catalogue)
+        sig = signaux(config, donnees, macro, devises, biais, extras or {}, cat)
+        sortie = normaliser({}, sig, conflits_detectes(sig), None, config, texte_absent=message)
+        imposer_signaux_mixtes(sortie)
+        sortie.update({"repli_python": True, "texte_indisponible": message})
+        return sortie
+    except Exception as exc:  # noqa: BLE001
+        log.error("8 engrenages : repli Python en échec (%s)", masquer_secrets(str(exc)))
+        return {"repli_python": False, "texte_indisponible": message}

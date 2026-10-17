@@ -422,6 +422,11 @@ def _blocs_engrenages(rapport: dict) -> list[dict]:
     if eng.get("statut") != "ok":
         blocs.append(nb.callout([nb.rt("Synthèse « 8 engrenages » indisponible aujourd'hui — ", gras=True),
                                  nb.rt(str(eng.get("raison", ""))[:200], couleur="gray")], "⏸", "gray_background"))
+        if eng.get("engrenages"):   # repli Python : directions et convictions calculées, texte en attente
+            blocs.append(nb.tableau(["Engrenage", "Direction (calcul Python)", "Conviction", "Texte"],
+                                    [[f"{e['numero']}. {e['nom']}", _direction_courte(e.get("direction") or {}),
+                                      LIBELLES_CONVICTION.get((e.get("conviction") or {}).get("niveau"), "n/d"),
+                                      e.get("texte_indisponible") or "—"] for e in eng["engrenages"]]))
         return blocs
     catalogue = {x["id"]: x for x in rapport.get("sources_citees", [])}
     lignes = []

@@ -83,10 +83,10 @@ class Normalisation(unittest.TestCase):
         e2 = n["engrenages"][1]
         self.assertEqual(e2["direction"]["dollar"], "haussier")                 # le modèle disait « baissier »
         self.assertTrue(any("engrenage 2" in c for c in n["controles"]))
-        self.assertEqual(n["engrenages"][3]["direction"]["dollar"], "baissier")   # fiscalité : direction du modèle
+        self.assertIsNone(n["engrenages"][3]["direction"]["dollar"])   # fiscalité sans matrice : jamais la direction du modèle
         self.assertEqual(n["engrenages"][3]["conviction"]["niveau"], "moyen")     # « élevée » plafonnée
         self.assertIsNone(n["engrenages"][1]["direction"]["risque"])   # pas de règle risque en 2 : jamais deviné
-        self.assertEqual(n["engrenages"][3]["direction"]["origine"]["dollar"], "modèle")
+        self.assertIsNone(n["engrenages"][3]["direction"]["origine"]["dollar"])
 
     def test_engrenage_absent_ou_sans_donnees_dit_donnees_insuffisantes(self):
         b = brut(engrenages=[e for e in brut()["engrenages"] if e["numero"] != 6])

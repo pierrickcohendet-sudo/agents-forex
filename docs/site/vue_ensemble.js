@@ -96,7 +96,7 @@ function roue(v, choisir) {
     centre.replaceChildren();
     const impose = t.titre_impose;
     centre.appendChild(texteSvg({ x: cx, y: cy - 36, "text-anchor": "middle", class: "roue-surtitre" }, "THÈME DU JOUR"));
-    coupe(t.titre || "Thème non déterminé", 14).forEach((l, i) => centre.appendChild(texteSvg({ x: cx, y: cy - 14 + i * 18, "text-anchor": "middle", class: `roue-titre${impose ? " impose" : ""}` }, l)));
+    coupe(t.titre || t.texte_indisponible || "Thème non déterminé", 14).forEach((l, i) => centre.appendChild(texteSvg({ x: cx, y: cy - 14 + i * 18, "text-anchor": "middle", class: `roue-titre${impose ? " impose" : ""}` }, l)));
     centre.appendChild(texteSvg({ x: cx, y: cy + 26, "text-anchor": "middle", class: "roue-sous" }, t.direction?.libelle || ""));
     if (coh) {
       centre.appendChild(texteSvg({ x: cx, y: cy + 42, "text-anchor": "middle", class: "roue-sous" }, "cohérence"));
@@ -147,7 +147,7 @@ function bandeau(v, choisir) {
   const enveloppe = x => { const h = el("section", "carte eg-hero"); h.append(roue(v, choisir), x); return h; };
   c.appendChild(el("div", "eg-sur-titre", `THÈME DU JOUR${t.date_rapport ? ` · ${dateCourte(t.date_rapport)}` : ""}`));
   if (!t.titre) {
-    c.appendChild(el("h2", "eg-theme", "Thème non déterminé"));
+    c.appendChild(el("h2", "eg-theme", t.texte_indisponible || "Thème non déterminé"));
     c.appendChild(el("p", "indisponible", `Indisponible : ${t.raison || "synthèse absente"}.`));
     return enveloppe(c);
   }
@@ -161,6 +161,11 @@ function bandeau(v, choisir) {
   if (t.texte) {
     const p = el("p", "eg-theme-texte", t.texte);
     if (t.texte_redige_par) p.appendChild(el("span", "source", ` — formulé par ${t.texte_redige_par} à partir des chiffres Python`));
+    c.appendChild(p);
+  }
+  if (!t.texte && t.texte_indisponible) {
+    const p = el("p", "indisponible", `${t.texte_indisponible}.`);
+    p.appendChild(el("span", "source", " Titre et directions : calcul Python."));
     c.appendChild(p);
   }
   const stats = el("div", "eg-stats");

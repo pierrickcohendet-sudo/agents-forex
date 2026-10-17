@@ -26,6 +26,9 @@ llm:
     - { modele: gemini-3.8-flash,      quota_jour: 20 }
     - { modele: gemini-3.5-flash-lite, quota_jour: 20 }
   fichier_quota: data/cache/quota_llm.json
+  # Les 8 derniers appels de chaque jour (somme des 3 modèles) sont réservés à la synthèse des
+  # 8 engrenages tant qu'elle n'a pas réussi ce jour-là : aucune autre section ne les consomme.
+  reserve_engrenages: 8
 
   # Disjoncteur : après N échecs consécutifs du modèle principal pendant un run (ou dès
   # un quota journalier épuisé), il est ignoré pour le reste du run et les appels vont

@@ -3,8 +3,8 @@
 Tout est calculé ici en Python, sans LLM :
 - chiffre vedette, ligne de contexte et mini-courbe 30 jours de chaque engrenage (séries datées
   des historiques, de la technique ou des dossiers déjà calculés) ;
-- direction et conviction reprises du rapport (règles Python de agent_engrenages ; le modèle ne
-  propose une direction que pour 4, 6 et 8, et c'est alors indiqué) ;
+- direction et conviction reprises du rapport (règles Python de agent_engrenages et matrice d'impact,
+  y compris sans texte du modèle : la roue reste colorée quand le quota est atteint) ;
 - cohérence X/7 : nombre d'engrenages 2 à 8 dont la direction est alignée sur celle du thème.
 Le texte du bandeau reprend le diagnostic déjà rédigé de l'engrenage 1 (aucun appel en plus).
 Une valeur absente vaut None avec sa raison, jamais une valeur inventée.
@@ -333,7 +333,10 @@ def calculer(dossiers_engrenages: dict, historiques: dict | None, technique: dic
         titre = TITRE_SIGNAUX_MIXTES
         texte, retirees = moderer_theme_fort(texte)
         texte_python = phrase_signaux_mixtes(coh, theme_dir)
+    # Texte du modèle absent (quota, réponse inexploitable) : le titre et les directions restent ceux de Python.
+    texte_indisponible = None if texte else ((par_num.get(1) or {}).get("texte_indisponible") or eng.get("texte_indisponible"))
     theme = {"titre": titre, "titre_impose": bool(coh and not coh["theme_fort"]), "texte_python": texte_python,
+             "texte_indisponible": texte_indisponible,
              "phrases_retirees": retirees,
              "texte": texte, "texte_redige_par": (eng.get("redige_par") or {}).get("libelle") if texte else None,
              "direction": theme_dir, "coherence": coh,

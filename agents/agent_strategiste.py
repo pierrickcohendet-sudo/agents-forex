@@ -862,6 +862,22 @@ def analyser(config: dict, llm: FournisseurLLM, technique: dict, macro: dict,
 
     carry = macro.get("carry", {})
     taux = macro.get("taux_directeurs", {})
+
+    # PRIORITÉ AU QUOTA : la synthèse « 8 engrenages » (un appel) passe AVANT les 9 devises, puis le reste.
+    # Ses directions et son titre sont 100 % Python (règles et matrice d'impact, indépendants des scores) ;
+    # seul le texte vient du modèle. Réutilisée telle quelle en --completer si déjà réussie, sinon retentée.
+    # Les derniers appels du jour lui sont réservés (llm.reserve_engrenages, core/llm.py).
+    engrenages_existant = (rapport_existant or {}).get("synthese_globale", {}).get("engrenages")
+    from agents import agent_engrenages
+    if agent_engrenages.a_faire({"engrenages": engrenages_existant}, config.get("engrenages") or {}):
+        deja = list(devises_deja_ok.values())
+        engrenages = agent_engrenages.generer(
+            config, llm, donnees, macro, catalogue, deja,
+            scoring.biais_macro_global(deja, config.get("biais_global", {})) if deja else None,
+            extras_synthese or {}, engrenages_existant)
+    else:
+        engrenages = engrenages_existant
+
     ids_catalogue = {s["id"] for s in catalogue}
     devises_finales = []
     pause_devises_s = float(config["llm"].get("pause_entre_devises_s", 0))
@@ -953,16 +969,6 @@ def analyser(config: dict, llm: FournisseurLLM, technique: dict, macro: dict,
     else:
         definir_etiquette("commentaire_classement")
         commentaire = commenter_synthese_globale(llm, classement, biais, memoire)
-
-    # Synthèse globale « 8 engrenages » (un appel, quotidien compact) : réutilisée telle quelle
-    # en --completer si déjà réussie, sinon (re)tentée seule.
-    engrenages_existant = (rapport_existant or {}).get("synthese_globale", {}).get("engrenages")
-    from agents import agent_engrenages
-    if agent_engrenages.a_faire({"engrenages": engrenages_existant}, config.get("engrenages") or {}):
-        engrenages = agent_engrenages.generer(config, llm, donnees, macro, catalogue, devises_finales, biais,
-                                              extras_synthese or {}, engrenages_existant)
-    else:
-        engrenages = engrenages_existant
 
     # Synthèse approfondie par devise : APRÈS tout le reste (un quota épuisé ne coûte alors
     # que ces synthèses), une devise à la fois, même pause que les analyses ; un échec ne

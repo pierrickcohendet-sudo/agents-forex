@@ -443,6 +443,9 @@ def main() -> int:
     # Appels par modèle : ce run (journal) + compteur du jour (fichier d'état, plafond gratuit).
     if hasattr(llm, "etat_quota"):
         rapport["meta"]["quota_llm"] = llm.etat_quota()
+    rapport["meta"]["resume_quota"] = ligne_quota(rapport["meta"].get("quota_llm"),
+                                                  (rapport.get("synthese_globale") or {}).get("engrenages"))
+    _ecrire_resume_run(rapport["meta"]["resume_quota"])
     appels_run: dict[str, dict] = {}
     for e in rapport["meta"]["appels_llm"]:   # cumul du jour (passages --completer inclus, plafonné)
         c = appels_run.setdefault(e["modele"], {"appels": 0, "echecs": 0})
@@ -479,6 +482,31 @@ def main() -> int:
              rapport["synthese_globale"]["biais_macro_global"],
              critique.get("validation", "?"), len(rapport.get("donnees_non_rafraichies", [])))
     return 0
+
+
+def ligne_quota(quota: dict | None, engrenages: dict | None) -> str:
+    """« Gemini : 17/60, engrenages : fait » — lisible d'un coup d'œil dans le résumé du run."""
+    q = quota or {}
+    appels, plafond = q.get("appels_aujourdhui"), q.get("plafond_jour")
+    statut = (engrenages or {}).get("statut")
+    etat = "fait" if statut == "ok" else "abandonnée" if statut == "abandonnee" else "en attente"
+    if statut != "ok" and (engrenages or {}).get("quota_atteint"):
+        etat += " (quota du jour atteint ; directions et titre en calcul Python)"
+    ligne = f"Gemini : {'n/d' if appels is None else appels}/{plafond or 'n/d'}, engrenages : {etat}"
+    if q.get("refus_reserve_ce_run"):
+        ligne += f" ; {q['refus_reserve_ce_run']} appel(s) refusé(s) pour garder la réserve des engrenages ({q.get('reserve_engrenages')})"
+    return ligne
+
+
+def _ecrire_resume_run(ligne: str) -> None:
+    log.info("Quota LLM : %s", ligne)
+    resume = os.environ.get("GITHUB_STEP_SUMMARY")
+    if resume:
+        try:
+            with open(resume, "a", encoding="utf-8") as f:
+                f.write(f"## Quota LLM du jour\n\n{ligne}\n\n")
+        except OSError:
+            pass
 
 
 def _sortie_avec_publication(code: int) -> int:
