@@ -1,40 +1,90 @@
 {
  "semaine": "2026-W42",
- "genere_le": "2026-10-14T09:01:31+00:00",
- "donnees_du": "2026-10-14T09:01:31+00:00",
+ "genere_le": "2026-10-18T12:05:25+00:00",
+ "donnees_du": "2026-10-18T12:05:23+00:00",
  "engrenages": {
   "1": {
-   "statut": "indisponible",
-   "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/mode | gemini-3.8-flash : quota du jour atte",
+   "constat": "Le marché évolue dans un régime de risque Risk Off avec un écart de score de risque-refuge fixé à -16,3 points. Le score de confluence de l'USD atteint 88 sur 100, confirmant la prédominance du dollar dans la configuration actuelle. Par ailleurs, l'indice de surprise global ressort à -0,02, calculé sur un ensemble de 8 devises.",
+   "mecanisme": "Le thème macroéconomique agit comme la synthèse opérationnelle qui dicte l'allocation globale des capitaux. En configuration Risk Off, les flux se dirigent vers les devises refuges au détriment des monnaies à fort bêta et liées aux matières premières. Ce cadrage domine temporairement les facteurs idiosyncratiques des paires de devises.",
+   "ce_qui_pourrait_tout_changer": "Un redressement marqué de l'indice de surprise économique mondial au-dessus de zéro invaliderait le récit de ralentissement. De plus, une remontée de l'écart de score entre devises de risque et refuges en territoire positif marquerait le retour d'un régime Risk On.",
+   "precedent": "Précédents insuffisants : le thème est la synthèse des autres engrenages : pas d'indicateur unique à comparer.",
+   "comprendre": "Le thème macro représente le récit dominant sur les marchés à un moment donné, agissant comme une grille de lecture unique pour l'ensemble des données économiques. Il détermine si les investisseurs privilégient la recherche de rendement (Risk On) ou la préservation du capital (Risk Off). Cette dynamique oriente le comportement des devises de manière transversale.",
+   "desk": "Un desk de trading surveille prioritairement l'écart entre les scores des devises de risque et de refuge (-16,3 points actuellement) afin de calibrer l'exposition globale du livre de marché. Une variation brutale de cet écart signale souvent un changement imminent de régime de marché.",
+   "implications": [
+    {
+     "devise": "USD",
+     "texte": "Le dollar tire parti de son score de confluence très élevé à 88 et du climat de Risk Off. Il conserve une dynamique dominante face aux devises cycliques."
+    },
+    {
+     "devise": "AUD",
+     "texte": "Sensible au sentiment mondial, la devise australienne pâtit directement du biais défensif ambiant. La baisse de l'appétit pour le risque pèse sur sa valorisation."
+    },
+    {
+     "devise": "EUR",
+     "texte": "L'euro subit la tiédeur des surprises économiques globales enregistrées à -0,02. Il demeure sous pression face à l'attractivité refuge de l'USD."
+    }
+   ],
+   "precedent_impose": true,
+   "controles": [],
    "precedents": [
     {
      "indicateur": null,
      "suffisant": false,
      "texte": "Précédents insuffisants : le thème est la synthèse des autres engrenages : pas d'indicateur unique à comparer."
     }
-   ]
+   ],
+   "redige_par": {
+    "modele": "gemini-3.5-flash",
+    "libelle": "Flash 3.5"
+   },
+   "statut": "ok",
+   "numero": 1,
+   "nom": "Thème macro"
   },
   "2": {
-   "statut": "indisponible",
-   "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : quota du jour atteint | gemini-3.5-flash-lite : quota du jour atteint",
+   "constat": "Aux États-Unis, le taux effectif de la Fed est à 3,88 % et le taux 2 ans s'affiche à 4,77 % (87e percentile sur 5 ans), maintenant un écart 2 ans − directeur de 89,0 pb orienté vers des hausses. En zone euro et au Japon, les rendements 2 ans se situent à des niveaux historiquement élevés à 3,08 % (95e percentile) et 1,952 % (100e percentile), avec des taux directeurs respectifs à 2,50 % et 1,228 %. En Australie, le taux directeur atteint 4,60 % (100e percentile), tandis que l'écart de taux 2 ans CAD face aux États-Unis s'établit à -157,0 pb (2e percentile sur 5 ans).",
+   "mecanisme": "Les taux de swap et rendements obligataires à 2 ans capturent les anticipations de resserrement ou d'assouplissement monétaire des banques centrales à moyen terme. Un écart de taux 2 ans qui s'élargit en faveur d'un pays attire les capitaux à la recherche de rendement et soutient mécaniquement sa monnaie. À l'inverse, un resserrement monétaire perçu comme excessif ou des taux réels négatifs pénalisent l'attrait structurel de la devise concernée.",
+   "ce_qui_pourrait_tout_changer": "Une variation mensuelle de l'écart 2 ans US − Fed dépassant son écart-type historique de 34,74 pb (variation actuelle de -15,0 pb) invaliderait la neutralité actuelle du moteur. De même, un discours inattendu lors des réunions de la Fed le 28 octobre ou de la BCE le 29 octobre réajusterait violemment la tarification des courbes souveraines.",
+   "precedent": "Depuis 2021, 47 épisodes où « Écart de taux 2 ans EUR − US (pb) » était entre -209,00 et -129,00 (aujourd'hui -169,00) : EUR médiane +0,19 % à 1 mois (47 cas), +0,16 % à 3 mois (46 cas), -0,06 % à 6 mois (43 cas). Tous épisodes confondus : +0,05 % à 1 mois.",
+   "comprendre": "Le rendement à 2 ans constitue la référence de marché pour évaluer la trajectoire future des taux directeurs sur un horizon de cycle. Lorsque le 2 ans cote nettement au-dessus du taux au jour le jour, le marché intègre des tours de vis supplémentaires de la banque centrale. Ce différentiel oriente les flux de trésorerie institutionnels et dicte le cours des devises avant même les décisions officielles.",
+   "desk": "Le desk surveille l'écart 2 ans − taux directeur ainsi que le spread de taux à 2 ans face aux États-Unis, indicateurs avancés d'un décalage entre la communication officielle d'une banque centrale et la réalité anticipée par les marchés de capitaux.",
+   "implications": [
+    {
+     "devise": "USD",
+     "texte": "Avec un taux 2 ans à 4,77 % et un écart de 89,0 pb sur le taux directeur, le dollar conserve un portage protecteur face à la majorité des devises du G10."
+    },
+    {
+     "devise": "EUR",
+     "texte": "Le différentiel de rendement à 2 ans face aux États-Unis reste ancré en territoire négatif à -169,0 pb, limitant le potentiel d'appréciation de l'euro."
+    },
+    {
+     "devise": "JPY",
+     "texte": "Malgré un taux directeur au plus haut sur 5 ans à 1,228 % (100e percentile), le désavantage de taux de -292,8 pb face aux États-Unis pèse toujours lourdement sur la devise."
+    },
+    {
+     "devise": "CAD",
+     "texte": "L'écart de taux 2 ans face aux États-Unis s'enfonce à -157,0 pb, un niveau comprimé correspondant au 2e percentile sur cinq ans."
+    }
+   ],
+   "controles": [],
    "precedents": [
     {
      "indicateur": "Écart de taux 2 ans EUR − US (pb)",
      "devise": "EUR",
      "minimum_cas": 5,
      "source": "calcul Python : séries des dossiers (FRED, Bundesbank, MoF Japon, BoC) et taux de change Fed H.10 / indice dollar large",
-     "valeur_actuelle": -170.0,
-     "date": "2026-10-13",
-     "ecart_type": 40.21,
+     "valeur_actuelle": -169.0,
+     "date": "2026-10-16",
+     "ecart_type": 40.0,
      "fenetre": [
-      -210.21,
-      -129.79
+      -209.0,
+      -129.0
      ],
      "cas": {
       "1m": {
        "n": 47,
-       "mediane_pct": 0.32,
-       "hausses": 27
+       "mediane_pct": 0.19,
+       "hausses": 26
       },
       "3m": {
        "n": 46,
@@ -62,7 +112,7 @@
       }
      },
      "suffisant": true,
-     "texte": "Depuis 2021, 47 épisodes où « Écart de taux 2 ans EUR − US (pb) » était entre -210,21 et -129,79 (aujourd'hui -170,00) : EUR médiane +0,32 % à 1 mois (47 cas), +0,16 % à 3 mois (46 cas), -0,06 % à 6 mois (43 cas). Tous épisodes confondus : +0,05 % à 1 mois."
+     "texte": "Depuis 2021, 47 épisodes où « Écart de taux 2 ans EUR − US (pb) » était entre -209,00 et -129,00 (aujourd'hui -169,00) : EUR médiane +0,19 % à 1 mois (47 cas), +0,16 % à 3 mois (46 cas), -0,06 % à 6 mois (43 cas). Tous épisodes confondus : +0,05 % à 1 mois."
     },
     {
      "indicateur": "Écart de taux 2 ans JPY − US (pb)",
@@ -71,32 +121,32 @@
      "source": "calcul Python : séries des dossiers (FRED, Bundesbank, MoF Japon, BoC) et taux de change Fed H.10 / indice dollar large",
      "valeur_actuelle": -292.8,
      "date": "2026-09-30",
-     "ecart_type": 121.04,
+     "ecart_type": 119.97,
      "fenetre": [
-      -413.84,
-      -171.76
+      -412.77,
+      -172.83
      ],
      "cas": {
       "1m": {
-       "n": 38,
-       "mediane_pct": -0.62,
+       "n": 37,
+       "mediane_pct": -0.6,
        "hausses": 14
       },
       "3m": {
-       "n": 37,
-       "mediane_pct": -2.66,
+       "n": 36,
+       "mediane_pct": -2.65,
        "hausses": 8
       },
       "6m": {
-       "n": 34,
-       "mediane_pct": -3.15,
+       "n": 33,
+       "mediane_pct": -3.12,
        "hausses": 12
       }
      },
      "reference_tous_episodes": {
       "1m": {
        "n": 65,
-       "mediane_pct": -0.51
+       "mediane_pct": -0.47
       },
       "3m": {
        "n": 64,
@@ -108,272 +158,423 @@
       }
      },
      "suffisant": true,
-     "texte": "Depuis 2021, 38 épisodes où « Écart de taux 2 ans JPY − US (pb) » était entre -413,84 et -171,76 (aujourd'hui -292,80) : JPY médiane -0,62 % à 1 mois (38 cas), -2,66 % à 3 mois (37 cas), -3,15 % à 6 mois (34 cas). Tous épisodes confondus : -0,51 % à 1 mois."
+     "texte": "Depuis 2021, 37 épisodes où « Écart de taux 2 ans JPY − US (pb) » était entre -412,77 et -172,83 (aujourd'hui -292,80) : JPY médiane -0,60 % à 1 mois (37 cas), -2,65 % à 3 mois (36 cas), -3,12 % à 6 mois (33 cas). Tous épisodes confondus : -0,47 % à 1 mois."
     },
     {
      "indicateur": "Écart de taux 2 ans CAD − US (pb)",
      "devise": "CAD",
      "minimum_cas": 5,
      "source": "calcul Python : séries des dossiers (FRED, Bundesbank, MoF Japon, BoC) et taux de change Fed H.10 / indice dollar large",
-     "valeur_actuelle": -162.0,
-     "date": "2026-10-09",
-     "ecart_type": 54.27,
+     "valeur_actuelle": -157.0,
+     "date": "2026-10-15",
+     "ecart_type": 54.36,
      "fenetre": [
-      -216.27,
-      -107.73
+      -211.36,
+      -102.64
      ],
      "cas": {
       "1m": {
-       "n": 17,
-       "mediane_pct": 0.16,
+       "n": 21,
+       "mediane_pct": 0.12,
        "hausses": 11
       },
       "3m": {
-       "n": 15,
-       "mediane_pct": 0.91,
-       "hausses": 9
+       "n": 20,
+       "mediane_pct": 0.15,
+       "hausses": 10
       },
       "6m": {
-       "n": 13,
-       "mediane_pct": 1.94,
-       "hausses": 9
+       "n": 17,
+       "mediane_pct": 0.98,
+       "hausses": 10
       }
      },
      "reference_tous_episodes": {
       "1m": {
-       "n": 66,
-       "mediane_pct": -0.09
+       "n": 65,
+       "mediane_pct": -0.35
       },
       "3m": {
        "n": 64,
-       "mediane_pct": -0.6
+       "mediane_pct": -0.53
       },
       "6m": {
        "n": 61,
-       "mediane_pct": -1.07
+       "mediane_pct": -0.95
       }
      },
      "suffisant": true,
-     "texte": "Depuis 2021, 17 épisodes où « Écart de taux 2 ans CAD − US (pb) » était entre -216,27 et -107,73 (aujourd'hui -162,00) : CAD médiane +0,16 % à 1 mois (17 cas), +0,91 % à 3 mois (15 cas), +1,94 % à 6 mois (13 cas). Tous épisodes confondus : -0,09 % à 1 mois."
+     "texte": "Depuis 2021, 21 épisodes où « Écart de taux 2 ans CAD − US (pb) » était entre -211,36 et -102,64 (aujourd'hui -157,00) : CAD médiane +0,12 % à 1 mois (21 cas), +0,15 % à 3 mois (20 cas), +0,98 % à 6 mois (17 cas). Tous épisodes confondus : -0,35 % à 1 mois."
     }
-   ]
+   ],
+   "redige_par": {
+    "modele": "gemini-3.8-flash",
+    "libelle": "Flash 3.8"
+   },
+   "statut": "ok",
+   "numero": 2,
+   "nom": "Politique monétaire"
   },
   "3": {
-   "statut": "indisponible",
-   "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : quota du jour atteint | gemini-3.5-flash-lite : quota du jour atteint",
+   "constat": "Aux États-Unis, l'indice de surprise macroéconomique s'établit à 0,28 écart (tendance baissière), soutenu par un PIB à 2,2 % contre 1,5 % attendu et des ventes au détail à 0,8 % contre 0,3 % prévu. Le Royaume-Uni affiche un indice de surprise à 0,30 écart, malgré un taux de chômage à 4,9 % situé au 90e percentile sur 5 ans. En bas de tableau, l'Australie et le Canada enregistrent des surprises nettement négatives à -0,64 et -0,62 écart, marquées notamment par une chute de 68,3K emplois au Canada et un chômage australien à 4,7 % (percentile 98). Pour le NZD, aucune publication avec consensus n'est disponible sur 30 jours.",
+   "mecanisme": "Les surprises économiques modifient immédiatement les anticipations de resserrement ou d'assouplissement monétaire intégrées par les marchés de taux courts. Des chiffres systématiquement supérieurs au consensus tirent les rendements obligataires vers le haut et attirent les flux vers la devise concernée, tandis que des déceptions répétées déclenchent des liquidations de positions vendeuses de taux.",
+   "ce_qui_pourrait_tout_changer": "Un basculement durable de l'indice de surprise américain en territoire négatif, amorcé par une dégradation rapide de l'emploi au-delà des 4,2 % actuels. À l'opposé, un rebond inattendu des indices d'activité en Australie et au Canada invaliderait le biais vendeur pesant actuellement sur les devises liées aux matières premières.",
+   "precedent": "Depuis 2021, 30 épisodes où « Inflation core US sur un an (%) » était entre 1,24 et 3,90 (aujourd'hui 2,57) : USD médiane -0,11 % à 1 mois (30 cas), +0,50 % à 3 mois (30 cas), +0,07 % à 6 mois (27 cas). Tous épisodes confondus : -0,07 % à 1 mois.",
+   "comprendre": "Le prix d'une devise intègre déjà les prévisions collectives des analystes ; ce n'est donc pas la valeur absolue d'une donnée qui fait décaler le cours, mais son écart au consensus. Une suite de surprises orientées dans le même sens force les banques d'investissement à réviser leurs modèles, générant des flux d'ajustement directionnels. La dispersion des surprises signale si le cycle économique est uniforme ou fragmenté d'un secteur à l'autre.",
+   "desk": "L'indice de surprise cumulé à 30 jours couplé à sa dispersion : il permet de détecter l'épuisement d'un consensus de marché avant que les banques centrales ne modifient officiellement leur discours.",
+   "implications": [
+    {
+     "devise": "USD",
+     "texte": "L'indice de surprise positif à 0,28 écart et la vigueur des ventes au détail à 0,8 % maintiennent un plancher solide sous le dollar face aux devises plus fragiles."
+    },
+    {
+     "devise": "AUD",
+     "texte": "L'indice de surprise de -0,64 écart et la déception sur l'inflation core à 0,2 % pénalisent lourdement le dollar australien."
+    },
+    {
+     "devise": "CAD",
+     "texte": "Le plongeon de l'emploi à -68,3K et l'indice de surprise à -0,62 écart accentuent la sous-performance de la devise canadienne."
+    },
+    {
+     "devise": "GBP",
+     "texte": "L'indice de surprise à 0,30 écart offre un soutien temporaire, mais la montée du chômage à 4,9 % bride les anticipations de rendement."
+    }
+   ],
+   "controles": [],
    "precedents": [
     {
      "indicateur": "Inflation core US sur un an (%)",
      "devise": "USD",
      "minimum_cas": 5,
      "source": "calcul Python : séries des dossiers (FRED, Bundesbank, MoF Japon, BoC) et taux de change Fed H.10 / indice dollar large",
-     "valeur_actuelle": 2.45,
-     "date": "2026-08-01",
+     "valeur_actuelle": 2.57,
+     "date": "2026-09-01",
      "ecart_type": 1.33,
      "fenetre": [
-      1.12,
-      3.78
+      1.24,
+      3.9
      ],
      "cas": {
       "1m": {
-       "n": 27,
-       "mediane_pct": -0.16,
-       "hausses": 12
+       "n": 30,
+       "mediane_pct": -0.11,
+       "hausses": 14
       },
       "3m": {
-       "n": 27,
-       "mediane_pct": 0.42,
-       "hausses": 17
+       "n": 30,
+       "mediane_pct": 0.5,
+       "hausses": 19
       },
       "6m": {
-       "n": 25,
-       "mediane_pct": -0.16,
-       "hausses": 12
+       "n": 27,
+       "mediane_pct": 0.07,
+       "hausses": 14
       }
      },
      "reference_tous_episodes": {
       "1m": {
-       "n": 57,
+       "n": 59,
        "mediane_pct": -0.07
       },
       "3m": {
-       "n": 57,
+       "n": 59,
        "mediane_pct": 0.42
       },
       "6m": {
-       "n": 55,
-       "mediane_pct": 0.08
+       "n": 56,
+       "mediane_pct": 0.14
       }
      },
      "suffisant": true,
-     "texte": "Depuis 2021, 27 épisodes où « Inflation core US sur un an (%) » était entre 1,12 et 3,78 (aujourd'hui 2,45) : USD médiane -0,16 % à 1 mois (27 cas), +0,42 % à 3 mois (27 cas), -0,16 % à 6 mois (25 cas). Tous épisodes confondus : -0,07 % à 1 mois."
+     "texte": "Depuis 2021, 30 épisodes où « Inflation core US sur un an (%) » était entre 1,24 et 3,90 (aujourd'hui 2,57) : USD médiane -0,11 % à 1 mois (30 cas), +0,50 % à 3 mois (30 cas), +0,07 % à 6 mois (27 cas). Tous épisodes confondus : -0,07 % à 1 mois."
     }
-   ]
+   ],
+   "redige_par": {
+    "modele": "gemini-3.8-flash",
+    "libelle": "Flash 3.8"
+   },
+   "statut": "ok",
+   "numero": 3,
+   "nom": "Données économiques"
   },
   "4": {
-   "statut": "indisponible",
-   "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : quota du jour atteint | gemini-3.5-flash-lite : quota du jour atteint",
+   "constat": "Aux États-Unis, le déficit budgétaire atteint -5,8 % du PIB en 2025 pour une dette fédérale de 122,6 % du PIB en janvier 2026. Cette abondance d'émissions pousse la prime de terme américaine à 1,0729 % au 9 octobre 2026, à son record sur 5 ans (percentile 100), tandis que le rendement à 10 ans s'établit à 5,10 %. Ailleurs, les tensions sur les maturités longues sont également extrêmes : le 10 ans britannique atteint 5,383 % et le 10 ans japonais 3,057 %, tous deux à des niveaux records sur 5 ans (percentile 100).",
+   "mecanisme": "L'expansion des déficits publics contraint les Trésors à émettre des volumes massifs d'obligations souveraines, saturant la capacité d'absorption des marchés. Pour compenser ce risque de sur-offre et de dérapage budgétaire, les investisseurs exigent une prime de terme plus élevée, ce qui tire les taux longs vers le haut. Selon l'arbitrage des capitaux, des taux longs élevés soutiennent la devise par le différentiel de rendement, ou la pénalisent si le marché perçoit une détérioration de la soutenabilité budgétaire.",
+   "ce_qui_pourrait_tout_changer": "Une annonce crédible de consolidation budgétaire ou une baisse coordonnée des volumes d'émission à long terme comprimerait la prime de terme. À l'inverse, l'adoption de mesures de relance non financées amplifierait le choc de duration et aggraverait les tensions sur les courbes de taux.",
+   "precedent": "Depuis 2020, 40 épisodes où « Rendement 10 ans US (%) » était entre 3,95 et 6,25 (aujourd'hui 5,10) : USD médiane -0,18 % à 1 mois (40 cas), +0,07 % à 3 mois (39 cas), -0,01 % à 6 mois (36 cas). Tous épisodes confondus : -0,13 % à 1 mois.",
+   "comprendre": "Le solde budgétaire mesure l'excédent ou le manque de ressources de l'État sur une année, tandis que la dette représente l'accumulation historique des déficits. La prime de terme est le rendement additionnel exigé par les prêteurs pour immobiliser leur capital sur dix ans plutôt que de renouveler des placements à court terme. Quand un gouvernement émet plus de dette que le marché ne peut en absorber facilement, cette prime grimpe pour inciter les acheteurs à se positionner.",
+   "desk": "Un desk surveille la prime de terme du modèle Kim-Wright (THREEFYTP10) : sa progression rapide au-dessus de 1,00 % signale une indigestion de l'offre obligataire qui pèse sur l'euro et fragilise les actifs sensibles à la duration.",
+   "implications": [
+    {
+     "devise": "USD",
+     "texte": "La hausse de 17,27 pb de la prime de terme sur un mois soutient théoriquement le billet vert, bien que l'analyse historique n'accorde qu'un indice faible à ce moteur avec une médiane de progression de +0,76 %."
+    },
+    {
+     "devise": "EUR",
+     "texte": "L'euro subit une pression directe face à la montée de la prime de terme américaine, avec une variation médiane historique de -0,44 % validée dans 66 % des cas sur 5 ans."
+    },
+    {
+     "devise": "GBP",
+     "texte": "Le rendement à 10 ans britannique à 5,383 % reflète un déficit élevé de -5,7 % du PIB en 2024, maintenant la livre sous la surveillance étroite des investisseurs obligataires."
+    },
+    {
+     "devise": "JPY",
+     "texte": "Le rendement à 10 ans japonais au record de 3,057 % dans un contexte de dette à 240,0 % du PIB renchérit lourdement le coût de refinancement de l'État nippon."
+    }
+   ],
+   "controles": [],
    "precedents": [
     {
      "indicateur": "Rendement 10 ans US (%)",
      "devise": "USD",
      "minimum_cas": 5,
      "source": "calcul Python : séries des dossiers (FRED, Bundesbank, MoF Japon, BoC) et taux de change Fed H.10 / indice dollar large",
-     "valeur_actuelle": 5.24,
-     "date": "2026-10-09",
-     "ecart_type": 0.94,
+     "valeur_actuelle": 5.1,
+     "date": "2026-10-15",
+     "ecart_type": 1.15,
      "fenetre": [
-      4.3,
-      6.18
+      3.95,
+      6.25
      ],
      "cas": {
       "1m": {
-       "n": 22,
-       "mediane_pct": -0.19,
-       "hausses": 8
+       "n": 40,
+       "mediane_pct": -0.18,
+       "hausses": 16
       },
       "3m": {
-       "n": 21,
-       "mediane_pct": -0.85,
-       "hausses": 8
+       "n": 39,
+       "mediane_pct": 0.07,
+       "hausses": 21
       },
       "6m": {
-       "n": 18,
-       "mediane_pct": -0.79,
-       "hausses": 5
+       "n": 36,
+       "mediane_pct": -0.01,
+       "hausses": 18
       }
      },
      "reference_tous_episodes": {
       "1m": {
-       "n": 65,
+       "n": 73,
        "mediane_pct": -0.13
       },
       "3m": {
-       "n": 64,
-       "mediane_pct": 0.4
+       "n": 72,
+       "mediane_pct": 0.48
       },
       "6m": {
-       "n": 61,
-       "mediane_pct": 0.66
+       "n": 69,
+       "mediane_pct": 0.9
       }
      },
      "suffisant": true,
-     "texte": "Depuis 2021, 22 épisodes où « Rendement 10 ans US (%) » était entre 4,30 et 6,18 (aujourd'hui 5,24) : USD médiane -0,19 % à 1 mois (22 cas), -0,85 % à 3 mois (21 cas), -0,79 % à 6 mois (18 cas). Tous épisodes confondus : -0,13 % à 1 mois."
+     "texte": "Depuis 2020, 40 épisodes où « Rendement 10 ans US (%) » était entre 3,95 et 6,25 (aujourd'hui 5,10) : USD médiane -0,18 % à 1 mois (40 cas), +0,07 % à 3 mois (39 cas), -0,01 % à 6 mois (36 cas). Tous épisodes confondus : -0,13 % à 1 mois."
     }
-   ]
+   ],
+   "redige_par": {
+    "modele": "gemini-3.8-flash",
+    "libelle": "Flash 3.8"
+   },
+   "statut": "ok",
+   "numero": 4,
+   "nom": "Politique fiscale"
   },
   "5": {
-   "statut": "indisponible",
-   "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : quota du jour atteint | gemini-3.5-flash-lite : quota du jour atteint",
+   "constat": "Le rendement à 10 ans américain s'établit à 5,1 % (percentile 99 sur 5 ans), en baisse de 12,0 points de base sur une semaine mais en hausse de 16,0 points de base sur quatre semaines, tandis que le 2 ans US cote 4,77 %. L'indice dollar large progresse à 121,6023 (+0,18 % sur une semaine, percentile 66), alors que le S&P 500 recule de 1,95 % à 7659,44 points. Le VIX ressort à 16,46 points (+6,81 % sur sept jours), maintenant un régime de volatilité intermédiaire, tandis que le pétrole Brent cote 126,55 $/baril et que l'indice or (proxy) se situe à 2516,8 points.",
+   "mecanisme": "La fermeté des rendements obligataires américains soutient directement le dollar face à l'ensemble du bloc des devises majeures, confirmée par une corrélation de 0,55 entre l'USD et le 10 ans US sur 30 séances. Parallèlement, les tensions de marché pénalisent les devises à bêta élevé, le VIX affichant une corrélation négative marquée avec le NZD (-0,64) et l'AUD (-0,53).",
+   "ce_qui_pourrait_tout_changer": "Une détente brutale des rendements obligataires américains sous le seuil du 2 ans (4,77 %) accompagnée d'un reflux du VIX sous sa moyenne détendrait les conditions financières et pénaliserait le dollar. À l'opposé, un franchissement des 21,61 points sur le VIX provoquerait une liquidation généralisée des actifs risqués au profit exclusif du dollar.",
+   "precedent": "Depuis 2020, 62 épisodes où « VIX » était entre 11,31 et 21,61 (aujourd'hui 16,46) : AUD médiane +0,10 % à 1 mois (62 cas), +0,32 % à 3 mois (61 cas), -0,43 % à 6 mois (58 cas). Tous épisodes confondus : -0,17 % à 1 mois.",
+   "comprendre": "Les marchés financiers fonctionnent comme un circuit interconnecté où les taux, les actions et les matières premières orientent les mouvements de capitaux. Lorsqu'une classe d'actifs comme les emprunts d'État américains offre un rendement élevé sans risque équivalent, elle draine les liquidités mondiales au détriment des devises sensibles à la croissance.",
+   "desk": "Le desk surveille la corrélation glissante entre le rendement du 10 ans américain et les devises matières premières afin de détecter le moment où le coût de refinancement américain brise l'appétit pour le risque global.",
+   "implications": [
+    {
+     "devise": "USD",
+     "texte": "Le billet vert reste soutenu par le niveau élevé des taux longs américains (corrélation de 0,55 avec le 10 ans US) et par sa relation positive avec le VIX (0,53)."
+    },
+    {
+     "devise": "NZD",
+     "texte": "La devise est la plus vulnérable au durcissement des conditions financières globales, affichant une forte sensibilité négative au VIX (-0,64) et au 10 ans US (-0,54)."
+    },
+    {
+     "devise": "AUD",
+     "texte": "Pénalisé par le repli hebdomadaire du S&P 500 et la remontée du VIX (corrélation de -0,53), l'AUD subit la pression de sa forte corrélation inverse avec le dollar (-0,75)."
+    },
+    {
+     "devise": "CHF",
+     "texte": "Le franc suisse pâtit de l'écartement des taux souverains américains, illustré par sa corrélation négative prononcée de -0,57 avec le rendement 10 ans US."
+    }
+   ],
+   "controles": [],
    "precedents": [
     {
      "indicateur": "VIX",
      "devise": "AUD",
      "minimum_cas": 5,
      "source": "calcul Python : séries des dossiers (FRED, Bundesbank, MoF Japon, BoC) et taux de change Fed H.10 / indice dollar large",
-     "valeur_actuelle": 15.21,
-     "date": "2026-10-12",
-     "ecart_type": 5.29,
+     "valeur_actuelle": 16.46,
+     "date": "2026-10-15",
+     "ecart_type": 5.15,
      "fenetre": [
-      9.92,
-      20.5
+      11.31,
+      21.61
      ],
      "cas": {
       "1m": {
-       "n": 51,
-       "mediane_pct": 0.06,
-       "hausses": 26
+       "n": 62,
+       "mediane_pct": 0.1,
+       "hausses": 32
       },
       "3m": {
-       "n": 50,
-       "mediane_pct": 0.23,
-       "hausses": 26
+       "n": 61,
+       "mediane_pct": 0.32,
+       "hausses": 31
       },
       "6m": {
-       "n": 47,
-       "mediane_pct": 0.31,
-       "hausses": 26
+       "n": 58,
+       "mediane_pct": -0.43,
+       "hausses": 28
       }
      },
      "reference_tous_episodes": {
       "1m": {
-       "n": 66,
+       "n": 74,
        "mediane_pct": -0.17
       },
       "3m": {
-       "n": 64,
-       "mediane_pct": -0.01
+       "n": 72,
+       "mediane_pct": -0.11
       },
       "6m": {
-       "n": 61,
-       "mediane_pct": -0.32
+       "n": 69,
+       "mediane_pct": -1.21
       }
      },
      "suffisant": true,
-     "texte": "Depuis 2021, 51 épisodes où « VIX » était entre 9,92 et 20,50 (aujourd'hui 15,21) : AUD médiane +0,06 % à 1 mois (51 cas), +0,23 % à 3 mois (50 cas), +0,31 % à 6 mois (47 cas). Tous épisodes confondus : -0,17 % à 1 mois."
+     "texte": "Depuis 2020, 62 épisodes où « VIX » était entre 11,31 et 21,61 (aujourd'hui 16,46) : AUD médiane +0,10 % à 1 mois (62 cas), +0,32 % à 3 mois (61 cas), -0,43 % à 6 mois (58 cas). Tous épisodes confondus : -0,17 % à 1 mois."
     },
     {
      "indicateur": "VIX",
      "devise": "JPY",
      "minimum_cas": 5,
      "source": "calcul Python : séries des dossiers (FRED, Bundesbank, MoF Japon, BoC) et taux de change Fed H.10 / indice dollar large",
-     "valeur_actuelle": 15.21,
-     "date": "2026-10-12",
-     "ecart_type": 5.29,
+     "valeur_actuelle": 16.46,
+     "date": "2026-10-15",
+     "ecart_type": 5.15,
      "fenetre": [
-      9.92,
-      20.5
+      11.31,
+      21.61
      ],
      "cas": {
       "1m": {
-       "n": 51,
-       "mediane_pct": -0.67,
-       "hausses": 20
+       "n": 62,
+       "mediane_pct": -0.64,
+       "hausses": 21
       },
       "3m": {
-       "n": 50,
-       "mediane_pct": -2.58,
-       "hausses": 15
+       "n": 61,
+       "mediane_pct": -2.2,
+       "hausses": 18
       },
       "6m": {
-       "n": 47,
-       "mediane_pct": -3.41,
+       "n": 58,
+       "mediane_pct": -3.39,
        "hausses": 14
       }
      },
      "reference_tous_episodes": {
       "1m": {
-       "n": 66,
-       "mediane_pct": -0.69
+       "n": 74,
+       "mediane_pct": -0.65
       },
       "3m": {
-       "n": 64,
-       "mediane_pct": -2.69
+       "n": 72,
+       "mediane_pct": -2.62
       },
       "6m": {
-       "n": 61,
-       "mediane_pct": -3.18
+       "n": 69,
+       "mediane_pct": -3.48
       }
      },
      "suffisant": true,
-     "texte": "Depuis 2021, 51 épisodes où « VIX » était entre 9,92 et 20,50 (aujourd'hui 15,21) : JPY médiane -0,67 % à 1 mois (51 cas), -2,58 % à 3 mois (50 cas), -3,41 % à 6 mois (47 cas). Tous épisodes confondus : -0,69 % à 1 mois."
+     "texte": "Depuis 2020, 62 épisodes où « VIX » était entre 11,31 et 21,61 (aujourd'hui 16,46) : JPY médiane -0,64 % à 1 mois (62 cas), -2,20 % à 3 mois (61 cas), -3,39 % à 6 mois (58 cas). Tous épisodes confondus : -0,65 % à 1 mois."
     }
-   ]
+   ],
+   "redige_par": {
+    "modele": "gemini-3.8-flash",
+    "libelle": "Flash 3.8"
+   },
+   "statut": "ok",
+   "numero": 5,
+   "nom": "Interconnexions de marchés"
   },
   "6": {
-   "statut": "indisponible",
-   "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : quota du jour atteint | gemini-3.5-flash-lite : quota du jour atteint",
+   "constat": "Le Brent progresse de 4,28 % sur un mois au 14 octobre 2026, restant contenu dans son intervalle d'un écart-type fixé à 12,03 %, ce qui génère une lecture qualifiée de neutre sur l'ensemble des actifs suivis. Les flux d'actualités géopolitiques s'articulent autour du risque militaire en Ukraine, de la situation dans le détroit d'Ormuz après le naufrage d'un navire singapourien, et des tensions sur les prix du diesel américain. En l'absence de choc dépassant la volatilité historique du brut, les primes de risque géopolitiques restent contenues sur les devises.",
+   "mecanisme": "L'engrenage géopolitique influence le marché des changes à travers deux canaux majeurs : la dégradation des termes de l'échange via les chocs pétroliers et la fuite des capitaux vers les actifs refuges. Une poussée des cours de l'énergie pénalise les devises des économies fortement importatrices tout en soutenant celles des pays exportateurs. Simultanément, l'aversion au risque comprime les devises cycliques au profit des liquidités souveraines perçues comme protectrices.",
+   "ce_qui_pourrait_tout_changer": "Une variation mensuelle du Brent supérieure à son seuil d'un écart-type (12,03 %), provoquée par exemple par une fermeture durable du détroit d'Ormuz, déclencherait un choc d'offre énergétique majeur. Une telle rupture pénaliserait immédiatement les devises consommatrices nettes tout en provoquant un afflux vers les devises refuges. À l'opposé, une détente formelle sur les théâtres moyen-oriental et ukrainien annulerait toute prime de risque sur l'énergie.",
+   "precedent": "Précédents insuffisants : pas de série chiffrée de la géopolitique.",
+   "comprendre": "Un desk de change ne traite pas les gros titres géopolitiques de façon brute, mais cherche leur matérialisation économique concrète. Cette transmission passe prioritairement par le coût des matières premières ou par une modification brutale des flux de capitaux internationaux. Si un événement géopolitique ne modifie ni l'offre physique d'énergie ni la balance des paiements, son impact FX demeure négligeable.",
+   "desk": "Le desk surveille la variation 1 mois du Brent par rapport à son seuil d'un écart-type (12,03 %), indicateur clé pour valider un choc d'offre affectant les termes de l'échange et l'inflation importée.",
+   "implications": [
+    {
+     "devise": "USD",
+     "texte": "Bénéficiant d'une sensibilité historique de 0,12 au Brent, le dollar conserve son double rôle d'exportateur net d'énergie et de refuge prioritaire en cas de crise."
+    },
+    {
+     "devise": "EUR",
+     "texte": "Avec une sensibilité de -0,12 face au baril de brut, la devise européenne reste exposée négativement à toute résurgence de tensions sur les approvisionnements en hydrocarbures."
+    },
+    {
+     "devise": "JPY",
+     "texte": "Pénalisé par une sensibilité de -0,22 au pétrole, le yen voit sa composante refuge partiellement compromise par la forte dépendance énergétique de l'archipel nippon."
+    },
+    {
+     "devise": "CAD",
+     "texte": "Affichant une sensibilité positive de 0,09 au Brent, le dollar canadien constitue le support cyclique privilégié en cas de renchérissement durable des cours du brut."
+    }
+   ],
+   "precedent_impose": true,
+   "controles": [],
    "precedents": [
     {
      "indicateur": null,
      "suffisant": false,
      "texte": "Précédents insuffisants : pas de série chiffrée de la géopolitique."
     }
-   ]
+   ],
+   "redige_par": {
+    "modele": "gemini-3.8-flash",
+    "libelle": "Flash 3.8"
+   },
+   "statut": "ok",
+   "numero": 6,
+   "nom": "Géopolitique"
   },
   "7": {
-   "statut": "indisponible",
-   "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : quota du jour atteint | gemini-3.5-flash-lite : quota du jour atteint",
+   "constat": "Le positionnement spéculatif atteint des niveaux extrêmes sur plusieurs devises majeures : l'EUR et l'AUD affichent un percentile COT de 2 avec des positions nettes courtes respectives de -99 332 et -98 588 contrats (accélération vendeuse hebdomadaire de -36 076 et -35 349 contrats), tandis que le GBP ressort également très vendeur au 6e percentile (-97 611 contrats). À l'inverse, le JPY et le CHF se situent en zone d'extrême acheteur aux percentiles 92 (+62 325 contrats) et 96 (-23 740 contrats). Côté volatilité à 20 jours, les cours restent très comprimés sur l'USD à 3,9 % (percentile 6 sur 5 ans) et sur le CNY à 1,4 %, dans un contexte où le dollar affiche une tendance hebdomadaire baissière malgré un RSI neutre de 51,6.",
+   "mecanisme": "Les flux spéculatifs et le positionnement créent des asymétries majeures de liquidité : lorsqu'une devise atteint un percentile extrême inférieur à 10 ou supérieur à 90, le carburant directionnel s'épuise faute de nouveaux entrants. Le moindre catalyseur fondamental ou le test d'un niveau technique clé force alors des rachats de positions massifs, déclenchant des mouvements correctifs violents à contre-courant du consensus.",
+   "ce_qui_pourrait_tout_changer": "Un franchissement net par l'EUR de sa résistance à 1,13732 (+1,10 %) ou de son support par l'AUD à 0,69501 (-0,08 %) provoquerait un débouclage brutal des positions courtes massives accumulées. De même, une rupture du support de l'USD à 102,05667 (-0,03 %) validerait la tendance baissière hebdomadaire et réveillerait une volatilité actuellement écrasée à 3,9 %.",
+   "precedent": "Depuis 2021, 22 épisodes où « Variation sur 4 semaines de l'indice dollar large (%) » était entre 1,49 et 4,25 (aujourd'hui 2,87) : USD médiane -0,17 % à 1 mois (22 cas), +0,13 % à 3 mois (22 cas), -0,75 % à 6 mois (21 cas). Tous épisodes confondus : -0,04 % à 1 mois.",
+   "comprendre": "Le rapport COT de la CFTC recense les positions nettes des investisseurs non commerciaux sur les contrats à terme. Un percentile inférieur à 10 traduit un consensus baissier saturé, tandis qu'un niveau supérieur à 90 reflète un optimisme excessif. Sur les marchés de devises, ces extrêmes constituent des indicateurs contrariens d'épuisement de tendance.",
+   "desk": "La variation hebdomadaire brutale des contrats nets non commerciaux sur l'EUR (-36 076) et l'AUD (-35 349) à proximité immédiate des seuils de consolidation, signal précurseur de liquidations en cascade.",
+   "implications": [
+    {
+     "devise": "EUR",
+     "texte": "Positionnement spéculatif vendeur extrême au 2e percentile (-99 332 contrats), ce qui expose la devise à un risque élevé de short squeeze vers la résistance à 1,13732."
+    },
+    {
+     "devise": "AUD",
+     "texte": "Accumulation vendeuse massive avec -98 588 contrats nets courts et un RSI à 41,2, limitant le potentiel baissier résiduel en cas de test du support à 0,69501."
+    },
+    {
+     "devise": "JPY",
+     "texte": "Positionnement acheteur saturé au 92e percentile avec +62 325 contrats, signalant une vulnérabilité à des prises de bénéfices sous la résistance à 0,00633."
+    },
+    {
+     "devise": "GBP",
+     "texte": "Ventes spéculatives tendues au 6e percentile (-97 611 contrats) qui divergent de la tendance technique de fond toujours orientée à la hausse."
+    }
+   ],
+   "controles": [],
    "precedents": [
     {
      "indicateur": "Variation sur 4 semaines de l'indice dollar large (%)",
@@ -382,103 +583,201 @@
      "source": "calcul Python : séries des dossiers (FRED, Bundesbank, MoF Japon, BoC) et taux de change Fed H.10 / indice dollar large",
      "valeur_actuelle": 2.87,
      "date": "2026-10-09",
-     "ecart_type": 1.43,
+     "ecart_type": 1.38,
      "fenetre": [
-      1.44,
-      4.3
+      1.49,
+      4.25
      ],
      "cas": {
       "1m": {
-       "n": 21,
-       "mediane_pct": -0.21,
-       "hausses": 9
+       "n": 22,
+       "mediane_pct": -0.17,
+       "hausses": 10
       },
       "3m": {
-       "n": 21,
-       "mediane_pct": 0.12,
-       "hausses": 11
+       "n": 22,
+       "mediane_pct": 0.13,
+       "hausses": 12
       },
       "6m": {
-       "n": 20,
-       "mediane_pct": -0.81,
-       "hausses": 9
+       "n": 21,
+       "mediane_pct": -0.75,
+       "hausses": 10
       }
      },
      "reference_tous_episodes": {
       "1m": {
-       "n": 64,
-       "mediane_pct": 0.07
+       "n": 73,
+       "mediane_pct": -0.04
       },
       "3m": {
-       "n": 63,
-       "mediane_pct": 0.34
+       "n": 72,
+       "mediane_pct": 0.49
       },
       "6m": {
-       "n": 60,
-       "mediane_pct": 0.36
+       "n": 68,
+       "mediane_pct": 0.89
       }
      },
      "suffisant": true,
-     "texte": "Depuis 2021, 21 épisodes où « Variation sur 4 semaines de l'indice dollar large (%) » était entre 1,44 et 4,30 (aujourd'hui 2,87) : USD médiane -0,21 % à 1 mois (21 cas), +0,12 % à 3 mois (21 cas), -0,81 % à 6 mois (20 cas). Tous épisodes confondus : +0,07 % à 1 mois."
+     "texte": "Depuis 2021, 22 épisodes où « Variation sur 4 semaines de l'indice dollar large (%) » était entre 1,49 et 4,25 (aujourd'hui 2,87) : USD médiane -0,17 % à 1 mois (22 cas), +0,13 % à 3 mois (22 cas), -0,75 % à 6 mois (21 cas). Tous épisodes confondus : -0,04 % à 1 mois."
     }
-   ]
+   ],
+   "redige_par": {
+    "modele": "gemini-3.8-flash",
+    "libelle": "Flash 3.8"
+   },
+   "statut": "ok",
+   "numero": 7,
+   "nom": "Price action et flux"
   },
   "8": {
-   "statut": "indisponible",
-   "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : quota du jour atteint | gemini-3.5-flash-lite : quota du jour atteint",
+   "constat": "Le pétrole WTI s'établit à 101,91 dollars après une progression de 7,25 % sur une semaine (percentile 92 sur 5 ans), tandis que le Brent cote 126,55 dollars (percentile 98 sur 5 ans), dans un contexte où les données de stocks et de production de brut de l'EIA restent indisponibles aujourd'hui. L'indice or (proxy) ressort à 2516,8, en baisse de 0,31 % sur une semaine et de 4,28 % sur quatre semaines, se situant au percentile 11 sur 5 ans. Sur le front commercial, le Canada affiche un excédent supérieur aux attentes à 4,2 milliards contre 1,5 milliard prévu, alors que la zone euro enregistre un déficit imprévu de -6,8 milliards contre un consensus de 4,5 milliards et que le déficit américain s'est creusé à -105,6 milliards contre -100,8 milliards attendus.",
+   "mecanisme": "Les variations des cours des matières premières énergétiques modifient directement les termes de l'échange des pays importateurs et exportateurs, influençant les soldes commerciaux. Un renchérissement du pétrole draine des flux de capitaux vers les exportateurs nets d'énergie dont les balances s'améliorent, tout en pénalisant les devises des blocs dépendants des importations via une détérioration de leur compte courant.",
+   "ce_qui_pourrait_tout_changer": "",
+   "precedent": "Depuis 2020, 17 épisodes où « Pétrole WTI ($/baril) » était entre 87,88 et 115,94 (aujourd'hui 101,91) : CAD médiane -0,35 % à 1 mois (17 cas), -1,42 % à 3 mois (16 cas), -2,80 % à 6 mois (14 cas). Tous épisodes confondus : -0,08 % à 1 mois.",
+   "comprendre": "La balance commerciale reflète la différence entre les biens exportés et importés par une économie, générant des flux d'achat ou de vente réels de devises. Lorsqu'une matière première clé comme le pétrole s'apprécie, les pays importateurs doivent convertir davantage de leur monnaie nationale pour payer leur facture énergétique, affaiblissant leur change au profit des producteurs.",
+   "desk": "Le desk surveille l'écart entre le consensus et la publication réelle des balances commerciales des exportateurs de brut (comme le CAD) afin d'anticiper les rééquilibrages de flux corporate sur le marché au comptant.",
+   "implications": [
+    {
+     "devise": "CAD",
+     "texte": "L'excédent commercial supérieur aux attentes à 4,2 milliards couplé à un WTI ancré au percentile 92 (101,91 dollars) apporte un soutien fondamental aux flux acheteurs de la devise canadienne."
+    },
+    {
+     "devise": "EUR",
+     "texte": "Le basculement de la balance commerciale à -6,8 milliards contre +4,5 milliards attendus, sous la pression de cours pétroliers élevés (Brent à 126,55 dollars), pèse structurellement sur la monnaie unique."
+    },
+    {
+     "devise": "USD",
+     "texte": "Le creusement du déficit commercial à -105,6 milliards illustre une dépendance continue aux importations, même si le statut d'exportateur d'énergie atténue l'impact du renchérissement du brut."
+    }
+   ],
+   "controles": [
+    "bloc(s) vide(s) après contrôle : ce_qui_pourrait_tout_changer",
+    "1 phrase(s) retirée(s) : chiffre absent des tableaux fournis"
+   ],
    "precedents": [
     {
      "indicateur": "Pétrole WTI ($/baril)",
      "devise": "CAD",
      "minimum_cas": 5,
      "source": "calcul Python : séries des dossiers (FRED, Bundesbank, MoF Japon, BoC) et taux de change Fed H.10 / indice dollar large",
-     "valeur_actuelle": 96.24,
-     "date": "2026-10-06",
-     "ecart_type": 13.55,
+     "valeur_actuelle": 101.91,
+     "date": "2026-10-14",
+     "ecart_type": 14.03,
      "fenetre": [
-      82.69,
-      109.79
+      87.88,
+      115.94
      ],
      "cas": {
       "1m": {
-       "n": 24,
-       "mediane_pct": -0.48,
-       "hausses": 11
+       "n": 17,
+       "mediane_pct": -0.35,
+       "hausses": 7
       },
       "3m": {
-       "n": 23,
-       "mediane_pct": -1.11,
+       "n": 16,
+       "mediane_pct": -1.42,
        "hausses": 7
       },
       "6m": {
-       "n": 21,
-       "mediane_pct": -2.4,
-       "hausses": 5
+       "n": 14,
+       "mediane_pct": -2.8,
+       "hausses": 2
       }
      },
      "reference_tous_episodes": {
       "1m": {
-       "n": 65,
-       "mediane_pct": -0.1
+       "n": 73,
+       "mediane_pct": -0.08
       },
       "3m": {
-       "n": 64,
-       "mediane_pct": -0.6
+       "n": 72,
+       "mediane_pct": -0.54
       },
       "6m": {
-       "n": 61,
-       "mediane_pct": -1.07
+       "n": 69,
+       "mediane_pct": -1.11
       }
      },
      "suffisant": true,
-     "texte": "Depuis 2021, 24 épisodes où « Pétrole WTI ($/baril) » était entre 82,69 et 109,79 (aujourd'hui 96,24) : CAD médiane -0,48 % à 1 mois (24 cas), -1,11 % à 3 mois (23 cas), -2,40 % à 6 mois (21 cas). Tous épisodes confondus : -0,10 % à 1 mois."
+     "texte": "Depuis 2020, 17 épisodes où « Pétrole WTI ($/baril) » était entre 87,88 et 115,94 (aujourd'hui 101,91) : CAD médiane -0,35 % à 1 mois (17 cas), -1,42 % à 3 mois (16 cas), -2,80 % à 6 mois (14 cas). Tous épisodes confondus : -0,08 % à 1 mois."
     }
-   ]
+   ],
+   "redige_par": {
+    "modele": "gemini-3.8-flash",
+    "libelle": "Flash 3.8"
+   },
+   "statut": "ok",
+   "numero": 8,
+   "nom": "Offre et demande"
   }
  },
  "synthese": {
-  "statut": "indisponible",
-  "raison": "0 engrenage(s) rédigé(s) sur 8 (minimum 5)"
+  "theme_semaine": "Le marché clôture la semaine dans un régime de Risk Off bien ancré, matérialisé par un écart de score risque-refuge défavorable de -16,3 points et un score de confluence de l'USD dominant à 88 sur 100. La résilience de l'économie américaine, portée par un PIB à 2,2 % et des ventes au détail à 0,8 %, contraste nettement avec l'affaiblissement cyclique du Canada et de l'Australie. Les tensions sur les émissions budgétaires maintiennent la prime de terme américaine à son record sur 5 ans de 1,0729 % (percentile 100), alimentant une consolidation baissière sur les actions avec un S&P 500 en repli de 1,95 %.",
+  "chaines": [
+   {
+    "titre": "Transmission des tensions budgétaires américaines vers les devises cycliques",
+    "maillons": [
+     {
+      "engrenage": 4,
+      "texte": "Le déficit fédéral américain de -5,8 % du PIB et une dette à 122,6 % hissent la prime de terme à 1,0729 %, atteignant son record sur 5 ans (percentile 100)."
+     },
+     {
+      "engrenage": 2,
+      "texte": "Le taux américain à 2 ans reste fixé à 4,77 % (87e percentile), maintenant un écart restrictif de 89,0 pb au-dessus du taux directeur de 3,88 %."
+     },
+     {
+      "engrenage": 5,
+      "texte": "Les conditions financières se durcissent : le S&P 500 cède 1,95 % à 7659,44 points et le VIX progresse de 6,81 % sur sept jours à 16,46 points."
+     },
+     {
+      "engrenage": 7,
+      "texte": "L'aversion au risque accélère les liquidations spéculatives sur l'AUD, dont les positions nettes vendeuses tombent au 2e percentile avec -98 588 contrats."
+     }
+    ]
+   },
+   {
+    "titre": "Choc de termes de l'échange énergétique sur la zone euro",
+    "maillons": [
+     {
+      "engrenage": 8,
+      "texte": "Les cours pétroliers se tendent avec un baril de Brent à 126,55 dollars (98e percentile) et un WTI en progression hebdomadaire de 7,25 % à 101,91 dollars."
+     },
+     {
+      "engrenage": 8,
+      "texte": "Ce renchérissement pèse sur les flux extérieurs européens, basculant la balance commerciale en déficit à -6,8 milliards d'euros contre un excédent de 4,5 milliards attendu."
+     },
+     {
+      "engrenage": 7,
+      "texte": "La dégradation commerciale précipite le positionnement spéculatif net vendeur sur l'EUR à un niveau extrême de -99 332 contrats (2e percentile)."
+     }
+    ]
+   }
+  ],
+  "conflits": [
+   {
+    "engrenages": [
+     1,
+     7
+    ],
+    "texte": "Divergence sur le dollar : le thème macro affiche un score de confluence USD hégémonique de 88 en plein régime Risk Off, alors que le price action signale une tendance hebdomadaire baissière avec une volatilité à 20 jours écrasée à 3,9 % (percentile 6) au contact immédiat du support à 102,05667."
+   },
+   {
+    "engrenages": [
+     3,
+     8
+    ],
+    "texte": "Divergence sur le Canada : les fondamentaux récents d'activité décrochent avec 68,3K destructions d'emplois et un indice de surprise à -0,62 écart, tandis que la balance commerciale surprend très positivement à 4,2 milliards grâce au soutien du WTI ancré au 92e percentile."
+   }
+  ],
+  "ce_qui_pourrait_tout_changer": "Un retournement à la hausse de l'indice mondial de surprise économique (-0,02 actuellement) couplé à un franchissement par l'EUR de sa résistance à 1,13732 déclencherait un rachat massif de positions vendeuses extrêmes. À l'inverse, une cassure confirmée du support du dollar à 102,05667 validerait le retournement technique du billet vert et réveillerait une volatilité historiquement comprimée.",
+  "controles": [],
+  "redige_par": {
+   "modele": "gemini-3.8-flash",
+   "libelle": "Flash 3.8"
+  },
+  "statut": "ok"
  },
  "meta": {
   "appels_llm": [
@@ -508,39 +807,152 @@
     "tokens_total": 4689,
     "ok": false,
     "etiquette": "hebdo:2"
+   },
+   {
+    "heure": "12:05",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 887,
+    "tokens_message": 717,
+    "tokens_total": 1604,
+    "ok": true,
+    "etiquette": "hebdo:1"
+   },
+   {
+    "heure": "12:06",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 887,
+    "tokens_message": 4672,
+    "tokens_total": 5559,
+    "ok": false,
+    "etiquette": "hebdo:2"
+   },
+   {
+    "heure": "12:07",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 887,
+    "tokens_message": 4672,
+    "tokens_total": 5559,
+    "ok": true,
+    "etiquette": "hebdo:2"
+   },
+   {
+    "heure": "12:07",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 887,
+    "tokens_message": 3680,
+    "tokens_total": 4567,
+    "ok": false,
+    "etiquette": "hebdo:3"
+   },
+   {
+    "heure": "12:09",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 887,
+    "tokens_message": 3680,
+    "tokens_total": 4567,
+    "ok": true,
+    "etiquette": "hebdo:3"
+   },
+   {
+    "heure": "12:09",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 887,
+    "tokens_message": 3730,
+    "tokens_total": 4617,
+    "ok": false,
+    "etiquette": "hebdo:4"
+   },
+   {
+    "heure": "12:09",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 887,
+    "tokens_message": 3730,
+    "tokens_total": 4617,
+    "ok": true,
+    "etiquette": "hebdo:4"
+   },
+   {
+    "heure": "12:10",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 887,
+    "tokens_message": 4018,
+    "tokens_total": 4905,
+    "ok": true,
+    "etiquette": "hebdo:5"
+   },
+   {
+    "heure": "12:10",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 887,
+    "tokens_message": 1829,
+    "tokens_total": 2716,
+    "ok": true,
+    "etiquette": "hebdo:6"
+   },
+   {
+    "heure": "12:11",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 887,
+    "tokens_message": 8942,
+    "tokens_total": 9829,
+    "ok": true,
+    "etiquette": "hebdo:7"
+   },
+   {
+    "heure": "12:11",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 887,
+    "tokens_message": 1247,
+    "tokens_total": 2134,
+    "ok": true,
+    "etiquette": "hebdo:8"
+   },
+   {
+    "heure": "12:11",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 887,
+    "tokens_message": 4060,
+    "tokens_total": 4947,
+    "ok": true,
+    "etiquette": "hebdo:synthese"
    }
   ],
   "quota_llm": {
-   "date": "2026-10-14",
+   "date": "2026-10-18",
    "ordre": [
     "gemini-3.5-flash",
     "gemini-3.8-flash",
     "gemini-3.5-flash-lite"
    ],
+   "appels_aujourdhui": 15,
+   "plafond_jour": 60,
+   "engrenages_faits": false,
+   "reserve_engrenages": 8,
+   "refus_reserve_ce_run": 0,
    "modeles": {
     "gemini-3.5-flash": {
-     "appels_aujourdhui": 12,
+     "appels_aujourdhui": 7,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-10-10T23:59:59+00:00",
-     "appels_ce_run": 3,
-     "reussites_ce_run": 0,
-     "sauts_ce_run": 13
+     "appels_ce_run": 4,
+     "reussites_ce_run": 1,
+     "sauts_ce_run": 5
     },
     "gemini-3.8-flash": {
-     "appels_aujourdhui": 20,
+     "appels_aujourdhui": 8,
      "plafond_jour": 20,
-     "epuise_jusqu_a": "2026-10-14T23:59:59+00:00",
-     "appels_ce_run": 0,
-     "reussites_ce_run": 0,
-     "sauts_ce_run": 16
+     "epuise_jusqu_a": "2026-10-16T23:59:59+00:00",
+     "appels_ce_run": 8,
+     "reussites_ce_run": 8,
+     "sauts_ce_run": 0
     },
     "gemini-3.5-flash-lite": {
-     "appels_aujourdhui": 20,
+     "appels_aujourdhui": 0,
      "plafond_jour": 20,
      "epuise_jusqu_a": null,
      "appels_ce_run": 0,
      "reussites_ce_run": 0,
-     "sauts_ce_run": 16
+     "sauts_ce_run": 0
     }
    }
   }
