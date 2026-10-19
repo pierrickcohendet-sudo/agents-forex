@@ -1,6 +1,6 @@
 {
  "version_schema": 1,
- "genere_le": "2026-10-19T16:07:55+00:00",
+ "genere_le": "2026-10-19T16:35:00+00:00",
  "debut_historique": "2021-08-18",
  "erreurs_collecte": [
   "EIA : HTTPSConnectionPool(host='api.eia.gov', port=443): Read timed out. (read timeout=60)"
@@ -13,7 +13,7 @@
     {
      "libelle": "Régime de risque (biais calculé)",
      "texte": "Risk Off",
-     "detail": "écart de score risque − refuge : -10.7 pts",
+     "detail": "écart de score risque − refuge : -15.3 pts",
      "source": "calcul Python (scores de confluence)"
     },
     {
@@ -31,7 +31,7 @@
     },
     {
      "libelle": "Score de confluence USD",
-     "texte": "82",
+     "texte": "92",
      "detail": "0-100, calcul Python",
      "source": "rapport du jour"
     }
@@ -64,8 +64,8 @@
     {
      "date": "2026-10-19",
      "biais": "risk_off",
-     "score_usd": 82,
-     "ecart": -10.7
+     "score_usd": 92,
+     "ecart": -15.3
     }
    ],
    "graphiques": [
@@ -143,72 +143,72 @@
         ],
         [
          "2026-10-19",
-         82
+         92
         ]
        ]
       },
       {
-       "nom": "CNY",
+       "nom": "AUD",
        "points": [
         [
-         "2026-09-23",
+         "2026-10-02",
          54
         ],
         [
-         "2026-10-02",
-         42
-        ],
-        [
          "2026-10-03",
-         48
+         49
         ],
         [
          "2026-10-05",
-         41
+         49
         ],
         [
          "2026-10-06",
-         41
+         65
         ],
         [
          "2026-10-07",
-         41
+         48
         ],
         [
          "2026-10-08",
-         36
+         48
         ],
         [
          "2026-10-09",
-         41
+         48
         ],
         [
          "2026-10-10",
-         36
+         56
         ],
         [
          "2026-10-11",
-         40
+         44
         ],
         [
          "2026-10-12",
-         36
+         44
         ],
         [
          "2026-10-13",
-         40
+         39
         ],
         [
          "2026-10-14",
-         40
+         56
         ],
         [
          "2026-10-15",
-         30
+         44
+        ],
+        [
+         "2026-10-16",
+         50
         ],
         [
          "2026-10-19",
-         62
+         56
         ]
        ]
       },
@@ -301,11 +301,7 @@
      "barres": [
       {
        "nom": "USD",
-       "valeur": 82
-      },
-      {
-       "nom": "CNY",
-       "valeur": 62
+       "valeur": 92
       },
       {
        "nom": "AUD",
@@ -313,23 +309,27 @@
       },
       {
        "nom": "GBP",
-       "valeur": 54
+       "valeur": 44
       },
       {
-       "nom": "NZD",
-       "valeur": 36
+       "nom": "CNY",
+       "valeur": 39
+      },
+      {
+       "nom": "CHF",
+       "valeur": 38
       },
       {
        "nom": "JPY",
        "valeur": 30
       },
       {
-       "nom": "CHF",
+       "nom": "CAD",
        "valeur": 30
       },
       {
-       "nom": "CAD",
-       "valeur": 18
+       "nom": "NZD",
+       "valeur": 28
       },
       {
        "nom": "EUR",
@@ -357,8 +357,8 @@
     {
      "id": "score_usd",
      "libelle": "Score USD",
-     "valeur": 82,
-     "texte": "82",
+     "valeur": 92,
+     "texte": "92",
      "unite": "score",
      "date": "2026-10-19",
      "frequence": null,
@@ -366,10 +366,10 @@
      "source": "calcul Python (score de confluence 0-100)",
      "raison": null,
      "variation": {
-      "valeur": 17,
+      "valeur": 27,
       "unite": "pts",
       "periode": "4 semaines",
-      "texte": "+17 pts sur 4 semaines"
+      "texte": "+27 pts sur 4 semaines"
      },
      "percentile_5a": null,
      "n_5a": null,
@@ -443,7 +443,7 @@
        ],
        [
         "2026-10-19",
-        82
+        92
        ]
       ],
       "periode": "30 jours (rapports archivés)",
@@ -454,8 +454,8 @@
     {
      "id": "score_cad",
      "libelle": "Score CAD",
-     "valeur": 18,
-     "texte": "18",
+     "valeur": 30,
+     "texte": "30",
      "unite": "score",
      "date": "2026-10-19",
      "frequence": null,
@@ -463,10 +463,10 @@
      "source": "calcul Python (score de confluence 0-100)",
      "raison": null,
      "variation": {
-      "valeur": -17,
+      "valeur": -5,
       "unite": "pts",
       "periode": "4 semaines",
-      "texte": "−17 pts sur 4 semaines"
+      "texte": "−5 pts sur 4 semaines"
      },
      "percentile_5a": null,
      "n_5a": null,
@@ -544,7 +544,7 @@
        ],
        [
         "2026-10-19",
-        18
+        30
        ]
       ],
       "periode": "30 jours (rapports archivés)",
@@ -644,8 +644,8 @@
     {
      "id": "ecart_max",
      "libelle": "Écart meilleur − moins bon score",
-     "valeur": 66,
-     "texte": "66",
+     "valeur": 76,
+     "texte": "76",
      "unite": "score",
      "date": "2026-10-19",
      "frequence": null,
@@ -653,10 +653,10 @@
      "source": "calcul Python (USD − EUR)",
      "raison": null,
      "variation": {
-      "valeur": 22,
+      "valeur": 32,
       "unite": "pts",
       "periode": "4 semaines",
-      "texte": "+22 pts sur 4 semaines"
+      "texte": "+32 pts sur 4 semaines"
      },
      "percentile_5a": null,
      "n_5a": null,
@@ -750,7 +750,7 @@
        ],
        [
         "2026-10-19",
-        66
+        76
        ]
       ],
       "periode": "30 jours (rapports archivés)",
@@ -1036,7 +1036,7 @@
       "direction": "Dollar ↓ · Risk on",
       "critere": "dollar",
       "accord": "non",
-      "conviction": "eleve"
+      "conviction": "moyen"
      },
      {
       "numero": 8,
@@ -11168,7 +11168,7 @@
      "raison": null
     }
    ],
-   "actualites_maj": "2026-10-19T16:07+00:00",
+   "actualites_maj": "2026-10-19T16:35+00:00",
    "actualites_nb_titres_lus": 30,
    "notes": [
     "Dette et solde publics : FMI (annuel, avec 1 à 3 ans de retard) ; EUR = Allemagne. Pas de série gratuite pour CHF et NZD.",
@@ -12433,9 +12433,9 @@
      "USD": {
       "EUR": -0.86,
       "GBP": -0.87,
-      "JPY": -0.65,
+      "JPY": -0.66,
       "CHF": -0.69,
-      "CAD": -0.69,
+      "CAD": -0.68,
       "AUD": -0.72,
       "NZD": -0.92,
       "CNY": -0.63,
@@ -12449,13 +12449,13 @@
      },
      "EUR": {
       "USD": -0.86,
-      "GBP": 0.89,
+      "GBP": 0.9,
       "JPY": 0.49,
       "CHF": 0.55,
-      "CAD": 0.62,
-      "AUD": 0.42,
-      "NZD": 0.78,
-      "CNY": 0.47,
+      "CAD": 0.61,
+      "AUD": 0.4,
+      "NZD": 0.77,
+      "CNY": 0.46,
       "VIX": -0.2,
       "Indice dollar large (Fed)": -0.66,
       "Indice or (proxy)": 0.47,
@@ -12466,13 +12466,13 @@
      },
      "GBP": {
       "USD": -0.87,
-      "EUR": 0.89,
-      "JPY": 0.49,
-      "CHF": 0.58,
-      "CAD": 0.56,
-      "AUD": 0.46,
+      "EUR": 0.9,
+      "JPY": 0.5,
+      "CHF": 0.59,
+      "CAD": 0.55,
+      "AUD": 0.45,
       "NZD": 0.79,
-      "CNY": 0.54,
+      "CNY": 0.53,
       "VIX": -0.17,
       "Indice dollar large (Fed)": -0.63,
       "Indice or (proxy)": 0.35,
@@ -12482,11 +12482,11 @@
       "Rendement 10 ans US": -0.32
      },
      "JPY": {
-      "USD": -0.65,
+      "USD": -0.66,
       "EUR": 0.49,
-      "GBP": 0.49,
+      "GBP": 0.5,
       "CHF": 0.24,
-      "CAD": 0.27,
+      "CAD": 0.26,
       "AUD": 0.44,
       "NZD": 0.54,
       "CNY": 0.31,
@@ -12501,7 +12501,7 @@
      "CHF": {
       "USD": -0.69,
       "EUR": 0.55,
-      "GBP": 0.58,
+      "GBP": 0.59,
       "JPY": 0.24,
       "CAD": 0.56,
       "AUD": 0.32,
@@ -12516,14 +12516,14 @@
       "Rendement 10 ans US": -0.57
      },
      "CAD": {
-      "USD": -0.69,
-      "EUR": 0.62,
-      "GBP": 0.56,
-      "JPY": 0.27,
+      "USD": -0.68,
+      "EUR": 0.61,
+      "GBP": 0.55,
+      "JPY": 0.26,
       "CHF": 0.56,
-      "AUD": 0.39,
-      "NZD": 0.55,
-      "CNY": 0.22,
+      "AUD": 0.38,
+      "NZD": 0.54,
+      "CNY": 0.21,
       "VIX": 0.08,
       "Indice dollar large (Fed)": -0.36,
       "Indice or (proxy)": 0.37,
@@ -12534,11 +12534,11 @@
      },
      "AUD": {
       "USD": -0.72,
-      "EUR": 0.42,
-      "GBP": 0.46,
+      "EUR": 0.4,
+      "GBP": 0.45,
       "JPY": 0.44,
       "CHF": 0.32,
-      "CAD": 0.39,
+      "CAD": 0.38,
       "NZD": 0.69,
       "CNY": 0.63,
       "VIX": -0.31,
@@ -12551,11 +12551,11 @@
      },
      "NZD": {
       "USD": -0.92,
-      "EUR": 0.78,
+      "EUR": 0.77,
       "GBP": 0.79,
       "JPY": 0.54,
       "CHF": 0.55,
-      "CAD": 0.55,
+      "CAD": 0.54,
       "AUD": 0.69,
       "CNY": 0.61,
       "VIX": -0.32,
@@ -12568,11 +12568,11 @@
      },
      "CNY": {
       "USD": -0.63,
-      "EUR": 0.47,
-      "GBP": 0.54,
+      "EUR": 0.46,
+      "GBP": 0.53,
       "JPY": 0.31,
       "CHF": 0.37,
-      "CAD": 0.22,
+      "CAD": 0.21,
       "AUD": 0.63,
       "NZD": 0.61,
       "VIX": -0.39,
@@ -17230,20 +17230,23 @@
    "titre": "Géopolitique",
    "evenements": [
     {
-     "titre": "Putin reportedly proposes three-way summit with Trump and Xi on Ukraine war — without Zelenskyy",
-     "canal": "refuge",
+     "titre": "Saudi Arabia postpones big investor conference to 2027 as Iran-backed Houthis escalate attacks on kingdom",
+     "canal": "energie",
      "canaux": [
+      "energie",
       "refuge"
      ],
-     "mecanisme": "conflit armé : fuite vers les valeurs refuges",
+     "mecanisme": "choc d'offre énergétique : prix du pétrole et du gaz, inflation importée",
      "devises": [
-      "USD",
+      "CAD",
+      "NZD",
+      "AUD",
       "JPY",
-      "CHF"
+      "EUR"
      ],
      "source": "cnbc_world",
      "date": "2026-10-19",
-     "lien": "https://www.cnbc.com/2026/10/19/putin-trump-xi-ukraine-war-energy.html"
+     "lien": "https://www.cnbc.com/2026/10/19/saudi-arabia-postpones-fii-investor-conference-to-2027.html"
     },
     {
      "titre": "Terrorism squad probes vehicle attack that critically injured Australian lawmaker",
@@ -17276,25 +17279,6 @@
      "source": "cnbc_world",
      "date": "2026-10-19",
      "lien": "https://www.cnbc.com/2026/10/19/openai-bugging-suspect-alfozan-saudi-royal-family.html"
-    },
-    {
-     "titre": "Oil prices slide as sanctions relief on Russian crude raises hopes of increased supply",
-     "canal": "energie",
-     "canaux": [
-      "energie",
-      "sanctions"
-     ],
-     "mecanisme": "choc d'offre énergétique : prix du pétrole et du gaz, inflation importée",
-     "devises": [
-      "CAD",
-      "NZD",
-      "AUD",
-      "JPY",
-      "EUR"
-     ],
-     "source": "cnbc_world",
-     "date": "2026-10-19",
-     "lien": "https://www.cnbc.com/2026/10/18/oil-price-today-ukraine-russia-iran-strait-hormuz.html"
     },
     {
      "titre": "investingLive Asia-Pacific market news: China beats, the euro wobbles and oil dips",
@@ -18425,7 +18409,7 @@
       },
       {
        "nom": "Sanctions",
-       "valeur": 1
+       "valeur": 0
       },
       {
        "nom": "Refuge (conflits)",
@@ -18773,8 +18757,8 @@
     {
      "id": "canal_sancti",
      "libelle": "Titres : sanctions",
-     "valeur": 1,
-     "texte": "1",
+     "valeur": 0,
+     "texte": "0",
      "unite": "nombre",
      "date": "2026-10-19",
      "frequence": null,
@@ -18806,7 +18790,7 @@
        ],
        [
         "2026-10-19",
-        1
+        0
        ]
       ],
       "periode": "depuis le début de l'archive quotidienne",
@@ -19442,10 +19426,10 @@
        "texte": "range"
       },
       "rsi": {
-       "valeur": 52.0,
+       "valeur": 53.3,
        "raison": null,
        "source": "calcul Python (RSI 14) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
-       "percentile_5a": 54,
+       "percentile_5a": 57,
        "var_1s": null,
        "var_4s": null,
        "unite": "",
@@ -19796,16 +19780,16 @@
         ],
         [
          "2026-10-19",
-         52.05
+         53.29
         ]
        ],
        "signal": null
       },
       "ecart_mm100": {
-       "valeur": 0.69,
+       "valeur": 0.77,
        "raison": null,
        "source": "calcul Python (écart à la MM100) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
-       "percentile_5a": 61,
+       "percentile_5a": 62,
        "var_1s": null,
        "var_4s": null,
        "unite": "%",
@@ -20156,15 +20140,15 @@
         ],
         [
          "2026-10-19",
-         0.69
+         0.77
         ]
        ]
       },
       "ecart_mm200": {
-       "valeur": 1.23,
+       "valeur": 1.31,
        "raison": null,
        "source": "calcul Python (écart à la MM200) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
-       "percentile_5a": 66,
+       "percentile_5a": 67,
        "var_1s": null,
        "var_4s": null,
        "unite": "%",
@@ -20515,7 +20499,7 @@
         ],
         [
          "2026-10-19",
-         1.23
+         1.31
         ]
        ]
       },
@@ -20874,7 +20858,7 @@
         ],
         [
          "2026-10-19",
-         3.83
+         3.82
         ]
        ]
       },
@@ -20885,7 +20869,7 @@
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
-       "texte": "support 101.2112 (-0.04 %)"
+       "texte": "resistance 101.40192 (+0.08 %)"
       },
       "cot": {
        "valeur": 12919,
@@ -20914,10 +20898,10 @@
        "texte": "range"
       },
       "rsi": {
-       "valeur": 38.1,
+       "valeur": 37.1,
        "raison": null,
        "source": "calcul Python (RSI 14) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
-       "percentile_5a": 18,
+       "percentile_5a": 16,
        "var_1s": null,
        "var_4s": null,
        "unite": "",
@@ -21268,16 +21252,16 @@
         ],
         [
          "2026-10-19",
-         38.13
+         37.13
         ]
        ],
        "signal": null
       },
       "ecart_mm100": {
-       "valeur": -2.17,
+       "valeur": -2.28,
        "raison": null,
        "source": "calcul Python (écart à la MM100) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
-       "percentile_5a": 23,
+       "percentile_5a": 22,
        "var_1s": null,
        "var_4s": null,
        "unite": "%",
@@ -21628,15 +21612,15 @@
         ],
         [
          "2026-10-19",
-         -2.17
+         -2.28
         ]
        ]
       },
       "ecart_mm200": {
-       "valeur": -3.12,
+       "valeur": -3.22,
        "raison": null,
        "source": "calcul Python (écart à la MM200) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
-       "percentile_5a": 23,
+       "percentile_5a": 22,
        "var_1s": null,
        "var_4s": null,
        "unite": "%",
@@ -21987,7 +21971,7 @@
         ],
         [
          "2026-10-19",
-         -3.12
+         -3.22
         ]
        ]
       },
@@ -21995,7 +21979,7 @@
        "valeur": 5.3,
        "raison": null,
        "source": "calcul Python (volatilité 20 séances) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
-       "percentile_5a": 28,
+       "percentile_5a": 29,
        "var_1s": null,
        "var_4s": null,
        "unite": "% annualisé",
@@ -22346,7 +22330,7 @@
         ],
         [
          "2026-10-19",
-         5.29
+         5.32
         ]
        ]
       },
@@ -22357,7 +22341,7 @@
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
-       "texte": "resistance 1.12496 (+0.29 %)"
+       "texte": "resistance 1.12496 (+0.40 %)"
       },
       "cot": {
        "valeur": -137573,
@@ -22386,10 +22370,10 @@
        "texte": "range"
       },
       "rsi": {
-       "valeur": 50.9,
+       "valeur": 49.7,
        "raison": null,
        "source": "calcul Python (RSI 14) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
-       "percentile_5a": 54,
+       "percentile_5a": 49,
        "var_1s": null,
        "var_4s": null,
        "unite": "",
@@ -22740,16 +22724,16 @@
         ],
         [
          "2026-10-19",
-         50.87
+         49.71
         ]
        ],
        "signal": null
       },
       "ecart_mm100": {
-       "valeur": -0.57,
+       "valeur": -0.67,
        "raison": null,
        "source": "calcul Python (écart à la MM100) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
-       "percentile_5a": 37,
+       "percentile_5a": 36,
        "var_1s": null,
        "var_4s": null,
        "unite": "%",
@@ -23100,15 +23084,15 @@
         ],
         [
          "2026-10-19",
-         -0.57
+         -0.67
         ]
        ]
       },
       "ecart_mm200": {
-       "valeur": -0.88,
+       "valeur": -0.98,
        "raison": null,
        "source": "calcul Python (écart à la MM200) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
-       "percentile_5a": 33,
+       "percentile_5a": 32,
        "var_1s": null,
        "var_4s": null,
        "unite": "%",
@@ -23459,7 +23443,7 @@
         ],
         [
          "2026-10-19",
-         -0.88
+         -0.98
         ]
        ]
       },
@@ -23467,7 +23451,7 @@
        "valeur": 5.7,
        "raison": null,
        "source": "calcul Python (volatilité 20 séances) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
-       "percentile_5a": 25,
+       "percentile_5a": 26,
        "var_1s": null,
        "var_4s": null,
        "unite": "% annualisé",
@@ -23818,7 +23802,7 @@
         ],
         [
          "2026-10-19",
-         5.7
+         5.73
         ]
        ]
       },
@@ -23829,7 +23813,7 @@
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
-       "texte": "support 1.33019 (-0.09 %)"
+       "texte": "resistance 1.33019 (+0.01 %)"
       },
       "cot": {
        "valeur": -106964,
@@ -23858,10 +23842,10 @@
        "texte": "haussier"
       },
       "rsi": {
-       "valeur": 44.2,
+       "valeur": 43.4,
        "raison": null,
        "source": "calcul Python (RSI 14) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
-       "percentile_5a": 50,
+       "percentile_5a": 47,
        "var_1s": null,
        "var_4s": null,
        "unite": "",
@@ -24212,13 +24196,13 @@
         ],
         [
          "2026-10-19",
-         44.19
+         43.42
         ]
        ],
        "signal": null
       },
       "ecart_mm100": {
-       "valeur": 0.62,
+       "valeur": 0.55,
        "raison": null,
        "source": "calcul Python (écart à la MM100) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
        "percentile_5a": 75,
@@ -24572,12 +24556,12 @@
         ],
         [
          "2026-10-19",
-         0.62
+         0.55
         ]
        ]
       },
       "ecart_mm200": {
-       "valeur": 0.1,
+       "valeur": 0.04,
        "raison": null,
        "source": "calcul Python (écart à la MM200) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
        "percentile_5a": 71,
@@ -24931,12 +24915,12 @@
         ],
         [
          "2026-10-19",
-         0.1
+         0.04
         ]
        ]
       },
       "volatilite": {
-       "valeur": 4.9,
+       "valeur": 5.0,
        "raison": null,
        "source": "calcul Python (volatilité 20 séances) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
        "percentile_5a": 7,
@@ -25290,7 +25274,7 @@
         ],
         [
          "2026-10-19",
-         4.92
+         4.97
         ]
        ]
       },
@@ -25301,7 +25285,7 @@
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
-       "texte": "support 0.0063 (-0.14 %)"
+       "texte": "support 0.0063 (-0.07 %)"
       },
       "cot": {
        "valeur": 50207,
@@ -25330,10 +25314,10 @@
        "texte": "range"
       },
       "rsi": {
-       "valeur": 49.9,
+       "valeur": 49.2,
        "raison": null,
        "source": "calcul Python (RSI 14) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
-       "percentile_5a": 47,
+       "percentile_5a": 45,
        "var_1s": null,
        "var_4s": null,
        "unite": "",
@@ -25684,13 +25668,13 @@
         ],
         [
          "2026-10-19",
-         49.89
+         49.19
         ]
        ],
        "signal": null
       },
       "ecart_mm100": {
-       "valeur": -1.7,
+       "valeur": -1.76,
        "raison": null,
        "source": "calcul Python (écart à la MM100) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
        "percentile_5a": 22,
@@ -26044,12 +26028,12 @@
         ],
         [
          "2026-10-19",
-         -1.7
+         -1.76
         ]
        ]
       },
       "ecart_mm200": {
-       "valeur": -3.42,
+       "valeur": -3.48,
        "raison": null,
        "source": "calcul Python (écart à la MM200) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
        "percentile_5a": 7,
@@ -26403,15 +26387,15 @@
         ],
         [
          "2026-10-19",
-         -3.42
+         -3.48
         ]
        ]
       },
       "volatilite": {
-       "valeur": 6.0,
+       "valeur": 6.1,
        "raison": null,
        "source": "calcul Python (volatilité 20 séances) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
-       "percentile_5a": 26,
+       "percentile_5a": 27,
        "var_1s": null,
        "var_4s": null,
        "unite": "% annualisé",
@@ -26762,7 +26746,7 @@
         ],
         [
          "2026-10-19",
-         6.02
+         6.06
         ]
        ]
       },
@@ -26773,7 +26757,7 @@
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
-       "texte": "support 1.20581 (-0.35 %)"
+       "texte": "support 1.20581 (-0.28 %)"
       },
       "cot": {
        "valeur": -22078,
@@ -26802,10 +26786,10 @@
        "texte": "range"
       },
       "rsi": {
-       "valeur": 54.5,
+       "valeur": 54.0,
        "raison": null,
        "source": "calcul Python (RSI 14) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
-       "percentile_5a": 70,
+       "percentile_5a": 68,
        "var_1s": null,
        "var_4s": null,
        "unite": "",
@@ -27156,16 +27140,16 @@
         ],
         [
          "2026-10-19",
-         54.51
+         53.97
         ]
        ],
        "signal": null
       },
       "ecart_mm100": {
-       "valeur": -0.37,
+       "valeur": -0.41,
        "raison": null,
        "source": "calcul Python (écart à la MM100) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
-       "percentile_5a": 54,
+       "percentile_5a": 53,
        "var_1s": null,
        "var_4s": null,
        "unite": "%",
@@ -27516,15 +27500,15 @@
         ],
         [
          "2026-10-19",
-         -0.37
+         -0.41
         ]
        ]
       },
       "ecart_mm200": {
-       "valeur": -1.5,
+       "valeur": -1.54,
        "raison": null,
        "source": "calcul Python (écart à la MM200) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
-       "percentile_5a": 34,
+       "percentile_5a": 33,
        "var_1s": null,
        "var_4s": null,
        "unite": "%",
@@ -27875,7 +27859,7 @@
         ],
         [
          "2026-10-19",
-         -1.5
+         -1.54
         ]
        ]
       },
@@ -27883,7 +27867,7 @@
        "valeur": 4.2,
        "raison": null,
        "source": "calcul Python (volatilité 20 séances) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
-       "percentile_5a": 30,
+       "percentile_5a": 28,
        "var_1s": null,
        "var_4s": null,
        "unite": "% annualisé",
@@ -28234,7 +28218,7 @@
         ],
         [
          "2026-10-19",
-         4.2
+         4.16
         ]
        ]
       },
@@ -28245,7 +28229,7 @@
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
-       "texte": "resistance 0.70987 (+0.02 %)"
+       "texte": "resistance 0.70987 (+0.06 %)"
       },
       "cot": {
        "valeur": -94765,
@@ -28274,10 +28258,10 @@
        "texte": "haussier"
       },
       "rsi": {
-       "valeur": 45.7,
+       "valeur": 44.8,
        "raison": null,
        "source": "calcul Python (RSI 14) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
-       "percentile_5a": 36,
+       "percentile_5a": 33,
        "var_1s": null,
        "var_4s": null,
        "unite": "",
@@ -28628,16 +28612,16 @@
         ],
         [
          "2026-10-19",
-         45.68
+         44.82
         ]
        ],
        "signal": null
       },
       "ecart_mm100": {
-       "valeur": -0.8,
+       "valeur": -0.87,
        "raison": null,
        "source": "calcul Python (écart à la MM100) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
-       "percentile_5a": 40,
+       "percentile_5a": 39,
        "var_1s": null,
        "var_4s": null,
        "unite": "%",
@@ -28988,15 +28972,15 @@
         ],
         [
          "2026-10-19",
-         -0.8
+         -0.87
         ]
        ]
       },
       "ecart_mm200": {
-       "valeur": -0.81,
+       "valeur": -0.88,
        "raison": null,
        "source": "calcul Python (écart à la MM200) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
-       "percentile_5a": 44,
+       "percentile_5a": 43,
        "var_1s": null,
        "var_4s": null,
        "unite": "%",
@@ -29347,15 +29331,15 @@
         ],
         [
          "2026-10-19",
-         -0.81
+         -0.88
         ]
        ]
       },
       "volatilite": {
-       "valeur": 6.7,
+       "valeur": 6.6,
        "raison": null,
        "source": "calcul Python (volatilité 20 séances) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
-       "percentile_5a": 15,
+       "percentile_5a": 14,
        "var_1s": null,
        "var_4s": null,
        "unite": "% annualisé",
@@ -29706,7 +29690,7 @@
         ],
         [
          "2026-10-19",
-         6.69
+         6.6
         ]
        ]
       },
@@ -29717,7 +29701,7 @@
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
-       "texte": "resistance 0.6992 (+0.15 %)"
+       "texte": "support 0.69624 (-0.20 %)"
       },
       "cot": {
        "valeur": -117299,
@@ -29746,10 +29730,10 @@
        "texte": "range"
       },
       "rsi": {
-       "valeur": 49.1,
+       "valeur": 48.0,
        "raison": null,
        "source": "calcul Python (RSI 14) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
-       "percentile_5a": 53,
+       "percentile_5a": 49,
        "var_1s": null,
        "var_4s": null,
        "unite": "",
@@ -30100,16 +30084,16 @@
         ],
         [
          "2026-10-19",
-         49.15
+         47.95
         ]
        ],
        "signal": null
       },
       "ecart_mm100": {
-       "valeur": -1.94,
+       "valeur": -2.06,
        "raison": null,
        "source": "calcul Python (écart à la MM100) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
-       "percentile_5a": 37,
+       "percentile_5a": 36,
        "var_1s": null,
        "var_4s": null,
        "unite": "%",
@@ -30460,15 +30444,15 @@
         ],
         [
          "2026-10-19",
-         -1.94
+         -2.06
         ]
        ]
       },
       "ecart_mm200": {
-       "valeur": -2.86,
+       "valeur": -2.98,
        "raison": null,
        "source": "calcul Python (écart à la MM200) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
-       "percentile_5a": 32,
+       "percentile_5a": 31,
        "var_1s": null,
        "var_4s": null,
        "unite": "%",
@@ -30819,12 +30803,12 @@
         ],
         [
          "2026-10-19",
-         -2.86
+         -2.98
         ]
        ]
       },
       "volatilite": {
-       "valeur": 6.6,
+       "valeur": 6.5,
        "raison": null,
        "source": "calcul Python (volatilité 20 séances) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
        "percentile_5a": 7,
@@ -31178,7 +31162,7 @@
         ],
         [
          "2026-10-19",
-         6.57
+         6.51
         ]
        ]
       },
@@ -31189,7 +31173,7 @@
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
-       "texte": "resistance 0.56699 (+0.06 %)"
+       "texte": "resistance 0.56699 (+0.18 %)"
       },
       "cot": {
        "valeur": -47001,
@@ -31218,10 +31202,10 @@
        "texte": "haussier"
       },
       "rsi": {
-       "valeur": 67.8,
+       "valeur": 67.5,
        "raison": null,
        "source": "calcul Python (RSI 14) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
-       "percentile_5a": 88,
+       "percentile_5a": 87,
        "var_1s": null,
        "var_4s": null,
        "unite": "",
@@ -31572,16 +31556,16 @@
         ],
         [
          "2026-10-19",
-         67.78
+         67.45
         ]
        ],
        "signal": null
       },
       "ecart_mm100": {
-       "valeur": 0.94,
+       "valeur": 0.93,
        "raison": null,
        "source": "calcul Python (écart à la MM100) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
-       "percentile_5a": 71,
+       "percentile_5a": 70,
        "var_1s": null,
        "var_4s": null,
        "unite": "%",
@@ -31932,12 +31916,12 @@
         ],
         [
          "2026-10-19",
-         0.94
+         0.93
         ]
        ]
       },
       "ecart_mm200": {
-       "valeur": 1.99,
+       "valeur": 1.98,
        "raison": null,
        "source": "calcul Python (écart à la MM200) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
        "percentile_5a": 84,
@@ -32291,7 +32275,7 @@
         ],
         [
          "2026-10-19",
-         1.99
+         1.98
         ]
        ]
       },
@@ -32661,7 +32645,7 @@
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
-       "texte": "support 0.14943 (-0.14 %)"
+       "texte": "support 0.14943 (-0.13 %)"
       },
       "cot": {
        "valeur": null,
@@ -33701,7 +33685,7 @@
         ],
         [
          "2026-10-19",
-         52.05
+         53.29
         ]
        ]
       },
@@ -34726,7 +34710,7 @@
         ],
         [
          "2026-10-19",
-         67.78
+         67.45
         ]
        ]
       },
@@ -35751,7 +35735,7 @@
         ],
         [
          "2026-10-19",
-         38.13
+         37.13
         ]
        ]
       }
@@ -35824,8 +35808,8 @@
     {
      "id": "rsi_usd",
      "libelle": "RSI 14 de l'USD",
-     "valeur": 52.0,
-     "texte": "52,0",
+     "valeur": 53.3,
+     "texte": "53,3",
      "unite": "rsi",
      "date": "2026-10-19",
      "frequence": null,
@@ -35833,12 +35817,12 @@
      "source": "calcul Python (RSI 14) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
      "raison": null,
      "variation": {
-      "valeur": -9.5,
+      "valeur": -8.3,
       "unite": "pts",
       "periode": "4 semaines",
-      "texte": "−9,5 pts sur 4 semaines"
+      "texte": "−8,3 pts sur 4 semaines"
      },
-     "percentile_5a": 54,
+     "percentile_5a": 57,
      "n_5a": 1255,
      "percentile_autre": null,
      "raison_percentile": null,
@@ -36186,7 +36170,7 @@
        ],
        [
         "2026-10-19",
-        52.05
+        53.29
        ]
       ],
       "periode": "120 jours",
@@ -36197,8 +36181,8 @@
     {
      "id": "mm200_usd",
      "libelle": "USD : écart à la MM200",
-     "valeur": 1.23,
-     "texte": "1,23 %",
+     "valeur": 1.31,
+     "texte": "1,31 %",
      "unite": "%",
      "date": "2026-10-19",
      "frequence": null,
@@ -36206,7 +36190,7 @@
      "source": "calcul Python (écart à la MM200) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
      "raison": null,
      "variation": null,
-     "percentile_5a": 66,
+     "percentile_5a": 67,
      "n_5a": 1255,
      "percentile_autre": null,
      "raison_percentile": null,
@@ -36554,7 +36538,7 @@
        ],
        [
         "2026-10-19",
-        1.23
+        1.31
        ]
       ],
       "periode": "120 jours",
@@ -36922,7 +36906,7 @@
        ],
        [
         "2026-10-19",
-        3.83
+        3.82
        ]
       ],
       "periode": "120 jours",
@@ -38530,8 +38514,8 @@
    "texte_python": "Les engrenages ne s'accordent pas : 0 sur 7 évaluables vont dans le sens du thème calculé (Dollar = · Risk off), sous le seuil de 3 pour parler d'un thème établi.",
    "texte_indisponible": null,
    "phrases_retirees": 1,
-   "texte": null,
-   "texte_redige_par": null,
+   "texte": "Les directions contradictoires entre les taux, le risque et les flux ne permettent pas de dégager une orientation claire.",
+   "texte_redige_par": "Flash-Lite 3.5",
    "direction": {
     "dollar": "neutre",
     "risque": "risk_off",
@@ -38612,14 +38596,14 @@
     "titre": "Thème macro",
     "chiffre": {
      "libelle": "Score USD",
-     "valeur": 82,
-     "texte": "82",
+     "valeur": 92,
+     "texte": "92",
      "unite": "",
      "date": "2026-10-19",
      "source": "calcul Python (scores de confluence)",
      "raison": null
     },
-    "ligne": "USD 82, CNY 62, EUR 16 : écart de 66 points entre extrêmes.",
+    "ligne": "USD 92, AUD 56, EUR 16 : écart de 76 points entre extrêmes.",
     "courbe": {
      "points": [],
      "periode": "4 semaines",
@@ -39053,14 +39037,14 @@
     "titre": "Géopolitique",
     "chiffre": {
      "libelle": "Événements retenus",
-     "valeur": 6.0,
-     "texte": "6",
+     "valeur": 5.0,
+     "texte": "5",
      "unite": "",
      "date": "2026-10-19",
      "source": "fil d'actualité classé par canal (calcul Python)",
      "raison": null
     },
-    "ligne": "Canaux : énergie 3, refuge (conflits) 3, sanctions 1.",
+    "ligne": "Canaux : énergie 3, refuge (conflits) 3.",
     "courbe": {
      "points": [],
      "periode": "30 jours",
@@ -39082,14 +39066,14 @@
     "titre": "Price action et flux",
     "chiffre": {
      "libelle": "Indice USD synthétique",
-     "valeur": 101.24987,
-     "texte": "101,25",
+     "valeur": 101.32289,
+     "texte": "101,32",
      "unite": "",
      "date": "2026-10-19",
      "source": "calcul local (Twelve Data)",
      "raison": null
     },
-    "ligne": "RSI USD 52,0, −0,64 % sur 5 jours ; COT extrême : EUR (vendeur), GBP (vendeur), CHF (acheteur) et 1 autre(s).",
+    "ligne": "RSI USD 53,3, −0,56 % sur 5 jours ; COT extrême : EUR (vendeur), GBP (vendeur), CHF (acheteur) et 1 autre(s).",
     "courbe": {
      "points": [
       [
@@ -39214,7 +39198,7 @@
       ],
       [
        "2026-10-19",
-       101.2499
+       101.3229
       ]
      ],
      "periode": "30 jours",
@@ -39227,8 +39211,8 @@
      "libelle": "Dollar ↓ · Risk on",
      "classe": "up",
      "origine": "calcul Python",
-     "conviction": 3,
-     "conviction_niveau": "eleve"
+     "conviction": 2,
+     "conviction_niveau": "moyen"
     }
    },
    {
@@ -39263,21 +39247,41 @@
   ],
   "chaines": [
    {
-    "titre": "Transmission de la volatilité des marchés vers le sentiment de risque",
+    "titre": "Transmission des tensions énergétiques vers l'inflation et les devises",
     "maillons": [
      {
-      "engrenage": 5,
-      "texte": "Le VIX progresse de +34.7 % sur 7 jours à 19.99, signalant une tension sur les marchés.",
+      "engrenage": 6,
+      "texte": "Les attaques de drones et la suspension de la conférence saoudienne perturbent l'offre énergétique.",
       "non_sourcee": false
      },
      {
-      "engrenage": 1,
-      "texte": "Ce regain de nervosité insuffle une composante de risk_off au thème macro global.",
+      "engrenage": 8,
+      "texte": "Les stocks de brut US chutent de -8.6 M barils et le WTI progresse de +7.2 % sur 7 jours.",
+      "non_sourcee": false
+     },
+     {
+      "engrenage": 2,
+      "texte": "Cette flambée des matières premières ravive les craintes inflationnistes, contraignant les banques centrales à maintenir des taux fermes.",
+      "non_sourcee": false
+     }
+    ]
+   },
+   {
+    "titre": "Impact des tensions budgétaires européennes sur les flux de change",
+    "maillons": [
+     {
+      "engrenage": 4,
+      "texte": "L'agitation sociale en France et les craintes sur la dette pèsent sur les obligations souveraines européennes.",
       "non_sourcee": false
      },
      {
       "engrenage": 7,
-      "texte": "En contradiction apparente, le price action à court terme reste orienté en risk_on sur les devises.",
+      "texte": "Les spéculateurs affichent des positions nettes vendeuses extrêmes sur l'euro.",
+      "non_sourcee": false
+     },
+     {
+      "engrenage": 5,
+      "texte": "La hausse de la volatilité et l'aversion au risque se propagent sur les marchés financiers.",
       "non_sourcee": false
      }
     ]
@@ -39378,7 +39382,7 @@
       "valeur": 0,
       "libelle": "Neutre",
       "regles": [],
-      "raison": "écart du cours à sa moyenne mobile 200 jours (tendance) : +1,23 %, sous les seuils; positionnement spéculatif COT, lecture contrarienne (extrêmes) : 75 percentile, sous les seuils",
+      "raison": "écart du cours à sa moyenne mobile 200 jours (tendance) : +1,31 %, sous les seuils; positionnement spéculatif COT, lecture contrarienne (extrêmes) : 75 percentile, sous les seuils",
       "bornee": false
      },
      {
@@ -39459,7 +39463,7 @@
       "regles": [
        {
         "regle": "écart du cours à sa moyenne mobile 200 jours (tendance) ≤ −2,00 % → −1",
-        "chiffre": "−3,12 %",
+        "chiffre": "−3,22 %",
         "source": "calcul Python (écart à la MM200) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
         "date": "2026-10-19",
         "points": -1
@@ -39645,7 +39649,7 @@
       "valeur": 0,
       "libelle": "Neutre",
       "regles": [],
-      "raison": "écart du cours à sa moyenne mobile 200 jours (tendance) : +0,10 %, sous les seuils; positionnement spéculatif COT, lecture contrarienne (extrêmes) : 87 percentile, sous les seuils",
+      "raison": "écart du cours à sa moyenne mobile 200 jours (tendance) : +0,04 %, sous les seuils; positionnement spéculatif COT, lecture contrarienne (extrêmes) : 87 percentile, sous les seuils",
       "bornee": false
      },
      {
@@ -39726,7 +39730,7 @@
       "regles": [
        {
         "regle": "écart du cours à sa moyenne mobile 200 jours (tendance) ≤ −2,00 % → −1",
-        "chiffre": "−3,42 %",
+        "chiffre": "−3,48 %",
         "source": "calcul Python (écart à la MM200) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
         "date": "2026-10-19",
         "points": -1
@@ -39826,7 +39830,7 @@
       "valeur": 0,
       "libelle": "Neutre",
       "regles": [],
-      "raison": "écart du cours à sa moyenne mobile 200 jours (tendance) : −1,50 %, sous les seuils; positionnement spéculatif COT, lecture contrarienne (extrêmes) : 42 percentile, sous les seuils",
+      "raison": "écart du cours à sa moyenne mobile 200 jours (tendance) : −1,54 %, sous les seuils; positionnement spéculatif COT, lecture contrarienne (extrêmes) : 42 percentile, sous les seuils",
       "bornee": false
      },
      {
@@ -39986,7 +39990,7 @@
       "regles": [
        {
         "regle": "écart du cours à sa moyenne mobile 200 jours (tendance) ≤ −2,00 % → −1",
-        "chiffre": "−2,86 %",
+        "chiffre": "−2,98 %",
         "source": "calcul Python (écart à la MM200) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période",
         "date": "2026-10-19",
         "points": -1
@@ -40063,7 +40067,7 @@
       "valeur": 0,
       "libelle": "Neutre",
       "regles": [],
-      "raison": "écart du cours à sa moyenne mobile 200 jours (tendance) : +1,99 %, sous les seuils; positionnement spéculatif COT, lecture contrarienne (extrêmes) : pas de donnée pour CNY",
+      "raison": "écart du cours à sa moyenne mobile 200 jours (tendance) : +1,98 %, sous les seuils; positionnement spéculatif COT, lecture contrarienne (extrêmes) : pas de donnée pour CNY",
       "bornee": false
      },
      {
