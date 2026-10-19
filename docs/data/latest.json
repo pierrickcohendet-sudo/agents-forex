@@ -4,7 +4,7 @@
   "type_rapport": "hebdomadaire",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-10-19T16:45:06+00:00",
+  "genere_le": "2026-10-19T21:39:47+00:00",
   "appels_llm": [
    {
     "heure": "15:51",
@@ -293,6 +293,78 @@
     "tokens_total": 8598,
     "ok": false,
     "etiquette": "synthese:CNY"
+   },
+   {
+    "heure": "21:37",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 7073,
+    "tokens_total": 8633,
+    "ok": false,
+    "etiquette": "synthese:NZD"
+   },
+   {
+    "heure": "21:38",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 7073,
+    "tokens_total": 8633,
+    "ok": true,
+    "etiquette": "synthese:NZD"
+   },
+   {
+    "heure": "21:39",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 7051,
+    "tokens_total": 8611,
+    "ok": true,
+    "etiquette": "synthese:CNY"
+   },
+   {
+    "heure": "21:39",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 0,
+    "tokens_message": 149,
+    "tokens_total": 149,
+    "ok": false,
+    "etiquette": "synthese:CNY"
+   },
+   {
+    "heure": "21:40",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 0,
+    "tokens_message": 149,
+    "tokens_total": 149,
+    "ok": true,
+    "etiquette": "synthese:CNY"
+   },
+   {
+    "heure": "21:40",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 0,
+    "tokens_message": 149,
+    "tokens_total": 149,
+    "ok": true,
+    "etiquette": "synthese:CNY"
+   },
+   {
+    "heure": "21:40",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 0,
+    "tokens_message": 149,
+    "tokens_total": 149,
+    "ok": true,
+    "etiquette": "synthese:CNY"
+   },
+   {
+    "heure": "21:40",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 0,
+    "tokens_message": 149,
+    "tokens_total": 149,
+    "ok": false,
+    "etiquette": "synthese:CNY"
    }
   ],
   "quota_llm": {
@@ -302,27 +374,27 @@
     "gemini-3.8-flash",
     "gemini-3.5-flash-lite"
    ],
-   "appels_aujourdhui": 44,
+   "appels_aujourdhui": 60,
    "plafond_jour": 60,
    "engrenages_faits": true,
    "reserve_engrenages": 8,
    "refus_reserve_ce_run": 0,
    "modeles": {
     "gemini-3.5-flash": {
-     "appels_aujourdhui": 12,
+     "appels_aujourdhui": 20,
      "plafond_jour": 20,
-     "epuise_jusqu_a": "2026-10-10T23:59:59+00:00",
+     "epuise_jusqu_a": "2026-10-20T06:59:59+00:00",
      "appels_ce_run": 3,
-     "reussites_ce_run": 0,
-     "sauts_ce_run": 11
+     "reussites_ce_run": 1,
+     "sauts_ce_run": 9
     },
     "gemini-3.8-flash": {
-     "appels_aujourdhui": 12,
+     "appels_aujourdhui": 20,
      "plafond_jour": 20,
-     "epuise_jusqu_a": "2026-10-16T23:59:59+00:00",
-     "appels_ce_run": 3,
-     "reussites_ce_run": 0,
-     "sauts_ce_run": 11
+     "epuise_jusqu_a": "2026-10-20T06:59:59+00:00",
+     "appels_ce_run": 5,
+     "reussites_ce_run": 4,
+     "sauts_ce_run": 6
     },
     "gemini-3.5-flash-lite": {
      "appels_aujourdhui": 20,
@@ -330,19 +402,19 @@
      "epuise_jusqu_a": null,
      "appels_ce_run": 0,
      "reussites_ce_run": 0,
-     "sauts_ce_run": 14
+     "sauts_ce_run": 7
     }
    }
   },
-  "resume_quota": "Gemini : 44/60, engrenages : fait",
+  "resume_quota": "Gemini : 60/60, engrenages : fait",
   "appels_par_modele": {
    "gemini-3.5-flash": {
-    "appels": 6,
-    "echecs": 6
+    "appels": 9,
+    "echecs": 8
    },
    "gemini-3.8-flash": {
-    "appels": 6,
-    "echecs": 6
+    "appels": 11,
+    "echecs": 7
    },
    "gemini-3.5-flash-lite": {
     "appels": 20,
@@ -415,6 +487,40 @@
       "ouvert_a_l_appel": null,
       "echecs_consecutifs": 0,
       "ignores": 14
+     }
+    ]
+   },
+   {
+    "heure": "21:40",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": true,
+    "appels_total": 12,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": true,
+      "cause": "quota journalier épuisé — quota gratuit journalier épuisé pour gemini-3.5-flash (HTTP 429, requêtes/jour)",
+      "ouvert_a_l_appel": 3,
+      "echecs_consecutifs": 1,
+      "ignores": 9
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": true,
+      "cause": "quota journalier épuisé — quota gratuit journalier épuisé pour gemini-3.8-flash (HTTP 429, requêtes/jour)",
+      "ouvert_a_l_appel": 6,
+      "echecs_consecutifs": 1,
+      "ignores": 6
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 7
      }
     ]
    }
@@ -4462,10 +4568,208 @@
     ]
    },
    "synthese_approfondie": {
-    "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/mode | gemini-3.8-flash : 503 Server Error: ",
-    "tentatives": 2,
-    "genere_le": "2026-10-19T16:43:44+00:00"
+    "orientation": "baissier",
+    "these_centrale": {
+     "texte": "La thèse baissière sur le dollar néo-zélandais reste confirmée par rapport aux séances précédentes, soutenue par un score de confluence faible de 36. Le NZD subit un lourd choc externe avec le creusement spectaculaire de son déficit commercial à -1971M NZ$, plus du double des prévisions. Dans un contexte de montée de la volatilité mondiale (VIX à 19.99), la devise pro-cyclique manque de soutien de carry face à un dollar américain structurellement fort.",
+     "source_ids": [
+      "src_010",
+      "src_025",
+      "src_126",
+      "src_167"
+     ],
+     "non_source": false
+    },
+    "moteurs": [
+     {
+      "moteur": "croissance",
+      "donnee": "0.2% t/t le 2026-09-16",
+      "trajectoire": "Ralentissement net après 0.9% au trimestre précédent, mais légèrement au-dessus du consensus de 0.1%.",
+      "implication": "L'atonie de l'expansion économique domestique limite les capacités de resserrement monétaire et pèse sur les flux d'investissement.",
+      "source_id": "src_257"
+     },
+     {
+      "moteur": "inflation",
+      "donnee": "1.5% a/a le 2026-07-20",
+      "trajectoire": "En hausse par rapport à 0.9% précédent et légèrement supérieure aux attentes de 1.4%.",
+      "implication": "L'inflation demeure modérée au sein de la fourchette cible, maintenant la banque centrale dans une position prudente sans urgence de hausse agressive.",
+      "source_id": "src_256"
+     },
+     {
+      "moteur": "emploi",
+      "donnee": "Taux de chômage à 5.6% et création d'emplois à 0.5% le 2026-08-04",
+      "trajectoire": "Chômage en dégradation vs 5.4% précédent et consensus de 5.4% ; créations d'emplois supérieures aux 0.1% attendus.",
+      "implication": "Le marché du travail montre des signes d'effritement via la hausse du taux de chômage, signalant un assouplissement des tensions sur les salaires.",
+      "source_id": "src_258"
+     },
+     {
+      "moteur": "banque_centrale",
+      "donnee": "Taux directeur à 2.75% le 2026-09-02",
+      "trajectoire": "Hausse de 25 pb par rapport à 2.50%, conforme aux prévisions de 2.75%.",
+      "implication": "La RBNZ adopte une posture data-dependent stricte qui neutralise l'avantage de taux face aux pairs du G8.",
+      "source_id": "src_139"
+     }
+    ],
+    "taux_et_flux": {
+     "texte": "Le taux directeur néo-zélandais s'établit à 2.75%, offrant un différentiel de carry nul (0.0 pt) par rapport à la médiane du G8. Le rendement souverain à 10 ans ressort à 4.94% (septembre 2026) contre 5.10% pour le 10 ans US au 2026-10-15. Le spread de rendement souverain 2 ans vs USD est non disponible. L'absence d'avantage de rendement direct expose le NZD aux sorties de flux face aux devises disposant d'un portage supérieur.",
+     "source_ids": [
+      "src_008",
+      "src_016",
+      "src_139"
+     ],
+     "non_source": false
+    },
+    "geopolitique": {
+     "texte": "En tant que proxy liquide de l'économie chinoise, le NZD enregistre positivement le PIB chinois du T3 supérieur aux attentes à 4.5% et le rebond des ventes au détail. Toutefois, ce soutien externe est neutralisé à court terme par la dégradation massive de la balance commerciale néo-zélandaise, soulignant la faiblesse des exportations nettes du pays vers ses partenaires asiatiques.",
+     "source_ids": [
+      "src_121",
+      "src_126",
+      "src_167"
+     ],
+     "non_source": false
+    },
+    "lecture_technique": {
+     "texte": "Sur NZD/USD, le cours s'établit à 0.56599 dans une tendance de fond hebdomadaire en range sans alignement des pivots de Dow. Le spot évolue sous ses moyennes mobiles majeures (écart de -2.06% vs MM100 à 0.57788 et -2.98% vs MM200 à 0.58335). Le RSI journalier se situe à 48.0 avec un momentum baissier. Une résistance immédiate se dresse à 0.56699 (2 impacts) et un support clé est testé à 0.56186 (3 impacts). La configuration technique est cohérente avec les fondamentaux dégradés.",
+     "source_ids": [
+      "src_023"
+     ],
+     "coherence": "alignee",
+     "non_source": false
+    },
+    "scenarios": [
+     {
+      "type": "haussier",
+      "declencheur": "Dépassement en clôture de la résistance à 0.56699 puis de la zone 0.57206 sous l'effet d'une détente marquée du dollar US.",
+      "probabilite": "faible",
+      "justification": "Un redressement nécessiterait un retournement complet de l'appétit pour le risque mondial et un apaisement de la courbe de taux américaine.",
+      "source_ids": [
+       "src_014",
+       "src_023",
+       "src_025"
+      ]
+     },
+     {
+      "type": "central",
+      "declencheur": "Maintien des cours au sein de l'intervalle 0.56186 - 0.56699 dans l'attente des prochaines décisions de la RBNZ.",
+      "probabilite": "moyenne",
+      "justification": "La résistance du PIB chinois compense temporairement la détérioration macroéconomique domestique néo-zélandaise.",
+      "source_ids": [
+       "src_023",
+       "src_121"
+      ]
+     },
+     {
+      "type": "baissier",
+      "declencheur": "Cassure confirmée en clôture du support technique à 0.56186 couplée à une confirmation de décélération du CPI q/q.",
+      "probabilite": "elevee",
+      "justification": "Le creusement record du déficit commercial et la hausse de la volatilité globale (VIX à 19.99) favorisent la poursuite des dégagements sur les devises bêta.",
+      "source_ids": [
+       "src_010",
+       "src_023",
+       "src_126",
+       "src_167"
+      ]
+     }
+    ],
+    "catalyseurs": [
+     {
+      "date": "2026-10-19",
+      "heure_utc": "21:45",
+      "evenement": "CPI q/q",
+      "impact": "high",
+      "consensus": null,
+      "source_id": "src_252",
+      "pourquoi": "La publication du CPI trimestriel déterminera si la RBNZ doit prolonger son cycle de resserrement ou acter une pause monétaire prolongée."
+     },
+     {
+      "date": "2026-10-28",
+      "heure_utc": "01:00",
+      "evenement": "Official Cash Rate",
+      "impact": "high",
+      "consensus": null,
+      "source_id": "src_253",
+      "pourquoi": "La décision sur le taux directeur (Official Cash Rate) précisera la trajectoire de politique monétaire et orientera le carry trade sur le NZD."
+     },
+     {
+      "date": "2026-11-03",
+      "heure_utc": "21:45",
+      "evenement": "Unemployment Rate",
+      "impact": "high",
+      "consensus": null,
+      "source_id": "src_254",
+      "pourquoi": "L'évolution du taux de chômage indiquera le degré de ralentissement du marché du travail face aux taux restrictifs."
+     },
+     {
+      "date": "2026-11-03",
+      "heure_utc": "21:45",
+      "evenement": "Employment Change q/q",
+      "impact": "high",
+      "consensus": null,
+      "source_id": "src_255",
+      "pourquoi": "La variation trimestrielle de l'emploi permettra de mesurer la résilience de la demande de main-d'œuvre domestique."
+     }
+    ],
+    "invalidation": [
+     {
+      "signal": "Franchissement net et clôture au-dessus de la résistance technique majeure à 0.57206.",
+      "source_id": "src_023"
+     },
+     {
+      "signal": "Publication du CPI q/q très supérieure aux attentes provoquant un re-pricing agressif des hausses de taux de la RBNZ.",
+      "source_id": "src_063"
+     },
+     {
+      "signal": "Retournement baissier marqué du VIX sous les 16 points réactivant les flux pro-cycliques mondiaux.",
+      "source_id": "src_010"
+     }
+    ],
+    "opportunites": [
+     {
+      "texte": "Réaction haussière technique potentielle sur la zone de support à 0.56186.",
+      "mecanisme": "Défense d'un niveau technique majeur testé à 3 reprises -> arrêt temporaire des ventes et rebond technique de court terme.",
+      "source_id": "src_023",
+      "non_sourcee": false
+     },
+     {
+      "texte": "Amélioration de la conjoncture chinoise via un PIB T3 supérieur aux attentes à 4.5%.",
+      "mecanisme": "Hausse de l'activité du principal partenaire commercial -> amélioration attendue de la demande d'exportations néo-zélandaises -> soutien au NZD.",
+      "source_id": "src_121",
+      "non_sourcee": false
+     },
+     {
+      "texte": "Reprise des ventes au détail en Chine progressant à leur rythme le plus rapide depuis mars.",
+      "mecanisme": "Consommation chinoise raffermie -> soutien indirect aux cours des matières premières exportées par la Nouvelle-Zélande -> appréciation du NZD.",
+      "source_id": "src_121",
+      "non_sourcee": false
+     }
+    ],
+    "menaces": [
+     {
+      "texte": "Déficit commercial mensuel creusé à près de 2 milliards NZ$ (-1971M NZ$).",
+      "mecanisme": "Sorties nettes de capitaux commerciaux -> offre excédentaire de devise domestique sur le marché des changes -> pression baissière sur le NZD.",
+      "source_id": "src_167",
+      "non_sourcee": false
+     },
+     {
+      "texte": "Aversion au risque accrue avec le bond du VIX à 19.99 (+21.45%).",
+      "mecanisme": "Repli des investisseurs vers les actifs refuges -> désengagement des devises dépendantes du cycle mondial -> dépréciation du NZD.",
+      "source_id": "src_010",
+      "non_sourcee": false
+     },
+     {
+      "texte": "Positionnement sous les moyennes mobiles 100 et 200 jours sur la paire NZD/USD.",
+      "mecanisme": "Structure technique dominée par les vendeurs -> flux de suivi de tendance institutionnels défavorables -> poursuite de la baisse.",
+      "source_id": "src_023",
+      "non_sourcee": false
+     }
+    ],
+    "controles": [],
+    "redige_par": {
+     "modele": "gemini-3.8-flash",
+     "libelle": "Flash 3.8"
+    },
+    "statut": "ok",
+    "tentatives": 3,
+    "genere_le": "2026-10-19T21:38:27+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.4,
@@ -4744,10 +5048,201 @@
     ]
    },
    "synthese_approfondie": {
-    "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint",
-    "tentatives": 2,
-    "genere_le": "2026-10-19T16:45:06+00:00"
+    "orientation": "haussier",
+    "these_centrale": {
+     "texte": "Le yuan bénéficie d'un rebond fondamental marqué par un PIB du T3 supérieur aux attentes à 4.5% et une forte accélération des ventes au détail. La PBoC encadre fermement la devise via la stabilité de ses taux préférentiels (LPR) et la gestion de son fixing, neutralisant les pressions baissières externes. La thèse s'est redressée vers un biais haussier modéré par rapport à la neutralité précédente, portée par la solidité macroéconomique domestique.",
+     "source_ids": [
+      "src_121",
+      "src_091",
+      "src_266"
+     ],
+     "non_source": false
+    },
+    "moteurs": [
+     {
+      "moteur": "croissance",
+      "donnee": "4.5% y/y (T3 2026, publié le 19/10/2026)",
+      "trajectoire": "précédent à 4.3%, consensus à 4.4%, surprise positive",
+      "implication": "L'accélération de l'activité économique réelle soutient la confiance des investisseurs et renforce la demande de devises.",
+      "source_id": "src_266"
+     },
+     {
+      "moteur": "inflation",
+      "donnee": "0.9% y/y (publié le 14/10/2026)",
+      "trajectoire": "précédent à 0.8%, consensus à 1.0%, sous les attentes mais en légère hausse",
+      "implication": "L'inflation contenue permet à la banque centrale de maintenir des taux réels stables sans resserrement brutal.",
+      "source_id": "src_265"
+     },
+     {
+      "moteur": "emploi",
+      "donnee": "5.2% (publié le 19/10/2026)",
+      "trajectoire": "précédent à 5.3%, consensus à 5.3%, surprise favorable",
+      "implication": "La baisse du chômage témoigne d'une amélioration du marché du travail, étayant la consommation intérieure.",
+      "source_id": "src_269"
+     },
+     {
+      "moteur": "banque_centrale",
+      "donnee": "3.00% pour le LPR 1 an et 3.50% pour le LPR 5 ans (19/10/2026)",
+      "trajectoire": "précédent à 3.00%, conforme aux attentes",
+      "implication": "Le maintien des taux cibles confirme la volonté de ne pas accentuer la dégradation du différentiel de rendement avec l'étranger.",
+      "source_id": "src_091"
+     }
+    ],
+    "taux_et_flux": {
+     "texte": "Le taux directeur de la PBoC s'établit à 3.00%, maintenant un différentiel modéré de +0.25 pt par rapport à la médiane des banques centrales du G8 (2.75%). Les spreads souverains 2 ans face à l'USD ne sont pas disponibles, mais le rendement américain à 2 ans pointe à 4.77%. Ce contexte offre un soutien marginal au carry trade tout en stabilisant les flux d'investissements obligataires entrants.",
+     "source_ids": [
+      "src_140",
+      "src_016",
+      "src_009"
+     ],
+     "non_source": false
+    },
+    "geopolitique": {
+     "texte": "Pour contrer un glissement de 10% des marchés boursiers cette année, Pékin a mis en place des restrictions sur les ventes et encouragé les rachats d'actions, visant à stopper les fuites de capitaux domestiques.",
+     "source_ids": [
+      "src_122"
+     ],
+     "non_source": false
+    },
+    "lecture_technique": {
+     "texte": "Sur USD/CNH, le cours évolue à 0.14963, au-dessus de la MM100 (0.14825) et de la MM200 (0.14673). Le RSI daily est à 67.5, reflétant un momentum haussier sur la paire (soit une dépréciation relative du yuan contre le dollar). La structure weekly demeure orientée à la hausse pour USD/CNH.",
+     "source_ids": [
+      "src_024"
+     ],
+     "coherence": "divergente",
+     "non_source": false
+    },
+    "scenarios": [
+     {
+      "type": "haussier",
+      "declencheur": "Accélération des ventes au détail au-dessus de 1.5% m/m et stabilisation confirmée du secteur immobilier.",
+      "probabilite": "elevee",
+      "justification": "La surprise positive du PIB au T3 à 4.5% et le rebond de la consommation privée apportent un ancrage fondamental solide.",
+      "source_ids": [
+       "src_121",
+       "src_270"
+      ]
+     },
+     {
+      "type": "central",
+      "declencheur": "Maintien du fixing PBoC sur les niveaux actuels et stabilisation du VIX mondial autour de 20.",
+      "probabilite": "moyenne",
+      "justification": "L'équilibre entre la fermeté des fondamentaux macroéconomiques chinois et les tensions sur le risque global.",
+      "source_ids": [
+       "src_091",
+       "src_010"
+      ]
+     },
+     {
+      "type": "baissier",
+      "declencheur": "Intensification des sorties de capitaux actions malgré les restrictions administratives à Shanghai et Shenzhen.",
+      "probabilite": "faible",
+      "justification": "Les autorités disposent de marges d'intervention directes pour freiner toute dépréciation désordonnée.",
+      "source_ids": [
+       "src_122"
+      ]
+     }
+    ],
+    "catalyseurs": [
+     {
+      "date": "2026-10-19",
+      "heure_utc": "02:00",
+      "evenement": "GDP q/y",
+      "impact": "low",
+      "consensus": "4.4%",
+      "source_id": "src_261",
+      "pourquoi": "La publication officielle du PIB trimestriel valide la reprise économique et infléchit le sentiment des investisseurs."
+     },
+     {
+      "date": "2026-10-20",
+      "heure_utc": "01:00",
+      "evenement": "1-y Loan Prime Rate",
+      "impact": "low",
+      "consensus": "3.00%",
+      "source_id": "src_262",
+      "pourquoi": "La décision sur le Loan Prime Rate reflète l'orientation du coût du crédit accordé aux entreprises et ménages."
+     },
+     {
+      "date": "2026-10-31",
+      "heure_utc": "01:30",
+      "evenement": "Manufacturing PMI",
+      "impact": "low",
+      "consensus": null,
+      "source_id": "src_263",
+      "pourquoi": "Le PMI manufacturier permettra de confirmer l'expansion de l'activité industrielle sur l'entame du T4."
+     },
+     {
+      "date": "2026-10-31",
+      "heure_utc": "01:30",
+      "evenement": "Non-Manufacturing PMI",
+      "impact": "low",
+      "consensus": null,
+      "source_id": "src_264",
+      "pourquoi": "Le PMI non-manufacturier donnera l'état de la reprise du secteur des services et des dépenses des ménages."
+     }
+    ],
+    "invalidation": [
+     {
+      "signal": "Révision à la baisse du PIB du T3 sous le seuil des 4.0%.",
+      "source_id": "src_266"
+     },
+     {
+      "signal": "Fixing quotidien de la PBoC orienté vers une dépréciation guidée et continue.",
+      "source_id": "src_091"
+     },
+     {
+      "signal": "Retour de l'indice CPI annuel sous 0.0%, marquant une rechute déflationniste.",
+      "source_id": "src_265"
+     }
+    ],
+    "opportunites": [
+     {
+      "texte": "Publication d'un PIB au T3 supérieur aux prévisions à 4.5% avec une hausse marquée des ventes au détail.",
+      "mecanisme": "Amélioration des perspectives de croissance -> regain d'attractivité des actifs chinois -> renforcement du yuan.",
+      "source_id": "src_121",
+      "non_sourcee": false
+     },
+     {
+      "texte": "Maintien du LPR à 1 an à 3.00% et à 5 ans à 3.50% par la PBoC.",
+      "mecanisme": "Absence de baisse surprise des taux -> préservation du rendement nominal -> soutien à la devise.",
+      "source_id": "src_091",
+      "non_sourcee": false
+     },
+     {
+      "texte": "Excédent de la balance commerciale à 906 milliards de dollars.",
+      "mecanisme": "Forts flux d'exportations -> rapatriement des recettes commerciales -> conversion continue en yuans.",
+      "source_id": "src_168",
+      "non_sourcee": false
+     }
+    ],
+    "menaces": [
+     {
+      "texte": "Progression du VIX à 19.99 (+21.45%) traduisant une hausse de l'aversion au risque.",
+      "mecanisme": "Dégagement des actifs émergents vers les valeurs refuges -> ventes de yuans.",
+      "source_id": "src_010",
+      "non_sourcee": false
+     },
+     {
+      "texte": "Mise en place de mesures d'urgence et restrictions de ventes pour contrer la baisse de 10% des actions.",
+      "mecanisme": "Incertitude sur la liquidité des marchés -> frein à l'entrée des capitaux étrangers -> pression sur le yuan.",
+      "source_id": "src_122",
+      "non_sourcee": false
+     },
+     {
+      "texte": "Repli des prix des logements neufs (-0.17% m/m).",
+      "mecanisme": "Fragilité persistante de l'immobilier -> frein au sentiment des ménages -> ralentissement des investissements domestiques.",
+      "source_id": "src_097",
+      "non_sourcee": false
+     }
+    ],
+    "controles": [],
+    "redige_par": {
+     "modele": "gemini-3.5-flash",
+     "libelle": "Flash 3.5"
+    },
+    "statut": "ok",
+    "tentatives": 3,
+    "genere_le": "2026-10-19T21:39:47+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.46,
@@ -6669,6 +7164,55 @@
    "detail": "CNY — Ventes au détail",
    "date": "2026-10-19",
    "url": null
+  },
+  {
+   "id": "src_271",
+   "source": "RSS cnbc_world",
+   "detail": "Saudi Arabia postpones big investor conference to 2027 as Iran-backed Houthis escalate attacks on kingdom",
+   "date": "2026-10-19T16:12:05+00:00",
+   "url": "https://www.cnbc.com/2026/10/19/saudi-arabia-postpones-fii-investor-conference-to-2027.html"
+  },
+  {
+   "id": "src_272",
+   "source": "RSS cnbc_world",
+   "detail": "Elon Musk says he'll give a SpaceX share to every child in America next year",
+   "date": "2026-10-19T16:00:23+00:00",
+   "url": "https://www.cnbc.com/2026/10/19/elon-musk-spacex-shares-giveaway-kids.html"
+  },
+  {
+   "id": "src_273",
+   "source": "RSS cnbc_world",
+   "detail": "Nasdaq gains as investors buy the dip in the AI trade: Live updates",
+   "date": "2026-10-19T16:11:18+00:00",
+   "url": "https://www.cnbc.com/2026/10/18/stock-market-today-live-updates.html"
+  },
+  {
+   "id": "src_274",
+   "source": "RSS cnbc_world",
+   "detail": "Treasury yields move higher as investors assess U.S. inflation backdrop",
+   "date": "2026-10-19T15:51:43+00:00",
+   "url": "https://www.cnbc.com/2026/10/19/bonds-treasurys-us-yields.html"
+  },
+  {
+   "id": "src_275",
+   "source": "RSS cnbc_world",
+   "detail": "France hit by worst unrest in years as attempts to rein in government spending meet citizen ire",
+   "date": "2026-10-19T14:28:50+00:00",
+   "url": "https://www.cnbc.com/2026/10/19/france-protests-worst-in-years-unrest-macron-.html"
+  },
+  {
+   "id": "src_276",
+   "source": "RSS cnbc_world",
+   "detail": "In pictures: More than 500,000 took to the streets as France protests erupted into violence",
+   "date": "2026-10-19T08:10:26+00:00",
+   "url": "https://www.cnbc.com/2026/10/19/france-protests-paris-violence-pictures.html"
+  },
+  {
+   "id": "src_277",
+   "source": "RSS investinglive",
+   "detail": "Bank of Canada Q3 business outlook survey -0.33 vs -0.38 prior",
+   "date": "2026-10-19T15:37:25+00:00",
+   "url": "https://investinglive.com/news/bank-of-canada-q3-business-outlook-survey-0-33-vs-0-38-prior/"
   }
  ],
  "donnees_non_rafraichies": [
@@ -6863,7 +7407,7 @@
     1.1239,
     1.12389,
     1.1176,
-    1.12169
+    1.1205
    ]
   },
   "GBP": {
@@ -7050,7 +7594,7 @@
     1.33287,
     1.33289,
     1.33191,
-    1.33137
+    1.3301
    ]
   },
   "JPY": {
@@ -7424,7 +7968,7 @@
     1.2135,
     1.21289,
     1.20992,
-    1.21005
+    1.20925
    ]
   },
   "CAD": {
@@ -7611,7 +8155,7 @@
     0.70719,
     0.70713,
     0.70746,
-    0.70971
+    0.70941
    ]
   },
   "AUD": {
@@ -7798,7 +8342,7 @@
     0.69458,
     0.69478,
     0.69703,
-    0.69814
+    0.6976
    ]
   },
   "NZD": {
@@ -7985,7 +8529,7 @@
     0.5652,
     0.56517,
     0.56625,
-    0.56666
+    0.56599
    ]
   },
   "CNY": {
@@ -8172,7 +8716,7 @@
     0.14957,
     0.14955,
     0.14977,
-    0.14965
+    0.14963
    ]
   },
   "USD": {
@@ -8359,7 +8903,7 @@
     101.28785,
     101.29639,
     101.31784,
-    101.24987
+    101.32289
    ]
   }
  },
@@ -9096,15 +9640,15 @@
   }
  },
  "prix_cloture": {
-  "EUR": 1.12169,
-  "GBP": 1.33137,
+  "EUR": 1.1205,
+  "GBP": 1.3301,
   "JPY": 0.00631,
-  "CHF": 1.21005,
-  "CAD": 0.70971,
-  "AUD": 0.69814,
-  "NZD": 0.56666,
-  "CNY": 0.14965,
-  "USD": 101.24987
+  "CHF": 1.20925,
+  "CAD": 0.70941,
+  "AUD": 0.6976,
+  "NZD": 0.56599,
+  "CNY": 0.14963,
+  "USD": 101.32289
  },
  "tracabilite": {
   "mode": "marquer",
@@ -9195,10 +9739,8 @@
  },
  "controle_qualite": {
   "conforme": false,
-  "nb_anomalies": 3,
+  "nb_anomalies": 1,
   "anomalies": [
-   "NZD : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : gemini-3.5-flash : 503 Server Error: Service Unavailable fo)",
-   "CNY : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash )",
    "prompt LLM volumineux : 14 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 20670 à 15:55 UTC, modèle gemini-3.5-flash-lite) — le contexte envoyé au LLM a regrossi"
   ]
  },
@@ -9220,7 +9762,7 @@
     "coherence_directionnelle_pct": 100.0,
     "indicateurs_instables": {}
    },
-   "commentaire": "Score 82 → 82 sur 1 jour(s) ; cohérence directionnelle : 100.0 %."
+   "commentaire": "Sur la période observée restreinte à une seule séance (2026-10-19), le biais USD montre une stabilité parfaite avec un score invariant de 82, affichant un écart-type de 0.0 et une variation nulle. L'absence totale d'indicateurs instables et la cohérence directionnelle de 100.0% reflètent un positionnement net et sans friction, bien que l'échantillon d'un seul jour limite de facto l'observation d'une trajectoire hebdomadaire."
   },
   "EUR": {
    "semaine_iso": "2026-W43",
@@ -9239,7 +9781,7 @@
     "coherence_directionnelle_pct": 100.0,
     "indicateurs_instables": {}
    },
-   "commentaire": "Score 16 → 16 sur 1 jour(s) ; cohérence directionnelle : 100.0 %."
+   "commentaire": "Sur l'unique séance enregistrée, le biais EUR affiche une stabilité absolue avec un score constant à 16, une variation nulle et un écart-type de 0,0. Aucun indicateur n'a changé de camp, maintenant une cohérence directionnelle calculée à 100,0 %, bien que cette régularité repose sur un historique limité à un seul jour."
   },
   "GBP": {
    "semaine_iso": "2026-W43",
@@ -9258,7 +9800,7 @@
     "coherence_directionnelle_pct": null,
     "indicateurs_instables": {}
    },
-   "commentaire": "Score 54 → 54 sur 1 jour(s) ; cohérence directionnelle : None %."
+   "commentaire": "Avec une seule séance enregistrée affichant un score de 54 (écart-type de 0,0 et variation nulle), le biais GBP ressort parfaitement stable sur l'échantillon disponible. Aucun indicateur n'ayant changé de camp, la configuration n'affiche aucun comportement erratique sur cette observation unique. Cette cohérence apparente reste néanmoins purement ponctuelle, l'absence de données sur le reste de la semaine empêchant de mesurer une dynamique multi-jours."
   },
   "JPY": {
    "semaine_iso": "2026-W43",
@@ -9381,6 +9923,6 @@
   "suggestions_connaissances": [],
   "validation": "non_evalue",
   "indisponible": true,
-  "note": "relecture non effectuée (tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : q)"
+  "note": "relecture non effectuée (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit) — gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (d)"
  }
 }
