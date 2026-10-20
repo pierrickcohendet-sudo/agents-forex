@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-10-20T19:17:15+00:00",
+  "genere_le": "2026-10-20T22:20:27+00:00",
   "appels_llm": [
    {
     "heure": "14:26",
@@ -276,9 +276,9 @@
      "appels_aujourdhui": 20,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-10-21T06:59:59+00:00",
-     "appels_ce_run": 2,
+     "appels_ce_run": 0,
      "reussites_ce_run": 0,
-     "sauts_ce_run": 1
+     "sauts_ce_run": 2
     },
     "gemini-3.8-flash": {
      "appels_aujourdhui": 20,
@@ -286,7 +286,7 @@
      "epuise_jusqu_a": "2026-10-21T06:59:59+00:00",
      "appels_ce_run": 0,
      "reussites_ce_run": 0,
-     "sauts_ce_run": 3
+     "sauts_ce_run": 2
     },
     "gemini-3.5-flash-lite": {
      "appels_aujourdhui": 20,
@@ -294,7 +294,7 @@
      "epuise_jusqu_a": null,
      "appels_ce_run": 0,
      "reussites_ce_run": 0,
-     "sauts_ce_run": 3
+     "sauts_ce_run": 2
     }
    }
   },
@@ -379,6 +379,40 @@
       "ouvert_a_l_appel": null,
       "echecs_consecutifs": 0,
       "ignores": 3
+     }
+    ]
+   },
+   {
+    "heure": "22:20",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 2,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 2
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 2
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 2
      }
     ]
    }
@@ -4472,7 +4506,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 1,
-    "genere_le": "2026-10-20T19:17:15+00:00"
+    "genere_le": "2026-10-20T22:20:27+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.4,
@@ -4750,7 +4784,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 1,
-    "genere_le": "2026-10-20T19:17:15+00:00"
+    "genere_le": "2026-10-20T22:20:27+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.46,
@@ -9129,8 +9163,8 @@
     "taux_pct": 100.0
    },
    "Prévision": {
-    "valeur": 13,
-    "explique": 104,
+    "valeur": 12,
+    "explique": 105,
     "vide": 0,
     "total": 117,
     "taux_pct": 100.0
@@ -9210,6 +9244,6 @@
   "suggestions_connaissances": [],
   "validation": "non_evalue",
   "indisponible": true,
-  "note": "relecture non effectuée (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit) — gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : quota du )"
+  "note": "relecture non effectuée (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit) — gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : quota du)"
  }
 }
