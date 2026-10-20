@@ -1,14 +1,14 @@
 {
  "version_schema": 1,
- "genere_le": "2026-10-19T21:42:00+00:00",
+ "genere_le": "2026-10-20T14:16:44+00:00",
  "sources": {
-  "rapport": "2026-10-19T21:39:47+00:00",
-  "tableau_macro": "2026-10-19T21:30:42+00:00"
+  "rapport": "2026-10-20T14:15:46+00:00",
+  "tableau_macro": "2026-10-20T13:35:07+00:00"
  },
  "regime": {
-  "biais": "risk_off",
-  "libelle": "Risk Off",
-  "ecart_points": -10.7,
+  "biais": "neutre",
+  "libelle": "Neutre",
+  "ecart_points": -0.7,
   "seuil_points": 5.0,
   "devises_risque": [
    "AUD",
@@ -21,14 +21,14 @@
    "USD"
   ],
   "explication": "Écart entre le score de confluence moyen des devises « risque » et celui des devises « refuge » (calcul Python) : au-delà du seuil, Risk On ; en deçà de son opposé, Risk Off ; sinon Neutre.",
-  "driver": "Sous un biais persistant de risk-off, l'USD écrase la concurrence avec un score de 82, reléguant les devises pro-cycliques (AUD, NZD, CAD) et les refuges traditionnels (JPY, CHF) au second plan.",
+  "driver": "Dans un contexte macro repassé à neutre, le GBP s'adjuge la première place (72) face au net tassement du USD (64 contre 82 précédemment), tandis que la bonne tenue de l'AUD (64) et la relégation du CHF en lanterne rouge (30) confirment une réallocation sélective vers le portage au détriment des refuges.",
   "relecture": "non_evalue",
-  "date_rapport": "2026-10-19",
-  "maj": "2026-10-19T21:39:47+00:00",
-  "type_rapport": "hebdomadaire",
+  "date_rapport": "2026-10-20",
+  "maj": "2026-10-20T14:15:46+00:00",
+  "type_rapport": "quotidien",
   "nb_devises": 9,
   "nb_devises_disponibles": 9,
-  "notion_url": "https://app.notion.com/p/FX-2026-10-19-hebdomadaire-3fe65bc6466181ec8fb5fa0a2d1c17fd",
+  "notion_url": "https://app.notion.com/p/FX-2026-10-20-quotidien-3ff65bc6466181b9993ac3c8b9fe6fe4",
   "notion_page_du_jour": true
  },
  "colonnes_cles": [
@@ -127,13 +127,13 @@
      "raison": null
     },
     "rendement_2a": {
-     "texte": "4,77 %",
-     "valeur_num": 4.77,
-     "date": "2026-10-15",
+     "texte": "4,74 %",
+     "valeur_num": 4.74,
+     "date": "2026-10-16",
      "source": "FRED (DGS2)",
      "consensus": null,
      "surprise": null,
-     "precedent": "4,75 %",
+     "precedent": "4,80 %",
      "manuel": false,
      "etat": "valeur",
      "raison": null
@@ -145,20 +145,20 @@
      "n": 9,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-10-19",
+     "date": "2026-10-20",
      "raison": null
     },
     "score": {
-     "texte": "82",
-     "valeur_num": 82,
+     "texte": "64",
+     "valeur_num": 64,
      "etat": "valeur",
      "source": "score de confluence (calcul Python)",
-     "date": "2026-10-19",
+     "date": "2026-10-20",
      "raison": null
     },
     "biais": {
      "texte": "Haussier",
-     "valeur_num": 82,
+     "valeur_num": 64,
      "code": "haussier",
      "etat": "valeur",
      "profil": "off",
@@ -220,13 +220,13 @@
      "raison": null
     },
     "rendement_2a": {
-     "texte": "3,10 %",
-     "valeur_num": 3.1,
-     "date": "2026-10-19",
+     "texte": "3,08 %",
+     "valeur_num": 3.08,
+     "date": "2026-10-20",
      "source": "Bundesbank (Allemagne 2 ans)",
      "consensus": null,
      "surprise": null,
-     "precedent": "3,09 %",
+     "precedent": "3,10 %",
      "manuel": false,
      "etat": "valeur",
      "raison": null
@@ -238,21 +238,21 @@
      "n": 11,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-10-19",
+     "date": "2026-10-20",
      "raison": null
     },
     "score": {
-     "texte": "16",
-     "valeur_num": 16,
+     "texte": "41",
+     "valeur_num": 41,
      "etat": "valeur",
      "source": "score de confluence (calcul Python)",
-     "date": "2026-10-19",
+     "date": "2026-10-20",
      "raison": null
     },
     "biais": {
-     "texte": "Baissier",
-     "valeur_num": 16,
-     "code": "baissier",
+     "texte": "Neutre",
+     "valeur_num": 41,
+     "code": "neutre",
      "etat": "valeur",
      "profil": "neutre",
      "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
@@ -289,11 +289,11 @@
      "raison": null
     },
     "chomage": {
-     "texte": "4,9 %",
-     "valeur_num": 4.9,
-     "date": "2026-09-15",
+     "texte": "4,7 %",
+     "valeur_num": 4.7,
+     "date": "2026-10-20",
      "source": "ForexFactory",
-     "consensus": "5,0 %",
+     "consensus": "4,9 %",
      "surprise": "▼",
      "precedent": "4,9 %",
      "manuel": false,
@@ -325,27 +325,27 @@
      "raison": "2 ans non publié en accès libre (BoE : 5/10/20 ans)"
     },
     "indice_surprise": {
-     "texte": "+0,3",
-     "valeur_num": 0.3,
-     "tendance": "baisse",
-     "n": 6,
+     "texte": "+0,5",
+     "valeur_num": 0.52,
+     "tendance": "stable",
+     "n": 8,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-10-19",
+     "date": "2026-10-20",
      "raison": null
     },
     "score": {
-     "texte": "54",
-     "valeur_num": 54,
+     "texte": "72",
+     "valeur_num": 72,
      "etat": "valeur",
      "source": "score de confluence (calcul Python)",
-     "date": "2026-10-19",
+     "date": "2026-10-20",
      "raison": null
     },
     "biais": {
-     "texte": "Neutre",
-     "valeur_num": 54,
-     "code": "neutre",
+     "texte": "Haussier",
+     "valeur_num": 72,
+     "code": "haussier",
      "etat": "valeur",
      "profil": "neutre",
      "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
@@ -424,21 +424,21 @@
      "n": 5,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-10-19",
+     "date": "2026-10-20",
      "raison": null
     },
     "score": {
-     "texte": "30",
-     "valeur_num": 30,
+     "texte": "46",
+     "valeur_num": 46,
      "etat": "valeur",
      "source": "score de confluence (calcul Python)",
-     "date": "2026-10-19",
+     "date": "2026-10-20",
      "raison": null
     },
     "biais": {
-     "texte": "Baissier",
-     "valeur_num": 30,
-     "code": "baissier",
+     "texte": "Neutre",
+     "valeur_num": 46,
+     "code": "neutre",
      "etat": "valeur",
      "profil": "off",
      "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
@@ -517,7 +517,7 @@
      "n": 5,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-10-19",
+     "date": "2026-10-20",
      "raison": null
     },
     "score": {
@@ -525,7 +525,7 @@
      "valeur_num": 30,
      "etat": "valeur",
      "source": "score de confluence (calcul Python)",
-     "date": "2026-10-19",
+     "date": "2026-10-20",
      "raison": null
     },
     "biais": {
@@ -592,9 +592,9 @@
      "raison": null
     },
     "rendement_2a": {
-     "texte": "3,21 %",
-     "valeur_num": 3.21,
-     "date": "2026-10-16",
+     "texte": "3,33 %",
+     "valeur_num": 3.33,
+     "date": "2026-10-19",
      "source": "Banque du Canada (Valet, 2 ans)",
      "consensus": null,
      "surprise": null,
@@ -610,20 +610,20 @@
      "n": 8,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-10-19",
+     "date": "2026-10-20",
      "raison": null
     },
     "score": {
-     "texte": "18",
-     "valeur_num": 18,
+     "texte": "36",
+     "valeur_num": 36,
      "etat": "valeur",
      "source": "score de confluence (calcul Python)",
-     "date": "2026-10-19",
+     "date": "2026-10-20",
      "raison": null
     },
     "biais": {
      "texte": "Baissier",
-     "valeur_num": 18,
+     "valeur_num": 36,
      "code": "baissier",
      "etat": "valeur",
      "profil": "on",
@@ -703,21 +703,21 @@
      "n": 9,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-10-19",
+     "date": "2026-10-20",
      "raison": null
     },
     "score": {
-     "texte": "56",
-     "valeur_num": 56,
+     "texte": "64",
+     "valeur_num": 64,
      "etat": "valeur",
      "source": "score de confluence (calcul Python)",
-     "date": "2026-10-19",
+     "date": "2026-10-20",
      "raison": null
     },
     "biais": {
-     "texte": "Neutre",
-     "valeur_num": 56,
-     "code": "neutre",
+     "texte": "Haussier",
+     "valeur_num": 64,
+     "code": "haussier",
      "etat": "valeur",
      "profil": "on",
      "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
@@ -796,20 +796,20 @@
      "n": 1,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-10-19",
+     "date": "2026-10-20",
      "raison": null
     },
     "score": {
-     "texte": "36",
-     "valeur_num": 36,
+     "texte": "38",
+     "valeur_num": 38,
      "etat": "valeur",
      "source": "score de confluence (calcul Python)",
-     "date": "2026-10-19",
+     "date": "2026-10-20",
      "raison": null
     },
     "biais": {
      "texte": "Baissier",
-     "valeur_num": 36,
+     "valeur_num": 38,
      "code": "baissier",
      "etat": "valeur",
      "profil": "on",
@@ -825,7 +825,7 @@
     "taux_directeur": {
      "texte": "3,00 % [LPR 1 an]",
      "valeur_num": 3.0,
-     "date": "2026-09-20",
+     "date": "2026-10-20",
      "source": "ForexFactory",
      "consensus": "3,00 %",
      "surprise": "=",
@@ -889,21 +889,21 @@
      "n": 8,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-10-19",
+     "date": "2026-10-20",
      "raison": null
     },
     "score": {
-     "texte": "62",
-     "valeur_num": 62,
+     "texte": "56",
+     "valeur_num": 56,
      "etat": "valeur",
      "source": "score de confluence (calcul Python)",
-     "date": "2026-10-19",
+     "date": "2026-10-20",
      "raison": null
     },
     "biais": {
-     "texte": "Haussier",
-     "valeur_num": 62,
-     "code": "haussier",
+     "texte": "Neutre",
+     "valeur_num": 56,
+     "code": "neutre",
      "etat": "valeur",
      "profil": "neutre",
      "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
@@ -1333,30 +1333,30 @@
       "z": 0.4
      },
      "chomage": {
-      "texte": "4,9 %",
-      "valeur_num": 4.9,
-      "date": "2026-09-15",
+      "texte": "4,7 %",
+      "valeur_num": 4.7,
+      "date": "2026-10-20",
       "source": "ForexFactory",
-      "consensus": "5,0 %",
+      "consensus": "4,9 %",
       "surprise": "▼",
       "precedent": "4,9 %",
       "manuel": false,
       "etat": "valeur",
       "raison": null,
-      "z": 1.0
+      "z": 2.0
      },
      "emploi": {
-      "texte": "27,8K [équiv. claimants]",
-      "valeur_num": 27.8,
-      "date": "2026-09-15",
+      "texte": "30,3K [équiv. claimants]",
+      "valeur_num": 30.3,
+      "date": "2026-10-20",
       "source": "ForexFactory",
-      "consensus": "8,3K",
+      "consensus": "19,4K",
       "surprise": "▲",
-      "precedent": "-11,8K [équiv. claimants] (révisé)",
+      "precedent": "7,0K [équiv. claimants] (révisé)",
       "manuel": false,
       "etat": "valeur",
       "raison": null,
-      "z": 0.33
+      "z": 0.18
      },
      "ventes_detail": {
       "texte": "0,5 %",
@@ -1386,11 +1386,11 @@
      }
     },
     "indice_30j": {
-     "indice": 0.3,
+     "indice": 0.52,
      "precedent": 0.45,
-     "tendance": "baisse",
-     "n": 6,
-     "texte": "+0,3 ▼ (n=6)"
+     "tendance": "stable",
+     "n": 8,
+     "texte": "+0,5 = (n=8)"
     }
    },
    {
@@ -2109,7 +2109,7 @@
      "taux_directeur": {
       "texte": "3,00 % [LPR 1 an]",
       "valeur_num": 3.0,
-      "date": "2026-09-20",
+      "date": "2026-10-20",
       "source": "ForexFactory",
       "consensus": "3,00 %",
       "surprise": "=",
@@ -2239,7 +2239,7 @@
     },
     "indice_30j": {
      "indice": 0.46,
-     "precedent": -0.29,
+     "precedent": -0.21,
      "tendance": "hausse",
      "n": 8,
      "texte": "+0,5 ▲ (n=8)"
