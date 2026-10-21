@@ -1,14 +1,14 @@
 {
  "version_schema": 1,
- "genere_le": "2026-10-21T14:54:49+00:00",
+ "genere_le": "2026-10-21T14:56:01+00:00",
  "sources": {
-  "rapport": "2026-10-21T14:53:30+00:00",
-  "tableau_macro": "2026-10-21T14:24:04+00:00"
+  "rapport": "2026-10-21T14:22:14+00:00",
+  "tableau_macro": "2026-10-21T14:55:16+00:00"
  },
  "regime": {
-  "biais": "risk_off",
-  "libelle": "Risk Off",
-  "ecart_points": -7.0,
+  "biais": "risk_on",
+  "libelle": "Risk On",
+  "ecart_points": 13.3,
   "seuil_points": 5.0,
   "devises_risque": [
    "AUD",
@@ -21,10 +21,10 @@
    "USD"
   ],
   "explication": "Écart entre le score de confluence moyen des devises « risque » et celui des devises « refuge » (calcul Python) : au-delà du seuil, Risk On ; en deçà de son opposé, Risk Off ; sinon Neutre.",
-  "driver": "Malgré un biais persistant risk-off, la GBP prend la tête du classement à 72 points, tandis que l'USD recule au troisième rang au profit d'actifs plus risqués comme l'AUD.",
-  "relecture": "non_evalue",
+  "driver": "Le basculement en risk-on propulse le GBP en tête (80) et tire les devises cycliques (AUD 72, NZD 58), actant la capitulation des valeurs refuges CHF (34) et JPY (26) en bas de tableau malgré la résistance de l'USD (74).",
+  "relecture": "a_revoir",
   "date_rapport": "2026-10-21",
-  "maj": "2026-10-21T14:53:30+00:00",
+  "maj": "2026-10-21T14:22:14+00:00",
   "type_rapport": "quotidien",
   "nb_devises": 9,
   "nb_devises_disponibles": 9,
@@ -81,7 +81,7 @@
     "taux_directeur": {
      "texte": "3,88 % [borne haute de la fourchette]",
      "valeur_num": 3.88,
-     "date": "2026-10-16",
+     "date": "2026-10-19",
      "source": "FRED (DFF, taux effectif)",
      "consensus": null,
      "surprise": null,
@@ -149,17 +149,17 @@
      "raison": null
     },
     "score": {
-     "texte": "56",
-     "valeur_num": 56,
+     "texte": "74",
+     "valeur_num": 74,
      "etat": "valeur",
      "source": "score de confluence (calcul Python)",
      "date": "2026-10-21",
      "raison": null
     },
     "biais": {
-     "texte": "Neutre",
-     "valeur_num": 56,
-     "code": "neutre",
+     "texte": "Haussier",
+     "valeur_num": 74,
+     "code": "haussier",
      "etat": "valeur",
      "profil": "off",
      "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
@@ -242,8 +242,8 @@
      "raison": null
     },
     "score": {
-     "texte": "21",
-     "valeur_num": 21,
+     "texte": "36",
+     "valeur_num": 36,
      "etat": "valeur",
      "source": "score de confluence (calcul Python)",
      "date": "2026-10-21",
@@ -251,7 +251,7 @@
     },
     "biais": {
      "texte": "Baissier",
-     "valeur_num": 21,
+     "valeur_num": 36,
      "code": "baissier",
      "etat": "valeur",
      "profil": "neutre",
@@ -335,8 +335,8 @@
      "raison": null
     },
     "score": {
-     "texte": "72",
-     "valeur_num": 72,
+     "texte": "80",
+     "valeur_num": 80,
      "etat": "valeur",
      "source": "score de confluence (calcul Python)",
      "date": "2026-10-21",
@@ -344,7 +344,7 @@
     },
     "biais": {
      "texte": "Haussier",
-     "valeur_num": 72,
+     "valeur_num": 80,
      "code": "haussier",
      "etat": "valeur",
      "profil": "neutre",
@@ -428,17 +428,17 @@
      "raison": null
     },
     "score": {
-     "texte": "47",
-     "valeur_num": 47,
+     "texte": "26",
+     "valeur_num": 26,
      "etat": "valeur",
      "source": "score de confluence (calcul Python)",
      "date": "2026-10-21",
      "raison": null
     },
     "biais": {
-     "texte": "Neutre",
-     "valeur_num": 47,
-     "code": "neutre",
+     "texte": "Baissier",
+     "valeur_num": 26,
+     "code": "baissier",
      "etat": "valeur",
      "profil": "off",
      "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
@@ -521,8 +521,8 @@
      "raison": null
     },
     "score": {
-     "texte": "36",
-     "valeur_num": 36,
+     "texte": "34",
+     "valeur_num": 34,
      "etat": "valeur",
      "source": "score de confluence (calcul Python)",
      "date": "2026-10-21",
@@ -530,7 +530,7 @@
     },
     "biais": {
      "texte": "Baissier",
-     "valeur_num": 36,
+     "valeur_num": 34,
      "code": "baissier",
      "etat": "valeur",
      "profil": "off",
@@ -614,17 +614,17 @@
      "raison": null
     },
     "score": {
-     "texte": "16",
-     "valeur_num": 16,
+     "texte": "44",
+     "valeur_num": 44,
      "etat": "valeur",
      "source": "score de confluence (calcul Python)",
      "date": "2026-10-21",
      "raison": null
     },
     "biais": {
-     "texte": "Baissier",
-     "valeur_num": 16,
-     "code": "baissier",
+     "texte": "Neutre",
+     "valeur_num": 44,
+     "code": "neutre",
      "etat": "valeur",
      "profil": "on",
      "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
@@ -707,8 +707,8 @@
      "raison": null
     },
     "score": {
-     "texte": "64",
-     "valeur_num": 64,
+     "texte": "72",
+     "valeur_num": 72,
      "etat": "valeur",
      "source": "score de confluence (calcul Python)",
      "date": "2026-10-21",
@@ -716,7 +716,7 @@
     },
     "biais": {
      "texte": "Haussier",
-     "valeur_num": 64,
+     "valeur_num": 72,
      "code": "haussier",
      "etat": "valeur",
      "profil": "on",
@@ -800,17 +800,17 @@
      "raison": null
     },
     "score": {
-     "texte": "38",
-     "valeur_num": 38,
+     "texte": "58",
+     "valeur_num": 58,
      "etat": "valeur",
      "source": "score de confluence (calcul Python)",
      "date": "2026-10-21",
      "raison": null
     },
     "biais": {
-     "texte": "Baissier",
-     "valeur_num": 38,
-     "code": "baissier",
+     "texte": "Neutre",
+     "valeur_num": 58,
+     "code": "neutre",
      "etat": "valeur",
      "profil": "on",
      "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
@@ -893,8 +893,8 @@
      "raison": null
     },
     "score": {
-     "texte": "48",
-     "valeur_num": 48,
+     "texte": "56",
+     "valeur_num": 56,
      "etat": "valeur",
      "source": "score de confluence (calcul Python)",
      "date": "2026-10-21",
@@ -902,7 +902,7 @@
     },
     "biais": {
      "texte": "Neutre",
-     "valeur_num": 48,
+     "valeur_num": 56,
      "code": "neutre",
      "etat": "valeur",
      "profil": "neutre",
@@ -973,7 +973,7 @@
      "taux_directeur": {
       "texte": "3,88 % [borne haute de la fourchette]",
       "valeur_num": 3.88,
-      "date": "2026-10-16",
+      "date": "2026-10-19",
       "source": "FRED (DFF, taux effectif)",
       "consensus": null,
       "surprise": null,
