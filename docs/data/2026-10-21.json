@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-10-21T14:53:30+00:00",
+  "genere_le": "2026-10-21T19:23:17+00:00",
   "appels_llm": [
    {
     "heure": "14:34",
@@ -230,6 +230,42 @@
     "tokens_total": 8601,
     "ok": true,
     "etiquette": "synthese:NZD"
+   },
+   {
+    "heure": "19:23",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 6886,
+    "tokens_total": 8446,
+    "ok": false,
+    "etiquette": "synthese:CNY"
+   },
+   {
+    "heure": "19:23",
+    "modele": "gemini-3.5-flash-lite",
+    "tokens_systeme": 1560,
+    "tokens_message": 6886,
+    "tokens_total": 8446,
+    "ok": true,
+    "etiquette": "synthese:CNY"
+   },
+   {
+    "heure": "19:23",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 0,
+    "tokens_message": 34903,
+    "tokens_total": 34903,
+    "ok": false,
+    "etiquette": "critique"
+   },
+   {
+    "heure": "19:23",
+    "modele": "gemini-3.5-flash-lite",
+    "tokens_systeme": 0,
+    "tokens_message": 34903,
+    "tokens_total": 34903,
+    "ok": true,
+    "etiquette": "critique"
    }
   ],
   "quota_llm": {
@@ -239,50 +275,50 @@
     "gemini-3.8-flash",
     "gemini-3.5-flash-lite"
    ],
-   "appels_aujourdhui": 46,
+   "appels_aujourdhui": 43,
    "plafond_jour": 60,
    "engrenages_faits": true,
    "reserve_engrenages": 8,
    "refus_reserve_ce_run": 0,
    "modeles": {
     "gemini-3.5-flash": {
-     "appels_aujourdhui": 6,
+     "appels_aujourdhui": 10,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-10-21T06:59:59+00:00",
-     "appels_ce_run": 3,
+     "appels_ce_run": 2,
      "reussites_ce_run": 0,
-     "sauts_ce_run": 21
+     "sauts_ce_run": 0
     },
     "gemini-3.8-flash": {
      "appels_aujourdhui": 20,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-10-22T06:59:59+00:00",
-     "appels_ce_run": 3,
-     "reussites_ce_run": 2,
-     "sauts_ce_run": 20
+     "appels_ce_run": 0,
+     "reussites_ce_run": 0,
+     "sauts_ce_run": 2
     },
     "gemini-3.5-flash-lite": {
-     "appels_aujourdhui": 20,
+     "appels_aujourdhui": 13,
      "plafond_jour": 20,
      "epuise_jusqu_a": null,
-     "appels_ce_run": 19,
-     "reussites_ce_run": 18,
-     "sauts_ce_run": 3
+     "appels_ce_run": 2,
+     "reussites_ce_run": 2,
+     "sauts_ce_run": 0
     }
    }
   },
-  "resume_quota": "Gemini : 46/60, engrenages : fait",
+  "resume_quota": "Gemini : 43/60, engrenages : fait",
   "appels_par_modele": {
    "gemini-3.5-flash": {
-    "appels": 3,
-    "echecs": 3
+    "appels": 5,
+    "echecs": 5
    },
    "gemini-3.8-flash": {
     "appels": 3,
     "echecs": 1
    },
    "gemini-3.5-flash-lite": {
-    "appels": 19,
+    "appels": 21,
     "echecs": 1
    }
   },
@@ -318,6 +354,40 @@
       "ouvert_a_l_appel": null,
       "echecs_consecutifs": 0,
       "ignores": 3
+     }
+    ]
+   },
+   {
+    "heure": "19:23",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 2,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 2,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 2
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
      }
     ]
    }
@@ -4843,10 +4913,199 @@
     ]
    },
    "synthese_approfondie": {
-    "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite passé en dernier | gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) |",
-    "tentatives": 1,
-    "genere_le": "2026-10-21T14:53:30+00:00"
+    "orientation": "neutre",
+    "these_centrale": {
+     "texte": "Le yuan évolue dans une configuration de consolidation encadrée par la politique de fixing de la PBoC, tiraillé entre une croissance domestique globalement résiliente au troisième trimestre et la pression persistante d'un dollar fort. La thèse s'est réajustée vers la neutralité par rapport à la séquence précédente, les flux d'investissements directs étrangers restant orientés à la baisse.",
+     "source_ids": [
+      "src_093",
+      "src_025",
+      "src_052"
+     ],
+     "non_source": false
+    },
+    "moteurs": [
+     {
+      "moteur": "croissance",
+      "donnee": "PIB trimestriel de 4.5% publié le 2026-10-19",
+      "trajectoire": "Précédent à 4.3%, tendance en amélioration et supérieure au consensus de 4.4%",
+      "implication": "Soutient modérément la devise en attestant de la solidité de l'activité domestique.",
+      "source_id": "src_267"
+     },
+     {
+      "moteur": "inflation",
+      "donnee": "CPI annuel de 0.9% publié le 2026-10-14",
+      "trajectoire": "Précédent à 0.8%, en légère hausse séquentielle mais inférieur au consensus de 1.0%",
+      "implication": "Maintient une pression modérée sur les anticipations de relance monétaire sans surprendre négativement les marchés.",
+      "source_id": "src_266"
+     },
+     {
+      "moteur": "emploi",
+      "donnee": "Taux de chômage de 5.2% publié le 2026-10-19",
+      "trajectoire": "Précédent à 5.3%, en légère amélioration et en dessous du consensus de 5.3%",
+      "implication": "Reflète un marché du travail stable, offrant un coussin de sécurité pour la consommation intérieure.",
+      "source_id": "src_270"
+     },
+     {
+      "moteur": "banque_centrale",
+      "donnee": "Taux directeur (1-y Loan Prime Rate) à 3.00% le 2026-10-20",
+      "trajectoire": "Précédent à 3.00%, stable et conforme au consensus, traduisant une approche data dependent prudente",
+      "implication": "Ancre les attentes du marché et stabilise le taux de change administré face aux pressions externes.",
+      "source_id": "src_140"
+     }
+    ],
+    "taux_et_flux": {
+     "texte": "Le différentiel de carry face à la médiane G8 s'établit à +0.25 pt, fournissant un soutien structurel mesuré aux flux. Parallèlement, la persistance d'une baisse des investissements directs étrangers de -5.3% ytd/y illustre la frilosité des capitaux internationaux, limitant l'attractivité des flux de portefeuille malgré les performances commerciales.",
+     "source_ids": [
+      "src_015",
+      "src_052"
+     ],
+     "non_source": false
+    },
+    "geopolitique": {
+     "texte": "",
+     "source_ids": [],
+     "non_source": false
+    },
+    "lecture_technique": {
+     "texte": "Sur la paire USD/CNH, la tendance hebdomadaire demeure haussière avec des sommets et des creux ascendants. Le RSI s'établit à 70.5 en zone de surachat, traduisant un momentum prononcé sur la paire et une pression baissière concomitante sur le yuan, au-dessus des moyennes mobiles de référence.",
+     "source_ids": [
+      "src_024"
+     ],
+     "coherence": "mixte",
+     "non_source": false
+    },
+    "scenarios": [
+     {
+      "type": "haussier",
+      "declencheur": "Publication de PMI officiels supérieurs aux attentes et accélération visible des flux d'investissements étrangers",
+      "probabilite": "faible",
+      "justification": "Contredit par la tendance actuelle de contraction des IDE et la fermeté persistante de l'indice dollar.",
+      "source_ids": [
+       "src_052",
+       "src_268"
+      ]
+     },
+     {
+      "type": "central",
+      "declencheur": "Maintien du fixing de la PBoC dans sa bande étroite et consolidation latérale de l'indice USD",
+      "probabilite": "elevee",
+      "justification": "Soutenu par la stabilité des taux directeurs et les interventions régulières des autorités pour piloter le cours.",
+      "source_ids": [
+       "src_093",
+       "src_025"
+      ]
+     },
+     {
+      "type": "baissier",
+      "declencheur": "Accélération de la vigueur de l'indice USD combinée à une dégradation des indicateurs avancés d'activité",
+      "probabilite": "moyenne",
+      "justification": "Alimenté par la persistance de l'aversion au risque mondiale et le repli des flux d'investissements entrants.",
+      "source_ids": [
+       "src_025",
+       "src_052"
+      ]
+     }
+    ],
+    "catalyseurs": [
+     {
+      "date": "2026-10-31",
+      "heure_utc": "01:30",
+      "evenement": "Manufacturing PMI",
+      "impact": "low",
+      "consensus": null,
+      "source_id": "src_262",
+      "pourquoi": "Permet d'évaluer la santé du secteur manufacturier et de valider ou infirmer la trajectoire de stabilisation de l'activité."
+     },
+     {
+      "date": "2026-10-31",
+      "heure_utc": "01:30",
+      "evenement": "Non-Manufacturing PMI",
+      "impact": "low",
+      "consensus": null,
+      "source_id": "src_263",
+      "pourquoi": "Fournit une mesure de la dynamique des services et de la demande intérieure."
+     },
+     {
+      "date": "2026-11-09",
+      "heure_utc": "01:30",
+      "evenement": "CPI y/y",
+      "impact": "low",
+      "consensus": null,
+      "source_id": "src_264",
+      "pourquoi": "Mesure l'évolution des prix à la consommation et ajuste les anticipations sur la marge de manœuvre de la PBoC."
+     },
+     {
+      "date": "2026-11-11",
+      "heure_utc": "03:03",
+      "evenement": "Trade Balance",
+      "impact": "low",
+      "consensus": null,
+      "source_id": "src_265",
+      "pourquoi": "Confirme la solidité de l'excédent extérieur et son impact sur les flux de devises."
+     }
+    ],
+    "invalidation": [
+     {
+      "signal": "Cassure nette et durable des supports techniques majeurs sur USD/CNH invalidant la tendance haussière de la paire",
+      "source_id": "src_024"
+     },
+     {
+      "signal": "Modification brutale et inattendue de la politique de fixing de la PBoC en dehors de la fourchette de tolérance habituelle",
+      "source_id": "src_093"
+     },
+     {
+      "signal": "Retournement brutal des flux d'investissements directs étrangers en territoire positif sur une base annuelle",
+      "source_id": "src_052"
+     }
+    ],
+    "opportunites": [
+     {
+      "texte": "La solidité de la balance commerciale avec un excédent de 906B soutient structurellement les flux de devises vers l'économie.",
+      "mecanisme": "Excédent commercial élevé -> entrée nette de devises -> soutien potentiel au yuan",
+      "source_id": "src_168",
+      "non_sourcee": false
+     },
+     {
+      "texte": "Le maintien des taux directeurs à des niveaux stables par la PBoC préserve la prévisibilité monétaire face aux soubresauts extérieurs.",
+      "mecanisme": "Stabilité des taux de prêts -> ancrage des anticipations -> réduction de la volatilité excessive de la devise",
+      "source_id": "src_093",
+      "non_sourcee": false
+     },
+     {
+      "texte": "La croissance du PIB au troisième trimestre supérieure au consensus démontre la capacité de résistance de l'appareil productif.",
+      "mecanisme": "Croissance supérieure aux attentes -> renforcement de la confiance macroéconomique -> attrait accru pour les actifs locaux",
+      "source_id": "src_267",
+      "non_sourcee": false
+     }
+    ],
+    "menaces": [
+     {
+      "texte": "La contraction continue des investissements directs étrangers de -5.3% ytd/y signale un manque persistant d'appétit des investisseurs non-résidents.",
+      "mecanisme": "Baisse des IDE -> diminution des flux de capitaux entrants -> pression baissière structurelle sur la devise",
+      "source_id": "src_052",
+      "non_sourcee": false
+     },
+     {
+      "texte": "La fermeté de l'indice dollar américain exerce une contrainte permanente sur le taux de change administré du yuan.",
+      "mecanisme": "Force du DXY -> élargissement de l'écart de valorisation -> nécessité d'un encadrement strict du fixing par la PBoC",
+      "source_id": "src_025",
+      "non_sourcee": false
+     },
+     {
+      "texte": "Un positionnement technique en zone de surachat sur la paire USD/CNH expose la devise à des risques de correction en cas de catalyseur externe inattendu.",
+      "mecanisme": "RSI élevé sur la paire -> saturation acheteuse de l'USD -> risque de mouvements de repli rapides du taux de change",
+      "source_id": "src_024",
+      "non_sourcee": false
+     }
+    ],
+    "controles": [],
+    "redige_par": {
+     "modele": "gemini-3.5-flash-lite",
+     "libelle": "Flash-Lite 3.5"
+    },
+    "statut": "ok",
+    "tentatives": 2,
+    "genere_le": "2026-10-21T19:23:17+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.46,
@@ -9301,22 +9560,31 @@
  },
  "controle_qualite": {
   "conforme": false,
-  "nb_anomalies": 6,
+  "nb_anomalies": 5,
   "anomalies": [
    "EUR synthèse approfondie : orientation « neutre » en tension avec le score de confluence calculé (21/100)",
    "CAD synthèse approfondie : moins de 3 opportunités (2)",
    "CAD synthèse approfondie : moins de 3 menaces (2)",
-   "CNY : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite pa)",
    "tableau macro : NZD/CPI annuel : publication manquée (prévue le 19/10, aucun « réel » reçu)",
-   "prompt LLM volumineux : 13 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 20666 à 14:41 UTC, modèle gemini-3.5-flash-lite) — le contexte envoyé au LLM a regrossi"
+   "prompt LLM volumineux : 15 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 34903 à 19:23 UTC, modèle gemini-3.5-flash) — le contexte envoyé au LLM a regrossi"
   ]
  },
  "critique": {
-  "incoherences": [],
+  "incoherences": [
+   "EUR synthèse approfondie : orientation « neutre » en tension avec le score de confluence calculé (21/100)"
+  ],
   "affirmations_non_sourcees": [],
-  "suggestions_connaissances": [],
-  "validation": "non_evalue",
-  "indisponible": true,
-  "note": "relecture non effectuée (tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite passé en dernier | gemini-3.5-flash : ignoré (disjon)"
+  "suggestions_connaissances": [
+   {
+    "theme": "Gestion des contrôles de complétude sur les synthèses approfondies",
+    "suggestion": "Vérifier systématiquement que le nombre d'opportunités et de menaces rédigées dans chaque synthèse approfondie de devise atteint le seuil minimal de 3 pour garantir l'homogénéité du rapport.",
+    "fichier_cible": "cas_particuliers.md"
+   }
+  ],
+  "validation": "a_revoir",
+  "redige_par": {
+   "modele": "gemini-3.5-flash-lite",
+   "libelle": "Flash-Lite 3.5"
+  }
  }
 }
