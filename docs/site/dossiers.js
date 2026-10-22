@@ -225,6 +225,7 @@ const PERIODES = [[30, "30 j"], [90, "90 j"], [366, "1 an"]];
 export function graphiqueSerie(g) {
   const cadre = el("figure", "graphique");
   cadre.appendChild(el("figcaption", null, `${g.titre}${g.unite ? ` (${g.unite})` : ""}`));
+  if (g.explication) cadre.appendChild(el("p", "graphique-explication", g.explication));
   if (!g.courbes?.length) { cadre.appendChild(el("p", "indisponible", `Indisponible : ${g.raison || "pas de données"}.`)); return cadre; }
   const fin = Math.max(...g.courbes.map(c => Date.parse(c.points[c.points.length - 1][0])));
   const debut = Math.min(...g.courbes.map(c => Date.parse(c.points[0][0])));

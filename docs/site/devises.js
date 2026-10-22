@@ -242,7 +242,10 @@ export function carteDevise(d, dos, coursDev, cles, rapportDev) {
   if (biais) tete.appendChild(el("span", `dc-pastille ${biais === "haussier" ? "pos" : biais === "baissier" ? "neg" : ""}`, BIAIS[biais] || biais));
   c.appendChild(tete);
   if (coursDev?.points?.length) {
-    c.appendChild(graphiqueSerie({ titre: "Force de la devise, base 100", unite: null, base_100: true, base_commune: true,
+    const explication = d === "USD"
+      ? "Indice relatif : indice synthétique du dollar face aux 8 autres devises (moyenne inverse), rebasé à 100. Même série que le RSI et la MM200 de cette carte. Ce n'est pas un panier de paires échangeables."
+      : `Indice relatif : cours ${d}/USD (dollars US pour 1 ${d}), rebasé à 100. Même série que le RSI et la MM200 de cette carte. Ce n'est pas un panier de paires : la force est mesurée face au seul dollar US.`;
+    c.appendChild(graphiqueSerie({ titre: "Force de la devise (indice relatif)", unite: null, base_100: true, base_commune: true, explication,
       annotations: coursDev.annotations || null,
       courbes: [{ nom: d, points: coursDev.points, couleur: "var(--accent)" },
                 { nom: "MM200", points: coursDev.mm200 || [], couleur: "var(--texte-2)", pointille: true }],

@@ -68,3 +68,10 @@ def test_site_impression_a4_textures_et_bouton():
     assert 'id="bouton-imprimer"' in html and "Imprimer / PDF" in html
     js = (RACINE / "docs/site/impression.js").read_text(encoding="utf-8")
     assert "Aide à la décision, pas un conseil" in js and "fetch(" not in js and "http" not in js.replace("http://www.w3.org", "")
+
+
+def test_carte_devises_titre_indice_relatif_et_pas_un_panier():
+    js = (RACINE / "docs/site/devises.js").read_text(encoding="utf-8")
+    assert 'titre: "Force de la devise (indice relatif)"' in js
+    assert "Même série que le RSI et la MM200" in js and "Ce n'est pas un panier de paires" in js
+    assert "annotations: coursDev.annotations" in js          # mêmes repères que cours.json
