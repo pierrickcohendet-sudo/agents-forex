@@ -49,11 +49,6 @@ export function selecteurPeriode(active) {
   const nav = el("nav", "eg-seg");
   nav.setAttribute("aria-label", "Période");
   for (const [id, lib] of [["", "Quotidien"], ["hebdo", "Hebdo"], ["mensuel", "Mensuel"]]) {
-    if (id === "mensuel") {
-      const b = el("span", "eg-seg-off", lib);
-      b.setAttribute("aria-disabled", "true"); b.title = "Vue mensuelle : palier ultérieur de la refonte";
-      nav.appendChild(b); continue;
-    }
     const a = el("a", null, lib); a.href = `#engrenages${id ? "/" + id : ""}`;
     a.setAttribute("aria-pressed", String(active === id));
     if (active === id) a.setAttribute("aria-current", "page");

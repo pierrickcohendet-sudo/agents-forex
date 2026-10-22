@@ -2,6 +2,7 @@
 import { chargerJson, enErreur, el, indisponible, dateHeure, enBref } from "./commun.js";
 import { carteDossiers } from "./dossiers.js";
 import { vueHebdo } from "./hebdo.js";
+import { chargerSyntheses, sectionSynthese } from "./consequences_synthese.js";
 import { vueEnsemble, selecteurPeriode } from "./vue_ensemble.js";
 
 const DOLLAR = { haussier: "Dollar haussier", baissier: "Dollar baissier", neutre: "Dollar neutre" };
@@ -144,7 +145,11 @@ export function carteEngrenagesCompacte(rapport) {
 }
 
 export async function pageEngrenages(parametre) {
-  if (parametre === "hebdo") return [selecteurPeriode("hebdo"), ...(await vueHebdo())];
+  if (parametre === "hebdo") {
+    const s = await chargerSyntheses();
+    return [selecteurPeriode("hebdo"), ...(await vueHebdo()), sectionSynthese(s.hebdo, "hebdo")];
+  }
+  if (parametre === "mensuel") return [selecteurPeriode("mensuel"), sectionSynthese((await chargerSyntheses()).mensuel, "mensuel")];
   const demande = /^g=([1-8])$/.exec(parametre || "");
   return [selecteurPeriode(""), ...(await pageQuotidienne(demande ? Number(demande[1]) : null))];
 }

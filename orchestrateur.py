@@ -36,7 +36,7 @@ from pathlib import Path
 import yaml
 from dotenv import load_dotenv
 
-from agents import (agent_critique, agent_dossier_hebdo, agent_engrenages, agent_redacteur, agent_strategiste, agent_synthese,
+from agents import (agent_consequences, agent_critique, agent_dossier_hebdo, agent_engrenages, agent_redacteur, agent_strategiste, agent_synthese,
                     collecte_calendrier, collecte_flux, collecte_historiques, collecte_macro, collecte_news,
                     collecte_technique)
 from core import (collecte_cache, controle_qualite, cours, dossiers, evaluation, hebdo, historique_5ans, impact, marche_taux, overrides, precedents,
@@ -138,8 +138,14 @@ def mode_hebdo(config: dict, donnees_dir: Path, dossier_rapports: Path, argument
         existant = json.loads(chemin.read_text(encoding="utf-8"))
     except (OSError, ValueError):
         existant = None
-    if not agent_dossier_hebdo.a_faire(existant):
-        log.info("--hebdo : dossier de la semaine déjà complet — rien à faire")
+    try:
+        syntheses = json.loads((docs_data / agent_consequences.FICHIER).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        syntheses = {}
+    dossier_a_faire = agent_dossier_hebdo.a_faire(existant)
+    consequences_a_faire = [t for t in ("hebdo", "mensuel") if agent_consequences.a_faire(syntheses, t)]
+    if not dossier_a_faire and not consequences_a_faire:
+        log.info("--hebdo : dossier et synthèse des conséquences de la semaine déjà complets — rien à faire")
         return 0
     cache = donnees_dir / "cache"
     historiques = etape("collecte historiques 5 ans", collecte_cache.avec_cache, "historiques", cache, date.today(), True,
@@ -163,6 +169,15 @@ def mode_hebdo(config: dict, donnees_dir: Path, dossier_rapports: Path, argument
     except Exception:  # noqa: BLE001
         log.exception("Fournisseur LLM indisponible")
         return 1
+    # Synthèse hebdomadaire (et mensuelle le 1er) des conséquences : un appel regroupé chacune, repli Python.
+    for type_ in consequences_a_faire:
+        etape(f"synthèse {type_} des conséquences", agent_consequences.executer, type_, RACINE, config,
+              les_dossiers, llm, defaut=None)
+    if not dossier_a_faire:
+        if not arguments.sans_web and config.get("publication_web", {}).get("actif", True):
+            etape("git push (synthèse des conséquences)", publication_web.pousser_git, config["publication_web"], RACINE,
+                  "synthèse hebdomadaire des conséquences")
+        return 0
     contenu = agent_dossier_hebdo.generer(config, llm, les_dossiers, les_precedents, rapport, existant)
     anciens = ((existant or {}).get("meta") or {}).get("appels_llm", []) if (existant or {}).get("semaine") == contenu["semaine"] else []
     contenu["meta"] = {"appels_llm": (anciens + journal_appels())[-60:],
@@ -373,9 +388,9 @@ def main() -> int:
             dev["indice_surprise_30j"] = indice.get(dev["devise"])
 
     # Dossiers : recalcul APRÈS l'analyse pour l'engrenage 1 (thème), qui dépend du rapport du jour.
-    etape("dossiers des engrenages (thème)", dossiers.ecrire, RACINE, historiques,
-          registre_macro.charger(donnees_dir / "registre_macro.json"), technique, config,
-          rapport, flux, news, dossier_rapports, defaut=None)
+    dossiers_theme = etape("dossiers des engrenages (thème)", dossiers.ecrire, RACINE, historiques,
+                           registre_macro.charger(donnees_dir / "registre_macro.json"), technique, config,
+                           rapport, flux, news, dossier_rapports, defaut=None)
 
     # ------------------------------------------- contrôle qualité (chaque run)
     rapport["controle_qualite"] = etape(
@@ -433,6 +448,11 @@ def main() -> int:
     # --------------------------------------------------------------- critique
     rapport = etape("agent critique", agent_critique.critiquer, llm, rapport,
                     defaut=rapport)
+
+    # Synthèse MENSUELLE des conséquences (le 1er, ou premier passage du mois) : un appel regroupé, APRÈS les
+    # engrenages (réserve de quota) ; repli 100 % Python si le modèle ou le quota manque. Aucun nouveau cron.
+    etape("synthèse mensuelle des conséquences", agent_consequences.executer, "mensuel", RACINE, config,
+          dossiers_theme or dossiers_jour, llm, defaut=None)
 
     # Journal léger des appels LLM (taille estimée + modèle utilisé) : en
     # --completer, s'ajoute à ceux du matin (plafonné) ; puis alerte qualité

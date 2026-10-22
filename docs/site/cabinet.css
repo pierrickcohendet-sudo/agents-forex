@@ -741,3 +741,17 @@ body.apercu-impression > *:not(#impression) { display: none !important; }
   .imp-pied { margin-top: 8px; }
   .pied::after { content: "Aide à la décision, pas un conseil en investissement."; display: block; font-weight: 700; }
 }
+
+/* ------------------------------- synthèse hebdo / mensuelle des conséquences (palier 7-texte) */
+.cs-liste { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 980px) { .cs-liste { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .cs-liste { grid-template-columns: minmax(0, 1fr); } }
+.cs-devise { background: var(--carte-2); border: 1px solid var(--trait); border-radius: var(--rayon); padding: 10px 12px; min-width: 0; }
+.cs-devise .texte { margin: 6px 0 4px; font-size: 14px; overflow-wrap: anywhere; }
+.cs-tete { display: flex; align-items: baseline; gap: 8px; }
+.cs-code { font: 700 1.05rem var(--serif); }
+.cs-bilan { font-size: 12px; border: 1px solid currentColor; border-radius: 999px; padding: 0 8px; color: var(--texte-2); }
+.cs-bilan.pos { color: var(--positif); } .cs-bilan.neg { color: var(--negatif); }
+.cs-devise td.pos { color: var(--positif); font-weight: 600; } .cs-devise td.neg { color: var(--negatif); font-weight: 600; }
+.cs-seg { margin: 0 0 8px; display: inline-flex; }
+.cs-devises { display: grid; gap: 0; }

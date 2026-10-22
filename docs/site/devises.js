@@ -1,5 +1,6 @@
 /* Onglet Devises : une fiche par devise (9), analyse du jour, indicateurs, synthèse approfondie. */
 import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, DRAPEAUX , enBref } from "./commun.js";
+import { blocDevises } from "./consequences_synthese.js";
 import { graphiqueSerie } from "./dossiers.js";
 
 const BIAIS = { haussier: "Haussier", baissier: "Baissier", neutre: "Neutre" };
@@ -291,6 +292,7 @@ export async function pageDevises(parametre) {
   const parDevise = new Map((rapport.devises || []).map(d => [d.devise, d]));
   for (const d of Object.keys(NOMS)) grille.appendChild(carteDevise(d, dos, enErreur(cours) ? null : cours.devises?.[d], cles.get(d), parDevise.get(d)));
   const note = el("p", "note", "Indicateurs : série unique 5 ans (mêmes valeurs que le dossier 7 et le tableau de chaque fiche), survol pour la source. Moteurs : cases les plus fortes de la matrice d'impact. Aide à la décision, jamais un ordre.");
-  return [tete, grille, note, ...(rapport.devises || []).map(d => fiche({ ...d, indicateurs_tableau: lignesTechniques(techniqueUnique(dos, d.devise), d.indicateurs_tableau || []) },
+  const syntheses = await blocDevises();
+  return [tete, grille, note, syntheses, ...(rapport.devises || []).map(d => fiche({ ...d, indicateurs_tableau: lignesTechniques(techniqueUnique(dos, d.devise), d.indicateurs_tableau || []) },
                                                            cles.get(d.devise), sources, d.devise === parametre))];
 }
