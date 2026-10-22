@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-10-22T19:17:44+00:00",
+  "genere_le": "2026-10-22T22:24:04+00:00",
   "appels_llm": [
    {
     "heure": "13:58",
@@ -321,9 +321,9 @@
      "appels_aujourdhui": 20,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-10-23T06:59:59+00:00",
-     "appels_ce_run": 3,
+     "appels_ce_run": 0,
      "reussites_ce_run": 0,
-     "sauts_ce_run": 1
+     "sauts_ce_run": 2
     },
     "gemini-3.8-flash": {
      "appels_aujourdhui": 20,
@@ -331,7 +331,7 @@
      "epuise_jusqu_a": "2026-10-23T06:59:59+00:00",
      "appels_ce_run": 0,
      "reussites_ce_run": 0,
-     "sauts_ce_run": 4
+     "sauts_ce_run": 2
     },
     "gemini-3.5-flash-lite": {
      "appels_aujourdhui": 20,
@@ -339,7 +339,7 @@
      "epuise_jusqu_a": null,
      "appels_ce_run": 0,
      "reussites_ce_run": 0,
-     "sauts_ce_run": 4
+     "sauts_ce_run": 2
     }
    }
   },
@@ -458,6 +458,40 @@
       "ouvert_a_l_appel": null,
       "echecs_consecutifs": 0,
       "ignores": 4
+     }
+    ]
+   },
+   {
+    "heure": "22:24",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 2,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 2
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 2
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 2
      }
     ]
    }
@@ -4544,9 +4578,10 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : 429 Client Error: Too Many Requests for url: https://generativelanguage.googleapis.com/v1beta/models | gemini-3.8-flash : quota du jour atte",
+    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+    "quota_atteint": true,
     "tentatives": 3,
-    "genere_le": "2026-10-22T19:17:24+00:00"
+    "genere_le": "2026-10-22T22:24:04+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.85,
@@ -4814,7 +4849,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 2,
-    "genere_le": "2026-10-22T19:17:44+00:00"
+    "genere_le": "2026-10-22T22:24:04+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.46,
@@ -9214,8 +9249,8 @@
     "taux_pct": 100.0
    },
    "Prévision": {
-    "valeur": 9,
-    "explique": 108,
+    "valeur": 19,
+    "explique": 98,
     "vide": 0,
     "total": 117,
     "taux_pct": 100.0
@@ -9283,7 +9318,7 @@
   "conforme": false,
   "nb_anomalies": 3,
   "anomalies": [
-   "NZD : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : gemini-3.5-flash : 429 Client Error: Too Many Requests for )",
+   "NZD : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
    "CNY : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
    "prompt LLM volumineux : 14 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 20472 à 14:03 UTC, modèle gemini-3.8-flash) — le contexte envoyé au LLM a regrossi"
   ]
@@ -9294,6 +9329,6 @@
   "suggestions_connaissances": [],
   "validation": "non_evalue",
   "indisponible": true,
-  "note": "relecture non effectuée (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit) — gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : quota du )"
+  "note": "relecture non effectuée (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit) — gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : quota du)"
  }
 }
