@@ -1,6 +1,7 @@
 /* Vue d'ensemble des 8 engrenages (refonte V2, palier 1) : bandeau du thème, 8 cartes avec
    mini-courbes, chaînes de transmission. Données : dossiers.json → vue_ensemble (calcul Python). */
 import { el, dateCourte, ouvrirDetail, DRAPEAUX } from "./commun.js";
+import { ouvrirBriefing } from "./briefing.js";
 
 const SVG = "http://www.w3.org/2000/svg";
 function s(tag, attrs) {
@@ -80,46 +81,72 @@ function coupe(texte, max) {
 }
 
 /* Roue : un secteur par engrenage ; couleur = direction (calcul Python), épaisseur = conviction (1 à 3), hachures grises
-   = aucune direction déterminée. Centre : thème du jour (« Signaux mixtes » sous le seuil) et cohérence. Survol ou focus :
-   le centre décrit l'engrenage ; clic ou Entrée : ouvre son dossier. */
+   = aucune direction déterminée. Centre : thème du jour (« Signaux mixtes » sous le seuil) et cohérence. Survol, focus ou
+   premier toucher : le centre décrit l'engrenage et la ligne sous la roue donne la règle Python de sa couleur ; clic,
+   Entrée ou second toucher : ouvre son dossier. */
+const LEGENDE_ROUE = [["up", "Vert", "risk on, ou dollar haussier quand le risque n'est pas tranché"],
+                      ["dn", "Rouge", "risk off, ou dollar baissier quand le risque n'est pas tranché"],
+                      ["nd", "Gris", "direction neutre"]];
+const AIDE_RAISON = "Survolez ou touchez un secteur : la règle Python qui décide sa couleur s'affiche ici.";
+
 function roue(v, choisir) {
   const W = 500, H = 420, cx = 250, cy = 210, r0 = 88, pas = 21;
-  const svg = svgEl("svg", { viewBox: `0 0 ${W} ${H}`, class: "roue", role: "group", "aria-label": "Roue des 8 engrenages : direction et conviction de chacun ; touchez un secteur pour ouvrir son dossier" });
+  const svg = svgEl("svg", { viewBox: `0 0 ${W} ${H}`, class: "roue", role: "group", "aria-label": "Roue des 8 engrenages : direction et conviction de chacun ; touchez un secteur pour voir la raison de sa couleur, puis pour ouvrir son dossier" });
   const defs = svgEl("defs");
   const motif = svgEl("pattern", { id: "hachures-roue", width: 7, height: 7, patternUnits: "userSpaceOnUse", patternTransform: "rotate(45)" });
   motif.append(svgEl("rect", { width: 7, height: 7, fill: "var(--carte-2)" }), svgEl("line", { x1: 0, y1: 0, x2: 0, y2: 7, stroke: "var(--neutre)", "stroke-width": 2.4 }));
   defs.appendChild(motif); svg.appendChild(defs);
   for (const rr of [r0 + pas, r0 + 2 * pas, r0 + 3 * pas]) svg.appendChild(svgEl("circle", { cx, cy, r: rr, fill: "none", stroke: "var(--trait)", "stroke-dasharray": "2 5" }));
-  const centre = svgEl("g", { class: "roue-centre", "aria-live": "polite" });
+  const centre = svgEl("g", { class: "roue-centre" });
+  const raison = el("p", "roue-raison", AIDE_RAISON);
+  raison.setAttribute("aria-live", "polite");
   const t = v.theme || {}, coh = t.coherence;
-  function centreTheme() {
+
+  /* Lignes du centre empilées puis centrées verticalement : [texte, classe, interligne, couleur?]. */
+  function remplirCentre(lignes) {
     centre.replaceChildren();
-    const impose = t.titre_impose;
-    centre.appendChild(texteSvg({ x: cx, y: cy - 36, "text-anchor": "middle", class: "roue-surtitre" }, "THÈME DU JOUR"));
-    coupe(t.titre || t.texte_indisponible || "Thème non déterminé", 14).forEach((l, i) => centre.appendChild(texteSvg({ x: cx, y: cy - 14 + i * 18, "text-anchor": "middle", class: `roue-titre${impose ? " impose" : ""}` }, l)));
-    centre.appendChild(texteSvg({ x: cx, y: cy + 26, "text-anchor": "middle", class: "roue-sous" }, t.direction?.libelle || ""));
-    if (coh) {
-      centre.appendChild(texteSvg({ x: cx, y: cy + 42, "text-anchor": "middle", class: "roue-sous" }, "cohérence"));
-      centre.appendChild(texteSvg({ x: cx, y: cy + 57, "text-anchor": "middle", class: "roue-sous" }, coh.libelle));
+    const hauteur = lignes.reduce((h, l) => h + l[2], 0);
+    let y = cy - hauteur / 2 + 10;
+    for (const [texte, classe, pasLigne, couleur] of lignes) {
+      const n = texteSvg({ x: cx, y, "text-anchor": "middle", class: classe }, texte);
+      if (couleur) n.setAttribute("fill", couleur);
+      centre.appendChild(n);
+      y += pasLigne;
     }
   }
-  function centreEngrenage(c) {
-    centre.replaceChildren();
-    const d = c.direction || {};
-    centre.appendChild(texteSvg({ x: cx, y: cy - 30, "text-anchor": "middle", class: "roue-surtitre" }, `ENGRENAGE ${c.numero}`));
-    coupe(c.titre, 14).forEach((l, i) => centre.appendChild(texteSvg({ x: cx, y: cy - 8 + i * 18, "text-anchor": "middle", class: "roue-titre" }, l)));
-    const ct = texteSvg({ x: cx, y: cy + 32, "text-anchor": "middle", class: "roue-sous" }, d.libelle || "non déterminée");
-    ct.setAttribute("fill", COULEUR_DIR[d.classe] || "var(--texte-2)");
-    centre.appendChild(ct);
-    centre.appendChild(texteSvg({ x: cx, y: cy + 50, "text-anchor": "middle", class: "roue-sous" }, `conviction ${CONVICTION[d.conviction || 0]}`));
+  const lignesDirection = (d, couleur) => (d?.libelle || "direction non déterminée").split(" · ").map(x => [x, "roue-sous", 15, couleur]);
+  function centreTheme() {
+    const lignes = [["THÈME DU JOUR", "roue-surtitre", 20]];
+    coupe(t.titre || t.texte_indisponible || "Thème non déterminé", 14).forEach(l => lignes.push([l, `roue-titre${t.titre_impose ? " impose" : ""}`, 19]));
+    lignes[lignes.length - 1][2] += 4;
+    if (t.direction?.libelle) lignes.push(...lignesDirection(t.direction));
+    if (coh) {
+      lignes[lignes.length - 1][2] += 4;
+      const texte = coh.theme_neutre ? coh.libelle : `cohérence ${coh.libelle}`;
+      coupe(texte, 22).forEach(l => lignes.push([l, "roue-sous roue-coh", 14]));
+    }
+    remplirCentre(lignes);
+    raison.textContent = AIDE_RAISON;
   }
+  function centreEngrenage(c) {
+    const d = c.direction || {};
+    const lignes = [[`ENGRENAGE ${c.numero}`, "roue-surtitre", 20]];
+    coupe(c.titre, 14).forEach(l => lignes.push([l, "roue-titre", 19]));
+    lignes[lignes.length - 1][2] += 4;
+    lignes.push(...lignesDirection(d, COULEUR_DIR[d.classe] || "var(--texte-2)"));
+    lignes.push([`conviction ${CONVICTION[d.conviction || 0]}`, "roue-sous", 15]);
+    remplirCentre(lignes);
+    raison.textContent = `Engrenage ${c.numero} · ${d.raison_couleur || d.raison || "raison non disponible"}`;
+  }
+
+  let toucheChoisie = null;   // mobile : le premier toucher montre la raison, le second ouvre le dossier
   (v.cartes || []).forEach((c, i) => {
     const d = c.direction || {};
     const sansDirection = !d.dollar && !d.risque;
     const a0 = -Math.PI / 2 + i * Math.PI / 4 + 0.035, a1 = -Math.PI / 2 + (i + 1) * Math.PI / 4 - 0.035, am = (a0 + a1) / 2;
     const r1 = r0 + pas * Math.max(1, d.conviction || 0);
     const g = svgEl("g", { class: "roue-secteur", tabindex: 0, role: "button",
-      "aria-label": `Engrenage ${c.numero}, ${c.titre} : ${d.libelle || "direction non déterminée"}, conviction ${CONVICTION[d.conviction || 0]}. Ouvrir le dossier.` });
+      "aria-label": `Engrenage ${c.numero}, ${c.titre} : ${d.libelle || "direction non déterminée"}, conviction ${CONVICTION[d.conviction || 0]}. ${d.raison_couleur || ""} Ouvrir le dossier.` });
     g.style.animationDelay = `${i * 60}ms`;
     g.appendChild(svgEl("path", { d: arc(cx, cy, r0, r1, a0, a1), fill: sansDirection ? "url(#hachures-roue)" : (COULEUR_DIR[d.classe] || "var(--neutre)"),
                                  stroke: "var(--carte)", "stroke-width": 1.5, class: sansDirection ? "sans-direction" : "" }));
@@ -128,8 +155,14 @@ function roue(v, choisir) {
     const [lx, ly] = polaire(cx, cy, r0 + 3 * pas + 16, am), cos = Math.cos(am);
     g.appendChild(texteSvg({ x: lx, y: ly + 4, "text-anchor": Math.abs(cos) < 0.2 ? "middle" : cos > 0 ? "start" : "end", class: "roue-etiquette" }, COURTS_ROUE[i]));
     g.addEventListener("mouseenter", () => centreEngrenage(c)); g.addEventListener("focus", () => centreEngrenage(c));
-    g.addEventListener("mouseleave", centreTheme); g.addEventListener("blur", centreTheme);
-    g.addEventListener("click", () => choisir(c.numero, true));
+    g.addEventListener("mouseleave", () => { if (toucheChoisie === null) centreTheme(); });
+    g.addEventListener("blur", () => { if (toucheChoisie === null) centreTheme(); });
+    g.addEventListener("pointerdown", e => { g.dataset.toucher = e.pointerType === "touch" ? "1" : ""; });
+    g.addEventListener("click", () => {
+      if (g.dataset.toucher === "1" && toucheChoisie !== c.numero) { toucheChoisie = c.numero; centreEngrenage(c); return; }
+      toucheChoisie = null;
+      choisir(c.numero, true);
+    });
     g.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); choisir(c.numero, true); } });
     svg.appendChild(g);
   });
@@ -137,7 +170,25 @@ function roue(v, choisir) {
   svg.appendChild(centre);
   const cadre = el("div", "roue-cadre");
   cadre.appendChild(svg);
-  cadre.appendChild(el("p", "roue-legende", "Vert : soutien · rouge : pression ou risk off · gris : neutre · hachures : aucune direction déterminée · épaisseur : conviction · touchez un secteur"));
+  const legende = el("ul", "roue-legende");
+  legende.setAttribute("aria-label", "Légende des couleurs de la roue");
+  for (const [classe, nom, sens] of LEGENDE_ROUE) {
+    const li = el("li");
+    li.append(el("span", `roue-pastille dir-${classe}`), el("b", null, `${nom} : `), document.createTextNode(sens));
+    legende.appendChild(li);
+  }
+  const hach = el("li");
+  hach.append(el("span", "roue-pastille hachures"), el("b", null, "Hachures : "), document.createTextNode("aucune direction déterminée"));
+  legende.appendChild(hach);
+  legende.appendChild(el("li", "roue-legende-note", "Épaisseur : conviction · survolez ou touchez un secteur pour sa raison, cliquez (ou touchez deux fois) pour son dossier"));
+  cadre.append(legende, raison);
+  if ((v.briefing?.cartes || []).length) {
+    const b = el("button", "bouton bouton-briefing", "▶ Briefing 60 s");
+    b.type = "button";
+    b.setAttribute("aria-label", "Ouvrir le briefing en 60 secondes : le thème puis les 8 engrenages, une carte à la fois");
+    b.addEventListener("click", () => ouvrirBriefing(v.briefing, t.date_rapport, b));
+    cadre.appendChild(b);
+  }
   return cadre;
 }
 
@@ -172,14 +223,14 @@ function bandeau(v, choisir) {
   const d = t.direction || {};
   const boite = (libelle, ...enfants) => { const b = el("div", "eg-stat"); b.appendChild(el("b", null, libelle)); b.append(...enfants); return b; };
   const puces = el("div", "eg-puces");
-  for (const [txt, cls] of [[{ haussier: "Dollar ↑", baissier: "Dollar ↓", neutre: "Dollar =" }[d.dollar], d.dollar === "haussier" ? "up" : d.dollar === "baissier" ? "dn" : "nd"],
+  for (const [txt, cls] of [[{ haussier: "Dollar haussier", baissier: "Dollar baissier", neutre: "Dollar neutre" }[d.dollar], d.dollar === "haussier" ? "up" : d.dollar === "baissier" ? "dn" : "nd"],
                             [{ risk_on: "Risk on", risk_off: "Risk off", neutre: "Risque neutre" }[d.risque], d.risque === "risk_off" ? "dn" : d.risque === "risk_on" ? "up" : "nd"]])
     if (txt) puces.appendChild(el("span", `eg-puce dir-${cls}`, txt));
   stats.appendChild(boite("Direction", puces));
   const coh = t.coherence;
-  const vCoh = el("span", "eg-gros tabulaire", coh ? (coh.libelle || `${coh.alignes} sur ${coh.evaluables ?? coh.sur} évaluables`) : "n/d");
+  const vCoh = el("span", coh?.theme_neutre ? "eg-moyen" : "eg-gros tabulaire", coh ? (coh.libelle || `${coh.alignes} sur ${coh.evaluables ?? coh.sur} évaluables`) : "n/d");
   vCoh.title = coh ? coh.regle : "";
-  const detailCoh = !coh ? "" : `alignés : ${coh.engrenages_alignes.join(", ") || "aucun"} · évaluables : ${(coh.engrenages_evaluables || []).join(", ") || "aucun"}`;
+  const detailCoh = !coh || coh.theme_neutre ? "" : `alignés : ${coh.engrenages_alignes.join(", ") || "aucun"} · évaluables : ${(coh.engrenages_evaluables || []).join(", ") || "aucun"}`;
   stats.appendChild(boite("Cohérence", vCoh, el("span", "eg-petit", detailCoh)));
   stats.appendChild(boite("Conviction", points(d.conviction || 0), el("span", "eg-petit", CONVICTION[d.conviction || 0])));
   c.appendChild(stats);

@@ -15,21 +15,29 @@ from datetime import date, timedelta
 
 TITRES = {1: "Thème macro", 2: "Politique monétaire", 3: "Données économiques", 4: "Politique fiscale",
           5: "Interconnexions de marchés", 6: "Géopolitique", 7: "Price action et flux", 8: "Offre et demande"}
-DOLLAR = {"haussier": "Dollar ↑", "baissier": "Dollar ↓", "neutre": "Dollar ="}
+DOLLAR = {"haussier": "Dollar haussier", "baissier": "Dollar baissier", "neutre": "Dollar neutre"}
 RISQUE = {"risk_on": "Risk on", "risk_off": "Risk off", "neutre": "Risque neutre"}
 POINTS_CONVICTION = {"faible": 1, "moyen": 2, "eleve": 3}
 JOURS_COURBE = 30
 SEUIL_THEME_FORT = 3   # moins de 3 engrenages alignés : « Signaux mixtes », jamais un thème fort
 TITRE_SIGNAUX_MIXTES = "Signaux mixtes"
+THEME_NEUTRE = "Thème neutre : pas d'alignement à mesurer"
+TEXTE_SANS_SYNTHESE = "Texte indisponible : synthèse des engrenages absente pour ce rapport"
+# Sens des couleurs de la roue et des cartes (même règle que _direction).
+COULEURS = {"up": "Vert : risk on, ou dollar haussier quand le risque n'est pas tranché",
+            "dn": "Rouge : risk off, ou dollar baissier quand le risque n'est pas tranché",
+            "nd": "Gris : direction neutre"}
+SECONDES_BRIEFING = 8
 # Vocabulaire d'un thème « fort » : retiré du texte du modèle quand la cohérence est sous le seuil.
 import re as _re
 _THEME_FORT = _re.compile(
     r"\b(?:th[èe]me (?:fort|dominant|clair|net|bien [ée]tabli|install[ée])|domin\w*|marqu[ée]e?s?|"
     r"nette(?:ment)?|net|clairement|franc(?:he)?(?:ment)?|solide(?:ment)?|consolid\w*|sans ambigu[ïi]t[ée]|"
     r"s'impose\w*|unanim\w*|tous les engrenages)\b", _re.IGNORECASE)
-REGLE_COHERENCE = ("engrenage 2 à 8 aligné si sa direction dollar est celle du thème ; à défaut de direction "
-                   "dollar, si sa direction risque est celle du thème. Évaluable = engrenage qui a une direction "
-                   "comparable à celle du thème. Moins de 3 alignés : « Signaux mixtes ».")
+REGLE_COHERENCE = ("engrenage 2 à 8 aligné si sa direction dollar est celle du thème ; à défaut (thème au dollar "
+                   "neutre, ou engrenage sans direction dollar), si sa direction risque est celle du thème. Évaluable = "
+                   "engrenage qui a une direction comparable à celle du thème. Moins de 3 alignés : « Signaux mixtes ». "
+                   "Thème au dollar et au risque neutres : rien à mesurer.")
 
 
 def _fr(v: float | None, d: int = 2) -> str:
@@ -241,31 +249,46 @@ def _direction(e: dict | None) -> dict:
     origine = d.get("origine") or {}
     par_modele = "modèle" in (origine.get("dollar") or "") or "modèle" in (origine.get("risque") or "")
     conv = ((e or {}).get("conviction") or {}).get("niveau")
+    regle = ((d.get("calculee") or {}).get("regle") or "").strip() or None
+    chiffre = next((x.get("texte") for x in (e or {}).get("donnees_calculees") or [] if x.get("texte")), None)
     return {"dollar": dollar, "risque": risque, "libelle": libelle, "classe": classe,
             "origine": "modèle (engrenage sans règle Python)" if par_modele else ("calcul Python" if dollar or risque else None),
-            "conviction": POINTS_CONVICTION.get(conv, 0), "conviction_niveau": conv}
+            "conviction": POINTS_CONVICTION.get(conv, 0), "conviction_niveau": conv, "regle": regle,
+            "raison_couleur": _raison_couleur(dollar, risque, libelle, classe, regle, chiffre, e)}
+
+
+def _raison_couleur(dollar, risque, libelle, classe, regle, chiffre, e) -> str:
+    """Pourquoi ce secteur a cette couleur : la règle Python (dossier ou matrice d'impact) et le chiffre du jour."""
+    if e is None:
+        return "Hachures : synthèse des engrenages absente pour ce rapport, aucune direction calculée."
+    if not dollar and not risque:
+        return "Hachures : aucune direction déterminée" + (f" ({regle})." if regle else " (pas de règle ni de donnée aujourd'hui).")
+    texte = f"{COULEURS[classe].split(' :')[0]} ({libelle}) : {regle or 'règle Python'}."
+    return texte + (f" Chiffre du jour : {chiffre}" if chiffre else "")
 
 
 def coherence(par_num: dict) -> dict:
     theme = _direction(par_num.get(1))
+    dollar_t = theme["dollar"] if theme["dollar"] in ("haussier", "baissier") else None
+    risque_t = theme["risque"] if theme["risque"] in ("risk_on", "risk_off") else None
     alignes, details = [], []
     for n in range(2, 9):
         d = _direction(par_num.get(n))
-        if theme["dollar"] and d["dollar"]:
-            ok = d["dollar"] == theme["dollar"] and theme["dollar"] != "neutre"
-            critere = "dollar"
-        elif theme["risque"] and d["risque"]:
-            ok = d["risque"] == theme["risque"] and theme["risque"] != "neutre"
-            critere = "risque"
+        if dollar_t and d["dollar"]:
+            ok, critere = d["dollar"] == dollar_t, "dollar"
+        elif risque_t and d["risque"]:
+            ok, critere = d["risque"] == risque_t, "risque"
         else:
             ok, critere = False, None
         details.append({"numero": n, "aligne": ok, "critere": critere, "direction": d["libelle"]})
         if ok:
             alignes.append(n)
     evaluables = [x["numero"] for x in details if x["critere"]]
+    neutre = not dollar_t and not risque_t     # thème sans sens (dollar et risque neutres ou absents)
     return {"alignes": len(alignes), "evaluables": len(evaluables), "sur": 7, "engrenages_alignes": alignes,
             "engrenages_evaluables": evaluables, "theme_fort": len(alignes) >= SEUIL_THEME_FORT,
-            "libelle": f"{len(alignes)} sur {len(evaluables)} évaluable{'s' if len(evaluables) > 1 else ''}",
+            "theme_neutre": neutre,
+            "libelle": THEME_NEUTRE if neutre else f"{len(alignes)} sur {len(evaluables)} évaluable{'s' if len(evaluables) > 1 else ''}",
             "detail": details, "regle": REGLE_COHERENCE}
 
 
@@ -280,6 +303,8 @@ def moderer_theme_fort(texte: str | None) -> tuple[str | None, int]:
 
 def phrase_signaux_mixtes(coh: dict, theme_dir: dict) -> str:
     sens = theme_dir.get("libelle") or "non déterminé"
+    if coh.get("theme_neutre"):
+        return f"Thème neutre ({sens}) : pas d'alignement à mesurer, aucun thème n'est annoncé."
     if not coh["evaluables"]:
         return f"Aucun autre engrenage n'a de direction comparable à celle du thème calculé ({sens}) : pas de thème confirmé."
     return (f"Les engrenages ne s'accordent pas : {coh['libelle']} vont dans le sens du thème calculé ({sens}), "
@@ -303,6 +328,63 @@ def _phrases(texte: str | None, n: int = 3) -> str | None:
     morceaux = [m.strip() for m in str(texte).replace("\n", " ").split(". ") if m.strip()]
     sortie = ". ".join(morceaux[:n]).replace("risk_off", "risk off").replace("risk_on", "risk on")
     return sortie if sortie.endswith((".", "!", "?")) else sortie + "."
+
+
+def _premiere_phrase(texte: str | None, maximum: int = 260) -> str | None:
+    # Les identifiants de sources (« (src_169) ») servent à la vérification : absents d'une carte lue en 8 secondes.
+    t = " ".join(_re.sub(r"\s*\((?:src_\d+(?:,\s*)?)+\)|\bsrc_\d+\b", "", str(texte or "")).split())
+    if not t:
+        return None
+    m = _re.match(r"^(.+?[.!?])(\s|$)", t)
+    phrase = (m.group(1) if m else t)[:maximum].replace("risk_off", "risk off").replace("risk_on", "risk on")
+    return phrase if phrase.endswith((".", "!", "?")) else phrase + "."
+
+
+def briefing(theme: dict, cartes: list[dict], par_num: dict, eng: dict) -> dict:
+    """Briefing en 60 secondes : 9 cartes (le thème puis les 8 engrenages), tous les textes repris des champs
+    déjà calculés ou rédigés (aucun appel). « À retenir » : la phrase du modèle si elle existe, sinon une phrase
+    Python, avec « Texte indisponible : … » quand le texte du modèle manque."""
+    absent_global = eng.get("texte_indisponible") or (None if par_num else TEXTE_SANS_SYNTHESE)
+    d1 = theme.get("direction") or {}
+    coh = theme.get("coherence")
+    if theme.get("texte"):
+        retenir, source, manque = _premiere_phrase(theme["texte"], 320), "modèle", None
+    else:
+        retenir = theme.get("texte_python") or (f"Direction calculée : {d1.get('libelle')}." if par_num else None)
+        source, manque = "calcul Python", theme.get("texte_indisponible") or absent_global
+    sortie = [{
+        "numero": 0, "surtitre": "Thème du jour", "titre": theme.get("titre") or "Thème non déterminé",
+        "chiffre": {"libelle": "Cohérence des engrenages",
+                    "texte": None if not coh else "Neutre" if coh.get("theme_neutre") else f"{coh['alignes']} sur {coh['evaluables']}",
+                    "raison": None if coh else theme.get("raison") or "synthèse des engrenages absente",
+                    "date": theme.get("date_rapport"),
+                    "source": THEME_NEUTRE if coh and coh.get("theme_neutre") else "règles Python des 8 engrenages"},
+        "ligne": (f"Direction du thème : {d1.get('libelle')}. "
+                  + (f"{coh['libelle']}." if coh.get("theme_neutre") else f"Cohérence : {coh['libelle']}.") if coh else
+                  f"Indisponible : {theme.get('raison') or 'synthèse des engrenages absente'}."),
+        "verdict": {k: d1.get(k) for k in ("libelle", "classe", "conviction", "conviction_niveau")},
+        "a_retenir": retenir, "a_retenir_source": source, "texte_indisponible": manque,
+        "raison_couleur": d1.get("raison_couleur"),
+    }]
+    for c in cartes:
+        e = par_num.get(c["numero"]) or {}
+        d = c.get("direction") or {}
+        diag = None if e.get("donnees_insuffisantes") or e.get("texte_indisponible") else _premiere_phrase(e.get("diagnostic"))
+        if diag:
+            retenir, source, manque = diag, "modèle", None
+        elif e.get("donnees_insuffisantes"):
+            retenir, source, manque = "Données insuffisantes aujourd'hui.", "calcul Python", None
+        else:
+            retenir = (f"{d.get('libelle')}. Règle Python : {d['regle']}." if d.get("regle") and (d.get("dollar") or d.get("risque"))
+                       else "Aucune direction calculée aujourd'hui.")
+            source, manque = "calcul Python", e.get("texte_indisponible") or absent_global
+        sortie.append({"numero": c["numero"], "surtitre": f"Engrenage {c['numero']}", "titre": c["titre"],
+                       "chiffre": c.get("chiffre"), "ligne": c.get("ligne"),
+                       "verdict": {k: d.get(k) for k in ("libelle", "classe", "conviction", "conviction_niveau")},
+                       "a_retenir": retenir, "a_retenir_source": source, "texte_indisponible": manque,
+                       "raison_couleur": d.get("raison_couleur")})
+    return {"cartes": sortie, "secondes_par_carte": SECONDES_BRIEFING,
+            "legende": [COULEURS["up"], COULEURS["dn"], COULEURS["nd"], "Hachures : aucune direction déterminée"]}
 
 
 # --------------------------------------------------------------- assemblage
@@ -342,7 +424,7 @@ def calculer(dossiers_engrenages: dict, historiques: dict | None, technique: dic
              "direction": theme_dir, "coherence": coh,
              "raison": None if par_num else "synthèse des engrenages pas encore disponible pour ce rapport",
              "date_rapport": ((rapport or {}).get("meta") or {}).get("date_rapport")}
-    return {"theme": theme, "cartes": cartes,
+    return {"theme": theme, "cartes": cartes, "briefing": briefing(theme, cartes, par_num, eng),
             "chaines": [{"titre": c.get("titre"), "maillons": [{"engrenage": m.get("engrenage"), "texte": m.get("texte"),
                                                                  "non_sourcee": bool(m.get("non_sourcee"))}
                                                                 for m in c.get("maillons") or []]}

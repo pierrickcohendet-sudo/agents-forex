@@ -395,7 +395,7 @@ def _blocs_marches(rapport: dict) -> list[dict]:
     return blocs
 
 
-FLECHES_DOLLAR = {"haussier": "Dollar ↑", "baissier": "Dollar ↓", "neutre": "Dollar ="}
+FLECHES_DOLLAR = {"haussier": "Dollar haussier", "baissier": "Dollar baissier", "neutre": "Dollar neutre"}
 LIBELLES_RISQUE = {"risk_on": "Risk on", "risk_off": "Risk off", "neutre": "Risque neutre"}
 LIBELLES_CONVICTION = {"faible": "faible", "moyen": "moyenne", "eleve": "élevée"}
 

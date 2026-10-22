@@ -14,7 +14,7 @@ from pathlib import Path
 from core import registre_macro as rm, vue_ensemble
 from core.tuiles import DEVISES, _fenetre, _fr, _points, _signe, tuile
 
-DIRECTION = {"haussier": "Dollar ↑", "baissier": "Dollar ↓", "neutre": "Dollar ="}
+DIRECTION = {"haussier": "Dollar haussier", "baissier": "Dollar baissier", "neutre": "Dollar neutre"}
 
 
 def _graphique_serie(titre, unite, lignes, source, base_100=False):

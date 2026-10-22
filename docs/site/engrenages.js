@@ -4,7 +4,7 @@ import { carteDossiers } from "./dossiers.js";
 import { vueHebdo } from "./hebdo.js";
 import { vueEnsemble, selecteurPeriode } from "./vue_ensemble.js";
 
-const DOLLAR = { haussier: "Dollar ↑", baissier: "Dollar ↓", neutre: "Dollar =" };
+const DOLLAR = { haussier: "Dollar haussier", baissier: "Dollar baissier", neutre: "Dollar neutre" };
 const RISQUE = { risk_on: "Risk on", risk_off: "Risk off", neutre: "Risque neutre" };
 const CONVICTION = { faible: "faible", moyen: "moyenne", eleve: "élevée" };
 
