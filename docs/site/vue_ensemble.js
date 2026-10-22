@@ -149,7 +149,7 @@ function roue(v, choisir) {
       "aria-label": `Engrenage ${c.numero}, ${c.titre} : ${d.libelle || "direction non déterminée"}, conviction ${CONVICTION[d.conviction || 0]}. ${d.raison_couleur || ""} Ouvrir le dossier.` });
     g.style.animationDelay = `${i * 60}ms`;
     g.appendChild(svgEl("path", { d: arc(cx, cy, r0, r1, a0, a1), fill: sansDirection ? "url(#hachures-roue)" : (COULEUR_DIR[d.classe] || "var(--neutre)"),
-                                 stroke: "var(--carte)", "stroke-width": 1.5, class: sansDirection ? "sans-direction" : "" }));
+                                 stroke: "var(--carte)", "stroke-width": 1.5, class: sansDirection ? "sans-direction" : `dir-${d.classe || "nd"}` }));
     const [nx, ny] = polaire(cx, cy, (r0 + r1) / 2, am);
     g.appendChild(texteSvg({ x: nx, y: ny + 5, "text-anchor": "middle", class: `roue-num${sansDirection ? " sombre" : ""}` }, String(c.numero)));
     const [lx, ly] = polaire(cx, cy, r0 + 3 * pas + 16, am), cos = Math.cos(am);

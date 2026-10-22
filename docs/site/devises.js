@@ -231,7 +231,7 @@ function moteurs(dos, devise) {
   if (!ligne) return [];
   return ligne.cases.filter(c => c.valeur !== 0).sort((a, b) => Math.abs(b.valeur) - Math.abs(a.valeur)).slice(0, 2);
 }
-function carteDevise(d, dos, coursDev, cles, rapportDev) {
+export function carteDevise(d, dos, coursDev, cles, rapportDev) {
   const c = el("article", "dc-carte");
   const tete = el("div", "dc-tete");
   tete.append(el("span", "dc-code", d), el("span", "dc-nom", NOMS[d]));
@@ -242,6 +242,7 @@ function carteDevise(d, dos, coursDev, cles, rapportDev) {
   c.appendChild(tete);
   if (coursDev?.points?.length) {
     c.appendChild(graphiqueSerie({ titre: "Force de la devise, base 100", unite: null, base_100: true, base_commune: true,
+      annotations: coursDev.annotations || null,
       courbes: [{ nom: d, points: coursDev.points, couleur: "var(--accent)" },
                 { nom: "MM200", points: coursDev.mm200 || [], couleur: "var(--texte-2)", pointille: true }],
       source: `${coursDev.libelle} — ${coursDev.source || "série unique 5 ans"} ; moyenne mobile 200 jours en pointillé` }));

@@ -322,7 +322,8 @@ def main() -> int:
                           registre_macro.charger(donnees_dir / "registre_macro.json"), technique, config,
                           None, flux, news, dossier_rapports, defaut=None)
     # Cours des 9 devises (page Devises) : même série que le RSI et la MM200 -> docs/data/cours.json
-    etape("cours des devises (cours.json)", cours.ecrire, RACINE, historique_5ans.charger(), technique, config, defaut=None)
+    etape("cours des devises (cours.json)", cours.ecrire, RACINE, historique_5ans.charger(), technique, config,
+          registre_macro.charger(donnees_dir / "registre_macro.json"), defaut=None)
     # Simulateur d'impact (§12, palier 11) : études d'événements sur 5 ans, sans LLM -> docs/data/impact.json
     etape("simulateur d'impact (impact.json)", impact.ecrire, RACINE, historique_5ans.charger(), technique,
           registre_macro.charger(donnees_dir / "registre_macro.json"), config, defaut=None)

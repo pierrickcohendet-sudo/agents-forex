@@ -15,7 +15,7 @@ import statistics
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
-from core import archive_quotidienne, complements, consequences, controles_macro, historique_5ans, matrice_impact, registre_macro as rm, tuiles, vue_ensemble
+from core import annotations, archive_quotidienne, complements, consequences, controles_macro, historique_5ans, matrice_impact, registre_macro as rm, tuiles, vue_ensemble
 
 log = logging.getLogger(__name__)
 
@@ -876,6 +876,12 @@ def construire(historiques: dict, registre: dict, technique: dict, config: dict,
             sortie["engrenages"]["5"]["matrice_chaleur"] = tuiles.matrice_chaleur(sortie["engrenages"]["5"], historiques)
     except Exception:  # noqa: BLE001
         log.exception("Carte de chaleur des corrélations en échec")
+    for numero, e in sortie["engrenages"].items():   # repères annotés (palier 10) : un graphique en échec n'affecte que lui
+        for g in (e or {}).get("graphiques") or []:
+            try:
+                annotations.annoter_graphique(g, registre)
+            except Exception:  # noqa: BLE001
+                log.exception("Annotations d'un graphique de l'engrenage %s en échec", numero)
     try:   # bandeau du thème, 8 cartes et chaînes (refonte V2, palier 1) : calcul Python, sans LLM
         sortie["vue_ensemble"] = vue_ensemble.calculer(sortie["engrenages"], historiques, technique, rapport)
         try:   # matrice d'impact 9 devises × 8 engrenages (règles de config.yaml, calcul Python)

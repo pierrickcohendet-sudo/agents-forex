@@ -9,13 +9,14 @@ import logging
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
-from core import historique_5ans as h5m, impact
+from core import annotations, historique_5ans as h5m, impact
 
 log = logging.getLogger(__name__)
 JOURS = 366
 
 
-def calculer(h: h5m.Historique, technique: dict | None = None, aujourdhui: date | None = None) -> dict:
+def calculer(h: h5m.Historique, technique: dict | None = None, aujourdhui: date | None = None,
+             registre: dict | None = None) -> dict:
     sortie = {"genere_le": datetime.now(timezone.utc).isoformat(timespec="seconds"), "source": h5m.SOURCE_INDICATEURS,
               "devises": {}}
     for devise in h5m.DEVISES:
@@ -25,17 +26,27 @@ def calculer(h: h5m.Historique, technique: dict | None = None, aujourdhui: date 
             continue
         mm = [(d, v) for d, v in h5m.moyenne_mobile(serie, 200)]
         limite = (date.fromisoformat(serie[-1][0]) - timedelta(days=JOURS)).isoformat()
+        points = [[d, round(v, 6)] for d, v in serie if d >= limite]
+        libelle = "indice USD synthétique (face aux 8 autres devises)" if devise == "USD" else f"dollars US pour 1 {devise}"
+        try:   # repères annotés (palier 10) : plus haut, plus bas, dernière valeur, évènement majeur de la devise
+            reperes = annotations.reperes(points, None, f"{libelle} — série unique 5 ans (Twelve Data raccordé à la Fed H.10)",
+                                          annotations.evenements_majeurs(registre, devise), devise)
+        except Exception:  # noqa: BLE001
+            log.exception("Annotations du cours %s en échec", devise)
+            reperes = None
         sortie["devises"][devise] = {
-            "points": [[d, round(v, 6)] for d, v in serie if d >= limite],
+            "annotations": {"courbe": devise, "periodes": reperes} if reperes else None,
+            "points": points,
             "mm200": [[d, round(v, 6)] for d, v in mm if d >= limite],
             "dernier": round(serie[-1][1], 6), "date": serie[-1][0],
-            "libelle": "indice USD synthétique (face aux 8 autres devises)" if devise == "USD" else f"dollars US pour 1 {devise}"}
+            "libelle": libelle}
     return sortie
 
 
-def ecrire(racine: str | Path, h: h5m.Historique, technique: dict | None, config: dict) -> dict | None:
+def ecrire(racine: str | Path, h: h5m.Historique, technique: dict | None, config: dict,
+           registre: dict | None = None) -> dict | None:
     try:
-        donnees = calculer(h, technique)
+        donnees = calculer(h, technique, registre=registre)
         chemin = Path(racine) / config.get("publication_web", {}).get("dossier_docs", "docs") / "data" / "cours.json"
         chemin.write_text(json.dumps(donnees, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
         return donnees

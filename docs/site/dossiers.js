@@ -161,6 +161,61 @@ function etiquettesSansChevauchement(ys, ecart, haut, bas) {
 }
 
 const JOUR_MS = 864e5;
+
+/* Repères annotés (palier 10, calcul Python : core/annotations.py) : une forme par type, lisible en noir et
+   blanc (▲ plus haut, ▼ plus bas, ● dernière valeur, ◆ évènement). Survol, focus ou toucher : détail, source, date. */
+const FORMES_REPERE = { haut: "▲", bas: "▼", dernier: "●", evenement: "◆" };
+function formeRepere(type, cx, cy) {
+  const r = 3.4;
+  if (type === "haut") return s("path", { d: `M${cx} ${cy - r - 1}L${cx + r} ${cy + r - 1}L${cx - r} ${cy + r - 1}Z`, class: "repere-forme" });
+  if (type === "bas") return s("path", { d: `M${cx} ${cy + r + 1}L${cx + r} ${cy - r + 1}L${cx - r} ${cy - r + 1}Z`, class: "repere-forme" });
+  if (type === "evenement") return s("path", { d: `M${cx} ${cy - r - 0.6}L${cx + r + 0.6} ${cy}L${cx} ${cy + r + 0.6}L${cx - r - 0.6} ${cy}Z`, class: "repere-forme evenement" });
+  return s("circle", { cx, cy, r: r - 0.4, class: "repere-forme dernier" });
+}
+export function dessinerReperes(svg, reperes, courbe, x, y, cadre, bulle, zone) {
+  if (!reperes?.length || !courbe) return 0;
+  const [xmin, xmax, ymin, ymax] = cadre;
+  const places = [];   // boîtes des étiquettes déjà posées : une étiquette ne recouvre jamais une autre
+  let n = 0;
+  for (const r of reperes) {
+    const p = courbe.pts.find(q => q[0] === r.date);
+    if (!p) continue;                                  // date hors de la période affichée : pas de repère
+    const cx = x(Date.parse(p[0])), cy = y(p[1]);
+    const g = s("g", { class: `repere repere-${r.type}`, tabindex: 0, role: "img",
+                       "aria-label": `${r.detail}. Source : ${r.source || "—"}.` });
+    g.appendChild(s("title", {}, `${r.detail} · source : ${r.source || "—"}`));
+    if (r.type === "evenement") g.appendChild(s("line", { x1: cx, x2: cx, y1: ymin, y2: ymax, class: "repere-ligne" }));
+    g.appendChild(formeRepere(r.type, cx, cy));
+    const enHaut = r.type === "bas" ? false : r.type === "haut" || r.type === "evenement" || cy > (ymin + ymax) / 2;
+    const ancre = cx > xmin + (xmax - xmin) * 0.72 ? "end" : cx < xmin + (xmax - xmin) * 0.2 ? "start" : "middle";
+    const texte = String(r.texte).slice(0, 22), larg = texte.length * 5.2;
+    const tx = cx + (ancre === "end" ? -3 : ancre === "start" ? 3 : 0);
+    const x0 = ancre === "end" ? tx - larg : ancre === "middle" ? tx - larg / 2 : tx;
+    const borne = v => Math.max(ymin + 7, Math.min(ymax - 2, v));
+    const base = enHaut ? cy - 6 : cy + 12, autre = enHaut ? cy + 12 : cy - 6;
+    const libre = v => !places.some(b => x0 < b[1] && x0 + larg > b[0] && Math.abs(v - b[2]) < 12);
+    const ty = [base, base - 12, base + 12, autre, autre + 12, autre - 12, base - 24, base + 24, autre + 24, base + 36, autre + 36]
+      .map(borne).find(libre);
+    if (ty !== undefined) {   // sinon : forme et détail au survol seulement, jamais deux étiquettes superposées
+      places.push([x0, x0 + larg, ty]);
+      g.appendChild(s("text", { x: tx, y: ty, "text-anchor": ancre, class: "repere-texte" }, texte));
+    }
+    const montrer = ev => {
+      ev.stopPropagation();
+      bulle.classList.add("repere-bulle");
+      bulle.replaceChildren(el("strong", null, `${FORMES_REPERE[r.type] || ""} ${r.texte}`),
+                            el("span", null, r.detail), el("small", null, `Source : ${r.source || "—"}`));
+      bulle.hidden = false;
+      const zr = zone.getBoundingClientRect(), gr = g.getBoundingClientRect();
+      bulle.style.left = `${Math.max(4, Math.min(gr.left - zr.left + 10, zr.width - bulle.offsetWidth - 4))}px`;
+    };
+    g.addEventListener("pointerenter", montrer); g.addEventListener("pointerdown", montrer); g.addEventListener("focus", montrer);
+    g.addEventListener("pointerleave", () => { bulle.hidden = true; }); g.addEventListener("blur", () => { bulle.hidden = true; });
+    svg.appendChild(g);
+    n++;
+  }
+  return n;
+}
 const PERIODES = [[30, "30 j"], [90, "90 j"], [366, "1 an"]];
 
 /* Graphique en lignes interactif (refonte §7) : périodes 30 j / 90 j / 1 an selon la profondeur des données,
@@ -241,8 +296,12 @@ export function graphiqueSerie(g) {
     svg.append(curseur, ...points);
     const capte = s("rect", { x: m.g, y: m.h, width: L - m.g - m.d, height: H - m.h - m.b, fill: "transparent", class: "capte" });
     svg.appendChild(capte);
+    const reperes = g.annotations?.periodes?.[periode ? String(periode) : "tout"] || [];
+    const nbReperes = dessinerReperes(svg, reperes, courbes.find(c => c.nom === g.annotations?.courbe) || null, x, y,
+                                      [m.g, L - m.d, m.h, H - m.b], bulle, zone);
     const proche = (pts, t) => { let best = pts[0]; for (const p of pts) if (Math.abs(Date.parse(p[0]) - t) < Math.abs(Date.parse(best[0]) - t)) best = p; return best; };
     function montrer(ev) {
+      bulle.classList.remove("repere-bulle");
       const r = svg.getBoundingClientRect();
       const vx = (ev.clientX - r.left) / r.width * L;
       const t = t0 + Math.max(0, Math.min(1, (vx - m.g) / (L - m.g - m.d))) * (t1 - t0);
@@ -270,7 +329,8 @@ export function graphiqueSerie(g) {
       const item = el("span"); const pastil = el("i"); pastil.style.background = c.couleur;
       item.append(pastil, document.createTextNode(` ${c.nom} ${nombre(derniers[i][1], 2)}`));
       return item;
-    }), el("span", "aide-graphique", "survolez ou touchez le graphique pour lire les valeurs"));
+    }), ...(nbReperes ? [el("span", "legende-reperes", "Repères : ▲ plus haut · ▼ plus bas · ● dernière valeur · ◆ évènement (banque centrale, CPI, NFP)")] : []),
+    el("span", "aide-graphique", "survolez ou touchez le graphique pour lire les valeurs"));
   }
   dessiner();
   return cadre;

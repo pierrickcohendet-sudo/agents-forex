@@ -635,3 +635,109 @@ svg .sc-scenario-point { fill: var(--alerte); stroke: var(--carte); stroke-width
   .roue-etiquette { font-size: 14.5px; } .roue-num { font-size: 16px; }
   .roue-titre { font-size: 17px; } .roue-sous { font-size: 13px; } .roue-surtitre { font-size: 12px; }
 }
+
+/* ------------------------------------------- repères annotés des graphiques (palier 10) */
+.repere { cursor: help; outline: none; }
+.repere-forme { fill: var(--texte); stroke: var(--carte); stroke-width: 1; }
+.repere-forme.dernier { fill: var(--accent); }
+.repere-forme.evenement { fill: var(--alerte); }
+.repere-ligne { stroke: var(--alerte); stroke-width: .8; stroke-dasharray: 2 2; vector-effect: non-scaling-stroke; }
+.repere-texte { font: 600 8px var(--sans); fill: var(--texte-2); paint-order: stroke; stroke: var(--carte); stroke-width: 2.5px; stroke-linejoin: round; }
+.repere:hover .repere-forme, .repere:focus-visible .repere-forme { stroke: var(--texte); stroke-width: 1.5; }
+.repere:focus-visible .repere-texte { fill: var(--texte); }
+.infobulle.repere-bulle { white-space: normal; max-width: min(280px, 90%); }
+.legende-reperes { flex-basis: 100%; font-size: 11.5px; }
+@media (max-width: 600px) { .repere-texte { font-size: 9.5px; } }
+
+/* ------------------------------------------------ impression et PDF (palier 10) */
+/* Bloc #impression : mêmes règles à l'écran (aperçu) et sur papier. Fond blanc, encre noire, textures. */
+#impression {
+  --fond: #fff; --carte: #fff; --carte-2: #f2f2f2; --texte: #000; --texte-2: #333; --trait: #9a9a9a;
+  --accent: #000; --positif: #000; --negatif: #000; --alerte: #000; --neutre: #8c8c8c; color-scheme: light;
+  background: #fff; color: #000; -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+#impression .imp-motifs { position: absolute; }
+.imp-barre { position: sticky; top: 0; z-index: 5; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px 16px;
+  background: #fff; border-bottom: 1px solid #9a9a9a; }
+.imp-barre p { margin: 0 auto 0 0; font-size: 13px; color: #333; }
+.imp-page { width: 210mm; min-height: 297mm; margin: 16px auto; padding: 12mm; background: #fff; color: #000;
+  box-shadow: 0 1px 6px rgb(0 0 0 / .25); display: flex; flex-direction: column; gap: 8px; font-size: 11px; line-height: 1.35; }
+.imp-tete { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; border-bottom: 2px solid #000; padding-bottom: 4px; }
+.imp-marque { font: 700 12px var(--serif); letter-spacing: .04em; }
+.imp-titre { font-size: 20px; }
+.imp-date { margin-left: auto; font-size: 10px; color: #333; }
+.imp-pied { margin-top: auto; border-top: 1px solid #000; padding-top: 4px; font-size: 9.5px; color: #333; }
+.imp-pied p { margin: 2px 0; }
+.imp-mention { font-weight: 700; color: #000; }
+#impression .carte { border-color: #9a9a9a; }
+#impression .eg-hero { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); padding: 8px; gap: 10px; }
+#impression .roue-cadre { max-width: 300px; }
+#impression .roue-secteur { animation: none; }
+#impression .roue-secteur path { opacity: 1; stroke: #000; stroke-width: 1; }
+#impression .roue-secteur path.dir-up { fill: url(#imp-up); }
+#impression .roue-secteur path.dir-dn { fill: url(#imp-dn); }
+#impression .roue-secteur path.dir-nd { fill: #d9d9d9; }
+#impression .roue-secteur path.dir-up ~ .roue-num, #impression .roue-secteur path.dir-nd ~ .roue-num { fill: #000; paint-order: stroke; stroke: #fff; stroke-width: 3px; }
+#impression .roue-secteur path.dir-dn ~ .roue-num { fill: #fff; }
+.imp-legende { list-style: none; padding: 0; margin: 4px 0 0; display: grid; gap: 2px; font-size: 9.5px; }
+.imp-pastille { display: inline-block; width: 11px; height: 11px; border: 1px solid #000; vertical-align: -1px; margin-right: 4px; }
+.imp-pastille.up { background: radial-gradient(circle, #000 1.2px, #fff 1.4px) 0 0 / 4px 4px; }
+.imp-pastille.dn { background: #222; } .imp-pastille.nd { background: #d9d9d9; }
+.imp-pastille.hachures { background: repeating-linear-gradient(45deg, #000 0 1.5px, #fff 1.5px 4px); }
+#impression .eg-grille { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin: 0; }
+#impression .eg-carte { padding: 6px 8px; transform: none; border-top-width: 3px; break-inside: avoid; }
+#impression .eg-carte.dir-up { border-top-style: dotted; } #impression .eg-carte.dir-dn { border-top-style: solid; border-top-color: #000; }
+#impression .eg-carte.dir-nd { border-top-color: #b3b3b3; }
+#impression .eg-valeur { font-size: 1.1rem; }
+.imp-source, .imp-retenir { display: block; font-size: 9.5px; color: #333; margin-top: 2px; overflow-wrap: anywhere; }
+.imp-retenir { color: #000; font-style: italic; }
+#impression .dc-grille { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+#impression .dc-carte { padding: 6px; break-inside: avoid; font-size: 10px; }
+#impression .periodes, #impression .aide-graphique, #impression .dc-ouvrir, #impression .imp-page .bouton, #impression .eg-impose { display: none; }
+#impression .graphique-svg path.trace { stroke-dasharray: none; animation: none; }
+#impression .legende-reperes { font-size: 8.5px; }
+#impression .repere-forme.dernier, #impression .repere-forme.evenement { fill: #000; }
+#impression .repere-forme.evenement { fill: #fff; stroke: #000; stroke-width: 1.2; }
+/* Une page par section : cartes compactes, sources détaillées regroupées dans le pied de page */
+#impression .dc-carte { gap: 3px; padding: 5px 6px; }
+#impression .dc-carte .graphique { padding: 3px; margin: 0; }
+#impression .dc-carte figcaption { font-size: 9px; margin: 0; }
+#impression .dc-carte .graphique-svg { max-height: 80px; }
+#impression .dc-grille { margin: 0; }
+#impression .dc-carte .graphique .note, #impression .legende-reperes, #impression .dc-moteurs .note { display: none; }
+#impression .dc-carte .legende { font-size: 8.5px; margin-top: 0; gap: 0 8px; }
+#impression .dc-inds { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 2px; }
+#impression .dc-ind { padding: 2px 4px; }
+#impression .dc-ind span { font-size: 8px; }
+#impression .dc-ind b { font-size: 9.5px; }
+#impression .dc-moteurs { font-size: 8.5px; }
+#impression .dc-moteur { margin: 0; font-size: 9px; line-height: 1.3; }
+#impression .dc-lab { font-size: 8px; }
+#impression .dc-code { font-size: 13px; } #impression .dc-nom, #impression .dc-pastille { font-size: 9px; }
+#impression .eg-courbe, #impression .eg-sans-courbe { height: 20px; min-height: 0; margin-top: 2px; }
+#impression .eg-ligne, #impression .eg-libelle { font-size: 9.5px; }
+#impression .eg-nom { font-size: 12px; margin-bottom: 0; }
+#impression .imp-legende-reperes { font-size: 9px; margin: 0; }
+.imp-sous-titre { font-size: 14px; margin-bottom: 6px; }
+#impression .eg-maillon { font-size: 10px; padding: 4px 6px; }
+body.apercu-impression { background: #d6d6d6; }
+body.apercu-impression > *:not(#impression) { display: none !important; }
+@media (max-width: 820px) { .imp-page { width: auto; min-height: 0; margin: 8px; padding: 10px; } }
+
+@page { size: A4 portrait; margin: 10mm; }
+@media print {
+  html, body { background: #fff !important; color: #000; }
+  /* Sans aperçu (Ctrl+P sur n'importe quelle page) : contenu courant, fond blanc, sans boutons ni navigation */
+  .onglets, .entete-actions, .bouton, .bouton-lien, button.periode, .periodes, .aide-graphique, .aide-clavier, dialog,
+  .roue-raison, .bouton-briefing, .imp-barre { display: none !important; }
+  .entete { position: static; border: 0; }
+  .carte { break-inside: avoid; box-shadow: none; }
+  :root, :root[data-theme] { --fond: #fff; --carte: #fff; --carte-2: #f2f2f2; --texte: #000; --texte-2: #333; --trait: #9a9a9a; color-scheme: light; }
+  /* Avec l'aperçu : seules les trois pages, une par feuille */
+  body.apercu-impression > *:not(#impression) { display: none !important; }
+  body.apercu-impression { background: #fff; }
+  .imp-page { width: auto; min-height: 0; margin: 0; padding: 0; box-shadow: none; break-after: page; }
+  .imp-page:last-child { break-after: auto; }
+  .imp-pied { margin-top: 8px; }
+  .pied::after { content: "Aide à la décision, pas un conseil en investissement."; display: block; font-weight: 700; }
+}

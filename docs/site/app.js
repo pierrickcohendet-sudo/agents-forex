@@ -73,6 +73,12 @@ async function initialiser() {
   document.getElementById("bouton-theme").addEventListener("click", () => {
     appliquerTheme(CYCLE_THEME[(CYCLE_THEME.indexOf(themeCourant()) + 1) % CYCLE_THEME.length]);
   });
+  // Impression / PDF : aperçu avant impression (3 pages A4), module chargé au premier clic seulement
+  const boutonImprimer = document.getElementById("bouton-imprimer");
+  boutonImprimer.addEventListener("click", async () => {
+    try { (await import("./impression.js")).ouvrirApercu(boutonImprimer); }
+    catch (e) { console.error(e); window.print(); }
+  });
   // #g=N mis à jour par le sélecteur via history.replaceState : pas d'événement hashchange, pas de rechargement
   window.addEventListener("hashchange", afficher);
   const entete = document.querySelector(".entete");
