@@ -2,6 +2,7 @@
 un commit distant arrive pendant le run, le push doit quand même réussir ; conflit sur les données :
 la version du run est gardée ; échec définitif : exception et raison enregistrée (run rouge)."""
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -18,7 +19,9 @@ CONFIG = {"git_push": "toujours"}
 
 
 def git(*args, cwd):
-    r = subprocess.run(["git", *args], cwd=cwd, capture_output=True, text=True)
+    # Jamais d'invite (mot de passe, éditeur) et délai maximal : un git bloqué échoue au lieu de geler la suite.
+    env = {**os.environ, "GIT_TERMINAL_PROMPT": "0", "GIT_EDITOR": "true"}
+    r = subprocess.run(["git", *args], cwd=cwd, capture_output=True, text=True, timeout=60, env=env)
     if r.returncode != 0:
         raise RuntimeError(f"git {' '.join(args)} : {r.stderr}")
     return r.stdout.strip()

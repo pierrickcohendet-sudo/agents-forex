@@ -70,10 +70,17 @@ def ecrire_donnees(rapport: dict, dossier_docs: str | Path) -> Path:
     return dossier
 
 
+DELAI_GIT_S = 180   # une commande git qui ne répond plus (réseau, verrou, invite) ne bloque jamais le run
+
+
 def _git(*args: str, racine: Path) -> subprocess.CompletedProcess:
-    return subprocess.run(
-        ["git", *args], cwd=racine, capture_output=True, text=True, check=False
-    )
+    """git sans invite interactive (pas de mot de passe ni d'éditeur demandés) et avec délai maximal."""
+    env = {**os.environ, "GIT_TERMINAL_PROMPT": "0", "GIT_EDITOR": "true"}
+    try:
+        return subprocess.run(["git", *args], cwd=racine, capture_output=True, text=True, check=False,
+                              timeout=DELAI_GIT_S, env=env)
+    except subprocess.TimeoutExpired:
+        return subprocess.CompletedProcess(["git", *args], 124, "", f"git {args[0]} : délai de {DELAI_GIT_S} s dépassé")
 
 
 def pousser_git(config_web: dict, racine_projet: str | Path = ".",
@@ -158,8 +165,7 @@ def _rebaser(racine: Path, branche: str) -> None:
             _git("checkout", "--theirs", "--", c, racine=racine)
             _git("add", "--", c, racine=racine)
         log.warning("Conflit résolu en gardant la version du run : %s", ", ".join(conflits))
-        pull = subprocess.run(["git", "-c", "core.editor=true", "rebase", "--continue"], cwd=racine,
-                              capture_output=True, text=True, check=False)
+        pull = _git("-c", "core.editor=true", "rebase", "--continue", racine=racine)
     if pull.returncode != 0:
         _git("rebase", "--abort", racine=racine)
         raise PushEchoue("rebase interrompu : trop de conflits successifs")
