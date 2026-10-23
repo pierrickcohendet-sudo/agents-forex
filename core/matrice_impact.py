@@ -18,6 +18,8 @@ def _pts(n: int) -> str:
     return f"{n:+d}".replace("-", "−")
 
 
+from core.indicateurs import TEXTE_NEUTRALISE  # noqa: E402
+
 LIBELLES = {2: "Soutien fort", 1: "Soutien", 0: "Neutre", -1: "Pression", -2: "Pression forte"}
 
 
@@ -113,7 +115,7 @@ def calculer(config: dict, engrenages: dict, vue: dict | None) -> dict:
     for devise in DEVISES:
         cases = []
         for n in range(1, 9):
-            points, appliquees, raisons = 0, [], []
+            points, appliquees, raisons, neutralisees = 0, [], [], []
             liste = regles.get(str(n)) or []
             if not liste:
                 raisons.append("aucune règle définie pour cet engrenage (config.yaml)")
@@ -142,10 +144,13 @@ def calculer(config: dict, engrenages: dict, vue: dict | None) -> dict:
                     if valeur is None or isinstance(valeur, dict):
                         raisons.append(f"{texte} : donnée indisponible")
                         continue
-                    if len(valeur) > 3 and valeur[3] and "heurt" in str(valeur[3]):
-                        raisons.append(f"{texte} : {_fmt(valeur[0], unite)}, compté 0 car {valeur[3]}")
-                        continue
                     cas = next((c for c in r.get("cas") or [] if _verifie(c["si"], valeur[0])), None)
+                    if len(valeur) > 3 and valeur[3] and "heurt" in str(valeur[3]):
+                        if (cas or {}).get("effets", {}).get(devise):   # aurait déclenché : neutralisation visible
+                            neutralisees.append(f"{texte} : {_fmt(valeur[0], unite)}, {TEXTE_NEUTRALISE} ({valeur[3]})")
+                        else:
+                            raisons.append(f"{texte} : {_fmt(valeur[0], unite)}, sous les seuils (série heurtée)")
+                        continue
                     pts = (cas or {}).get("effets", {}).get(devise)
                     if not pts:
                         raisons.append(f"{texte} : {_fmt(valeur[0], unite)}, aucun effet sur {devise}")
@@ -156,9 +161,12 @@ def calculer(config: dict, engrenages: dict, vue: dict | None) -> dict:
             if not appliquees and not raisons:
                 raisons.append(f"aucune règle de cet engrenage ne concerne {devise}")
             borne = max(-2, min(2, points))
-            cases.append({"engrenage": n, "valeur": borne, "libelle": LIBELLES[borne], "regles": appliquees,
-                          "raison": None if appliquees else "; ".join(raisons),
-                          "bornee": borne != points})
+            case = {"engrenage": n, "valeur": borne, "libelle": LIBELLES[borne], "regles": appliquees,
+                    "raison": None if appliquees else "; ".join(neutralisees + raisons),
+                    "bornee": borne != points}
+            if neutralisees and not appliquees:
+                case.update({"etat": "neutralise", "libelle": "Neutralisé", "neutralisation": "; ".join(neutralisees)})
+            cases.append(case)
         total = sum(c["valeur"] for c in cases)
         seuils = cfg.get("bilan") or {"soutenue": 3, "pression": -3}
         lignes.append({"devise": devise, "cases": cases, "bilan": total,

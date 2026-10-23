@@ -13,6 +13,8 @@ from __future__ import annotations
 
 from datetime import date, timedelta
 
+from core import indicateurs
+
 TITRES = {1: "Thème macro", 2: "Politique monétaire", 3: "Données économiques", 4: "Politique fiscale",
           5: "Interconnexions de marchés", 6: "Géopolitique", 7: "Price action et flux", 8: "Offre et demande"}
 DOLLAR = {"haussier": "Dollar haussier", "baissier": "Dollar baissier", "neutre": "Dollar neutre"}
@@ -170,10 +172,11 @@ def _carte_5(historiques: dict) -> tuple[dict, str, dict]:
     var = _pct(dl, 7)
     ligne = (f"Indice dollar {_signe(var)} % sur 7 jours" if var is not None else "Variation du dollar indisponible") + \
             (f", VIX à {_fr(vix[-1][1], 1)}." if vix else ".")
-    return (_chiffre("Indice dollar large (Fed)", dl[-1][1] if dl else None, "", dl[-1][0] if dl else None,
-                     "FRED (DTWEXBGS)", texte=None if not dl else _fr(dl[-1][1], 1),
-                     raison="indice dollar large indisponible"),
-            ligne, _courbe(_derniers_jours(dl), "FRED (DTWEXBGS)"))
+    chiffre = _chiffre("Indice dollar large (Fed)", dl[-1][1] if dl else None, "", dl[-1][0] if dl else None,
+                       "FRED (DTWEXBGS)", texte=None if not dl else _fr(dl[-1][1], 1),
+                       raison="indice dollar large indisponible")
+    chiffre["indicateur"] = "dollar_large"
+    return chiffre, ligne, _courbe(_derniers_jours(dl), "FRED (DTWEXBGS)")
 
 
 def _carte_6(dossiers: dict) -> tuple[dict, str, dict]:
@@ -223,6 +226,11 @@ def _carte_8(historiques: dict) -> tuple[dict, str, dict]:
         morceaux.append(f"stocks {_signe(var, 1)} M de barils sur la semaine")
     if brent:
         morceaux.append(f"Brent à {_fr(brent[-1][1])} $")
+    wti = _points(historiques, "wti")
+    var_wti = _pct(wti, 7)
+    saut = indicateurs.serie_heurtee(wti)
+    if saut and var_wti is not None and abs(var_wti) >= 3:   # au-delà du seuil, mais neutralisé : on le dit
+        morceaux.append(f"WTI {_signe(var_wti, 1)} % sur 7 jours, {indicateurs.TEXTE_NEUTRALISE} ({saut})")
     ligne = ", ".join(morceaux) + "." if morceaux else "Pétrole indisponible."
     return (_chiffre("Stocks de brut US", st[-1][1] if st else None, "M barils", st[-1][0] if st else None,
                      "EIA (WCESTUS1, hors réserve stratégique)", texte=None if not st else f"{_fr(st[-1][1], 1)} M",

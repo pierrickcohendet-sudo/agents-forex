@@ -970,6 +970,10 @@ def analyser(config: dict, llm: FournisseurLLM, technique: dict, macro: dict,
         definir_etiquette("commentaire_classement")
         commentaire = commenter_synthese_globale(llm, classement, biais, memoire)
 
+    # Partie Python des engrenages recalculée à chaque passage (une seule valeur par indicateur sur le site).
+    engrenages = agent_engrenages.rafraichir(engrenages, config, donnees, macro, catalogue, devises_finales, biais,
+                                             extras_synthese or {})
+
     # Synthèse approfondie par devise : APRÈS tout le reste (un quota épuisé ne coûte alors
     # que ces synthèses), une devise à la fois, même pause que les analyses ; un échec ne
     # touche que sa devise.

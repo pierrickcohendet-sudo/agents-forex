@@ -759,3 +759,7 @@ body.apercu-impression > *:not(#impression) { display: none !important; }
 /* Carte Devises : ce que mesure la courbe (étape 4) */
 .graphique-explication { margin: 2px 0 6px; font-size: 12px; color: var(--texte-2); line-height: 1.4; }
 #impression .graphique-explication { font-size: 8px; margin: 0 0 2px; line-height: 1.25; }
+
+/* Lot V5 : case neutralisée (série heurtée) — au-delà du seuil, mais comptée 0 : jamais un simple « Neutre » */
+.mi-case.neutralise { background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--alerte) 22%, var(--carte)) 0 3px, var(--carte) 3px 7px); }
+.mi-case.neutralise .mi-libelle { color: var(--alerte); font-weight: 700; }

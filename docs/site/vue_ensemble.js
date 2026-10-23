@@ -319,7 +319,7 @@ export function matriceImpact(m) {
     const tr = el("tr");
     tr.appendChild(el("th", "mi-devise", `${DRAPEAUX[l.devise] || ""} ${l.devise}`));
     for (const cas of l.cases) {
-      const td = el("td", `mi-case v${cas.valeur}`);
+      const td = el("td", `mi-case v${cas.valeur}${cas.etat ? ` ${cas.etat}` : ""}`);
       const b = el("button", "mi-bouton");
       b.type = "button";
       b.setAttribute("aria-label", `${l.devise}, engrenage ${cas.engrenage} : ${cas.libelle}. Voir la règle.`);

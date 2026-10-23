@@ -18,7 +18,7 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 
 from agents.agent_synthese import _Catalogue, _ids, _norm, _retirer_ordres, _texte
-from core import vue_ensemble
+from core import indicateurs, vue_ensemble
 from core.llm import (MESSAGE_QUOTA_ATTEINT, FournisseurLLM, QuotaAtteint, attribution_modele,
                       definir_etiquette, extraire_json, repli_modele_suivant)
 from core.secrets import masquer_secrets
@@ -317,7 +317,8 @@ def signaux(config: dict, donnees: dict, macro: dict, devises: list[dict], biais
     v_vix = _variation(marche.get("vix"))
     if vix.get("valeur") is not None:
         donnees5.append({"texte": f"VIX {vix['valeur']} le {vix.get('date')}"
-                         + (f" ({v_vix[1]:+.1f} % sur 7 j)" if v_vix else ""), "source_id": vix.get("source_id")})
+                         + (f" ({v_vix[1]:+.1f} % sur 7 j)" if v_vix else ""), "source_id": vix.get("source_id"),
+                         "indicateur": "vix", "valeur": vix["valeur"], "date": vix.get("date")})
     risque5 = None
     if vix.get("valeur") is not None:
         niveau = float(vix["valeur"])
@@ -326,12 +327,13 @@ def signaux(config: dict, donnees: dict, macro: dict, devises: list[dict], biais
     v_dollar = _variation(marche.get("dollar_large"))
     if v_dollar:
         donnees5.append({"texte": f"Indice dollar large (Fed) {v_dollar[0]} le {v_dollar[2]} ({v_dollar[1]:+.2f} % sur 7 j)",
-                         "source_id": cat.src("FRED", "indice dollar large (DTWEXBGS)", v_dollar[2])})
+                         "source_id": cat.src("FRED", "indice dollar large (DTWEXBGS)", v_dollar[2]),
+                         "indicateur": "dollar_large", "valeur": v_dollar[0], "date": v_dollar[2]})
     sp = series.get("sp500") or {}
     if sp.get("valeur") is not None:
         donnees5.append({"texte": f"S&P 500 {sp['valeur']} le {sp.get('date')} ({sp.get('variation_pct'):+.2f} % sur la séance)"
                          if sp.get("variation_pct") is not None else f"S&P 500 {sp['valeur']} le {sp.get('date')}",
-                         "source_id": sp.get("source_id")})
+                         "source_id": sp.get("source_id"), "indicateur": "sp500", "valeur": sp["valeur"], "date": sp.get("date")})
     indisponibles5 = []
     or_ = flux.get("or")
     if or_:
@@ -402,16 +404,23 @@ def signaux(config: dict, donnees: dict, macro: dict, devises: list[dict], biais
     v_wti = _variation(marche.get("wti"))
     if v_wti:
         saut = saut_atypique(marche.get("wti"))
+        neutralise = bool(saut) and abs(v_wti[1]) >= 3
         donnees8.append({"texte": f"WTI {v_wti[0]} $ le {v_wti[2]} ({v_wti[1]:+.1f} % sur 7 j)"
-                                  + (f" — série heurtée ({saut} en une séance)" if saut else ""),
-                         "source_id": (series.get("petrole_wti") or {}).get("source_id")})
+                                  + (f" — {indicateurs.TEXTE_NEUTRALISE} ({saut} en une séance)" if neutralise else
+                                     f" — série heurtée ({saut} en une séance)" if saut else ""),
+                         "source_id": (series.get("petrole_wti") or {}).get("source_id"),
+                         "indicateur": "wti", "valeur": v_wti[0], "date": v_wti[2], "neutralise": neutralise})
     v_brent = _variation(marche.get("brent"))
     if v_brent:
         saut = saut_atypique(marche.get("brent"))
+        neutralise_b = bool(saut) and abs(v_brent[1]) >= 3
         donnees8.append({"texte": f"Brent {v_brent[0]} $ le {v_brent[2]} ({v_brent[1]:+.1f} % sur 7 j)"
-                                  + (f" — série heurtée ({saut} en une séance, chiffres EIA/FRED officiels) : "
+                                  + (f" — {indicateurs.TEXTE_NEUTRALISE} ({saut} en une séance, chiffres EIA/FRED officiels)"
+                                     if neutralise_b else
+                                     f" — série heurtée ({saut} en une séance, chiffres EIA/FRED officiels) : "
                                      "variation sur 7 j à lire avec prudence" if saut else ""),
-                         "source_id": (series.get("petrole_brent") or {}).get("source_id")})
+                         "source_id": (series.get("petrole_brent") or {}).get("source_id"),
+                         "indicateur": "brent", "valeur": v_brent[0], "date": v_brent[2], "neutralise": neutralise_b})
     indisponibles8 = []
     eia = flux.get("eia")
     if eia:
@@ -429,7 +438,8 @@ def signaux(config: dict, donnees: dict, macro: dict, devises: list[dict], biais
     resultat[8] = {"dollar": None, "risque": None,
                    "devises": ["CAD"] + (["NZD", "AUD"] if v_wti and abs(v_wti[1]) >= 3 else []),
                    "regle": "aucune direction dollar/risque calculée : pétrole (CAD), stocks EIA et balances commerciales décrits",
-                   "donnees": donnees8, "indisponibles": indisponibles8, "force": max(_force(v_wti[1] if v_wti else None, 3),
+                   "donnees": donnees8, "indisponibles": indisponibles8,
+                   "force": max(_force(v_wti[1] if v_wti and not any(d.get("neutralise") for d in donnees8 if d.get("indicateur") == "wti") else None, 3),
                                 _force((eia or {}).get("variation_semaine"), 3))}
 
     _directions_matrice(resultat, dossiers)
@@ -824,6 +834,51 @@ def generer(config: dict, llm: FournisseurLLM, donnees: dict, macro: dict, catal
             _liberer_reserve(llm)
         return {"statut": statut, "raison": masquer_secrets(str(exc))[:200], "tentatives": n, "genere_le": horodatage,
                 **repli_python(config, donnees, macro, catalogue, devises, biais, extras, TEXTE_ECHEC)}
+
+
+def rafraichir(sortie: dict | None, config: dict, donnees: dict, macro: dict, catalogue: list[dict],
+               devises: list[dict], biais: str | None, extras: dict | None) -> dict | None:
+    """À chaque passage (lot V5) : directions, convictions, chiffres calculés, conflits Python et titre imposé
+    recalculés sur les données du passage ; seuls les textes du modèle sont gardés. Évite qu'une synthèse du
+    matin affiche un VIX différent de la matrice recalculée à 18 h. Ne lève jamais."""
+    if not sortie or not sortie.get("engrenages"):
+        return sortie
+    try:
+        cat = _Catalogue(catalogue)
+        sig = signaux(config, donnees, macro, devises, biais, extras or {}, cat)
+    except Exception as exc:  # noqa: BLE001
+        log.error("8 engrenages : rafraîchissement Python en échec (%s)", masquer_secrets(str(exc)))
+        return sortie
+    changes = []
+    for e in sortie["engrenages"]:
+        s = sig.get(e.get("numero")) or {}
+        d = e.setdefault("direction", {})
+        avant = (d.get("dollar"), d.get("risque"))
+        donnees_ok = bool(s.get("donnees"))
+        d["dollar"], d["risque"] = (s.get("dollar"), s.get("risque")) if donnees_ok or e["numero"] in (1, 4, 6) else (None, None)
+        d["calculee"] = {"dollar": s.get("dollar"), "risque": s.get("risque"), "regle": s.get("regle")}
+        d["origine"] = {"dollar": "calcul Python" if d["dollar"] else None, "risque": "calcul Python" if d["risque"] else None}
+        if s.get("conviction") is not None:
+            e.setdefault("conviction", {}).update({"niveau": s["conviction"], "origine": "calcul Python"})
+        e["donnees_calculees"] = s.get("donnees", [])
+        e["sources_indisponibles"] = s.get("indisponibles", [])
+        if avant != (d["dollar"], d["risque"]) and (e.get("diagnostic") and not e.get("texte_indisponible")):
+            e["texte_redige_avant_recalcul"] = True
+            changes.append(e["numero"])
+    py = [c for c in sortie.get("conflits") or [] if c.get("origine") != "calcul Python"]
+    vus = {tuple(c["engrenages"]) for c in py}
+    for c in conflits_detectes(sig):
+        if tuple(c["engrenages"]) not in vus:
+            py.append({"engrenages": c["engrenages"], "texte": c["texte"], "source_ids": [], "origine": "calcul Python"})
+    sortie["conflits"] = py
+    sortie.pop("titre_theme_impose", None)
+    imposer_signaux_mixtes(sortie)
+    sortie["rafraichi_le"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    if changes:
+        sortie.setdefault("controles", []).append(
+            "direction recalculée après le texte du modèle pour l'engrenage " + ", ".join(map(str, changes)) +
+            " : le texte décrit les chiffres du moment de sa rédaction")
+    return sortie
 
 
 def _liberer_reserve(llm: FournisseurLLM) -> None:

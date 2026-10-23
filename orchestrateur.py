@@ -39,7 +39,7 @@ from dotenv import load_dotenv
 from agents import (agent_consequences, agent_critique, agent_dossier_hebdo, agent_engrenages, agent_redacteur, agent_strategiste, agent_synthese,
                     collecte_calendrier, collecte_flux, collecte_historiques, collecte_macro, collecte_news,
                     collecte_technique)
-from core import (collecte_cache, controle_qualite, cours, dossiers, evaluation, hebdo, historique_5ans, impact, marche_taux, overrides, precedents,
+from core import (collecte_cache, controle_qualite, indicateurs, cours, dossiers, evaluation, hebdo, historique_5ans, impact, marche_taux, overrides, precedents,
                   publication_web,
                   registre_macro, saisies_manuelles, site_donnees, tableau_macro)
 from core.llm import creer_fournisseur, journal_appels, reinitialiser_journal
@@ -347,6 +347,11 @@ def main() -> int:
     # « différentiel de taux » du score de confluence (pondérations inchangées).
     macro["taux_obligataires"] = (tableau or {}).get("resume_taux", {})
     macro["flux"] = flux
+    # Une seule valeur par indicateur : les doublons de marché de la collecte macro prennent la valeur canonique
+    # de l'historique 5 ans (même valeur, même date, même source que les dossiers et la matrice).
+    unifies = etape("source unique des indicateurs de marché", indicateurs.unifier, macro, historiques, defaut=[])
+    if unifies:
+        log.info("Indicateurs alignés sur l'historique canonique : %s", " ; ".join(unifies))
     # Taux directeurs OFFICIELS (registre) à la place des valeurs de repli de config.yaml ;
     # le carry et les différentiels sont recalculés. La config reste le repli si le registre
     # n'a pas de valeur numérique pour la devise.
@@ -397,6 +402,13 @@ def main() -> int:
         "contrôle qualité", controle_qualite.controler, rapport, config,
         defaut={"conforme": False, "nb_anomalies": 1,
                 "anomalies": ["contrôle qualité en échec"]})
+    # Une seule valeur par indicateur : deux briques qui publient deux chiffres différents = anomalie visible
+    ecarts = etape("cohérence des indicateurs publiés", lambda: indicateurs.incoherences(
+        indicateurs.publiees(rapport, dossiers_theme or dossiers_jour)), defaut=[])
+    if ecarts and isinstance(rapport.get("controle_qualite"), dict):
+        rapport["controle_qualite"].setdefault("anomalies", []).extend(f"indicateur publié deux fois : {e}" for e in ecarts)
+        rapport["controle_qualite"]["nb_anomalies"] = len(rapport["controle_qualite"]["anomalies"])
+        rapport["controle_qualite"]["conforme"] = False
 
     # -------------------------------- base hebdomadaire cumulative (chaque jour)
     dossier_hebdo = donnees_dir / "hebdo"
