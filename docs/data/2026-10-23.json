@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-10-23T14:44:06+00:00",
+  "genere_le": "2026-10-23T18:31:42+00:00",
   "appels_llm": [
    {
     "heure": "13:37",
@@ -293,6 +293,33 @@
     "tokens_total": 34435,
     "ok": true,
     "etiquette": "critique"
+   },
+   {
+    "heure": "18:28",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 7006,
+    "tokens_total": 8566,
+    "ok": false,
+    "etiquette": "synthese:CNY"
+   },
+   {
+    "heure": "18:31",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 7006,
+    "tokens_total": 8566,
+    "ok": false,
+    "etiquette": "synthese:CNY"
+   },
+   {
+    "heure": "18:35",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 0,
+    "tokens_message": 34469,
+    "tokens_total": 34469,
+    "ok": false,
+    "etiquette": "critique"
    }
   ],
   "quota_llm": {
@@ -302,7 +329,7 @@
     "gemini-3.8-flash",
     "gemini-3.5-flash-lite"
    ],
-   "appels_aujourdhui": 49,
+   "appels_aujourdhui": 53,
    "plafond_jour": 60,
    "engrenages_faits": true,
    "reserve_engrenages": 8,
@@ -312,16 +339,16 @@
      "appels_aujourdhui": 20,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-10-24T06:59:59+00:00",
-     "appels_ce_run": 3,
+     "appels_ce_run": 0,
      "reussites_ce_run": 0,
-     "sauts_ce_run": 0
+     "sauts_ce_run": 3
     },
     "gemini-3.8-flash": {
-     "appels_aujourdhui": 9,
+     "appels_aujourdhui": 13,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-10-23T06:59:59+00:00",
      "appels_ce_run": 3,
-     "reussites_ce_run": 1,
+     "reussites_ce_run": 0,
      "sauts_ce_run": 0
     },
     "gemini-3.5-flash-lite": {
@@ -330,19 +357,19 @@
      "epuise_jusqu_a": null,
      "appels_ce_run": 0,
      "reussites_ce_run": 0,
-     "sauts_ce_run": 2
+     "sauts_ce_run": 3
     }
    }
   },
-  "resume_quota": "Gemini : 49/60, engrenages : fait",
+  "resume_quota": "Gemini : 53/60, engrenages : fait",
   "appels_par_modele": {
    "gemini-3.5-flash": {
     "appels": 6,
     "echecs": 6
    },
    "gemini-3.8-flash": {
-    "appels": 6,
-    "echecs": 5
+    "appels": 9,
+    "echecs": 8
    },
    "gemini-3.5-flash-lite": {
     "appels": 20,
@@ -415,6 +442,40 @@
       "ouvert_a_l_appel": null,
       "echecs_consecutifs": 0,
       "ignores": 2
+     }
+    ]
+   },
+   {
+    "heure": "18:35",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": true,
+    "appels_total": 3,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 3
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": true,
+      "cause": "3 échecs consécutifs — HTTPSConnectionPool(host='generativelanguage.googleapis.com', port=443): Read timed out. (read timeout=180)",
+      "ouvert_a_l_appel": 3,
+      "echecs_consecutifs": 3,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 3
      }
     ]
    }
@@ -4928,9 +4989,9 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/mode | gemini-3.8-flash : HTTPSConnectionPoo",
-    "tentatives": 2,
-    "genere_le": "2026-10-23T14:44:06+00:00"
+    "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : HTTPSConnectionPool(host='generativelanguage.googleapis.com', port=443): Read timed out. (read ti",
+    "tentatives": 3,
+    "genere_le": "2026-10-23T18:31:42+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.46,
@@ -6859,6 +6920,13 @@
    "detail": "CNY — Ventes au détail",
    "date": "2026-10-19",
    "url": null
+  },
+  {
+   "id": "src_272",
+   "source": "FRED",
+   "detail": "vix (VIXCLS)",
+   "date": "2026-10-22",
+   "url": "https://fred.stlouisfed.org/series/VIXCLS"
   }
  ],
  "donnees_non_rafraichies": [
@@ -7053,7 +7121,7 @@
     1.12351,
     1.12332,
     1.12165,
-    1.11983
+    1.12023
    ]
   },
   "GBP": {
@@ -7240,7 +7308,7 @@
     1.33798,
     1.33936,
     1.33996,
-    1.33738
+    1.33772
    ]
   },
   "JPY": {
@@ -7427,7 +7495,7 @@
     0.00632,
     0.00632,
     0.00637,
-    0.00639
+    0.00638
    ]
   },
   "CHF": {
@@ -7614,7 +7682,7 @@
     1.21258,
     1.21292,
     1.21846,
-    1.21507
+    1.21427
    ]
   },
   "CAD": {
@@ -7801,7 +7869,7 @@
     0.71132,
     0.7119,
     0.71372,
-    0.71536
+    0.71555
    ]
   },
   "AUD": {
@@ -7988,7 +8056,7 @@
     0.70013,
     0.70314,
     0.70188,
-    0.70261
+    0.70315
    ]
   },
   "NZD": {
@@ -8175,7 +8243,7 @@
     0.5681,
     0.5702,
     0.5684,
-    0.56946
+    0.56961
    ]
   },
   "CNY": {
@@ -8362,7 +8430,7 @@
     0.14982,
     0.14984,
     0.14985,
-    0.14994
+    0.14993
    ]
   },
   "USD": {
@@ -8549,7 +8617,7 @@
     101.68664,
     101.55339,
     101.42953,
-    101.4006
+    101.40185
    ]
   }
  },
@@ -8920,7 +8988,6 @@
   },
   "vix": {
    "dates": [
-    "2026-06-18",
     "2026-06-19",
     "2026-06-22",
     "2026-06-23",
@@ -9009,10 +9076,10 @@
     "2026-10-16",
     "2026-10-19",
     "2026-10-20",
-    "2026-10-21"
+    "2026-10-21",
+    "2026-10-22"
    ],
    "valeurs": [
-    16.4,
     16.78,
     17.28,
     19.49,
@@ -9101,7 +9168,8 @@
     19.99,
     18.44,
     17.31,
-    16.68
+    16.68,
+    19.03
    ]
   },
   "dollar_large": {
@@ -9284,15 +9352,15 @@
   }
  },
  "prix_cloture": {
-  "EUR": 1.11983,
-  "GBP": 1.33738,
-  "JPY": 0.00639,
-  "CHF": 1.21507,
-  "CAD": 0.71536,
-  "AUD": 0.70261,
-  "NZD": 0.56946,
-  "CNY": 0.14994,
-  "USD": 101.4006
+  "EUR": 1.12023,
+  "GBP": 1.33772,
+  "JPY": 0.00638,
+  "CHF": 1.21427,
+  "CAD": 0.71555,
+  "AUD": 0.70315,
+  "NZD": 0.56961,
+  "CNY": 0.14993,
+  "USD": 101.40185
  },
  "tracabilite": {
   "mode": "marquer",
@@ -9388,37 +9456,16 @@
    "USD synthèse approfondie : moins de 3 opportunités (2)",
    "USD synthèse approfondie : moins de 3 menaces (2)",
    "EUR synthèse approfondie : orientation « neutre » en tension avec le score de confluence calculé (16/100)",
-   "CNY : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : gemini-3.5-flash : 503 Server Error: Service Unavailable fo)",
-   "prompt LLM volumineux : 15 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 34435 à 14:44 UTC, modèle gemini-3.5-flash) — le contexte envoyé au LLM a regrossi"
+   "CNY : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash)",
+   "prompt LLM volumineux : 16 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 34469 à 18:35 UTC, modèle gemini-3.8-flash) — le contexte envoyé au LLM a regrossi"
   ]
  },
  "critique": {
-  "incoherences": [
-   "EUR : L'orientation de la synthèse approfondie est qualifiée de « neutre » avec un scénario central d'oscillation en range, ce qui contredit directement le score de confluence calculé de 16/100 plaçant l'euro au dernier rang (9e) avec une forte pression baissière.",
-   "GBP : La synthèse approfondie affiche une orientation « neutre » et attribue une probabilité « faible » au scénario haussier, en contradiction avec le score de confluence de 70/100 plaçant la devise en 1re position du classement.",
-   "CNY : La synthèse approfondie est en échec technique complet (erreur 503 / indisponible), privant la devise de scénarios et d'analyse prospective.",
-   "EUR et AUD (detail_score cpi_surprise) : Mauvaise attribution des sources. L'indicateur CPI surprise de l'EUR cite src_053 (qui correspond au CPI britannique), et celui de l'AUD cite src_048 (qui correspond au Flash Manufacturing PMI).",
-   "Biais global vs Engrenages : synthese_globale indique un biais_macro_global « risk_off », alors que l'engrenage 1 (direction risque neutre), l'engrenage 5 (VIX 16.68, risque neutre) et l'engrenage 7 (écart risque-refuge +0.11 pt, risque neutre) concluent tous à un régime de risque neutre."
-  ],
-  "affirmations_non_sourcees": [
-   "CAD : L'affirmation dans les menaces et la synthèse approfondie mentionnant le « cours du WTI en baisse de -1.93% à 107.89 USD » est marquée comme non sourcée (et attribuée à src_105 qui traite uniquement du Defense Production Act de Trump sans chiffre de variation de marché)."
-  ],
-  "suggestions_connaissances": [
-   {
-    "theme": "Gestion des indisponibilités de synthèse approfondie (fallback LLM)",
-    "suggestion": "Définir un protocole de repli dégradé lorsqu'aucun modèle LLM ne répond (erreur 503), générant une synthèse minimale standardisée à partir du score de confluence et des opportunités/menaces pour éviter une rupture de publication.",
-    "fichier_cible": "cas_particuliers.md"
-   },
-   {
-    "theme": "Attribution des source_ids sur indicateurs sans publication",
-    "suggestion": "Préciser que lorsqu'un indicateur macroéconomique (ex. cpi_surprise) ne présente aucune publication récente, source_id doit être laissé à null plutôt que relié par erreur à une dépêche calendrier sans rapport (ex. CPI étranger ou PMI).",
-    "fichier_cible": "cas_particuliers.md"
-   }
-  ],
-  "validation": "a_revoir",
-  "redige_par": {
-   "modele": "gemini-3.8-flash",
-   "libelle": "Flash 3.8"
-  }
+  "incoherences": [],
+  "affirmations_non_sourcees": [],
+  "suggestions_connaissances": [],
+  "validation": "non_evalue",
+  "indisponible": true,
+  "note": "relecture non effectuée (tous les modèles de la chaîne en échec : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : HTTPSConnectionPool(host='generativelanguage.go)"
  }
 }
