@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-10-23T18:31:42+00:00",
+  "genere_le": "2026-10-23T22:12:57+00:00",
   "appels_llm": [
    {
     "heure": "13:37",
@@ -320,6 +320,24 @@
     "tokens_total": 34469,
     "ok": false,
     "etiquette": "critique"
+   },
+   {
+    "heure": "22:12",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 7007,
+    "tokens_total": 8567,
+    "ok": false,
+    "etiquette": "synthese:CNY"
+   },
+   {
+    "heure": "22:12",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 7007,
+    "tokens_total": 8567,
+    "ok": false,
+    "etiquette": "synthese:CNY"
    }
   ],
   "quota_llm": {
@@ -329,7 +347,7 @@
     "gemini-3.8-flash",
     "gemini-3.5-flash-lite"
    ],
-   "appels_aujourdhui": 53,
+   "appels_aujourdhui": 60,
    "plafond_jour": 60,
    "engrenages_faits": true,
    "reserve_engrenages": 8,
@@ -344,12 +362,12 @@
      "sauts_ce_run": 3
     },
     "gemini-3.8-flash": {
-     "appels_aujourdhui": 13,
+     "appels_aujourdhui": 20,
      "plafond_jour": 20,
-     "epuise_jusqu_a": "2026-10-23T06:59:59+00:00",
-     "appels_ce_run": 3,
+     "epuise_jusqu_a": "2026-10-24T06:59:59+00:00",
+     "appels_ce_run": 2,
      "reussites_ce_run": 0,
-     "sauts_ce_run": 0
+     "sauts_ce_run": 1
     },
     "gemini-3.5-flash-lite": {
      "appels_aujourdhui": 20,
@@ -361,15 +379,15 @@
     }
    }
   },
-  "resume_quota": "Gemini : 53/60, engrenages : fait",
+  "resume_quota": "Gemini : 60/60, engrenages : fait",
   "appels_par_modele": {
    "gemini-3.5-flash": {
     "appels": 6,
     "echecs": 6
    },
    "gemini-3.8-flash": {
-    "appels": 9,
-    "echecs": 8
+    "appels": 11,
+    "echecs": 10
    },
    "gemini-3.5-flash-lite": {
     "appels": 20,
@@ -468,6 +486,40 @@
       "ouvert_a_l_appel": 3,
       "echecs_consecutifs": 3,
       "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 3
+     }
+    ]
+   },
+   {
+    "heure": "22:13",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": true,
+    "appels_total": 3,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 3
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": true,
+      "cause": "quota journalier épuisé — quota gratuit journalier épuisé pour gemini-3.8-flash (HTTP 429, requêtes/jour)",
+      "ouvert_a_l_appel": 2,
+      "echecs_consecutifs": 2,
+      "ignores": 1
      },
      {
       "modele": "gemini-3.5-flash-lite",
@@ -4988,9 +5040,10 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : HTTPSConnectionPool(host='generativelanguage.googleapis.com', port=443): Read timed out. (read ti",
+    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+    "quota_atteint": true,
     "tentatives": 3,
-    "genere_le": "2026-10-23T18:31:42+00:00"
+    "genere_le": "2026-10-23T22:12:57+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.46,
@@ -9383,8 +9436,8 @@
     "taux_pct": 100.0
    },
    "Prévision": {
-    "valeur": 15,
-    "explique": 102,
+    "valeur": 16,
+    "explique": 101,
     "vide": 0,
     "total": 117,
     "taux_pct": 100.0
@@ -9455,7 +9508,7 @@
    "USD synthèse approfondie : moins de 3 opportunités (2)",
    "USD synthèse approfondie : moins de 3 menaces (2)",
    "EUR synthèse approfondie : orientation « neutre » en tension avec le score de confluence calculé (16/100)",
-   "CNY : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash)",
+   "CNY : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
    "prompt LLM volumineux : 16 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 34469 à 18:35 UTC, modèle gemini-3.8-flash) — le contexte envoyé au LLM a regrossi"
   ]
  },
@@ -9465,6 +9518,6 @@
   "suggestions_connaissances": [],
   "validation": "non_evalue",
   "indisponible": true,
-  "note": "relecture non effectuée (tous les modèles de la chaîne en échec : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : HTTPSConnectionPool(host='generativelanguage.go)"
+  "note": "relecture non effectuée (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit) — gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : ignoré ()"
  }
 }
