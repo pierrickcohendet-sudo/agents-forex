@@ -922,7 +922,7 @@ def ecrire(racine: str | Path, historiques: dict, registre: dict, technique: dic
                                          / "impact.json").read_text(encoding="utf-8"))
         except (OSError, ValueError):
             impact_donnees = None
-        agenda_donnees = agenda.ecrire(racine, registre, config)   # docs/data/agenda.json (page Agenda, cockpit)
+        agenda_donnees = agenda.ecrire(racine, registre, config, historique_5ans.charger(), technique)   # docs/data/agenda.json (page Agenda, cockpit)
         donnees = construire(historiques, registre, technique, config, rapport, flux, news, dossier_rapports,
                              historique_5ans.charger(), impact_donnees, agenda_donnees)
         try:   # archive quotidienne des valeurs non historisées, puis mini-courbes tirées de l'archive

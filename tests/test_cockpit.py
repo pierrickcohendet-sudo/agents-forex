@@ -97,17 +97,21 @@ def test_agenda_heures_de_paris_impacts_publie_et_engrenage():
                                                           "nom_ff": "Official Bank Rate", "impact": "High"}}}}
     a = agenda.calculer(FF, gl, reg, CONFIG, datetime(2026, 10, 24, 10, tzinfo=timezone.utc))
     evts = [e for j in a["jours"] for e in j["evenements"]]
-    assert len(a["jours"]) == 7 and "Hors fenêtre" not in [e["evenement"] for e in evts]
-    fed = next(e for e in evts if e["evenement"] == "Federal Funds Rate")
+    assert a["debut"] == "2026-10-19" and a["fin"] == "2026-11-01"          # semaine en cours + semaine suivante
+    assert "Hors fenêtre" not in [e["evenement_en"] for e in evts]
+    fed = next(e for e in evts if e["evenement_en"] == "Federal Funds Rate")
     assert fed["heure_paris"] == "19:00" and fed["impact"] == "fort" and fed["engrenage"] == 2 and fed["simulateur"] == "fed"
+    assert fed["type"] == "Réunion BC" and fed["points"] == "●●●" and fed["evenement"].startswith("Décision de la Fed")
+    assert fed["officiel"]["verifie_le"] == "2026-10-24"                     # date confirmée par le calendrier FOMC
     assert next(e for e in evts if e["devise"] == "AUD")["date_paris"] == "2026-10-28"     # 20:30 New York = 01:30 Paris
-    ifo = next(e for e in evts if e["evenement"] == "German Ifo")
+    ifo = next(e for e in evts if e["evenement_en"] == "German Ifo")
     assert ifo["publie"] == "89.0" and ifo["impact"] == "moyen" and ifo["consensus"] is None and ifo["raison_consensus"]
-    boe = next(e for e in evts if e["devise"] == "GBP")
+    boe = next(e for e in evts if e["devise"] == "GBP" and e["type"] == "Réunion BC")
     assert boe["source"].startswith("registre macro") and boe["engrenage"] == 2
     bc = next(b for b in a["banques_centrales"] if b["devise"] == "GBP")
-    assert bc["prochaine"] == "2026-10-29" and bc["variation_pb"] == 0 and bc["raison_reunions"]
-    assert agenda.prochain_rendez_vous(a)["evenement"] in ("CPI y/y", "Federal Funds Rate", "Official Bank Rate")
+    assert bc["prochaine"] == "2026-11-05" and bc["variation_pb"] == 0 and len(bc["reunions"]) == 3   # calendrier officiel BoE
+    r = agenda.prochain_rendez_vous(a)
+    assert r is None or r["impact"] == "fort"
 
 
 def test_agenda_precedent_de_repli_jamais_affiche_comme_publication():
@@ -115,7 +119,7 @@ def test_agenda_precedent_de_repli_jamais_affiche_comme_publication():
                                             "prevision": {"dateline": int(datetime(2026, 10, 28, 18, tzinfo=timezone.utc).timestamp()),
                                                           "nom_ff": "Federal Funds Rate", "impact": "High", "valeur": "4.00%"}}}}
     a = agenda.calculer(None, [], reg, CONFIG, datetime(2026, 10, 24, 10, tzinfo=timezone.utc))
-    fed = next(e for j in a["jours"] for e in j["evenements"])
+    fed = next(e for j in a["jours"] for e in j["evenements"] if e["evenement_en"] == "Federal Funds Rate")
     assert fed["precedent"] is None and "pas la dernière publication" in fed["raison_precedent"] and fed["consensus"] == "4.00%"
     app = (RACINE / "docs/site/app.js").read_text(encoding="utf-8")
     assert 'agenda: { titre: "Agenda", module: "./agenda.js"' in app

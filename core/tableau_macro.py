@@ -633,6 +633,14 @@ def _taux_directeurs(config: dict, dossier_cache: Path) -> dict[str, dict]:
     return taux
 
 
+def _memoriser_agenda(evenements: list[dict], dossier_cache: Path, maintenant: datetime) -> None:
+    try:
+        from core import agenda
+        agenda.memoriser_mois(evenements, dossier_cache, maintenant)
+    except Exception as exc:  # noqa: BLE001 — l'agenda ne doit jamais casser le tableau macro
+        log.warning("Agenda : page « mois » non mémorisée (%s)", exc)
+
+
 def _web_inchange(matrice: dict, chemin: Path) -> bool:
     try:
         ancien = json.loads(chemin.read_text(encoding="utf-8"))
@@ -676,6 +684,7 @@ def mettre_a_jour(config: dict, racine: str | Path, chemin_config: str | Path | 
                           "declencheur": ff.get("declencheur")}
         if ff["statut"] == "frais":
             bilan = rm.integrer_evenements(registre, ff["evenements"], cfg_tm, maintenant)
+            _memoriser_agenda(ff["evenements"], donnees / "cache", maintenant)   # agenda : sans requête de plus
             resultat["ff"].update(bilan)
             log.info("Tableau macro : %d case(s) mises à jour, %d introuvable(s) à initialiser",
                      bilan["mises_a_jour"], len(bilan["introuvables"]))
@@ -691,6 +700,7 @@ def mettre_a_jour(config: dict, racine: str | Path, chemin_config: str | Path | 
                         log.warning("Tableau macro : mois +%d non lu (%s)", decalage, suite["note"])
                         break
                     rm.integrer_evenements(registre, suite["evenements"], cfg_tm, maintenant)
+                    _memoriser_agenda(suite["evenements"], donnees / "cache", maintenant)
         elif ff["statut"] == "indisponible":
             log.warning("Tableau macro : ForexFactory indisponible (%s) — registre inchangé", ff["note"])
     except Exception as exc:  # noqa: BLE001

@@ -486,6 +486,7 @@ def main() -> int:
     rapport["meta"]["resume_quota"] = ligne_quota(rapport["meta"].get("quota_llm"),
                                                   (rapport.get("synthese_globale") or {}).get("engrenages"))
     _ecrire_resume_run(rapport["meta"]["resume_quota"])
+    etape("résumé du run : agenda et fraîcheur des données", _ecrire_resume_donnees, RACINE, config)
     appels_run: dict[str, dict] = {}
     for e in rapport["meta"]["appels_llm"]:   # cumul du jour (passages --completer inclus, plafonné)
         c = appels_run.setdefault(e["modele"], {"appels": 0, "echecs": 0})
@@ -545,6 +546,40 @@ def _ecrire_resume_run(ligne: str) -> None:
         try:
             with open(resume, "a", encoding="utf-8") as f:
                 f.write(f"## Quota LLM du jour\n\n{ligne}\n\n")
+        except OSError:
+            pass
+
+
+def lignes_resume_donnees(racine: Path, config: dict) -> list[str]:
+    """Résumé du run : noms d'évènements non traduits (agenda) et données trop vieilles (page Santé)."""
+    docs = Path(racine) / config.get("publication_web", {}).get("dossier_docs", "docs") / "data"
+    lignes = []
+    try:
+        ag = json.loads((docs / "agenda.json").read_text(encoding="utf-8"))
+        nt = ag.get("non_traduits") or []
+        lignes.append(f"Agenda : {ag.get('n_evenements', 0)} évènement(s), consensus {ag.get('consensus', {}).get('etat', 'n/d')} ; "
+                      + (f"{len(nt)} nom(s) non traduit(s) : {', '.join(nt[:20])}" if nt else "tous les noms traduits"))
+    except (OSError, ValueError):
+        lignes.append("Agenda : agenda.json absent")
+    try:
+        so = json.loads((docs / "sources.json").read_text(encoding="utf-8"))
+        alertes = [s for s in so.get("sources") or [] if s.get("fraicheur", {}).get("etat") in ("orange", "rouge")]
+        lignes.append("Fraîcheur : " + ("; ".join(f"{s['nom']} ({s['fraicheur']['texte']})" for s in alertes) if alertes
+                                         else "aucune donnée plus vieille que deux fois sa fréquence"))
+    except (OSError, ValueError):
+        pass
+    return lignes
+
+
+def _ecrire_resume_donnees(racine: Path, config: dict) -> None:
+    lignes = lignes_resume_donnees(racine, config)
+    for l in lignes:
+        log.info(l)
+    resume = os.environ.get("GITHUB_STEP_SUMMARY")
+    if resume and lignes:
+        try:
+            with open(resume, "a", encoding="utf-8") as f:
+                f.write("## Agenda et fraîcheur des données\n\n" + "\n".join(f"- {l}" for l in lignes) + "\n\n")
         except OSError:
             pass
 

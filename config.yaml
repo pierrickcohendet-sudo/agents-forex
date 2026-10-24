@@ -403,6 +403,380 @@ synthese_approfondie:
 journal:
   mes_paires: [USD/JPY, EUR/USD, GBP/USD, AUD/USD, USD/CAD, USD/CHF]
 
+# --- Agenda macro (lot V5, complément) ------------------------------------------
+# Semaine en cours + semaine suivante, heure de Paris (changements d'heure gérés par zoneinfo). Sources, par ordre :
+# calendriers officiels ci-dessous (dates des réunions), page « mois » ForexFactory déjà lue pour le tableau macro
+# (aucune requête de plus : heure, consensus, réel), flux public JSON ForexFactory de la semaine (consensus),
+# FRED releases/dates (dates des publications US, une requête par jour), registre macro.
+# Un nom non traduit garde l'anglais et apparaît dans le résumé du run.
+agenda:
+  # Lignes sans intérêt de marché : regroupées en une ligne discrète par jour (jamais dans le décompte)
+  non_marche: ["Daylight Saving Time Shift", "Bank Holiday", "French Bank Holiday", "German Bank Holiday",
+               "Italian Bank Holiday", "Spanish Bank Holiday"]
+  # Traduction en trois temps : nom exact (traductions), sinon pays (prefixes) + qualificatif (qualificatifs)
+  # + base (bases) + unité (suffixes). « Advance GDP q/q » -> « PIB T/T, 1re estimation ».
+  traductions:
+    "Daylight Saving Time Shift": "Changement d'heure"
+    "Bank Holiday": "Jour férié"
+    "Federal Funds Rate": "Décision de la Fed (taux des fonds fédéraux, borne haute)"
+    "Main Refinancing Rate": "Décision de la BCE (taux de refinancement)"
+    "Deposit Facility Rate": "Décision de la BCE (taux de dépôt)"
+    "Official Bank Rate": "Décision de la BoE (Bank Rate)"
+    "Overnight Rate": "Décision de la BoC (taux à un jour)"
+    "Cash Rate": "Décision de la RBA (taux directeur)"
+    "Official Cash Rate": "Décision de la RBNZ (OCR)"
+    "BOJ Policy Rate": "Décision de la BoJ (taux directeur)"
+    "SNB Policy Rate": "Décision de la BNS (taux directeur)"
+    "1-y Loan Prime Rate": "LPR 1 an (PBoC)"
+    "5-y Loan Prime Rate": "LPR 5 ans (PBoC)"
+    "FOMC Statement": "Communiqué de la Fed"
+    "FOMC Press Conference": "Conférence de presse de la Fed"
+    "FOMC Meeting Minutes": "Compte rendu du FOMC"
+    "FOMC Economic Projections": "Projections économiques du FOMC"
+    "Beige Book": "Livre beige de la Fed"
+    "ECB Press Conference": "Conférence de presse de la BCE"
+    "Monetary Policy Statement": "Déclaration de politique monétaire"
+    "ECB Monetary Policy Statement": "Déclaration de politique monétaire de la BCE"
+    "Monetary Policy Meeting Accounts": "Compte rendu de la réunion de la BCE"
+    "BOE Monetary Policy Report": "Rapport de politique monétaire de la BoE"
+    "Monetary Policy Report": "Rapport de politique monétaire"
+    "Monetary Policy Summary": "Résumé de politique monétaire (BoE)"
+    "MPC Official Bank Rate Votes": "Votes du MPC (BoE)"
+    "MPC Asset Purchase Facility Votes": "Votes du MPC sur les achats d'actifs (BoE)"
+    "BOC Monetary Policy Report": "Rapport de politique monétaire de la BoC"
+    "BOC Rate Statement": "Communiqué de la BoC"
+    "BOC Press Conference": "Conférence de presse de la BoC"
+    "BOC Business Outlook Survey": "Enquête sur les perspectives des entreprises (BoC)"
+    "BOC Summary of Deliberations": "Résumé des délibérations de la BoC"
+    "RBA Rate Statement": "Communiqué de la RBA"
+    "RBA Press Conference": "Conférence de presse de la RBA"
+    "RBA Monetary Policy Statement": "Déclaration de politique monétaire de la RBA"
+    "Monetary Policy Meeting Minutes": "Compte rendu de politique monétaire"
+    "RBA Meeting Minutes": "Compte rendu de la RBA"
+    "RBA Annual Report": "Rapport annuel de la RBA"
+    "RBNZ Rate Statement": "Communiqué de la RBNZ"
+    "RBNZ Monetary Policy Statement": "Déclaration de politique monétaire de la RBNZ"
+    "RBNZ Press Conference": "Conférence de presse de la RBNZ"
+    "RBNZ Financial Stability Report": "Rapport de stabilité financière de la RBNZ"
+    "BOJ Outlook Report": "Rapport sur les perspectives de la BoJ"
+    "BOJ Press Conference": "Conférence de presse de la BoJ"
+    "Monetary Policy Statement (BOJ)": "Déclaration de politique monétaire de la BoJ"
+    "Summary of Monetary Policy Discussions": "Résumé des débats de politique monétaire"
+    "BOJ Core CPI y/y": "IPC sous-jacent de la BoJ A/A"
+    "SNB Monetary Policy Assessment": "Évaluation de politique monétaire de la BNS"
+    "SNB Press Conference": "Conférence de presse de la BNS"
+    "NBS Press Conference": "Conférence de presse du Bureau national des statistiques (Chine)"
+    "German Buba Monthly Report": "Allemagne : rapport mensuel de la Bundesbank"
+    "IMF Meetings": "Réunions FMI / Banque mondiale"
+    "EU Economic Summit": "Sommet économique de l'UE"
+    "G7 Meetings": "Réunions du G7"
+    "G20 Meetings": "Réunions du G20"
+    "OPEC Meetings": "Réunions de l'OPEP"
+    "OPEC-JMMC Meetings": "Comité de suivi OPEP+ (JMMC)"
+    "Jackson Hole Symposium": "Symposium de Jackson Hole"
+    "ECB Forum on Central Banking": "Forum BCE de Sintra"
+    "Unemployment Claims": "Inscriptions hebdomadaires au chômage"
+    "Non-Farm Employment Change": "Créations d'emplois non agricoles (NFP)"
+    "ADP Non-Farm Employment Change": "Créations d'emplois privés ADP"
+    "ADP Weekly Employment Change": "Emploi privé ADP (hebdomadaire)"
+    "JOLTS Job Openings": "Offres d'emploi JOLTS"
+    "Challenger Job Cuts y/y": "Annonces de suppressions d'emplois Challenger A/A"
+    "Claimant Count Change": "Demandeurs d'allocations chômage"
+    "API Weekly Statistical Bulletin": "Stocks de pétrole API (hebdomadaire)"
+    "Crude Oil Inventories": "Stocks de pétrole brut (EIA)"
+    "Natural Gas Storage": "Stocks de gaz naturel (EIA)"
+    "Empire State Manufacturing Index": "Indice manufacturier Empire State (Fed de New York)"
+    "Philly Fed Manufacturing Index": "Indice manufacturier de la Fed de Philadelphie"
+    "Richmond Manufacturing Index": "Indice manufacturier de la Fed de Richmond"
+    "Chicago PMI": "PMI de Chicago"
+    "NAHB Housing Market Index": "Indice du marché immobilier NAHB"
+    "NFIB Small Business Index": "Indice des petites entreprises NFIB"
+    "CB Consumer Confidence": "Confiance des consommateurs (Conference Board)"
+    "CB Leading Index m/m": "Indicateur avancé du Conference Board M/M"
+    "UoM Consumer Sentiment": "Moral des consommateurs (université du Michigan)"
+    "UoM Inflation Expectations": "Anticipations d'inflation (université du Michigan)"
+    "Prelim UoM Consumer Sentiment": "Moral des consommateurs (université du Michigan), prélim."
+    "Prelim UoM Inflation Expectations": "Anticipations d'inflation (université du Michigan), prélim."
+    "Revised UoM Consumer Sentiment": "Moral des consommateurs (université du Michigan), révisé"
+    "Revised UoM Inflation Expectations": "Anticipations d'inflation (université du Michigan), révisé"
+    "Federal Budget Balance": "Solde budgétaire fédéral"
+    "TIC Long-Term Purchases": "Achats nets de titres longs par l'étranger (TIC)"
+    "Foreign Securities Purchases": "Achats de titres étrangers"
+    "Ivey PMI": "PMI Ivey"
+    "IPPI m/m": "Prix des produits industriels M/M"
+    "RMPI m/m": "Prix des matières premières M/M"
+    "NHPI m/m": "Prix des logements neufs M/M"
+    "Common CPI y/y": "IPC commun A/A"
+    "Median CPI y/y": "IPC médian A/A"
+    "Trimmed CPI y/y": "IPC tronqué A/A"
+    "Trimmed Mean CPI m/m": "IPC moyenne tronquée M/M"
+    "Trimmed Mean CPI q/q": "IPC moyenne tronquée T/T"
+    "Weighted Median CPI q/q": "IPC médian pondéré T/T"
+    "National Core CPI y/y": "IPC sous-jacent national A/A"
+    "Tokyo Core CPI y/y": "IPC sous-jacent de Tokyo A/A"
+    "GfK Consumer Confidence": "Confiance des consommateurs GfK"
+    "CBI Industrial Order Expectations": "Carnets de commandes industriels CBI"
+    "CBI Realized Sales": "Ventes réalisées CBI"
+    "Rightmove HPI m/m": "Prix immobiliers Rightmove M/M"
+    "Nationwide HPI m/m": "Prix immobiliers Nationwide M/M"
+    "Public Sector Net Borrowing": "Besoin net de financement du secteur public"
+    "Average Earnings Index 3m/y": "Salaires moyens 3 mois/A"
+    "Index of Services 3m/3m": "Indice des services 3M/3M"
+    "RPI y/y": "Indice des prix de détail (RPI) A/A"
+    "BRC Shop Price Index y/y": "Prix en magasin BRC A/A"
+    "Halifax HPI m/m": "Prix immobiliers Halifax M/M"
+    "German ZEW Economic Sentiment": "Allemagne : sentiment économique ZEW"
+    "ZEW Economic Sentiment": "Sentiment économique ZEW"
+    "German Ifo Business Climate": "Allemagne : climat des affaires Ifo"
+    "Belgian NBB Business Climate": "Belgique : climat des affaires (BNB)"
+    "Spanish Unemployment Change": "Espagne : variation du chômage"
+    "Consumer Confidence": "Confiance des consommateurs"
+    "Tertiary Industry Activity m/m": "Activité du secteur tertiaire M/M"
+    "Core Machinery Orders m/m": "Commandes de machines (hors navires et électricité) M/M"
+    "Household Spending y/y": "Dépenses des ménages A/A"
+    "Household Spending m/m": "Dépenses des ménages M/M"
+    "BusinessNZ Manufacturing Index": "Indice manufacturier BusinessNZ"
+    "BusinessNZ Services Index": "Indice des services BusinessNZ"
+    "GDT Price Index": "Enchères laitières GDT (prix)"
+    "ANZ Business Confidence": "Confiance des entreprises ANZ"
+    "Visitor Arrivals m/m": "Arrivées de visiteurs M/M"
+    "Credit Card Spending y/y": "Dépenses par carte de crédit A/A"
+    "FPI m/m": "Prix alimentaires (FPI) M/M"
+    "NAB Business Confidence": "Confiance des entreprises NAB"
+    "Westpac Consumer Sentiment": "Moral des consommateurs Westpac"
+    "MI Inflation Gauge m/m": "Jauge d'inflation MI M/M"
+    "MI Leading Index m/m": "Indicateur avancé MI M/M"
+    "Caixin Manufacturing PMI": "PMI manufacturier Caixin"
+    "Caixin Services PMI": "PMI des services Caixin"
+    "Non-Manufacturing PMI": "PMI non manufacturier"
+    "Fixed Asset Investment ytd/y": "Investissement en capital fixe, cumul annuel/A"
+    "Foreign Direct Investment ytd/y": "Investissements directs étrangers, cumul annuel/A"
+    "New Loans": "Nouveaux prêts"
+    "M2 Money Supply y/y": "Masse monétaire M2 A/A"
+    "M2 Money Stock y/y": "Masse monétaire M2 A/A"
+    "USD-Denominated Trade Balance": "Balance commerciale en dollars"
+    "10-y Bond Auction": "Adjudication d'obligations à 10 ans"
+    "30-y Bond Auction": "Adjudication d'obligations à 30 ans"
+    "German 30-y Bond Auction": "Allemagne : adjudication d'obligations à 30 ans"
+    "German 10-y Bond Auction": "Allemagne : adjudication d'obligations à 10 ans"
+    "Italian 10-y Bond Auction": "Italie : adjudication d'obligations à 10 ans"
+    "Spanish 10-y Bond Auction": "Espagne : adjudication d'obligations à 10 ans"
+  prefixes:
+    "German ": "Allemagne : "
+    "French ": "France : "
+    "Italian ": "Italie : "
+    "Spanish ": "Espagne : "
+    "Belgian ": "Belgique : "
+    "Tokyo ": "Tokyo : "
+  qualificatifs:
+    "Advance ": "1re estimation"
+    "Prelim Flash ": "flash, prélim."
+    "Prelim ": "prélim."
+    "Flash ": "flash"
+    "Final ": "définitif"
+    "Revised ": "révisé"
+  suffixes:
+    " m/m": " M/M"
+    " y/y": " A/A"
+    " q/q": " T/T"
+    " q/y": " T/A"
+    " 3m/y": " 3 mois/A"
+    " 3m/3m": " 3M/3M"
+    " ytd/y": ", cumul annuel/A"
+  bases:
+    "GDP": "PIB"
+    "GDP Price Index": "Déflateur du PIB"
+    "CPI": "IPC"
+    "Core CPI": "IPC sous-jacent"
+    "CPI Flash Estimate": "IPC, estimation flash"
+    "Core CPI Flash Estimate": "IPC sous-jacent, estimation flash"
+    "HICP": "IPCH"
+    "PPI": "IPP"
+    "Core PPI": "IPP sous-jacent"
+    "PPI Input": "IPP (intrants)"
+    "PPI Output": "IPP (production)"
+    "PCE Price Index": "Indice des prix PCE"
+    "Core PCE Price Index": "Indice des prix PCE sous-jacent"
+    "Personal Income": "Revenus des ménages"
+    "Personal Spending": "Dépenses des ménages"
+    "WPI": "Prix de gros"
+    "Import Prices": "Prix à l'importation"
+    "Retail Sales": "Ventes au détail"
+    "Core Retail Sales": "Ventes au détail hors automobiles"
+    "Unemployment Rate": "Taux de chômage"
+    "Employment Change": "Variation de l'emploi"
+    "Employment Cost Index": "Indice du coût de l'emploi"
+    "Wage Price Index": "Indice des salaires"
+    "Manufacturing PMI": "PMI manufacturier"
+    "Services PMI": "PMI des services"
+    "Composite PMI": "PMI composite"
+    "ISM Manufacturing PMI": "ISM manufacturier"
+    "ISM Services PMI": "ISM des services"
+    "Industrial Production": "Production industrielle"
+    "Manufacturing Production": "Production manufacturière"
+    "Manufacturing Sales": "Ventes manufacturières"
+    "Wholesale Sales": "Ventes en gros"
+    "Construction Output": "Production dans la construction"
+    "Capacity Utilization Rate": "Taux d'utilisation des capacités"
+    "Trade Balance": "Balance commerciale"
+    "Goods Trade Balance": "Balance commerciale des biens"
+    "Current Account": "Balance courante"
+    "Housing Starts": "Mises en chantier"
+    "Building Permits": "Permis de construire"
+    "Building Approvals": "Permis de construire"
+    "Existing Home Sales": "Ventes de logements anciens"
+    "New Home Sales": "Ventes de logements neufs"
+    "Pending Home Sales": "Promesses de ventes de logements"
+    "New Home Prices": "Prix des logements neufs"
+    "HPI": "Prix immobiliers"
+    "Business Inventories": "Stocks des entreprises"
+    "Durable Goods Orders": "Commandes de biens durables"
+    "Core Durable Goods Orders": "Commandes de biens durables hors transport"
+    "Factory Orders": "Commandes industrielles"
+    "Consumer Confidence": "Confiance des consommateurs"
+    "Ifo Business Climate": "climat des affaires Ifo"
+    "ZEW Economic Sentiment": "sentiment économique ZEW"
+    "Unemployment Change": "variation du chômage"
+    "Bank Holiday": "jour férié"
+    "Private Loans": "Prêts au secteur privé"
+    "M3 Money Supply": "Masse monétaire M3"
+    "Average Hourly Earnings": "Salaire horaire moyen"
+  # Discours : « <fonction> <Nom> Speaks » -> « Discours : <Nom>, <fonction> » ; Testifies -> Audition
+  orateurs:
+    "Fed Chairman": "président de la Fed"
+    "Fed Chair": "président(e) de la Fed"
+    "Fed Vice Chair for Supervision": "vice-président(e) de la Fed chargé(e) de la supervision"
+    "Fed Vice Chair": "vice-président(e) de la Fed"
+    "FOMC Member": "membre du FOMC"
+    "Fed Governor": "gouverneur de la Fed"
+    "ECB President": "présidente de la BCE"
+    "ECB Vice President": "vice-président de la BCE"
+    "ECB Chief Economist": "économiste en chef de la BCE"
+    "ECB Executive Board Member": "membre du directoire de la BCE"
+    "German Buba President": "président de la Bundesbank"
+    "French Gov": "gouverneur de la Banque de France"
+    "BOE Gov": "gouverneur de la BoE"
+    "BOE Deputy Gov": "sous-gouverneur de la BoE"
+    "MPC Member": "membre du MPC (BoE)"
+    "BOJ Gov": "gouverneur de la BoJ"
+    "BOJ Deputy Gov": "sous-gouverneur de la BoJ"
+    "BOC Gov": "gouverneur de la BoC"
+    "BOC Deputy Gov": "sous-gouverneur de la BoC"
+    "Gov Council Member": "membre du conseil de direction (BoC)"
+    "RBA Gov": "gouverneure de la RBA"
+    "RBA Deputy Gov": "sous-gouverneur de la RBA"
+    "RBA Assist Gov": "gouverneur adjoint de la RBA"
+    "RBNZ Gov": "gouverneur de la RBNZ"
+    "RBNZ Deputy Gov": "sous-gouverneur de la RBNZ"
+    "SNB Chairman": "président de la BNS"
+    "SNB Vice Chairman": "vice-président de la BNS"
+    "PBOC Gov": "gouverneur de la PBoC"
+    "Treasury Secretary": "secrétaire au Trésor"
+    "President": "président"
+  # Calendriers officiels des réunions (date de la décision ; jour 2 pour les réunions sur deux jours).
+  # heure : heure locale officielle de l'annonce quand la source la donne, sinon l'heure vient de ForexFactory la semaine
+  # concernée. statut : officiel | secondaire (site officiel refusé, sources secondaires concordantes) | provisoire.
+  reunions:
+    USD:
+      source: "Calendrier FOMC officiel"
+      url: "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
+      verifie_le: "2026-10-24"
+      statut: officiel
+      note: "2027 : dates provisoires jusqu'à confirmation à la réunion précédente (mention « tentative » de la Fed)"
+      dates: ["2026-10-28", "2026-12-09", "2027-01-27", "2027-03-17", "2027-04-28", "2027-06-09", "2027-07-28",
+              "2027-09-15", "2027-10-27", "2027-12-08"]
+    EUR:
+      source: "Calendrier des réunions du Conseil des gouverneurs (BCE)"
+      url: "https://www.ecb.europa.eu/press/calendars/mgcgc/html/index.en.html"
+      verifie_le: "2026-10-24"
+      statut: officiel
+      dates: ["2026-10-29", "2026-12-17", "2027-02-04", "2027-03-18", "2027-04-29", "2027-06-10", "2027-07-22",
+              "2027-09-09", "2027-10-28", "2027-12-16"]
+    GBP:
+      source: "Dates des annonces du MPC (Banque d'Angleterre)"
+      url: "https://www.bankofengland.co.uk/monetary-policy/upcoming-mpc-dates"
+      verifie_le: "2026-10-24"
+      statut: officiel
+      dates: ["2026-11-05", "2026-12-17", "2027-02-04", "2027-03-18", "2027-04-29", "2027-06-17", "2027-07-29",
+              "2027-09-16", "2027-11-04", "2027-12-16"]
+    JPY:
+      source: "Calendrier des réunions de politique monétaire (Banque du Japon)"
+      url: "https://www.boj.or.jp/en/mopo/mpmsche_minu/index.htm"
+      verifie_le: "2026-10-24"
+      statut: officiel
+      note: "Heure de l'annonce non fixée par la BoJ (en fin de réunion, le second jour)"
+      dates: ["2026-10-30", "2026-12-18", "2027-01-22", "2027-03-18", "2027-04-28", "2027-06-11", "2027-07-22",
+              "2027-09-22", "2027-10-29", "2027-12-17"]
+    CHF:
+      source: "Calendrier des évènements (Banque nationale suisse)"
+      url: "https://www.snb.ch/en/services-events/digital-services/event-schedule"
+      verifie_le: "2026-10-24"
+      statut: officiel
+      heure: "09:30"
+      fuseau: "Europe/Zurich"
+      dates: ["2026-12-10", "2027-03-18", "2027-06-24", "2027-09-23", "2027-12-16"]
+    CAD:
+      source: "Calendrier des annonces du taux directeur (Banque du Canada, communiqué du 27/07/2026)"
+      url: "https://www.bankofcanada.ca/2026/07/bank-canada-publishes-2027-schedule-policy-interest-rate-announcements-other-major-publications/"
+      verifie_le: "2026-10-24"
+      statut: officiel
+      heure: "09:45"
+      fuseau: "America/Toronto"
+      dates: ["2026-10-28", "2026-12-09", "2027-01-27", "2027-03-03", "2027-04-28", "2027-06-02", "2027-07-21",
+              "2027-09-08", "2027-10-27", "2027-12-08"]
+    AUD:
+      source: "Calendrier des réunions du Monetary Policy Board (RBA)"
+      url: "https://www.rba.gov.au/schedules-events/board-meeting-schedules.html"
+      verifie_le: "2026-10-24"
+      statut: officiel
+      dates: ["2026-11-03", "2026-12-08", "2027-02-09", "2027-03-23", "2027-05-04", "2027-06-22", "2027-08-10",
+              "2027-09-28", "2027-11-02", "2027-12-14"]
+    NZD:
+      source: "Calendrier de la RBNZ relayé par mpamag.com (16/10/2025) et squirrel.co.nz"
+      url: "https://www.mpamag.com/nz/news/general/rbnz-confirms-202627-ocr-dates-highlights-covid-19-policy-lessons/553110"
+      verifie_le: "2026-10-24"
+      statut: secondaire
+      note: "Site officiel rbnz.govt.nz refusé (403, non contourné) ; 2027 : sources secondaires divergentes (10 ou 17 février), dates non retenues"
+      dates: ["2026-10-28", "2026-12-09"]
+    CNY:
+      source: "Règle de publication du LPR (PBoC) : le 20 de chaque mois, reporté au jour ouvré suivant"
+      url: "http://www.pbc.gov.cn/"
+      verifie_le: "2026-10-24"
+      statut: regle
+      regle: lpr_20
+      note: "Date calculée selon la règle ; un jour férié chinois peut la décaler (non connu ici)"
+  # Grands rendez-vous : date officielle ou, à défaut, sources secondaires concordantes (statut affiché)
+  grands_rendez_vous:
+    - { date: "2026-11-03", titre: "Élections de mi-mandat aux États-Unis", devises: [USD], statut: officiel,
+        source: "Loi fédérale (2 U.S.C. § 7 : mardi suivant le premier lundi de novembre)", verifie_le: "2026-10-24" }
+    - { date: "2026-11-29", titre: "Comité de suivi OPEP+ (JMMC) : offre de pétrole", devises: [CAD, NZD, JPY], statut: secondaire,
+        source: "TASS (04/10/2026) ; aucun communiqué opec.org trouvé", verifie_le: "2026-10-24" }
+    - { date: "2026-12-09", titre: "Dernière réunion de l'année de la Fed (projections économiques)", devises: [USD], statut: officiel,
+        source: "Calendrier FOMC officiel (federalreserve.gov)", verifie_le: "2026-10-24" }
+    - { date: "2026-12-14", fin: "2026-12-15", titre: "Sommet des chefs d'État du G20 (Miami)", devises: [USD], statut: secondaire,
+        source: "Annonce de la Maison-Blanche relayée par la presse ; page officielle non trouvée", verifie_le: "2026-10-24" }
+  grands_rendez_vous_absents: "Jackson Hole et Forum BCE de Sintra 2027, réunions de printemps FMI / Banque mondiale 2027 : dates pas encore publiées (vérifié le 24/10/2026)"
+  # FRED releases/dates : publications US à venir (date seule, sans heure). Nom FRED -> [nom français, impact, motif FF]
+  # Le motif évite le doublon avec la ligne ForexFactory du même jour (qui a l'heure et le consensus).
+  fred_publications:
+    "Consumer Price Index": ["IPC (BLS)", fort, "CPI"]
+    "Employment Situation": ["Rapport sur l'emploi : NFP et chômage (BLS)", fort, "Non-Farm|Unemployment Rate"]
+    "Gross Domestic Product": ["PIB (BEA)", fort, "GDP"]
+    "Personal Income and Outlays": ["Revenus et dépenses des ménages, PCE (BEA)", fort, "PCE|Personal"]
+    "Producer Price Index": ["IPP (BLS)", moyen, "PPI"]
+    "Advance Monthly Sales for Retail and Food Services": ["Ventes au détail (Census)", fort, "Retail Sales"]
+    "Unemployment Insurance Weekly Claims Report": ["Inscriptions hebdomadaires au chômage (DOL)", moyen, "Unemployment Claims"]
+    "Job Openings and Labor Turnover Survey": ["Offres d'emploi JOLTS (BLS)", moyen, "JOLTS"]
+    "Employment Cost Index": ["Indice du coût de l'emploi (BLS)", moyen, "Employment Cost"]
+    "Advance Durable Goods Manufacturers' Shipments, Inventories and Orders": ["Commandes de biens durables (Census)", moyen, "Durable"]
+    "New Residential Construction": ["Mises en chantier et permis (Census)", faible, "Housing Starts|Building Permits"]
+    "New Residential Sales": ["Ventes de logements neufs (Census)", faible, "New Home Sales"]
+    "G.17 Industrial Production and Capacity Utilization": ["Production industrielle (Fed)", faible, "Industrial Production"]
+    "U.S. International Trade in Goods and Services": ["Balance commerciale (BEA)", faible, "Trade Balance"]
+    "Surveys of Consumers": ["Moral des consommateurs (université du Michigan)", moyen, "UoM"]
+    "Beige Book": ["Livre beige de la Fed", faible, "Beige Book"]
+    "FOMC Press Release": null   # quotidien chez FRED (mise à jour des séries) : n'est pas un évènement
+
 engrenages:
   actif: true
   articles_max: 25            # titres d'actualité envoyés (géopolitique, fiscalité)
