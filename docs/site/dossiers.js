@@ -1,6 +1,7 @@
 /* Dossiers chiffrés des 8 engrenages (docs/data/dossiers.json) : calcul Python quotidien, sans LLM.
    Tableaux + deux graphiques SVG par engrenage (série 90 jours, comparaison en barres), sans bibliothèque. */
 import { chargerJson, enErreur, el, dateCourte, dateHeure, ouvrirDetail, listeDefinitions, DRAPEAUX } from "./commun.js";
+import { detailEngrenage } from "./dossier_detail.js";
 
 const nombre = (v, dec = 2) => v === null || v === undefined ? "—" :
   Number(v).toLocaleString("fr-FR", { minimumFractionDigits: 0, maximumFractionDigits: dec });
@@ -753,7 +754,10 @@ export async function carteDossiers(options = {}) {
     const centrer = () => { selecteur.scrollLeft = Math.max(0, bActif.offsetLeft - selecteur.offsetLeft - (selecteur.clientWidth - bActif.offsetWidth) / 2); };
     centrer(); setTimeout(centrer, 80);   // second passage : la carte vient d'être insérée dans la page
     zone.classList.remove("fondu"); void zone.offsetWidth; zone.classList.add("fondu");   // relance l'animation
-    zone.replaceChildren(el("h3", "dossier-titre", `${actif}. ${NOMS[actif]}`), contenuEngrenage(actif, d.engrenages?.[actif]));
+    // Lot V5 : vue détaillée (chiffres clés, courbe 6 mois, règles, « et si », histoire, lecture) puis le dossier chiffré complet
+    zone.replaceChildren(el("h3", "dossier-titre", `${actif}. ${NOMS[actif]}`),
+                         detailEngrenage(d.cockpit?.details?.[actif], actif, delta => c.decaler(delta)),
+                         contenuEngrenage(actif, d.engrenages?.[actif]));
   }
   c.appendChild(collant); c.appendChild(zone);
   if ((d.erreurs_collecte || []).length) c.appendChild(el("p", "tag-alerte", `Séries indisponibles aujourd'hui : ${d.erreurs_collecte.join(" ; ")}`));

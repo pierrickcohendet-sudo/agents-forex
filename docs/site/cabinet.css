@@ -854,3 +854,43 @@ body.apercu-impression > *:not(#impression) { display: none !important; }
 .ck-bilan.pos { color: var(--positif); } .ck-bilan.neg { color: var(--negatif); }
 details.ck-vignette > summary { cursor: pointer; font: 700 1.05rem var(--serif); padding: 4px 0; }
 details.ck-vignette[open] > summary { margin-bottom: 10px; }
+
+/* ------------------------------------------------ dossier détaillé d'un engrenage (lot V5, étape 4) */
+.dd { display: grid; gap: 14px; margin: 8px 0 18px; }
+.dd-tete { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; }
+.dd-nav { display: flex; gap: 8px; flex-wrap: wrap; }
+.dd-chiffres { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+.dd-chiffre { display: flex; flex-direction: column; gap: 3px; background: var(--carte-2); border: 1px solid var(--trait); border-radius: var(--rayon); padding: 12px; min-width: 0; }
+.dd-chiffre b { font: 700 1.6rem var(--serif); }
+.dd-rang { font-size: 13px; font-weight: 600; } .dd-rang.nd { color: var(--texte-2); font-weight: 400; }
+.dd-milieu { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 14px; align-items: start; }
+@media (max-width: 900px) { .dd-milieu { grid-template-columns: minmax(0, 1fr); } }
+.dd-bloc h3 { font-size: 1.05rem; margin-bottom: 8px; }
+.dd-zone { opacity: .55; fill: color-mix(in srgb, var(--neutre) 30%, var(--carte)); }
+.dd-zone.dir-up { fill: color-mix(in srgb, var(--positif) 30%, var(--carte)); }
+.dd-zone.dir-dn { fill: color-mix(in srgb, var(--negatif) 30%, var(--carte)); }
+.dd-seuil { stroke: var(--texte-2); stroke-dasharray: 4 4; stroke-width: 1; }
+.dd-regles { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.dd-regles li { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; background: var(--carte-2); border-radius: var(--rayon); padding: 8px 10px; }
+.dd-etat { flex: 0 0 auto; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: var(--rayon); background: var(--carte); color: var(--texte-2); border: 1px solid var(--trait); }
+.dd-etat.on { color: var(--accent); border-color: currentColor; }
+.dd-etat.proche { color: var(--alerte); border-color: currentColor; }
+.dd-seg { flex-wrap: wrap; margin-bottom: 8px; }
+.dd-seg button { font-size: 13px; }
+.dd-desc { font-size: 14px; color: var(--texte-2); margin: 6px 0; }
+.dd-effets { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 4px; }
+@media (max-width: 600px) { .dd-effets { grid-template-columns: repeat(5, minmax(0, 1fr)); row-gap: 10px; } }
+.dd-effet { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 12.5px; text-align: center; }
+.dd-effet.pos .tabulaire { color: var(--positif); font-weight: 700; } .dd-effet.neg .tabulaire { color: var(--negatif); font-weight: 700; }
+.dd-barre { position: relative; display: block; width: 18px; height: 84px; border-bottom: 0; }
+.dd-barre::after { content: ""; position: absolute; left: -6px; right: -6px; top: 50%; height: 1px; background: var(--trait); }
+.dd-barre i { position: absolute; left: 0; right: 0; border-radius: 2px; background: var(--neutre); }
+.dd-effet.pos .dd-barre i { background: var(--positif); } .dd-effet.neg .dd-barre i { background: var(--negatif); }
+.dd-hist { display: grid; gap: 6px; }
+.dd-hist-ligne { display: grid; grid-template-columns: 40px minmax(60px, 1fr) 64px minmax(0, 1.2fr); gap: 8px; align-items: center; font-size: 13px; }
+.dd-hbar { position: relative; display: block; height: 14px; background: var(--carte-2); border-radius: 3px; }
+.dd-hbar::after { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--trait); }
+.dd-hbar i { position: absolute; top: 2px; bottom: 2px; border-radius: 2px; }
+.dd-hbar i.pos { background: var(--positif); } .dd-hbar i.neg { background: var(--negatif); }
+.ck-petit.faible { color: var(--alerte); }
+.dd-lecture { font-size: 16px; line-height: 1.55; margin: 0 0 6px; max-width: 900px; }

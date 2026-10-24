@@ -15,7 +15,7 @@ import statistics
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
-from core import agenda, annotations, archive_quotidienne, cockpit, complements, consequences, controles_macro, historique_5ans, matrice_impact, registre_macro as rm, tuiles, vue_ensemble
+from core import agenda, annotations, archive_quotidienne, cockpit, complements, outils, consequences, controles_macro, historique_5ans, matrice_impact, registre_macro as rm, tuiles, vue_ensemble
 
 log = logging.getLogger(__name__)
 
@@ -899,6 +899,14 @@ def construire(historiques: dict, registre: dict, technique: dict, config: dict,
         except Exception as exc:  # noqa: BLE001
             log.exception("Cockpit en échec")
             sortie["cockpit"] = {"indisponible": f"calcul en échec : {exc}"[:200]}
+        try:   # dossier détaillé de chaque engrenage (lot V5, étape 4)
+            if not sortie["cockpit"].get("indisponible"):
+                scen = outils.scenarios(config, sortie.get("matrice_impact") or {})
+                sortie["cockpit"]["details"] = outils.details(sortie["engrenages"], sortie["cockpit"], sortie.get("matrice_impact"),
+                                                              rapport, h5, technique, impact_donnees, scen, historiques)
+        except Exception as exc:  # noqa: BLE001
+            log.exception("Dossiers détaillés en échec")
+            sortie["cockpit"]["details_indisponibles"] = f"calcul en échec : {exc}"[:200]
     except Exception as exc:  # noqa: BLE001
         log.exception("Vue d'ensemble des engrenages en échec")
         sortie["vue_ensemble"] = {"indisponible": f"calcul en échec : {exc}"[:200]}
@@ -924,6 +932,7 @@ def ecrire(racine: str | Path, historiques: dict, registre: dict, technique: dic
             log.exception("Archive quotidienne des indicateurs en échec")
         chemin = Path(racine) / config.get("publication_web", {}).get("dossier_docs", "docs") / "data" / "dossiers.json"
         chemin.write_text(json.dumps(donnees, ensure_ascii=False, indent=1), encoding="utf-8")
+        outils.ecrire(racine, config, donnees, historique_5ans.charger(), technique, agenda_donnees)   # docs/data/outils.json
         return donnees
     except Exception as exc:  # noqa: BLE001
         log.error("dossiers.json non écrit : %s", exc)
