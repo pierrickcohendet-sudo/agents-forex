@@ -1082,3 +1082,34 @@ details.ck-vignette[open] > summary { margin-bottom: 10px; }
 .jn-plein:not([open]) { display: none; }
 .jn-plein img { max-width: 100%; max-height: 100%; object-fit: contain; justify-self: center; }
 .jn-plein .bouton { justify-self: end; }
+
+/* Journal (complément) : en-tête de la fiche, tuiles, grille des contributions, puces, biais en boutons */
+.jn-barre { flex-wrap: wrap; }
+.jn-puces { display: flex; flex-wrap: wrap; gap: 6px; }
+.jn-puce { min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--trait); background: var(--carte-2); color: var(--texte); font: 600 14px var(--sans); cursor: pointer; }
+.jn-puce[aria-pressed="true"] { background: var(--texte); color: var(--carte); border-color: var(--texte); }
+.jn-fiche-tete { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; justify-content: space-between; }
+.jn-solde { padding: 4px 12px; border-radius: 999px; font-size: 13.5px; font-weight: 700; background: var(--carte-2); border: 1px solid var(--trait); }
+.jn-solde.pos { color: var(--positif); border-color: var(--positif); } .jn-solde.neg { color: var(--negatif); border-color: var(--negatif); }
+.jn-tuiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 8px; }
+.jn-tuile { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; background: var(--carte-2); border-radius: var(--rayon); min-width: 0; }
+.jn-t-lib { font-size: 12.5px; color: var(--texte-2); }
+.jn-t-val { font: 700 17px var(--mono); overflow-wrap: anywhere; }
+.jn-t-detail { font-size: 12px; color: var(--texte-2); overflow-wrap: anywhere; }
+.jn-t-lien { font-size: 12.5px; }
+.jn-contrib h3 { font-size: .95rem; margin-bottom: 6px; }
+.jn-contrib-grille { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 4px; }
+.jn-c { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 12px; color: var(--texte-2); }
+.jn-c b { width: 100%; height: 36px; display: grid; place-items: center; border-radius: var(--rayon); font: 700 14px var(--mono); color: var(--texte); background: var(--carte-2); }
+.jn-c.zero b { color: var(--texte-2); }
+.jn-c.p1 b { background: color-mix(in srgb, var(--positif) 22%, var(--carte)); } .jn-c.p2 b { background: var(--positif); color: #fff; }
+.jn-c.n1 b { background: color-mix(in srgb, var(--negatif) 22%, var(--carte)); } .jn-c.n2 b { background: var(--negatif); color: #fff; }
+.jn-c.incomplete b { background: repeating-linear-gradient(45deg, color-mix(in srgb, var(--neutre) 25%, var(--carte)) 0 3px, var(--carte) 3px 7px); }
+.jn-biais { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.jn-biais legend { grid-column: 1 / -1; }
+.jn-biais label { justify-content: center; min-height: 44px; border: 1px solid var(--trait); border-radius: var(--rayon); background: var(--carte-2); font-weight: 600; cursor: pointer; }
+.jn-biais input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.jn-biais label:has(input:checked) { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, var(--carte)); }
+.jn-biais label:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+.jn-depot-titre { font-weight: 700; color: var(--texte) !important; font-size: 15px !important; }
+.sc-seg button:disabled { opacity: .45; cursor: not-allowed; }

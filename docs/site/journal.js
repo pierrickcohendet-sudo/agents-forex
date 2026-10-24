@@ -6,7 +6,7 @@ import { graphiqueSerie, dessinerReperes } from "./dossiers.js";
 
 const SVG = "http://www.w3.org/2000/svg";
 const UNITES = [["30min", "30 min"], ["4h", "4 h"], ["1j", "1 j"]];
-const BIAIS = { haussier: "Haussier", baissier: "Baissier", neutre: "Neutre" };
+const BIAIS = { haussier: "Haussier", neutre: "Neutre", baissier: "Baissier" };
 const COURTS = { 1: "Thème", 2: "Monétaire", 3: "Données", 4: "Fiscale", 5: "Marchés", 6: "Géopolitique", 7: "Flux", 8: "Offre" };
 const signe = (v, d = 2) => v == null ? "n/d" : `${v > 0 ? "+" : ""}${Number(v).toLocaleString("fr-FR", { maximumFractionDigits: d })}`.replace("-", "−");
 const nombre = (v, d = 4) => v == null ? "n/d" : Number(v).toLocaleString("fr-FR", { maximumFractionDigits: d });
@@ -144,6 +144,14 @@ function graphiques(f, mes) {
     rendre();
     c.append(nav, zone);
   } else {
+    const nav = el("div", "sc-seg"); nav.setAttribute("role", "group"); nav.setAttribute("aria-label", "Unité de temps");
+    for (const [u, lib] of UNITES) {
+      const b = el("button", null, lib); b.type = "button";
+      if (u === "1j") b.setAttribute("aria-pressed", "true");
+      else { b.disabled = true; b.title = mes.includes(f.paire) ? (f.chandeliers?.raison || "non collectés") : "réservé à Mes paires (config.yaml, journal.mes_paires)"; }
+      nav.appendChild(b);
+    }
+    c.appendChild(nav);
     const g = f.graphique_1j || {};
     c.appendChild(graphiqueSerie({ titre: `${f.paire} · 1 jour (6 mois)`, unite: null, courbes: [{ nom: f.paire, points: g.points || [], couleur: "var(--accent)" }],
                                    source: g.source || "série unique 5 ans", annotations: g.annotations }));
@@ -152,12 +160,60 @@ function graphiques(f, mes) {
   return c;
 }
 
+function tuile(libelle, valeur, detail, lien) {
+  const t = el("div", "jn-tuile");
+  t.append(el("span", "jn-t-lib", libelle), el("b", "jn-t-val tabulaire", valeur));
+  if (detail) t.appendChild(el("span", "jn-t-detail", detail));
+  if (lien) { const a = el("a", "jn-t-lien", lien[0]); a.href = lien[1]; t.appendChild(a); }
+  return t;
+}
+
+function tuiles(f) {
+  const m = f.macro || {}, t = f.technique || {}, p = m.portage || {};
+  const g = el("div", "jn-tuiles");
+  const taux = x => x?.directeur == null ? "n/d" : `${x.borne === "<" ? "< " : ""}${String(x.directeur.toFixed(2)).replace(".", ",")} %`;
+  g.appendChild(tuile("Écart de taux directeurs", p.directeur_pb == null ? "n/d" : `${signe(p.directeur_pb / 100, 2)} pt${p.borne ? " (borne)" : ""}`,
+    `${f.base} ${taux(p.base)} · ${f.cotation} ${taux(p.cotation)}`));
+  g.appendChild(tuile("Surprises macro 30 j", `${signe(m.surprises?.[f.base])} / ${signe(m.surprises?.[f.cotation])}`, `${f.base} / ${f.cotation}`));
+  g.appendChild(tuile("RSI 14 · MM200", t.raison ? "n/d" : `${String(t.rsi14 ?? "n/d").replace(".", ",")} · ${t.ecart_mm200 == null ? "n/d" : `${signe(t.ecart_mm200)} %`}`,
+    t.raison ? t.raison : "série journalière, écart à la moyenne 200 j"));
+  const evts = (m.evenements || []).slice(0, 2);
+  g.appendChild(tuile("Prochains évènements", evts.length ? evts.map(e => `${e.devise} ${dateCourte(e.date_paris).slice(0, 5)}`).join(" · ") : "aucun",
+    evts.length ? evts.map(e => e.evenement).join(" · ") : "rien de fort ou moyen au calendrier", ["voir l'Agenda", "#agenda"]));
+  return g;
+}
+
+function contributions(f) {
+  const dec = (f.macro || {}).decomposition || {};
+  const box = el("div", "jn-contrib");
+  box.appendChild(el("h3", null, `Contribution par engrenage (${f.base} − ${f.cotation})`));
+  const g = el("div", "jn-contrib-grille");
+  for (const x of dec.contributions || []) {
+    const v = x.contribution;
+    const c = el("div", `jn-c ${v >= 2 ? "p2" : v === 1 ? "p1" : v <= -2 ? "n2" : v === -1 ? "n1" : "zero"}${x.incomplete ? " incomplete" : ""}`);
+    c.append(el("b", "tabulaire", v ? signe(v, 0) : "·"), el("span", null, String(x.engrenage)));
+    c.title = `${x.engrenage} ${COURTS[x.engrenage]} : ${f.base} ${signe(x.base, 0)} (${x.etat_base}) − ${f.cotation} ${signe(x.cotation, 0)} (${x.etat_cotation})${x.incomplete ? " · incomplet" : ""}`;
+    g.appendChild(c);
+  }
+  box.appendChild(g);
+  if (!(dec.contributions || []).length) box.appendChild(el("p", "note", "Décomposition n/d."));
+  return box;
+}
+
 function ficheAnalyse(f, mes) {
   const c = el("section", "carte jn-fiche");
   if (!f || f.raison) { c.appendChild(el("p", "indisponible", `Fiche n/d : ${f?.raison || "paire absente"}.`)); return c; }
   const m = f.macro || {}, t = f.technique || {};
-  c.appendChild(el("h2", null, `${f.paire} — fiche d'analyse`));
-  c.appendChild(el("p", "ck-petit", `Rapport du ${dateCourte(f.date_rapport)} · calcul Python ${mes.includes(f.paire) ? "· Mes paires" : ""}`));
+  const dec0 = m.decomposition || {};
+  const tete = el("div", "jn-fiche-tete");
+  tete.appendChild(el("h2", null, `Analyse automatique · ${dateCourte(f.date_rapport)}`));
+  if (dec0.solde != null) {
+    const sol = el("span", `jn-solde ${dec0.solde > 0 ? "pos" : dec0.solde < 0 ? "neg" : ""}`, `Solde engrenages ${signe(dec0.solde, 0)} · ${dec0.lecture || ""}`);
+    sol.title = dec0.texte || "";
+    tete.appendChild(sol);
+  }
+  c.appendChild(tete);
+  c.appendChild(el("p", "ck-petit", `Calcul Python à chaque run${mes.includes(f.paire) ? " · Mes paires" : ""}. Lecture de la paire, jamais un ordre.`));
   const syn = el("div", "jn-synthese");
   syn.appendChild(el("h3", null, "Synthèse en 3 lignes"));
   if (f.synthese_modele?.texte) {
@@ -168,6 +224,8 @@ function ficheAnalyse(f, mes) {
     syn.appendChild(el("span", "source", mes.includes(f.paire) ? "calcul Python (texte du modèle indisponible aujourd'hui)" : "calcul Python"));
   }
   c.appendChild(syn);
+  c.appendChild(tuiles(f));
+  c.appendChild(contributions(f));
   c.appendChild(graphiques(f, mes));
   const macro = el("div", "jn-bloc");
   macro.appendChild(el("h3", null, "Macro"));
@@ -266,7 +324,16 @@ export async function pageJournal() {
   const zoneFiche = el("div");
   const rendreFiche = () => { zoneFiche.replaceChildren(ficheAnalyse(paires.fiches[paireActive], mes)); champPaire.value = paireActive; };
   choix.addEventListener("change", () => { paireActive = choix.value; try { localStorage.setItem("fxdesk-journal-paire", paireActive); } catch (e) { /* préférence seulement */ } rendreFiche(); });
-  const barre = el("div", "jn-barre"); barre.append(el("label", null, "Paire"), choix);
+  const puces = el("div", "jn-puces"); puces.setAttribute("role", "group"); puces.setAttribute("aria-label", "Mes paires");
+  const boutonsPuces = mes.map(p => {
+    const b = el("button", "jn-puce", p); b.type = "button";
+    b.addEventListener("click", () => { choix.value = p; choix.dispatchEvent(new Event("change")); });
+    puces.appendChild(b); return b;
+  });
+  const marquerPuce = () => boutonsPuces.forEach(b => b.setAttribute("aria-pressed", String(b.textContent === paireActive)));
+  choix.addEventListener("change", marquerPuce);
+  const barre = el("div", "jn-barre"); barre.append(puces, choix);
+  marquerPuce();
   gauche.append(barre, zoneFiche);
 
   // ------------- formulaire de note
@@ -277,18 +344,19 @@ export async function pageJournal() {
   for (const p of paires.paires || []) champPaire.appendChild(new Option(p, p));
   const unites = el("fieldset", "jn-unites"); unites.appendChild(el("legend", null, "Unités de temps regardées"));
   for (const [u, lib] of UNITES) { const l = el("label"); const c = el("input"); c.type = "checkbox"; c.value = u; l.append(c, document.createTextNode(` ${lib}`)); unites.appendChild(l); }
-  const biais = el("fieldset", "jn-unites"); biais.appendChild(el("legend", null, "Mon biais (ma lecture, pas un ordre)"));
+  const biais = el("fieldset", "jn-unites jn-biais"); biais.appendChild(el("legend", null, "Mon biais (ma lecture, pas un ordre)"));
   for (const [v, lib] of Object.entries(BIAIS)) { const l = el("label"); const r = el("input"); r.type = "radio"; r.name = "jn-biais"; r.value = v; if (v === "neutre") r.checked = true; l.append(r, document.createTextNode(` ${lib}`)); biais.appendChild(l); }
   const texte = el("textarea", "jn-zone"); texte.rows = 6; texte.placeholder = "Mon analyse… (mise en forme : **gras**, *italique*, lignes « - » pour une liste)";
   texte.setAttribute("aria-label", "Texte de la note");
   const etiquettes = el("input", "jn-etiquettes"); etiquettes.type = "text"; etiquettes.placeholder = "Étiquettes, séparées par des virgules";
   etiquettes.setAttribute("aria-label", "Étiquettes");
   const depot = el("div", "jn-depot"); depot.tabIndex = 0;
-  depot.appendChild(el("p", null, "Images : glissez-déposez, collez (Ctrl+V) ou choisissez un fichier. Compression à 1600 px."));
+  depot.appendChild(el("p", "jn-depot-titre", "Coller (Ctrl+V) ou glisser mes captures"));
+  depot.appendChild(el("p", null, "Chaque image reçoit son unité de temps (30 min · 4 h · 1 j) ; compression à 1600 px, rien n'est envoyé."));
   const fichier = el("input"); fichier.type = "file"; fichier.accept = "image/*"; fichier.multiple = true; fichier.setAttribute("aria-label", "Ajouter des images");
   const apercus = el("div", "jn-apercus");
   depot.append(fichier, apercus);
-  const enregistrer = el("button", "bouton jn-principal", "Enregistrer la note"); enregistrer.type = "submit";
+  const enregistrer = el("button", "bouton jn-principal", "Enregistrer · avec l'instantané de l'analyse du jour"); enregistrer.type = "submit";
   const annuler = el("button", "bouton", "Annuler la modification"); annuler.type = "button"; annuler.hidden = true;
   const actions = el("div", "jn-actions"); actions.append(enregistrer, annuler);
   form.append(erreur, el("label", "jn-lab", "Paire"), champPaire, unites, biais, texte, etiquettes, depot, actions,
