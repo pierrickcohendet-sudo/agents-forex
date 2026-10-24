@@ -184,7 +184,10 @@ def engrenage_2(historiques: dict, registre: dict, config: dict) -> dict:
                             "raison_percentile": "valeur manuelle ponctuelle (pas d'historique)",
                             "alerte": f"relevé ancien ({age} jours)" if age > 10 else None}
         else:
-            c["taux_2a"] = absent((spec2.get("absent") or "pas de rendement 2 ans gratuit pour ce pays")
+            sonde = (historiques.get("sondes_sources") or {}).get(f"{devise}_2a") or {}
+            verif = (f" — vérification du {sonde['date'][8:10]}/{sonde['date'][5:7]} : "
+                     f"{'HTTP ' + str(sonde['statut']) + ', ' if sonde.get('statut') else ''}{sonde.get('lecture')}") if sonde.get("date") else ""
+            c["taux_2a"] = absent((spec2.get("absent") or "pas de rendement 2 ans gratuit pour ce pays") + verif
                                   + (" — valeur manuelle prévue dans config.yaml (valeurs_manuelles), non renseignée" if manuel else ""))
         # 2 ans − directeur (ce que le marché intègre de baisses / hausses)
         if s2 and directeur is not None:
@@ -797,7 +800,7 @@ def appliquer_historique_5ans(engrenages: dict, h5, technique: dict | None) -> N
 
 def construire(historiques: dict, registre: dict, technique: dict, config: dict, rapport: dict | None = None,
                flux: dict | None = None, news: dict | None = None, dossier_rapports: str | Path | None = None,
-               h5=None) -> dict:
+               h5=None, impact_donnees: dict | None = None) -> dict:
     if h5 is not None and h5.disponible:   # corrélations 5 ans calculées par le module partagé
         try:
             historiques = {**historiques, "correlations_5a": historique_5ans.correlations(h5, technique)}
@@ -885,7 +888,8 @@ def construire(historiques: dict, registre: dict, technique: dict, config: dict,
     try:   # bandeau du thème, 8 cartes et chaînes (refonte V2, palier 1) : calcul Python, sans LLM
         sortie["vue_ensemble"] = vue_ensemble.calculer(sortie["engrenages"], historiques, technique, rapport)
         try:   # matrice d'impact 9 devises × 8 engrenages (règles de config.yaml, calcul Python)
-            sortie["matrice_impact"] = matrice_impact.calculer(config, sortie["engrenages"], sortie["vue_ensemble"])
+            sortie["matrice_impact"] = matrice_impact.calculer(config, sortie["engrenages"], sortie["vue_ensemble"],
+                                                               historiques, impact_donnees)
         except Exception as exc:  # noqa: BLE001
             log.exception("Matrice d'impact en échec")
             sortie["matrice_impact"] = {"indisponible": f"calcul en échec : {exc}"[:200]}
@@ -899,8 +903,13 @@ def ecrire(racine: str | Path, historiques: dict, registre: dict, technique: dic
            flux: dict | None = None, news: dict | None = None, dossier_rapports: str | Path | None = None) -> dict | None:
     """Écrit docs/data/dossiers.json et retourne le contenu (None en cas d'échec, jamais d'exception)."""
     try:
+        try:   # étude d'impact 5 ans (simulateur) : confirme le signe des règles de couverture de la matrice
+            impact_donnees = json.loads((Path(racine) / config.get("publication_web", {}).get("dossier_docs", "docs") / "data"
+                                         / "impact.json").read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            impact_donnees = None
         donnees = construire(historiques, registre, technique, config, rapport, flux, news, dossier_rapports,
-                             historique_5ans.charger())
+                             historique_5ans.charger(), impact_donnees)
         try:   # archive quotidienne des valeurs non historisées, puis mini-courbes tirées de l'archive
             archive = archive_quotidienne.archiver(donnees["engrenages"])
             archive_quotidienne.completer_tuiles(donnees["engrenages"], archive)

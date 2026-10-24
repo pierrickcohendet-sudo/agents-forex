@@ -82,6 +82,21 @@ def _get(url: str, **params) -> requests.Response:
     return rep
 
 
+def _sonder(url: str) -> dict:
+    """Vérification quotidienne d'une source non adoptée : statut HTTP daté, sans jamais contourner un refus."""
+    jour = date.today().isoformat()
+    try:
+        rep = requests.get(url, headers=UA, timeout=30)
+        texte = (rep.headers.get("content-type") or "").split(";")[0]
+        return {"date": jour, "statut": rep.status_code, "type": texte, "url": url,
+                "lecture": "accès automatisé refusé" if rep.status_code == 403 else
+                           "service indisponible" if rep.status_code >= 500 else
+                           "requête refusée (format ou série inconnue)" if rep.status_code >= 400 else
+                           "répond : intégration possible après contrôle du format"}
+    except Exception as exc:  # noqa: BLE001
+        return {"date": jour, "statut": None, "url": url, "lecture": f"injoignable ({masquer_secrets(str(exc))[:80]})"}
+
+
 def _fred(serie: str, cle: str, debut: date) -> list[tuple[str, float]]:
     rep = _get("https://api.stlouisfed.org/fred/series/observations", series_id=serie, api_key=cle,
                file_type="json", observation_start=debut.isoformat())
@@ -250,6 +265,10 @@ def collecter(config: dict) -> dict:
             if lecteur:
                 ajouter(f"{devise}_{maturite}", lambda s=spec, l=lecteur: l(s), spec.get("source", spec.get("type")),
                         "%", "mensuel" if spec.get("type") == "fred_mensuel" else "quotidien")
+            elif spec.get("verifier"):
+                # Source absente : UNE requête par jour pour savoir si elle répond depuis le runner (jamais de
+                # contournement d'un 403) ; le résultat daté complète la raison « n/d » affichée sur le site.
+                resultat.setdefault("sondes_sources", {})[f"{devise}_{maturite}"] = _sonder(spec["verifier"])
     try:   # historique quotidien 5 ans (fenêtre glissante, taille stable) : RSI, volatilité, corrélations…
         resultat["historique_5ans"] = historique_5ans.enregistrer(bruts)
     except Exception as exc:  # noqa: BLE001 — n'affecte que les calculs longs

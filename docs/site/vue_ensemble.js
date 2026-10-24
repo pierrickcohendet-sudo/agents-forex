@@ -287,9 +287,15 @@ function chaines(v) {
 
 /* ------------------------------------------------ matrice d'impact (§8) */
 const FLECHES = { 2: "▲▲", 1: "▲", 0: "·", "-1": "▼", "-2": "▼▼" };
+/* Symbole d'une case : flèches pour une règle déclenchée ; sinon l'état (neutre, n/d, sans règle, neutralisé). */
+export const symboleCase = c => c.etat === "nd" ? "n/d" : c.etat === "sans_regle" ? "—" : c.etat === "neutralise" ? "⊘" : FLECHES[c.valeur];
 const COURTS_ENG = { 1: "Thème", 2: "Monétaire", 3: "Données", 4: "Fiscale", 5: "Marchés", 6: "Géopolitique", 7: "Flux", 8: "Offre" };
 function detailCase(devise, c) {
-  const noeuds = [el("p", "mi-detail-valeur", `${FLECHES[c.valeur]} ${c.libelle} (${c.valeur > 0 ? "+" : ""}${String(c.valeur).replace("-", "−")})`)];
+  const noeuds = [el("p", "mi-detail-valeur", `${symboleCase(c)} ${c.libelle}${c.etat === "active" || c.etat === "neutre" ? ` (${c.valeur > 0 ? "+" : ""}${String(c.valeur).replace("-", "−")})` : ""}`)];
+  const sens = { neutre: "Neutre : règle évaluée sur le chiffre du jour, non déclenchée.", nd: "n/d : donnée absente, la règle n'a pas pu être évaluée.",
+                 sans_regle: "Sans règle : aucune règle de cet engrenage ne concerne cette devise (ou règle non confirmée sur 5 ans).",
+                 neutralise: "Neutralisé : au-delà du seuil, mais la série est heurtée ; compté 0." }[c.etat];
+  if (sens) noeuds.push(el("p", "note", sens));
   if (c.regles.length) {
     for (const r of c.regles) {
       const b = el("div", "mi-regle");
@@ -298,7 +304,7 @@ function detailCase(devise, c) {
       noeuds.push(b);
     }
     if (c.bornee) noeuds.push(el("p", "note", "Somme des règles bornée à ±2."));
-  } else noeuds.push(el("p", "note", `Valeur 0 : ${c.raison}.`));
+  } else noeuds.push(el("p", "note", `Raison : ${c.raison}.`));
   noeuds.push(el("p", "note", "Règles modifiables dans config.yaml (matrice_impact). Aide à la lecture, jamais une recommandation."));
   ouvrirDetail(`${devise} × engrenage ${c.engrenage} (${COURTS_ENG[c.engrenage]})`, noeuds);
 }
@@ -319,11 +325,12 @@ export function matriceImpact(m) {
     const tr = el("tr");
     tr.appendChild(el("th", "mi-devise", `${DRAPEAUX[l.devise] || ""} ${l.devise}`));
     for (const cas of l.cases) {
-      const td = el("td", `mi-case v${cas.valeur}${cas.etat ? ` ${cas.etat}` : ""}`);
+      const td = el("td", `mi-case v${cas.valeur}${cas.etat ? ` etat-${cas.etat}` : ""}`);
       const b = el("button", "mi-bouton");
       b.type = "button";
       b.setAttribute("aria-label", `${l.devise}, engrenage ${cas.engrenage} : ${cas.libelle}. Voir la règle.`);
-      b.append(el("span", "mi-fleche", FLECHES[cas.valeur]), el("span", "mi-libelle", cas.libelle));
+      b.append(el("span", "mi-fleche", symboleCase(cas)), el("span", "mi-libelle", cas.libelle));
+      if (cas.etat !== "active" && cas.raison) b.title = cas.raison;
       b.addEventListener("click", () => detailCase(l.devise, cas));
       td.appendChild(b); tr.appendChild(td);
     }
@@ -333,7 +340,9 @@ export function matriceImpact(m) {
     corps.appendChild(tr);
   }
   t.appendChild(corps); defile.appendChild(t); c.appendChild(defile);
-  if (m.cases_total) c.appendChild(el("p", "mi-densite", `${m.cases_actives} cases actives sur ${m.cases_total} : les autres valent 0 (règle non déclenchée, donnée absente ou série heurtée ; raison dans chaque case).`));
+  if (m.cases_total) c.appendChild(el("p", "mi-densite", m.compte_libelle
+    ? `${m.compte_libelle} (sur ${m.cases_total} cases) · neutre = règle évaluée non déclenchée · raison dans chaque case.`
+    : `${m.cases_actives} cases actives sur ${m.cases_total}.`));
   c.appendChild(el("p", "note", m.legende));
   if (!m.theme_fort) c.appendChild(el("p", "note", "Signaux mixtes : les règles du thème global (colonne 1) ne s'appliquent pas aujourd'hui."));
   return c;

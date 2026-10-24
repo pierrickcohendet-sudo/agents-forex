@@ -178,22 +178,22 @@ tableau_macro:
         2a:  { type: bundesbank, code: "BBSIS/D.I.ZST.ZI.EUR.S1311.B.A604.R02XX.R.A.A._Z._Z.A", source: "Bundesbank (Allemagne 2 ans)" }
         10a: { type: bundesbank, code: "BBSIS/D.I.ZST.ZI.EUR.S1311.B.A604.R10XX.R.A.A._Z._Z.A", source: "Bundesbank (Allemagne 10 ans)" }
       GBP:
-        2a:  { absent: "2 ans non publié en accès libre (BoE : 5/10/20 ans)" }
+        2a:  { absent: "2 ans non publié en accès libre (BoE IADB : 5, 10 et 20 ans seulement ; vérifié le 24/10/2026)" }
         10a: { type: boe, code: IUDMNPY, source: "Banque d'Angleterre (par yield 10 ans, IUDMNPY)" }
       JPY:
         2a:  { type: mof, colonne: "2Y", source: "Ministère des Finances du Japon (JGB 2 ans)" }
         10a: { type: mof, colonne: "10Y", source: "Ministère des Finances du Japon (JGB 10 ans)" }
       CHF:
-        2a:  { absent: "SNB : série arrêtée (dernière donnée 07/2025)" }
+        2a:  { absent: "SNB : rendements 2 ans indisponibles par le portail de données (série arrêtée 07/2025, portail en erreur le 24/10/2026)", verifier: "https://data.snb.ch/api/cube/rendoblim/data/csv/en" }
         10a: { type: fred_mensuel, serie: IRLTLT01CHM156N, source: "OCDE via FRED (IRLTLT01CHM156N)" }
       CAD:
         2a:  { type: boc, serie: BD.CDN.2YR.DQ.YLD, source: "Banque du Canada (Valet, 2 ans)" }
         10a: { type: boc, serie: BD.CDN.10YR.DQ.YLD, source: "Banque du Canada (Valet, 10 ans)" }
       AUD:
-        2a:  { absent: "RBA : accès automatisé refusé (403)" }
+        2a:  { absent: "RBA (tableau F2) : accès automatisé refusé (403), jamais contourné", verifier: "https://www.rba.gov.au/statistics/tables/csv/f2-data.csv" }
         10a: { type: fred_mensuel, serie: IRLTLT01AUM156N, source: "OCDE via FRED (IRLTLT01AUM156N)" }
       NZD:
-        2a:  { absent: "RBNZ : accès automatisé refusé (403)" }
+        2a:  { absent: "RBNZ (tableau B2) : accès automatisé refusé (403), jamais contourné", verifier: "https://www.rbnz.govt.nz/-/media/project/sites/rbnz/files/statistics/series/b/b2/hb2-daily.xlsx" }
         10a: { type: fred_mensuel, serie: IRLTLT01NZM156N, source: "OCDE via FRED (IRLTLT01NZM156N)" }
       CNY:
         2a:  { absent: "aucune source gratuite exploitable" }
@@ -686,6 +686,63 @@ matrice_impact:
         cas:
           - { si: ["<=", -5], effets: { CAD: 1 } }
           - { si: [">=", 5], effets: { CAD: -1 } }
+
+  # Couverture par devise (lot V5) : engrenages 4, 5, 6 et 8. Effet = signe de simulateur.lecture_classique
+  # × sens du franchissement, appliqué à une devise SEULEMENT si le signe mesuré sur 5 ans le confirme pour ce
+  # sens (sensibilité de même signe, médiane à 1 mois conforme, borne basse de Wilson à 90 % > 50 % ; données
+  # docs/data/impact.json, comme le tableau des conséquences). Déclenchement : seuil fixe OU percentile sur 5 ans
+  # de la même mesure (85e en haut, 15e en bas). Une devise déjà couverte par une règle ci-dessus sur le même
+  # indicateur n'est jamais comptée deux fois. Série heurtée : neutralisée (visible). Calcul : core/couverture.py.
+  couverture:
+    percentiles: [15, 85]
+    fenetre_jours: 28            # « variation » = sur 4 semaines
+    regles:
+      "4":
+        - indicateur: us10a      # clé de simulateur.lecture_classique et de impact.json
+          serie: USD_10a         # série canonique de l'historique 5 ans
+          mesure: variation
+          unite: pb
+          seuils: { haut: 25, bas: -25 }
+          texte: "10 ans US, variation sur 4 semaines"
+          pedagogie: "Des taux longs américains qui montent rendent les placements en dollars plus rémunérateurs : les capitaux affluent vers le dollar, au détriment des autres devises. Une forte hausse peut aussi traduire une prime de risque budgétaire (engrenage 4)."
+      "5":
+        - indicateur: vix
+          serie: vix
+          mesure: niveau
+          unite: pts
+          seuils: { haut: 25, bas: 14 }
+          texte: "niveau du VIX"
+          pedagogie: "Le VIX mesure la peur sur les actions américaines. Quand il monte, les investisseurs vendent les devises « risquées » (AUD, NZD, CAD) et achètent les refuges (USD, JPY, CHF) ; quand il est très bas, c'est l'inverse."
+        - indicateur: sp500
+          serie: sp500
+          mesure: variation
+          unite: "%"
+          seuils: { haut: 4, bas: -4 }
+          texte: "S&P 500, variation sur 4 semaines"
+          pedagogie: "Des actions en forte hausse signalent l'appétit pour le risque : les devises cycliques en profitent, les refuges reculent. Une baisse marquée produit l'effet inverse."
+        - indicateur: dollar_large
+          serie: dollar_large
+          mesure: variation
+          unite: "%"
+          seuils: { haut: 2, bas: -2 }
+          texte: "indice dollar large (Fed), variation sur 4 semaines"
+          pedagogie: "L'indice dollar large de la Fed résume la force du dollar face à ses partenaires commerciaux : quand il monte, presque toutes les autres devises baissent face au dollar."
+      "6":
+        - indicateur: or
+          serie: indice_or
+          mesure: variation
+          unite: "%"
+          seuils: { haut: 5, bas: -5 }
+          texte: "indice or (proxy), variation sur 4 semaines"
+          pedagogie: "L'or est le refuge des périodes de tension géopolitique : une forte hausse accompagne souvent un dollar plus faible et un franc suisse plus fort (lecture à confirmer sur 5 ans)."
+      "8":
+        - indicateur: brent
+          serie: brent
+          mesure: variation
+          unite: "%"
+          seuils: { haut: 10, bas: -10 }
+          texte: "Brent, variation sur 4 semaines"
+          pedagogie: "Un pétrole plus cher soutient les devises des pays exportateurs (CAD) et pèse sur celles des importateurs (JPY, EUR), via la balance commerciale."
 
 # --- Simulateur d'impact : lecture classique (refonte §12) ---------------------
 # Sens attendu « dans les manuels » pour une HAUSSE de l'indicateur (une baisse inverse

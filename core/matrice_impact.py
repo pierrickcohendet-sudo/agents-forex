@@ -18,6 +18,7 @@ def _pts(n: int) -> str:
     return f"{n:+d}".replace("-", "−")
 
 
+from core import couverture  # noqa: E402
 from core.indicateurs import TEXTE_NEUTRALISE  # noqa: E402
 
 LIBELLES = {2: "Soutien fort", 1: "Soutien", 0: "Neutre", -1: "Pression", -2: "Pression forte"}
@@ -106,75 +107,147 @@ def _fmt(v, unite: str | None) -> str:
     return t.replace(".", ",").replace("-", "−")
 
 
-def calculer(config: dict, engrenages: dict, vue: dict | None) -> dict:
-    cfg = (config or {}).get("matrice_impact") or {}
+ETATS = ("active", "neutralise", "neutre", "nd", "sans_regle")
+LIBELLES_ETAT = {"neutre": "Neutre", "nd": "n/d", "sans_regle": "Sans règle", "neutralise": "Neutralisé"}
+# Indicateur de la couverture -> signal d'une règle existante sur le même indicateur (jamais compté deux fois)
+SIGNAL_EXISTANT = {"vix": "vix", "sp500": "sp500_var_4s", "brent": "brent_var_4s"}
+
+
+def _deja_couverte(liste: list, indicateur: str, devise: str) -> bool:
+    signal = SIGNAL_EXISTANT.get(indicateur)
+    for r in liste:
+        if r.get("signal") != signal:
+            continue
+        if r.get("par_devise") or devise in {d for c in r.get("cas") or [] for d in (c.get("effets") or {})}:
+            return True
+    return False
+
+
+def _case(devise: str, n: int, liste: list, sig: dict, theme_fort: bool, coh_libelle: str | None, couv: list) -> dict:
+    """Une case de la matrice : valeur bornée à ±2, état (active / neutralise / neutre / nd / sans_regle) et raisons."""
+    points, appliquees, neutralisees = 0, [], []
+    evaluees, manquantes, non_confirmees = [], [], []
+    for r in liste:
+        nom, texte, unite = r.get("signal"), r.get("texte", r.get("signal")), r.get("unite")
+        if r.get("exige_theme_fort") and not theme_fort:
+            evaluees.append(f"{texte} : non appliqué, signaux mixtes ({coh_libelle or 'cohérence indisponible'})")
+            continue
+        valeur = sig.get(nom)
+        if r.get("par_devise"):
+            v = (valeur or {}).get(devise) if isinstance(valeur, dict) else None
+            if v is None:
+                manquantes.append(f"{texte} : pas de donnée pour {devise}")
+                continue
+            palier = next((p for p in r.get("paliers") or [] if _verifie(p, v[0])), None)
+            if palier is None:
+                evaluees.append(f"{texte} : {_fmt(v[0], unite)}, sous les seuils")
+                continue
+            points += palier[2]
+            appliquees.append({"regle": f"{texte} {SYMBOLES.get(palier[0], palier[0])} {_fmt(palier[1], unite).lstrip('+')} → {_pts(palier[2])}",
+                               "chiffre": _fmt(v[0], unite), "source": v[1], "date": v[2], "points": palier[2]})
+            continue
+        concernees = {d for c in r.get("cas") or [] for d in (c.get("effets") or {})}
+        if devise not in concernees:
+            continue
+        if valeur is None or isinstance(valeur, dict):
+            manquantes.append(f"{texte} : donnée indisponible")
+            continue
+        cas = next((c for c in r.get("cas") or [] if _verifie(c["si"], valeur[0])), None)
+        if len(valeur) > 3 and valeur[3] and "heurt" in str(valeur[3]):
+            if (cas or {}).get("effets", {}).get(devise):   # aurait déclenché : neutralisation visible
+                neutralisees.append(f"{texte} : {_fmt(valeur[0], unite)}, {TEXTE_NEUTRALISE} ({valeur[3]})")
+            else:
+                evaluees.append(f"{texte} : {_fmt(valeur[0], unite)}, sous les seuils (série heurtée)")
+            continue
+        pts = (cas or {}).get("effets", {}).get(devise)
+        if not pts:
+            evaluees.append(f"{texte} : {_fmt(valeur[0], unite)}, aucun effet sur {devise}")
+            continue
+        points += pts
+        appliquees.append({"regle": f"{texte} {SYMBOLES.get(cas['si'][0], cas['si'][0])} {_fmt(cas['si'][1], unite).lstrip('+')} → {_pts(pts)} pour {devise}",
+                           "chiffre": _fmt(valeur[0], unite), "source": valeur[1], "date": valeur[2], "points": pts})
+    # Couverture par devise (config.yaml, matrice_impact.couverture) : signe classique confirmé sur 5 ans
+    for r in couv or []:
+        d = (r.get("devises") or {}).get(devise)
+        if d is None or _deja_couverte(liste, r.get("indicateur"), devise):
+            continue
+        texte, unite = r.get("texte"), r.get("unite")
+        if r.get("raison"):
+            manquantes.append(f"{texte} : {r['raison']}")
+            continue
+        if not d["haut"]["confirmee"] and not d["bas"]["confirmee"]:
+            non_confirmees.append(f"{texte} : règle classique non confirmée sur 5 ans ({d['haut']['raison']})")
+            continue
+        direction = r.get("direction")
+        seuils = f"seuils {couverture.fmt(r.get('seuil_bas'), unite)} / {couverture.fmt(r.get('seuil_haut'), unite)}"
+        if direction is None:
+            evaluees.append(f"{texte} : {couverture.fmt(r.get('valeur'), unite)}, dans le couloir ({seuils})")
+            continue
+        conf = d[direction]
+        if not conf["confirmee"]:
+            evaluees.append(f"{texte} : {couverture.fmt(r.get('valeur'), unite)}, seuil {('haut' if direction == 'haut' else 'bas')} "
+                            f"franchi mais sens non confirmé ({conf['raison']})")
+            continue
+        if r.get("neutralise"):
+            neutralisees.append(f"{texte} : {couverture.fmt(r.get('valeur'), unite)}, {TEXTE_NEUTRALISE} ({r.get('serie_heurtee')})")
+            continue
+        pts = d["signe_classique"] * (1 if direction == "haut" else -1)
+        points += pts
+        seuil = r.get("seuil_haut") if direction == "haut" else r.get("seuil_bas")
+        appliquees.append({"regle": f"{texte} {'≥' if direction == 'haut' else '≤'} {couverture.fmt(seuil, unite).lstrip('+')} "
+                                    f"({r.get('declencheur')}) → {_pts(pts)} pour {devise} ; {conf['raison']}",
+                           "chiffre": couverture.fmt(r.get("valeur"), unite), "source": r.get("source"), "date": r.get("date"),
+                           "points": pts, "couverture": True})
+    borne = max(-2, min(2, points))
+    if appliquees:
+        etat, raison = "active", None
+    elif neutralisees:
+        etat, raison = "neutralise", "; ".join(neutralisees + evaluees)
+    elif evaluees:
+        etat, raison = "neutre", "; ".join(evaluees + manquantes)
+    elif manquantes:
+        etat, raison = "nd", "; ".join(manquantes)
+    else:
+        etat = "sans_regle"
+        raison = "; ".join(non_confirmees) if non_confirmees else (
+            "aucune règle définie pour cet engrenage (config.yaml)" if not liste and not couv else
+            f"aucune règle de cet engrenage ne concerne {devise}")
+    case = {"engrenage": n, "valeur": borne, "libelle": LIBELLES[borne] if etat == "active" else LIBELLES_ETAT[etat],
+            "regles": appliquees, "raison": raison, "bornee": borne != points, "etat": etat}
+    if etat == "neutralise":
+        case["neutralisation"] = "; ".join(neutralisees)
+    return case
+
+
+def matrice(cfg: dict, sig: dict, couv: dict, theme_fort: bool, coh_libelle: str | None) -> dict:
     regles = cfg.get("regles") or {}
-    sig = signaux(engrenages, vue)
-    theme_fort, coh_libelle, _ = sig.get("_theme_fort", (False, None, None))
+    seuils = cfg.get("bilan") or {"soutenue": 3, "pression": -3}
     lignes = []
     for devise in DEVISES:
-        cases = []
-        for n in range(1, 9):
-            points, appliquees, raisons, neutralisees = 0, [], [], []
-            liste = regles.get(str(n)) or []
-            if not liste:
-                raisons.append("aucune règle définie pour cet engrenage (config.yaml)")
-            for r in liste:
-                nom, texte, unite = r.get("signal"), r.get("texte", r.get("signal")), r.get("unite")
-                if r.get("exige_theme_fort") and not theme_fort:
-                    raisons.append(f"{texte} : non appliqué, signaux mixtes ({coh_libelle or 'cohérence indisponible'})")
-                    continue
-                valeur = sig.get(nom)
-                if r.get("par_devise"):
-                    v = (valeur or {}).get(devise) if isinstance(valeur, dict) else None
-                    if v is None:
-                        raisons.append(f"{texte} : pas de donnée pour {devise}")
-                        continue
-                    palier = next((p for p in r.get("paliers") or [] if _verifie(p, v[0])), None)
-                    if palier is None:
-                        raisons.append(f"{texte} : {_fmt(v[0], unite)}, sous les seuils")
-                        continue
-                    points += palier[2]
-                    appliquees.append({"regle": f"{texte} {SYMBOLES.get(palier[0], palier[0])} {_fmt(palier[1], unite).lstrip('+')} → {_pts(palier[2])}",
-                                       "chiffre": _fmt(v[0], unite), "source": v[1], "date": v[2], "points": palier[2]})
-                else:
-                    concernees = {d for c in r.get("cas") or [] for d in (c.get("effets") or {})}
-                    if devise not in concernees:
-                        continue
-                    if valeur is None or isinstance(valeur, dict):
-                        raisons.append(f"{texte} : donnée indisponible")
-                        continue
-                    cas = next((c for c in r.get("cas") or [] if _verifie(c["si"], valeur[0])), None)
-                    if len(valeur) > 3 and valeur[3] and "heurt" in str(valeur[3]):
-                        if (cas or {}).get("effets", {}).get(devise):   # aurait déclenché : neutralisation visible
-                            neutralisees.append(f"{texte} : {_fmt(valeur[0], unite)}, {TEXTE_NEUTRALISE} ({valeur[3]})")
-                        else:
-                            raisons.append(f"{texte} : {_fmt(valeur[0], unite)}, sous les seuils (série heurtée)")
-                        continue
-                    pts = (cas or {}).get("effets", {}).get(devise)
-                    if not pts:
-                        raisons.append(f"{texte} : {_fmt(valeur[0], unite)}, aucun effet sur {devise}")
-                        continue
-                    points += pts
-                    appliquees.append({"regle": f"{texte} {SYMBOLES.get(cas['si'][0], cas['si'][0])} {_fmt(cas['si'][1], unite).lstrip('+')} → {_pts(pts)} pour {devise}",
-                                       "chiffre": _fmt(valeur[0], unite), "source": valeur[1], "date": valeur[2], "points": pts})
-            if not appliquees and not raisons:
-                raisons.append(f"aucune règle de cet engrenage ne concerne {devise}")
-            borne = max(-2, min(2, points))
-            case = {"engrenage": n, "valeur": borne, "libelle": LIBELLES[borne], "regles": appliquees,
-                    "raison": None if appliquees else "; ".join(neutralisees + raisons),
-                    "bornee": borne != points}
-            if neutralisees and not appliquees:
-                case.update({"etat": "neutralise", "libelle": "Neutralisé", "neutralisation": "; ".join(neutralisees)})
-            cases.append(case)
+        cases = [_case(devise, n, regles.get(str(n)) or [], sig, theme_fort, coh_libelle, (couv or {}).get(str(n)) or [])
+                 for n in range(1, 9)]
         total = sum(c["valeur"] for c in cases)
-        seuils = cfg.get("bilan") or {"soutenue": 3, "pression": -3}
         lignes.append({"devise": devise, "cases": cases, "bilan": total,
-                       "lecture": "soutenue" if total >= seuils["soutenue"] else "sous pression" if total <= seuils["pression"] else "neutre"})
-    actives = sum(1 for l in lignes for c in l["cases"] if c["valeur"] != 0)
-    return {"lignes": lignes, "seuils_bilan": cfg.get("bilan"), "theme_fort": theme_fort,
-            "cases_actives": actives, "cases_total": len(lignes) * 8,
-            "legende": "▲▲ soutien fort (+2) · ▲ soutien (+1) · · neutre (0) · ▼ pression (−1) · ▼▼ pression forte (−2). "
-                       "Chaque case applique une règle écrite dans config.yaml au chiffre du jour ; bilan = somme des 8 cases "
-                       f"(soutenue ≥ {(cfg.get('bilan') or {}).get('soutenue', 3)}, sous pression ≤ {(cfg.get('bilan') or {}).get('pression', -3)}). "
-                       "Aide à la lecture, jamais une recommandation d'achat ou de vente."}
+                       "lecture": "soutenue" if total >= seuils["soutenue"] else "sous pression" if total <= seuils["pression"] else "neutre",
+                       "incompletes": sum(1 for c in cases if c["etat"] == "nd")})
+    comptes = {e: sum(1 for l in lignes for c in l["cases"] if c["etat"] == e) for e in ETATS}
+    return {"lignes": lignes, "comptes": comptes, "cases_actives": comptes["active"], "cases_total": len(lignes) * 8,
+            "compte_libelle": f"{comptes['active']} actives, {comptes['nd']} n/d, {comptes['sans_regle']} sans règle"
+                              + (f", {comptes['neutralise']} neutralisée(s)" if comptes["neutralise"] else ""),
+            "seuils_bilan": seuils}
+
+
+def calculer(config: dict, engrenages: dict, vue: dict | None, historiques: dict | None = None,
+             impact: dict | None = None) -> dict:
+    cfg = (config or {}).get("matrice_impact") or {}
+    sig = signaux(engrenages, vue)
+    theme_fort, coh_libelle, _ = sig.get("_theme_fort", (False, None, None))
+    couv = couverture.evaluer(config, historiques, impact) if historiques is not None else {}
+    sortie = matrice(cfg, sig, couv, theme_fort, coh_libelle)
+    sortie.update({"theme_fort": theme_fort, "couverture": couv, "signaux_valeurs": {k: v for k, v in sig.items() if not k.startswith("_")},
+                   "legende": "▲▲ soutien fort (+2) · ▲ soutien (+1) · · neutre : règle évaluée, non déclenchée · hachures : n/d, donnée "
+                              "absente · gris très clair : sans règle · ▼ pression (−1) · ▼▼ pression forte (−2). Chaque case applique une "
+                              "règle écrite dans config.yaml au chiffre du jour ; bilan = somme des 8 cases "
+                              f"(soutenue ≥ {(cfg.get('bilan') or {}).get('soutenue', 3)}, sous pression ≤ {(cfg.get('bilan') or {}).get('pression', -3)}). "
+                              "Aide à la lecture, jamais une recommandation d'achat ou de vente."})
+    return sortie

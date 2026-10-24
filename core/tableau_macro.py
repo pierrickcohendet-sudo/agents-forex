@@ -96,6 +96,68 @@ def _symbole_variation(case: dict) -> str | None:
     return "=" if abs(v) < 0.5 else ("▲" if v > 0 else "▼")
 
 
+_RE_TAUX = re.compile(r"^\s*([<>≤≥]?)\s*([+-]?\d+(?:[.,]\d+)?)\s*%?")
+
+
+def lire_taux(texte) -> tuple[float | None, str | None]:
+    """« 3.88% » -> (3.88, None) ; « <1.25% » -> (1.25, "<") : la valeur est une BORNE, jamais un point exact."""
+    m = _RE_TAUX.match(str(texte or ""))
+    if not m:
+        return None, None
+    return float(m.group(2).replace(",", ".")), ({"<": "<", "≤": "<", ">": ">", "≥": ">"}.get(m.group(1)) or None)
+
+
+def _pb(v: float) -> str:
+    return f"{v:+.0f} pb".replace("-", "−")
+
+
+def infos_taux(registre: dict, devises: list[str]) -> dict[str, dict]:
+    """Par devise : dernière variation du taux directeur (pb, date), écart au taux US (pb), prochaine réunion."""
+    cases = (registre or {}).get("cases") or {}
+    usd, _ = lire_taux(((cases.get(rm.cle("taux_directeur", "USD")) or {}).get("actuel") or {}).get("valeur"))
+    sortie = {}
+    for devise in devises:
+        case = cases.get(rm.cle("taux_directeur", devise)) or {}
+        actuel, prec = case.get("actuel") or {}, case.get("precedent") or {}
+        a, borne = lire_taux(actuel.get("valeur"))
+        p, borne_p = lire_taux(prec.get("valeur"))
+        info = {"borne": borne, "date_decision": actuel.get("date_pub"), "prochaine": rm.prochaine_publication(case)}
+        if a is None:
+            info.update(variation_pb=None, raison_variation="taux actuel illisible ou absent du registre")
+        elif p is None:
+            info.update(variation_pb=None, raison_variation="taux précédent absent du registre")
+        elif actuel.get("origine"):   # ex. USD : taux effectif FRED (DFF) face à la cible de la décision précédente
+            info.update(variation_pb=None, raison_variation=f"taux actuel = {actuel.get('source') or 'valeur de repli'}, "
+                                                            "non comparable à la décision précédente")
+        else:
+            info["variation_pb"] = round((a - p) * 100)
+        if devise == "USD":
+            info.update(ecart_us_pb=None, raison_ecart="référence")
+        elif a is None or usd is None:
+            info.update(ecart_us_pb=None, raison_ecart="taux de la devise ou taux US absent")
+        else:
+            info["ecart_us_pb"] = round((a - usd) * 100)
+        morceaux = []
+        if info.get("variation_pb") is None:
+            morceaux.append(f"Δ n/d ({info['raison_variation']})")
+        else:
+            quand = f" le {info['date_decision'][8:10]}/{info['date_decision'][5:7]}" if info.get("date_decision") else ""
+            morceaux.append(("inchangé" if info["variation_pb"] == 0 else f"Δ {_pb(info['variation_pb'])}") + quand
+                            + (" (bornes de fourchette)" if borne and borne_p else ""))
+        if devise != "USD":
+            if info.get("ecart_us_pb") is None:
+                morceaux.append(f"écart US n/d ({info['raison_ecart']})")
+            else:   # borne « < » : l'écart réel est au plus celui-ci
+                morceaux.append(f"écart US {'≤ ' if borne == '<' else '≥ ' if borne == '>' else ''}{_pb(info['ecart_us_pb'])}")
+        morceaux.append(f"prochaine {info['prochaine'][8:10]}/{info['prochaine'][5:7]}" if info.get("prochaine")
+                        else "prochaine n/d (pas de réunion au calendrier collecté)")
+        if borne:
+            morceaux.append(f"taux publié comme borne : {'au plus' if borne == '<' else 'au moins'} {str(a).replace('.', ',')} %")
+        info["texte"] = " · ".join(morceaux)
+        sortie[devise] = info
+    return sortie
+
+
 def construire_matrice(registre: dict, saisies: dict, overrides_jour: dict,
                        cfg_tm: dict, jour: date, indice: dict | None = None) -> dict:
     """Matrice (indicateur × devise × type, forme complète pour le web) ET lignes
@@ -138,6 +200,13 @@ def construire_matrice(registre: dict, saisies: dict, overrides_jour: dict,
             ligne["prochaine"] = rm.prochaine_publication(case)
             ligne["source"] = rm.source_cellule(case)
             lignes.append(ligne)
+    # Colonne « Surprise » des taux directeurs (lot V5) : l'écart au consensus y vaut presque toujours 0 ; à la place,
+    # dernière variation (pb, datée), écart au taux US et prochaine réunion, chacun « n/d » avec sa raison.
+    infos = infos_taux(registre, devises)
+    for ligne in lignes:
+        if ligne["indicateur"] == "taux_directeur" and ligne["devise"] in infos:
+            ligne["taux"] = infos[ligne["devise"]]
+            ligne["surprise"] = infos[ligne["devise"]]["texte"]
     # Indice de surprise 30 j : une ligne par devise (calculé en Python, jamais saisi).
     indice_txt = {}
     if indice:

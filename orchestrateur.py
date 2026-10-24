@@ -333,16 +333,16 @@ def main() -> int:
                        technique, historique_5ans.charger(), defaut={})
     if harmonises:
         log.info("RSI harmonisés sur la série 5 ans : %s", harmonises)
+    # Simulateur d'impact (§12, palier 11) : études d'événements sur 5 ans, sans LLM -> docs/data/impact.json.
+    # AVANT les dossiers : la matrice d'impact y lit la confirmation sur 5 ans de ses règles par devise (lot V5).
+    etape("simulateur d'impact (impact.json)", impact.ecrire, RACINE, historique_5ans.charger(), technique,
+          registre_macro.charger(donnees_dir / "registre_macro.json"), config, defaut=None)
     dossiers_jour = etape("dossiers des engrenages (dossiers.json)", dossiers.ecrire, RACINE, historiques,
                           registre_macro.charger(donnees_dir / "registre_macro.json"), technique, config,
                           None, flux, news, dossier_rapports, defaut=None)
     # Cours des 9 devises (page Devises) : même série que le RSI et la MM200 -> docs/data/cours.json
     etape("cours des devises (cours.json)", cours.ecrire, RACINE, historique_5ans.charger(), technique, config,
           registre_macro.charger(donnees_dir / "registre_macro.json"), defaut=None)
-    # Simulateur d'impact (§12, palier 11) : études d'événements sur 5 ans, sans LLM -> docs/data/impact.json
-    etape("simulateur d'impact (impact.json)", impact.ecrire, RACINE, historique_5ans.charger(), technique,
-          registre_macro.charger(donnees_dir / "registre_macro.json"), config, defaut=None)
-
     # Rendements 2 ans / 10 ans et spread vs USD (Tableau macro) : alimentent la ligne
     # « différentiel de taux » du score de confluence (pondérations inchangées).
     macro["taux_obligataires"] = (tableau or {}).get("resume_taux", {})

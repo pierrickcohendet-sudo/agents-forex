@@ -3,7 +3,7 @@ import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, ouvrirD
 
 const COLONNES = [
   { cle: "libelle", titre: "Indicateur" }, { cle: "Actuel", titre: "Actuel" }, { cle: "Précédent", titre: "Précédent" },
-  { cle: "Prévision", titre: "Prévision" }, { cle: "surprise", titre: "Surprise" }, { cle: "date_pub", titre: "Publié le" },
+  { cle: "Prévision", titre: "Prévision" }, { cle: "surprise", titre: "Surprise · taux" }, { cle: "date_pub", titre: "Publié le" },
   { cle: "prochaine", titre: "Prochaine" }, { cle: "source", titre: "Source" },
 ];
 const normaliser = t => String(t ?? "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();

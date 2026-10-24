@@ -761,5 +761,11 @@ body.apercu-impression > *:not(#impression) { display: none !important; }
 #impression .graphique-explication { font-size: 8px; margin: 0 0 2px; line-height: 1.25; }
 
 /* Lot V5 : case neutralisée (série heurtée) — au-delà du seuil, mais comptée 0 : jamais un simple « Neutre » */
-.mi-case.neutralise { background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--alerte) 22%, var(--carte)) 0 3px, var(--carte) 3px 7px); }
-.mi-case.neutralise .mi-libelle { color: var(--alerte); font-weight: 700; }
+.mi-case.etat-neutralise { background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--alerte) 22%, var(--carte)) 0 3px, var(--carte) 3px 7px); }
+.mi-case.etat-neutralise .mi-libelle { color: var(--alerte); font-weight: 700; }
+
+/* Lot V5 : trois états de la matrice — neutre (évaluée), n/d (donnée absente : hachures), sans règle (gris très clair) */
+.mi-case.etat-nd { background: repeating-linear-gradient(45deg, color-mix(in srgb, var(--neutre) 30%, var(--carte)) 0 3px, var(--carte) 3px 7px); }
+.mi-case.etat-nd .mi-fleche, .mi-case.etat-nd .mi-libelle { color: var(--texte-2); font-weight: 600; }
+.mi-case.etat-sans_regle { background: color-mix(in srgb, var(--neutre) 7%, var(--carte)); }
+.mi-case.etat-sans_regle .mi-fleche, .mi-case.etat-sans_regle .mi-libelle { color: color-mix(in srgb, var(--texte-2) 55%, var(--carte)); }
