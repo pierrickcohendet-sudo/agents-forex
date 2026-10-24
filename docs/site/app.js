@@ -6,6 +6,7 @@ const ONGLETS = {
   synthese: { titre: "Synthèse", rendu: pageSynthese },
   engrenages: { titre: "8 engrenages", module: "./engrenages.js", fonction: "pageEngrenages" },
   scenarios: { titre: "Scénarios", module: "./scenarios.js", fonction: "pageScenarios" },   // impact.json chargé à l'ouverture
+  outils: { titre: "Outils", module: "./outils.js", fonction: "pageOutils" },   // lot V5 : radar, et si, paires, jours similaires
   devises: { titre: "Devises", module: "./devises.js", fonction: "pageDevises" },
   tableau: { titre: "Tableau macro", module: "./tableau.js", fonction: "pageTableau" },
   agenda: { titre: "Agenda", bientot: "L'agenda des publications et réunions de banques centrales arrive dans une prochaine version." },

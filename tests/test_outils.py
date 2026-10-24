@@ -89,3 +89,11 @@ def test_histoire_regles_wilson_et_echantillon():
     assert h["USD"].startswith("confirmé · 33 cas") and h["EUR"] == "indice faible · 33 cas"
     assert h["JPY"] == "échantillon insuffisant · 11 cas" and h["CNY"] == "n/d"
     assert outils._histoire(impact, None)["raison"]
+
+
+def test_onglet_outils_branche_sur_outils_json():
+    html = (RACINE / "docs/index.html").read_text(encoding="utf-8")
+    app = (RACINE / "docs/site/app.js").read_text(encoding="utf-8")
+    js = (RACINE / "docs/site/outils.js").read_text(encoding="utf-8")
+    assert 'data-onglet="outils"' in html and "pageOutils" in app
+    assert "data/outils.json" in js and "fetch(" not in js

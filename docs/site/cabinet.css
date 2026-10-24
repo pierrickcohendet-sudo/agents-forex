@@ -894,3 +894,43 @@ details.ck-vignette[open] > summary { margin-bottom: 10px; }
 .dd-hbar i.pos { background: var(--positif); } .dd-hbar i.neg { background: var(--negatif); }
 .ck-petit.faible { color: var(--alerte); }
 .dd-lecture { font-size: 16px; line-height: 1.55; margin: 0 0 6px; max-width: 900px; }
+
+/* ---------------------------------------------------------------- boîte à outils (lot V5, étape 5) */
+.ot-grille { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
+@media (max-width: 980px) { .ot-grille { grid-template-columns: minmax(0, 1fr); } }
+.ot-carte { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.ot-radar { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; max-height: 640px; overflow-y: auto; }
+.ot-sig { display: grid; grid-template-columns: 28px minmax(0, 1fr) 180px 80px; gap: 10px; align-items: center; background: var(--carte-2);
+  border-radius: var(--rayon); padding: 8px 10px; }
+@media (max-width: 600px) { .ot-sig { grid-template-columns: 28px minmax(0, 1fr) 64px; } .ot-barre { display: none !important; } }
+.ot-sig-txt { display: flex; flex-direction: column; gap: 2px; min-width: 0; font-size: 14px; overflow-wrap: anywhere; }
+.ot-barre { position: relative; display: block; height: 8px; border-radius: 4px; background: var(--carte); }
+.ot-barre i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; background: var(--accent); }
+.ot-sig.etat-proche .ot-barre i, .ot-sig.etat-franchi .ot-barre i { background: var(--alerte); }
+.ot-dist { text-align: right; font-weight: 700; font-size: 13px; }
+.ot-sig.etat-franchi .ot-dist { color: var(--alerte); }
+.ot-rdv { color: var(--accent); }
+.ot-puces { display: flex; flex-wrap: wrap; gap: 6px; }
+.ot-puce { font-size: 13px; font-weight: 600; padding: 6px 10px; border-radius: var(--rayon); text-decoration: none;
+  background: color-mix(in srgb, var(--accent) 14%, var(--carte)); color: var(--accent); }
+.ot-select { font: inherit; font-size: 15px; min-height: 44px; padding: 0 10px; border-radius: var(--rayon); border: 1px solid var(--trait);
+  background: var(--carte); color: var(--texte); max-width: 100%; }
+.ot-desc { margin: 0; font-size: 14px; color: var(--texte-2); }
+.ot-bilans, .ot-decomp { display: grid; gap: 6px; }
+.ot-bilan { display: grid; grid-template-columns: 44px minmax(0, 1fr) 84px; gap: 10px; align-items: center; font-size: 14px; }
+.ot-piste { position: relative; display: block; height: 20px; background: var(--carte-2); border-radius: 4px; }
+.ot-piste::after { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--trait); }
+.ot-piste i { position: absolute; display: block; border-radius: 2px; }
+.ot-piste i.avant { top: 3px; height: 6px; background: var(--neutre); }
+.ot-piste i.apres { top: 11px; height: 7px; background: var(--accent); }
+.ot-piste i.pos { top: 3px; bottom: 3px; background: var(--positif); } .ot-piste i.neg { top: 3px; bottom: 3px; background: var(--negatif); }
+.ot-bilan .change { font-weight: 700; color: var(--accent); }
+.ot-leg { display: inline-block; width: 14px; height: 6px; } .ot-leg.avant { background: var(--neutre); } .ot-leg.apres { background: var(--accent); }
+.ot-ligne { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.ot-dc { display: grid; grid-template-columns: 120px 64px 64px minmax(0, 1fr) 40px; gap: 8px; align-items: center; font-size: 14px; }
+@media (max-width: 600px) { .ot-dc { grid-template-columns: 96px 54px 54px minmax(0, 1fr) 34px; font-size: 12.5px; } }
+.ot-dc.incomplete { background: repeating-linear-gradient(45deg, color-mix(in srgb, var(--neutre) 15%, var(--carte)) 0 3px, var(--carte) 3px 7px); border-radius: var(--rayon); }
+.ot-dc b { text-align: right; }
+.ot-solde { margin: 4px 0 0; font-weight: 700; border-top: 1px solid var(--trait); padding-top: 8px; }
+.ot-sim td.pos { color: var(--positif); } .ot-sim td.neg { color: var(--negatif); }
+.ot-sim .ot-med td { font-weight: 700; border-top: 2px solid var(--trait); }
