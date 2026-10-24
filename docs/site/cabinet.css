@@ -955,3 +955,57 @@ details.ck-vignette[open] > summary { margin-bottom: 10px; }
 .ag-raison { display: block; }
 @media (max-width: 600px) { .ag-evt { grid-template-columns: 52px minmax(0, 1fr); } }
 @media print { .ag-filtres { display: none !important; } .ag-jour, .ag-evt { break-inside: avoid; } .ag-evt { background: #fff; border: 1px solid #999; } }
+
+/* ---------------------------------------------------------------- journal (lot V5, étape 7) */
+.jn-grille { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 980px) { .jn-grille { grid-template-columns: minmax(0, 1fr); } }
+.jn-col { display: grid; gap: 12px; min-width: 0; }
+.jn-barre { display: flex; gap: 10px; align-items: center; }
+.jn-fiche { display: grid; gap: 10px; }
+.jn-fiche h3 { font-size: 1rem; margin-bottom: 4px; }
+.jn-synthese { border-left: 3px solid var(--accent); padding: 4px 0 4px 12px; }
+.jn-synthese p { margin: 2px 0; font-size: 15px; }
+.jn-bloc p { margin: 2px 0 6px; font-size: 14px; line-height: 1.45; overflow-wrap: anywhere; }
+.jn-dec { list-style: none; margin: 4px 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 4px; }
+.jn-dec li { display: flex; justify-content: space-between; gap: 6px; font-size: 13px; background: var(--carte-2); padding: 3px 8px; border-radius: var(--rayon); }
+.jn-dec li.incomplete { background: repeating-linear-gradient(45deg, color-mix(in srgb, var(--neutre) 18%, var(--carte)) 0 3px, var(--carte) 3px 7px); }
+.jn-dec .pos { color: var(--positif); } .jn-dec .neg { color: var(--negatif); }
+.jn-bougie line { stroke: var(--texte-2); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.jn-bougie.hausse rect { fill: var(--positif); } .jn-bougie.baisse rect { fill: var(--negatif); }
+.jn-form { display: grid; gap: 10px; }
+.jn-unites { border: 1px solid var(--trait); border-radius: var(--rayon); padding: 6px 10px; display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0; }
+.jn-unites legend { font-size: 13px; color: var(--texte-2); padding: 0 4px; }
+.jn-unites label { display: inline-flex; align-items: center; gap: 4px; min-height: 32px; font-size: 14px; }
+.jn-zone, .jn-etiquettes { font: inherit; font-size: 15px; width: 100%; padding: 8px 10px; border: 1px solid var(--trait); border-radius: var(--rayon);
+  background: var(--carte); color: var(--texte); }
+.jn-depot { border: 2px dashed var(--trait); border-radius: var(--rayon); padding: 10px; display: grid; gap: 8px; }
+.jn-depot.survol { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, var(--carte)); }
+.jn-depot p { margin: 0; font-size: 13px; color: var(--texte-2); }
+.jn-apercus { display: flex; flex-wrap: wrap; gap: 8px; }
+.jn-apercu { display: grid; gap: 4px; width: 132px; }
+.jn-apercu img { width: 132px; height: 84px; object-fit: cover; border-radius: var(--rayon); border: 1px solid var(--trait); }
+.jn-apercu select { font: inherit; font-size: 13px; }
+.jn-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.jn-principal { border-color: var(--accent); }
+.jn-erreur:empty { display: none; }
+.jn-rappel { margin: 0; font-size: 13px; color: var(--alerte); }
+.jn-entrees { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.jn-entree { background: var(--carte-2); border: 1px solid var(--trait); border-radius: var(--rayon); padding: 10px 12px; display: grid; gap: 6px; }
+.jn-entree-tete { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+.jn-etiq { font-size: 12px; padding: 1px 8px; border-radius: 999px; background: var(--carte); border: 1px solid var(--trait); }
+.biais-haussier { color: var(--positif); border-color: currentColor; } .biais-baissier { color: var(--negatif); border-color: currentColor; }
+.jn-extrait { margin: 0; font-size: 14px; overflow-wrap: anywhere; }
+.jn-miniatures { display: flex; flex-wrap: wrap; gap: 6px; }
+.jn-mini { padding: 0; border: 1px solid var(--trait); border-radius: var(--rayon); background: var(--carte); cursor: zoom-in; display: grid; font: inherit; font-size: 11.5px; color: var(--texte-2); }
+.jn-mini img { width: 96px; height: 60px; object-fit: cover; border-radius: var(--rayon) var(--rayon) 0 0; }
+.jn-suivi { margin: 0; font-size: 13px; color: var(--texte-2); }
+.jn-texte p { margin: 0 0 6px; } .jn-texte ul { margin: 0 0 6px; padding-left: 20px; }
+.jn-instantane { background: var(--carte-2); border-radius: var(--rayon); padding: 8px 12px; margin: 8px 0; }
+.jn-instantane p { margin: 2px 0; font-size: 14px; }
+.jn-confirm { display: inline-flex; flex-wrap: wrap; gap: 6px; align-items: center; font-weight: 600; }
+.jn-danger { border-color: var(--negatif); color: var(--negatif); }
+.jn-copie { width: 100%; min-height: 120px; font: 13px monospace; }
+.jn-plein { width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 12px; border: 0; background: #000; display: grid; grid-template-rows: auto minmax(0, 1fr); gap: 8px; }
+.jn-plein:not([open]) { display: none; }
+.jn-plein img { max-width: 100%; max-height: 100%; object-fit: contain; justify-self: center; }
+.jn-plein .bouton { justify-self: end; }

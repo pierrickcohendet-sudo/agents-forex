@@ -36,7 +36,7 @@ from pathlib import Path
 import yaml
 from dotenv import load_dotenv
 
-from agents import (agent_consequences, agent_critique, agent_dossier_hebdo, agent_engrenages, agent_redacteur, agent_strategiste, agent_synthese,
+from agents import (agent_consequences, agent_critique, agent_paires, collecte_intraday, agent_dossier_hebdo, agent_engrenages, agent_redacteur, agent_strategiste, agent_synthese,
                     collecte_calendrier, collecte_flux, collecte_historiques, collecte_macro, collecte_news,
                     collecte_technique)
 from core import (collecte_cache, controle_qualite, indicateurs, cours, dossiers, evaluation, hebdo, historique_5ans, impact, marche_taux, overrides, precedents,
@@ -323,6 +323,10 @@ def main() -> int:
     # source et par jour (cache) ; une source en échec n'affecte qu'elle.
     flux = etape("collecte flux (CFTC, EIA, or)", _collecter, "flux", collecte_flux.collecter, config,
                  defaut={**vide, "cot": {}, "eia": None, "or": None})
+    # Journal (lot V5) : chandeliers 30 min / 4 h / 1 j des « Mes paires », run complet seulement (18 requêtes au plus,
+    # moins de 8 par minute, cache du jour) ; un échec laisse le graphique 1 jour et la raison.
+    if not arguments.completer:
+        etape("collecte chandeliers (Mes paires)", collecte_intraday.collecter, config, RACINE, defaut=None)
     # Historiques 5 ans + dossiers chiffrés des engrenages (percentiles, variations, corrélations) :
     # calcul Python quotidien, AUCUN appel LLM ; docs/data/dossiers.json lu par le site.
     historiques = etape("collecte historiques 5 ans", _collecter, "historiques",
@@ -465,6 +469,9 @@ def main() -> int:
     # engrenages (réserve de quota) ; repli 100 % Python si le modèle ou le quota manque. Aucun nouveau cron.
     etape("synthèse mensuelle des conséquences", agent_consequences.executer, "mensuel", RACINE, config,
           dossiers_theme or dossiers_jour, llm, defaut=None)
+    # Journal (lot V5) : synthèse des « Mes paires » par le modèle, un appel groupé par jour, APRÈS les engrenages
+    # et les devises (réserve de quota) ; la phrase Python reste si le modèle ou le quota manque.
+    etape("synthèse des Mes paires (Journal)", agent_paires.executer, RACINE, config, llm, defaut={})
 
     # Journal léger des appels LLM (taille estimée + modèle utilisé) : en
     # --completer, s'ajoute à ceux du matin (plafonné) ; puis alerte qualité

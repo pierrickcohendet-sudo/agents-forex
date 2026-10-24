@@ -15,7 +15,7 @@ import statistics
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
-from core import agenda, annotations, archive_quotidienne, cockpit, complements, outils, consequences, controles_macro, historique_5ans, matrice_impact, registre_macro as rm, tuiles, vue_ensemble
+from core import agenda, annotations, archive_quotidienne, cockpit, complements, outils, paires, consequences, controles_macro, historique_5ans, matrice_impact, registre_macro as rm, tuiles, vue_ensemble
 
 log = logging.getLogger(__name__)
 
@@ -933,6 +933,7 @@ def ecrire(racine: str | Path, historiques: dict, registre: dict, technique: dic
         chemin = Path(racine) / config.get("publication_web", {}).get("dossier_docs", "docs") / "data" / "dossiers.json"
         chemin.write_text(json.dumps(donnees, ensure_ascii=False, indent=1), encoding="utf-8")
         outils.ecrire(racine, config, donnees, historique_5ans.charger(), technique, agenda_donnees)   # docs/data/outils.json
+        paires.ecrire(racine, config, donnees, rapport, registre, agenda_donnees, historique_5ans.charger(), technique)   # Journal
         return donnees
     except Exception as exc:  # noqa: BLE001
         log.error("dossiers.json non écrit : %s", exc)

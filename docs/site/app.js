@@ -11,6 +11,7 @@ const ONGLETS = {
   tableau: { titre: "Tableau macro", module: "./tableau.js", fonction: "pageTableau" },
   agenda: { titre: "Agenda", module: "./agenda.js", fonction: "pageAgenda" },   // lot V5 : 7 jours + banques centrales
   institutions: { titre: "Institutions", bientot: "Le positionnement des institutions (rapport COT de la CFTC) arrive dans une prochaine version." },
+  journal: { titre: "Journal", module: "./journal.js", fonction: "pageJournal" },   // lot V5 : fiches des paires + mes notes (IndexedDB)
   archives: { titre: "Archives", module: "./archives.js", fonction: "pageArchives" },
   apprendre: { titre: "Apprendre", bientot: "Les fiches de formation (concept du jour, glossaire) arrivent dans une prochaine version." },
 };
