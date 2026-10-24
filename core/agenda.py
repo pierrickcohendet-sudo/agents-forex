@@ -97,9 +97,13 @@ def evenements(ff_brut: str | None, glissants: list[dict] | None, registre: dict
         titre = prev.get("nom_ff") or case.get("indicateur")
         if (devise, str(titre).lower(), quand.astimezone(paris).date().isoformat()) in vus:
             continue
-        sortie.append(_ligne(devise, str(titre), quand, str(prev.get("impact") or ""),
-                             (case.get("actuel") or {}).get("valeur"), prev.get("valeur"), None,
-                             "registre macro (ForexFactory, prochaine publication)", paris))
+        actuel = case.get("actuel") or {}
+        ligne = _ligne(devise, str(titre), quand, str(prev.get("impact") or ""),
+                       None if actuel.get("origine") else actuel.get("valeur"), prev.get("valeur"), None,
+                       "registre macro (ForexFactory, prochaine publication)", paris)
+        if actuel.get("origine"):   # ex. USD : taux effectif FRED, pas la dernière décision publiée
+            ligne["raison_precedent"] = f"valeur du registre = {actuel.get('source') or 'valeur de repli'}, pas la dernière publication"
+        sortie.append(ligne)
     return sorted(sortie, key=lambda e: e["iso_utc"])
 
 
@@ -152,7 +156,7 @@ def calculer(ff_brut: str | None, glissants: list[dict] | None, registre: dict |
     return {"genere_le": maintenant.isoformat(timespec="seconds"), "fuseau": "Europe/Paris", "jours": jours,
             "n_evenements": len(evts), "banques_centrales": banques_centrales(registre, config, evts),
             "raison_vide": None if evts else "calendrier ForexFactory de la semaine non collecté et aucune publication prévue au registre",
-            "note": "Heures de Paris. Valeur publiée dès qu'elle existe dans les données collectées. Aide à la décision, jamais un ordre."}
+            "note": "Valeur publiée dès qu'elle existe dans les données collectées. Aide à la décision, jamais un ordre."}
 
 
 def prochain_rendez_vous(agenda_donnees: dict | None, impacts=("fort",)) -> dict | None:

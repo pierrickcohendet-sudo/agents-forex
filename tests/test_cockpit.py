@@ -108,3 +108,14 @@ def test_agenda_heures_de_paris_impacts_publie_et_engrenage():
     bc = next(b for b in a["banques_centrales"] if b["devise"] == "GBP")
     assert bc["prochaine"] == "2026-10-29" and bc["variation_pb"] == 0 and bc["raison_reunions"]
     assert agenda.prochain_rendez_vous(a)["evenement"] in ("CPI y/y", "Federal Funds Rate", "Official Bank Rate")
+
+
+def test_agenda_precedent_de_repli_jamais_affiche_comme_publication():
+    reg = {"cases": {"USD|taux_directeur": {"devise": "USD", "actuel": {"valeur": "3.88%", "origine": "taux_config", "source": "FRED (DFF)"},
+                                            "prevision": {"dateline": int(datetime(2026, 10, 28, 18, tzinfo=timezone.utc).timestamp()),
+                                                          "nom_ff": "Federal Funds Rate", "impact": "High", "valeur": "4.00%"}}}}
+    a = agenda.calculer(None, [], reg, CONFIG, datetime(2026, 10, 24, 10, tzinfo=timezone.utc))
+    fed = next(e for j in a["jours"] for e in j["evenements"])
+    assert fed["precedent"] is None and "pas la dernière publication" in fed["raison_precedent"] and fed["consensus"] == "4.00%"
+    app = (RACINE / "docs/site/app.js").read_text(encoding="utf-8")
+    assert 'agenda: { titre: "Agenda", module: "./agenda.js"' in app

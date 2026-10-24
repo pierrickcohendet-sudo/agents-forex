@@ -9,7 +9,7 @@ const ONGLETS = {
   outils: { titre: "Outils", module: "./outils.js", fonction: "pageOutils" },   // lot V5 : radar, et si, paires, jours similaires
   devises: { titre: "Devises", module: "./devises.js", fonction: "pageDevises" },
   tableau: { titre: "Tableau macro", module: "./tableau.js", fonction: "pageTableau" },
-  agenda: { titre: "Agenda", bientot: "L'agenda des publications et réunions de banques centrales arrive dans une prochaine version." },
+  agenda: { titre: "Agenda", module: "./agenda.js", fonction: "pageAgenda" },   // lot V5 : 7 jours + banques centrales
   institutions: { titre: "Institutions", bientot: "Le positionnement des institutions (rapport COT de la CFTC) arrive dans une prochaine version." },
   archives: { titre: "Archives", module: "./archives.js", fonction: "pageArchives" },
   apprendre: { titre: "Apprendre", bientot: "Les fiches de formation (concept du jour, glossaire) arrivent dans une prochaine version." },
