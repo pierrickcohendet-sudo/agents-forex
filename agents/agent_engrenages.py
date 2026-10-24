@@ -45,7 +45,18 @@ SANS_REGLE = (4, 6, 8)   # engrenages dont la direction dollar vient de la case 
 MATRICE_RISQUE = (6,)    # risque tiré de la matrice : canal « refuge » de la géopolitique seulement
 TEXTE_QUOTA = "Texte indisponible : quota du jour atteint"
 TEXTE_ECHEC = "Texte indisponible : réponse du modèle inexploitable"
-MIN_ENGRENAGES_REPONSE = 6   # en dessous : réponse jugée incomplète, redemandée au modèle suivant
+MIN_ENGRENAGES_REPONSE = 6
+# Seuils des règles de direction (une seule définition : signaux, cockpit, radar et « Et si »).
+SEUILS = {"us2a_pb": 10, "surprise": 0.3, "vix_risk_off": 25, "vix_risk_on": 14, "dollar_large_pct": 0.5,
+          "usd_5j_pct": 0.3, "risque_refuge_pt": 0.3}
+
+
+def _mesure(libelle: str, valeur, unite: str, bas, haut, date_: str | None, source: str | None,
+            dir_haut: str, dir_bas: str, raison: str | None = None) -> dict:
+    """Mesure qui décide la direction d'un engrenage, avec ses seuils (thermomètre du cockpit)."""
+    return {"libelle": libelle, "valeur": valeur, "unite": unite, "seuil_bas": bas, "seuil_haut": haut, "date": date_,
+            "source": source, "si_haut": dir_haut, "si_bas": dir_bas,
+            "raison": None if valeur is not None else (raison or "donnée indisponible")}   # en dessous : réponse jugée incomplète, redemandée au modèle suivant
 
 SCHEMA = """{
   "engrenages": [{"numero": 1-8,
@@ -287,22 +298,29 @@ def signaux(config: dict, donnees: dict, macro: dict, devises: list[dict], biais
     if var2 is not None and (us2.get("actuel") or {}).get("valeur"):
         donnees2.append({"texte": f"Rendement US 2 ans {us2['actuel']['valeur']} ({var2:+.0f} pb sur une semaine)",
                          "source_id": src_registre("USD", "rendement_2a", us2["actuel"])})
-    resultat[2] = {"dollar": _dir(var2, 10, "haussier", "baissier"), "risque": None,
+    k2 = SEUILS["us2a_pb"]
+    resultat[2] = {"dollar": _dir(var2, k2, "haussier", "baissier"), "risque": None,
                    "devises": [d for d, s in decisions if s in ("hausse", "baisse")],
-                   "regle": "dollar : variation hebdomadaire du 2 ans US (≥ +10 pb haussier, ≤ -10 pb baissier)",
-                   "donnees": donnees2, "force": _force(var2, 10)}
+                   "regle": f"dollar : variation hebdomadaire du 2 ans US (≥ +{k2} pb haussier, ≤ -{k2} pb baissier)",
+                   "donnees": donnees2, "force": _force(var2, k2),
+                   "mesure": _mesure("2 ans US sur 7 j", var2, "pb", -k2, k2, (us2.get("actuel") or {}).get("date_pub"),
+                                     (us2.get("actuel") or {}).get("source") or "registre macro", "Dollar haussier", "Dollar baissier",
+                                     "variation du 2 ans US absente du registre")}
 
     # 3. Données économiques : indice de surprise 30 j
     indices = (extras or {}).get("indice_surprise") or {}
     id_ind = cat.src("Calcul Python (registre macro)", "indice de surprise macro 30 jours par devise", aujourdhui)
     vals = {d: v.get("indice") for d, v in indices.items() if isinstance(v, dict) and v.get("indice") is not None}
     i_usd = vals.get("USD")
-    resultat[3] = {"dollar": _dir(i_usd, 0.3, "haussier", "baissier"), "risque": None,
+    k3 = SEUILS["surprise"]
+    resultat[3] = {"dollar": _dir(i_usd, k3, "haussier", "baissier"), "risque": None,
                    "devises": [d for d, v in sorted(vals.items(), key=lambda kv: -abs(kv[1]))[:3]],
-                   "regle": "dollar : indice de surprise 30 j de l'USD (≥ +0,3 haussier, ≤ -0,3 baissier)",
+                   "regle": f"dollar : indice de surprise 30 j de l'USD (≥ +{k3} haussier, ≤ -{k3} baissier)".replace(".", ","),
                    "donnees": [{"texte": "Indice de surprise 30 j : " + ", ".join(f"{d} {v:+.2f}" for d, v in vals.items()),
                                 "source_id": id_ind}] if vals else [],
-                   "force": _force(i_usd, 0.3)}
+                   "force": _force(i_usd, k3),
+                   "mesure": _mesure("surprise USD 30 j", i_usd, "écarts", -k3, k3, aujourdhui, "calcul Python (registre macro)",
+                                     "Dollar haussier", "Dollar baissier", "indice de surprise USD indisponible")}
 
     # 4. Politique fiscale : pas de règle de direction, mais les chiffres du dossier (10 ans, prime de
     # terme, dette / PIB) sont fournis au modèle — jamais une entrée vide quand le dossier en a.
@@ -322,8 +340,8 @@ def signaux(config: dict, donnees: dict, macro: dict, devises: list[dict], biais
     risque5 = None
     if vix.get("valeur") is not None:
         niveau = float(vix["valeur"])
-        risque5 = "risk_off" if niveau >= 25 or (v_vix and v_vix[1] >= 25) else \
-                  "risk_on" if niveau <= 14 and not (v_vix and v_vix[1] >= 10) else "neutre"
+        risque5 = "risk_off" if niveau >= SEUILS["vix_risk_off"] or (v_vix and v_vix[1] >= 25) else \
+                  "risk_on" if niveau <= SEUILS["vix_risk_on"] and not (v_vix and v_vix[1] >= 10) else "neutre"
     v_dollar = _variation(marche.get("dollar_large"))
     if v_dollar:
         donnees5.append({"texte": f"Indice dollar large (Fed) {v_dollar[0]} le {v_dollar[2]} ({v_dollar[1]:+.2f} % sur 7 j)",
@@ -347,7 +365,9 @@ def signaux(config: dict, donnees: dict, macro: dict, devises: list[dict], biais
         donnees5.append({"texte": f"Courbe US 10 ans - 2 ans : {yc['spread_10y_2y']:+.2f} pt le {yc.get('date')} "
                                   f"({yc.get('regime', '')} : {yc.get('lecture', '')})",
                          "source_id": yc.get("source_id")})
-    resultat[5] = {"dollar": _dir(v_dollar[1] if v_dollar else None, 0.5, "haussier", "baissier"),
+    resultat[5] = {"dollar": _dir(v_dollar[1] if v_dollar else None, SEUILS["dollar_large_pct"], "haussier", "baissier"),
+                   "mesure": _mesure("VIX", vix.get("valeur"), "pts", SEUILS["vix_risk_on"], SEUILS["vix_risk_off"], vix.get("date"),
+                                     vix.get("source") or "FRED (VIXCLS)", "Risk off", "Risk on", "VIX indisponible"),
                    "risque": risque5, "devises": ["JPY", "CHF", "AUD"] if risque5 in ("risk_on", "risk_off") else [],
                    "regle": "risque : VIX (≥ 25 ou +25 % sur 7 j : risk off ; ≤ 14 sans hausse : risk on) ; "
                             "dollar : indice dollar large Fed sur 7 j (±0,5 %)",
@@ -393,7 +413,11 @@ def signaux(config: dict, donnees: dict, macro: dict, devises: list[dict], biais
             donnees7.append({"texte": "Positionnement extrême (≥ 90e ou ≤ 10e percentile sur 52 semaines) : "
                                       + ", ".join(extremes) + " — risque de retournement si le flux s'inverse.",
                              "source_id": id_cot})
-    resultat[7] = {"dollar": _dir(v_usd, 0.3, "haussier", "baissier"), "risque": _dir(ecart, 0.3, "risk_on", "risk_off"),
+    k7 = SEUILS["usd_5j_pct"]
+    resultat[7] = {"dollar": _dir(v_usd, k7, "haussier", "baissier"), "risque": _dir(ecart, SEUILS["risque_refuge_pt"], "risk_on", "risk_off"),
+                   "mesure": _mesure("indice USD synthétique, 5 j", v_usd, "%", -k7, k7, t_usd.get("date") or aujourdhui,
+                                     "calcul local (Twelve Data, série unique)", "Dollar haussier", "Dollar baissier",
+                                     "variation 5 j de l'indice USD indisponible"),
                    "devises": [d for d in RISQUE + REFUGE if abs((technique.get(d) or {}).get("variation_5j_pct") or 0) >= 0.5],
                    "regle": "dollar : indice USD synthétique sur 5 j (±0,3 %) ; risque : devises risque vs refuge sur 5 j (±0,3 pt) ; "
                             "COT : positionnement décrit, extrêmes signalés (pas de direction tirée du COT seul)",
@@ -663,6 +687,7 @@ def normaliser(brut: dict, sig: dict[int, dict], conflits_py: list[dict], concep
             "source_ids": _ids(e.get("source_ids")) or [x["source_id"] for x in s.get("donnees", []) if x.get("source_id")][:4],
             "donnees_calculees": s.get("donnees", []),
             "sources_indisponibles": s.get("indisponibles", []),
+            "mesure": s.get("mesure"),
         })
         if texte_absent:
             engrenages[-1]["texte_indisponible"] = texte_absent
@@ -862,6 +887,7 @@ def rafraichir(sortie: dict | None, config: dict, donnees: dict, macro: dict, ca
             e.setdefault("conviction", {}).update({"niveau": s["conviction"], "origine": "calcul Python"})
         e["donnees_calculees"] = s.get("donnees", [])
         e["sources_indisponibles"] = s.get("indisponibles", [])
+        e["mesure"] = s.get("mesure")
         if avant != (d["dollar"], d["risque"]) and (e.get("diagnostic") and not e.get("texte_indisponible")):
             e["texte_redige_avant_recalcul"] = True
             changes.append(e["numero"])

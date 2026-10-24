@@ -769,3 +769,88 @@ body.apercu-impression > *:not(#impression) { display: none !important; }
 .mi-case.etat-nd .mi-fleche, .mi-case.etat-nd .mi-libelle { color: var(--texte-2); font-weight: 600; }
 .mi-case.etat-sans_regle { background: color-mix(in srgb, var(--neutre) 7%, var(--carte)); }
 .mi-case.etat-sans_regle .mi-fleche, .mi-case.etat-sans_regle .mi-libelle { color: color-mix(in srgb, var(--texte-2) 55%, var(--carte)); }
+
+/* ---------------------------------------------------------------- cockpit (lot V5, étape 3) */
+.ck-hero { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 980px) { .ck-hero { grid-template-columns: minmax(0, 1fr); } }
+.ck-theme { display: flex; flex-wrap: wrap; gap: 20px; align-items: center; }
+.ck-anneau-bloc { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 0 0 auto; }
+.ck-anneau { width: 150px; height: 150px; }
+.ck-anneau-fond { fill: none; stroke: var(--carte-2); stroke-width: 14; }
+.ck-anneau-arc { fill: none; stroke: var(--neutre); stroke-width: 14; stroke-linecap: round; }
+.ck-anneau-arc.dir-up { stroke: var(--positif); } .ck-anneau-arc.dir-dn { stroke: var(--negatif); }
+.ck-anneau-val { font: 700 38px var(--serif); fill: var(--texte); }
+.ck-anneau-sous { font: 600 12px var(--sans); fill: var(--texte-2); }
+.ck-theme-texte { flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.ck-surtitre { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--texte-2); }
+.ck-surtitre.impose, .ck-titre.impose { color: var(--alerte); }
+.ck-titre { font-size: clamp(1.6rem, 4vw, 2.3rem); line-height: 1.1; }
+.ck-pastilles { display: flex; flex-wrap: wrap; gap: 6px; }
+.ck-pastille { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap;
+  background: var(--carte-2); color: var(--texte-2); border: 1px solid var(--trait); }
+.ck-pastille.dir-up { color: var(--positif); border-color: currentColor; } .ck-pastille.dir-dn { color: var(--negatif); border-color: currentColor; }
+.ck-pastille.petite { font-size: 11.5px; padding: 1px 8px; }
+.ck-paragraphe { margin: 0; font-size: 15.5px; line-height: 1.5; }
+.ck-explication { margin: 0; font-size: 14px; color: var(--texte-2); }
+.ck-petit { font-size: 12.5px; color: var(--texte-2); }
+.ck-briefing { align-self: flex-start; }
+.ck-bord { display: flex; flex-direction: column; gap: 10px; }
+.ck-h3 { font: 700 13px var(--sans); letter-spacing: .07em; text-transform: uppercase; color: var(--texte-2); }
+.ck-bord-liste { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.ck-bord-liste li { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; line-height: 1.4; }
+.ck-dist { flex: 0 0 auto; min-width: 62px; text-align: center; padding: 3px 6px; border-radius: var(--rayon); font-weight: 700; font-size: 13px;
+  background: var(--carte-2); color: var(--texte); }
+.ck-dist.chaud { background: color-mix(in srgb, var(--alerte) 22%, var(--carte)); }
+.ck-dist.rdv { background: color-mix(in srgb, var(--accent) 18%, var(--carte)); color: var(--accent); }
+.ck-lien { font-weight: 600; font-size: 14px; }
+.ck-section-tete { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 14px; margin-bottom: 8px; }
+.ck-section-tete h2 { font-size: 1.2rem; }
+.ck-legende { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 0; font-size: 12.5px; color: var(--texte-2); }
+.ck-legende span { display: inline-flex; align-items: center; gap: 5px; }
+.ck-pt { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--neutre); }
+.ck-pt.dir-up { background: var(--positif); } .ck-pt.dir-dn { background: var(--negatif); }
+.ck-pt.seuil { width: 2px; height: 12px; border-radius: 0; background: var(--texte); }
+.ck-thermos-grille { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+.ck-thermo { font: inherit; color: inherit; text-align: left; cursor: pointer; display: flex; flex-direction: column; gap: 8px; min-width: 0;
+  background: var(--carte); border: 1px solid var(--trait); border-radius: var(--rayon); padding: 14px; }
+.ck-thermo:hover, .ck-thermo:focus-visible { border-color: var(--accent); }
+.ck-thermo-tete { display: flex; align-items: center; gap: 8px; }
+.ck-num { width: 26px; height: 26px; border-radius: 50%; background: var(--carte-2); display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; }
+.ck-thermo-titre { font-weight: 700; flex: 1 1 auto; }
+.ck-thermo-val { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px; }
+.ck-thermo-val b { font: 700 1.6rem var(--serif); }
+.ck-piste { position: relative; height: 26px; display: block; }
+.ck-piste i { position: absolute; display: block; }
+.ck-rail { left: 0; right: 0; top: 11px; height: 4px; border-radius: 2px; background: var(--carte-2); }
+.ck-zone { top: 11px; height: 4px; background: color-mix(in srgb, var(--neutre) 35%, var(--carte)); }
+.ck-zone.dir-up { background: color-mix(in srgb, var(--positif) 45%, var(--carte)); }
+.ck-zone.dir-dn { background: color-mix(in srgb, var(--negatif) 45%, var(--carte)); }
+.ck-seuil { top: 5px; width: 2px; height: 16px; margin-left: -1px; background: var(--texte); }
+.ck-point { top: 6px; width: 14px; height: 14px; margin-left: -7px; border-radius: 50%; border: 2px solid var(--carte); background: var(--neutre); }
+.ck-point.dir-up { background: var(--positif); } .ck-point.dir-dn { background: var(--negatif); }
+.ck-piste.vide .ck-rail { background: repeating-linear-gradient(45deg, var(--neutre) 0 2px, var(--carte) 2px 6px); }
+.ck-note { font-size: 13px; line-height: 1.4; color: var(--texte-2); overflow-wrap: anywhere; }
+.ck-note.alerte { color: var(--alerte); font-weight: 600; }
+.ck-bas { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 16px; }
+@media (max-width: 980px) { .ck-bas { grid-template-columns: minmax(0, 1fr); } }
+.ck-fil-grille { display: grid; grid-template-columns: 120px repeat(var(--n), minmax(14px, 1fr)); gap: 3px; min-width: 420px; align-items: center; }
+.ck-fil-nom { font-size: 13px; color: var(--texte-2); white-space: nowrap; }
+.ck-fil-cel { height: 20px; border-radius: 3px; background: color-mix(in srgb, var(--neutre) 35%, var(--carte)); }
+.ck-fil-cel.dir-up { background: var(--positif); } .ck-fil-cel.dir-dn { background: var(--negatif); }
+.ck-fil-cel.vide { background: repeating-linear-gradient(45deg, var(--trait) 0 2px, var(--carte) 2px 6px); }
+.ck-fil-axe { display: flex; justify-content: space-between; padding-left: 123px; font-size: 12px; color: var(--texte-2); min-width: 420px; }
+.ck-mat { border-collapse: separate; border-spacing: 3px; font-size: 13px; }
+.ck-mat th { font-size: 12px; color: var(--texte-2); font-weight: 600; text-align: center; }
+.ck-mat tbody th { text-align: left; color: var(--texte); font-weight: 700; }
+.ck-mc { width: 30px; height: 26px; text-align: center; border-radius: 4px; font-weight: 700; background: var(--carte-2); color: var(--texte-2); }
+.ck-mc.v1 { background: color-mix(in srgb, var(--positif) 30%, var(--carte)); color: var(--texte); }
+.ck-mc.v2 { background: color-mix(in srgb, var(--positif) 60%, var(--carte)); color: var(--texte); }
+.ck-mc.v-1 { background: color-mix(in srgb, var(--negatif) 30%, var(--carte)); color: var(--texte); }
+.ck-mc.v-2 { background: color-mix(in srgb, var(--negatif) 60%, var(--carte)); color: var(--texte); }
+.ck-mc.etat-nd { background: repeating-linear-gradient(45deg, color-mix(in srgb, var(--neutre) 35%, var(--carte)) 0 3px, var(--carte) 3px 7px); font-size: 10px; }
+.ck-mc.etat-sans_regle { background: color-mix(in srgb, var(--neutre) 7%, var(--carte)); color: color-mix(in srgb, var(--texte-2) 55%, var(--carte)); }
+.ck-mc.etat-neutralise { background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--alerte) 25%, var(--carte)) 0 3px, var(--carte) 3px 7px); color: var(--alerte); }
+.ck-bilan { font-weight: 700; text-align: right; padding-left: 6px; }
+.ck-bilan.pos { color: var(--positif); } .ck-bilan.neg { color: var(--negatif); }
+details.ck-vignette > summary { cursor: pointer; font: 700 1.05rem var(--serif); padding: 4px 0; }
+details.ck-vignette[open] > summary { margin-bottom: 10px; }

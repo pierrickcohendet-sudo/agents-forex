@@ -15,7 +15,7 @@ import statistics
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
-from core import annotations, archive_quotidienne, complements, consequences, controles_macro, historique_5ans, matrice_impact, registre_macro as rm, tuiles, vue_ensemble
+from core import agenda, annotations, archive_quotidienne, cockpit, complements, consequences, controles_macro, historique_5ans, matrice_impact, registre_macro as rm, tuiles, vue_ensemble
 
 log = logging.getLogger(__name__)
 
@@ -800,7 +800,7 @@ def appliquer_historique_5ans(engrenages: dict, h5, technique: dict | None) -> N
 
 def construire(historiques: dict, registre: dict, technique: dict, config: dict, rapport: dict | None = None,
                flux: dict | None = None, news: dict | None = None, dossier_rapports: str | Path | None = None,
-               h5=None, impact_donnees: dict | None = None) -> dict:
+               h5=None, impact_donnees: dict | None = None, agenda_donnees: dict | None = None) -> dict:
     if h5 is not None and h5.disponible:   # corrélations 5 ans calculées par le module partagé
         try:
             historiques = {**historiques, "correlations_5a": historique_5ans.correlations(h5, technique)}
@@ -893,6 +893,12 @@ def construire(historiques: dict, registre: dict, technique: dict, config: dict,
         except Exception as exc:  # noqa: BLE001
             log.exception("Matrice d'impact en échec")
             sortie["matrice_impact"] = {"indisponible": f"calcul en échec : {exc}"[:200]}
+        try:   # cockpit (lot V5) : thermomètres, signaux au bord du seuil, fil des 15 séances
+            sortie["cockpit"] = cockpit.calculer(sortie["vue_ensemble"], sortie["matrice_impact"], rapport, config,
+                                                 Path(dossier_rapports) if dossier_rapports else None, agenda_donnees)
+        except Exception as exc:  # noqa: BLE001
+            log.exception("Cockpit en échec")
+            sortie["cockpit"] = {"indisponible": f"calcul en échec : {exc}"[:200]}
     except Exception as exc:  # noqa: BLE001
         log.exception("Vue d'ensemble des engrenages en échec")
         sortie["vue_ensemble"] = {"indisponible": f"calcul en échec : {exc}"[:200]}
@@ -908,8 +914,9 @@ def ecrire(racine: str | Path, historiques: dict, registre: dict, technique: dic
                                          / "impact.json").read_text(encoding="utf-8"))
         except (OSError, ValueError):
             impact_donnees = None
+        agenda_donnees = agenda.ecrire(racine, registre, config)   # docs/data/agenda.json (page Agenda, cockpit)
         donnees = construire(historiques, registre, technique, config, rapport, flux, news, dossier_rapports,
-                             historique_5ans.charger(), impact_donnees)
+                             historique_5ans.charger(), impact_donnees, agenda_donnees)
         try:   # archive quotidienne des valeurs non historisées, puis mini-courbes tirées de l'archive
             archive = archive_quotidienne.archiver(donnees["engrenages"])
             archive_quotidienne.completer_tuiles(donnees["engrenages"], archive)

@@ -4,6 +4,7 @@ import { carteDossiers } from "./dossiers.js";
 import { vueHebdo } from "./hebdo.js";
 import { chargerSyntheses, sectionSynthese } from "./consequences_synthese.js";
 import { vueEnsemble, selecteurPeriode } from "./vue_ensemble.js";
+import { cockpit } from "./cockpit.js";
 
 const DOLLAR = { haussier: "Dollar haussier", baissier: "Dollar baissier", neutre: "Dollar neutre" };
 const RISQUE = { risk_on: "Risk on", risk_off: "Risk off", neutre: "Risque neutre" };
@@ -176,7 +177,16 @@ async function pageQuotidienne(engrenageDemande = null) {
     if (defiler) dossier.scrollIntoView({ behavior: sansAnimation() ? "auto" : "smooth", block: "start" });
   }, enErreur(d) ? null : d.matrice_impact);
   if (engrenageDemande) setTimeout(() => dossier.scrollIntoView({ block: "start" }), 60);   // lien partagé #g=N
-  const blocs = [...vue.noeuds, dossier];
+  // Lot V5 : le cockpit est la vue par défaut ; la roue, les cartes et la matrice complète restent en vignette.
+  const choisir = (n, defiler) => {
+    vue.marquer(n); dossier.choisir(n);
+    if (defiler) dossier.scrollIntoView({ behavior: sansAnimation() ? "auto" : "smooth", block: "start" });
+  };
+  const noeudsCockpit = cockpit(enErreur(d) ? null : d.cockpit, enErreur(d) ? null : d.vue_ensemble, enErreur(d) ? null : d.matrice_impact, choisir);
+  const vignette = el("details", "carte ck-vignette");
+  vignette.appendChild(el("summary", null, "Roue des 8 engrenages, cartes, chaînes et matrice complète"));
+  vignette.append(...vue.noeuds);
+  const blocs = [...noeudsCockpit, vignette, dossier];
   if (enErreur(rapport)) return [...blocs, indisponible("Analyse rédigée", rapport?.__erreur)];
   const eng = rapport.synthese_globale?.engrenages;
   if (!eng) return [...blocs, indisponible("Analyse rédigée", "pas encore générée pour ce rapport (premier run complet à venir)")];
