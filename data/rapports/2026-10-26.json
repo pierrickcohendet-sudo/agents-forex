@@ -4,7 +4,7 @@
   "type_rapport": "hebdomadaire",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-10-26T16:16:47+00:00",
+  "genere_le": "2026-10-26T21:04:21+00:00",
   "appels_llm": [
    {
     "heure": "15:25",
@@ -311,6 +311,51 @@
     "tokens_total": 149,
     "ok": false,
     "etiquette": "synthese:CNY"
+   },
+   {
+    "heure": "21:03",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 6726,
+    "tokens_total": 8286,
+    "ok": false,
+    "etiquette": "synthese:CNY"
+   },
+   {
+    "heure": "21:04",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 6726,
+    "tokens_total": 8286,
+    "ok": false,
+    "etiquette": "synthese:CNY"
+   },
+   {
+    "heure": "21:07",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 0,
+    "tokens_message": 149,
+    "tokens_total": 149,
+    "ok": true,
+    "etiquette": "synthese:CNY"
+   },
+   {
+    "heure": "21:07",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 0,
+    "tokens_message": 149,
+    "tokens_total": 149,
+    "ok": false,
+    "etiquette": "synthese:CNY"
+   },
+   {
+    "heure": "21:08",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 0,
+    "tokens_message": 149,
+    "tokens_total": 149,
+    "ok": false,
+    "etiquette": "synthese:CNY"
    }
   ],
   "quota_llm": {
@@ -320,7 +365,7 @@
     "gemini-3.8-flash",
     "gemini-3.5-flash-lite"
    ],
-   "appels_aujourdhui": 51,
+   "appels_aujourdhui": 60,
    "plafond_jour": 60,
    "engrenages_faits": true,
    "reserve_engrenages": 8,
@@ -330,17 +375,17 @@
      "appels_aujourdhui": 20,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-10-27T06:59:59+00:00",
-     "appels_ce_run": 4,
-     "reussites_ce_run": 1,
-     "sauts_ce_run": 11
+     "appels_ce_run": 0,
+     "reussites_ce_run": 0,
+     "sauts_ce_run": 13
     },
     "gemini-3.8-flash": {
-     "appels_aujourdhui": 11,
+     "appels_aujourdhui": 20,
      "plafond_jour": 20,
-     "epuise_jusqu_a": "2026-10-24T06:59:59+00:00",
-     "appels_ce_run": 3,
-     "reussites_ce_run": 0,
-     "sauts_ce_run": 11
+     "epuise_jusqu_a": "2026-10-27T06:59:59+00:00",
+     "appels_ce_run": 5,
+     "reussites_ce_run": 1,
+     "sauts_ce_run": 8
     },
     "gemini-3.5-flash-lite": {
      "appels_aujourdhui": 20,
@@ -348,19 +393,19 @@
      "epuise_jusqu_a": null,
      "appels_ce_run": 0,
      "reussites_ce_run": 0,
-     "sauts_ce_run": 14
+     "sauts_ce_run": 12
     }
    }
   },
-  "resume_quota": "Gemini : 51/60, engrenages : fait",
+  "resume_quota": "Gemini : 60/60, engrenages : fait",
   "appels_par_modele": {
    "gemini-3.5-flash": {
     "appels": 11,
     "echecs": 7
    },
    "gemini-3.8-flash": {
-    "appels": 6,
-    "echecs": 6
+    "appels": 11,
+    "echecs": 10
    },
    "gemini-3.5-flash-lite": {
     "appels": 17,
@@ -433,6 +478,40 @@
       "ouvert_a_l_appel": null,
       "echecs_consecutifs": 0,
       "ignores": 14
+     }
+    ]
+   },
+   {
+    "heure": "21:08",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": true,
+    "appels_total": 13,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 13
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": true,
+      "cause": "quota journalier épuisé — quota gratuit journalier épuisé pour gemini-3.8-flash (HTTP 429, requêtes/jour)",
+      "ouvert_a_l_appel": 5,
+      "echecs_consecutifs": 2,
+      "ignores": 8
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 12
      }
     ]
    }
@@ -1160,7 +1239,7 @@
     "libelle": "Flash 3.5"
    },
    "version": "quotidienne",
-   "rafraichi_le": "2026-10-26T16:12:47+00:00",
+   "rafraichi_le": "2026-10-26T21:03:04+00:00",
    "titre_theme_impose": "Signaux mixtes"
   },
   "classement_devises": [
@@ -5010,9 +5089,9 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash passé en dernier | gemini-3.8-flash : 503 Server Error: Service Unavailable for url: https://generativelang",
-    "tentatives": 2,
-    "genere_le": "2026-10-26T16:16:47+00:00"
+    "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/m",
+    "tentatives": 3,
+    "genere_le": "2026-10-26T21:04:21+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.46,
@@ -9845,7 +9924,7 @@
    "AUD : posture banque centrale non expliquée (contexte_geopolitique)",
    "USD synthèse approfondie : moins de 3 opportunités (2)",
    "USD synthèse approfondie : moins de 3 menaces (2)",
-   "CNY : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash passé e)",
+   "CNY : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash)",
    "prompt LLM volumineux : 17 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 20474 à 15:29 UTC, modèle gemini-3.5-flash) — le contexte envoyé au LLM a regrossi"
   ]
  },
@@ -9867,7 +9946,7 @@
     "coherence_directionnelle_pct": 100.0,
     "indicateurs_instables": {}
    },
-   "commentaire": "Score 81 → 81 sur 1 jour(s) ; cohérence directionnelle : 100.0 %."
+   "commentaire": "Sur la base d'une unique séance observée le 2026-10-26, le biais USD affiche une stabilité absolue avec un score constant à 81, illustré par un écart-type de 0.0 et une variation nulle. La cohérence directionnelle ressort à 100.0%, soutenue par l'absence totale d'indicateurs ayant changé de camp. Le positionnement s'avère donc parfaitement stable et exempt de tout comportement erratique sur cet échantillon."
   },
   "EUR": {
    "semaine_iso": "2026-W44",
@@ -10028,6 +10107,6 @@
   "suggestions_connaissances": [],
   "validation": "non_evalue",
   "indisponible": true,
-  "note": "relecture non effectuée (tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : q)"
+  "note": "relecture non effectuée (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit) — gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : ignoré ()"
  }
 }
