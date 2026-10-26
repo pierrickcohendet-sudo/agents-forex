@@ -4,7 +4,7 @@
   "type_rapport": "hebdomadaire",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-10-26T15:51:20+00:00",
+  "genere_le": "2026-10-26T16:16:47+00:00",
   "appels_llm": [
    {
     "heure": "15:25",
@@ -248,6 +248,69 @@
     "tokens_total": 8627,
     "ok": true,
     "etiquette": "synthese:AUD"
+   },
+   {
+    "heure": "16:14",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 6609,
+    "tokens_total": 8169,
+    "ok": true,
+    "etiquette": "synthese:NZD"
+   },
+   {
+    "heure": "16:14",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 6726,
+    "tokens_total": 8286,
+    "ok": false,
+    "etiquette": "synthese:CNY"
+   },
+   {
+    "heure": "16:15",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 6726,
+    "tokens_total": 8286,
+    "ok": false,
+    "etiquette": "synthese:CNY"
+   },
+   {
+    "heure": "16:16",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 6726,
+    "tokens_total": 8286,
+    "ok": false,
+    "etiquette": "synthese:CNY"
+   },
+   {
+    "heure": "16:16",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 6726,
+    "tokens_total": 8286,
+    "ok": false,
+    "etiquette": "synthese:CNY"
+   },
+   {
+    "heure": "16:20",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 0,
+    "tokens_message": 149,
+    "tokens_total": 149,
+    "ok": false,
+    "etiquette": "synthese:CNY"
+   },
+   {
+    "heure": "16:20",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 0,
+    "tokens_message": 149,
+    "tokens_total": 149,
+    "ok": false,
+    "etiquette": "synthese:CNY"
    }
   ],
   "quota_llm": {
@@ -257,47 +320,47 @@
     "gemini-3.8-flash",
     "gemini-3.5-flash-lite"
    ],
-   "appels_aujourdhui": 37,
+   "appels_aujourdhui": 51,
    "plafond_jour": 60,
    "engrenages_faits": true,
    "reserve_engrenages": 8,
    "refus_reserve_ce_run": 0,
    "modeles": {
     "gemini-3.5-flash": {
-     "appels_aujourdhui": 12,
+     "appels_aujourdhui": 20,
      "plafond_jour": 20,
-     "epuise_jusqu_a": "2026-10-24T06:59:59+00:00",
-     "appels_ce_run": 7,
-     "reussites_ce_run": 3,
-     "sauts_ce_run": 28
+     "epuise_jusqu_a": "2026-10-27T06:59:59+00:00",
+     "appels_ce_run": 4,
+     "reussites_ce_run": 1,
+     "sauts_ce_run": 11
     },
     "gemini-3.8-flash": {
-     "appels_aujourdhui": 5,
+     "appels_aujourdhui": 11,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-10-24T06:59:59+00:00",
      "appels_ce_run": 3,
      "reussites_ce_run": 0,
-     "sauts_ce_run": 30
+     "sauts_ce_run": 11
     },
     "gemini-3.5-flash-lite": {
      "appels_aujourdhui": 20,
      "plafond_jour": 20,
      "epuise_jusqu_a": null,
-     "appels_ce_run": 17,
-     "reussites_ce_run": 16,
-     "sauts_ce_run": 16
+     "appels_ce_run": 0,
+     "reussites_ce_run": 0,
+     "sauts_ce_run": 14
     }
    }
   },
-  "resume_quota": "Gemini : 37/60, engrenages : fait",
+  "resume_quota": "Gemini : 51/60, engrenages : fait",
   "appels_par_modele": {
    "gemini-3.5-flash": {
-    "appels": 7,
-    "echecs": 4
+    "appels": 11,
+    "echecs": 7
    },
    "gemini-3.8-flash": {
-    "appels": 3,
-    "echecs": 3
+    "appels": 6,
+    "echecs": 6
    },
    "gemini-3.5-flash-lite": {
     "appels": 17,
@@ -336,6 +399,40 @@
       "ouvert_a_l_appel": null,
       "echecs_consecutifs": 0,
       "ignores": 16
+     }
+    ]
+   },
+   {
+    "heure": "16:20",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": true,
+    "appels_total": 15,
+    "replis_json_modele_suivant": 4,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": true,
+      "cause": "quota journalier épuisé — quota gratuit journalier épuisé pour gemini-3.5-flash (HTTP 429, requêtes/jour)",
+      "ouvert_a_l_appel": 4,
+      "echecs_consecutifs": 3,
+      "ignores": 11
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": true,
+      "cause": "3 échecs consécutifs — HTTPSConnectionPool(host='generativelanguage.googleapis.com', port=443): Read timed out. (read timeout=180)",
+      "ouvert_a_l_appel": 4,
+      "echecs_consecutifs": 3,
+      "ignores": 11
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 14
      }
     ]
    }
@@ -494,8 +591,8 @@
      ],
      "donnees_calculees": [
       {
-       "texte": "USD taux directeur 3.88% le 2026-10-21 (hausse, précédent 3.75%)",
-       "source_id": "src_134"
+       "texte": "USD taux directeur 3.88% le 2026-10-22 (hausse, précédent 3.75%)",
+       "source_id": "src_276"
       },
       {
        "texte": "EUR taux directeur 2.65% le 2026-09-10 (hausse, précédent 2.40%)",
@@ -1064,8 +1161,8 @@
     "libelle": "Flash 3.5"
    },
    "version": "quotidienne",
-   "titre_theme_impose": "Signaux mixtes",
-   "rafraichi_le": "2026-10-26T15:43:59+00:00"
+   "rafraichi_le": "2026-10-26T16:12:47+00:00",
+   "titre_theme_impose": "Signaux mixtes"
   },
   "classement_devises": [
    {
@@ -4455,10 +4552,196 @@
     ]
    },
    "synthese_approfondie": {
-    "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite passé en dernier | gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) |",
-    "tentatives": 1,
-    "genere_le": "2026-10-26T15:51:00+00:00"
+    "orientation": "neutre",
+    "these_centrale": {
+     "texte": "La thèse évolue vers une neutralité prudente, le score de confluence à 40 reflétant une phase de consolidation en range hebdomadaire. Le dollar néo-zélandais reste sous pression en raison du fort ralentissement de l'inflation à 0.7% et d'un déficit commercial plus creusé qu'anticipé. Néanmoins, la résilience de la croissance et la tenue de l'emploi limitent pour l'instant le risque de décrochage marqué.",
+     "source_ids": [
+      "src_023",
+      "src_169",
+      "src_261",
+      "src_262"
+     ],
+     "non_source": false
+    },
+    "moteurs": [
+     {
+      "moteur": "croissance",
+      "donnee": "0.2% au 2026-09-16",
+      "trajectoire": "Précédent à 0.9%, surprise haussière par rapport au consensus de 0.1%",
+      "implication": "La croissance trimestrielle résiste mieux que prévu, ce qui écarte l'hypothèse d'une contraction économique imminente.",
+      "source_id": "src_262"
+     },
+     {
+      "moteur": "inflation",
+      "donnee": "0.7% au 2026-10-21",
+      "trajectoire": "Précédent à 1.5%, surprise baissière par rapport au consensus de 0.8%",
+      "implication": "La nette décélération sous la cible de la banque centrale accentue le biais dovish et pèse sur le NZD.",
+      "source_id": "src_261"
+     },
+     {
+      "moteur": "emploi",
+      "donnee": "5.6% au 2026-08-04",
+      "trajectoire": "Précédent à 5.4%, dégradation supérieure au consensus de 5.4%",
+      "implication": "La hausse du taux de chômage confirme un ramollissement progressif du marché du travail domestique.",
+      "source_id": "src_263"
+     },
+     {
+      "moteur": "banque_centrale",
+      "donnee": "2.75% au 2026-09-02",
+      "trajectoire": "Précédent à 2.50%, conforme au consensus de 2.75%",
+      "implication": "La RBNZ conserve une posture neutre dépendante des données, réduisant le soutien apporté à la devise par l'écart de taux.",
+      "source_id": "src_141"
+     }
+    ],
+    "taux_et_flux": {
+     "texte": "Le taux directeur s'établit à 2.75%, affichant un différentiel de carry nul (0.0 pt) par rapport à la médiane du G8. Le rendement souverain à 10 ans ressort à 4.94% contre 4.96% pour le 10 ans américain, tandis que le rendement à 2 ans néo-zélandais est non disponible, empêchant l'évaluation du spread court terme face à l'USD.",
+     "source_ids": [
+      "src_008",
+      "src_015",
+      "src_016"
+     ],
+     "non_source": false
+    },
+    "geopolitique": {
+     "texte": "L'élargissement des restrictions américaines sur les investissements technologiques ciblant la Chine suscite des avertissements de riposte de Pékin. En tant que partenaire commercial majeur de la Nouvelle-Zélande, toute tension en Chine menace la demande d'exportations néo-zélandaises.",
+     "source_ids": [
+      "src_130"
+     ],
+     "non_source": false
+    },
+    "lecture_technique": {
+     "texte": "Sur la paire NZD/USD, le cours (0.56808) évolue sous sa moyenne mobile 100 jours (0.57707) et 200 jours (0.58323). La structure hebdomadaire est en range, encadrée par un support immédiat à 0.56699 et une résistance à 0.57046, avec un RSI neutre à 50.8.",
+     "source_ids": [
+      "src_023"
+     ],
+     "coherence": "alignee",
+     "non_source": false
+    },
+    "scenarios": [
+     {
+      "type": "haussier",
+      "declencheur": "Rebond manifeste de l'indice ANZ Business Confidence franchissant les 55 points",
+      "probabilite": "faible",
+      "justification": "L'inflation très faible (0.7%) et le creusement du déficit commercial pèsent lourdement sur la capacité d'un rally haussier durable.",
+      "source_ids": [
+       "src_094",
+       "src_169",
+       "src_261"
+      ]
+     },
+     {
+      "type": "central",
+      "declencheur": "Maintien des cours du NZD/USD dans les bornes du range actuel entre 0.56699 et 0.57046",
+      "probabilite": "elevee",
+      "justification": "L'approche 'data-dependent' de la RBNZ et l'absence de publication majeure ce jour privilégient la neutralité.",
+      "source_ids": [
+       "src_023",
+       "src_141"
+      ]
+     },
+     {
+      "type": "baissier",
+      "declencheur": "Rupture baissière confirmée en clôture du support à 0.56699",
+      "probabilite": "moyenne",
+      "justification": "La hausse du VIX à 19.45 et la fermeté de l'indice USD (101.11) maintiennent une pression constante sur les devises pro-cycliques.",
+      "source_ids": [
+       "src_010",
+       "src_023",
+       "src_025"
+      ]
+     }
+    ],
+    "catalyseurs": [
+     {
+      "date": "2026-10-28",
+      "heure_utc": "01:00",
+      "evenement": "Official Cash Rate",
+      "impact": "high",
+      "consensus": "3.00%",
+      "source_id": "src_258",
+      "pourquoi": "La décision sur l'Official Cash Rate fixe la trajectoire monétaire de la RBNZ et influence directement les anticipations de taux."
+     },
+     {
+      "date": "2026-11-03",
+      "heure_utc": "21:45",
+      "evenement": "Unemployment Rate",
+      "impact": "high",
+      "consensus": null,
+      "source_id": "src_259",
+      "pourquoi": "La publication du taux de chômage permettra d'évaluer la sévérité de la détente du marché du travail."
+     },
+     {
+      "date": "2026-11-03",
+      "heure_utc": "21:45",
+      "evenement": "Employment Change q/q",
+      "impact": "high",
+      "consensus": null,
+      "source_id": "src_260",
+      "pourquoi": "La variation trimestrielle de l'emploi reflète la capacité de création de postes et la santé globale du secteur privé."
+     }
+    ],
+    "invalidation": [
+     {
+      "signal": "Clôture journalière au-dessus de la résistance technique des 0.57046",
+      "source_id": "src_023"
+     },
+     {
+      "signal": "Rebond surprise de l'inflation annuelle au-dessus de 2.0%",
+      "source_id": "src_261"
+     },
+     {
+      "signal": "Détente marquée du VIX repassant sous les 15 points",
+      "source_id": "src_010"
+     }
+    ],
+    "opportunites": [
+     {
+      "texte": "Défense du support à 0.56699",
+      "mecanisme": "Maintien au-dessus du support à 0.56699 -> déclenchement d'achats techniques de range -> rebond du NZD vers la résistance à 0.57046.",
+      "source_id": "src_023",
+      "non_sourcee": false
+     },
+     {
+      "texte": "Résilience du PIB trimestriel à 0.2%",
+      "mecanisme": "Surprise haussière du PIB (0.2% vs 0.1%) -> atténuation des craintes de récession -> soutien temporaire aux flux sur le NZD.",
+      "source_id": "src_262",
+      "non_sourcee": false
+     },
+     {
+      "texte": "Créations d'emplois supérieures aux attentes (+0.5%)",
+      "mecanisme": "Emploi plus fort que prévu (+0.5% vs +0.1%) -> baisse des attentes de baisses de taux agressives -> appréciation du NZD.",
+      "source_id": "src_264",
+      "non_sourcee": false
+     }
+    ],
+    "menaces": [
+     {
+      "texte": "Effondrement de l'inflation annuelle à 0.7%",
+      "mecanisme": "CPI sous le consensus (0.7% vs 0.8%) -> renforcement des anticipations de baisses de taux par la RBNZ -> pression vendeuse sur le NZD.",
+      "source_id": "src_261",
+      "non_sourcee": false
+     },
+     {
+      "texte": "Creusement du déficit de la balance commerciale (-1971M)",
+      "mecanisme": "Déficit commercial pire qu'attendu (-1971M vs -775M) -> réduction des entrées nettes de devises -> dépréciation du NZD.",
+      "source_id": "src_169",
+      "non_sourcee": false
+     },
+     {
+      "texte": "Aversion au risque accrue (VIX à 19.45) et USD fort (101.11)",
+      "mecanisme": "Tensions géopolitiques et hausse de la volatilité -> désengagement des devises pro-cycliques -> ventes sur le NZD.",
+      "source_id": "src_010",
+      "non_sourcee": false
+     }
+    ],
+    "controles": [],
+    "redige_par": {
+     "modele": "gemini-3.5-flash",
+     "libelle": "Flash 3.5"
+    },
+    "statut": "ok",
+    "tentatives": 2,
+    "genere_le": "2026-10-26T16:14:04+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.85,
@@ -4728,9 +5011,9 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite passé en dernier | gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) |",
-    "tentatives": 1,
-    "genere_le": "2026-10-26T15:51:20+00:00"
+    "raison": "tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash passé en dernier | gemini-3.8-flash : 503 Server Error: Service Unavailable for url: https://generativelang",
+    "tentatives": 2,
+    "genere_le": "2026-10-26T16:16:47+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.46,
@@ -6686,6 +6969,13 @@
    "source": "ForexFactory (registre macro)",
    "detail": "CNY — Ventes au détail",
    "date": "2026-10-19",
+   "url": null
+  },
+  {
+   "id": "src_276",
+   "source": "FRED (DFF, taux effectif) (registre macro)",
+   "detail": "USD — Taux directeur",
+   "date": "2026-10-22",
    "url": null
   }
  ],
@@ -9551,13 +9841,12 @@
  },
  "controle_qualite": {
   "conforme": false,
-  "nb_anomalies": 6,
+  "nb_anomalies": 5,
   "anomalies": [
    "AUD : posture banque centrale non expliquée (contexte_geopolitique)",
    "USD synthèse approfondie : moins de 3 opportunités (2)",
    "USD synthèse approfondie : moins de 3 menaces (2)",
-   "NZD : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite pa)",
-   "CNY : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite pa)",
+   "CNY : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash passé e)",
    "prompt LLM volumineux : 17 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 20474 à 15:29 UTC, modèle gemini-3.5-flash) — le contexte envoyé au LLM a regrossi"
   ]
  },
