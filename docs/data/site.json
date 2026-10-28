@@ -1,14 +1,14 @@
 {
  "version_schema": 1,
- "genere_le": "2026-10-27T20:41:09+00:00",
+ "genere_le": "2026-10-28T00:51:38+00:00",
  "sources": {
-  "rapport": "2026-10-27T14:57:48+00:00",
-  "tableau_macro": "2026-10-27T14:34:14+00:00"
+  "rapport": "2026-10-28T00:51:05+00:00",
+  "tableau_macro": "2026-10-28T00:29:36+00:00"
  },
  "regime": {
-  "biais": "risk_off",
-  "libelle": "Risk Off",
-  "ecart_points": -10.3,
+  "biais": "neutre",
+  "libelle": "Neutre",
+  "ecart_points": null,
   "seuil_points": 5.0,
   "devises_risque": [
    "AUD",
@@ -21,14 +21,14 @@
    "USD"
   ],
   "explication": "Écart entre le score de confluence moyen des devises « risque » et celui des devises « refuge » (calcul Python) : au-delà du seuil, Risk On ; en deçà de son opposé, Risk Off ; sinon Neutre.",
-  "driver": "Sous un biais risk-off marqué, le dollar écrase le classement avec une confluence record à 78 portée par son portage et ses flux refuges, reléguant paradoxalement les traditionnels JPY et CHF en queue de peloton (rangs 5 et 6) malgré le climat d'aversion.",
+  "driver": "Biais neutre ; USD en tête du classement de confluence.",
   "relecture": "non_evalue",
-  "date_rapport": "2026-10-27",
-  "maj": "2026-10-27T14:57:48+00:00",
+  "date_rapport": "2026-10-28",
+  "maj": "2026-10-28T00:51:05+00:00",
   "type_rapport": "quotidien",
   "nb_devises": 9,
-  "nb_devises_disponibles": 9,
-  "notion_url": "https://app.notion.com/p/FX-2026-10-27-quotidien-40665bc64661810fb50cda55ac04a69d",
+  "nb_devises_disponibles": 1,
+  "notion_url": "https://app.notion.com/p/FX-2026-10-28-quotidien-40765bc646618181b45cc984af463ed2",
   "notion_page_du_jour": true
  },
  "colonnes_cles": [
@@ -127,13 +127,13 @@
      "raison": null
     },
     "rendement_2a": {
-     "texte": "4,69 %",
-     "valeur_num": 4.69,
-     "date": "2026-10-23",
+     "texte": "4,68 %",
+     "valeur_num": 4.68,
+     "date": "2026-10-26",
      "source": "FRED (DGS2)",
      "consensus": null,
      "surprise": null,
-     "precedent": "4,74 %",
+     "precedent": "4,77 %",
      "manuel": false,
      "etat": "valeur",
      "raison": null
@@ -145,20 +145,20 @@
      "n": 9,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-10-27",
+     "date": "2026-10-28",
      "raison": null
     },
     "score": {
-     "texte": "78",
-     "valeur_num": 78,
+     "texte": "74",
+     "valeur_num": 74,
      "etat": "valeur",
      "source": "score de confluence (calcul Python)",
-     "date": "2026-10-27",
+     "date": "2026-10-28",
      "raison": null
     },
     "biais": {
      "texte": "Haussier",
-     "valeur_num": 78,
+     "valeur_num": 74,
      "code": "haussier",
      "etat": "valeur",
      "profil": "off",
@@ -220,13 +220,13 @@
      "raison": null
     },
     "rendement_2a": {
-     "texte": "3,08 %",
-     "valeur_num": 3.08,
-     "date": "2026-10-26",
+     "texte": "3,07 %",
+     "valeur_num": 3.07,
+     "date": "2026-10-27",
      "source": "Bundesbank (Allemagne 2 ans)",
      "consensus": null,
      "surprise": null,
-     "precedent": "3,10 %",
+     "precedent": "3,08 %",
      "manuel": false,
      "etat": "valeur",
      "raison": null
@@ -238,25 +238,20 @@
      "n": 11,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-10-27",
+     "date": "2026-10-28",
      "raison": null
     },
     "score": {
-     "texte": "31",
-     "valeur_num": 31,
-     "etat": "valeur",
-     "source": "score de confluence (calcul Python)",
-     "date": "2026-10-27",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "Analyse EUR impossible : tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash passé en dernier | gemini-3.8-fl"
     },
     "biais": {
-     "texte": "Baissier",
-     "valeur_num": 31,
-     "code": "baissier",
-     "etat": "valeur",
-     "profil": "neutre",
-     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "score du jour indisponible"
     }
    }
   },
@@ -331,25 +326,20 @@
      "n": 11,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-10-27",
+     "date": "2026-10-28",
      "raison": null
     },
     "score": {
-     "texte": "54",
-     "valeur_num": 54,
-     "etat": "valeur",
-     "source": "score de confluence (calcul Python)",
-     "date": "2026-10-27",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "Analyse GBP impossible : tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash passé en dernier | gemini-3.8-fl"
     },
     "biais": {
-     "texte": "Neutre",
-     "valeur_num": 54,
-     "code": "neutre",
-     "etat": "valeur",
-     "profil": "neutre",
-     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "score du jour indisponible"
     }
    }
   },
@@ -424,25 +414,20 @@
      "n": 7,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-10-27",
+     "date": "2026-10-28",
      "raison": null
     },
     "score": {
-     "texte": "53",
-     "valeur_num": 53,
-     "etat": "valeur",
-     "source": "score de confluence (calcul Python)",
-     "date": "2026-10-27",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "Analyse JPY impossible : tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash passé en dernier | gemini-3.8-fl"
     },
     "biais": {
-     "texte": "Neutre",
-     "valeur_num": 53,
-     "code": "neutre",
-     "etat": "valeur",
-     "profil": "off",
-     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "score du jour indisponible"
     }
    }
   },
@@ -517,25 +502,20 @@
      "n": 4,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-10-27",
+     "date": "2026-10-28",
      "raison": null
     },
     "score": {
-     "texte": "38",
-     "valeur_num": 38,
-     "etat": "valeur",
-     "source": "score de confluence (calcul Python)",
-     "date": "2026-10-27",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "Analyse CHF impossible : tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash passé en dernier | gemini-3.8-fl"
     },
     "biais": {
-     "texte": "Baissier",
-     "valeur_num": 38,
-     "code": "baissier",
-     "etat": "valeur",
-     "profil": "off",
-     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "score du jour indisponible"
     }
    }
   },
@@ -592,13 +572,13 @@
      "raison": null
     },
     "rendement_2a": {
-     "texte": "3,33 %",
-     "valeur_num": 3.33,
-     "date": "2026-10-23",
+     "texte": "3,37 %",
+     "valeur_num": 3.37,
+     "date": "2026-10-26",
      "source": "Banque du Canada (Valet, 2 ans)",
      "consensus": null,
      "surprise": null,
-     "precedent": "3,21 %",
+     "precedent": "3,33 %",
      "manuel": false,
      "etat": "valeur",
      "raison": null
@@ -610,25 +590,20 @@
      "n": 8,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-10-27",
+     "date": "2026-10-28",
      "raison": null
     },
     "score": {
-     "texte": "30",
-     "valeur_num": 30,
-     "etat": "valeur",
-     "source": "score de confluence (calcul Python)",
-     "date": "2026-10-27",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "Analyse CAD impossible : tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash passé en dernier | gemini-3.8-fl"
     },
     "biais": {
-     "texte": "Baissier",
-     "valeur_num": 30,
-     "code": "baissier",
-     "etat": "valeur",
-     "profil": "on",
-     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "score du jour indisponible"
     }
    }
   },
@@ -703,25 +678,20 @@
      "n": 7,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-10-27",
+     "date": "2026-10-28",
      "raison": null
     },
     "score": {
-     "texte": "70",
-     "valeur_num": 70,
-     "etat": "valeur",
-     "source": "score de confluence (calcul Python)",
-     "date": "2026-10-27",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "Analyse AUD impossible : tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash passé en dernier | gemini-3.8-fl"
     },
     "biais": {
-     "texte": "Haussier",
-     "valeur_num": 70,
-     "code": "haussier",
-     "etat": "valeur",
-     "profil": "on",
-     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "score du jour indisponible"
     }
    }
   },
@@ -796,25 +766,20 @@
      "n": 2,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-10-27",
+     "date": "2026-10-28",
      "raison": null
     },
     "score": {
-     "texte": "38",
-     "valeur_num": 38,
-     "etat": "valeur",
-     "source": "score de confluence (calcul Python)",
-     "date": "2026-10-27",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "Analyse NZD impossible : tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash passé en dernier | gemini-3.8-fl"
     },
     "biais": {
-     "texte": "Baissier",
-     "valeur_num": 38,
-     "code": "baissier",
-     "etat": "valeur",
-     "profil": "on",
-     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "score du jour indisponible"
     }
    }
   },
@@ -889,25 +854,20 @@
      "n": 8,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-10-27",
+     "date": "2026-10-28",
      "raison": null
     },
     "score": {
-     "texte": "58",
-     "valeur_num": 58,
-     "etat": "valeur",
-     "source": "score de confluence (calcul Python)",
-     "date": "2026-10-27",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "Analyse CNY impossible : tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash passé en dernier | gemini-3.8-fl"
     },
     "biais": {
-     "texte": "Neutre",
-     "valeur_num": 58,
-     "code": "neutre",
-     "etat": "valeur",
-     "profil": "neutre",
-     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "score du jour indisponible"
     }
    }
   }
