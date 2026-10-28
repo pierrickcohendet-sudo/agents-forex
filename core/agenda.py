@@ -372,6 +372,11 @@ def _depuis_grands(ag: Agenda, grands: list[dict] | None) -> list[dict]:
         a_venir.append({k: g.get(k) for k in ("date", "fin", "titre", "devises", "statut", "source", "verifie_le")})
         quand = datetime.fromisoformat(f"{g['date']}T00:00").replace(tzinfo=ag.paris)
         for devise in (g.get("devises") or ["USD"])[:1]:
+            deja = ag.chercher(devise, g["date"], GRAND)   # même rendez-vous déjà vu par ForexFactory : on le complète
+            if deja:
+                deja.update({"evenement": g["titre"], "statut_source": g.get("statut"), "devises_concernees": g.get("devises"),
+                             "officiel": {"source": g.get("source"), "verifie_le": g.get("verifie_le"), "statut": g.get("statut")}})
+                continue
             ag.ajouter(devise, g["titre"], quand, "high", source=g.get("source") or "", heure_connue=False,
                        verifie_le=g.get("verifie_le"), titre_fr=g["titre"], type_force="Grand rendez-vous",
                        extra={"statut_source": g.get("statut"), "devises_concernees": g.get("devises")})

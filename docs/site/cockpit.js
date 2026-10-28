@@ -1,6 +1,6 @@
 /* Cockpit des 8 engrenages (lot V5, étape 3) : vue par défaut de l'onglet. Tout vient de dossiers.json → cockpit
    (calcul Python) : positions, seuils et couleurs des thermomètres ne sont jamais calculés ici. */
-import { el, dateCourte } from "./commun.js";
+import { el, dateCourte, certifier } from "./commun.js";
 import { ouvrirBriefing } from "./briefing.js";
 import { symboleCase } from "./vue_ensemble.js";
 
@@ -82,7 +82,10 @@ function thermometre(t, choisir) {
   tete.append(el("span", "ck-num", String(t.numero)), el("span", "ck-thermo-titre", t.titre),
               el("span", `ck-pastille petite dir-${t.direction?.classe || "nd"}`, t.direction?.libelle || "non déterminée"));
   const val = el("span", "ck-thermo-val");
-  val.append(el("b", "tabulaire", t.texte_valeur), el("span", "ck-petit", `${t.libelle || ""}${t.date ? ` · ${dateCourte(t.date).slice(0, 5)}` : ""}`));
+  const chiffre = el("b", "tabulaire", t.texte_valeur);
+  if (t.valeur != null) certifier(chiffre, { libelle: t.libelle || t.nom, valeur: t.texte_valeur, source: t.source, date: t.date,
+                                              indicateur: t.indicateur, sansFocus: true });
+  val.append(chiffre, el("span", "ck-petit", `${t.libelle || ""}${t.date ? ` · ${dateCourte(t.date).slice(0, 5)}` : ""}`));
   const piste = el("span", `ck-piste${t.valeur == null ? " vide" : ""}`);
   piste.setAttribute("aria-hidden", "true");
   piste.appendChild(el("i", "ck-rail"));

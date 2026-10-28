@@ -1,7 +1,7 @@
 /* Page Agenda (lot V5, complément) : docs/data/agenda.json, calcul Python sans LLM.
    Globe des 9 banques centrales (d3-geo + world-atlas, versions épinglées, repli en liste), horloges, onglets par jour,
    filtres par type, impact et devise, réaction passée, prises de parole et grands rendez-vous. Heures de Paris. */
-import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, ouvrirDetail, listeDefinitions, DRAPEAUX } from "./commun.js";
+import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, ouvrirDetail, listeDefinitions, certifier, DRAPEAUX } from "./commun.js";
 
 const CDN = {
   d3geo: "https://cdn.jsdelivr.net/npm/d3-geo@3.1.1/+esm",
@@ -63,7 +63,8 @@ function grilleBanques(banques) {
     const bouton = el("button", `ag-bc-case${b.cette_semaine ? " semaine" : ""}`);
     bouton.type = "button";
     bouton.append(el("b", null, `${DRAPEAUX[b.devise] || ""} ${b.court}`),
-      el("span", "tabulaire", tauxTexte(b)),
+      certifier(el("span", "tabulaire", tauxTexte(b)), { libelle: `Taux directeur ${b.court}`, valeur: tauxTexte(b),
+                                                        source: b.source_taux || "registre macro (ForexFactory)", date: b.date_taux, sansFocus: true }),
       el("span", "note", b.prochaine ? `${b.cette_semaine ? "Cette semaine · " : "Prochaine : "}${dateCourte(b.prochaine).slice(0, 5)}` : "Prochaine : n/d"));
     if (b.badge && b.badge.sens !== "statu_quo") bouton.appendChild(el("span", `ag-badge ${b.badge.sens}`, b.badge.texte));
     bouton.addEventListener("click", () => ficheBanque(b));
@@ -228,9 +229,15 @@ function ligneEvenement(e) {
     + `Source : ${e.source}${e.verifie_le ? ` · vérifié le ${dateCourte(e.verifie_le)}` : ""}`);
   corps.append(t, src);
   const valeurs = el("div", "ag-valeurs tabulaire");
-  const v = (lib, x, raison, cls) => { const s = el("span", cls || null, `${lib} ${virgule(x) ?? "n/d"}`); if (x == null && raison) s.title = raison; return s; };
-  valeurs.append(v("Préc.", e.precedent, e.raison_precedent), v("Cons.", e.consensus, e.raison_consensus),
-                 v("Réel", e.publie, "pas encore publié", e.publie ? "ag-publie" : null));
+  const v = (lib, x, raison, cls, champ) => {
+    const s = el("span", cls || null, `${lib} ${virgule(x) ?? "n/d"}`);
+    if (x == null && raison) s.title = raison;
+    else if (x != null) certifier(s, { libelle: `${e.evenement} (${e.devise}) · ${lib}`, valeur: virgule(x),
+                                       source: e.sources_champs?.[champ] || e.source, date: e.date_paris });
+    return s;
+  };
+  valeurs.append(v("Préc.", e.precedent, e.raison_precedent, null, "precedent"), v("Cons.", e.consensus, e.raison_consensus, null, "consensus"),
+                 v("Réel", e.publie, "pas encore publié", e.publie ? "ag-publie" : null, "publie"));
   const cr = el("span", "ag-rebours tabulaire", rebours(e.iso_utc)); cr.dataset.iso = e.iso_utc;
   const liens = el("div", "ag-liens");
   liens.appendChild(cr);

@@ -1,6 +1,6 @@
 /* Dossiers chiffrés des 8 engrenages (docs/data/dossiers.json) : calcul Python quotidien, sans LLM.
    Tableaux + deux graphiques SVG par engrenage (série 90 jours, comparaison en barres), sans bibliothèque. */
-import { chargerJson, enErreur, el, dateCourte, dateHeure, ouvrirDetail, listeDefinitions, DRAPEAUX } from "./commun.js";
+import { chargerJson, enErreur, el, dateCourte, dateHeure, ouvrirDetail, listeDefinitions, certifier, DRAPEAUX } from "./commun.js";
 import { detailEngrenage } from "./dossier_detail.js";
 
 const nombre = (v, dec = 2) => v === null || v === undefined ? "—" :
@@ -406,6 +406,8 @@ function tuileChiffre(t) {
   tete.appendChild(info); c.appendChild(tete);
   const v = el("div", "tk-valeur tabulaire", t.texte ?? "n/d");
   if (t.texte === null || t.texte === undefined) v.classList.add("tk-nd");
+  else certifier(v, { libelle: t.libelle, valeur: t.texte, source: t.source, date: String(t.date || "").length > 7 ? t.date : null,
+                      indicateur: t.indicateur || t.id });
   c.appendChild(v);
   const val = t.variation?.valeur;
   c.appendChild(el("div", `tk-var tabulaire ${val > 0 ? "pos" : val < 0 ? "neg" : ""}`, t.variation ? t.variation.texte : "variation n/d"));

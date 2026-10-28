@@ -39,7 +39,7 @@ from dotenv import load_dotenv
 from agents import (agent_consequences, agent_critique, agent_paires, collecte_intraday, agent_dossier_hebdo, agent_engrenages, agent_redacteur, agent_strategiste, agent_synthese,
                     collecte_calendrier, collecte_flux, collecte_historiques, collecte_macro, collecte_news,
                     collecte_technique)
-from core import (collecte_cache, controle_qualite, indicateurs, cours, dossiers, evaluation, hebdo, historique_5ans, impact, marche_taux, overrides, precedents,
+from core import (collecte_cache, controle_qualite, sources, indicateurs, cours, dossiers, evaluation, hebdo, historique_5ans, impact, marche_taux, overrides, precedents,
                   publication_web,
                   registre_macro, saisies_manuelles, site_donnees, tableau_macro)
 from core.llm import creer_fournisseur, journal_appels, reinitialiser_journal
@@ -486,6 +486,8 @@ def main() -> int:
     rapport["meta"]["resume_quota"] = ligne_quota(rapport["meta"].get("quota_llm"),
                                                   (rapport.get("synthese_globale") or {}).get("engrenages"))
     _ecrire_resume_run(rapport["meta"]["resume_quota"])
+    # Page « Santé » : registre des sources, fraîcheur, certificats des chiffres (calcul Python, aucune requête de plus)
+    etape("registre des sources (page Santé)", sources.ecrire, RACINE, config, rapport)
     etape("résumé du run : agenda et fraîcheur des données", _ecrire_resume_donnees, RACINE, config)
     appels_run: dict[str, dict] = {}
     for e in rapport["meta"]["appels_llm"]:   # cumul du jour (passages --completer inclus, plafonné)

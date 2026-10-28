@@ -1,5 +1,5 @@
 /* FX Desk — site V1. Lit uniquement docs/data/*.json (produits par le pipeline), aucune clé, aucun appel externe. */
-import { chargerJson, enErreur, el, indisponible, initialiserDetail, dateHeure } from "./commun.js";
+import { chargerJson, enErreur, el, indisponible, initialiserDetail, initialiserCertificats, dateHeure } from "./commun.js";
 import { pageSynthese } from "./synthese.js";
 
 const ONGLETS = {
@@ -13,6 +13,7 @@ const ONGLETS = {
   institutions: { titre: "Institutions", bientot: "Le positionnement des institutions (rapport COT de la CFTC) arrive dans une prochaine version." },
   journal: { titre: "Journal", module: "./journal.js", fonction: "pageJournal" },   // lot V5 : fiches des paires + mes notes (IndexedDB)
   archives: { titre: "Archives", module: "./archives.js", fonction: "pageArchives" },
+  sante: { titre: "Santé des données", module: "./sante.js", fonction: "pageSante" },   // lot V5 : registre des sources, fraîcheur
   apprendre: { titre: "Apprendre", bientot: "Les fiches de formation (concept du jour, glossaire) arrivent dans une prochaine version." },
 };
 
@@ -68,6 +69,7 @@ async function afficher() {
 
 async function initialiser() {
   initialiserDetail();
+  initialiserCertificats();
   document.querySelectorAll(".onglets a").forEach(a => {
     if (ONGLETS[a.dataset.onglet]?.bientot) { a.classList.add("bientot"); a.title = "Bientôt disponible"; }
   });

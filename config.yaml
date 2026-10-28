@@ -561,6 +561,49 @@ agenda:
     "German 10-y Bond Auction": "Allemagne : adjudication d'obligations à 10 ans"
     "Italian 10-y Bond Auction": "Italie : adjudication d'obligations à 10 ans"
     "Spanish 10-y Bond Auction": "Espagne : adjudication d'obligations à 10 ans"
+    "ANZ Commodity Prices m/m": "Prix des matières premières ANZ M/M"
+    "ANZ Job Advertisements m/m": "Offres d'emploi ANZ M/M"
+    "Annual Budget Release": "Présentation du budget annuel"
+    "Autumn Forecast Statement": "Prévisions budgétaires d'automne"
+    "Average Cash Earnings y/y": "Salaires moyens en numéraire A/A"
+    "Building Consents m/m": "Permis de construire M/M"
+    "Commodity Prices y/y": "Prix des matières premières A/A"
+    "Congressional Elections": "Élections au Congrès (mi-mandat)"
+    "Construction PMI": "PMI de la construction"
+    "Construction Spending m/m": "Dépenses de construction M/M"
+    "Consumer Credit m/m": "Crédit à la consommation M/M"
+    "FOMC Financial Stability Report": "Rapport de stabilité financière de la Fed"
+    "Fed Monetary Policy Report": "Rapport de politique monétaire de la Fed"
+    "Foreign Currency Reserves": "Réserves de change"
+    "French Consumer Spending m/m": "France : consommation des ménages M/M"
+    "French Gov Budget Balance": "France : solde budgétaire de l'État"
+    "French Prelim Private Payrolls q/q": "France : emploi salarié privé T/T, prélim."
+    "German GfK Consumer Climate": "Allemagne : climat de consommation GfK"
+    "German ifo Business Climate": "Allemagne : climat des affaires Ifo"
+    "ISM Manufacturing Prices": "ISM manufacturier : prix payés"
+    "Italian Monthly Unemployment Rate": "Italie : taux de chômage mensuel"
+    "KOF Economic Barometer": "Baromètre économique KOF"
+    "Labor Cost Index q/q": "Indice du coût du travail T/T"
+    "Lloyds HPI m/m": "Prix immobiliers Lloyds M/M"
+    "Loan Officer Survey": "Enquête de la Fed auprès des responsables de crédit"
+    "M4 Money Supply m/m": "Masse monétaire M4 M/M"
+    "Monetary Base y/y": "Base monétaire A/A"
+    "Mortgage Approvals": "Accords de prêts immobiliers"
+    "Net Lending to Individuals m/m": "Prêts nets aux particuliers M/M"
+    "Omdia Total Vehicle Sales": "Ventes totales de véhicules (Omdia)"
+    "Parliamentary Elections": "Élections législatives"
+    "Prelim Nonfarm Productivity q/q": "Productivité non agricole T/T, prélim."
+    "Prelim Unit Labor Costs q/q": "Coûts salariaux unitaires T/T, prélim."
+    "Prelim Wholesale Inventories m/m": "Stocks des grossistes M/M, prélim."
+    "Private Sector Credit m/m": "Crédit au secteur privé M/M"
+    "RCM/TIPP Economic Optimism": "Optimisme économique RCM/TIPP"
+    "RatingDog Manufacturing PMI": "PMI manufacturier RatingDog"
+    "RatingDog Services PMI": "PMI des services RatingDog"
+    "S&P/CS Composite-20 HPI y/y": "Prix immobiliers S&P/Case-Shiller (20 villes) A/A"
+    "SECO Consumer Climate": "Climat de consommation SECO"
+    "SPPI y/y": "Prix des services aux entreprises A/A"
+    "Treasury Currency Report": "Rapport du Trésor américain sur les changes"
+    "UBS Economic Expectations": "Anticipations économiques UBS"
   prefixes:
     "German ": "Allemagne : "
     "French ": "France : "
@@ -663,6 +706,7 @@ agenda:
     "BOC Gov": "gouverneur de la BoC"
     "BOC Deputy Gov": "sous-gouverneur de la BoC"
     "Gov Council Member": "membre du conseil de direction (BoC)"
+    "Gov Board Member": "membre de la direction générale (BNS)"
     "RBA Gov": "gouverneure de la RBA"
     "RBA Deputy Gov": "sous-gouverneur de la RBA"
     "RBA Assist Gov": "gouverneur adjoint de la RBA"
@@ -920,18 +964,81 @@ scraping:
   user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
   sites:
     forexfactory:    { url: "https://nfs.faireconomy.media/ff_calendar_thisweek.json", type: json, actif: true }
-    tradingview:     { url: "https://www.tradingview.com/markets/currencies/cross-rates-overview-heat-map/", type: html, actif: true }
-    mataf:           { url: "https://www.mataf.net/fr/forex/tools/correlation", type: html, actif: true }
+    tradingview:     { url: "https://www.tradingview.com/markets/currencies/cross-rates-overview-heat-map/", type: html, actif: false }
+    mataf:           { url: "https://www.mataf.net/fr/forex/tools/correlation", type: html, actif: false }
     # Sources news / géopolitique / décisions économiques (état du monde) :
-    financialjuice:  { url: "https://www.financialjuice.com/home", type: html, actif: true,
+    financialjuice:  { url: "https://www.financialjuice.com/home", type: html, actif: false,
                        selecteurs: '[class*="headline"]' }
-    finviz:          { url: "https://finviz.com/", type: html, actif: true,
+    finviz:          { url: "https://finviz.com/", type: html, actif: false,
                        selecteurs: "a.nn-tab-link, a.tab-link-nw" }
-    financialsource: { url: "https://financialsource.co/", type: html, actif: true }
+    financialsource: { url: "https://financialsource.co/", type: html, actif: false }
 
 rss:
   cnbc_world:    "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100727362"
   investinglive: "https://www.forexlive.com/feed/news"   # InvestingLive (ex-ForexLive)
+  # Communiqués officiels des banques centrales (lot V5) : remplacent les extractions HTML de Finviz,
+  # FinancialJuice, FinancialSource et TradingView (flux vérifiés le 24/10/2026, réponse 200)
+  fed_communiques: "https://www.federalreserve.gov/feeds/press_all.xml"
+  bce_communiques: "https://www.ecb.europa.eu/rss/press.html"
+  boe_actualites:  "https://www.bankofengland.co.uk/rss/news"
+  boc_communiques: "https://www.bankofcanada.ca/content_type/press-releases/feed/"
+
+# --- Registre des sources (lot V5, page « Santé ») ----------------------------------------------
+# statut : officielle | api (API sous licence gratuite) | flux (flux public) | extraction (extraction de page)
+# frequence : quotidienne (jours ouvrés) | hebdomadaire | mensuelle | trimestrielle | annuelle | collecte (date de la collecte)
+# retard_jours : délai normal entre la période de la donnée et sa publication (ex. OCDE mensuel : ~45 j).
+# Fraîcheur : verte jusqu'à 2 fois la normale (fréquence + retard), orange au-delà, rouge au-delà de 4 fois ou sans date.
+# mesure : où lire la date de la dernière donnée (historique 5 ans, cache de collecte, registre, config).
+# motifs : mots repérés dans le libellé « source » d'un chiffre du site, pour son certificat.
+sources:
+  - { id: fred, nom: "FRED / ALFRED (Fed de St. Louis)", statut: officielle, frequence: quotidienne, retard_jours: 2,
+      alimente: "Taux US, VIX, S&P 500, pétrole, indice dollar large, CPI, PIB, millésimes ALFRED du simulateur",
+      mesure: { historique: [USD_2a, USD_10a, vix, sp500, wti, brent] }, motifs: ["FRED", "ALFRED"] }
+  - { id: fed_h10, nom: "Fed H.10 (via FRED)", statut: officielle, frequence: hebdomadaire, retard_jours: 3,
+      alimente: "Indice dollar large, cours de référence des 8 devises face au dollar", mesure: { historique: [dollar_large, FX_EUR] },
+      motifs: ["H.10", "DTWEXBGS"] }
+  - { id: ocde_fmi, nom: "OCDE et FMI (via FRED)", statut: officielle, frequence: mensuelle, retard_jours: 45,
+      alimente: "Taux longs mensuels, chômage hors États-Unis, dette et solde publics", mesure: { historique: [DEU_10a_mensuel, GBP_chomage] },
+      motifs: ["OCDE", "FMI"] }
+  - { id: cftc, nom: "CFTC · rapport COT", statut: officielle, frequence: hebdomadaire, retard_jours: 3,
+      alimente: "Positionnement spéculatif (engrenage 7)", mesure: { flux: cot }, motifs: ["CFTC", "COT"] }
+  - { id: eia, nom: "EIA (département de l'Énergie)", statut: officielle, frequence: hebdomadaire, retard_jours: 5,
+      alimente: "Stocks et production de brut (engrenage 8)", mesure: { historique: [eia_stocks] }, motifs: ["EIA"] }
+  - { id: banques_centrales, nom: "Bundesbank · BoE · BoJ · MoF Japon · Banque du Canada", statut: officielle, frequence: quotidienne, retard_jours: 2,
+      alimente: "Taux souverains 2 et 10 ans, taux effectifs (SONIA, call rate)",
+      mesure: { historique: [EUR_2a, GBP_10a, JPY_taux_effectif, CAD_2a] },
+      motifs: ["Bundesbank", "Banque d'Angleterre", "Banque du Japon", "Ministère des Finances du Japon", "Banque du Canada"] }
+  - { id: calendriers_officiels, nom: "Calendriers officiels des 9 banques centrales", statut: officielle, frequence: annuelle, retard_jours: 0,
+      alimente: "Agenda : dates des réunions (date de vérification)", mesure: { config_reunions: true }, motifs: ["calendrier officiel", "Calendrier FOMC"] }
+  - { id: fred_calendrier, nom: "FRED releases/dates", statut: officielle, frequence: collecte, retard_jours: 0,
+      alimente: "Agenda : dates des publications US", mesure: { cache: agenda_fred }, motifs: ["FRED releases/dates"] }
+  - { id: twelve_data, nom: "Twelve Data", statut: api, frequence: quotidienne, retard_jours: 1,
+      alimente: "Cours des paires, RSI et moyennes mobiles, bougies 30 min / 4 h (Mes paires), ETF obligataire",
+      mesure: { historique: [oblig_us_tlt], cache: technique }, motifs: ["Twelve Data"] }
+  - { id: gemini, nom: "Gemini (rédaction seulement)", statut: api, frequence: collecte, retard_jours: 0,
+      alimente: "Textes : jamais un chiffre, une direction ni un seuil", mesure: { quota: true }, motifs: ["modèle", "Gemini"] }
+  - { id: rss, nom: "Flux RSS (CNBC, InvestingLive, communiqués Fed / BCE / BoE / BoC)", statut: flux, frequence: collecte, retard_jours: 0,
+      alimente: "Titres du jour (engrenage 6), communiqués officiels", mesure: { news: true }, motifs: ["RSS", "flux RSS"] }
+  - { id: ff_flux, nom: "ForexFactory · flux public JSON de la semaine", statut: flux, frequence: collecte, retard_jours: 0,
+      alimente: "Agenda : consensus et heures de la semaine en cours", mesure: { cache_scrape: forexfactory }, motifs: ["flux public JSON"] }
+  - { id: ff_mois, nom: "ForexFactory · page « mois »", statut: extraction, frequence: collecte, retard_jours: 0,
+      alimente: "Tableau macro et agenda : valeur publiée, consensus et précédent des 9 devises",
+      mesure: { budget_ff: true }, motifs: ["page « mois »", "registre macro", "ForexFactory"],
+      a_remplacer: true,
+      remplacement: "Gardée : seule source gratuite de la valeur publiée ET du consensus pour les 9 devises (les flux publics n'ont pas la valeur publiée, vérifié le 06/10/2026). FRED/ALFRED couvre déjà les publications US ; pour les 8 autres devises, aucun équivalent licite gratuit trouvé. Plafond de 6 requêtes par jour, robots.txt respecté." }
+  # Extractions HTML retirées le 24/10/2026 (lot V5) : apport faible, remplacées par des flux licites
+  - { id: tradingview, nom: "TradingView (page heat map)", statut: extraction, frequence: collecte, retard_jours: 0, retiree: true,
+      alimente: "Rien d'exploitable : page rendue en JavaScript, 0 titre extrait", mesure: { cache_scrape: tradingview }, motifs: [],
+      remplacement: "Supprimée : les cours croisés viennent déjà de Twelve Data et de la Fed H.10." }
+  - { id: finviz, nom: "Finviz (page d'accueil)", statut: extraction, frequence: collecte, retard_jours: 0, retiree: true,
+      alimente: "Quelques titres de presse américains et des libellés techniques sans valeur", mesure: { cache_scrape: finviz }, motifs: [],
+      remplacement: "Remplacée par les flux RSS officiels (communiqués Fed, BCE, BoE, BoC) et les flux RSS CNBC / InvestingLive." }
+  - { id: financialjuice, nom: "FinancialJuice (page d'accueil)", statut: extraction, frequence: collecte, retard_jours: 0, retiree: true,
+      alimente: "Rien d'exploitable : 0 titre extrait (contenu chargé en JavaScript)", mesure: { cache_scrape: financialjuice }, motifs: [],
+      remplacement: "Supprimée : les flux RSS couvrent les titres du jour." }
+  - { id: financialsource, nom: "FinancialSource (page d'accueil)", statut: extraction, frequence: collecte, retard_jours: 0, retiree: true,
+      alimente: "Titres de cours en ligne (publicité), aucune information de marché", mesure: { cache_scrape: financialsource }, motifs: [],
+      remplacement: "Supprimée : apport nul pour l'analyse." }
 
 notion:
   actif: true

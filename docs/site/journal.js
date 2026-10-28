@@ -1,7 +1,7 @@
 /* Espace Journal (lot V5, étape 7). Colonne gauche : fiche d'analyse de la paire (docs/data/paires.json, calcul Python)
    et graphiques. Colonne droite : mes notes, stockées dans le navigateur (IndexedDB), sans serveur ni clé ; export / import
    JSON (images intégrées) pour la sauvegarde et le transfert. Le biais personnel reste MA lecture, jamais un ordre. */
-import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, ouvrirDetail } from "./commun.js";
+import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, ouvrirDetail, certifier } from "./commun.js";
 import { graphiqueSerie, dessinerReperes } from "./dossiers.js";
 
 const SVG = "http://www.w3.org/2000/svg";
@@ -160,9 +160,11 @@ function graphiques(f, mes) {
   return c;
 }
 
-function tuile(libelle, valeur, detail, lien) {
+function tuile(libelle, valeur, detail, lien, cert) {
   const t = el("div", "jn-tuile");
-  t.append(el("span", "jn-t-lib", libelle), el("b", "jn-t-val tabulaire", valeur));
+  const b = el("b", "jn-t-val tabulaire", valeur);
+  if (cert && valeur !== "n/d") certifier(b, { libelle, valeur, ...cert });
+  t.append(el("span", "jn-t-lib", libelle), b);
   if (detail) t.appendChild(el("span", "jn-t-detail", detail));
   if (lien) { const a = el("a", "jn-t-lien", lien[0]); a.href = lien[1]; t.appendChild(a); }
   return t;
@@ -176,7 +178,7 @@ function tuiles(f) {
     `${f.base} ${taux(p.base)} · ${f.cotation} ${taux(p.cotation)}`));
   g.appendChild(tuile("Surprises macro 30 j", `${signe(m.surprises?.[f.base])} / ${signe(m.surprises?.[f.cotation])}`, `${f.base} / ${f.cotation}`));
   g.appendChild(tuile("RSI 14 · MM200", t.raison ? "n/d" : `${String(t.rsi14 ?? "n/d").replace(".", ",")} · ${t.ecart_mm200 == null ? "n/d" : `${signe(t.ecart_mm200)} %`}`,
-    t.raison ? t.raison : "série journalière, écart à la moyenne 200 j"));
+    t.raison ? t.raison : "série journalière, écart à la moyenne 200 j", null, { source: t.source, date: t.date }));
   const evts = (m.evenements || []).slice(0, 2);
   g.appendChild(tuile("Prochains évènements", evts.length ? evts.map(e => `${e.devise} ${dateCourte(e.date_paris).slice(0, 5)}`).join(" · ") : "aucun",
     evts.length ? evts.map(e => e.evenement).join(" · ") : "rien de fort ou moyen au calendrier", ["voir l'Agenda", "#agenda"]));

@@ -1,5 +1,5 @@
 /* Onglet Tableau macro : docs/data/tableau_macro.json, regroupé par devise, tri et recherche. */
-import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, ouvrirDetail, listeDefinitions, DRAPEAUX } from "./commun.js";
+import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, ouvrirDetail, listeDefinitions, certifier, DRAPEAUX } from "./commun.js";
 
 const COLONNES = [
   { cle: "libelle", titre: "Indicateur" }, { cle: "Actuel", titre: "Actuel" }, { cle: "Précédent", titre: "Précédent" },
@@ -77,7 +77,10 @@ export async function pageTableau() {
           const td = el("td", col.cle === "source" ? "source-cellule" : null);
           if (["Actuel", "Précédent", "Prévision"].includes(col.cle) && l.etat?.[col.cle] !== "valeur") {
             td.appendChild(el("span", "nd", v || "n/d"));
-          } else td.textContent = v ?? "—";
+          } else {
+            td.textContent = v ?? "—";
+            if (col.cle === "Actuel" && v) certifier(td, { libelle: `${l.libelle} ${l.devise}`, valeur: v, source: l.source, date: l.date_pub });
+          }
           if (l.manuel?.[col.cle]) td.appendChild(el("span", "manuel", "✍"));
           tr.appendChild(td);
         }

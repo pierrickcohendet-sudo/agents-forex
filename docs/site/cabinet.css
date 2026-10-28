@@ -1113,3 +1113,49 @@ details.ck-vignette[open] > summary { margin-bottom: 10px; }
 .jn-biais label:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
 .jn-depot-titre { font-weight: 700; color: var(--texte) !important; font-size: 15px !important; }
 .sc-seg button:disabled { opacity: .45; cursor: not-allowed; }
+
+/* Certificat d'un chiffre (composant partagé, lot V5 page Santé) */
+.cert { text-decoration: underline dotted color-mix(in srgb, var(--texte-2) 60%, transparent); text-underline-offset: 3px; cursor: help; }
+.cert.cert-orange { color: var(--alerte); text-decoration-color: var(--alerte); }
+.cert.cert-rouge { color: var(--negatif); text-decoration-color: var(--negatif); }
+.cert-bulle { position: absolute; z-index: 50; max-width: min(360px, calc(100vw - 16px)); padding: 12px 14px; display: grid; gap: 4px;
+  background: var(--carte); color: var(--texte); border: 1px solid var(--trait); border-radius: var(--rayon);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .25); font-size: 13px; line-height: 1.4; pointer-events: none; }
+.cert-bulle[hidden] { display: none; }
+.cert-bulle p { margin: 0; }
+.cert-tete { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.cert-tete b { font: 700 15px var(--serif); }
+.cert-statut { font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: var(--rayon); border: 1px solid currentColor; color: var(--positif); white-space: nowrap; }
+.cert-statut.api, .cert-statut.flux { color: var(--accent); } .cert-statut.extraction { color: var(--alerte); }
+.cert-age.vert { color: var(--positif); } .cert-age.orange { color: var(--alerte); } .cert-age.rouge { color: var(--negatif); }
+@media print { .cert { text-decoration: none; } .cert-bulle { display: none !important; } }
+
+/* ---------------------------------------------------------------- santé des données (lot V5, étape 7-bis) */
+.sa-compteurs { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin: 10px 0; }
+.sa-compteur { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; background: var(--carte-2); border-radius: var(--rayon); border-top: 3px solid var(--neutre); }
+.sa-compteur b { font: 700 26px var(--serif); }
+.sa-compteur span { font-size: 13px; color: var(--texte-2); }
+.sa-compteur.officielle { border-top-color: var(--positif); } .sa-compteur.api, .sa-compteur.flux { border-top-color: var(--accent); }
+.sa-compteur.extraction { border-top-color: var(--alerte); }
+.sa-alertes ul { margin: 6px 0 0; padding-left: 20px; }
+.sa-table td { text-align: left; white-space: normal; vertical-align: top; }
+.sa-table th { text-align: left; }
+.sa-nom { min-width: 180px; } .sa-alimente { min-width: 220px; color: var(--texte-2); }
+.sa-puce { display: inline-block; margin: 2px 6px 2px 0; font-size: 11.5px; font-weight: 700; padding: 1px 7px; border-radius: var(--rayon); border: 1px solid currentColor; white-space: nowrap; }
+.sa-puce.officielle { color: var(--positif); } .sa-puce.api, .sa-puce.flux { color: var(--accent); }
+.sa-puce.extraction { color: var(--alerte); } .sa-puce.retiree { color: var(--texte-2); }
+.sa-frais b { margin-right: 4px; }
+.sa-frais.vert b, td.sa-frais.vert { color: var(--positif); } .sa-frais.orange b, td.sa-frais.orange { color: var(--alerte); }
+.sa-frais.rouge b, td.sa-frais.rouge { color: var(--negatif); }
+.sa-exemple { max-width: 420px; padding: 12px 14px; margin-bottom: 12px; display: grid; gap: 3px; background: var(--carte-2); border: 1px solid var(--trait); border-radius: var(--rayon); font-size: 14px; }
+.sa-exemple p { margin: 0; }
+.sa-ex-tete { font: 700 20px var(--serif); }
+.sa-liste, .sa-niveaux { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.sa-liste li { padding: 10px 12px; background: var(--carte-2); border-radius: var(--rayon); }
+.sa-liste p { margin: 4px 0 0; font-size: 14px; }
+.sa-niveaux li { display: flex; gap: 12px; align-items: baseline; padding: 10px 12px; background: var(--carte-2); border-radius: var(--rayon); font-size: 15px; }
+.sa-niveau { flex: 0 0 auto; min-width: 86px; text-align: center; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: var(--rayon); }
+.sa-niveau.mesure { background: color-mix(in srgb, var(--positif) 20%, var(--carte)); }
+.sa-niveau.historique { background: color-mix(in srgb, var(--accent) 20%, var(--carte)); }
+.sa-niveau.lecture { background: color-mix(in srgb, var(--alerte) 22%, var(--carte)); }
+.sa-niveau.jamais { background: color-mix(in srgb, var(--negatif) 22%, var(--carte)); }
