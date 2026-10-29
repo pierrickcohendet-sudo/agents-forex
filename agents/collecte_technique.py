@@ -18,6 +18,7 @@ import time
 import pandas as pd
 import requests
 
+from core import quota_twelve
 from core.secrets import masquer_secrets
 
 log = logging.getLogger(__name__)
@@ -26,6 +27,7 @@ URL_TWELVE = "https://api.twelvedata.com/time_series"
 
 
 def _ohlc(paire: str, intervalle: str, taille: int, cle: str) -> pd.DataFrame:
+    quota_twelve.consommer(1, "technique")   # plafond du jour et 8 par minute (compteur partagé)
     rep = requests.get(URL_TWELVE, params={
         "symbol": paire, "interval": intervalle, "outputsize": taille,
         "apikey": cle, "timezone": "UTC",
@@ -133,7 +135,7 @@ def collecter(config: dict) -> dict:
             time.sleep(pause)
             df_w = _ohlc(paire, "1week", 120, cle)
             time.sleep(pause)
-        except (requests.RequestException, RuntimeError) as exc:
+        except (requests.RequestException, RuntimeError) as exc:   # QuotaTwelveAtteint compris (RuntimeError)
             erreur = masquer_secrets(str(exc))
             resultat["erreurs"].append(f"{devise} ({paire}) : {erreur}")
             log.error("Collecte technique %s en échec : %s", devise, erreur)

@@ -26,6 +26,16 @@ def _hote(adresse):
 
 
 @pytest.fixture(autouse=True)
+def _quota_twelve_temporaire(tmp_path, monkeypatch):
+    """Le compteur Twelve Data des tests écrit dans un dossier temporaire, jamais dans data/cache."""
+    from core import quota_twelve
+    monkeypatch.setattr(quota_twelve, "CHEMIN", tmp_path / "quota_twelve.json")
+    monkeypatch.setattr(quota_twelve, "PAR_MINUTE", 10 ** 6)   # pas de pause réelle dans les tests (testée à part)
+    quota_twelve._minute.clear()
+    yield
+
+
+@pytest.fixture(autouse=True)
 def _bloquer_reseau(request, monkeypatch):
     if request.node.get_closest_marker("reseau"):
         yield

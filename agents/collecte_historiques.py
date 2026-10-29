@@ -161,6 +161,8 @@ def _boj(code: str, debut: date) -> list[tuple[str, float]]:
 def _twelve(symbole: str, debut: date, cle: str) -> list[tuple[str, float]]:
     """Clôtures quotidiennes Twelve Data (une requête), ex. TLT : ETF d'obligations d'État US à long terme."""
     jours = (date.today() - debut).days
+    from core import quota_twelve
+    quota_twelve.consommer(1, "historiques")
     rep = _get("https://api.twelvedata.com/time_series", symbol=symbole, interval="1day",
                outputsize=min(5000, int(jours * 5 / 7) + 20), apikey=cle)
     donnees = rep.json()

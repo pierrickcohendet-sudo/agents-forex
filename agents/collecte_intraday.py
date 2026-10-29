@@ -26,6 +26,8 @@ PAUSE_S = 8.0
 
 
 def _bougies(paire: str, intervalle: str, taille: int, cle: str) -> list[list]:
+    from core import quota_twelve
+    quota_twelve.consommer(1, "chandeliers")
     rep = requests.get(URL, params={"symbol": paire, "interval": intervalle, "outputsize": taille, "apikey": cle,
                                     "timezone": "UTC"}, timeout=60)
     rep.raise_for_status()
