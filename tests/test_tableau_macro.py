@@ -640,6 +640,16 @@ class RendementsObligataires(unittest.TestCase):
             self.assertEqual(mt.lire_mof("2Y")[0], ("2026-09-30", 1.952))
             self.assertEqual(mt.lire_mof("10Y")[0], ("2026-09-30", 3.057))
 
+    def test_mof_historique_mensuel_plus_fichier_du_mois_en_cours(self):
+        # Alerte de fraîcheur du 29/10/2026 : l'historique s'arrêtait au 30/09 ; le fichier du mois porte le quotidien
+        historique = "Date,2Y,10Y\n2026/9/29,1.9,3.0\n2026/9/30,1.952,3.057\n"
+        mois = "Interest Rate (October 2026),,(Unit : %)\nDate,2Y,10Y\n2026/10/27,1.888,2.829\n2026/10/28,1.915,2.867\n,,\n"
+        reponses = lambda url, **k: mock.Mock(content=(mois if url == mt.URL_MOF_MOIS else historique).encode())
+        with mock.patch.object(mt, "_get", side_effect=reponses):
+            pts = mt.lire_mof("2Y")
+        self.assertEqual(pts[0], ("2026-10-28", 1.915))
+        self.assertEqual(pts[-1], ("2026-09-29", 1.9))
+
     def test_parseur_boc_valet(self):
         js = {"observations": [{"d": "2026-10-02", "BD.CDN.2YR.DQ.YLD": {"v": "3.25"}},
                                {"d": "2026-10-05", "BD.CDN.2YR.DQ.YLD": {"v": "3.26"}}]}

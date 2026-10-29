@@ -77,20 +77,35 @@ def lire_boe(code: str) -> list[tuple[str, float]]:
     return sorted(points, reverse=True)
 
 
-def lire_mof(colonne: str) -> list[tuple[str, float]]:
-    rep = _get("https://www.mof.go.jp/english/policy/jgbs/reference/interest_rate/historical/jgbcme_all.csv")
-    lignes = list(csv.reader(io.StringIO(rep.content.decode("utf-8", "replace"))))
+# Ministère des Finances du Japon : le fichier historique n'est mis à jour qu'une fois par mois ; le fichier du mois en
+# cours porte les cotations quotidiennes (alerte de fraîcheur du 29/10/2026 : JGB figés au 30/09). On lit les deux.
+URL_MOF_HISTORIQUE = "https://www.mof.go.jp/english/policy/jgbs/reference/interest_rate/historical/jgbcme_all.csv"
+URL_MOF_MOIS = "https://www.mof.go.jp/english/policy/jgbs/reference/interest_rate/jgbcme.csv"
+
+
+def points_mof(texte: str, colonne: str) -> list[tuple[str, float]]:
+    """Lignes « AAAA/M/J,… » d'un CSV du ministère -> [(date ISO, valeur)] ; « - » ou vide : pas de cotation."""
+    lignes = list(csv.reader(io.StringIO(texte)))
     entete_i = next(i for i, l in enumerate(lignes) if l and l[0].strip() == "Date")
     index = [c.strip() for c in lignes[entete_i]].index(colonne)
     points = []
-    for l in lignes[-30:]:
+    for l in lignes[entete_i + 1:]:
         if len(l) > index and re.match(r"^\d{4}/\d{1,2}/\d{1,2}$", l[0].strip()):
             try:
                 a, m, j = (int(x) for x in l[0].strip().split("/"))
                 points.append((f"{a:04d}-{m:02d}-{j:02d}", float(l[index])))
             except ValueError:
-                continue  # « - » : pas de cotation ce jour-là
-    return sorted(points, reverse=True)
+                continue
+    return points
+
+
+def lire_mof(colonne: str) -> list[tuple[str, float]]:
+    fusion = dict(points_mof(_get(URL_MOF_HISTORIQUE).content.decode("utf-8", "replace"), colonne)[-30:])
+    try:   # mois en cours : cotations quotidiennes ; en cas d'échec, l'historique seul (raison dans le journal)
+        fusion.update(points_mof(_get(URL_MOF_MOIS).content.decode("utf-8", "replace"), colonne))
+    except Exception as exc:  # noqa: BLE001
+        log.warning("MoF Japon : fichier du mois en cours illisible (%s), historique seul", exc)
+    return sorted(fusion.items(), reverse=True)
 
 
 def lire_boc(serie: str) -> list[tuple[str, float]]:

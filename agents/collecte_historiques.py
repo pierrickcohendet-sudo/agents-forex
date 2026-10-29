@@ -114,21 +114,14 @@ def _bundesbank(code: str, debut: date) -> list[tuple[str, float]]:
 
 
 def _mof(colonne: str, debut: date) -> list[tuple[str, float]]:
-    rep = _get("https://www.mof.go.jp/english/policy/jgbs/reference/interest_rate/historical/jgbcme_all.csv")
-    lignes = list(csv.reader(io.StringIO(rep.content.decode("utf-8", "replace"))))
-    entete = next(i for i, l in enumerate(lignes) if l and l[0].strip() == "Date")
-    index = [c.strip() for c in lignes[entete]].index(colonne)
-    points = []
-    for l in lignes[entete + 1:]:
-        if len(l) > index and re.match(r"^\d{4}/\d{1,2}/\d{1,2}$", l[0].strip()):
-            try:
-                a, m, j = (int(x) for x in l[0].strip().split("/"))
-                d = date(a, m, j)
-                if d >= debut:
-                    points.append((d.isoformat(), float(l[index])))
-            except ValueError:
-                continue
-    return sorted(points)
+    """Historique (mis à jour une fois par mois) + fichier du mois en cours (cotations quotidiennes)."""
+    from core.marche_taux import URL_MOF_HISTORIQUE, URL_MOF_MOIS, points_mof
+    fusion = dict(points_mof(_get(URL_MOF_HISTORIQUE).content.decode("utf-8", "replace"), colonne))
+    try:
+        fusion.update(points_mof(_get(URL_MOF_MOIS).content.decode("utf-8", "replace"), colonne))
+    except Exception as exc:  # noqa: BLE001
+        log.warning("MoF Japon : fichier du mois en cours illisible (%s), historique seul", exc)
+    return sorted((d, v) for d, v in fusion.items() if d >= debut.isoformat())
 
 
 def _boc(serie: str, debut: date) -> list[tuple[str, float]]:
