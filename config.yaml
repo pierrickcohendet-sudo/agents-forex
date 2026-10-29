@@ -123,6 +123,10 @@ tableau_macro:
   ancienne_database_id: "663661d2dd3d42fb808b397caa79ea87"
   ordre_devises: [USD, EUR, GBP, JPY, CHF, CAD, AUD, NZD, CNY]
   forexfactory:
+    # Licéité (lot Verrouillage) : extraction de page gardée tant qu'aucune source licite gratuite ne donne la valeur
+    # publiée ET le consensus des 9 devises ; false = plus aucune extraction, registre nourri par les sources
+    # officielles (publications_officielles, FRED) et le flux public JSON de la semaine.
+    page_mois: true
     url: "https://www.forexfactory.com/calendar?month=this"
     url_mois: "https://www.forexfactory.com/calendar?month={mois}"
     # Plafond TOTAL de requêtes sur la page « mois » par jour (UTC), tous motifs
@@ -360,6 +364,25 @@ tableau_macro:
       AUD: { ff: [{ id: 122, nom: "Goods Trade Balance" }], etiquette: "biens" }
       NZD: { ff: [{ id: 121, nom: "Trade Balance" }] }
       CNY: { ff: [{ id: 630, nom: "Trade Balance" }] }
+
+# --- Valeurs publiées par les instituts officiels (lot Verrouillage, licéité) ------------------
+# API publiques sans clé, une requête par série et par jour. Confirment la valeur ForexFactory de la même publication,
+# la remplacent si elle manque, signalent un écart. Non couverts ici, avec la raison : JPY (e-Stat exige une clé),
+# NZD (Stats NZ exige une clé), AUD (API de l'ABS injoignable le 29/10/2026), CHF (pas d'API simple de l'OFS pour ces
+# séries), CNY (pas d'API officielle du NBS), PMI (données propriétaires S&P Global / ISM : aucune source libre).
+publications_officielles:
+  actif: true
+  series:
+    - { devise: GBP, indicateur: cpi, source: ons, chemin: "economy/inflationandpriceindices/timeseries/d7g7/mm23", libelle: "ONS (D7G7, IPC sur un an)" }
+    - { devise: GBP, indicateur: cpi_core, source: ons, chemin: "economy/inflationandpriceindices/timeseries/dko8/mm23", libelle: "ONS (DKO8, IPC sous-jacent sur un an)" }
+    - { devise: GBP, indicateur: chomage, source: ons, chemin: "employmentandlabourmarket/peoplenotinwork/unemployment/timeseries/mgsx/lms", libelle: "ONS (MGSX, taux de chômage)" }
+    - { devise: GBP, indicateur: pib, source: ons, chemin: "economy/grossdomesticproductgdp/timeseries/ihyq/qna", libelle: "ONS (IHYQ, PIB T/T)" }
+    - { devise: CAD, indicateur: cpi, source: statcan, vecteur: 41690973, calcul: mm, libelle: "Statistique Canada (IPC, vecteur 41690973, M/M)" }
+    - { devise: CAD, indicateur: chomage, source: statcan, vecteur: 2062815, libelle: "Statistique Canada (EPA, taux de chômage, vecteur 2062815)" }
+    - { devise: CAD, indicateur: pib, source: statcan, vecteur: 65201210, calcul: mm, libelle: "Statistique Canada (PIB mensuel, vecteur 65201210, M/M)" }
+    - { devise: EUR, indicateur: cpi, source: eurostat, jeu: prc_hicp_minr, filtres: { geo: EA, unit: RCH_A, coicop18: TOTAL }, libelle: "Eurostat (IPCH zone euro, taux annuel)" }
+    - { devise: EUR, indicateur: chomage, source: eurostat, jeu: une_rt_m, filtres: { geo: EA21, s_adj: SA, age: TOTAL, sex: T, unit: PC_ACT }, libelle: "Eurostat (chômage zone euro)" }
+    - { devise: EUR, indicateur: pib, source: eurostat, jeu: namq_10_gdp, filtres: { geo: EA21, unit: CLV_PCH_PRE, s_adj: SCA, na_item: B1GQ }, libelle: "Eurostat (PIB zone euro, T/T)" }
 
 # --- Contrôle qualité ---------------------------------------------------------
 controle_qualite:
@@ -1023,11 +1046,14 @@ sources:
       alimente: "Titres du jour (engrenage 6), communiqués officiels", mesure: { news: true }, motifs: ["RSS", "flux RSS"] }
   - { id: ff_flux, nom: "ForexFactory · flux public JSON de la semaine", statut: flux, frequence: collecte, retard_jours: 0,
       alimente: "Agenda : consensus et heures de la semaine en cours", mesure: { cache_scrape: forexfactory }, motifs: ["flux public JSON"] }
+  - { id: officielles, nom: "Instituts officiels : ONS, Statistique Canada, Eurostat", statut: officielle, frequence: mensuelle, retard_jours: 30,
+      alimente: "Valeur publiée (IPC, chômage, PIB) de GBP, CAD, EUR : confirme ou remplace ForexFactory",
+      mesure: { cache: officielles }, motifs: ["ONS", "Statistique Canada", "Eurostat"] }
   - { id: ff_mois, nom: "ForexFactory · page « mois »", statut: extraction, frequence: collecte, retard_jours: 0,
       alimente: "Tableau macro et agenda : valeur publiée, consensus et précédent des 9 devises",
       mesure: { budget_ff: true }, motifs: ["page « mois »", "registre macro", "ForexFactory"],
       a_remplacer: true,
-      remplacement: "Gardée : seule source gratuite de la valeur publiée ET du consensus pour les 9 devises (les flux publics n'ont pas la valeur publiée, vérifié le 06/10/2026). FRED/ALFRED couvre déjà les publications US ; pour les 8 autres devises, aucun équivalent licite gratuit trouvé. Plafond de 6 requêtes par jour, robots.txt respecté." }
+      remplacement: "Remplacée en partie : la valeur publiée de GBP, CAD et EUR (IPC, chômage, PIB) vient des instituts officiels (ONS, Statistique Canada, Eurostat) qui confirment ForexFactory, USD par FRED/ALFRED, le consensus par le flux public JSON. Gardée pour le reste, faute de source licite gratuite : JPY et NZD (API à clé), AUD (API de l'ABS injoignable), CHF et CNY (pas d'API), PMI (données propriétaires). Interrupteur tableau_macro.forexfactory.page_mois pour la couper. Plafond de 6 requêtes par jour, robots.txt respecté." }
   # Extractions HTML retirées le 24/10/2026 (lot V5) : apport faible, remplacées par des flux licites
   - { id: tradingview, nom: "TradingView (page heat map)", statut: extraction, frequence: collecte, retard_jours: 0, retiree: true,
       alimente: "Rien d'exploitable : page rendue en JavaScript, 0 titre extrait", mesure: { cache_scrape: tradingview }, motifs: [],

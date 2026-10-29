@@ -15,7 +15,7 @@ from __future__ import annotations
 import json
 import logging
 import re
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 
 log = logging.getLogger(__name__)
@@ -268,6 +268,10 @@ def source_cellule(case: dict) -> str:
     morceaux = [a.get("source") or ("n/d" if a.get("valeur") is None else "")]
     if a.get("periode") and not a.get("date_pub"):
         morceaux.append(_periode_fr(a["periode"]))
+    if a.get("source_officielle"):
+        morceaux.append(f"confirmé par {a['source_officielle']}")
+    elif a.get("ecart_officiel"):
+        morceaux.append(f"écart : {a['ecart_officiel']}")
     if not (case.get("prevision") or {}).get("valeur") and case.get("projection"):
         pr = case["projection"]
         morceaux.append(f"proj. BC : {pr.get('source', 'banque centrale')} ({pr.get('serie', '')})")
@@ -334,6 +338,50 @@ def integrer_fred(registre: dict, resultat_fred: dict) -> int:
                 case["statut"] = "ok"
             comblees += 1
     return comblees
+
+
+def _jours_entre(avant: str, apres: str) -> int:
+    """Jours entre deux dates ISO (apres − avant), 0 si illisible. Fuseaux différents : 3 jours de tolérance."""
+    try:
+        return (date.fromisoformat(apres[:10]) - date.fromisoformat(avant[:10])).days
+    except ValueError:
+        return 0
+
+
+def integrer_officielles(registre: dict, collecte: dict, tolerance: float = 0.051) -> dict:
+    """Valeurs des instituts officiels (ONS, Statistique Canada, Eurostat) : CONFIRMENT la valeur ForexFactory de la
+    même publication (statut « confirmé »), la REMPLACENT quand la case n'a pas de valeur publiée plus récente, et
+    signalent un écart (contrôle croisé). Jamais de valeur inventée. -> {confirmees, comblees, ecarts}."""
+    bilan = {"confirmees": 0, "comblees": 0, "ecarts": []}
+    for cle_case, v in (collecte or {}).get("valeurs", {}).items():
+        devise, indicateur = cle_case.split("|")
+        case = registre["cases"].get(cle(indicateur, devise))
+        if case is None or case.get("statut") == "non_applicable":
+            continue
+        texte = f"{v['valeur']:.1f}%" if v.get("unite", "%") == "%" else f"{v['valeur']:g}"
+        case["officielle"] = {"valeur": texte, "valeur_num": v["valeur"], "periode": v.get("periode"),
+                              "publie_le": v.get("publie_le"), "source": v["source"]}
+        a = case.get("actuel") or {}
+        publie_ff = str(a.get("date_pub") or "")
+        publie_off = str(v.get("publie_le") or "")
+        if a.get("valeur_num") is not None and publie_ff and publie_off and _jours_entre(publie_off, publie_ff) > 3:
+            continue   # ForexFactory a déjà une publication plus récente que la dernière mise à jour officielle
+        if a.get("valeur_num") is not None and not a.get("origine"):
+            if abs(float(a["valeur_num"]) - float(v["valeur"])) <= tolerance:
+                a["statut_valeur"] = "confirmé"
+                a["source_officielle"] = v["source"]
+                bilan["confirmees"] += 1
+            else:
+                bilan["ecarts"].append(f"{cle_case} : ForexFactory {a.get('valeur')} contre {texte} ({v['source']}, {v.get('periode')})")
+                a["ecart_officiel"] = f"{texte} selon {v['source']}"
+            continue
+        case["actuel"] = {"valeur": texte, "valeur_num": float(v["valeur"]), "date_pub": v.get("publie_le"), "dateline": None,
+                          "periode": v.get("periode"), "consensus": None, "surprise": None, "source": v["source"],
+                          "origine": "officielle", "statut_valeur": "confirmé"}
+        if case.get("statut") in ("a_initialiser", None):
+            case["statut"] = "ok"
+        bilan["comblees"] += 1
+    return bilan
 
 
 def integrer_projections(registre: dict, resultat_fred: dict) -> None:

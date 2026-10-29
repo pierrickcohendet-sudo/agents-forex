@@ -635,6 +635,10 @@ def _taux_directeurs(config: dict, dossier_cache: Path) -> dict[str, dict]:
     return taux
 
 
+class _PageMoisCoupee(Exception):
+    pass
+
+
 def _memoriser_agenda(evenements: list[dict], dossier_cache: Path, maintenant: datetime) -> None:
     try:
         from core import agenda
@@ -673,8 +677,11 @@ def mettre_a_jour(config: dict, racine: str | Path, chemin_config: str | Path | 
     avant = (json.dumps(registre, sort_keys=True), json.dumps(saisies, sort_keys=True))
     resultat: dict = {"ff": None, "notion": None}
 
-    # 1. ForexFactory (page « mois ») : créneau dû ou mise à jour ciblée
+    # 1. ForexFactory (page « mois ») : créneau dû ou mise à jour ciblée. Interrupteur forexfactory.page_mois
+    # (lot Verrouillage) : à false, plus aucune extraction de page ; le registre vit des sources licites seules.
     try:
+        if not cfg_tm["forexfactory"].get("page_mois", True):
+            raise _PageMoisCoupee()
         if client_scraping is None:
             from core.scraping import ClientScraping
             client_scraping = ClientScraping(config["scraping"], donnees / "cache")
@@ -705,6 +712,9 @@ def mettre_a_jour(config: dict, racine: str | Path, chemin_config: str | Path | 
                     _memoriser_agenda(suite["evenements"], donnees / "cache", maintenant)
         elif ff["statut"] == "indisponible":
             log.warning("Tableau macro : ForexFactory indisponible (%s) — registre inchangé", ff["note"])
+    except _PageMoisCoupee:
+        resultat["ff"] = {"statut": "coupee", "note": "page « mois » désactivée (forexfactory.page_mois: false)"}
+        log.info("Tableau macro : page « mois » ForexFactory désactivée — sources licites seules")
     except Exception as exc:  # noqa: BLE001
         log.error("Tableau macro : collecte ForexFactory en échec : %s", masquer_secrets(str(exc))[:200])
 
@@ -729,6 +739,16 @@ def mettre_a_jour(config: dict, racine: str | Path, chemin_config: str | Path | 
         rm.integrer_projections(registre, fred)
     except Exception as exc:  # noqa: BLE001
         log.error("Tableau macro : FRED en échec : %s", masquer_secrets(str(exc))[:200])
+
+    # 2 bis-bis. Valeurs des instituts officiels (ONS, Statistique Canada, Eurostat) : licéité (lot Verrouillage) —
+    # confirment, comblent ou contredisent la valeur ForexFactory ; une requête par série et par jour (cache).
+    try:
+        from agents import collecte_officielles
+        from core import collecte_cache as _cco
+        off = _cco.avec_cache("officielles", donnees / "cache", jour, True, collecte_officielles.collecter, config)
+        resultat["officielles"] = {**rm.integrer_officielles(registre, off), "erreurs": off.get("erreurs", [])}
+    except Exception as exc:  # noqa: BLE001
+        log.error("Tableau macro : publications officielles en échec : %s", masquer_secrets(str(exc))[:200])
 
     # 2 ter. Rendements souverains 2 ans / 10 ans + spread vs USD (données de marché, cache du jour)
     try:
