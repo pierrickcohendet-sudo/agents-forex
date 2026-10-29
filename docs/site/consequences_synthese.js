@@ -49,6 +49,13 @@ export function sectionSynthese(entree, type, devise = null) {
     + (modele ? `Texte formulé par ${entree.redige_par?.libelle || "le modèle"} ; toute phrase citant un chiffre absent des faits est retirée.`
               : "Texte du modèle indisponible : phrase 100 % Python ci-dessous.")));
   if (!modele) c.appendChild(el("p", "indisponible", `Texte indisponible : ${entree.quota_atteint ? "quota du jour" : String(entree.raison || "modèle indisponible").replace(/^indisponible\s*:\s*/i, "")}.`));
+  // Synthèse d'ensemble : moteurs (nom, variation, zone), chiffres de la semaine, évènements de la semaine suivante
+  if (!devise && entree.synthese) {
+    const g = el("div", "cs-ensemble");
+    g.appendChild(el("p", "texte", entree.synthese.texte || entree.synthese.phrase_python));
+    g.appendChild(el("span", "source", entree.synthese.texte ? `formulé par ${entree.redige_par?.libelle || "le modèle"} à partir des faits Python` : "calcul Python"));
+    c.appendChild(g);
+  }
   const liste = el("div", "cs-liste");
   for (const [d, x] of Object.entries(entree.devises || {})) {
     if (devise && d !== devise) continue;

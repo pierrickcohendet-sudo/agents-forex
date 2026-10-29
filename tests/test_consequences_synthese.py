@@ -54,13 +54,13 @@ def test_faits_et_phrase_python_avec_indice_faible_et_nombre_de_cas():
 def test_modele_formule_un_seul_appel_chiffres_et_ordres_controles():
     faux = Faux({"devises": {
         "USD": "Le dollar reçoit un soutien du VIX dans 68 % des 25 cas.",
-        "JPY": "Indice faible sur 22 cas. Le yen montera de 4,7 % d'ici Noël.",      # 4,7 absent des faits : retiré
+        "JPY": "Indice faible du VIX sur 22 cas. Le yen montera de 4,7 % d'ici Noël.",      # 4,7 absent des faits : retiré
         "EUR": "Achetez l'euro maintenant."}})                                         # ordre : retiré
     s = ac.generer("hebdo", DOSSIERS, faux, jour=date(2026, 10, 25))
     assert faux.appels == 1 and faux.etiquettes == ["consequences:hebdo"]
     assert s["statut"] == "ok" and s["periode"] == "2026-W43"
     assert s["devises"]["USD"]["texte"].startswith("Le dollar reçoit un soutien")
-    assert s["devises"]["JPY"]["texte"] == "Indice faible sur 22 cas."
+    assert s["devises"]["JPY"]["texte"] == "Indice faible du VIX sur 22 cas."
     assert s["devises"]["EUR"]["texte"] is None                                       # le site affiche la phrase Python
     assert all(d["phrase_python"] for d in s["devises"].values())
     assert len(s["controles"]) == 2
@@ -102,3 +102,49 @@ def test_executer_ecrit_le_fichier_et_l_archive():
     assert contenu["hebdo"]["devises"]["USD"]["phrase_python"]
     assert (racine / "data/hebdo/consequences_hebdo_2026-W43.json").exists()
     assert ac.executer("mensuel", racine, cfg, DOSSIERS, None, jour=date(2026, 10, 25)) is None   # pas le début du mois
+
+
+
+# ------------------------------------------------------------------ lot Verrouillage, point 6
+DOSSIERS_Z = {"engrenages": {
+    "5": {"consequences": {"moteur": {"libelle": "VIX", "variation_1m": 6.4, "unite": "pts", "date": "2026-10-23"}, "lignes": [
+        {"actif": "USD", "sigma_moteur": 5.13, "fiabilite": {"part": 68, "n": 25, "borne_wilson_90": 52.3},
+         "aujourdhui": {"lecture": "Soutien", "n": 25}}]}},
+    "6": {"consequences": {"moteur": {"libelle": "Brent", "variation_1m": -3.78, "unite": "%", "date": "2026-10-20"}, "lignes": [
+        {"actif": "USD", "sigma_moteur": 12.01, "aujourdhui": {"lecture": "Neutre"}},
+        {"actif": "CAD", "sigma_moteur": 12.01, "aujourdhui": {"lecture": "Neutre"}}]}}}}
+CONTEXTE = {"chiffres_semaine": [{"libelle": "VIX", "variation_5s": 2.1, "unite": "pts", "du": "2026-10-16", "au": "2026-10-23", "niveau": 19.03}],
+            "semaine_suivante": [{"date": "2026-10-28", "devise": "USD", "evenement": "Décision de la Fed", "type": "Réunion BC", "consensus": "4.00%"}]}
+
+
+def test_zone_et_phrase_python_cite_les_moteurs_sans_compteur():
+    usd = ac.faits_devise(DOSSIERS_Z, "USD")
+    assert [x["zone"] for x in usd["lignes"]] == ["haute", "calme"]
+    p = ac.phrase_python(usd)
+    assert "VIX +6,40 pts sur 1 mois (au-dessus de +1 écart-type, ±5,13)" in p and "Brent −3,78 % sur 1 mois (zone calme" in p
+    assert not ac.COMPTEUR.search(p) and "moteur(s) calme(s)" not in p
+    g = ac.synthese_python({"USD": usd}, CONTEXTE)
+    assert "Moteurs les plus actifs : VIX" in g and "VIX +2,10 pts sur 5 séances" in g and "USD Décision de la Fed (28/10)" in g
+
+
+def test_controle_rejette_compteurs_et_texte_sans_moteur():
+    lignes = ac.faits_devise(DOSSIERS_Z, "USD")["lignes"]
+    assert ac.controler_texte("Le bilan est neutre, comptabilisant 4 cas neutres.", lignes) == "compteur répété (« X cas neutres »)"
+    assert ac.controler_texte("Bilan sans direction, 3 moteurs calmes.", lignes).startswith("compteur")
+    assert ac.controler_texte("Le dollar reste sans direction cette semaine.", lignes) == "aucun moteur cité"
+    assert ac.controler_texte("La volatilité (VIX +6,4 pts, au-delà d'un écart-type) soutient le dollar.", lignes) is None
+    assert ac.controler_texte("Le pétrole recule dans sa zone calme.", lignes) is None
+
+
+def test_texte_rejete_remplace_par_la_phrase_python_et_contexte_dans_le_prompt():
+    faux = Faux({"synthese": "Le VIX (+6,4 pts) domine ; la Fed décide le 28/10.",
+                 "devises": {"USD": "Bilan sans direction établie, 4 cas neutres et 1 cas non disponible.",
+                             "CAD": "Le Brent recule de 3,78 % dans sa zone calme."}})
+    prompts = []
+    orig = faux.appeler_llm
+    faux.appeler_llm = lambda p, systeme=None: (prompts.append(p), orig(p))[1]
+    s = ac.generer("hebdo", DOSSIERS_Z, faux, jour=date(2026, 10, 25), contexte=CONTEXTE)
+    assert s["devises"]["USD"]["texte"] is None and any("USD : texte rejeté (compteur" in c for c in s["controles"])
+    assert s["devises"]["CAD"]["texte"].startswith("Le Brent recule")
+    assert s["synthese"]["texte"].startswith("Le VIX") and s["synthese"]["phrase_python"]
+    assert "evenements_semaine_suivante" in prompts[0] and "INTERDIT" in prompts[0] and "zone" in prompts[0]
