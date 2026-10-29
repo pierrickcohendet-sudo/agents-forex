@@ -179,6 +179,11 @@ def calculer(config: dict, dossiers_donnees: dict, rapport: dict | None, registr
                       for u, v in ch.items()}
             fiches[p]["chandeliers"] = ch or {
                 "raison": (intraday or {}).get("raison") or "chandeliers non collectés (collecte au run complet, Twelve Data)"}
+            try:   # Rapport du jour, étape 9 : niveaux affichés sur les chandeliers (repères, pas des signaux)
+                from core import technique_niveaux
+                fiches[p]["niveaux"] = technique_niveaux.calculer(ch, serie_paire(h5, technique, p))
+            except Exception as exc:  # noqa: BLE001
+                fiches[p]["niveaux"] = {"raison": f"niveaux non calculés : {exc}"[:150]}
         t = (textes or {}).get(p)
         if p in mes and t and t.get("texte"):
             fiches[p]["synthese_modele"] = t

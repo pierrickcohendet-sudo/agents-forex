@@ -1231,3 +1231,47 @@ table.dense td.source-cellule, table.dense td.sa-nom, table.dense td.sa-alimente
 .cs-ensemble .texte { margin: 0 0 4px; font-family: var(--serif); font-size: 16px; }
 .ag-statut-chiffre { font-family: var(--sans); font-size: 10.5px; color: var(--texte-2); }
 .ag-statut-chiffre.provisoire, .ag-statut-chiffre.estimation { font-style: italic; } .ag-statut-chiffre.revise { color: var(--alerte); font-weight: 700; }
+
+/* ---------------------------------------------------------------- page « Rapport » (lot Rapport du jour) */
+.rp-tete { display: grid; gap: 6px; border-top: 3px solid var(--accent); }
+.rp-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.rp-sommaire { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 13.5px; padding-top: 6px; border-top: 1px solid var(--trait); }
+.rp-corps { display: grid; gap: 12px; }
+.rp-section > summary { cursor: pointer; list-style: none; }
+.rp-section > summary::-webkit-details-marker { display: none; }
+.rp-section > summary h3 { display: inline; font-size: 1.15rem; }
+.rp-section > summary::after { content: " ▾"; color: var(--texte-2); }
+.rp-section:not([open]) > summary::after { content: " ▸"; }
+.rp-section h4 { margin: 12px 0 6px; font-size: .98rem; font-family: var(--serif); }
+.rp-texte { font-family: var(--serif); font-size: 16.5px; line-height: 1.5; max-width: 75ch; margin: 8px 0; }
+.rp-lecture { font-weight: 700; margin: 8px 0; }
+.rp-liste { margin: 4px 0 8px; padding-left: 20px; font-size: 14px; display: grid; gap: 3px; }
+.rp-mention { font-style: italic; }
+.rp-meca { padding: 8px 10px; background: var(--carte-2); border-left: 3px solid var(--accent); border-radius: var(--rayon); margin-bottom: 6px; }
+.rp-meca p { margin: 2px 0; font-size: 14px; }
+.rp-scen { padding: 8px 10px; background: var(--carte-2); border-radius: var(--rayon); margin-bottom: 6px; border-left: 3px solid var(--neutre); }
+.rp-scen.mieux { border-left-color: var(--accent); } .rp-scen.invalide { opacity: .7; }
+.rp-scen summary { display: flex; flex-wrap: wrap; gap: 4px 12px; cursor: pointer; }
+.rp-statut { color: var(--texte-2); font-size: 13px; }
+.rp-jour { padding: 6px 10px; border-left: 3px solid var(--neutre); background: var(--carte-2); border-radius: var(--rayon); margin-bottom: 6px; }
+.rp-jour.critique { border-left-color: var(--negatif); }
+.rp-jour summary { cursor: pointer; text-transform: none; }
+.rp-bc, .rp-paire { padding: 8px 12px; background: var(--carte-2); border-radius: var(--rayon); margin-bottom: 8px; }
+.rp-bc h4 { margin-top: 0; }
+.rp-paire-tete { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; }
+.rp-libelle { font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--accent); color: var(--accent); }
+.rp-tech summary { cursor: pointer; font-weight: 700; }
+.rp-risque { margin-top: 12px; padding: 10px 12px; border: 1px solid var(--trait); border-radius: var(--rayon); }
+.rp-calc { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
+.rp-calc label { display: grid; gap: 2px; font-size: 13px; color: var(--texte-2); }
+.rp-calc input, .rp-calc select { font: 14px var(--mono); padding: 6px 8px; border: 1px solid var(--trait); border-radius: var(--rayon); background: var(--carte); color: var(--texte); min-height: 36px; }
+.rp-calc-res { font-weight: 700; margin: 8px 0; }
+@media print {
+  .rp-actions, .rp-sommaire, .rp-calc, .rp-calc-res { display: none !important; }
+  .rp-section { break-inside: auto; } .rp-section > summary::after { content: ""; }
+  .rp-section:not([open]) > *:not(summary) { display: block !important; }
+  details:not([open]) > *:not(summary) { display: block !important; }
+}
+.jn-checklist { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+.jn-niveaux { margin: 4px 0; padding-left: 18px; font-size: 13.5px; display: grid; gap: 2px; font-family: var(--sans); }
+.jn-niveaux li[title] { cursor: help; text-decoration: underline dotted color-mix(in srgb, var(--texte-2) 50%, transparent); text-underline-offset: 3px; }

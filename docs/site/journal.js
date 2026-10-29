@@ -7,6 +7,9 @@ import { graphiqueSerie, dessinerReperes } from "./dossiers.js";
 const SVG = "http://www.w3.org/2000/svg";
 const UNITES = [["30min", "30 min"], ["4h", "4 h"], ["1j", "1 j"]];
 const BIAIS = { haussier: "Haussier", neutre: "Neutre", baissier: "Baissier" };
+// Checklist en 8 étapes (modèle du Rapport du jour) : cochée par moi, enregistrée avec la note
+const CHECKLIST = [["biais", "Biais supérieur"], ["liquidite", "Liquidité"], ["structure", "Structure"], ["zone", "Zone d'intérêt"],
+                   ["macro", "Confirmation macro"], ["declencheur", "Déclencheur M30"], ["invalidation", "Invalidation"], ["risque", "Risque"]];
 const COURTS = { 1: "Thème", 2: "Monétaire", 3: "Données", 4: "Fiscale", 5: "Marchés", 6: "Géopolitique", 7: "Flux", 8: "Offre" };
 const signe = (v, d = 2) => v == null ? "n/d" : `${v > 0 ? "+" : ""}${Number(v).toLocaleString("fr-FR", { maximumFractionDigits: d })}`.replace("-", "−");
 const nombre = (v, d = 4) => v == null ? "n/d" : Number(v).toLocaleString("fr-FR", { maximumFractionDigits: d });
@@ -202,6 +205,24 @@ function contributions(f) {
   return box;
 }
 
+function blocNiveaux(n) {
+  const b = el("div", "jn-bloc");
+  b.appendChild(el("h3", null, "Niveaux multi-unités"));
+  if (n.raison) { b.appendChild(el("p", "note", `n/d : ${n.raison}.`)); return b; }
+  const d = n.definitions || {}, ul = el("ul", "jn-niveaux");
+  const ajouter = (texte, def) => { const li = el("li", null, texte); if (def) li.title = def; ul.appendChild(li); };
+  const v = x => nombre(x, 5);
+  if (n.veille) ajouter(`Veille (${dateCourte(n.veille.jour).slice(0, 5)}) : haut ${v(n.veille.haut)} · bas ${v(n.veille.bas)}`, d.veille);
+  if (n.semaine_precedente) ajouter(`Semaine précédente : haut ${v(n.semaine_precedente.haut)} · bas ${v(n.semaine_precedente.bas)}`, d.semaine);
+  for (const [s, x] of Object.entries(n.sessions || {})) if (x) ajouter(`Session ${s} : haut ${v(x.haut)} · bas ${v(x.bas)}${x.complete ? "" : " (en cours)"}`, d.sessions);
+  for (const e of (n.structure_h4?.evenements || []).slice(-2)) ajouter(`${e.type} ${e.sens} (H4) le ${e.date.slice(8, 10)}/${e.date.slice(5, 7)} au-delà de ${v(e.niveau)}`, e.type === "BOS" ? d.bos : d.choch);
+  for (const z of (n.fvg_h4 || []).slice(0, 2)) ajouter(`FVG H4 ${z.sens} ouverte : ${v(z.bas)} – ${v(z.haut)}`, d.fvg);
+  for (const z of (n.fvg_m30 || []).slice(0, 2)) ajouter(`FVG M30 ${z.sens} ouverte : ${v(z.bas)} – ${v(z.haut)}`, d.fvg);
+  for (const k of ["tendance_jour", "tendance_semaine"]) if (n[k]) ajouter(`Tendance ${n[k].unite} : ${n[k].lecture || n[k].raison}${n[k].pente_mm50 ? ` (MM50 ${n[k].pente_mm50})` : ""}`, d.tendance);
+  b.append(ul, el("span", "source", n.mention || ""));
+  return b;
+}
+
 function ficheAnalyse(f, mes) {
   const c = el("section", "carte jn-fiche");
   if (!f || f.raison) { c.appendChild(el("p", "indisponible", `Fiche n/d : ${f?.raison || "paire absente"}.`)); return c; }
@@ -255,6 +276,7 @@ function ficheAnalyse(f, mes) {
       + `plus haut 20 j ${nombre(t.plus_haut_20j)} · plus bas 20 j ${nombre(t.plus_bas_20j)} · volatilité 30 j ${String(t.volatilite_30j).replace(".", ",")} %.`));
   if (t.source) tech.appendChild(el("span", "source", `Source : ${t.source}`));
   c.appendChild(tech);
+  if (f.niveaux) c.appendChild(blocNiveaux(f.niveaux));
   const cons = el("div", "jn-bloc");
   cons.appendChild(el("h3", null, "Conséquences (tableau des conséquences)"));
   cons.appendChild((f.consequences || []).length ? el("p", null, f.consequences.map(x => `${x.engrenage} ${COURTS[x.engrenage]} : ${f.base} ${x.base}, ${f.cotation} ${x.cotation}`).join(" · ")) : el("p", "note", "Aucune ligne pour cette paire."));
@@ -361,7 +383,9 @@ export async function pageJournal() {
   const enregistrer = el("button", "bouton jn-principal", "Enregistrer · avec l'instantané de l'analyse du jour"); enregistrer.type = "submit";
   const annuler = el("button", "bouton", "Annuler la modification"); annuler.type = "button"; annuler.hidden = true;
   const actions = el("div", "jn-actions"); actions.append(enregistrer, annuler);
-  form.append(erreur, el("label", "jn-lab", "Paire"), champPaire, unites, biais, texte, etiquettes, depot, actions,
+  const checklist = el("fieldset", "jn-unites jn-checklist"); checklist.appendChild(el("legend", null, "Checklist avant d'agir (8 étapes, à cocher moi-même)"));
+  for (const [v, lib] of CHECKLIST) { const l = el("label"); const c = el("input"); c.type = "checkbox"; c.value = v; l.append(c, document.createTextNode(` ${lib}`)); checklist.appendChild(l); }
+  form.append(erreur, el("label", "jn-lab", "Paire"), champPaire, unites, biais, checklist, texte, etiquettes, depot, actions,
               el("p", "note", "Date et heure ajoutées automatiquement ; un instantané de la fiche d'analyse du moment est gardé avec la note."));
   let images = [];       // {id, unite, blob, largeur, hauteur}
   let enEdition = null;
@@ -400,6 +424,7 @@ export async function pageJournal() {
     enEdition = n; champPaire.value = n.paire; texte.value = n.texte || ""; etiquettes.value = (n.etiquettes || []).join(", ");
     unites.querySelectorAll("input").forEach(c => { c.checked = (n.unites || []).includes(c.value); });
     biais.querySelectorAll("input").forEach(r => { r.checked = r.value === n.biais; });
+    checklist.querySelectorAll("input").forEach(c => { c.checked = (n.checklist || []).includes(c.value); });
     images = (n.images || []).map(x => ({ ...x }));
     rendreApercus(); annuler.hidden = false; enregistrer.textContent = "Enregistrer les modifications";
     form.scrollIntoView({ block: "start" });
@@ -407,6 +432,7 @@ export async function pageJournal() {
   function vider() {
     enEdition = null; texte.value = ""; etiquettes.value = ""; images = []; rendreApercus();
     unites.querySelectorAll("input").forEach(c => { c.checked = false; });
+    checklist.querySelectorAll("input").forEach(c => { c.checked = false; });
     annuler.hidden = true; enregistrer.textContent = "Enregistrer la note";
   }
   annuler.addEventListener("click", vider);
@@ -418,6 +444,7 @@ export async function pageJournal() {
       paire: champPaire.value, unites: [...unites.querySelectorAll("input:checked")].map(c => c.value),
       biais: biais.querySelector("input:checked")?.value || "neutre", texte: texte.value.trim(),
       etiquettes: etiquettes.value.split(",").map(x => x.trim()).filter(Boolean),
+      checklist: [...checklist.querySelectorAll("input:checked")].map(c => c.value),
       images: images.map(({ id, unite, blob, largeur, hauteur }) => ({ id, unite, blob, largeur, hauteur })),
       instantane: enEdition?.instantane || instantane(paires.fiches[champPaire.value] || {}),
     };
@@ -506,6 +533,7 @@ export async function pageJournal() {
     const noeuds = [];
     const t = el("p", "ck-petit", `${dateHeure(n.cree_le)}${n.modifie_le !== n.cree_le ? ` · modifiée ${dateHeure(n.modifie_le)}` : ""} · unités : ${(n.unites || []).map(u => UNITES.find(x => x[0] === u)?.[1]).join(", ") || "—"} · biais : ${BIAIS[n.biais]} (ma lecture, pas un ordre)`);
     noeuds.push(t, texteMisEnForme(n.texte));
+    if ((n.checklist || []).length) noeuds.push(el("p", "ck-petit", `Checklist : ${CHECKLIST.map(([v, l]) => `${(n.checklist || []).includes(v) ? "☑" : "☐"} ${l}`).join(" · ")}`));
     if ((n.images || []).length) noeuds.push(miniatures(n));
     const i = n.instantane || {};
     const inst = el("div", "jn-instantane");

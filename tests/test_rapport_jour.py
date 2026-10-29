@@ -141,3 +141,15 @@ def test_notion_ecrit_puis_met_l_ancienne_version_a_la_corbeille():
     ordre = [c[0] for c in client.mock_calls if c[0] in ("pages.create", "blocks.children.append", "pages.update")]
     assert ordre[0] == "pages.create" and ordre[-1] == "pages.update"           # écriture d'abord, corbeille ensuite
     assert client.pages.update.call_args.kwargs == {"in_trash": True}
+
+
+def test_site_page_rapport_par_defaut_le_matin_et_journal():
+    app = (RACINE / "docs/site/app.js").read_text(encoding="utf-8")
+    assert 'rapport: { titre: "Rapport", module: "./rapport.js"' in app and "h < 13" in app
+    assert CONFIG["rapport"]["heure_bascule_accueil"] == "13:00"
+    js = (RACINE / "docs/site/rapport.js").read_text(encoding="utf-8")
+    for cle in rj.SECTIONS_COMPLETES + rj.SECTIONS_COURTES:
+        assert f"  {cle}(r)" in js, cle
+    assert "beforeprint" in js and "window.print()" in js and "Lecture :" in js
+    jn = (RACINE / "docs/site/journal.js").read_text(encoding="utf-8")
+    assert "Déclencheur M30" in jn and "checklist:" in jn and "blocNiveaux" in jn

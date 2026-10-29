@@ -2,6 +2,7 @@
 import { chargerJson, enErreur, el, indisponible, initialiserDetail, initialiserCertificats, dateHeure } from "./commun.js";
 
 const ONGLETS = {
+  rapport: { titre: "Rapport", module: "./rapport.js", fonction: "pageRapport" },   // Rapport du jour : page d'accueil le matin
   accueil: { titre: "Aujourd'hui", module: "./accueil.js", fonction: "pageAccueil" },   // lot V5 : tableau de bord du jour, accueil.json seul
   synthese: { titre: "Synthèse", module: "./synthese.js", fonction: "pageSynthese" },
   engrenages: { titre: "8 engrenages", module: "./engrenages.js", fonction: "pageEngrenages" },
@@ -32,11 +33,17 @@ function appliquerTheme(t) {
 }
 
 /* ---------------------------------------------------------------- routage */
+// Page par défaut : le Rapport du jour le matin (avant 13:00 à Paris, comme rapport.heure_bascule_accueil dans
+// config.yaml), le tableau de bord « Aujourd'hui » ensuite.
+function pageParDefaut() {
+  const h = Number(new Intl.DateTimeFormat("fr-FR", { hour: "2-digit", hour12: false, timeZone: "Europe/Paris" }).format(new Date()));
+  return h < 13 ? "rapport" : "accueil";
+}
 async function afficher() {
-  const hash = (location.hash || "#accueil").slice(1);
+  const hash = (location.hash || `#${pageParDefaut()}`).slice(1);
   // Lien direct vers un dossier d'engrenage : #g=N (équivaut à #engrenages/g=N)
   const [id, parametre] = /^g=[1-8]$/.test(hash) ? ["engrenages", hash] : hash.split("/");
-  const onglet = ONGLETS[id] ? id : "accueil";
+  const onglet = ONGLETS[id] ? id : pageParDefaut();
   document.querySelectorAll(".onglets a").forEach(a => {
     if (a.dataset.onglet === onglet) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
   });
@@ -61,7 +68,7 @@ async function afficher() {
     console.error(e);
     blocs = [indisponible(conf.titre, `erreur d'affichage (${e.message})`)];
   }
-  if ((location.hash || "#accueil").slice(1) !== hash) return;   // l'utilisateur a changé d'onglet entre-temps
+  if ((location.hash || `#${pageParDefaut()}`).slice(1) !== hash) return;   // l'utilisateur a changé d'onglet entre-temps
   main.replaceChildren(...blocs);
   if (parametre && !parametre.startsWith("g=")) document.getElementById(`fiche-${parametre}`)?.scrollIntoView();
   else window.scrollTo(0, 0);
