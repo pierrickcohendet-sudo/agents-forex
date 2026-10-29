@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-10-29T15:52:42+00:00",
+  "genere_le": "2026-10-29T16:17:53+00:00",
   "appels_llm": [
    {
     "heure": "15:19",
@@ -248,6 +248,78 @@
     "tokens_total": 9061,
     "ok": true,
     "etiquette": "synthese:JPY"
+   },
+   {
+    "heure": "16:05",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 6542,
+    "tokens_total": 8102,
+    "ok": false,
+    "etiquette": "synthese:CHF"
+   },
+   {
+    "heure": "16:06",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 6542,
+    "tokens_total": 8102,
+    "ok": false,
+    "etiquette": "synthese:CHF"
+   },
+   {
+    "heure": "16:06",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 6542,
+    "tokens_total": 8102,
+    "ok": true,
+    "etiquette": "synthese:CHF"
+   },
+   {
+    "heure": "16:08",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 7164,
+    "tokens_total": 8724,
+    "ok": false,
+    "etiquette": "synthese:CAD"
+   },
+   {
+    "heure": "16:11",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 7164,
+    "tokens_total": 8724,
+    "ok": false,
+    "etiquette": "synthese:CAD"
+   },
+   {
+    "heure": "16:15",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 7164,
+    "tokens_total": 8724,
+    "ok": false,
+    "etiquette": "synthese:CAD"
+   },
+   {
+    "heure": "16:16",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 7164,
+    "tokens_total": 8724,
+    "ok": false,
+    "etiquette": "synthese:CAD"
+   },
+   {
+    "heure": "16:17",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 7136,
+    "tokens_total": 8696,
+    "ok": true,
+    "etiquette": "synthese:AUD"
    }
   ],
   "quota_llm": {
@@ -257,47 +329,47 @@
     "gemini-3.8-flash",
     "gemini-3.5-flash-lite"
    ],
-   "appels_aujourdhui": 38,
+   "appels_aujourdhui": 51,
    "plafond_jour": 60,
    "engrenages_faits": true,
    "reserve_engrenages": 8,
    "refus_reserve_ce_run": 0,
    "modeles": {
     "gemini-3.5-flash": {
-     "appels_aujourdhui": 12,
+     "appels_aujourdhui": 20,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-10-27T06:59:59+00:00",
-     "appels_ce_run": 7,
-     "reussites_ce_run": 3,
-     "sauts_ce_run": 23
+     "appels_ce_run": 5,
+     "reussites_ce_run": 2,
+     "sauts_ce_run": 7
     },
     "gemini-3.8-flash": {
-     "appels_aujourdhui": 6,
+     "appels_aujourdhui": 11,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-10-29T06:59:59+00:00",
-     "appels_ce_run": 5,
-     "reussites_ce_run": 1,
-     "sauts_ce_run": 24
+     "appels_ce_run": 3,
+     "reussites_ce_run": 0,
+     "sauts_ce_run": 8
     },
     "gemini-3.5-flash-lite": {
      "appels_aujourdhui": 20,
      "plafond_jour": 20,
      "epuise_jusqu_a": null,
-     "appels_ce_run": 15,
-     "reussites_ce_run": 13,
-     "sauts_ce_run": 13
+     "appels_ce_run": 0,
+     "reussites_ce_run": 0,
+     "sauts_ce_run": 11
     }
    }
   },
-  "resume_quota": "Gemini : 38/60, engrenages : fait",
+  "resume_quota": "Gemini : 51/60, engrenages : fait",
   "appels_par_modele": {
    "gemini-3.5-flash": {
-    "appels": 7,
-    "echecs": 4
+    "appels": 12,
+    "echecs": 7
    },
    "gemini-3.8-flash": {
-    "appels": 5,
-    "echecs": 4
+    "appels": 8,
+    "echecs": 7
    },
    "gemini-3.5-flash-lite": {
     "appels": 15,
@@ -336,6 +408,40 @@
       "ouvert_a_l_appel": null,
       "echecs_consecutifs": 0,
       "ignores": 13
+     }
+    ]
+   },
+   {
+    "heure": "16:18",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": true,
+    "appels_total": 12,
+    "replis_json_modele_suivant": 8,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 7
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": true,
+      "cause": "3 échecs consécutifs — HTTPSConnectionPool(host='generativelanguage.googleapis.com', port=443): Read timed out. (read timeout=180)",
+      "ouvert_a_l_appel": 4,
+      "echecs_consecutifs": 3,
+      "ignores": 8
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 11
      }
     ]
    }
@@ -1070,8 +1176,8 @@
     "libelle": "Flash-Lite 3.5"
    },
    "version": "quotidienne",
-   "titre_theme_impose": "Signaux mixtes",
-   "rafraichi_le": "2026-10-29T15:46:29+00:00"
+   "rafraichi_le": "2026-10-29T16:04:54+00:00",
+   "titre_theme_impose": "Signaux mixtes"
   },
   "classement_devises": [
    {
@@ -3137,10 +3243,203 @@
     ]
    },
    "synthese_approfondie": {
-    "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite passé en dernier | gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) |",
-    "tentatives": 1,
-    "genere_le": "2026-10-29T15:51:22+00:00"
+    "orientation": "neutre",
+    "these_centrale": {
+     "texte": "Le franc suisse évolue dans une configuration de range hebdomadaire sur la paire USD/CHF, soutenu par son rôle d'actif refuge face à la volatilité globale mais bridé par un taux directeur nul et un désavantage de portage marqué. La Banque Nationale Suisse conserve une approche dépendante des données tout en restant vigilante face aux risques d'appréciation excessive de sa devise. Par rapport aux sessions précédentes, la thèse demeure inchangée dans son orientation neutre.",
+     "source_ids": [
+      "src_020",
+      "src_141",
+      "src_015"
+     ],
+     "non_source": false
+    },
+    "moteurs": [
+     {
+      "moteur": "croissance",
+      "donnee": "1.9% au 2026-09-03",
+      "trajectoire": "précédent 0.6% / hausse / surprise haussière vs consensus à 1.7%",
+      "implication": "La solidité de l'activité économique helvétique apporte un soutien fondamental au CHF et réduit la nécessité d'un assouplissement monétaire.",
+      "source_id": "src_229"
+     },
+     {
+      "moteur": "inflation",
+      "donnee": "0.0% a/a au 2026-10-01",
+      "trajectoire": "précédent 0.4% / baisse / conforme au consensus de 0.0%",
+      "implication": "L'absence de pressions inflationnistes justifie le maintien d'une politique de taux nul par la BNS.",
+      "source_id": "src_228"
+     },
+     {
+      "moteur": "emploi",
+      "donnee": "3.1% au 2026-10-06",
+      "trajectoire": "précédent 3.1% / stable / conforme au consensus de 3.1%",
+      "implication": "La stabilité du marché du travail soutient la demande interne sans générer de dérapage salarial.",
+      "source_id": "src_231"
+     },
+     {
+      "moteur": "banque_centrale",
+      "donnee": "0.00% au 2026-09-24",
+      "trajectoire": "précédent 0.00% / neutre / conforme au consensus de 0.00%",
+      "implication": "La BNS conserve une posture neutre dépendante des données, maintenant le CHF pénalisé par son portage mais crédible en valeur refuge.",
+      "source_id": "src_141"
+     }
+    ],
+    "taux_et_flux": {
+     "texte": "Avec un taux directeur maintenu à 0,00 %, le franc suisse subit un différentiel de taux négatif de -2,75 points par rapport à la médiane G8, pesant structurellement sur les flux de portage. Le rendement souverain à 10 ans s'établit à 0,59 %, confirmant un environnement de taux bas. Les données pour le rendement souverain à 2 ans et son spread vs USD sont non disponibles.",
+     "source_ids": [
+      "src_141",
+      "src_015",
+      "src_152"
+     ],
+     "non_source": false
+    },
+    "geopolitique": {
+     "texte": "L'intervention publique de Mme Tschudin, membre du conseil de la BNS, est suivie afin d'évaluer la tolérance de la banque centrale face à la fermeté du franc suisse dans le contexte géopolitique actuel.",
+     "source_ids": [
+      "src_069"
+     ],
+     "non_source": false
+    },
+    "lecture_technique": {
+     "texte": "Sur la paire USD/CHF, le cours évolue sous la MM100 à 1,22715 et la MM200 à 1,25207 dans une structure en range hebdomadaire. Le RSI daily s'établit à 49,8, traduisant un momentum neutre. La borne basse du range est identifiée sur le support à 1,20908 (3 impacts). La lecture technique est mixte, reflétant la résistance du CHF comme valeur refuge face à la pression du portage négatif.",
+     "source_ids": [
+      "src_020"
+     ],
+     "coherence": "mixte",
+     "non_source": false
+    },
+    "scenarios": [
+     {
+      "type": "haussier",
+      "declencheur": "Cassure baissière nette de USD/CHF sous le support de 1,20908 en lien avec une remontée de la volatilité globale.",
+      "probabilite": "moyenne",
+      "justification": "Le statut de valeur refuge du franc helvétique capte les flux défensifs lors des phases de nervosité sur les marchés actions.",
+      "source_ids": [
+       "src_020",
+       "src_010"
+      ]
+     },
+     {
+      "type": "central",
+      "declencheur": "Maintien de USD/CHF dans sa zone de consolidation entre le support à 1,20908 et la résistance à 1,21444.",
+      "probabilite": "elevee",
+      "justification": "Cohérent avec le score de 38, l'absence de surprise sur le CPI et la posture d'attente de la BNS.",
+      "source_ids": [
+       "src_020",
+       "src_141"
+      ]
+     },
+     {
+      "type": "baissier",
+      "declencheur": "Rebond de USD/CHF franchissant la résistance à 1,21444 ou avertissement explicite de la BNS sur la surévaluation du franc.",
+      "probabilite": "faible",
+      "justification": "Le portage de -2,75 pt pénalise la devise, mais une dépréciation marquée exige un retour franc du Risk-On mondial.",
+      "source_ids": [
+       "src_020",
+       "src_015",
+       "src_141"
+      ]
+     }
+    ],
+    "catalyseurs": [
+     {
+      "date": "2026-10-29",
+      "heure_utc": "07:30",
+      "evenement": "Retail Sales y/y",
+      "impact": "low",
+      "consensus": null,
+      "source_id": "src_224",
+      "pourquoi": "Permet de vérifier si la consommation des ménages soutient la trajectoire de croissance."
+     },
+     {
+      "date": "2026-11-02",
+      "heure_utc": "08:30",
+      "evenement": "Manufacturing PMI",
+      "impact": "low",
+      "consensus": null,
+      "source_id": "src_225",
+      "pourquoi": "Donne une mesure de la santé du secteur industriel soumis à la concurrence internationale."
+     },
+     {
+      "date": "2026-11-03",
+      "heure_utc": "07:30",
+      "evenement": "CPI m/m",
+      "impact": "medium",
+      "consensus": null,
+      "source_id": "src_226",
+      "pourquoi": "Variable déterminante pour anticiper d'éventuelles actions de la BNS sur les taux d'intérêt."
+     },
+     {
+      "date": "2026-11-05",
+      "heure_utc": "08:00",
+      "evenement": "Unemployment Rate",
+      "impact": "low",
+      "consensus": null,
+      "source_id": "src_227",
+      "pourquoi": "Confirme la stabilité du marché du travail helvétique."
+     }
+    ],
+    "invalidation": [
+     {
+      "signal": "Franchissement haussier confirmé de la résistance USD/CHF à 1,21444.",
+      "source_id": "src_020"
+     },
+     {
+      "signal": "Publication d'une inflation CPI en territoire négatif incitant la BNS à assouplir.",
+      "source_id": "src_228"
+     },
+     {
+      "signal": "Annonce d'interventions directes de la BNS sur le marché des changes pour vendre du CHF.",
+      "source_id": "src_141"
+     }
+    ],
+    "opportunites": [
+     {
+      "texte": "Rebond tactique sur le support USD/CHF à 1,20908.",
+      "mecanisme": "Test du support majeur -> achats de CHF par couverture défensive -> reflux du cours de la paire vers le bas du range.",
+      "source_id": "src_020",
+      "non_sourcee": false
+     },
+     {
+      "texte": "Ventes au détail solides dépassant les 3,2 %.",
+      "mecanisme": "Consommation interne robuste -> renforcement des perspectives d'activité -> soutien fondamental au CHF.",
+      "source_id": "src_232",
+      "non_sourcee": false
+     },
+     {
+      "texte": "Surprise haussière sur le PIB au-dessus de 1,9 %.",
+      "mecanisme": "Croissance supérieure aux prévisions -> réduction des anticipations de soutien monétaire -> appréciation du franc suisse.",
+      "source_id": "src_229",
+      "non_sourcee": false
+     }
+    ],
+    "menaces": [
+     {
+      "texte": "Intervention verbale ou opérationnelle de la BNS.",
+      "mecanisme": "Crainte de déflation liée à un CHF trop fort -> ventes de francs par la banque centrale -> dépréciation de la devise.",
+      "source_id": "src_141",
+      "non_sourcee": false
+     },
+     {
+      "texte": "Désavantage persistant de différentiel de taux (-2,75 pt vs G8).",
+      "mecanisme": "Taux directeur à 0,00 % -> coût de portage négatif élevé -> arbitrages défavorables au CHF en période de calme de marché.",
+      "source_id": "src_015",
+      "non_sourcee": false
+     },
+     {
+      "texte": "Détente brutale du VIX sous les 16,91.",
+      "mecanisme": "Apaisement du sentiment de risque mondial -> désengagement des actifs défensifs -> flux vendeurs sur le franc suisse.",
+      "source_id": "src_010",
+      "non_sourcee": false
+     }
+    ],
+    "controles": [],
+    "redige_par": {
+     "modele": "gemini-3.5-flash",
+     "libelle": "Flash 3.5"
+    },
+    "statut": "ok",
+    "tentatives": 2,
+    "genere_le": "2026-10-29T16:06:52+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.38,
@@ -3398,9 +3697,9 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite passé en dernier | gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) |",
-    "tentatives": 1,
-    "genere_le": "2026-10-29T15:51:42+00:00"
+    "raison": "tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash passé en dernier | gemini-3.8-flash : HTTPSConnectionPool(host='generativelanguage.googleapis.com', port=44",
+    "tentatives": 2,
+    "genere_le": "2026-10-29T16:16:29+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.75,
@@ -3656,10 +3955,202 @@
     ]
    },
    "synthese_approfondie": {
-    "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite passé en dernier | gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) |",
-    "tentatives": 1,
-    "genere_le": "2026-10-29T15:52:02+00:00"
+    "orientation": "haussier",
+    "these_centrale": {
+     "texte": "L'AUD conserve un biais haussier soutenu par un portage très attractif (+1.85 pt vs médiane G8) et une inflation persistante qui conforte la posture restrictive de la RBA. Sa progression demeure toutefois freinée par la fermeté de l'indice dollar et des chiffres d'emploi récents en repli. La thèse reste stable par rapport aux séances précédentes, maintenant une trajectoire positive mais prudente.",
+     "source_ids": [
+      "src_015",
+      "src_251",
+      "src_025"
+     ],
+     "non_source": false
+    },
+    "moteurs": [
+     {
+      "moteur": "croissance",
+      "donnee": "0.4% au Q2 (publié le 2026-09-02)",
+      "trajectoire": "précédent 0.3%, consensus 0.3% (surprise positive de +0.1 pt)",
+      "implication": "Signale une résilience économique modérée qui soutient le biais neutre-hawkish de la RBA.",
+      "source_id": "src_253"
+     },
+     {
+      "moteur": "inflation",
+      "donnee": "CPI annuel à 4.3% (publié le 2026-10-28)",
+      "trajectoire": "précédent 4.0%, consensus 4.2% (surprise haussière de +0.1 pt)",
+      "implication": "Renforce la nécessité pour la banque centrale de maintenir des taux restrictifs plus longtemps.",
+      "source_id": "src_251"
+     },
+     {
+      "moteur": "emploi",
+      "donnee": "Variation de l'emploi à -39.3K et chômage à 4.7% (publiés le 2026-10-15)",
+      "trajectoire": "précédent +29.3K, consensus +19.6K (surprise baissière marquée)",
+      "implication": "Traduit un ralentissement du marché du travail qui nuance les pressions inflationnistes.",
+      "source_id": "src_257"
+     },
+     {
+      "moteur": "banque_centrale",
+      "donnee": "Taux directeur à 4.60% (décision du 2026-09-29)",
+      "trajectoire": "précédent 4.35%, hausse conforme aux attentes",
+      "implication": "Confirme le biais hawkish de la RBA et offre le niveau de portage le plus élevé du G8.",
+      "source_id": "src_143"
+     }
+    ],
+    "taux_et_flux": {
+     "texte": "L'Australie affiche un taux directeur de 4.60%, procurant un différentiel de taux positif de +1.85 pt par rapport à la médiane G8. Le rendement obligataire souverain à 10 ans s'établit à 5.283% pour septembre 2026. Les données de spread à 2 ans vs USD sont non disponibles.",
+     "source_ids": [
+      "src_015",
+      "src_016"
+     ],
+     "non_source": false
+    },
+    "geopolitique": {
+     "texte": "",
+     "source_ids": [],
+     "non_source": false
+    },
+    "lecture_technique": {
+     "texte": "Sur l'unité de temps hebdomadaire, la structure de Dow reste haussière avec un support validé à 0.70311 (3 impacts). En daily, l'AUD/USD se situe légèrement sous ses moyennes mobiles 100 jours (0.70335) et 200 jours (0.70589), tandis que le RSI 14 à 52.2 témoigne d'un momentum modérément haussier.",
+     "source_ids": [
+      "src_022"
+     ],
+     "coherence": "mixte",
+     "non_source": false
+    },
+    "scenarios": [
+     {
+      "type": "haussier",
+      "declencheur": "Franchissement confirmé de la résistance à 0.70431 accompagné d'un rebond des PMI chinois au-dessus de 50.0",
+      "probabilite": "moyenne",
+      "justification": "L'inflation au-dessus des attentes et le carry attractif offrent un soutien fondamental solide, mais nécessitent un catalyseur externe sur les matières premières.",
+      "source_ids": [
+       "src_251",
+       "src_022",
+       "src_050"
+      ]
+     },
+     {
+      "type": "central",
+      "declencheur": "Maintien des cours entre le support à 0.70107 et la résistance à 0.70431 jusqu'à la prochaine réunion de la RBA",
+      "probabilite": "elevee",
+      "justification": "Le soutien du portage compense la contraction récente de l'emploi et la fermeté de l'USD.",
+      "source_ids": [
+       "src_015",
+       "src_257",
+       "src_025"
+      ]
+     },
+     {
+      "type": "baissier",
+      "declencheur": "Rupture du support technique à 0.70107 couplée à une dégradation continue des données d'activité en Chine",
+      "probabilite": "faible",
+      "justification": "Le différentiel de rendement positif protège la devise contre une baisse brutale à court terme.",
+      "source_ids": [
+       "src_022",
+       "src_050",
+       "src_015"
+      ]
+     }
+    ],
+    "catalyseurs": [
+     {
+      "date": "2026-11-03",
+      "heure_utc": "03:30",
+      "evenement": "Cash Rate",
+      "impact": "high",
+      "consensus": null,
+      "source_id": "src_247",
+      "pourquoi": "La décision sur le Cash Rate permettra d'évaluer la volonté de la RBA de maintenir ses taux restrictifs face à l'inflation."
+     },
+     {
+      "date": "2026-11-04",
+      "heure_utc": "00:30",
+      "evenement": "Household Spending m/m",
+      "impact": "low",
+      "consensus": null,
+      "source_id": "src_248",
+      "pourquoi": "Les dépenses des ménages apporteront des précisions sur la demande intérieure et le comportement du consommateur."
+     },
+     {
+      "date": "2026-11-19",
+      "heure_utc": "00:30",
+      "evenement": "Unemployment Rate",
+      "impact": "high",
+      "consensus": null,
+      "source_id": "src_249",
+      "pourquoi": "Le taux de chômage indiquera si la dégradation récente de l'emploi se confirme ou s'il s'agissait d'un phénomène ponctuel."
+     },
+     {
+      "date": "2026-11-19",
+      "heure_utc": "00:30",
+      "evenement": "Employment Change",
+      "impact": "high",
+      "consensus": null,
+      "source_id": "src_250",
+      "pourquoi": "La variation de l'emploi donnera la mesure exacte de la santé du marché du travail australien."
+     }
+    ],
+    "invalidation": [
+     {
+      "signal": "Enfoncement net du support technique hebdomadaire à 0.70107",
+      "source_id": "src_022"
+     },
+     {
+      "signal": "Chute inattendue des indicateurs d'inflation sous 3.8% modifiant le biais de la RBA",
+      "source_id": "src_251"
+     },
+     {
+      "signal": "Contraction nette des PMI manufacturiers chinois sous 48.0",
+      "source_id": "src_050"
+     }
+    ],
+    "opportunites": [
+     {
+      "texte": "Maintien de la structure de tendance haussière weekly au-dessus du support à 0.70311",
+      "mecanisme": "La préservation des supports majeurs en tendance de fond attire les flux acheteurs alignés sur la dynamique de long terme.",
+      "source_id": "src_022",
+      "non_sourcee": false
+     },
+     {
+      "texte": "Différentiel de taux directeur favorable de +1.85 pt par rapport à la médiane G8",
+      "mecanisme": "Un taux de portage élevé génère un flux acheteur structurel de carry trade au détriment des devises à faible rendement.",
+      "source_id": "src_015",
+      "non_sourcee": false
+     },
+     {
+      "texte": "Surprise haussière sur le CPI annuel réévalué à 4.3%",
+      "mecanisme": "L'inflation persistante force la banque centrale à maintenir des taux élevés, soutenant l'attractivité obligataire de la devise.",
+      "source_id": "src_251",
+      "non_sourcee": false
+     }
+    ],
+    "menaces": [
+     {
+      "texte": "Solidité de l'indice dollar évoluant au-dessus de sa moyenne mobile 200 jours",
+      "mecanisme": "La fermeté du dollar américain exerce un frein mécanique direct sur la progression du cours AUD/USD.",
+      "source_id": "src_025",
+      "non_sourcee": false
+     },
+     {
+      "texte": "Destruction nette d'emplois enregistrée à -39.3K",
+      "mecanisme": "Une faiblesse prolongée du marché du travail limite la marge de manœuvre de la RBA pour durcir sa politique monétaire.",
+      "source_id": "src_257",
+      "non_sourcee": false
+     },
+     {
+      "texte": "Ralentissement des indicateurs PMI manufacturiers en Chine",
+      "mecanisme": "Le ralentissement de l'économie chinoise réduit la demande de matières premières australiennes et dégrade la balance commerciale.",
+      "source_id": "src_050",
+      "non_sourcee": false
+     }
+    ],
+    "controles": [],
+    "redige_par": {
+     "modele": "gemini-3.5-flash",
+     "libelle": "Flash 3.5"
+    },
+    "statut": "ok",
+    "tentatives": 2,
+    "genere_le": "2026-10-29T16:17:13+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.47,
@@ -3906,9 +4397,9 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite passé en dernier | gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) |",
-    "tentatives": 1,
-    "genere_le": "2026-10-29T15:52:22+00:00"
+    "raison": "tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash passé en dernier | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint ",
+    "tentatives": 2,
+    "genere_le": "2026-10-29T16:17:33+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.91,
@@ -4173,9 +4664,9 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite passé en dernier | gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) |",
-    "tentatives": 1,
-    "genere_le": "2026-10-29T15:52:42+00:00"
+    "raison": "tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash passé en dernier | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint ",
+    "tentatives": 2,
+    "genere_le": "2026-10-29T16:17:53+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.46,
@@ -8997,13 +9488,11 @@
  },
  "controle_qualite": {
   "conforme": false,
-  "nb_anomalies": 6,
+  "nb_anomalies": 4,
   "anomalies": [
-   "CHF : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite pa)",
-   "CAD : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite pa)",
-   "AUD : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite pa)",
-   "NZD : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite pa)",
-   "CNY : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite pa)",
+   "CAD : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash passé e)",
+   "NZD : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash passé e)",
+   "CNY : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash passé e)",
    "prompt LLM volumineux : 19 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 21534 à 15:24 UTC, modèle gemini-3.5-flash) — le contexte envoyé au LLM a regrossi"
   ]
  },
@@ -9013,6 +9502,6 @@
   "suggestions_connaissances": [],
   "validation": "non_evalue",
   "indisponible": true,
-  "note": "relecture non effectuée (tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite passé en dernier | gemini-3.5-flash : ignoré (disjon)"
+  "note": "relecture non effectuée (tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash passé en dernier | gemini-3.8-flash : ignoré (disjoncteur)"
  }
 }
