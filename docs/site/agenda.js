@@ -10,7 +10,9 @@ const CDN = {
 };
 const COURTS = { 1: "Thème", 2: "Monétaire", 3: "Données", 4: "Fiscale", 5: "Marchés", 6: "Géopolitique", 7: "Flux", 8: "Offre" };
 const FILTRES = [["tout", "Tout"], ["bc", "Réunions BC"], ["chiffre", "Chiffres"], ["discours", "Discours"], ["fort", "Impact fort"]];
-const CLASSE_TYPE = { "Réunion BC": "bc", "Conférence": "discours", "Discours": "discours", "Grand rendez-vous": "grand", "Chiffre": "chiffre" };
+const CLASSE_TYPE = { "Réunion BC": "bc", "Conférence": "discours", "Discours": "discours", "Grand rendez-vous": "grand",
+                      "Adjudication": "chiffre", "Chiffre": "chiffre" };
+const STATUTS = { estimation: "estimation", provisoire: "provisoire", "révisé": "révisé", "confirmé": "confirmé" };
 const JOUR_COURT = new Intl.DateTimeFormat("fr-FR", { weekday: "short", timeZone: "UTC" });
 const JOUR_LONG = new Intl.DateTimeFormat("fr-FR", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" });
 const virgule = v => v == null || v === "" ? null : String(v).replace(/(\d)\.(\d)/g, "$1,$2");
@@ -233,7 +235,9 @@ function ligneEvenement(e) {
   corps.append(t, src);
   const valeurs = el("div", "ag-valeurs tabulaire");
   const v = (lib, x, raison, cls, champ) => {
+    const st = e.statuts?.[champ];
     const s = el("span", cls || null, `${lib} ${virgule(x) ?? "n/d"}`);
+    if (x != null && st) { const b = el("small", `ag-statut-chiffre ${st === "révisé" ? "revise" : st}`, ` ${STATUTS[st] || st}`); s.appendChild(b); if (st === "révisé" && e.revision_detail) b.title = String(e.revision_detail); }
     if (x == null && raison) s.title = raison;
     else if (x != null) certifier(s, { libelle: `${e.evenement} (${e.devise}) · ${lib}`, valeur: virgule(x),
                                        source: e.sources_champs?.[champ] || e.source, date: e.date_paris,

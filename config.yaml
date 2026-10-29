@@ -1017,7 +1017,7 @@ rss:
 # motifs : mots repérés dans le libellé « source » d'un chiffre du site, pour son certificat.
 sources:
   - { id: fred, nom: "FRED / ALFRED (Fed de St. Louis)", statut: officielle, frequence: quotidienne, retard_jours: 2,
-      alimente: "Taux US, VIX, S&P 500, pétrole, indice dollar large, CPI, PIB, millésimes ALFRED du simulateur",
+      alimente: "Taux US 2, 10 et 30 ans, taux réel (TIPS), point mort d'inflation, crédit high yield, VIX, S&P 500, pétrole, CPI, PIB, millésimes ALFRED",
       mesure: { historique: [USD_2a, USD_10a, vix, sp500, wti, brent] }, motifs: ["FRED", "ALFRED"] }
   - { id: fed_h10, nom: "Fed H.10 (via FRED)", statut: officielle, frequence: hebdomadaire, retard_jours: 3,
       alimente: "Indice dollar large, cours de référence des 8 devises face au dollar", mesure: { historique: [dollar_large, FX_EUR] },
@@ -1035,10 +1035,14 @@ sources:
       motifs: ["Bundesbank", "Banque d'Angleterre", "Banque du Japon", "Ministère des Finances du Japon", "Banque du Canada"] }
   - { id: calendriers_officiels, nom: "Calendriers officiels des 9 banques centrales", statut: officielle, frequence: annuelle, retard_jours: 0,
       alimente: "Agenda : dates des réunions (date de vérification)", mesure: { config_reunions: true }, motifs: ["calendrier officiel", "Calendrier FOMC"] }
+  - { id: tresor, nom: "TreasuryDirect (Trésor US)", statut: officielle, frequence: collecte, retard_jours: 0,
+      alimente: "Agenda : adjudications de notes et d'obligations US", mesure: { cache: agenda_tresor }, motifs: ["TreasuryDirect"] }
+  - { id: alfred, nom: "ALFRED (millésimes FRED)", statut: officielle, frequence: collecte, retard_jours: 0,
+      alimente: "Statut « révisé » des publications US (emploi, PIB, IPC)", mesure: { cache: agenda_revisions }, motifs: ["ALFRED"] }
   - { id: fred_calendrier, nom: "FRED releases/dates", statut: officielle, frequence: collecte, retard_jours: 0,
       alimente: "Agenda : dates des publications US", mesure: { cache: agenda_fred }, motifs: ["FRED releases/dates"] }
   - { id: twelve_data, nom: "Twelve Data", statut: api, frequence: quotidienne, retard_jours: 1,
-      alimente: "Cours des paires, RSI et moyennes mobiles, bougies 30 min / 4 h (Mes paires), ETF obligataire",
+      alimente: "Cours des paires, RSI et moyennes mobiles, bougies 30 min / 4 h (Mes paires), or (XAU/USD), ETF TLT, QQQ (Nasdaq 100), EWJ (Japon), EWG (Allemagne)",
       mesure: { historique: [oblig_us_tlt], cache: technique }, motifs: ["Twelve Data"] }
   - { id: gemini, nom: "Gemini (rédaction seulement)", statut: api, frequence: collecte, retard_jours: 0,
       alimente: "Textes : jamais un chiffre, une direction ni un seuil", mesure: { quota: true }, motifs: ["modèle", "Gemini"] }

@@ -40,7 +40,7 @@ PAIRE_PRINCIPALE = {"USD": ("EUR/USD", -1), "EUR": ("EUR/USD", 1), "GBP": ("GBP/
                     "CNY": ("USD/CNY", -1)}
 IMPACTS = {"high": "fort", "medium": "moyen", "low": "faible", "holiday": "férié", "non-economic": "faible"}
 POINTS = {"fort": "●●●", "moyen": "●●○", "faible": "●○○"}
-TYPES = ("Réunion BC", "Conférence", "Discours", "Grand rendez-vous", "Chiffre")
+TYPES = ("Réunion BC", "Conférence", "Discours", "Grand rendez-vous", "Adjudication", "Chiffre")
 DECISION = re.compile(r"federal funds rate|main refinancing rate|deposit facility rate|official bank rate|overnight rate"
                       r"|^cash rate|official cash rate|boj policy rate|snb policy rate|loan prime rate", re.I)
 CONFERENCE = re.compile(r"press conference", re.I)
@@ -264,7 +264,8 @@ def _depuis_mois(ag: Agenda, mois: list[dict] | None, verifie_le: str | None) ->
             continue
         quand = datetime.fromtimestamp(int(it["dateline"]), tz=timezone.utc)
         ag.ajouter(str(it.get("devise") or "").upper(), str(it["nom"])[:150], quand, it.get("impact") or "",
-                   it.get("precedent"), it.get("prevision"), it.get("reel"), SOURCE_MOIS, verifie_le=verifie_le)
+                   it.get("precedent"), it.get("prevision"), it.get("reel"), SOURCE_MOIS, verifie_le=verifie_le,
+                   extra={"revision": it.get("revision")} if it.get("revision") else None)
 
 
 def _depuis_semaine(ag: Agenda, ff_brut: str | None, verifie_le: str | None) -> None:
@@ -362,6 +363,25 @@ def _depuis_fred(ag: Agenda, fred: dict | None, cfg_fred: dict | None) -> None:
             e["raison_consensus"] = "consensus publié par ForexFactory la semaine de la publication"
 
 
+def _depuis_tresor(ag: Agenda, tresor: dict | None) -> None:
+    """Adjudications du Trésor US (TreasuryDirect, API officielle) : Notes, Bonds et TIPS ; Bills écartés (trop nombreux,
+    peu d'effet de marché). Heure de clôture des offres compétitives, heure de New York."""
+    for t in (tresor or {}).get("adjudications") or []:
+        if t.get("type") not in ("Note", "Bond", "TIPS"):
+            continue
+        try:
+            h = datetime.strptime(t.get("heure") or "1:00 PM", "%I:%M %p")
+            quand = datetime.fromisoformat(f"{t['date']}T{h:%H:%M}").replace(tzinfo=fuseau("America/New_York"))
+        except (KeyError, ValueError):
+            continue
+        long_terme = t.get("duree", "").startswith(("10-", "20-", "30-")) or t.get("type") == "Bond"
+        nom = f"Adjudication du Trésor US : {t['type'].replace('Bond', 'obligation').replace('Note', 'note')} {t.get('duree', '')}".strip()
+        ag.ajouter("USD", f"Treasury {t.get('type')} {t.get('duree')} auction", quand, "medium" if long_terme else "low",
+                   source="TreasuryDirect (adjudications à venir, API officielle)", verifie_le=(tresor or {}).get("collecte_le"),
+                   titre_fr=nom.replace("-Year", " ans").replace("-Week", " semaines"), type_force="Adjudication",
+                   extra={"engrenage": 4})
+
+
 def _depuis_grands(ag: Agenda, grands: list[dict] | None) -> list[dict]:
     """Grands rendez-vous : dans l'agenda s'ils tombent dans la fenêtre ; tous ceux à venir dans la liste à part."""
     a_venir = []
@@ -381,6 +401,33 @@ def _depuis_grands(ag: Agenda, grands: list[dict] | None) -> list[dict]:
                        verifie_le=g.get("verifie_le"), titre_fr=g["titre"], type_force="Grand rendez-vous",
                        extra={"statut_source": g.get("statut"), "devises_concernees": g.get("devises")})
     return sorted(a_venir, key=lambda g: g["date"])
+
+
+# ------------------------------------------------------------------ statut de chaque chiffre
+PROVISOIRE = re.compile(r"\b(advance|prelim|flash)\b", re.I)
+# Évènement USD -> série ALFRED dont les millésimes disent si la publication précédente a été révisée
+REVISION_ALFRED = [(r"non-farm", "PAYEMS"), (r"gdp", "GDP"), (r"\bcpi\b", "CPIAUCSL")]
+
+
+def statuts(ag: Agenda, revisions: dict | None) -> None:
+    """Statut de chaque chiffre : estimation (consensus), provisoire (1re estimation, flash, prélim.), révisé (millésime
+    ALFRED changé, ou révision publiée par ForexFactory), confirmé (valeur publiée définitive ou confirmée par l'institut)."""
+    rev = (revisions or {}).get("series") or {}
+    for e in ag.lignes.values():
+        s = {}
+        if e.get("consensus"):
+            s["consensus"] = "estimation"
+        if e.get("publie"):
+            s["publie"] = "provisoire" if PROVISOIRE.search(e.get("evenement_en", "")) else "confirmé"
+        if e.get("precedent"):
+            serie = next((sid for motif, sid in REVISION_ALFRED if e["devise"] == "USD" and re.search(motif, e.get("evenement_en", ""), re.I)), None)
+            r = ((rev.get(serie) or {}).get("avant_derniere" if e.get("publie") else "derniere")) if serie else None
+            if e.get("revision") or (r and r.get("revise")):
+                s["precedent"] = "révisé"
+                e["revision_detail"] = e.get("revision") or r.get("detail")
+            else:
+                s["precedent"] = "confirmé"
+        e["statuts"] = s
 
 
 # ------------------------------------------------------------------ réaction passée
@@ -548,7 +595,8 @@ def banques_centrales(registre: dict | None, config: dict | None, ag: Agenda, re
 def calculer(ff_brut: str | None, glissants: list[dict] | None, registre: dict | None, config: dict | None,
              maintenant: datetime | None = None, mois: list[dict] | None = None, fred: dict | None = None,
              impact: dict | None = None, archive: dict | None = None, series: dict | None = None,
-             macro: dict | None = None, verifs: dict | None = None) -> dict:
+             macro: dict | None = None, verifs: dict | None = None, tresor: dict | None = None,
+             revisions: dict | None = None) -> dict:
     maintenant = maintenant or datetime.now(timezone.utc)
     ag = Agenda(config, maintenant)
     cfg = ag.cfg
@@ -559,10 +607,12 @@ def calculer(ff_brut: str | None, glissants: list[dict] | None, registre: dict |
     _depuis_registre(ag, registre)
     _depuis_officiels(ag, cfg.get("reunions") or {})
     _depuis_fred(ag, fred, cfg.get("fred_publications") or {})
+    _depuis_tresor(ag, tresor)
     grands = _depuis_grands(ag, cfg.get("grands_rendez_vous"))
     refs = _references_taux(registre, macro)
     badges(ag, refs)
     reactions(ag, impact, archive, series or {})
+    statuts(ag, revisions)
     for e in ag.lignes.values():
         if not e.get("consensus"):
             e.setdefault("raison_consensus", "pas de consensus publié" if e["type"] in ("Chiffre", "Réunion BC") else
@@ -646,7 +696,7 @@ def memoriser_mois(evenements: list[dict], dossier_cache: str | Path, maintenant
     for e in evenements or []:
         if e.get("dateline"):
             garde[str(e.get("id") or (e.get("devise"), e.get("nom"), e.get("dateline")))] = {
-                k: e.get(k) for k in ("id", "devise", "nom", "impact", "dateline", "reel", "prevision", "precedent")}
+                k: e.get(k) for k in ("id", "devise", "nom", "impact", "dateline", "reel", "prevision", "precedent", "revision")}
     liste = sorted((e for e in garde.values() if bas <= int(e["dateline"]) <= haut), key=lambda e: int(e["dateline"]))
     chemin.write_text(json.dumps({"maj": maintenant.isoformat(timespec="seconds"), "evenements": liste}, ensure_ascii=False),
                       encoding="utf-8")
@@ -687,6 +737,58 @@ def collecter_fred(cle: str, aujourdhui: date, jours: int = 15) -> dict:
         return {"dates": [], "erreurs": [masquer_secrets(str(exc))[:200]], "collecte_le": aujourdhui.isoformat()}
 
 
+def collecter_tresor(aujourdhui: date) -> dict:
+    """TreasuryDirect : adjudications annoncées à venir (API officielle, une requête par jour)."""
+    import requests
+    from core.secrets import masquer_secrets
+    try:
+        rep = requests.get("https://www.treasurydirect.gov/TA_WS/securities/upcoming", params={"format": "json"},
+                           headers={"User-Agent": "agents-forex/1.0"}, timeout=30)
+        rep.raise_for_status()
+        sortie = [{"type": x.get("securityType"), "duree": x.get("securityTerm"), "date": str(x.get("competitiveAuctionCloseDate"))[:10],
+                   "heure": x.get("competitiveAuctionCloseTime"), "cusip": x.get("cusip")} for x in rep.json()]
+        return {"adjudications": sortie, "erreurs": [], "collecte_le": aujourdhui.isoformat()}
+    except Exception as exc:  # noqa: BLE001
+        return {"adjudications": [], "erreurs": [masquer_secrets(str(exc))[:200]], "collecte_le": aujourdhui.isoformat()}
+
+
+def collecter_revisions(cle: str, aujourdhui: date) -> dict:
+    """ALFRED : la dernière observation publiée a-t-elle changé d'un millésime à l'autre ? (3 séries, 3 requêtes)."""
+    import requests
+    from core.secrets import masquer_secrets
+    sortie = {"series": {}, "erreurs": [], "collecte_le": aujourdhui.isoformat()}
+    if not cle:
+        sortie["erreurs"].append("FRED_API_KEY absente")
+        return sortie
+    for sid in ("PAYEMS", "GDP", "CPIAUCSL"):
+        try:
+            rep = requests.get("https://api.stlouisfed.org/fred/series/observations",
+                               params={"series_id": sid, "api_key": cle, "file_type": "json", "realtime_start": (aujourdhui - timedelta(days=120)).isoformat(),
+                                       "realtime_end": "9999-12-31", "observation_start": (aujourdhui - timedelta(days=200)).isoformat()}, timeout=30)
+            rep.raise_for_status()
+            sortie["series"][sid] = analyser_millesimes(rep.json().get("observations") or [])
+        except Exception as exc:  # noqa: BLE001
+            sortie["erreurs"].append(f"{sid} : {masquer_secrets(str(exc))[:150]}")
+    return sortie
+
+
+def analyser_millesimes(observations: list[dict]) -> dict:
+    """Observations ALFRED (plusieurs millésimes par période) -> révision de la dernière et de l'avant-dernière période.
+    Avant une publication, son « précédent » est la dernière période ; après, c'est l'avant-dernière, que la
+    publication a pu réviser."""
+    par_periode: dict[str, list] = {}
+    for o in observations:
+        if o.get("value") not in (".", None):
+            par_periode.setdefault(o["date"], []).append((o["realtime_start"], o["value"]))
+    periodes = sorted(par_periode)
+
+    def etat(p):
+        valeurs = [v for _, v in sorted(par_periode[p])]
+        return {"periode": p, "revise": len(set(valeurs)) > 1,
+                "detail": f"période {p} : {valeurs[0]} puis {valeurs[-1]} (ALFRED)" if len(set(valeurs)) > 1 else None}
+    return {"derniere": etat(periodes[-1]) if periodes else None, "avant_derniere": etat(periodes[-2]) if len(periodes) > 1 else None}
+
+
 def _series_principales(h5, technique) -> dict:
     from core import paires
     sortie = {}
@@ -715,11 +817,21 @@ def ecrire(racine: str | Path, registre: dict | None, config: dict, h5=None, tec
             fred = {"dates": [], "erreurs": [str(exc)[:200]]}
         docs = racine / config.get("publication_web", {}).get("dossier_docs", "docs") / "data"
         macro = (_lire_json(cache / "collecte_macro.json") or {}).get("donnees")
+        try:
+            tresor = collecte_cache.avec_cache("agenda_tresor", cache, aujourd, True, collecter_tresor, aujourd)
+        except Exception as exc:  # noqa: BLE001
+            tresor = {"adjudications": [], "erreurs": [str(exc)[:200]]}
+        try:
+            revisions = collecte_cache.avec_cache("agenda_revisions", cache, aujourd, True, collecter_revisions,
+                                                  os.environ.get("FRED_API_KEY", "").strip(), aujourd)
+        except Exception as exc:  # noqa: BLE001
+            revisions = {"series": {}, "erreurs": [str(exc)[:200]]}
         donnees = calculer(ff, glissants, registre, config, mois=mois.get("evenements"), fred=fred,
                            impact=_lire_json(docs / "impact.json"),
                            archive=_lire_json(racine / "data" / "archives" / "publications.json"),
                            series=_series_principales(h5, technique) if h5 is not None else {}, macro=macro,
-                           verifs={"mois": (mois.get("maj") or "")[:16] or None, "semaine": semaine.get("date")})
+                           verifs={"mois": (mois.get("maj") or "")[:16] or None, "semaine": semaine.get("date")},
+                           tresor=tresor, revisions=revisions)
         (docs / "agenda.json").write_text(json.dumps(donnees, ensure_ascii=False, indent=1), encoding="utf-8")
         return donnees
     except Exception as exc:  # noqa: BLE001

@@ -63,6 +63,23 @@ SERIES_FRED.update({
     "USD_solde_pib": ("FYFSGDA188S", "FRED (FYFSGDA188S, solde fédéral / PIB)", "%", "annuel"),
     "USD_prime_terme": ("THREEFYTP10", "FRED (THREEFYTP10, prime de terme 10 ans, Kim-Wright)", "%", "quotidien"),
 })
+# Rapport du jour (étape 1) : courbe US complète, taux réel, point mort, crédit, cuivre, OAT (mensuels libellés « mensuel »)
+SERIES_FRED.update({
+    "USD_30a": ("DGS30", "FRED (DGS30)", "%", "quotidien"),
+    "USD_reel_10a": ("DFII10", "FRED (DFII10, taux réel 10 ans, TIPS)", "%", "quotidien"),
+    "USD_point_mort_10a": ("T10YIE", "FRED (T10YIE, point mort d'inflation 10 ans)", "%", "quotidien"),
+    "USD_spread_hy": ("BAMLH0A0HYM2", "FRED (BAMLH0A0HYM2, écart de crédit high yield US, ICE BofA)", "%", "quotidien"),
+    "cuivre_mensuel": ("PCOPPUSDM", "FRED (PCOPPUSDM, cuivre, FMI, mensuel)", "$/tonne", "mensuel"),
+    "FRA_10a_mensuel": ("IRLTLT01FRM156N", "OCDE via FRED (IRLTLT01FRM156N, 10 ans France, mensuel)", "%", "mensuel"),
+})
+# Twelve Data (plan gratuit vérifié le 29/10/2026) : or au comptant ; indices remplacés par des ETF clairement libellés
+# (NDX payant, N225 et DAX indisponibles ou ambigus sur le plan gratuit). Une requête par symbole et par jour.
+SERIES_TWELVE = {
+    "or_xau": ("XAU/USD", "Twelve Data (XAU/USD, or au comptant)", "$/once"),
+    "nasdaq_qqq": ("QQQ", "Twelve Data (ETF QQQ, réplique le Nasdaq 100 — pas l'indice lui-même)", "$"),
+    "japon_ewj": ("EWJ", "Twelve Data (ETF EWJ, actions japonaises — indicateur du Nikkei, pas l'indice)", "$"),
+    "allemagne_ewg": ("EWG", "Twelve Data (ETF EWG, actions allemandes — indicateur du DAX, pas l'indice)", "$"),
+}
 # Taux de change quotidiens (Fed H.10) pour les précédents historiques : « ce qu'a fait la devise ensuite ».
 # inverse = cotation en unités de devise pour 1 USD (la force de la devise est alors 1 / taux).
 CHANGES_FRED = {"EUR": ("DEXUSEU", False), "GBP": ("DEXUSUK", False), "JPY": ("DEXJPUS", True), "CHF": ("DEXSZUS", True),
@@ -232,6 +249,8 @@ def collecter(config: dict) -> dict:
     if cle_twelve:
         ajouter("oblig_us_tlt", lambda: _twelve("TLT", aujourdhui - timedelta(days=historique_5ans.FENETRE_JOURS), cle_twelve),
                 "Twelve Data (TLT, ETF obligations d'État US 20 ans et plus)", "$", "quotidien")
+        for nom, (symbole, source, unite) in SERIES_TWELVE.items():
+            ajouter(nom, lambda s=symbole: _twelve(s, aujourdhui - timedelta(days=400), cle_twelve), source, unite, "quotidien")
     else:
         resultat["erreurs"].append("TWELVE_DATA_API_KEY absente : obligations US (TLT) non collectées")
     # Pétrole : stocks commerciaux de brut et production US, hebdomadaires sur 6 ans (moyenne 5 ans)
