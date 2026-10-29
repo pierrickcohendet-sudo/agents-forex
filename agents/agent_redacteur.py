@@ -1029,3 +1029,114 @@ def publier_dossier_hebdo(config: dict, contenu: dict, chemin_config: str | Path
     client.blocks.children.append(page["id"], children=[nb.titre(2, NOTES_TITRE), {"type": "paragraph", "paragraph": {"rich_text": []}}])
     log.info("Page Notion du dossier hebdo créée : %s", page.get("url"))
     return page.get("url")
+
+
+# ------------------------------------------------------- rapport du jour (lot « Rapport du jour »)
+TYPE_RAPPORT_JOUR = "rapport du jour"
+
+
+def _f(v, d: int = 2) -> str:
+    return "n/d" if v is None else f"{v:+.{d}f}".replace(".", ",").replace("-", "−")
+
+
+def blocs_rapport_jour(r: dict) -> list[dict]:
+    """Blocs Notion du Rapport du jour : mêmes sections que la page du site, chiffres sourcés, textes validés."""
+    def texte(sec):
+        return (r.get(sec) or {}).get("texte") or (r.get(sec) or {}).get("phrase_python") or ""
+
+    b = [nb.paragraphe_gris(f"⚙️ Rapport du jour généré automatiquement le {r.get('genere_le', '')[:16]} UTC — version {r.get('version')}. "
+                            "Aide à la décision : jamais un ordre d'achat ou de vente."),
+         nb.titre(1, f"Rapport FX du {r.get('date')}"),
+         nb.titre(2, "Synthèse exécutive"), nb.paragraphe([nb.rt(texte("synthese"))])]
+    for c in (r.get("synthese") or {}).get("catalyseurs") or []:
+        jour = c["date_paris"]
+        b.append(nb.puce([nb.rt(f"{jour[8:10]}/{jour[5:7]} {c.get('heure_paris') or ''} · {c['devise']} · {c['evenement']}")]))
+    b.append(nb.tableau(["Devise", "Biais de travail", "Condition", "Statut"],
+                        [[x["devise"], x["biais"], x["condition"], x["statut"]] for x in (r.get("synthese") or {}).get("biais") or []]))
+    b.append(nb.paragraphe_gris((r.get("synthese") or {}).get("mention") or ""))
+    pm = r.get("point_marche") or {}
+    lignes = []
+    for l in pm.get("lignes") or []:
+        niveau = "n/d" if l["niveau"] is None else f"{l['niveau']:.4g}"
+        lignes.append([l["actif"], niveau, _f(l["variation_j1"]), _f(l["variation_5j"]), l.get("lecture") or l.get("raison") or "",
+                       f"{l.get('source') or ''} · {l.get('heure') or ''}"])
+    b += [nb.titre(2, "Point de marché"), nb.paragraphe([nb.rt(pm.get("lecture_modele") or pm.get("lecture") or "", gras=True)]),
+          nb.tableau(["Actif", "Niveau", "J-1", "5 séances", "Lecture", "Source"], lignes)]
+    b.append(nb.titre(2, "Lecture institutionnelle et scénarios"))
+    for m in (r.get("lecture") or {}).get("detectes") or []:
+        chiffres = " ; ".join(c["chiffre"] for c in m["conditions"])
+        b.append(nb.puce([nb.rt(m["libelle"] + " : ", gras=True), nb.rt(f"{m['lecture']} ({chiffres})")]))
+    sc = r.get("scenarios") or {}
+    b.append(nb.paragraphe([nb.rt(sc.get("texte_mieux_confirme") or "", gras=True)]))
+    for s in sc.get("liste") or []:
+        b.append(nb.puce([nb.rt(f"{s['titre']} : {s['statut']}{' (invalidé)' if s.get('invalide') else ''}")]))
+    b.append(nb.titre(2, "Calendrier commenté"))
+    for j in (r.get("calendrier") or {}).get("jours") or []:
+        b.append(nb.puce([nb.rt(f"{j['date']} — {j['titre']} : ", gras=True), nb.rt(j["lecture"])]))
+    for f in (r.get("calendrier") or {}).get("fenetres") or []:
+        b.append(nb.puce([nb.rt(f"Fenêtre à ne pas manquer : {f['date']} {f['heure']} (score {f['score']}) — {', '.join(f['evenements'][:3])}")]))
+    if r.get("banques"):
+        b.append(nb.titre(2, "Banques centrales de la semaine"))
+        for x in r["banques"]:
+            m = x.get("marche") or {}
+            marche = f"{m.get('ecart_pb')} pb" if m else "n/d"
+            badge = f", {x['badge']['texte']}" if x.get("badge") else ""
+            b.append(nb.puce([nb.rt(f"{x['court']} ({x['date']}) : ", gras=True),
+                              nb.rt(f"taux {x.get('taux')} ({x.get('type_taux') or 'taux directeur'}), consensus {x.get('consensus') or 'n/d'}{badge} ; "
+                                    f"indication de marché {marche} ; à surveiller : {', '.join(x.get('a_surveiller') or [])}")]))
+    b += [nb.titre(2, "Bilan de la semaine passée"), nb.paragraphe([nb.rt(texte("bilan"))])]
+    for s in (r.get("bilan") or {}).get("surprises") or []:
+        b.append(nb.puce([nb.rt(f"{s['devise']} {s['indicateur']} ({s['date']}) : publié {s['publie']} contre {s['consensus']} "
+                                f"({_f(s['surprise_ecarts'])} écarts)")]))
+    wl = r.get("watchlist") or {}
+    b += [nb.titre(2, "Watchlist"), nb.paragraphe_gris(wl.get("mention") or "")]
+    for w in wl.get("top") or []:
+        h = w["scenario_haussier"].get("texte") or " ; ".join(w["scenario_haussier"]["conditions"])
+        bs = w["scenario_baissier"].get("texte") or " ; ".join(w["scenario_baissier"]["conditions"])
+        b.append(nb.puce([nb.rt(f"{w['paire']} — {w['libelle']} (score {w['score']}) : ", gras=True),
+                          nb.rt(f"haussier si {h} ; baissier si {bs}. Risque : {w.get('risque')}")]))
+    p = r.get("plan") or {}
+    b.append(nb.titre(2, "Plan d'action du jour"))
+    if p.get("texte"):
+        b.append(nb.paragraphe([nb.rt(p["texte"])]))
+    for nom, cle in (("Avant la session", "avant"), ("Pendant", "pendant"), ("Avant la clôture", "cloture")):
+        b.append(nb.puce([nb.rt(f"{nom} : ", gras=True), nb.rt(" ; ".join(p.get(cle) or []))]))
+    b += [nb.titre(2, "Conclusion"), nb.paragraphe([nb.rt(texte("conclusion"))]), nb.paragraphe_gris(r.get("mention") or "")]
+    return b
+
+
+def publier_rapport_jour(config: dict, r: dict, chemin_config: str | Path | None = None, client: Client | None = None) -> str | None:
+    """Écrit le Rapport du jour dans la base Notion existante (nouvelle entrée), puis, l'écriture réussie, met à la
+    corbeille les versions précédentes du même jour (récupérables dans Notion). Retourne l'URL."""
+    cfg = config.get("notion", {})
+    if not cfg.get("actif", True):
+        return None
+    if client is None:
+        cle = os.environ.get("NOTION_API_KEY", "").strip()
+        if not cle:
+            log.warning("Rapport du jour : NOTION_API_KEY manquante, copie Notion sautée")
+            return None
+        client = Client(auth=cle)
+    database_id = _obtenir_database(client, cfg, chemin_config)
+    if not database_id:
+        return None
+    ds = _obtenir_data_source(client, database_id)
+    filtre = {"and": [{"property": "Date", "date": {"equals": r["date"]}}, {"property": "Type", "select": {"equals": TYPE_RAPPORT_JOUR}}]}
+    anciennes = client.data_sources.query(ds, filter=filtre, page_size=10).get("results") or []
+    titre = f"Rapport du jour — {r['date']} ({r.get('version')})"
+    semaine = hebdo.semaine_iso(date.fromisoformat(r["date"]))
+    page = client.pages.create(
+        parent={"type": "data_source_id", "data_source_id": ds}, icon={"type": "emoji", "emoji": "🗞️"},
+        properties={"Nom": {"title": [{"type": "text", "text": {"content": titre}}]},
+                    "Date": {"date": {"start": r["date"]}}, "Type": {"select": {"name": TYPE_RAPPORT_JOUR}},
+                    "Semaine": {"rich_text": [{"type": "text", "text": {"content": semaine}}]}})
+    blocs = blocs_rapport_jour(r)
+    for i in range(0, len(blocs), 90):   # limite de l'API : 100 blocs par ajout
+        client.blocks.children.append(page["id"], children=blocs[i:i + 90])
+    for a in anciennes:   # l'écriture a réussi : les anciennes versions du jour vont à la corbeille (récupérables)
+        try:
+            client.pages.update(a["id"], in_trash=True)
+        except Exception as exc:  # noqa: BLE001
+            log.warning("Ancienne version du rapport du jour non mise à la corbeille : %s", masquer_secrets(str(exc))[:150])
+    log.info("Rapport du jour copié dans Notion : %s (%d ancienne(s) version(s) à la corbeille)", page.get("url"), len(anciennes))
+    return page.get("url")

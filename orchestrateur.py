@@ -36,7 +36,7 @@ from pathlib import Path
 import yaml
 from dotenv import load_dotenv
 
-from agents import (agent_consequences, agent_critique, agent_paires, collecte_intraday, agent_dossier_hebdo, agent_engrenages, agent_redacteur, agent_strategiste, agent_synthese,
+from agents import (agent_consequences, agent_critique, agent_paires, agent_rapport, collecte_intraday, agent_dossier_hebdo, agent_engrenages, agent_redacteur, agent_strategiste, agent_synthese,
                     collecte_calendrier, collecte_flux, collecte_historiques, collecte_macro, collecte_news,
                     collecte_technique)
 from core import (accueil, alertes, collecte_cache, controle_qualite, quota_twelve, seance, sources, indicateurs, cours, dossiers, evaluation, hebdo, historique_5ans, impact, marche_taux, overrides, precedents,
@@ -482,6 +482,12 @@ def main() -> int:
     # Journal (lot V5) : synthèse des « Mes paires » par le modèle, un appel groupé par jour, APRÈS les engrenages
     # et les devises (réserve de quota) ; la phrase Python reste si le modèle ou le quota manque.
     etape("synthèse des Mes paires (Journal)", agent_paires.executer, RACINE, config, llm, defaut={})
+    # Rapport du jour : sections calculées en Python, communiqués officiels archivés, 2 appels groupés au plus (une fois
+    # par jour, après les engrenages et la réserve de quota), repli 100 % Python ; copie Notion au run complet.
+    rapport_jour_donnees = etape("rapport du jour", agent_rapport.executer, RACINE, config, llm, defaut=None)
+    if rapport_jour_donnees and not arguments.completer and not arguments.sans_notion:
+        etape("rapport du jour dans Notion", agent_redacteur.publier_rapport_jour, config, rapport_jour_donnees,
+              RACINE / "config.yaml")
 
     # Journal léger des appels LLM (taille estimée + modèle utilisé) : en
     # --completer, s'ajoute à ceux du matin (plafonné) ; puis alerte qualité

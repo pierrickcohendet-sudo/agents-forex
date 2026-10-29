@@ -1262,6 +1262,127 @@ matrice_impact:
           texte: "Brent, variation sur 4 semaines"
           pedagogie: "Un pétrole plus cher soutient les devises des pays exportateurs (CAD) et pèse sur celles des importateurs (JPY, EUR), via la balance commerciale."
 
+# --- Rapport du jour (lot « Rapport du jour ») --------------------------------------------------
+# Tout ce qui classe, déclenche ou oriente est calculé en Python avec ces tables ; le modèle ne fait que rédiger
+# (2 appels groupés au plus, après les engrenages, repli 100 % Python). Variables disponibles : voir
+# core/rapport_jour.py, VARIABLES (variations sur 5 séances en pb ou en %, niveaux, surprises).
+rapport:
+  heure_bascule_accueil: "13:00"   # heure de Paris : avant, la page d'accueil est le Rapport ; après, « Aujourd'hui »
+  # Point de marché : lecture en une ligne, première règle vérifiée (sinon « mouvement sans signal net »)
+  lectures_marche:
+    - { si: [[us10a_5j, "<", -5], [nasdaq_5j, "<", -1]], texte: "rendements et actions en baisse : recherche de sécurité" }
+    - { si: [[us10a_5j, ">", 5], [nasdaq_5j, "<", -1]], texte: "rendements en hausse et actions en baisse : resserrement des conditions financières" }
+    - { si: [[us10a_5j, "<", -5], [nasdaq_5j, ">", 1]], texte: "rendements en baisse et actions en hausse : détente favorable au risque" }
+    - { si: [[us10a_5j, ">", 5], [nasdaq_5j, ">", 1]], texte: "rendements et actions en hausse : croissance plutôt que crainte" }
+  # Mécanismes détectés : combinaisons de signaux ; chaque mécanisme affiche les chiffres qui le déclenchent
+  mecanismes:
+    - { id: fuite_qualite, libelle: "Fuite vers la qualité", si: [[us10a_5j, "<", -5], [nasdaq_5j, "<", -1]],
+        lecture: "Les capitaux quittent les actifs risqués pour les obligations d'État : soutien du yen et du franc suisse." }
+    - { id: soutien_dollar_diminue, libelle: "Soutien au dollar qui diminue", si: [[ecart_2a_us_de_5j, "<", -5]],
+        lecture: "L'écart de rendement à 2 ans entre les États-Unis et l'Allemagne se resserre : le portage du dollar s'érode." }
+    - { id: soutien_dollar_augmente, libelle: "Soutien au dollar qui augmente", si: [[ecart_2a_us_de_5j, ">", 5]],
+        lecture: "L'écart de rendement à 2 ans entre les États-Unis et l'Allemagne s'élargit : le portage du dollar se renforce." }
+    - { id: inflation_attenuee, libelle: "Craintes d'inflation atténuées", si: [[brent_5j, "<", -3]],
+        lecture: "Le pétrole recule : moins de pression sur l'inflation importée, soutien des devises importatrices (JPY, EUR)." }
+    - { id: inflation_ravivee, libelle: "Craintes d'inflation ravivées", si: [[brent_5j, ">", 3], [point_mort_10a_5j, ">", 3]],
+        lecture: "Pétrole et anticipations d'inflation montent ensemble : les banques centrales restent sous pression." }
+    - { id: appetit_risque, libelle: "Appétit pour le risque", si: [[vix_5j, "<", -2], [sp500_5j, ">", 1]],
+        lecture: "Volatilité en baisse et actions en hausse : soutien des devises cycliques (AUD, NZD, CAD)." }
+    - { id: tension_credit, libelle: "Tension sur le crédit", si: [[spread_hy_5j, ">", 15]],
+        lecture: "L'écart de crédit high yield s'élargit : signe de stress financier, prudence sur le risque." }
+    - { id: taux_reels_hausse, libelle: "Taux réels en hausse", si: [[reel_10a_5j, ">", 8]],
+        lecture: "Le taux réel à 10 ans monte : conditions financières plus strictes, pression sur l'or et les actions de croissance." }
+    - { id: or_refuge, libelle: "L'or joue son rôle de refuge", si: [[or_5j, ">", 2], [vix_5j, ">", 0]],
+        lecture: "L'or monte avec la volatilité : demande de protection." }
+    - { id: risque_budgetaire_fr, libelle: "Risque budgétaire français", si: [[oat_bund, ">", 80]],
+        lecture: "L'écart OAT-Bund dépasse 80 pb (données mensuelles) : prime de risque sur l'euro." }
+  # Trois scénarios standards : conditions mesurables (« X sur N remplies »), conséquences par devise, invalidations.
+  # Jamais de probabilité : le mieux confirmé est « le mieux confirmé à ce jour ».
+  scenarios:
+    - id: inflation_restrictive
+      titre: "Inflation persistante, banques centrales restrictives"
+      conditions:
+        - [surprise_cpi_us, ">", 0, "IPC US au-dessus du consensus"]
+        - [surprise_pce_us, ">", 0, "PCE sous-jacent US au-dessus du consensus"]
+        - [brent_5j, ">", 0, "Brent en hausse sur 5 séances"]
+        - [us2a_5j, ">", 0, "Rendement 2 ans US en hausse sur 5 séances"]
+        - [point_mort_10a_5j, ">", 0, "Point mort d'inflation 10 ans en hausse"]
+      consequences: { USD: 1, EUR: -1, GBP: 0, JPY: -1, CHF: -1, CAD: 1, AUD: -1, NZD: -1, CNY: -1 }
+      invalidations:
+        - [us2a_5j, "<", -15, "Rendement 2 ans US en baisse de plus de 15 pb"]
+        - [surprise_cpi_us, "<", -0.1, "IPC US nettement sous le consensus"]
+    - id: ralentissement
+      titre: "Ralentissement, détente des rendements"
+      conditions:
+        - [us2a_5j, "<", 0, "Rendement 2 ans US en baisse sur 5 séances"]
+        - [us10a_5j, "<", 0, "Rendement 10 ans US en baisse sur 5 séances"]
+        - [surprise_30j_usd, "<", 0, "Indice de surprise US sur 30 jours négatif"]
+        - [brent_5j, "<", 0, "Brent en baisse sur 5 séances"]
+        - [nasdaq_5j, "<", 0, "Nasdaq 100 (ETF QQQ) en baisse sur 5 séances"]
+      consequences: { USD: -1, EUR: 1, GBP: 0, JPY: 1, CHF: 1, CAD: -1, AUD: -1, NZD: -1, CNY: 0 }
+      invalidations:
+        - [us2a_5j, ">", 15, "Rendement 2 ans US en hausse de plus de 15 pb"]
+        - [surprise_30j_usd, ">", 0.5, "Indice de surprise US nettement positif"]
+    - id: choc_geopolitique
+      titre: "Choc géopolitique, dénouement des positions risquées"
+      conditions:
+        - [vix, ">", 22, "VIX au-dessus de 22"]
+        - [vix_5j, ">", 3, "VIX en hausse de plus de 3 points sur 5 séances"]
+        - [nasdaq_5j, "<", -2, "Nasdaq 100 (ETF QQQ) en baisse de plus de 2 %"]
+        - [or_5j, ">", 1, "Or en hausse de plus de 1 %"]
+        - [brent_5j, ">", 3, "Brent en hausse de plus de 3 %"]
+        - [oat_bund, ">", 80, "Écart OAT-Bund au-dessus de 80 pb (mensuel)"]
+      consequences: { USD: 1, EUR: -1, GBP: -1, JPY: 1, CHF: 1, CAD: 0, AUD: -1, NZD: -1, CNY: 0 }
+      invalidations:
+        - [vix, "<", 16, "VIX sous 16"]
+        - [nasdaq_5j, ">", 2, "Nasdaq 100 (ETF QQQ) en hausse de plus de 2 %"]
+  # Watchlist : poids du score de priorité (affiché avec sa décomposition)
+  watchlist:
+    poids: { evenements: 1.0, differentiel: 1.0, solde: 1.0, volatilite: 1.0 }
+    seuils_libelles: { priorite_elevee: 6, a_confirmer: 4 }
+    confirmations:
+      JPY: "écart de taux à 2 ans US − Japon, Nikkei (ETF EWJ), VIX"
+      AUD: "cuivre (mensuel), actions chinoises, VIX"
+      NZD: "enchères laitières GDT, VIX"
+      CAD: "pétrole (Brent, WTI), écart de taux à 2 ans US − Canada"
+      CHF: "VIX, or, écart de taux à 2 ans US − Suisse"
+      EUR: "écart de taux à 2 ans US − Allemagne, écart OAT-Bund"
+      GBP: "écart de taux à 2 ans US − Royaume-Uni"
+      USD: "indice dollar large (Fed), rendements US 2 et 10 ans"
+      CNY: "fixing de la PBoC, indice dollar large"
+    risques:
+      JPY: "intervention du ministère des Finances japonais au-delà des seuils de tolérance"
+      NZD: "liquidité faible : écarts de cotation larges hors séance asiatique"
+      CAD: "pétrole : un choc d'offre domine les chiffres canadiens"
+      AUD: "Chine : données et politique de soutien de Pékin"
+      CHF: "intervention de la BNS sur le franc"
+      EUR: "fragmentation : écarts souverains (OAT, BTP) contre Bund"
+      GBP: "budget et dette britanniques : prime de risque sur les gilts"
+      USD: "décision et communication de la Fed"
+      CNY: "fixing administré de la PBoC (cours encadré)"
+  # Fiches banques centrales : thèmes « à surveiller » choisis en Python selon les données
+  themes_a_surveiller:
+    - { si: [cpi_au_dessus_cible, ">", 0.5], texte: "inflation au-dessus de la cible" }
+    - { si: [cpi_au_dessus_cible, "<", -0.5], texte: "inflation sous la cible" }
+    - { si: [brent_5j, ">", 3], texte: "pétrole en hausse (inflation importée)" }
+    - { si: [force_devise_5j, "<", -1], texte: "devise faible sur 5 séances (inflation importée)" }
+    - { si: [force_devise_5j, ">", 1], texte: "devise forte sur 5 séances (resserrement des conditions)" }
+    - { si: [chomage_variation, ">", 0.2], texte: "marché du travail qui se détend" }
+  cibles_inflation: { USD: 2.0, EUR: 2.0, GBP: 2.0, JPY: 2.0, CHF: 1.0, CAD: 2.0, AUD: 2.5, NZD: 2.0, CNY: 3.0 }
+  # Plan d'action : éléments fixes de chaque bloc (les éléments du jour sont ajoutés en Python)
+  plan:
+    avant: ["Relire le thème du jour et les seuils proches du radar", "Noter les publications à fort impact et leurs heures"]
+    pendant: ["Ne pas réagir dans les minutes qui encadrent une publication forte", "Vérifier que la réaction confirme le scénario surveillé"]
+    cloture: ["Comparer le mouvement du jour au scénario le mieux confirmé", "Mettre à jour le Journal (notes ouvertes, invalidations)"]
+  # Table pédagogique fixe : comment interpréter une décision
+  interpretation:
+    - ["Maintien, ton restrictif (« hawkish »)", "La devise peut monter : le marché repousse les baisses de taux attendues."]
+    - ["Maintien, ton accommodant (« dovish »)", "La devise peut baisser : le marché avance les baisses de taux."]
+    - ["Hausse, ton accommodant", "Réaction limitée, voire baisse : la hausse était attendue, la suite moins."]
+    - ["Hausse, ton restrictif", "La devise peut monter nettement : d'autres hausses deviennent plausibles."]
+    - ["Baisse, ton restrictif", "Réaction limitée, voire hausse : le cycle de baisse pourrait s'arrêter."]
+    - ["Baisse, ton accommodant", "La devise peut baisser nettement : d'autres baisses deviennent plausibles."]
+
 # --- Simulateur d'impact : lecture classique (refonte §12) ---------------------
 # Sens attendu « dans les manuels » pour une HAUSSE de l'indicateur (une baisse inverse
 # le signe) : +1 la devise s'apprécie, -1 elle se déprécie ; devise absente = pas de

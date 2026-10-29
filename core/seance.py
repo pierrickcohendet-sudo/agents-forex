@@ -98,6 +98,12 @@ def rafraichir(racine: str | Path, config: dict, rapport: dict | None) -> dict:
     except Exception as exc:  # noqa: BLE001
         log.exception("Séance : dossiers / agenda non rafraîchis")
         resume["dossiers"] = f"échec : {exc}"[:200]
+    try:   # communiqués officiels du jour de décision (sites officiels), puis Rapport du jour recalculé (textes du jour gardés)
+        from core import communiques, rapport_jour
+        communiques.archiver(racine, config, json.loads((docs / "agenda.json").read_text(encoding="utf-8")))
+        resume["rapport_jour"] = "ok" if rapport_jour.ecrire(racine, config) else "échec"
+    except Exception as exc:  # noqa: BLE001
+        resume["rapport_jour"] = f"échec : {exc}"[:200]
     for nom, f in (("sources", lambda: sources.ecrire(racine, config, rapport)), ("accueil", lambda: accueil.ecrire(racine, config))):
         try:
             f()
