@@ -67,6 +67,57 @@ def cotations(cle: str, paires: list[str] | None = None) -> dict:
         return {"maj": maintenant, "cotations": {}, "raison": masquer_secrets(str(exc))[:200]}
 
 
+# Séries FRED quotidiennes publiées dans la journée (Trésor US H.15 : la valeur du jour J paraît vers 20 h UTC le
+# lendemain) : le run de 08:15 UTC ne voit que J-2 ; chaque complément horaire relit les dernières observations des
+# séries en retard sur le dernier jour ouvré (10 observations, une requête par série en retard).
+SERIES_SEANCE = ["USD_2a", "USD_10a", "USD_30a", "USD_reel_10a", "USD_point_mort_10a", "USD_spread_hy", "USD_taux_effectif",
+                 "vix", "sp500", "brent", "wti"]
+
+
+def _jour_ouvre_precedent(j):
+    from datetime import timedelta
+    j -= timedelta(days=1)
+    while j.weekday() >= 5:
+        j -= timedelta(days=1)
+    return j
+
+
+def rafraichir_fred(racine: Path, cle: str, aujourd=None, session=requests) -> dict:
+    """Ajoute au cache des historiques les observations FRED publiées depuis le run du matin. -> {serie: nb ajoutées}."""
+    from agents import collecte_historiques as ch
+    aujourd = aujourd or datetime.now(timezone.utc).date()
+    chemin = racine / "data" / "cache" / "collecte_historiques.json"
+    try:
+        brut = json.loads(chemin.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {"raison": "cache des historiques absent"}
+    if not cle:
+        return {"raison": "FRED_API_KEY absente"}
+    attendu = _jour_ouvre_precedent(aujourd).isoformat()
+    series = (brut.get("donnees") or {}).get("series") or {}
+    ajouts = {}
+    for nom in SERIES_SEANCE:
+        s = series.get(nom)
+        if not s or not s.get("points") or s["points"][-1][0] >= attendu or nom not in ch.SERIES_FRED:
+            continue
+        try:
+            rep = session.get("https://api.stlouisfed.org/fred/series/observations",
+                              params={"series_id": ch.SERIES_FRED[nom][0], "api_key": cle, "file_type": "json",
+                                      "sort_order": "desc", "limit": 10}, timeout=30)
+            rep.raise_for_status()
+            nouveaux = sorted((o["date"], float(o["value"])) for o in rep.json().get("observations", [])
+                              if o.get("value") not in (".", None) and o["date"] > s["points"][-1][0])
+        except Exception as exc:  # noqa: BLE001
+            ajouts[nom] = f"échec : {masquer_secrets(str(exc))[:80]}"
+            continue
+        if nouveaux:
+            s["points"] += [[d, v] for d, v in nouveaux]
+            ajouts[nom] = len(nouveaux)
+    if any(isinstance(v, int) for v in ajouts.values()):
+        chemin.write_text(json.dumps(brut, ensure_ascii=False, default=str), encoding="utf-8")
+    return ajouts
+
+
 def _cache(racine: Path, nom: str) -> dict | None:
     try:
         return json.loads((racine / "data" / "cache" / f"collecte_{nom}.json").read_text(encoding="utf-8")).get("donnees")
@@ -86,6 +137,10 @@ def rafraichir(racine: str | Path, config: dict, rapport: dict | None) -> dict:
         resume["cotations"] = sum(1 for c in s["cotations"].values() if c.get("prix") is not None) if not s["raison"] else s["raison"]
     except Exception as exc:  # noqa: BLE001
         resume["cotations"] = f"échec : {exc}"[:200]
+    try:
+        resume["fred_seance"] = rafraichir_fred(racine, os.environ.get("FRED_API_KEY", "").strip())
+    except Exception as exc:  # noqa: BLE001
+        resume["fred_seance"] = f"échec : {exc}"[:200]
     try:
         registre = registre_macro.charger(racine / "data" / "registre_macro.json")
         technique = _cache(racine, "technique") or {}

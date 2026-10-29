@@ -403,6 +403,61 @@ def _depuis_grands(ag: Agenda, grands: list[dict] | None) -> list[dict]:
     return sorted(a_venir, key=lambda g: g["date"])
 
 
+# ------------------------------------------------------------------ écart réel contre consensus (finition n°1)
+MOTS_INDICATEURS = [(r"unemployment rate", "chomage"), (r"claimant|unemployment claims", "chomage"),
+                    (r"core cpi|trimmed|median cpi|common cpi", "cpi_core"), (r"\bcpi\b", "cpi"), (r"gdp", "pib"),
+                    (r"manufacturing pmi", "pmi_manufacturier"), (r"services pmi|non-manufacturing pmi|ivey", "pmi_services"),
+                    (r"employment change|non-farm", "emploi"), (r"retail sales|household spending", "ventes_detail"),
+                    (r"trade balance", "balance_commerciale"), (r"rate$|policy rate|cash rate|refinancing", "taux_directeur")]
+
+
+def _indicateur(e: dict, cfg_tm: dict) -> str | None:
+    """Indicateur du registre d'un évènement : correspondance ForexFactory exacte, sinon mots-clés."""
+    nom = e.get("evenement_en", "")
+    for ind, par_devise in (cfg_tm.get("correspondances") or {}).items():
+        for f in ((par_devise or {}).get(e.get("devise")) or {}).get("ff") or []:
+            if f.get("nom", "").lower() == nom.lower():
+                return ind
+    return next((ind for motif, ind in MOTS_INDICATEURS if re.search(motif, nom, re.I)), None)
+
+
+def ecart(publie, consensus, indicateur: str | None, cfg_tm: dict, type_evt: str | None = None) -> dict | None:
+    """Réel contre consensus : sens (au-dessus / en dessous / conforme), écart dans l'unité publiée, écart en écarts
+    habituels de l'indicateur (σ, échelle du registre) ; favorable à la devise selon le sens de la variable (chômage :
+    inverse) ; « marqué » si |écart| ≥ 0,5 point ou ≥ 1 σ."""
+    p, c = nombre(publie)[0], nombre(consensus)[0]
+    if p is None or c is None:
+        return None
+    d = round(p - c, 4)
+    pourcent = str(publie).strip().endswith("%")
+    suffixe = (str(publie).strip()[-1] if str(publie).strip()[-1:] in "KMBT" else "")
+    cfg_ind = ((cfg_tm.get("indicateurs") or {}).get(indicateur) or {}) if indicateur else {}
+    echelle = cfg_ind.get("echelle_surprise_absolue") if suffixe and cfg_ind.get("echelle_surprise_absolue") else cfg_ind.get("echelle_surprise")
+    if suffixe and cfg_ind.get("echelle_surprise_absolue"):
+        mult = {"K": 1e3, "M": 1e6, "B": 1e9, "T": 1e12}[suffixe]
+        z = round(d * mult / float(echelle), 2)
+    else:
+        z = round(d / float(echelle), 2) if echelle else None
+    inverse = cfg_ind.get("sens") == "inverse"
+    sens = "conforme" if d == 0 else "au-dessus" if d > 0 else "en dessous"
+    if type_evt == "Réunion BC" and pourcent:
+        pb = round(d * 100)
+        texte = "conforme au consensus" if pb == 0 else f"{'au-dessus' if pb > 0 else 'en dessous'} du consensus ({pb:+d} pb)"
+    else:
+        u = " pt" if pourcent else suffixe
+        texte = "conforme au consensus" if d == 0 else f"{sens} du consensus ({d:+g}{u}{f', {z:+.1f} σ' if z is not None else ''})"
+    return {"sens": sens, "ecart": d, "unite": "point" if pourcent else (suffixe or "unité"), "z": z, "indicateur": indicateur,
+            "favorable": None if d == 0 else ((d > 0) != inverse), "inverse": inverse,
+            "marque": d != 0 and ((pourcent and abs(d) >= 0.5) or (z is not None and abs(z) >= 1)),
+            "texte": texte.replace(".", ",").replace("-", "−"), "echelle": echelle}
+
+
+def ecarts(ag: "Agenda", cfg_tm: dict) -> None:
+    for e in ag.lignes.values():
+        if e.get("publie") and e.get("consensus"):
+            e["ecart"] = ecart(e["publie"], e["consensus"], _indicateur(e, cfg_tm), cfg_tm, e.get("type"))
+
+
 # ------------------------------------------------------------------ statut de chaque chiffre
 PROVISOIRE = re.compile(r"\b(advance|prelim|flash)\b", re.I)
 # Évènement USD -> série ALFRED dont les millésimes disent si la publication précédente a été révisée
@@ -613,6 +668,7 @@ def calculer(ff_brut: str | None, glissants: list[dict] | None, registre: dict |
     badges(ag, refs)
     reactions(ag, impact, archive, series or {})
     statuts(ag, revisions)
+    ecarts(ag, (config or {}).get("tableau_macro") or {})
     for e in ag.lignes.values():
         if not e.get("consensus"):
             e.setdefault("raison_consensus", "pas de consensus publié" if e["type"] in ("Chiffre", "Réunion BC") else

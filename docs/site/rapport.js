@@ -180,7 +180,20 @@ const RENDUS = {
     return b;
   },
   conclusion(r) { return [texteSection(r.conclusion), el("p", "note rp-mention", r.mention)]; },
-  depuis_veille(r) { return [liste(r.depuis_veille || [])]; },
+  depuis_veille(r) {
+    const pv = r.publications_veille || {}, b = [liste(r.depuis_veille || [])];
+    if ((pv.publications || []).length) {
+      b.push(el("h4", null, `Publications fortes du ${jj(pv.jour)}`));
+      b.push(liste(pv.publications.map(p => `${p.texte}${p.reaction ? ` · réaction ${p.devise} ${signe(p.reaction.variation_pct)} % (séance du ${jj(p.reaction.seance)})` : ""}`)));
+      b.push(el("p", "note", pv.note || ""));
+    }
+    return b;
+  },
+  synthese_courte(r) {
+    const s = r.synthese_courte || {};
+    return [el("p", "rp-lecture", `${s.theme || "Thème n/d"} · ${s.direction || ""} · conviction ${s.conviction || "n/d"}`), liste(s.lignes || [])];
+  },
+  watchlist_top3(r) { return RENDUS.watchlist({ ...r, watchlist: { ...(r.watchlist || {}), top: r.watchlist_top3 || [] } }); },
   evenements_jour(r) {
     const e = r.evenements_jour || [];
     return [e.length ? liste(e.map(x => `${x.heure_paris} ${DRAPEAUX[x.devise] || ""} ${x.devise} ${x.evenement} ${x.points || ""}${x.consensus ? ` · cons. ${String(x.consensus).replace(".", ",")}` : ""}${x.publie ? ` · réel ${String(x.publie).replace(".", ",")}` : ""}`))

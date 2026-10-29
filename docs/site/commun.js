@@ -160,6 +160,7 @@ function remplirBulle(c, sources) {
   lignes.push(el("p", null, `Valeur du ${date ? dateCourte(date) : "n/d"}${recup ? ` · récupérée le ${String(recup).length > 10 ? dateHeure(recup) : dateCourte(recup)}` : ""}`));
   lignes.push(el("p", null, cert ? `Contrôle croisé : ${cert.controle} ${cert.controle === "✓" ? "même valeur dans tous les modules" : cert.controle_detail || ""}`
     : "Contrôle croisé : sans objet (valeur calculée ou propre à ce module)"));
+  if (cert?.calendrier) lignes.push(el("p", "cert-calendrier", `Calendrier de publication : ${cert.calendrier}`));
   if (c.sansAge) lignes.push(el("p", "cert-age", `Âge : ${c.sansAge}`));
   else if (fr) lignes.push(el("p", `cert-age ${fr.etat}`, `Âge : ${fr.texte}`));
   else lignes.push(el("p", "cert-age", "Âge : n/d (source hors registre)"));

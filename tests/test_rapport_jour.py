@@ -34,7 +34,7 @@ def test_statut_des_scenarios_sans_probabilite_et_invalidation():
     vars_ = V(us2a_5j=-9, us10a_5j=-13, surprise_30j_usd=-0.2, brent_5j=-1, nasdaq_5j=-0.5, vix=17, vix_5j=0.2)
     s = rj.scenarios(CONFIG, vars_, {"2026-10-27": {"ralentissement": [3, 5]}}, "2026-10-28")
     r = {x["id"]: x for x in s["liste"]}
-    assert r["ralentissement"]["statut"] == "5 condition(s) sur 5 remplie(s)" and r["ralentissement"]["mieux_confirme"]
+    assert r["ralentissement"]["statut"] == "5 conditions sur 5 remplies" and r["ralentissement"]["mieux_confirme"]
     assert "le mieux confirmé à ce jour" in s["texte_mieux_confirme"].lower() and "%" not in s["texte_mieux_confirme"]
     assert s["historique"]["jours"] == ["2026-10-27", "2026-10-28"]
     inv = rj.scenarios(CONFIG, V(us2a_5j=20, us10a_5j=-1), None, None)

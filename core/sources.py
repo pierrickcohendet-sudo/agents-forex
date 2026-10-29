@@ -32,6 +32,25 @@ CERTIFIES = {"vix": ("VIX", "pts"), "sp500": ("S&P 500", "pts"), "wti": ("Pétro
              "CAD_10a": ("Rendement 10 ans Canada", "%"), "eia_stocks": ("Stocks de brut US (EIA)", "milliers de barils")}
 
 
+# Calendrier réel de publication (certificat) : explique l'âge normal d'une valeur
+CALENDRIERS = {
+    "USD_2a": "Trésor US (H.15) via FRED : la valeur du jour J paraît le lendemain vers 20 h UTC ; le run de 08:15 voit J-2, "
+              "les compléments horaires du soir rattrapent J-1.",
+    "USD_10a": "Trésor US (H.15) via FRED : la valeur du jour J paraît le lendemain vers 20 h UTC ; le run de 08:15 voit J-2, "
+               "les compléments horaires du soir rattrapent J-1.",
+    "USD_taux_effectif": "Fed de New York via FRED : taux du jour J publié le lendemain matin (heure de New York).",
+    "brent": "EIA via FRED : prix au comptant publié avec 1 à 2 jours ouvrés de retard (mise à jour FRED vers 17 h UTC).",
+    "wti": "EIA via FRED : prix au comptant publié avec 1 à 2 jours ouvrés de retard (mise à jour FRED vers 17 h UTC).",
+    "vix": "CBOE via FRED : la clôture du jour J paraît le soir même ou le lendemain matin.",
+    "sp500": "S&P Dow Jones via FRED : la clôture du jour J paraît le lendemain matin.",
+    "dollar_large": "Fed (H.10) via FRED : publication hebdomadaire, le lundi, des valeurs de la semaine précédente.",
+    "USD_prime_terme": "Fed (Kim-Wright) via FRED : mise à jour hebdomadaire.",
+    "eia_stocks": "EIA : rapport hebdomadaire le mercredi (semaine close le vendredi précédent).",
+    "JPY_2a": "Ministère des Finances du Japon : fichier du mois en cours, mis à jour chaque jour ouvré de Tokyo.",
+    "JPY_10a": "Ministère des Finances du Japon : fichier du mois en cours, mis à jour chaque jour ouvré de Tokyo.",
+}
+
+
 def _lire(chemin: Path):
     try:
         return json.loads(Path(chemin).read_text(encoding="utf-8"))
@@ -163,6 +182,7 @@ def certificats(historiques: dict, registre_sources: list[dict], config: dict, r
             frq = "mensuelle"
         ctrl, detail = _controle(cle, rapport)
         sortie[cle] = {"libelle": libelle, "valeur": pts[-1][1], "unite": unite, "source": source, "serie": cle,
+                       "calendrier": CALENDRIERS.get(cle),
                        "date_valeur": str(pts[-1][0])[:10], "recupere_le": (src or {}).get("recupere_le"),
                        "statut": (src or {}).get("statut_libelle"), "controle": ctrl, "controle_detail": detail,
                        "fraicheur": fraicheur(pts[-1][0], frq, (conf or {}).get("retard_jours", 1), aujourdhui)}

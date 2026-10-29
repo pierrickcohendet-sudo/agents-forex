@@ -30,12 +30,23 @@ OPS = {">": lambda a, b: a > b, "<": lambda a, b: a < b, ">=": lambda a, b: a >=
 POIDS_IMPACT = {"fort": 3, "moyen": 2, "faible": 1}
 SECTIONS_COMPLETES = ["synthese", "point_marche", "lecture", "calendrier", "banques", "bilan", "watchlist", "technique",
                       "scenarios", "tableau_de_bord", "plan", "conclusion"]
-SECTIONS_COURTES = ["point_marche", "depuis_veille", "evenements_jour", "scenarios", "plan"]
+SECTIONS_COURTES = ["synthese_courte", "point_marche", "depuis_veille", "evenements_jour", "scenarios", "watchlist_top3", "plan"]
+SEUIL_DOMINANT = 3   # en dessous de 3 conditions remplies : « aucun scénario dominant »
 TITRES = {"synthese": "Synthèse exécutive", "point_marche": "Point de marché", "lecture": "Lecture institutionnelle",
           "calendrier": "Calendrier commenté", "banques": "Banques centrales de la semaine", "bilan": "Bilan de la semaine passée",
           "watchlist": "Watchlist des paires", "technique": "Technique multi-unités", "scenarios": "Scénarios de la semaine",
           "tableau_de_bord": "Tableau de bord", "plan": "Plan d'action du jour", "conclusion": "Conclusion",
-          "depuis_veille": "Mises à jour depuis la veille", "evenements_jour": "Évènements du jour"}
+          "depuis_veille": "Mises à jour depuis la veille", "evenements_jour": "Évènements du jour",
+          "synthese_courte": "Synthèse exécutive", "watchlist_top3": "Watchlist : les 3 premières paires"}
+
+
+def pluriel(n, singulier: str, pluriel_: str | None = None) -> str:
+    """« 1 condition », « 2 conditions » : accord au lieu de « (s) »."""
+    return f"{n} {singulier if abs(n) < 2 else (pluriel_ or singulier + 's')}"
+
+
+def majuscule(t: str | None) -> str | None:
+    return t[:1].upper() + t[1:] if t else t
 
 
 # ------------------------------------------------------------------ séries et variables
@@ -171,12 +182,40 @@ LECTURES_ACTIF = {
 SEUILS_SENS = {"%": 0.3, "pb": 3, "pts": 1}
 
 
+SEUILS_J1 = {"%": 0.15, "pb": 2, "pts": 0.5}
+LIBELLE_DIVERGENCE = {"taux": ("rebond J-1", "repli J-1"), "fx": ("rebond J-1", "repli J-1")}
+
+
 def _lecture_fx(paire: str, sens: int) -> str:
     base, cot = paire.split("/")
     if sens == 0:
-        return "peu de mouvement"
+        return "peu de mouvement sur 5 séances"
     forte = base if sens > 0 else cot
     return f"{forte} plus fort sur 5 séances"
+
+
+def lecture_actif(cat: str, cle: str, v1: float | None, v5: float | None, unite: str) -> str:
+    """Phrase qui précise sa période (5 séances) et signale une variation J-1 de sens contraire."""
+    sens = 0 if v5 is None or abs(v5) < SEUILS_SENS[unite] else (1 if v5 > 0 else -1)
+    base = _lecture_fx(cle, sens) if cat == "fx" else (LECTURES_ACTIF.get((cat, sens)) or "peu de mouvement sur 5 séances")
+    if cat != "fx" and sens:
+        mot, reste = (base.split(" : ", 1) + [""])[:2]
+        base = f"{mot} sur 5 séances{' : ' + reste if reste else ''}"
+    if sens and v1 is not None and abs(v1) >= SEUILS_J1[unite] and (v1 > 0) != (sens > 0):
+        qui = f"{cle} : " if cat == "fx" else ""
+        base += f" ({qui}{'rebond' if v1 > 0 else 'repli'} J-1 dans {'une baisse' if sens < 0 else 'une hausse'} sur 5 séances)"
+    elif not sens and v1 is not None and abs(v1) >= SEUILS_J1[unite] * 2:
+        base += f" (mouvement J-1 de {v1:+g}{' pb' if unite == 'pb' else ' %' if unite == '%' else ' pts'})".replace(".", ",")
+    return majuscule(base)
+
+
+def format_actif(cat: str, cle: str) -> dict:
+    """Décimales par type : paires 4 (JPY 2), indices 2, taux 2 avec %, matières premières 2."""
+    if cat == "fx":
+        return {"decimales": 2 if "JPY" in cle else 4, "suffixe": ""}
+    if cat == "taux":
+        return {"decimales": 2, "suffixe": " %"}
+    return {"decimales": 2, "suffixe": ""}
 
 
 def point_marche(historiques, h5, technique, seance: dict | None, config: dict, vars_: dict) -> dict:
@@ -195,15 +234,15 @@ def point_marche(historiques, h5, technique, seance: dict | None, config: dict, 
         heure = q.get("heure_utc") if q.get("prix") is not None else (pts[-1][0] if pts else None)
         v5 = variation(pts, 5, unite)
         v1 = q.get("variation_pct") if q.get("variation_pct") is not None and unite == "%" else variation(pts, 1, unite)
-        sens = 0 if v5 is None or abs(v5) < SEUILS_SENS[unite] else (1 if v5 > 0 else -1)
-        lecture = _lecture_fx(cle, sens) if cat == "fx" else (LECTURES_ACTIF.get((cat, sens)) or "peu de mouvement")
+        lecture = lecture_actif(cat, cle, v1, v5, unite)
         lignes.append({"actif": libelle, "niveau": niveau, "variation_j1": v1, "variation_5j": v5, "unite": unite,
+                       "categorie": cat, **format_actif(cat, cle),
                        "heure": heure, "source": (q.get("source") + " ; " + source) if q.get("prix") is not None else source,
                        "statut": "provisoire" if q.get("prix") is not None and q.get("marche_ouvert") else ("confirmé" if niveau is not None else None),
                        "lecture": lecture if niveau is not None else None,
-                       "raison": None if niveau is not None else "série absente (ajoutée au lot Rapport du jour : prochain run)"})
+                       "raison": None if niveau is not None else "Série absente (ajoutée au lot Rapport du jour : prochain run)"})
     globale = next((r["texte"] for r in (config.get("rapport") or {}).get("lectures_marche") or []
-                    if all(c["remplie"] for c in evaluer(r["si"], vars_))), "mouvement sans signal d'ensemble net")
+                    if all(c["remplie"] for c in evaluer(r["si"], vars_))), "Mouvement sans signal d'ensemble net")
     return {"lignes": lignes, "lecture": globale,
             "note": "Niveau : cotation de séance (Twelve Data) quand elle existe, sinon dernière clôture. Variations J-1 et 5 séances. "
                     "Lecture choisie dans une table de règles Python."}
@@ -226,19 +265,24 @@ def scenarios(config: dict, vars_: dict, historique: dict[str, dict] | None = No
         inval = evaluer(s.get("invalidations") or [], vars_)
         x, n = sum(1 for c in conds if c["remplie"]), len(conds)
         liste.append({"id": s["id"], "titre": s["titre"], "conditions": conds, "remplies": x, "total": n,
-                      "nd": sum(1 for c in conds if c["remplie"] is None), "statut": f"{x} condition(s) sur {n} remplie(s)",
+                      "nd": sum(1 for c in conds if c["remplie"] is None),
+                      "statut": f"{pluriel(x, 'condition')} sur {n} {'remplie' if x < 2 else 'remplies'}",
                       "invalide": any(c["remplie"] for c in inval), "invalidations": inval, "consequences": s.get("consequences") or {}})
     candidats = [s for s in liste if not s["invalide"] and s["remplies"] > 0]
-    meilleur = max(candidats, key=lambda s: (s["remplies"] / s["total"], s["remplies"]), default=None)
+    avance = max(candidats, key=lambda s: (s["remplies"] / s["total"], s["remplies"]), default=None)
+    meilleur = avance if avance and avance["remplies"] >= SEUIL_DOMINANT else None
     for s in liste:
         s["mieux_confirme"] = bool(meilleur and s["id"] == meilleur["id"])
+        s["plus_avance"] = bool(avance and s["id"] == avance["id"])
     hist = dict(historique or {})
     if aujourdhui:
         hist[aujourdhui] = {s["id"]: [s["remplies"], s["total"]] for s in liste}
     jours = sorted(hist)[-5:]
     return {"liste": liste, "mieux_confirme": meilleur["id"] if meilleur else None,
             "texte_mieux_confirme": f"Le mieux confirmé à ce jour : « {meilleur['titre']} » ({meilleur['statut']})." if meilleur
-            else "Aucun scénario n'a de condition remplie à ce jour.",
+            else (f"Aucun scénario dominant à ce jour (moins de {SEUIL_DOMINANT} conditions remplies ; le plus avancé : "
+                  f"« {avance['titre']} », {avance['statut']})." if avance else "Aucun scénario dominant : aucune condition remplie à ce jour."),
+            "seuil_dominant": SEUIL_DOMINANT,
             "historique": {"jours": jours, "valeurs": {d: hist[d] for d in jours}},
             "note": "Statut compté en Python ; jamais une probabilité. Une invalidation remplie écarte le scénario."}
 
@@ -595,9 +639,57 @@ def _lire(p: Path):
         return None
 
 
+def jour_ouvre_precedent(j: date) -> date:
+    j -= timedelta(days=1)
+    while j.weekday() >= 5:
+        j -= timedelta(days=1)
+    return j
+
+
+def _taux_txt(v) -> str:
+    x = _num(v)
+    return "n/d" if x is None else f"{x:.2f} %".replace(".", ",")
+
+
+def publications_veille(agenda_donnees, h5, technique, aujourd: date) -> dict:
+    """Publications à fort impact du dernier jour ouvré : réel contre consensus (écart, en σ si l'échelle de l'indicateur
+    est connue) et réaction de la devise sur la séance qui suit ; surprises de banques centrales en tête."""
+    from core import impact as impact_mod
+    veille = jour_ouvre_precedent(aujourd).isoformat()
+    evts = [e for j in (agenda_donnees or {}).get("jours") or [] for e in j.get("evenements") or []
+            if e.get("date_paris") == veille and e.get("impact") == "fort" and e.get("publie") and e.get("type") in ("Chiffre", "Réunion BC")]
+    lignes = []
+    for e in evts:
+        ec = e.get("ecart") or {}
+        rea = None
+        if h5 is not None:
+            force = impact_mod.serie_devise(h5, e["devise"], technique)
+            avant, apres = force.a((date.fromisoformat(veille) - timedelta(days=1)).isoformat()), force.apres((date.fromisoformat(veille) - timedelta(days=1)).isoformat())
+            if avant and apres and apres[0] >= veille:
+                rea = {"variation_pct": round((apres[1] / avant - 1) * 100, 2), "seance": apres[0],
+                       "source": "force de la devise, série unique 5 ans (Twelve Data raccordé à la Fed H.10)"}
+        if e.get("type") == "Réunion BC":
+            p, c, prec = _num(e["publie"]), _num(e.get("consensus")), _num(e.get("precedent"))
+            decision = ("maintien" if p is not None and prec is not None and p == prec else
+                        "hausse" if p is not None and prec is not None and p > prec else "baisse" if p is not None and prec is not None else "décision")
+            attendu = "" if c is None or p == c else f" contre {_taux_txt(e['consensus'])} attendu ({round((p - c) * 100):+d} pb)".replace("-", "−")
+            texte = f"{e['devise']} · {e['evenement']} : {decision} à {_taux_txt(e['publie'])}{attendu}" + ("" if attendu else ", conforme au consensus")
+        else:
+            texte = f"{e['devise']} · {e['evenement']} : {e['publie']} contre {e.get('consensus') or 'n/d'} attendu" + (f", {ec['texte']}" if ec else "")
+        lignes.append({"devise": e["devise"], "evenement": e["evenement"], "heure": e.get("heure_paris"), "type": e.get("type"),
+                       "publie": e["publie"], "consensus": e.get("consensus"), "precedent": e.get("precedent"), "ecart": ec or None,
+                       "surprise_bc": e.get("type") == "Réunion BC" and bool(ec) and ec.get("sens") != "conforme",
+                       "reaction": rea, "raison_reaction": None if rea else "séance suivante pas encore close ou série absente",
+                       "texte": texte.replace(".", ",") if e.get("type") != "Réunion BC" else texte, "statut": (e.get("statuts") or {}).get("publie")})
+    lignes.sort(key=lambda l: (not l["surprise_bc"], l["type"] != "Réunion BC", -abs((l["ecart"] or {}).get("z") or 0)))
+    return {"jour": veille, "publications": lignes,
+            "note": "Réel contre consensus (ForexFactory) ; écart en écarts habituels (σ) de l'indicateur quand le registre donne son "
+                    "échelle ; réaction : variation de la force de la devise entre la veille de la publication et la séance qui suit."}
+
+
 def depuis_veille(actuel: dict, veille: dict | None) -> list[str]:
     if not veille:
-        return ["Pas de rapport archivé la veille : comparaison n/d."]
+        return ["Pas de rapport archivé la veille : les publications de la veille et les cours archivés tiennent lieu de comparaison."]
     lignes = []
     av = {s["id"]: s for s in ((veille.get("scenarios") or {}).get("liste") or [])}
     for s in (actuel.get("scenarios") or {}).get("liste") or []:
@@ -673,6 +765,17 @@ def calculer(racine: str | Path, config: dict, maintenant: datetime | None = Non
         if veille:
             break
     sortie["depuis_veille"] = depuis_veille(sortie, veille)
+    sortie["publications_veille"] = publications_veille(agenda_donnees, h5, technique, aujourd)
+    ent = cockpit.get("entete") or {}
+    theme_txt = str(ent.get("texte") or "").split(". ")[0].rstrip(".")
+    du_jour = [e for e in sortie["evenements_jour"] if e.get("impact") == "fort"]
+    sortie["synthese_courte"] = {
+        "theme": ent.get("titre"), "direction": (ent.get("direction") or {}).get("libelle"), "conviction": ent.get("conviction"),
+        "lignes": [majuscule(theme_txt) + "." if theme_txt else "Thème du jour n/d.",
+                   sortie["scenarios"]["texte_mieux_confirme"],
+                   (f"Aujourd'hui : {', '.join(f'{e['heure_paris']} {e['devise']} {e['evenement']}' for e in du_jour[:3])}."
+                    if du_jour else "Aucune publication à fort impact aujourd'hui.")]}
+    sortie["watchlist_top3"] = sortie["watchlist"]["top"][:3]
     sortie["conclusion"] = {"phrase_python": f"{sortie['scenarios']['texte_mieux_confirme']} {sortie['point_marche']['lecture'].capitalize()}. "
                                              f"{MENTION_BIAIS}", "texte": None}
     sortie["sections"] = SECTIONS_COMPLETES if sortie["version"] == "complète" else SECTIONS_COURTES
