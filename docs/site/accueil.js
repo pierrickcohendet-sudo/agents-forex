@@ -160,18 +160,60 @@ function blocFraicheur(a) {
   return c;
 }
 
+function bandeauAlertes(al) {
+  if (enErreur(al) || !(al.actives || []).length) return null;
+  const b = el("section", "ac-bandeau");
+  b.setAttribute("role", "alert");
+  const t = el("p", "ac-bandeau-titre");
+  t.append(el("b", null, `${al.actives.length} alerte(s) active(s)`),
+           document.createTextNode(` depuis le ${dateHeure(al.depuis)} · vérifié le ${dateHeure(al.maj)}`));
+  b.appendChild(t);
+  const ul = el("ul");
+  for (const x of al.actives.slice(0, 5)) ul.appendChild(el("li", null, x.texte));
+  if (al.actives.length > 5) ul.appendChild(el("li", null, `… et ${al.actives.length - 5} autre(s)`));
+  b.appendChild(ul);
+  const lien = el("a", null, "Voir la page Santé des données →"); lien.href = "#sante";
+  b.appendChild(lien);
+  return b;
+}
+
+function blocSeance(s) {
+  const c = el("section", "carte ac-seance apparait");
+  const tete = el("div", "ac-evts-tete");
+  tete.appendChild(el("h2", null, "Cours en séance"));
+  tete.appendChild(el("span", "note", enErreur(s) ? "" : `Twelve Data · relevé ${dateHeure(s.maj)}`));
+  c.appendChild(tete);
+  const cot = Object.entries(enErreur(s) ? {} : s.cotations || {});
+  if (!cot.length) { c.appendChild(el("p", "note", `Cotations n/d : ${enErreur(s) ? "seance.json absent (prochain run)" : s.raison || "aucune cotation"}.`)); return c; }
+  const g = el("div", "ac-cours");
+  for (const [p, q] of cot) {
+    const d = el("div", "ac-cours-case");
+    const prix = el("b", "tabulaire", q.prix == null ? "n/d" : Number(q.prix).toLocaleString("fr-FR", { maximumFractionDigits: p.includes("JPY") ? 3 : 5 }));
+    if (q.prix != null) certifier(prix, { libelle: p, valeur: prix.textContent, source: q.source, date: q.heure_utc,
+                                         sansAge: `cotation de ${q.heure_utc ? dateHeure(q.heure_utc) : "n/d"}` });
+    else prix.title = q.raison || "";
+    const v = q.variation_pct;
+    d.append(el("span", "ac-cours-paire", p), prix,
+             el("span", `tabulaire ${v > 0 ? "pos" : v < 0 ? "neg" : ""}`, v == null ? "n/d" : `${v > 0 ? "+" : ""}${v.toFixed(2).replace(".", ",")} %`));
+    g.appendChild(d);
+  }
+  c.appendChild(g);
+  c.appendChild(el("p", "note", "Variation depuis la clôture précédente. Rafraîchi à chaque passage horaire (09:15 à 21:15 UTC)."));
+  return c;
+}
+
 export async function pageAccueil() {
-  const a = await chargerJson("data/accueil.json");
+  const [a, al, s] = await Promise.all([chargerJson("data/accueil.json"), chargerJson("data/alertes.json"), chargerJson("data/seance.json")]);
   if (enErreur(a)) return [indisponible("Aujourd'hui", a?.__erreur || "accueil.json absent (prochain run)")];
   const [theme, majHorloge] = blocTheme(a);
   const grille = el("div", "ac-grille");
   const evts = blocEvenements(a);
-  grille.append(blocBord(a), blocFraicheur(a), blocNotes());
+  grille.append(blocSeance(s), blocBord(a), blocFraicheur(a), blocNotes());
   const minuterie = setInterval(() => {
     if (!document.body.contains(theme)) { clearInterval(minuterie); return; }
     majHorloge();
     evts.querySelectorAll(".ac-rebours").forEach(s => { s.textContent = rebours(s.dataset.iso); });
   }, 1000);
   const pied = el("p", "note ac-pied", a.note);
-  return [theme, evts, grille, pied];
+  return [bandeauAlertes(al), theme, evts, grille, pied].filter(Boolean);
 }

@@ -39,7 +39,7 @@ from dotenv import load_dotenv
 from agents import (agent_consequences, agent_critique, agent_paires, collecte_intraday, agent_dossier_hebdo, agent_engrenages, agent_redacteur, agent_strategiste, agent_synthese,
                     collecte_calendrier, collecte_flux, collecte_historiques, collecte_macro, collecte_news,
                     collecte_technique)
-from core import (accueil, collecte_cache, controle_qualite, sources, indicateurs, cours, dossiers, evaluation, hebdo, historique_5ans, impact, marche_taux, overrides, precedents,
+from core import (accueil, alertes, collecte_cache, controle_qualite, quota_twelve, seance, sources, indicateurs, cours, dossiers, evaluation, hebdo, historique_5ans, impact, marche_taux, overrides, precedents,
                   publication_web,
                   registre_macro, saisies_manuelles, site_donnees, tableau_macro)
 from core.llm import creer_fournisseur, journal_appels, reinitialiser_journal
@@ -86,6 +86,9 @@ def initialiser_logs(dossier: Path) -> None:
     logging.getLogger().addFilter(_FiltreSecrets())
 
 
+ECHECS: list[str] = []   # étapes en échec de ce run (alertes de fin de run)
+
+
 def etape(nom: str, fonction, *args, fatal: bool = False, defaut=None, **kwargs):
     """Exécute une étape ; loggue et notifie l'échec. fatal=True arrête le pipeline."""
     try:
@@ -96,6 +99,7 @@ def etape(nom: str, fonction, *args, fatal: bool = False, defaut=None, **kwargs)
         # Trace COMPLÈTE (fichier + ligne) dans data/logs/ ; la notification
         # Slack/email ne reçoit que le résumé.
         log.exception("Étape « %s » en échec", nom)
+        ECHECS.append(f"{nom} ({type(exc).__name__})")
         notifier_echec(nom, f"{type(exc).__name__}: {exc}")
         if fatal:
             raise
@@ -241,6 +245,9 @@ def main() -> int:
     rapport_existant = None
     if arguments.completer:
         rapport_existant = _charger_rapport_existant(dossier_rapports)
+        if rapport_existant is not None:
+            # Mises à jour en séance : cotations, « réel » de l'agenda, thermomètres, santé, accueil (sans LLM)
+            etape("mises à jour en séance", seance.rafraichir, RACINE, config, rapport_existant, defaut={})
         if rapport_existant is None:
             log.info("--completer sans rapport existant aujourd'hui : passage complet effectué à la place")
         else:
@@ -259,11 +266,14 @@ def main() -> int:
                                                             config.get("engrenages") or {})
             if (not a_completer and not etat_manquant and not collectes_a_refaire
                     and not synthese_manquantes and not engrenages_manquants):
-                log.info("--completer : rien à compléter aujourd'hui (rapport déjà complet) — run ignoré")
-                if (tableau or {}).get("modifie") and not arguments.sans_web:
-                    etape("site web (site.json)", site_donnees.ecrire, RACINE, config)
-                    etape("git push (tableau macro)", publication_web.pousser_git,
-                          config["publication_web"], RACINE, "tableau macro : mise à jour")
+                log.info("--completer : rien à compléter aujourd'hui (rapport déjà complet) — analyses inchangées")
+                etape("alertes de fin de run", _alertes_fin_run, RACINE, config, rapport_existant)
+                etape("résumé du run : agenda et fraîcheur des données", _ecrire_resume_donnees, RACINE, config)
+                if not arguments.sans_web:
+                    if (tableau or {}).get("modifie"):
+                        etape("site web (site.json)", site_donnees.ecrire, RACINE, config)
+                    etape("git push (séance)", publication_web.pousser_git,
+                          config["publication_web"], RACINE, "séance : cours, agenda et thermomètres")
                 return 0
             log.info("--completer : %d devise(s) à retenter (%s)%s%s", len(a_completer),
                      ", ".join(a_completer) or "—", " + état du monde" if etat_manquant else "",
@@ -489,6 +499,11 @@ def main() -> int:
     # Page « Santé » : registre des sources, fraîcheur, certificats des chiffres (calcul Python, aucune requête de plus)
     etape("registre des sources (page Santé)", sources.ecrire, RACINE, config, rapport)
     etape("page d'accueil du jour (accueil.json)", accueil.ecrire, RACINE, config)
+    if not arguments.completer:   # cotations de séance aussi au run complet (point de marché du matin)
+        etape("cotations de séance", lambda: (RACINE / config["publication_web"]["dossier_docs"] / "data" / "seance.json").write_text(
+            json.dumps(seance.cotations(os.environ.get("TWELVE_DATA_API_KEY", "").strip()), ensure_ascii=False, indent=1),
+            encoding="utf-8"))
+    etape("alertes de fin de run", _alertes_fin_run, RACINE, config, rapport)
     etape("résumé du run : agenda et fraîcheur des données", _ecrire_resume_donnees, RACINE, config)
     appels_run: dict[str, dict] = {}
     for e in rapport["meta"]["appels_llm"]:   # cumul du jour (passages --completer inclus, plafonné)
@@ -553,10 +568,26 @@ def _ecrire_resume_run(ligne: str) -> None:
             pass
 
 
-def lignes_resume_donnees(racine: Path, config: dict) -> list[str]:
-    """Résumé du run : noms d'évènements non traduits (agenda) et données trop vieilles (page Santé)."""
+def _alertes_fin_run(racine: Path, config: dict, rapport: dict | None) -> dict:
+    """Échecs d'étape, fraîcheur (> 2 fois la normale), quota des engrenages -> alertes.json + issue GitHub."""
     docs = Path(racine) / config.get("publication_web", {}).get("dossier_docs", "docs") / "data"
-    lignes = []
+    try:
+        so = json.loads((docs / "sources.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        so = None
+    actives = alertes.evaluer(ECHECS, publication_web.ECHEC_PUSH, so, rapport)
+    donnees = alertes.ecrire(docs, actives)
+    url = (config.get("publication_web") or {}).get("url_site") or "https://pierrickcohendet-sudo.github.io/agents-forex/"
+    from core.notifications import notifier_alertes
+    donnees["notification"] = notifier_alertes(actives, donnees["change"], alertes.corps_issue(actives, url))
+    log.info("Alertes de fin de run : %d active(s) — %s", len(actives), donnees["notification"])
+    return donnees
+
+
+def lignes_resume_donnees(racine: Path, config: dict) -> list[str]:
+    """Résumé du run : agenda (noms non traduits), fraîcheur (page Santé), quota Twelve Data, alertes."""
+    docs = Path(racine) / config.get("publication_web", {}).get("dossier_docs", "docs") / "data"
+    lignes = [quota_twelve.ligne_resume()]
     try:
         ag = json.loads((docs / "agenda.json").read_text(encoding="utf-8"))
         nt = ag.get("non_traduits") or []
@@ -569,6 +600,11 @@ def lignes_resume_donnees(racine: Path, config: dict) -> list[str]:
         alertes = [s for s in so.get("sources") or [] if s.get("fraicheur", {}).get("etat") in ("orange", "rouge")]
         lignes.append("Fraîcheur : " + ("; ".join(f"{s['nom']} ({s['fraicheur']['texte']})" for s in alertes) if alertes
                                          else "aucune donnée plus vieille que deux fois sa fréquence"))
+    except (OSError, ValueError):
+        pass
+    try:
+        al = json.loads((docs / "alertes.json").read_text(encoding="utf-8"))
+        lignes.append(f"Alertes actives : {len(al.get('actives') or [])}" + (f" — {al['actives'][0]['texte']}" if al.get("actives") else ""))
     except (OSError, ValueError):
         pass
     return lignes

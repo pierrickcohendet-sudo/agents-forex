@@ -110,6 +110,7 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          GITHUB_TOKEN: ${{ github.token }}   # issue d'alerte automatique (issues: write), jamais publié
         run: |
           case "${{ steps.decision.outputs.mode }}" in
             hebdo) ARGS="--hebdo" ;;
@@ -121,3 +122,20 @@ jobs:
         # Le commit + push de docs/data, data/rapports, data/cache et data/hebdo
         # est fait par le pipeline lui-même (core/publication_web.py) quand
         # GITHUB_ACTIONS=true et publication_web.git_push = auto.
+
+      # Le run s'est arrêté (Python en erreur, installation, délai) : l'issue d'alerte reçoit le lien du run.
+      - name: Alerte si le run échoue
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          MSG="Run rapport-fx en échec : ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          gh label create alerte-pipeline --repo "${{ github.repository }}" --color D97706 \
+            --description "Alerte automatique du pipeline FX" 2>/dev/null || true
+          N=$(gh issue list --repo "${{ github.repository }}" --label alerte-pipeline --state open --json number --jq '.[0].number')
+          if [ -n "$N" ]; then
+            gh issue comment "$N" --repo "${{ github.repository }}" --body "$MSG"
+          else
+            gh issue create --repo "${{ github.repository }}" --label alerte-pipeline \
+              --title "Alerte pipeline FX : run en échec" --body "$MSG"
+          fi

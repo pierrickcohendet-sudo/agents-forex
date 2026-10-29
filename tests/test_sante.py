@@ -65,7 +65,7 @@ def test_resume_du_run_noms_non_traduits_et_fraicheur(tmp_path):
     (docs / "sources.json").write_text(json.dumps({"sources": [{"nom": "EIA", "fraicheur": {"etat": "orange", "texte": "30 j"}}]}),
                                        encoding="utf-8")
     lignes = orchestrateur.lignes_resume_donnees(tmp_path, {"publication_web": {"dossier_docs": "docs"}})
-    assert "Zorglub Index" in lignes[0] and "EIA (30 j)" in lignes[1]
+    assert lignes[0].startswith("Twelve Data : 0/800") and "Zorglub Index" in lignes[1] and "EIA (30 j)" in lignes[2]
 
 
 def test_page_sante_et_certificat_partage_branches():
