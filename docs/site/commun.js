@@ -124,8 +124,10 @@ function joursOuvres(debut, fin) {
   return n;
 }
 /* Même règle que core/sources.py : vert jusqu'à 2 fois la normale, orange au-delà, rouge au-delà de 4 fois. */
-export function fraicheurLocale(date, regle) {
+const FREQ_CHIFFRE = { quotidien: "quotidienne (jours ouvrés)", hebdomadaire: "hebdomadaire", mensuel: "mensuelle", trimestriel: "trimestrielle" };
+export function fraicheurLocale(date, regle, frequence) {
   if (!date || !regle) return null;
+  if (frequence && FREQ_CHIFFRE[frequence]) regle = { frequence: FREQ_CHIFFRE[frequence], retard_jours: frequence === "mensuel" ? 45 : frequence === "trimestriel" ? 60 : 2 };
   const d = new Date(`${String(date).slice(0, 10)}T00:00:00Z`);
   if (isNaN(d)) return null;
   const quotidien = /jours ouvrés|chaque run/.test(regle.frequence || "");
@@ -146,7 +148,7 @@ function regleDe(src, sources) {
 function remplirBulle(c, sources) {
   const cert = c.indicateur ? sources?.certificats?.[c.indicateur] : null;
   const regle = regleDe(c.source || cert?.source, sources);
-  const fr = cert?.fraicheur || fraicheurLocale(c.date || cert?.date_valeur, regle);
+  const fr = c.sansAge ? null : cert?.fraicheur || fraicheurLocale(c.date || cert?.date_valeur, regle, c.frequence);
   const lignes = [];
   const tete = el("div", "cert-tete");
   tete.append(el("b", null, `${c.libelle || cert?.libelle || "Chiffre"}${c.valeur != null ? ` ${c.valeur}` : ""}`));
@@ -158,7 +160,8 @@ function remplirBulle(c, sources) {
   lignes.push(el("p", null, `Valeur du ${date ? dateCourte(date) : "n/d"}${recup ? ` · récupérée le ${String(recup).length > 10 ? dateHeure(recup) : dateCourte(recup)}` : ""}`));
   lignes.push(el("p", null, cert ? `Contrôle croisé : ${cert.controle} ${cert.controle === "✓" ? "même valeur dans tous les modules" : cert.controle_detail || ""}`
     : "Contrôle croisé : sans objet (valeur calculée ou propre à ce module)"));
-  if (fr) lignes.push(el("p", `cert-age ${fr.etat}`, `Âge : ${fr.texte}`));
+  if (c.sansAge) lignes.push(el("p", "cert-age", `Âge : ${c.sansAge}`));
+  else if (fr) lignes.push(el("p", `cert-age ${fr.etat}`, `Âge : ${fr.texte}`));
   else lignes.push(el("p", "cert-age", "Âge : n/d (source hors registre)"));
   bulle.replaceChildren(...lignes);
 }
@@ -196,7 +199,8 @@ export function certifier(noeud, c) {
   sourcesJson().then(sources => {
     if (enErreur(sources)) return;
     const cert = c.indicateur ? sources.certificats?.[c.indicateur] : null;
-    const fr = cert?.fraicheur || fraicheurLocale(c.date || cert?.date_valeur, regleDe(c.source || cert?.source, sources));
+    if (c.sansAge) return;
+    const fr = cert?.fraicheur || fraicheurLocale(c.date || cert?.date_valeur, regleDe(c.source || cert?.source, sources), c.frequence);
     if (fr && fr.etat !== "vert") noeud.classList.add(`cert-${fr.etat}`);
   });
   return noeud;

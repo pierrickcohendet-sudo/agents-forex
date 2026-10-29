@@ -1,0 +1,546 @@
+{
+ "genere_le": "2026-10-28T22:59:31+00:00",
+ "date_rapport": "2026-10-28",
+ "theme": {
+  "titre": "Signaux mixtes",
+  "titre_impose": true,
+  "direction": {
+   "libelle": "Dollar haussier · Risque neutre",
+   "classe": "up"
+  },
+  "conviction": "moyen",
+  "alignes": 2,
+  "evaluables": 7,
+  "compte_matrice": "15 actives, 5 n/d, 19 sans règle",
+  "explication": "Engrenages orientés : 6. Géopolitique (Dollar haussier · Risk off) ; 7. Flux (Dollar haussier · Risque neutre). Les autres restent dans leur couloir neutre.",
+  "texte": "Les directions divergentes entre la politique monétaire et la géopolitique neutralisent toute orientation univoque.",
+  "texte_source": "modèle"
+ },
+ "au_bord": [
+  {
+   "id": "surprise_30j-CNY",
+   "engrenage": 3,
+   "devise": "CNY",
+   "libelle": "indice de surprise macro 30 jours — CNY",
+   "texte_valeur": "+0,46",
+   "distance_texte": "0,04",
+   "phrase": "indice de surprise macro 30 jours — CNY à +0,46 : 0,04 du seuil haut (+0,50), soit 4,0 % du couloir neutre",
+   "etat": "proche",
+   "date": "2026-10-28",
+   "source": "calcul Python (registre macro, 30 j)"
+  },
+  {
+   "id": "thermometre-2",
+   "engrenage": 2,
+   "devise": null,
+   "libelle": "2 ans US sur 7 j",
+   "texte_valeur": "−9 pb",
+   "distance_texte": "1 pb",
+   "phrase": "2 ans US sur 7 j à −9 pb : 1 pb du seuil bas (−10 pb), soit 5,0 % du couloir neutre",
+   "etat": "proche",
+   "date": "2026-10-26",
+   "source": "FRED (DGS2)"
+  },
+  {
+   "id": "surprise_30j-AUD",
+   "engrenage": 3,
+   "devise": "AUD",
+   "libelle": "indice de surprise macro 30 jours — AUD",
+   "texte_valeur": "−0,44",
+   "distance_texte": "0,06",
+   "phrase": "indice de surprise macro 30 jours — AUD à −0,44 : 0,06 du seuil bas (−0,50), soit 6,0 % du couloir neutre",
+   "etat": "proche",
+   "date": "2026-10-28",
+   "source": "calcul Python (registre macro, 30 j)"
+  }
+ ],
+ "franchis": 17,
+ "evenements": [
+  {
+   "iso_utc": "2026-10-29T12:30+00:00",
+   "date_paris": "2026-10-29",
+   "heure_paris": "13:30",
+   "devise": "USD",
+   "evenement": "PIB T/T, 1re estimation",
+   "type": "Chiffre",
+   "impact": "fort",
+   "points": "●●●",
+   "precedent": "1.5%",
+   "consensus": "3.2%",
+   "publie": null,
+   "badge": null,
+   "engrenage": 3
+  },
+  {
+   "iso_utc": "2026-10-29T12:30+00:00",
+   "date_paris": "2026-10-29",
+   "heure_paris": "13:30",
+   "devise": "USD",
+   "evenement": "Indice des prix PCE sous-jacent M/M",
+   "type": "Chiffre",
+   "impact": "fort",
+   "points": "●●●",
+   "precedent": "0.2%",
+   "consensus": "0.3%",
+   "publie": null,
+   "badge": null,
+   "engrenage": null
+  },
+  {
+   "iso_utc": "2026-10-29T12:30+00:00",
+   "date_paris": "2026-10-29",
+   "heure_paris": "13:30",
+   "devise": "USD",
+   "evenement": "Déflateur du PIB T/T, 1re estimation",
+   "type": "Chiffre",
+   "impact": "moyen",
+   "points": "●●○",
+   "precedent": "6.2%",
+   "consensus": "3.2%",
+   "publie": null,
+   "badge": null,
+   "engrenage": 3
+  },
+  {
+   "iso_utc": "2026-10-29T12:30+00:00",
+   "date_paris": "2026-10-29",
+   "heure_paris": "13:30",
+   "devise": "USD",
+   "evenement": "Inscriptions hebdomadaires au chômage",
+   "type": "Chiffre",
+   "impact": "moyen",
+   "points": "●●○",
+   "precedent": "194K",
+   "consensus": "198K",
+   "publie": null,
+   "badge": null,
+   "engrenage": 3
+  },
+  {
+   "iso_utc": "2026-10-29T12:50+00:00",
+   "date_paris": "2026-10-29",
+   "heure_paris": "13:50",
+   "devise": "CAD",
+   "evenement": "Discours de Gravelle, membre du conseil de direction (BoC)",
+   "type": "Discours",
+   "impact": "faible",
+   "points": "●○○",
+   "precedent": null,
+   "consensus": null,
+   "publie": null,
+   "badge": null,
+   "engrenage": 2
+  },
+  {
+   "iso_utc": "2026-10-29T13:15+00:00",
+   "date_paris": "2026-10-29",
+   "heure_paris": "14:15",
+   "devise": "EUR",
+   "evenement": "Décision de la BCE (taux de refinancement)",
+   "type": "Réunion BC",
+   "impact": "fort",
+   "points": "●●●",
+   "precedent": "2.65%",
+   "consensus": "2.65%",
+   "publie": null,
+   "badge": {
+    "sens": "statu_quo",
+    "texte": "statu quo attendu",
+    "pb": 0,
+    "reference": "2.65%",
+    "source_reference": "précédent publié"
+   },
+   "engrenage": 2
+  },
+  {
+   "iso_utc": "2026-10-29T13:15+00:00",
+   "date_paris": "2026-10-29",
+   "heure_paris": "14:15",
+   "devise": "EUR",
+   "evenement": "Déclaration de politique monétaire",
+   "type": "Chiffre",
+   "impact": "fort",
+   "points": "●●●",
+   "precedent": null,
+   "consensus": null,
+   "publie": null,
+   "badge": null,
+   "engrenage": 2
+  },
+  {
+   "iso_utc": "2026-10-29T13:45+00:00",
+   "date_paris": "2026-10-29",
+   "heure_paris": "14:45",
+   "devise": "EUR",
+   "evenement": "Conférence de presse de la BCE",
+   "type": "Conférence",
+   "impact": "fort",
+   "points": "●●●",
+   "precedent": null,
+   "consensus": null,
+   "publie": null,
+   "badge": null,
+   "engrenage": 2
+  },
+  {
+   "iso_utc": "2026-10-29T15:30+00:00",
+   "date_paris": "2026-10-29",
+   "heure_paris": "16:30",
+   "devise": "CAD",
+   "evenement": "Discours de Vincent, membre du conseil de direction (BoC)",
+   "type": "Discours",
+   "impact": "faible",
+   "points": "●○○",
+   "precedent": null,
+   "consensus": null,
+   "publie": null,
+   "badge": null,
+   "engrenage": 2
+  },
+  {
+   "iso_utc": "2026-10-29T17:30+00:00",
+   "date_paris": "2026-10-29",
+   "heure_paris": "18:30",
+   "devise": "CHF",
+   "evenement": "Discours de Tschudin, membre de la direction générale (BNS)",
+   "type": "Discours",
+   "impact": "faible",
+   "points": "●○○",
+   "precedent": null,
+   "consensus": null,
+   "publie": null,
+   "badge": null,
+   "engrenage": 2
+  },
+  {
+   "iso_utc": "2026-10-29T23:30+00:00",
+   "date_paris": "2026-10-30",
+   "heure_paris": "00:30",
+   "devise": "JPY",
+   "evenement": "IPC sous-jacent de Tokyo A/A",
+   "type": "Chiffre",
+   "impact": "moyen",
+   "points": "●●○",
+   "precedent": "2.7%",
+   "consensus": "2.6%",
+   "publie": null,
+   "badge": null,
+   "engrenage": 3
+  },
+  {
+   "iso_utc": "2026-10-30T02:30+00:00",
+   "date_paris": "2026-10-30",
+   "heure_paris": "03:30",
+   "devise": "JPY",
+   "evenement": "Décision de la BoJ (taux directeur)",
+   "type": "Réunion BC",
+   "impact": "fort",
+   "points": "●●●",
+   "precedent": "<1.25%",
+   "consensus": "<1.25%",
+   "publie": null,
+   "badge": {
+    "sens": "statu_quo",
+    "texte": "statu quo attendu",
+    "pb": 0,
+    "reference": "<1.25%",
+    "source_reference": "précédent publié"
+   },
+   "engrenage": 2
+  },
+  {
+   "iso_utc": "2026-10-30T02:30+00:00",
+   "date_paris": "2026-10-30",
+   "heure_paris": "03:30",
+   "devise": "JPY",
+   "evenement": "Déclaration de politique monétaire",
+   "type": "Chiffre",
+   "impact": "fort",
+   "points": "●●●",
+   "precedent": null,
+   "consensus": null,
+   "publie": null,
+   "badge": null,
+   "engrenage": 2
+  },
+  {
+   "iso_utc": "2026-10-30T02:31+00:00",
+   "date_paris": "2026-10-30",
+   "heure_paris": "03:31",
+   "devise": "JPY",
+   "evenement": "Rapport sur les perspectives de la BoJ",
+   "type": "Chiffre",
+   "impact": "fort",
+   "points": "●●●",
+   "precedent": null,
+   "consensus": null,
+   "publie": null,
+   "badge": null,
+   "engrenage": null
+  },
+  {
+   "iso_utc": "2026-10-30T05:30+00:00",
+   "date_paris": "2026-10-30",
+   "heure_paris": "06:30",
+   "devise": "JPY",
+   "evenement": "Conférence de presse de la BoJ",
+   "type": "Conférence",
+   "impact": "fort",
+   "points": "●●●",
+   "precedent": null,
+   "consensus": null,
+   "publie": null,
+   "badge": null,
+   "engrenage": 2
+  },
+  {
+   "iso_utc": "2026-10-30T07:29+00:00",
+   "date_paris": "2026-10-30",
+   "heure_paris": "08:29",
+   "devise": "EUR",
+   "evenement": "Allemagne : IPC M/M, prélim.",
+   "type": "Chiffre",
+   "impact": "moyen",
+   "points": "●●○",
+   "precedent": "0.6%",
+   "consensus": "0.1%",
+   "publie": null,
+   "badge": null,
+   "engrenage": 3
+  },
+  {
+   "iso_utc": "2026-10-30T09:00+00:00",
+   "date_paris": "2026-10-30",
+   "heure_paris": "10:00",
+   "devise": "EUR",
+   "evenement": "Allemagne : PIB T/T, prélim.",
+   "type": "Chiffre",
+   "impact": "moyen",
+   "points": "●●○",
+   "precedent": "0.2%",
+   "consensus": "0.1%",
+   "publie": null,
+   "badge": null,
+   "engrenage": 3
+  },
+  {
+   "iso_utc": "2026-10-30T12:30+00:00",
+   "date_paris": "2026-10-30",
+   "heure_paris": "13:30",
+   "devise": "CAD",
+   "evenement": "PIB M/M",
+   "type": "Chiffre",
+   "impact": "moyen",
+   "points": "●●○",
+   "precedent": "0.0%",
+   "consensus": "0.2%",
+   "publie": null,
+   "badge": null,
+   "engrenage": 3
+  },
+  {
+   "iso_utc": "2026-10-30T12:30+00:00",
+   "date_paris": "2026-10-30",
+   "heure_paris": "13:30",
+   "devise": "USD",
+   "evenement": "Indice du coût de l'emploi T/T",
+   "type": "Chiffre",
+   "impact": "moyen",
+   "points": "●●○",
+   "precedent": "0.9%",
+   "consensus": "0.8%",
+   "publie": null,
+   "badge": null,
+   "engrenage": 3
+  },
+  {
+   "iso_utc": "2026-10-30T16:00+00:00",
+   "date_paris": "2026-10-30",
+   "heure_paris": "17:00",
+   "devise": "USD",
+   "evenement": "Discours de Daly, membre du FOMC",
+   "type": "Discours",
+   "impact": "faible",
+   "points": "●○○",
+   "precedent": null,
+   "consensus": null,
+   "publie": null,
+   "badge": null,
+   "engrenage": 2
+  },
+  {
+   "iso_utc": "2026-10-30T16:30+00:00",
+   "date_paris": "2026-10-30",
+   "heure_paris": "17:30",
+   "devise": "USD",
+   "evenement": "Discours de Musalem, membre du FOMC",
+   "type": "Discours",
+   "impact": "faible",
+   "points": "●○○",
+   "precedent": null,
+   "consensus": null,
+   "publie": null,
+   "badge": null,
+   "engrenage": 2
+  }
+ ],
+ "raison_evenements": null,
+ "banques": [
+  {
+   "devise": "USD",
+   "court": "Fed",
+   "siege": [
+    38.89,
+    -77.05
+   ],
+   "cette_semaine": true,
+   "prochaine": "2026-10-28",
+   "taux_texte": "4.00%",
+   "badge": {
+    "sens": "statu_quo",
+    "texte": "statu quo attendu",
+    "pb": 0,
+    "reference": "4.00%",
+    "source_reference": "précédent publié"
+   }
+  },
+  {
+   "devise": "EUR",
+   "court": "BCE",
+   "siege": [
+    50.11,
+    8.7
+   ],
+   "cette_semaine": true,
+   "prochaine": "2026-10-29",
+   "taux_texte": "2.65%",
+   "badge": {
+    "sens": "statu_quo",
+    "texte": "statu quo attendu",
+    "pb": 0,
+    "reference": "2.65%",
+    "source_reference": "précédent publié"
+   }
+  },
+  {
+   "devise": "GBP",
+   "court": "BoE",
+   "siege": [
+    51.51,
+    -0.09
+   ],
+   "cette_semaine": false,
+   "prochaine": "2026-11-05",
+   "taux_texte": "3.75%",
+   "badge": null
+  },
+  {
+   "devise": "JPY",
+   "court": "BoJ",
+   "siege": [
+    35.69,
+    139.77
+   ],
+   "cette_semaine": true,
+   "prochaine": "2026-10-30",
+   "taux_texte": "<1.25%",
+   "badge": {
+    "sens": "statu_quo",
+    "texte": "statu quo attendu",
+    "pb": 0,
+    "reference": "<1.25%",
+    "source_reference": "précédent publié"
+   }
+  },
+  {
+   "devise": "CHF",
+   "court": "BNS",
+   "siege": [
+    46.95,
+    7.44
+   ],
+   "cette_semaine": false,
+   "prochaine": "2026-12-10",
+   "taux_texte": "0.00%",
+   "badge": null
+  },
+  {
+   "devise": "CAD",
+   "court": "BoC",
+   "siege": [
+    45.42,
+    -75.7
+   ],
+   "cette_semaine": true,
+   "prochaine": "2026-10-28",
+   "taux_texte": "2.50%",
+   "badge": {
+    "sens": "hausse",
+    "texte": "hausse attendue",
+    "pb": 25,
+    "reference": "2.25%",
+    "source_reference": "précédent publié"
+   }
+  },
+  {
+   "devise": "AUD",
+   "court": "RBA",
+   "siege": [
+    -33.87,
+    151.21
+   ],
+   "cette_semaine": false,
+   "prochaine": "2026-11-03",
+   "taux_texte": "4.60%",
+   "badge": null
+  },
+  {
+   "devise": "NZD",
+   "court": "RBNZ",
+   "siege": [
+    -41.29,
+    174.78
+   ],
+   "cette_semaine": true,
+   "prochaine": "2026-10-28",
+   "taux_texte": "2.75%",
+   "badge": {
+    "sens": "hausse",
+    "texte": "hausse attendue",
+    "pb": 25,
+    "reference": "2.75%",
+    "source_reference": "précédent publié"
+   }
+  },
+  {
+   "devise": "CNY",
+   "court": "PBoC",
+   "siege": [
+    39.91,
+    116.36
+   ],
+   "cette_semaine": false,
+   "prochaine": "2026-11-20",
+   "taux_texte": "3.00%",
+   "badge": null
+  }
+ ],
+ "fraicheur": {
+  "sources": 13,
+  "vertes": 13,
+  "alertes": [
+   {
+    "id": "JPY_2a",
+    "libelle": "Rendement 2 ans Japon",
+    "texte": "20 j ouvré(s) (normal : 3 j ouvré(s) au plus) — plus de quatre fois la normale"
+   },
+   {
+    "id": "JPY_10a",
+    "libelle": "Rendement 10 ans Japon",
+    "texte": "20 j ouvré(s) (normal : 3 j ouvré(s) au plus) — plus de quatre fois la normale"
+   }
+  ],
+  "calcule_le": "2026-10-28T22:56:12+00:00"
+ },
+ "note": "Tableau de bord du jour : faits datés et lectures historiques, jamais un ordre d'achat ou de vente."
+}

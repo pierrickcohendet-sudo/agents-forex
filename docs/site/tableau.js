@@ -79,7 +79,8 @@ export async function pageTableau() {
             td.appendChild(el("span", "nd", v || "n/d"));
           } else {
             td.textContent = v ?? "—";
-            if (col.cle === "Actuel" && v) certifier(td, { libelle: `${l.libelle} ${l.devise}`, valeur: v, source: l.source, date: l.date_pub });
+            if (col.cle === "Actuel" && v) certifier(td, { libelle: `${l.libelle} ${l.devise}`, valeur: v, source: l.source, date: l.date_pub, frequence: l.frequence,
+                                                        sansAge: l.frequence ? undefined : "publication ponctuelle : âge selon le calendrier de l'indicateur" });
           }
           if (l.manuel?.[col.cle]) td.appendChild(el("span", "manuel", "✍"));
           tr.appendChild(td);

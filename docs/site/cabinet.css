@@ -8,9 +8,9 @@
   --texte-2: #5B6B82;
   --trait: #CBD3DE;
   --accent: #1D4ED8;
-  --positif: #12805C;
+  --positif: #0E6E4F;   /* 5,9:1 sur la carte (AA) */
   --negatif: #B42318;
-  --alerte: #B7791F;
+  --alerte: #8A5A0E;    /* 5,9:1 sur la carte (AA ; ancien #B7791F à 3,6:1) */
   --neutre: #8A96A8;
   --rayon: 3px;
   --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
@@ -938,7 +938,7 @@ details.ck-vignette[open] > summary { margin-bottom: 10px; }
 
 /* ---------------------------------------------------------------- agenda (lot V5, complément) */
 .surtitre { margin: 0 0 4px; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--texte-2); }
-.ag-h1 { font-size: clamp(22px, 4vw, 30px); margin-bottom: 6px; }
+.carte > .ag-h1 { font-size: clamp(22px, 4vw, 30px); margin-bottom: 6px; }
 .bouton-texte { background: none; border: 0; padding: 4px 2px; color: var(--accent); font: 600 13px var(--sans); cursor: pointer; text-decoration: underline; }
 .ag-globe-tete { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 4px 12px; }
 .ag-horloges { margin: 0; color: var(--texte-2); font-size: 13px; font-family: var(--mono); }
@@ -977,7 +977,7 @@ details.ck-vignette[open] > summary { margin-bottom: 10px; }
 .ag-filtre[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--carte); }
 .ag-devise { min-height: 36px; border-radius: 999px; border: 1px solid var(--trait); background: var(--carte-2); color: var(--texte); padding: 0 10px; font: 600 13px var(--sans); }
 .ag-panneau.inactif { display: none; }
-.ag-panneau h3 { font-size: 1.05rem; margin: 4px 0 8px; text-transform: capitalize; }
+.ag-panneau h3 { font-size: 1.05rem; margin: 4px 0 8px; }
 .ag-discret { margin: 0 0 6px; font-style: italic; }
 .ag-liste { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
 .ag-evt { display: grid; grid-template-columns: 52px 62px minmax(0, 1fr) 190px 190px; grid-template-areas: "h d c v r" "h d l l l";
@@ -1159,3 +1159,59 @@ details.ck-vignette[open] > summary { margin-bottom: 10px; }
 .sa-niveau.historique { background: color-mix(in srgb, var(--accent) 20%, var(--carte)); }
 .sa-niveau.lecture { background: color-mix(in srgb, var(--alerte) 22%, var(--carte)); }
 .sa-niveau.jamais { background: color-mix(in srgb, var(--negatif) 22%, var(--carte)); }
+
+/* ================================================================ passe design (lot V5, étape 7-ter) */
+/* Chiffres : police à chasse fixe, alignés à droite dans les tableaux */
+.tabulaire, table.dense td, .chiffre { font-family: var(--mono); font-size: .93em; letter-spacing: -0.01em; }
+table.dense td.source-cellule, table.dense td.sa-nom, table.dense td.sa-alimente, .sa-table td { font-family: var(--sans); font-size: 1em; letter-spacing: 0; }
+
+/* Micro-animations sobres, coupées par « moins d'animations » */
+@media (prefers-reduced-motion: no-preference) {
+  main > * { animation: apparition .32s ease-out both; }
+  main > *:nth-child(2) { animation-delay: .04s; } main > *:nth-child(3) { animation-delay: .08s; } main > *:nth-child(n+4) { animation-delay: .12s; }
+  .ag-panneau:not(.inactif), .sc-seg + *, .ot-panneau { animation: fondu .2s ease-out both; }
+  .onglets a { transition: color .15s, border-color .2s; }
+  .bouton, .ag-filtre, .ag-onglet, .jn-puce, .ag-bc-case, .ck-thermo { transition: background-color .15s, border-color .15s, color .15s, transform .15s; }
+  .ag-bc-case:hover, .ck-thermo:hover { transform: translateY(-1px); }
+}
+@keyframes apparition { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes fondu { from { opacity: 0; } to { opacity: 1; } }
+
+/* ---------------------------------------------------------------- page « Aujourd'hui » */
+.ac-theme { display: grid; gap: 8px; border-top: 3px solid var(--accent); }
+.ac-horloge { margin: 0; display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; color: var(--texte-2); }
+.ac-date { font-weight: 600; }
+.ac-date::first-letter, .ag-panneau h3::first-letter, .ag-jour h3::first-letter { text-transform: uppercase; }
+.ac-heure { font-size: 15px; color: var(--texte); }
+.carte > .ac-titre { font-size: clamp(26px, 5vw, 38px); line-height: 1.15; margin: 0; }
+.ac-ligne { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; }
+.ac-conviction { font-weight: 700; font-size: 14px; }
+.ac-texte { margin: 2px 0; font-family: var(--serif); font-size: 17px; line-height: 1.45; max-width: 70ch; }
+.ac-lien { font-weight: 600; font-size: 14px; }
+.ac-grille { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; align-items: start; }
+.ac-liste { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; }
+.ac-liste li { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; padding: 8px 10px; background: var(--carte-2); border-radius: var(--rayon); font-size: 14px; }
+.ac-eng { font-weight: 700; font-size: 12.5px; white-space: nowrap; }
+.ac-lib { flex: 1 1 160px; min-width: 0; color: var(--texte-2); overflow-wrap: anywhere; }
+.ac-dist { color: var(--alerte); font-size: 12.5px; }
+.ac-evts-tete { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 4px 12px; }
+.ac-evts-corps { display: grid; grid-template-columns: minmax(0, 1fr) 240px; gap: 16px; align-items: start; margin-top: 8px; }
+.ac-agenda { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.ac-agenda li { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; gap: 2px 10px; align-items: baseline; padding: 8px 10px;
+  background: var(--carte-2); border-radius: var(--rayon); border-left: 3px solid var(--neutre); font-size: 14px; }
+.ac-agenda li.impact-fort { border-left-color: var(--negatif); } .ac-agenda li.impact-moyen { border-left-color: var(--alerte); }
+.ac-agenda li.note { display: block; border-left: 0; }
+.ac-h { font-weight: 700; }
+.ac-evt-titre { min-width: 0; overflow-wrap: anywhere; display: flex; flex-wrap: wrap; gap: 2px 6px; align-items: baseline; }
+.ac-rebours { color: var(--accent); font-weight: 700; font-size: 12.5px; white-space: nowrap; }
+.ac-valeurs { grid-column: 2 / 4; color: var(--texte-2); font-size: 12.5px; }
+.ac-globe { width: 100%; aspect-ratio: 1; max-width: 240px; justify-self: center; display: grid; place-items: center; }
+.ac-globe .ag-pin text { font-size: 13px; }
+.ac-frais-ligne { margin: 8px 0 4px; font: 700 18px var(--serif); }
+.ac-alertes { margin: 0; padding-left: 18px; color: var(--alerte); font-size: 13.5px; }
+.jn-biais-puce { font-size: 11.5px; font-weight: 700; padding: 1px 7px; border-radius: 999px; border: 1px solid currentColor; color: var(--texte-2); }
+.jn-biais-puce.haussier { color: var(--positif); } .jn-biais-puce.baissier { color: var(--negatif); }
+.ac-pied { margin: 0; text-align: center; }
+@media (max-width: 720px) { .ac-evts-corps { grid-template-columns: minmax(0, 1fr); } .ac-globe { max-width: 200px; } }
+@media print { .ac-globe { display: none; } .ac-evts-corps { grid-template-columns: 1fr; } }
+@media print { main > *, .ag-panneau { animation: none !important; opacity: 1 !important; transform: none !important; } }

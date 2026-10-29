@@ -64,7 +64,8 @@ function grilleBanques(banques) {
     bouton.type = "button";
     bouton.append(el("b", null, `${DRAPEAUX[b.devise] || ""} ${b.court}`),
       certifier(el("span", "tabulaire", tauxTexte(b)), { libelle: `Taux directeur ${b.court}`, valeur: tauxTexte(b),
-                                                        source: b.source_taux || "registre macro (ForexFactory)", date: b.date_taux, sansFocus: true }),
+                                                        source: b.source_taux || "registre macro (ForexFactory)", date: b.date_taux, sansFocus: true,
+                                                        sansAge: "taux en vigueur jusqu'à la prochaine décision" }),
       el("span", "note", b.prochaine ? `${b.cette_semaine ? "Cette semaine · " : "Prochaine : "}${dateCourte(b.prochaine).slice(0, 5)}` : "Prochaine : n/d"));
     if (b.badge && b.badge.sens !== "statu_quo") bouton.appendChild(el("span", `ag-badge ${b.badge.sens}`, b.badge.texte));
     bouton.addEventListener("click", () => ficheBanque(b));
@@ -73,7 +74,7 @@ function grilleBanques(banques) {
   return g;
 }
 
-async function dessinerGlobe(zone, banques) {
+export async function dessinerGlobe(zone, banques, choisir = ficheBanque) {
   const [geo, topo, monde] = await Promise.all([import(CDN.d3geo), import(CDN.topojson),
     fetch(CDN.monde).then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })]);
   const pays = topo.feature(monde, monde.objects.countries);
@@ -100,8 +101,8 @@ async function dessinerGlobe(zone, banques) {
     const [dx, dy, ancre] = DECALAGES[b.devise] || [9, 4, "start"];
     t.setAttribute("x", dx); t.setAttribute("y", dy); t.setAttribute("text-anchor", ancre);
     g.append(c, t);
-    g.addEventListener("click", () => ficheBanque(b));
-    g.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); ficheBanque(b); } });
+    g.addEventListener("click", () => choisir(b));
+    g.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); choisir(b); } });
     points.appendChild(g);
     return [b, g];
   });
@@ -233,7 +234,8 @@ function ligneEvenement(e) {
     const s = el("span", cls || null, `${lib} ${virgule(x) ?? "n/d"}`);
     if (x == null && raison) s.title = raison;
     else if (x != null) certifier(s, { libelle: `${e.evenement} (${e.devise}) · ${lib}`, valeur: virgule(x),
-                                       source: e.sources_champs?.[champ] || e.source, date: e.date_paris });
+                                       source: e.sources_champs?.[champ] || e.source, date: e.date_paris,
+                                       sansAge: "valeur d'une publication ponctuelle (date de l'évènement)" });
     return s;
   };
   valeurs.append(v("Préc.", e.precedent, e.raison_precedent, null, "precedent"), v("Cons.", e.consensus, e.raison_consensus, null, "consensus"),

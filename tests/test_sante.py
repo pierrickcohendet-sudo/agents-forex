@@ -75,3 +75,26 @@ def test_page_sante_et_certificat_partage_branches():
     assert "export function certifier" in commun
     for page in ("cockpit", "dossiers", "tableau", "agenda", "journal", "sante"):
         assert "certifier(" in (RACINE / f"docs/site/{page}.js").read_text(encoding="utf-8"), page
+
+
+def test_accueil_leger_24h_et_au_bord():
+    from datetime import datetime, timezone
+    from core import accueil
+    maintenant = datetime(2026, 10, 28, 23, 0, tzinfo=timezone.utc)
+    dossiers = {"cockpit": {"entete": {"titre": "Signaux mixtes", "conviction": "moyen", "direction": {"libelle": "Dollar haussier", "classe": "up"},
+                                       "date_rapport": "2026-10-28"},
+                            "au_bord": [{"id": f"s{i}", "engrenage": 3, "libelle": "x", "texte_valeur": "+0,46", "distance_texte": "0,04"} for i in range(5)],
+                            "franchis": [{}, {}]}}
+    ag = {"jours": [{"evenements": [
+        {"iso_utc": "2026-10-29T12:30+00:00", "impact": "fort", "type": "Chiffre", "evenement": "PIB T/T"},
+        {"iso_utc": "2026-10-29T13:00+00:00", "impact": "faible", "type": "Chiffre", "evenement": "faible, écarté"},
+        {"iso_utc": "2026-10-29T14:00+00:00", "impact": "faible", "type": "Discours", "evenement": "discours gardé"},
+        {"iso_utc": "2026-11-02T12:30+00:00", "impact": "fort", "type": "Chiffre", "evenement": "trop loin"}]}],
+          "banques_centrales": [{"devise": "USD", "court": "Fed", "siege": [38.9, -77.0], "cette_semaine": True}]}
+    a = accueil.calculer(dossiers, ag, {"sources": [{"fraicheur": {"etat": "vert"}}], "alertes": []}, maintenant)
+    assert len(a["au_bord"]) == 3 and a["franchis"] == 2 and a["theme"]["titre"] == "Signaux mixtes"
+    assert [e["evenement"] for e in a["evenements"]] == ["PIB T/T", "discours gardé"]
+    assert a["banques"][0]["court"] == "Fed" and a["fraicheur"] == {"sources": 1, "vertes": 1, "alertes": [], "calcule_le": None}
+    app = (RACINE / "docs/site/app.js").read_text(encoding="utf-8")
+    assert 'accueil: { titre: "Aujourd\'hui", module: "./accueil.js"' in app and "./synthese.js" in app
+    assert "dossiers.json" not in (RACINE / "docs/site/accueil.js").read_text(encoding="utf-8")   # page légère

@@ -1,9 +1,9 @@
 /* FX Desk — site V1. Lit uniquement docs/data/*.json (produits par le pipeline), aucune clé, aucun appel externe. */
 import { chargerJson, enErreur, el, indisponible, initialiserDetail, initialiserCertificats, dateHeure } from "./commun.js";
-import { pageSynthese } from "./synthese.js";
 
 const ONGLETS = {
-  synthese: { titre: "Synthèse", rendu: pageSynthese },
+  accueil: { titre: "Aujourd'hui", module: "./accueil.js", fonction: "pageAccueil" },   // lot V5 : tableau de bord du jour, accueil.json seul
+  synthese: { titre: "Synthèse", module: "./synthese.js", fonction: "pageSynthese" },
   engrenages: { titre: "8 engrenages", module: "./engrenages.js", fonction: "pageEngrenages" },
   scenarios: { titre: "Scénarios", module: "./scenarios.js", fonction: "pageScenarios" },   // impact.json chargé à l'ouverture
   outils: { titre: "Outils", module: "./outils.js", fonction: "pageOutils" },   // lot V5 : radar, et si, paires, jours similaires
@@ -33,10 +33,10 @@ function appliquerTheme(t) {
 
 /* ---------------------------------------------------------------- routage */
 async function afficher() {
-  const hash = (location.hash || "#synthese").slice(1);
+  const hash = (location.hash || "#accueil").slice(1);
   // Lien direct vers un dossier d'engrenage : #g=N (équivaut à #engrenages/g=N)
   const [id, parametre] = /^g=[1-8]$/.test(hash) ? ["engrenages", hash] : hash.split("/");
-  const onglet = ONGLETS[id] ? id : "synthese";
+  const onglet = ONGLETS[id] ? id : "accueil";
   document.querySelectorAll(".onglets a").forEach(a => {
     if (a.dataset.onglet === onglet) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
   });
@@ -61,7 +61,7 @@ async function afficher() {
     console.error(e);
     blocs = [indisponible(conf.titre, `erreur d'affichage (${e.message})`)];
   }
-  if ((location.hash || "#synthese").slice(1) !== hash) return;   // l'utilisateur a changé d'onglet entre-temps
+  if ((location.hash || "#accueil").slice(1) !== hash) return;   // l'utilisateur a changé d'onglet entre-temps
   main.replaceChildren(...blocs);
   if (parametre && !parametre.startsWith("g=")) document.getElementById(`fiche-${parametre}`)?.scrollIntoView();
   else window.scrollTo(0, 0);
