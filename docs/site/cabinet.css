@@ -1275,3 +1275,8 @@ table.dense td.source-cellule, table.dense td.sa-nom, table.dense td.sa-alimente
 .jn-checklist { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
 .jn-niveaux { margin: 4px 0; padding-left: 18px; font-size: 13.5px; display: grid; gap: 2px; font-family: var(--sans); }
 .jn-niveaux li[title] { cursor: help; text-decoration: underline dotted color-mix(in srgb, var(--texte-2) 50%, transparent); text-underline-offset: 3px; }
+/* Rapport : colonnes de texte en police normale, alignées à gauche, avec retour à la ligne */
+.rp-marche td:nth-child(1), .rp-marche td:nth-child(5), .rp-marche td:nth-child(6), .rp-biais td, .rp-section table.dense td:first-child { font-family: var(--sans); font-size: 13.5px; text-align: left; white-space: normal; letter-spacing: 0; }
+.rp-marche td:nth-child(6) { color: var(--texte-2); font-size: 12px; min-width: 180px; }
+.rp-section table.dense th { text-align: left; }
+@media (max-width: 600px) { .rp-marche th:nth-child(6), .rp-marche td:nth-child(6) { display: none; } .rp-marche td:nth-child(5) { min-width: 170px; } .rp-marche td:nth-child(1) { min-width: 96px; } }
