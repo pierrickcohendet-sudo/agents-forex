@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-10-29T16:17:53+00:00",
+  "genere_le": "2026-10-29T20:52:41+00:00",
   "appels_llm": [
    {
     "heure": "15:19",
@@ -320,6 +320,60 @@
     "tokens_total": 8696,
     "ok": true,
     "etiquette": "synthese:AUD"
+   },
+   {
+    "heure": "20:44",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 7164,
+    "tokens_total": 8724,
+    "ok": false,
+    "etiquette": "synthese:CAD"
+   },
+   {
+    "heure": "20:46",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 7164,
+    "tokens_total": 8724,
+    "ok": true,
+    "etiquette": "synthese:CAD"
+   },
+   {
+    "heure": "20:46",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 6642,
+    "tokens_total": 8202,
+    "ok": false,
+    "etiquette": "synthese:NZD"
+   },
+   {
+    "heure": "20:50",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 6642,
+    "tokens_total": 8202,
+    "ok": false,
+    "etiquette": "synthese:NZD"
+   },
+   {
+    "heure": "20:52",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 6768,
+    "tokens_total": 8328,
+    "ok": true,
+    "etiquette": "synthese:CNY"
+   },
+   {
+    "heure": "20:52",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 0,
+    "tokens_message": 34202,
+    "tokens_total": 34202,
+    "ok": false,
+    "etiquette": "critique"
    }
   ],
   "quota_llm": {
@@ -329,7 +383,7 @@
     "gemini-3.8-flash",
     "gemini-3.5-flash-lite"
    ],
-   "appels_aujourdhui": 51,
+   "appels_aujourdhui": 60,
    "plafond_jour": 60,
    "engrenages_faits": true,
    "reserve_engrenages": 8,
@@ -339,17 +393,17 @@
      "appels_aujourdhui": 20,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-10-27T06:59:59+00:00",
-     "appels_ce_run": 5,
-     "reussites_ce_run": 2,
-     "sauts_ce_run": 7
-    },
-    "gemini-3.8-flash": {
-     "appels_aujourdhui": 11,
-     "plafond_jour": 20,
-     "epuise_jusqu_a": "2026-10-29T06:59:59+00:00",
-     "appels_ce_run": 3,
+     "appels_ce_run": 0,
      "reussites_ce_run": 0,
      "sauts_ce_run": 8
+    },
+    "gemini-3.8-flash": {
+     "appels_aujourdhui": 20,
+     "plafond_jour": 20,
+     "epuise_jusqu_a": "2026-10-30T06:59:59+00:00",
+     "appels_ce_run": 6,
+     "reussites_ce_run": 2,
+     "sauts_ce_run": 2
     },
     "gemini-3.5-flash-lite": {
      "appels_aujourdhui": 20,
@@ -357,19 +411,19 @@
      "epuise_jusqu_a": null,
      "appels_ce_run": 0,
      "reussites_ce_run": 0,
-     "sauts_ce_run": 11
+     "sauts_ce_run": 7
     }
    }
   },
-  "resume_quota": "Gemini : 51/60, engrenages : fait",
+  "resume_quota": "Gemini : 60/60, engrenages : fait",
   "appels_par_modele": {
    "gemini-3.5-flash": {
     "appels": 12,
     "echecs": 7
    },
    "gemini-3.8-flash": {
-    "appels": 8,
-    "echecs": 7
+    "appels": 14,
+    "echecs": 11
    },
    "gemini-3.5-flash-lite": {
     "appels": 15,
@@ -442,6 +496,40 @@
       "ouvert_a_l_appel": null,
       "echecs_consecutifs": 0,
       "ignores": 11
+     }
+    ]
+   },
+   {
+    "heure": "20:52",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": true,
+    "appels_total": 8,
+    "replis_json_modele_suivant": 2,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 8
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": true,
+      "cause": "quota journalier épuisé — quota gratuit journalier épuisé pour gemini-3.8-flash (HTTP 429, requêtes/jour)",
+      "ouvert_a_l_appel": 6,
+      "echecs_consecutifs": 1,
+      "ignores": 2
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 7
      }
     ]
    }
@@ -1176,7 +1264,7 @@
     "libelle": "Flash-Lite 3.5"
    },
    "version": "quotidienne",
-   "rafraichi_le": "2026-10-29T16:04:54+00:00",
+   "rafraichi_le": "2026-10-29T20:41:08+00:00",
    "titre_theme_impose": "Signaux mixtes"
   },
   "classement_devises": [
@@ -3696,10 +3784,203 @@
     ]
    },
    "synthese_approfondie": {
-    "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash passé en dernier | gemini-3.8-flash : HTTPSConnectionPool(host='generativelanguage.googleapis.com', port=44",
-    "tentatives": 2,
-    "genere_le": "2026-10-29T16:16:29+00:00"
+    "orientation": "neutre",
+    "these_centrale": {
+     "texte": "Par rapport aux séances précédentes où dominait un biais baissier, la thèse évolue vers une neutralisation tactique en raison du relèvement de taux de la BoC et d'un momentum technique de court terme. Le dollar canadien demeure toutefois enfermé dans son range hebdomadaire, freiné par un différentiel de taux persistant en faveur du dollar américain et le repli des cours pétroliers. Le profil fondamental global reste contraint par des indicateurs d'activité et d'emploi mitigés.",
+     "source_ids": [
+      "src_016",
+      "src_021",
+      "src_142"
+     ],
+     "non_source": false
+    },
+    "moteurs": [
+     {
+      "moteur": "croissance",
+      "donnee": "PIB trimestriel à 0,0% au 2026-09-29",
+      "trajectoire": "Conforme au consensus (0,0%), en fort ralentissement par rapport au trimestre précédent (0,4%)",
+      "implication": "La stagnation de la croissance économique canadienne limite la capacité de resserrement additionnel et pèse structurellement sur le CAD.",
+      "source_id": "src_241"
+     },
+     {
+      "moteur": "inflation",
+      "donnee": "CPI annuel à 0,1% et CPI core annuel à 1,9% au 2026-10-19",
+      "trajectoire": "Inférieurs aux consensus respectifs (0,2% et 2,0%), avec une hausse du CPI global vs -0,1% précédent mais un repli du core vs 2,0% précédent",
+      "implication": "Le ralentissement de l'inflation sous-jacente sous la cible médiane de 2,0% réduit les pressions inflationnistes et affaiblit le soutien par les taux réels.",
+      "source_id": "src_239"
+     },
+     {
+      "moteur": "emploi",
+      "donnee": "Variation de l'emploi à -68,3K et chômage à 6,5% au 2026-10-09",
+      "trajectoire": "Surprise très négative vs consensus (+6,1K) et dégradation par rapport au mois précédent (-41,7K) ; chômage stable à 6,5% (consensus 6,5%, précédent 6,4%)",
+      "implication": "La contraction marquée des créations d'emplois signale une fragilité du marché du travail canadien, facteur baissier pour la devise.",
+      "source_id": "src_245"
+     },
+     {
+      "moteur": "banque_centrale",
+      "donnee": "Taux directeur fixé à 2,50% le 2026-10-28",
+      "trajectoire": "Conforme aux attentes (2,50%), en hausse de 25 pb par rapport au taux précédent (2,25%)",
+      "implication": "La Banque du Canada adopte une posture data-dependent prudente, offrant un soutien temporaire mais conditionné à l'évolution macroéconomique.",
+      "source_id": "src_142"
+     }
+    ],
+    "taux_et_flux": {
+     "texte": "Le taux directeur de la BoC est à 2,50% au 28-10-2026, affichant un différentiel négatif de -0,25 point face à la médiane du G8. Sur la courbe des taux, le spread souverain à 2 ans CAD vs USD s'établit à -134 pb au 27-10-2026 (rendement canadien 2 ans à 3,36% contre 4,70% pour les Treasuries), ce qui génère un coût de portage très défavorable au dollar canadien et favorise les flux d'arbitrage vers le billet vert.",
+     "source_ids": [
+      "src_016",
+      "src_142"
+     ],
+     "non_source": false
+    },
+    "geopolitique": {
+     "texte": "L'apaisement diplomatique au Moyen-Orient avec l'ouverture de discussions sur l'Iran a pesé sur les cours du brut (WTI en repli à 103,37$ le 27-10-2026), ce qui dégrade directement les termes de l'échange du Canada, exportateur net d'énergie.",
+     "source_ids": [
+      "src_011",
+      "src_128"
+     ],
+     "non_source": false
+    },
+    "lecture_technique": {
+     "texte": "La paire USD/CAD évolue à 0,71503 dans une tendance de fond en range hebdomadaire, sous sa moyenne mobile 200 (0,72025) mais au-dessus de sa moyenne mobile 100 (0,71194). Le RSI journalier s'affiche à 62,3 en momentum haussier (89e percentile sur 5 ans), s'approchant de la résistance immédiate à 0,71589 tout en restant protégé par un support majeur à 0,71410 (4 impacts validés).",
+     "source_ids": [
+      "src_021"
+     ],
+     "coherence": "mixte",
+     "non_source": false
+    },
+    "scenarios": [
+     {
+      "type": "haussier",
+      "declencheur": "Franchissement net de la résistance à 0,71770 et dépassement de la MM200 à 0,72025",
+      "probabilite": "faible",
+      "justification": "Nécessiterait un retournement violent à la hausse des prix pétroliers ou des surprises majeures sur le PIB canadien face à un USD affaibli.",
+      "source_ids": [
+       "src_021",
+       "src_045"
+      ]
+     },
+     {
+      "type": "central",
+      "declencheur": "Maintien de USD/CAD à l'intérieur du canal 0,71410 - 0,71770 sans franchissement de la MM200",
+      "probabilite": "elevee",
+      "justification": "La hausse de taux de la BoC équilibre la faiblesse macroéconomique (emploi, croissance) et maintient les cours dans les bornes du range hebdomadaire.",
+      "source_ids": [
+       "src_021",
+       "src_142"
+      ]
+     },
+     {
+      "type": "baissier",
+      "declencheur": "Cassure du support technique à 0,71410 sur USD/CAD ou nouvelle baisse du pétrole WTI sous 100$",
+      "probabilite": "moyenne",
+      "justification": "Le spread 2 ans négatif de -134 pb face à l'USD et la détérioration de l'emploi (-68,3K) exercent une pression vendeuse structurelle sur le CAD.",
+      "source_ids": [
+       "src_011",
+       "src_016",
+       "src_245"
+      ]
+     }
+    ],
+    "catalyseurs": [
+     {
+      "date": "2026-10-30",
+      "heure_utc": "12:30",
+      "evenement": "GDP m/m",
+      "impact": "medium",
+      "consensus": "0.2%",
+      "source_id": "src_233",
+      "pourquoi": "La publication du PIB mensuel permettra d'évaluer si l'économie canadienne évite la contraction après la stagnation du dernier trimestre."
+     },
+     {
+      "date": "2026-11-06",
+      "heure_utc": "13:30",
+      "evenement": "Unemployment Rate",
+      "impact": "high",
+      "consensus": null,
+      "source_id": "src_234",
+      "pourquoi": "Le taux de chômage confirmera ou non si le marché du travail canadien subit une dégradation structurelle au-delà de 6,5%."
+     },
+     {
+      "date": "2026-11-06",
+      "heure_utc": "13:30",
+      "evenement": "Employment Change",
+      "impact": "high",
+      "consensus": null,
+      "source_id": "src_235",
+      "pourquoi": "La variation de l'emploi mesurera la capacité de rebond après la perte sévère de 68,3K postes le mois précédent."
+     },
+     {
+      "date": "2026-11-16",
+      "heure_utc": "13:30",
+      "evenement": "CPI m/m",
+      "impact": "high",
+      "consensus": null,
+      "source_id": "src_237",
+      "pourquoi": "L'indice mensuel des prix à la consommation déterminera si la BoC a l'espace pour maintenir son taux directeur à 2,50%."
+     }
+    ],
+    "invalidation": [
+     {
+      "signal": "Rupture baissière confirmée en clôture sous le support technique de 0,71410 sur USD/CAD",
+      "source_id": "src_021"
+     },
+     {
+      "signal": "Resserrement du spread 2 ans CAD/USD au-dessus de -100 pb",
+      "source_id": "src_016"
+     },
+     {
+      "signal": "Rebond marqué des créations nettes d'emplois lors de la prochaine publication",
+      "source_id": "src_235"
+     }
+    ],
+    "opportunites": [
+     {
+      "texte": "Défense du support majeur à 0,71410 sur USD/CAD",
+      "mecanisme": "Accumulation technique d'acheteurs sur une zone testée 4 fois -> rebond technique vers la borne supérieure du range hebdomadaire",
+      "source_id": "src_021",
+      "non_sourcee": false
+     },
+     {
+      "texte": "Excédent de la balance commerciale à 4,2 milliards de dollars",
+      "mecanisme": "Balance commerciale nettement supérieure au consensus (1,5B) -> demande structurelle de flux de conversion de devises vers le CAD",
+      "source_id": "src_170",
+      "non_sourcee": false
+     },
+     {
+      "texte": "Momentum de court terme orienté à la hausse avec RSI à 62,3",
+      "mecanisme": "Dynamique d'achat tactique sur les horizons courts -> soutien des cours contre les pressions macroéconomiques immédiates",
+      "source_id": "src_021",
+      "non_sourcee": false
+     }
+    ],
+    "menaces": [
+     {
+      "texte": "Écart de rendement négatif de -134 pb sur le 2 ans face aux États-Unis",
+      "mecanisme": "Rémunération inférieure des actifs canadiens -> désengagement des flux de carry trade au profit de l'USD",
+      "source_id": "src_016",
+      "non_sourcee": false
+     },
+     {
+      "texte": "Repli des cours du pétrole brut WTI à 103,37$",
+      "mecanisme": "Baisse des recettes énergétiques à l'exportation -> détérioration des termes de l'échange canadiens et pression baissière sur le CAD",
+      "source_id": "src_011",
+      "non_sourcee": false
+     },
+     {
+      "texte": "Contraction brutale de l'emploi à -68,3K",
+      "mecanisme": "Perte importante d'emplois et stagnation du PIB -> affaiblissement de la consommation intérieure et risque d'assouplissement forcé de la BoC",
+      "source_id": "src_245",
+      "non_sourcee": false
+     }
+    ],
+    "controles": [],
+    "redige_par": {
+     "modele": "gemini-3.8-flash",
+     "libelle": "Flash 3.8"
+    },
+    "statut": "ok",
+    "tentatives": 3,
+    "genere_le": "2026-10-29T20:46:03+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.75,
@@ -4397,9 +4678,9 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash passé en dernier | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint ",
-    "tentatives": 2,
-    "genere_le": "2026-10-29T16:17:33+00:00"
+    "raison": "tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.8-flash passé en dernier | gemini-3.5-flash : quota du jour atteint | gemini-3.5-flash-lite : quota du jour atteint",
+    "tentatives": 3,
+    "genere_le": "2026-10-29T20:50:34+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.91,
@@ -4663,10 +4944,201 @@
     ]
    },
    "synthese_approfondie": {
-    "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash passé en dernier | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint ",
-    "tentatives": 2,
-    "genere_le": "2026-10-29T16:17:53+00:00"
+    "orientation": "neutre",
+    "these_centrale": {
+     "texte": "Par rapport à la veille, la thèse passe d'un biais haussier à une posture neutre, reflétée par un score de confluence ramené à 48. Le yuan évolue dans une phase d'attente prudente avant la publication des indices PMI d'activité, sans impulsion directionnelle immédiate de la part de la PBoC. La dynamique technique de fond reste ferme mais fait face à des signaux de surachat prononcés qui limitent l'appréciation à court terme.",
+     "source_ids": [
+      "src_024",
+      "src_050",
+      "src_145"
+     ],
+     "non_source": false
+    },
+    "moteurs": [
+     {
+      "moteur": "croissance",
+      "donnee": "PIB à 4.5% en glissement annuel au T3 (publié le 19/10/2026)",
+      "trajectoire": "En hausse par rapport à 4.3% au T2 et supérieur au consensus de 4.4%",
+      "implication": "L'accélération modérée de l'activité soutient le plancher économique du yuan, complétée par des ventes au détail dynamiques à 1.1% contre 0.5% anticipé.",
+      "source_id": "src_272"
+     },
+     {
+      "moteur": "inflation",
+      "donnee": "CPI annuel à 0.9% en septembre (publié le 14/10/2026)",
+      "trajectoire": "Légère progression par rapport à 0.8% précédent, mais en deçà du consensus de 1.0%",
+      "implication": "La faiblesse des pressions sur les prix laisse la porte ouverte à un soutien monétaire supplémentaire, ce qui plafonne le potentiel de hausse des rendements intérieurs.",
+      "source_id": "src_271"
+     },
+     {
+      "moteur": "emploi",
+      "donnee": "Taux de chômage urbain à 5.2% en septembre (publié le 19/10/2026)",
+      "trajectoire": "En repli par rapport à 5.3% précédent et meilleur que l'attente de 5.3%",
+      "implication": "La stabilisation du marché du travail réduit l'urgence de mesures de relance monétaire agressives, apportant un soutien fondamental diffus au yuan.",
+      "source_id": "src_275"
+     },
+     {
+      "moteur": "banque_centrale",
+      "donnee": "Taux directeur maintenu à 3.00% le 20/10/2026",
+      "trajectoire": "Stable par rapport à la réunion précédente (3.00%), conforme aux prévisions",
+      "implication": "La PBoC maintient une gestion prudente axée sur les données, privilégiant les injections ciblées de liquidités plutôt qu'un assouplissement franc de ses taux directeurs.",
+      "source_id": "src_145"
+     }
+    ],
+    "taux_et_flux": {
+     "texte": "Le taux directeur chinois s'établit à 3.00%, conférant un différentiel de portage positif modeste de +0.25 point par rapport à la médiane du G8. Les rendements souverains à 2 ans locaux ne sont pas disponibles, mais face aux taux 2 ans américains à 4.70%, le portage reste structurellement défavorable face à l'USD, incitant à des flux prudents. Ce désavantage relatif est partiellement compensé par la solidité de la balance commerciale ressortie à 906 milliards en septembre, nettement au-dessus des 790 milliards prévus.",
+     "source_ids": [
+      "src_009",
+      "src_145",
+      "src_173"
+     ],
+     "non_source": false
+    },
+    "geopolitique": {
+     "texte": "",
+     "source_ids": [],
+     "non_source": false
+    },
+    "lecture_technique": {
+     "texte": "La tendance de fond hebdomadaire demeure haussière, les cours évoluant à 0.15019 au-dessus de la moyenne mobile 200 à 0.14716 et de la moyenne mobile 100 à 0.14845. Cependant, le momentum journalier affiche une surchauffe aiguë avec un RSI 14 à 79.0 (percentile historique de 98), avertissant d'un risque élevé d'essoufflement ou de repli vers le support immédiat à 0.14943. La configuration est en divergence avec le biais fondamental neutre du jour, les signaux techniques appelant à une consolidation.",
+     "source_ids": [
+      "src_024"
+     ],
+     "coherence": "divergente",
+     "non_source": false
+    },
+    "scenarios": [
+     {
+      "type": "haussier",
+      "declencheur": "Surprise haussière marquée sur les PMI manufacturier et non manufacturier repassant nettement en zone d'expansion (>50.5).",
+      "probabilite": "faible",
+      "justification": "Le consensus table sur un ralentissement d'activité (49.9 prévu) et le niveau de surachat technique limite la marge d'extension sans consolidation préalable.",
+      "source_ids": [
+       "src_024",
+       "src_050"
+      ]
+     },
+     {
+      "type": "central",
+      "declencheur": "Stabilisation des cours au-dessus du support de 0.14943 accompagnée de PMI conformes aux attentes (49.9 manufacturier et 50.0 services).",
+      "probabilite": "elevee",
+      "justification": "L'absence de guidance agressive de la PBoC et la décélération technique sous le seuil de surachat militent pour une consolidation horizontale.",
+      "source_ids": [
+       "src_024",
+       "src_050",
+       "src_051"
+      ]
+     },
+     {
+      "type": "baissier",
+      "declencheur": "Cassure confirmée du support technique à 0.14943 couplée à une dégradation des PMI sous 49.5.",
+      "probabilite": "moyenne",
+      "justification": "L'extrême tension du RSI journalier (79.0) rend la devise vulnérable à un débouclage de positions acheteuses si les indicateurs d'activité déçoivent.",
+      "source_ids": [
+       "src_024",
+       "src_050"
+      ]
+     }
+    ],
+    "catalyseurs": [
+     {
+      "date": "2026-10-31",
+      "heure_utc": "01:30",
+      "evenement": "Manufacturing PMI",
+      "impact": "low",
+      "consensus": "49.9",
+      "source_id": "src_267",
+      "pourquoi": "Fournira une mesure actualisée de la santé industrielle et confirmera ou non la contraction de l'activité sous le seuil des 50.0."
+     },
+     {
+      "date": "2026-10-31",
+      "heure_utc": "01:30",
+      "evenement": "Non-Manufacturing PMI",
+      "impact": "low",
+      "consensus": "50.0",
+      "source_id": "src_268",
+      "pourquoi": "Permettra de jauger la robustesse de la demande intérieure dans les services, principal relais de l'activité chinoise."
+     },
+     {
+      "date": "2026-11-09",
+      "heure_utc": "01:30",
+      "evenement": "CPI y/y",
+      "impact": "low",
+      "consensus": null,
+      "source_id": "src_269",
+      "pourquoi": "Indiquera si le risque déflationniste persiste, conditionnant la latitude de la PBoC à assouplir davantage sa politique."
+     },
+     {
+      "date": "2026-11-11",
+      "heure_utc": "03:03",
+      "evenement": "Trade Balance",
+      "impact": "low",
+      "consensus": null,
+      "source_id": "src_270",
+      "pourquoi": "Mesurera la vigueur des flux d'exportations, moteur central de l'accumulation de réserves et de soutien au yuan."
+     }
+    ],
+    "invalidation": [
+     {
+      "signal": "Rupture baissière nette sous le support technique des 0.14943 sur la devise.",
+      "source_id": "src_024"
+     },
+     {
+      "signal": "Publication du PMI manufacturier nettement sous le consensus à moins de 49.2.",
+      "source_id": "src_050"
+     },
+     {
+      "signal": "Baisse inattendue du taux directeur par la PBoC lors du prochain fixing mensuel.",
+      "source_id": "src_145"
+     }
+    ],
+    "opportunites": [
+     {
+      "texte": "Persistance de la structure haussière weekly au-dessus de la moyenne mobile 200.",
+      "mecanisme": "Configuration de Dow préservée -> maintien de flux acheteurs structurels sur les replis.",
+      "source_id": "src_024",
+      "non_sourcee": false
+     },
+     {
+      "texte": "Excédent commercial massif à 906 milliards face à une prévision de 790 milliards.",
+      "mecanisme": "Surplus d'exportations élevé -> demande naturelle soutenue de conversion en yuans.",
+      "source_id": "src_173",
+      "non_sourcee": false
+     },
+     {
+      "texte": "Amélioration des ventes au détail à 1.1% contre 0.5% anticipé.",
+      "mecanisme": "Rebond de la consommation intérieure -> renforcement de la résilience du PIB et appréciation de la devise.",
+      "source_id": "src_276",
+      "non_sourcee": false
+     }
+    ],
+    "menaces": [
+     {
+      "texte": "RSI journalier à 79.0 situé au 98e percentile historique de surachat.",
+      "mecanisme": "Épuisement du flux acheteur à court terme -> prises de bénéfices et risque de correction brutale.",
+      "source_id": "src_024",
+      "non_sourcee": false
+     },
+     {
+      "texte": "Consensus anticipant une rechute du PMI manufacturier à 49.9.",
+      "mecanisme": "Passage sous le seuil d'expansion -> détérioration du sentiment sur le secteur productif chinois et ventes de CNY.",
+      "source_id": "src_050",
+      "non_sourcee": false
+     },
+     {
+      "texte": "Écart négatif de rendement face aux taux souverains 2 ans américains à 4.70%.",
+      "mecanisme": "Taux directeur chinois fixé à 3.00% vs rendements obligataires US élevés -> arbitrage de portage favorisant le dollar face au yuan.",
+      "source_id": "src_009",
+      "non_sourcee": false
+     }
+    ],
+    "controles": [],
+    "redige_par": {
+     "modele": "gemini-3.8-flash",
+     "libelle": "Flash 3.8"
+    },
+    "statut": "ok",
+    "tentatives": 3,
+    "genere_le": "2026-10-29T20:52:41+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.46,
@@ -9488,12 +9960,10 @@
  },
  "controle_qualite": {
   "conforme": false,
-  "nb_anomalies": 4,
+  "nb_anomalies": 2,
   "anomalies": [
-   "CAD : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash passé e)",
-   "NZD : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash passé e)",
-   "CNY : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash passé e)",
-   "prompt LLM volumineux : 19 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 21534 à 15:24 UTC, modèle gemini-3.5-flash) — le contexte envoyé au LLM a regrossi"
+   "NZD : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.8-flash passé e)",
+   "prompt LLM volumineux : 20 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 34202 à 20:52 UTC, modèle gemini-3.8-flash) — le contexte envoyé au LLM a regrossi"
   ]
  },
  "critique": {
@@ -9502,6 +9972,6 @@
   "suggestions_connaissances": [],
   "validation": "non_evalue",
   "indisponible": true,
-  "note": "relecture non effectuée (tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash passé en dernier | gemini-3.8-flash : ignoré (disjoncteur)"
+  "note": "relecture non effectuée (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit) — gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : quota gr)"
  }
 }

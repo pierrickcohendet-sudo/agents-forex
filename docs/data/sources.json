@@ -1,11 +1,11 @@
 {
- "genere_le": "2026-10-29T16:18:01+00:00",
+ "genere_le": "2026-10-29T20:52:51+00:00",
  "aujourdhui": "2026-10-29",
  "sources": [
   {
    "id": "fred",
    "nom": "FRED / ALFRED (Fed de St. Louis)",
-   "alimente": "Taux US, VIX, S&P 500, pétrole, indice dollar large, CPI, PIB, millésimes ALFRED du simulateur",
+   "alimente": "Taux US 2, 10 et 30 ans, taux réel (TIPS), point mort d'inflation, crédit high yield, VIX, S&P 500, pétrole, CPI, PIB, millésimes ALFRED",
    "statut": "officielle",
    "statut_libelle": "Officielle",
    "frequence": "quotidienne (jours ouvrés)",
@@ -173,6 +173,52 @@
    "remplacement": null
   },
   {
+   "id": "tresor",
+   "nom": "TreasuryDirect (Trésor US)",
+   "alimente": "Agenda : adjudications de notes et d'obligations US",
+   "statut": "officielle",
+   "statut_libelle": "Officielle",
+   "frequence": "à chaque run",
+   "retard_jours": 0,
+   "derniere_donnee": "2026-10-29",
+   "recupere_le": "2026-10-29",
+   "fraicheur": {
+    "etat": "vert",
+    "age_jours": 0,
+    "normal_jours": 1,
+    "texte": "0 j ouvré(s) (normal : 1 j ouvré(s) au plus)"
+   },
+   "motifs": [
+    "TreasuryDirect"
+   ],
+   "a_remplacer": false,
+   "retiree": false,
+   "remplacement": null
+  },
+  {
+   "id": "alfred",
+   "nom": "ALFRED (millésimes FRED)",
+   "alimente": "Statut « révisé » des publications US (emploi, PIB, IPC)",
+   "statut": "officielle",
+   "statut_libelle": "Officielle",
+   "frequence": "à chaque run",
+   "retard_jours": 0,
+   "derniere_donnee": "2026-10-29",
+   "recupere_le": "2026-10-29",
+   "fraicheur": {
+    "etat": "vert",
+    "age_jours": 0,
+    "normal_jours": 1,
+    "texte": "0 j ouvré(s) (normal : 1 j ouvré(s) au plus)"
+   },
+   "motifs": [
+    "ALFRED"
+   ],
+   "a_remplacer": false,
+   "retiree": false,
+   "remplacement": null
+  },
+  {
    "id": "fred_calendrier",
    "nom": "FRED releases/dates",
    "alimente": "Agenda : dates des publications US",
@@ -198,7 +244,7 @@
   {
    "id": "twelve_data",
    "nom": "Twelve Data",
-   "alimente": "Cours des paires, RSI et moyennes mobiles, bougies 30 min / 4 h (Mes paires), ETF obligataire",
+   "alimente": "Cours des paires, RSI et moyennes mobiles, bougies 30 min / 4 h (Mes paires), or (XAU/USD), ETF TLT, QQQ (Nasdaq 100), EWJ (Japon), EWG (Allemagne)",
    "statut": "api",
    "statut_libelle": "API sous licence gratuite",
    "frequence": "quotidienne (jours ouvrés)",
@@ -290,6 +336,31 @@
    "remplacement": null
   },
   {
+   "id": "officielles",
+   "nom": "Instituts officiels : ONS, Statistique Canada, Eurostat",
+   "alimente": "Valeur publiée (IPC, chômage, PIB) de GBP, CAD, EUR : confirme ou remplace ForexFactory",
+   "statut": "officielle",
+   "statut_libelle": "Officielle",
+   "frequence": "mensuelle",
+   "retard_jours": 30,
+   "derniere_donnee": "2026-10-29",
+   "recupere_le": "2026-10-29",
+   "fraicheur": {
+    "etat": "vert",
+    "age_jours": 0,
+    "normal_jours": 61,
+    "texte": "0 j (normal : 61 j au plus)"
+   },
+   "motifs": [
+    "ONS",
+    "Statistique Canada",
+    "Eurostat"
+   ],
+   "a_remplacer": false,
+   "retiree": false,
+   "remplacement": null
+  },
+  {
    "id": "ff_mois",
    "nom": "ForexFactory · page « mois »",
    "alimente": "Tableau macro et agenda : valeur publiée, consensus et précédent des 9 devises",
@@ -298,7 +369,7 @@
    "frequence": "à chaque run",
    "retard_jours": 0,
    "derniere_donnee": "2026-10-29",
-   "recupere_le": "2026-10-29T15:15:14+00:00",
+   "recupere_le": "2026-10-29T20:39:43+00:00",
    "fraicheur": {
     "etat": "vert",
     "age_jours": 0,
@@ -312,7 +383,7 @@
    ],
    "a_remplacer": true,
    "retiree": false,
-   "remplacement": "Gardée : seule source gratuite de la valeur publiée ET du consensus pour les 9 devises (les flux publics n'ont pas la valeur publiée, vérifié le 06/10/2026). FRED/ALFRED couvre déjà les publications US ; pour les 8 autres devises, aucun équivalent licite gratuit trouvé. Plafond de 6 requêtes par jour, robots.txt respecté."
+   "remplacement": "Remplacée en partie : la valeur publiée de GBP, CAD et EUR (IPC, chômage, PIB) vient des instituts officiels (ONS, Statistique Canada, Eurostat) qui confirment ForexFactory, USD par FRED/ALFRED, le consensus par le flux public JSON. Gardée pour le reste, faute de source licite gratuite : JPY et NZD (API à clé), AUD (API de l'ABS injoignable), CHF et CNY (pas d'API), PMI (données propriétaires). Interrupteur tableau_macro.forexfactory.page_mois pour la couper. Plafond de 6 requêtes par jour, robots.txt respecté."
   },
   {
    "id": "tradingview",
@@ -400,7 +471,7 @@
   }
  ],
  "comptes": {
-  "officielle": 8,
+  "officielle": 11,
   "api": 2,
   "flux": 2,
   "extraction": 1
