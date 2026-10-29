@@ -1,14 +1,14 @@
 {
  "version_schema": 1,
- "genere_le": "2026-10-29T01:13:37+00:00",
+ "genere_le": "2026-10-29T15:53:49+00:00",
  "sources": {
-  "rapport": "2026-10-29T01:13:05+00:00",
-  "tableau_macro": "2026-10-29T00:53:21+00:00"
+  "rapport": "2026-10-29T15:52:42+00:00",
+  "tableau_macro": "2026-10-29T15:15:20+00:00"
  },
  "regime": {
   "biais": "neutre",
   "libelle": "Neutre",
-  "ecart_points": null,
+  "ecart_points": -4.0,
   "seuil_points": 5.0,
   "devises_risque": [
    "AUD",
@@ -21,13 +21,13 @@
    "USD"
   ],
   "explication": "Écart entre le score de confluence moyen des devises « risque » et celui des devises « refuge » (calcul Python) : au-delà du seuil, Risk On ; en deçà de son opposé, Risk Off ; sinon Neutre.",
-  "driver": "Biais neutre ; USD en tête du classement de confluence.",
+  "driver": "Biais macro neutre confirmé : l'AUD (score 69) et l'USD (score 68) dominent le haut du classement, reflétant une dynamique de portage élevée sans directionnelle claire de marché.",
   "relecture": "non_evalue",
   "date_rapport": "2026-10-29",
-  "maj": "2026-10-29T01:13:05+00:00",
+  "maj": "2026-10-29T15:52:42+00:00",
   "type_rapport": "quotidien",
   "nb_devises": 9,
-  "nb_devises_disponibles": 1,
+  "nb_devises_disponibles": 9,
   "notion_url": "https://app.notion.com/p/FX-2026-10-29-quotidien-40865bc6466181b2b4d3f10dfad64052",
   "notion_page_du_jour": true
  },
@@ -139,18 +139,18 @@
      "raison": null
     },
     "indice_surprise": {
-     "texte": "+0,2",
-     "valeur_num": 0.23,
+     "texte": "+0,3",
+     "valeur_num": 0.27,
      "tendance": "baisse",
-     "n": 10,
+     "n": 11,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
      "date": "2026-10-29",
      "raison": null
     },
     "score": {
-     "texte": "74",
-     "valeur_num": 74,
+     "texte": "68",
+     "valeur_num": 68,
      "etat": "valeur",
      "source": "score de confluence (calcul Python)",
      "date": "2026-10-29",
@@ -158,7 +158,7 @@
     },
     "biais": {
      "texte": "Haussier",
-     "valeur_num": 74,
+     "valeur_num": 68,
      "code": "haussier",
      "etat": "valeur",
      "profil": "off",
@@ -172,14 +172,14 @@
    "drapeau": "🇪🇺",
    "cellules": {
     "taux_directeur": {
-     "texte": "2,65 % [taux de refinancement principal (le site utilise le taux de dépôt ECBDFR pour le portage et les dossiers)] ✍️",
+     "texte": "2,65 % [taux de refinancement]",
      "valeur_num": 2.65,
-     "date": null,
-     "source": null,
-     "consensus": null,
-     "surprise": null,
-     "precedent": "2,40 % [taux de refinancement principal (le site utilise le taux de dépôt ECBDFR pour le portage et les dossiers)] ✍️",
-     "manuel": true,
+     "date": "2026-10-29",
+     "source": "ForexFactory",
+     "consensus": "2,65 %",
+     "surprise": "=",
+     "precedent": "2,65 % [taux de refinancement]",
+     "manuel": false,
      "etat": "valeur",
      "raison": null
     },
@@ -233,25 +233,30 @@
     },
     "indice_surprise": {
      "texte": "-0,1",
-     "valeur_num": -0.1,
-     "tendance": "stable",
-     "n": 11,
+     "valeur_num": -0.09,
+     "tendance": "hausse",
+     "n": 12,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
      "date": "2026-10-29",
      "raison": null
     },
     "score": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)"
+     "texte": "34",
+     "valeur_num": 34,
+     "etat": "valeur",
+     "source": "score de confluence (calcul Python)",
+     "date": "2026-10-29",
+     "raison": null
     },
     "biais": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "score du jour indisponible"
+     "texte": "Baissier",
+     "valeur_num": 34,
+     "code": "baissier",
+     "etat": "valeur",
+     "profil": "neutre",
+     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
+     "raison": null
     }
    }
   },
@@ -330,16 +335,21 @@
      "raison": null
     },
     "score": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)"
+     "texte": "68",
+     "valeur_num": 68,
+     "etat": "valeur",
+     "source": "score de confluence (calcul Python)",
+     "date": "2026-10-29",
+     "raison": null
     },
     "biais": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "score du jour indisponible"
+     "texte": "Haussier",
+     "valeur_num": 68,
+     "code": "haussier",
+     "etat": "valeur",
+     "profil": "neutre",
+     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
+     "raison": null
     }
    }
   },
@@ -418,16 +428,21 @@
      "raison": null
     },
     "score": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)"
+     "texte": "47",
+     "valeur_num": 47,
+     "etat": "valeur",
+     "source": "score de confluence (calcul Python)",
+     "date": "2026-10-29",
+     "raison": null
     },
     "biais": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "score du jour indisponible"
+     "texte": "Neutre",
+     "valeur_num": 47,
+     "code": "neutre",
+     "etat": "valeur",
+     "profil": "off",
+     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
+     "raison": null
     }
    }
   },
@@ -506,16 +521,21 @@
      "raison": null
     },
     "score": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)"
+     "texte": "38",
+     "valeur_num": 38,
+     "etat": "valeur",
+     "source": "score de confluence (calcul Python)",
+     "date": "2026-10-29",
+     "raison": null
     },
     "biais": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "score du jour indisponible"
+     "texte": "Baissier",
+     "valeur_num": 38,
+     "code": "baissier",
+     "etat": "valeur",
+     "profil": "off",
+     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
+     "raison": null
     }
    }
   },
@@ -594,16 +614,21 @@
      "raison": null
     },
     "score": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)"
+     "texte": "40",
+     "valeur_num": 40,
+     "etat": "valeur",
+     "source": "score de confluence (calcul Python)",
+     "date": "2026-10-29",
+     "raison": null
     },
     "biais": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "score du jour indisponible"
+     "texte": "Baissier",
+     "valeur_num": 40,
+     "code": "baissier",
+     "etat": "valeur",
+     "profil": "on",
+     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
+     "raison": null
     }
    }
   },
@@ -682,16 +707,21 @@
      "raison": null
     },
     "score": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)"
+     "texte": "69",
+     "valeur_num": 69,
+     "etat": "valeur",
+     "source": "score de confluence (calcul Python)",
+     "date": "2026-10-29",
+     "raison": null
     },
     "biais": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "score du jour indisponible"
+     "texte": "Haussier",
+     "valeur_num": 69,
+     "code": "haussier",
+     "etat": "valeur",
+     "profil": "on",
+     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
+     "raison": null
     }
    }
   },
@@ -770,16 +800,21 @@
      "raison": null
     },
     "score": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)"
+     "texte": "32",
+     "valeur_num": 32,
+     "etat": "valeur",
+     "source": "score de confluence (calcul Python)",
+     "date": "2026-10-29",
+     "raison": null
     },
     "biais": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "score du jour indisponible"
+     "texte": "Baissier",
+     "valeur_num": 32,
+     "code": "baissier",
+     "etat": "valeur",
+     "profil": "on",
+     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
+     "raison": null
     }
    }
   },
@@ -858,16 +893,21 @@
      "raison": null
     },
     "score": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)"
+     "texte": "48",
+     "valeur_num": 48,
+     "etat": "valeur",
+     "source": "score de confluence (calcul Python)",
+     "date": "2026-10-29",
+     "raison": null
     },
     "biais": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "score du jour indisponible"
+     "texte": "Neutre",
+     "valeur_num": 48,
+     "code": "neutre",
+     "etat": "valeur",
+     "profil": "neutre",
+     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
+     "raison": null
     }
    }
   }
@@ -970,17 +1010,17 @@
       "z": 1.0
      },
      "pib": {
-      "texte": "2,2 %",
-      "valeur_num": 2.2,
-      "date": "2026-09-30",
+      "texte": "3,4 %",
+      "valeur_num": 3.4,
+      "date": "2026-10-29",
       "source": "ForexFactory",
-      "consensus": "1,5 %",
+      "consensus": "3,2 %",
       "surprise": "▲",
-      "precedent": "1,5 %",
+      "precedent": "2,2 % (révisé)",
       "manuel": false,
       "etat": "valeur",
       "raison": null,
-      "z": 2.33
+      "z": 0.67
      },
      "pmi_manufacturier": {
       "texte": "54,5",
@@ -1062,25 +1102,25 @@
      }
     },
     "indice_30j": {
-     "indice": 0.23,
+     "indice": 0.27,
      "precedent": 0.55,
      "tendance": "baisse",
-     "n": 10,
-     "texte": "+0,2 ▼ (n=10)"
+     "n": 11,
+     "texte": "+0,3 ▼ (n=11)"
     }
    },
    {
     "devise": "EUR",
     "cellules": {
      "taux_directeur": {
-      "texte": "2,65 % [taux de refinancement principal (le site utilise le taux de dépôt ECBDFR pour le portage et les dossiers)] ✍️",
+      "texte": "2,65 % [taux de refinancement]",
       "valeur_num": 2.65,
-      "date": null,
-      "source": null,
-      "consensus": null,
-      "surprise": null,
-      "precedent": "2,40 % [taux de refinancement principal (le site utilise le taux de dépôt ECBDFR pour le portage et les dossiers)] ✍️",
-      "manuel": true,
+      "date": "2026-10-29",
+      "source": "ForexFactory",
+      "consensus": "2,65 %",
+      "surprise": "=",
+      "precedent": "2,65 % [taux de refinancement]",
+      "manuel": false,
       "etat": "valeur",
       "raison": null,
       "z": 0.0
@@ -1204,11 +1244,11 @@
      }
     },
     "indice_30j": {
-     "indice": -0.1,
+     "indice": -0.09,
      "precedent": -0.25,
-     "tendance": "stable",
-     "n": 11,
-     "texte": "-0,1 = (n=11)"
+     "tendance": "hausse",
+     "n": 12,
+     "texte": "-0,1 ▲ (n=12)"
     }
    },
    {
