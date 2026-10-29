@@ -91,6 +91,29 @@ def _graphiques_marche(cle: str, nb_points: int) -> dict:
     return graphiques
 
 
+URL_BCE_DEPOT = "https://data-api.ecb.europa.eu/service/data/FM/D.U2.EUR.4F.KR.DFR.LEV"
+
+
+def taux_depot_bce(fred_ecbdfr: dict | None) -> dict:
+    """Taux de la facilité de dépôt de la BCE : FRED ECBDFR (déjà collecté) ; à défaut, API de données de la BCE
+    (une requête, licite, sans clé). Retourne {taux, date, source, type} ou {taux: None, raison}."""
+    if fred_ecbdfr and fred_ecbdfr.get("valeur") is not None:
+        return {"taux": float(fred_ecbdfr["valeur"]), "date": str(fred_ecbdfr.get("date")),
+                "source": "FRED (ECBDFR, taux de la facilité de dépôt de la BCE)", "type": "dépôt"}
+    try:
+        rep = requests.get(URL_BCE_DEPOT, params={"lastNObservations": 1, "format": "jsondata"},
+                           headers={"Accept": "application/json"}, timeout=30)
+        rep.raise_for_status()
+        j = rep.json()
+        serie = next(iter(j["dataSets"][0]["series"].values()))
+        cle, obs = max(serie["observations"].items(), key=lambda kv: int(kv[0]))
+        date = j["structure"]["dimensions"]["observation"][0]["values"][int(cle)]["id"]
+        return {"taux": float(obs[0]), "date": str(date)[:10],
+                "source": "API de données de la BCE (FM, DFR, taux de la facilité de dépôt)", "type": "dépôt"}
+    except Exception as exc:  # noqa: BLE001 — réseau, format : n/d avec la raison, jamais une valeur inventée
+        return {"taux": None, "raison": f"ECBDFR absent de FRED et API BCE en échec ({masquer_secrets(str(exc))[:120]})"}
+
+
 def collecter(config: dict) -> dict:
     resultat: dict = {"series": {}, "yield_curve": {"disponible": False},
                       "taux_directeurs": {}, "graphiques_marche": {}, "erreurs": []}
@@ -129,6 +152,13 @@ def collecter(config: dict) -> dict:
     resultat["yield_curve"] = _lecture_yield_curve(
         observations.get("rendement_10y", []), observations.get("rendement_2y", [])
     )
+
+    # EUR : taux de la facilité de dépôt, automatique (FRED ECBDFR, sinon API de la BCE) ; jamais de saisie manuelle
+    eur = taux_depot_bce(resultat["series"].get("bce_depot"))
+    if eur.get("taux") is not None:
+        resultat["taux_directeurs"]["EUR"] = eur
+    else:
+        resultat["erreurs"].append(f"Taux de dépôt BCE n/d : {eur.get('raison')}")
 
     # Taux directeurs : repli configuré à la main, USD écrasé par FEDFUNDS si dispo.
     for devise, info in config.get("taux_directeurs", {}).items():

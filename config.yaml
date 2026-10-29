@@ -938,12 +938,14 @@ fred:
     petrole_wti:   DCOILWTICO
     petrole_brent: DCOILBRENTEU
     sp500:         SP500
+    bce_depot:     ECBDFR     # taux de la facilité de dépôt de la BCE (repli : API de données de la BCE)
 
 # Taux directeurs de repli, mis à jour À LA MAIN (date obligatoire).
 # L'USD est rafraîchi automatiquement via FRED (DFF, taux effectif quotidien).
+# EUR : plus de saisie manuelle (lot Verrouillage) — taux de dépôt automatique (FRED ECBDFR, sinon API de la BCE),
+# taux de refinancement gardé en information secondaire (registre macro, ForexFactory).
 taux_directeurs:
   USD: { taux: 3.75, date: "2026-01-15" }
-  EUR: { taux: 2.40, date: "2026-01-15" }
   GBP: { taux: 3.75, date: "2026-01-15" }
   JPY: { taux: 1.00, date: "2026-01-15" }
   CHF: { taux: 0.00, date: "2026-01-15" }

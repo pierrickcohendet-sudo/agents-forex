@@ -34,7 +34,7 @@ function horloges() {
 }
 
 // Taux tel que publié (« 2.75% » -> « 2,75 % », « <1.25% » -> « < 1,25 % ») : jamais de zéro final perdu
-const tauxTexte = b => b.taux_texte ? virgule(String(b.taux_texte).replace(/^([<>])\s*/, "$1 ").replace(/%$/, " %")) :
+const tauxTexte = b => b.taux_texte ? virgule(String(b.taux_texte).replace(/^([<>])\s*/, "$1 ").replace(/%$/, " %").replace(/(\d)\.(\d)/g, "$1,$2")) :
   b.taux == null ? "n/d" : `${virgule(b.taux.toFixed(2))} %`;
 // Étiquettes du globe : BCE à gauche, BNS en dessous (sièges voisins de la BoE en Europe)
 const DECALAGES = { EUR: [-9, 4, "end"], CHF: [9, 14, "start"], GBP: [9, -2, "start"] };
@@ -46,7 +46,8 @@ function ficheBanque(b) {
     : `${b.variation_pb === 0 ? "inchangé" : `${b.variation_pb > 0 ? "+" : "−"}${Math.abs(b.variation_pb)} pb`}${b.date_variation ? ` le ${dateCourte(b.date_variation)}` : ""}`;
   const cal = b.calendrier || {};
   ouvrirDetail(`${DRAPEAUX[b.devise] || ""} ${b.banque}`, [listeDefinitions([
-    ["Taux actuel", `${taux} (${b.source_taux || "registre macro"}${b.date_taux ? `, ${dateCourte(b.date_taux)}` : ""})`],
+    ["Taux actuel", `${taux}${b.type_taux ? ` · ${b.type_taux}` : ""} (${b.source_taux || "registre macro"}${b.date_taux ? `, ${dateCourte(b.date_taux)}` : ""})`],
+    ["Information secondaire", b.taux_secondaire || b.raison_taux || undefined],
     ["Dernière variation", variation],
     ["Prochaine décision", b.prochaine ? `${dateCourte(b.prochaine)}${b.heure_prochaine && b.heure_prochaine !== "journée" ? ` à ${b.heure_prochaine} (Paris)` : ""}` : "n/d"],
     ["Consensus", b.consensus_prochaine ? `${virgule(b.consensus_prochaine)}${b.badge ? ` · ${b.badge.texte}` : ""}` : "n/d (publié par ForexFactory la semaine de la réunion)"],
@@ -67,6 +68,7 @@ function grilleBanques(banques) {
                                                         source: b.source_taux || "registre macro (ForexFactory)", date: b.date_taux, sansFocus: true,
                                                         sansAge: "taux en vigueur jusqu'à la prochaine décision" }),
       el("span", "note", b.prochaine ? `${b.cette_semaine ? "Cette semaine · " : "Prochaine : "}${dateCourte(b.prochaine).slice(0, 5)}` : "Prochaine : n/d"));
+    if (b.type_taux && b.type_taux !== "taux directeur") bouton.insertBefore(el("span", "note", b.type_taux), bouton.children[2]);
     if (b.badge && b.badge.sens !== "statu_quo") bouton.appendChild(el("span", `ag-badge ${b.badge.sens}`, b.badge.texte));
     bouton.addEventListener("click", () => ficheBanque(b));
     g.appendChild(bouton);

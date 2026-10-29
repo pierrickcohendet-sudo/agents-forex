@@ -626,6 +626,8 @@ def _taux_directeurs(config: dict, dossier_cache: Path) -> dict[str, dict]:
     try:
         cache = json.loads((dossier_cache / "collecte_macro.json").read_text(encoding="utf-8"))
         for d, t in cache.get("donnees", {}).get("taux_directeurs", {}).items():
+            if d == "EUR":   # dépôt (macro) ≠ refinancement (registre ForexFactory) : jamais mélangés
+                continue
             if d in taux and str(t.get("date")) > taux[d]["date"]:
                 taux[d] = {"taux": t.get("taux"), "date": str(t["date"]), "source": t.get("source", "FRED")}
     except (OSError, json.JSONDecodeError):

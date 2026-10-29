@@ -479,7 +479,31 @@ def badges(ag: Agenda, refs: dict[str, dict]) -> None:
                                  else "taux actuel n/d")
 
 
-def banques_centrales(registre: dict | None, config: dict | None, ag: Agenda, refs: dict[str, dict]) -> list[dict]:
+def taux_principal(devise: str, actuel: dict, macro: dict | None) -> dict:
+    """Taux affiché et son type. Fed : fourchette cible (FRED DFEDTARL / DFEDTARU) ; BCE : taux de dépôt automatique
+    (FRED ECBDFR ou API de la BCE), le refinancement du registre en information secondaire ; sinon le registre."""
+    series = (macro or {}).get("series") or {}
+    if devise == "USD":
+        bas, haut = series.get("fed_cible_basse") or {}, series.get("fed_cible_haute") or {}
+        if bas.get("valeur") is not None and haut.get("valeur") is not None:
+            return {"texte": f"{bas['valeur']:.2f}–{haut['valeur']:.2f}%", "valeur": haut["valeur"], "type": "fourchette cible",
+                    "source": "FRED (DFEDTARL / DFEDTARU)", "date": haut.get("date"),
+                    "secondaire": f"taux effectif {actuel.get('valeur')}" if actuel.get("valeur") else None}
+    if devise == "EUR":
+        dep = ((macro or {}).get("taux_directeurs") or {}).get("EUR") or {}
+        if dep.get("type") == "dépôt" and dep.get("taux") is not None:
+            return {"texte": f"{dep['taux']:.2f}%", "valeur": dep["taux"], "type": "dépôt", "source": dep.get("source"),
+                    "date": dep.get("date"),
+                    "secondaire": f"refinancement {actuel.get('valeur')} (registre macro)" if actuel.get("valeur") else None}
+        return {"texte": actuel.get("valeur"), "valeur": None, "type": "refinancement",
+                "source": actuel.get("source"), "date": actuel.get("date_pub"),
+                "secondaire": None, "raison": "taux de dépôt n/d (ECBDFR et API BCE indisponibles) : refinancement affiché"}
+    return {"texte": actuel.get("valeur"), "valeur": None, "type": "taux directeur", "source": actuel.get("source"),
+            "date": actuel.get("date_pub"), "secondaire": None}
+
+
+def banques_centrales(registre: dict | None, config: dict | None, ag: Agenda, refs: dict[str, dict],
+                      macro: dict | None = None) -> list[dict]:
     infos = tableau_macro.infos_taux(registre or {}, DEVISES)
     officiels = ((config or {}).get("agenda") or {}).get("reunions") or {}
     aujourd = ag.maintenant.astimezone(ag.paris).date()
@@ -499,10 +523,15 @@ def banques_centrales(registre: dict | None, config: dict | None, ag: Agenda, re
         prochaine = reunions[0]["date"] if reunions else None
         ligne = next((e for e in ag.lignes.values() if e["devise"] == devise and e["type"] == "Réunion BC"
                       and e["date_paris"] == prochaine), None)
+        tp = taux_principal(devise, actuel, macro)
+        if tp.get("valeur") is not None:
+            valeur, borne = tp["valeur"], None
         sortie.append({
             "devise": devise, "banque": BANQUES[devise], "court": COURTS[devise], "siege": SIEGES[devise],
-            "taux": valeur, "borne": borne, "taux_texte": actuel.get("valeur"), "date_taux": actuel.get("date_pub"),
-            "source_taux": actuel.get("source"), "reference_badge": refs.get(devise),
+            "taux": valeur, "borne": borne, "taux_texte": tp.get("texte") or actuel.get("valeur"), "type_taux": tp["type"],
+            "taux_secondaire": tp.get("secondaire"), "raison_taux": tp.get("raison"),
+            "date_taux": tp.get("date") or actuel.get("date_pub"),
+            "source_taux": tp.get("source") or actuel.get("source"), "reference_badge": refs.get(devise),
             "variation_pb": i.get("variation_pb"),
             "date_variation": i.get("date_decision") if i.get("variation_pb") is not None else None,
             "raison_variation": i.get("raison_variation"), "prochaine": prochaine,
@@ -557,7 +586,7 @@ def calculer(ff_brut: str | None, glissants: list[dict] | None, registre: dict |
             "aujourdhui": maintenant.astimezone(ag.paris).date().isoformat(),
             "jours": jours, "n_evenements": len(evts), "comptes": comptes,
             "n_forts": sum(1 for e in evts if e["impact"] == "fort"),
-            "banques_centrales": banques_centrales(registre, config, ag, refs),
+            "banques_centrales": banques_centrales(registre, config, ag, refs, macro),
             "grands_rendez_vous": grands, "grands_rendez_vous_absents": cfg.get("grands_rendez_vous_absents"),
             "prises_de_parole": [e for e in evts if e["type"] in ("Discours", "Conférence")],
             "non_traduits": sorted(ag.trad.non_traduits),
