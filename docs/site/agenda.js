@@ -1,7 +1,7 @@
 /* Page Agenda (lot V5, complément) : docs/data/agenda.json, calcul Python sans LLM.
    Globe des 9 banques centrales (d3-geo + world-atlas, versions épinglées, repli en liste), horloges, onglets par jour,
    filtres par type, impact et devise, réaction passée, prises de parole et grands rendez-vous. Heures de Paris. */
-import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, ouvrirDetail, listeDefinitions, certifier, DRAPEAUX } from "./commun.js";
+import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, ouvrirDetail, listeDefinitions, certifier, pluriel, badgeEcart, DRAPEAUX } from "./commun.js";
 
 const CDN = {
   d3geo: "https://cdn.jsdelivr.net/npm/d3-geo@3.1.1/+esm",
@@ -246,6 +246,7 @@ function ligneEvenement(e) {
   };
   valeurs.append(v("Préc.", e.precedent, e.raison_precedent, null, "precedent"), v("Cons.", e.consensus, e.raison_consensus, null, "consensus"),
                  v("Réel", e.publie, "pas encore publié", e.publie ? "ag-publie" : null, "publie"));
+  if (e.ecart) valeurs.appendChild(badgeEcart(e.ecart));
   const cr = el("span", "ag-rebours tabulaire", rebours(e.iso_utc)); cr.dataset.iso = e.iso_utc;
   const liens = el("div", "ag-liens");
   liens.appendChild(cr);
@@ -259,7 +260,7 @@ function blocJours(a) {
   const c = el("section", "carte ag-calendrier");
   const tete = el("div", "ag-cal-tete");
   tete.appendChild(el("h2", null, "Calendrier"));
-  tete.appendChild(el("p", "sous-titre", `Du ${dateCourte(a.debut)} au ${dateCourte(a.fin)} · heures de Paris (changements d'heure inclus) · ${a.n_evenements} évènement(s), dont ${a.n_forts} à fort impact.`));
+  tete.appendChild(el("p", "sous-titre", `Du ${dateCourte(a.debut)} au ${dateCourte(a.fin)} · heures de Paris (changements d'heure inclus) · ${pluriel(a.n_evenements, "évènement")}, dont ${a.n_forts} à fort impact.`));
   c.appendChild(tete);
   const jours = a.jours || [];
   const onglets = el("div", "ag-onglets"); onglets.setAttribute("role", "tablist"); onglets.setAttribute("aria-label", "Jours");
@@ -282,7 +283,7 @@ function blocJours(a) {
     const b = el("button", "ag-onglet"); b.type = "button"; b.setAttribute("role", "tab");
     b.append(el("span", "ag-o-jour", JOUR_COURT.format(d).replace(".", "")), el("span", "ag-o-num", String(d.getUTCDate())),
              el("span", "ag-o-forts", j.n_forts ? "●".repeat(Math.min(j.n_forts, 5)) : "·"));
-    b.title = `${JOUR_LONG.format(d)} : ${j.evenements.length} évènement(s), ${j.n_forts} à fort impact`;
+    b.title = `${JOUR_LONG.format(d)} : ${pluriel(j.evenements.length, "évènement")}, ${j.n_forts} à fort impact`;
     if (j.date === a.aujourdhui) b.classList.add("aujourdhui");
     if (j.date < a.aujourdhui) b.classList.add("passe");
     b.addEventListener("click", () => { actif = i; appliquer(); });

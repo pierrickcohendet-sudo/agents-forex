@@ -31,7 +31,7 @@ def test_decomposer_base_moins_cotation_et_cases_incompletes():
     assert (c5["base"], c5["cotation"], c5["contribution"]) == (-2, 2, -4)          # VIX ≥ 30 : AUD −2, JPY +2
     assert aj["solde"] == sum(c["contribution"] for c in aj["contributions"])
     assert any("AUD n/d" in x for x in aj["incompletes"])                           # écart 2 ans AUD absent
-    assert "case(s) incomplète(s)" in aj["texte"]
+    assert "5 cases incomplètes" in aj["texte"]
 
 
 def test_et_si_bilan_avant_apres_par_seuil_de_config():

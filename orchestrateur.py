@@ -484,7 +484,8 @@ def main() -> int:
     etape("synthèse des Mes paires (Journal)", agent_paires.executer, RACINE, config, llm, defaut={})
     # Rapport du jour : sections calculées en Python, communiqués officiels archivés, 2 appels groupés au plus (une fois
     # par jour, après les engrenages et la réserve de quota), repli 100 % Python ; copie Notion au run complet.
-    rapport_jour_donnees = etape("rapport du jour", agent_rapport.executer, RACINE, config, llm, defaut=None)
+    rapport_jour_donnees = etape("rapport du jour", agent_rapport.executer, RACINE, config, llm,
+                                 complet=not arguments.completer, defaut=None)
     if rapport_jour_donnees and not arguments.completer and not arguments.sans_notion:
         etape("rapport du jour dans Notion", agent_redacteur.publier_rapport_jour, config, rapport_jour_donnees,
               RACINE / "config.yaml")

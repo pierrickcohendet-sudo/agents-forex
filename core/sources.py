@@ -80,9 +80,9 @@ def fraicheur(derniere: str | None, frequence: str, retard: int, aujourdhui: dat
         return {"etat": "rouge", "age_jours": None, "normal_jours": normal, "texte": f"date illisible ({derniere})"}
     ouvre = frequence in ("quotidienne", "collecte")
     age = jours_ouvres(d, aujourdhui) if ouvre else (aujourdhui - d).days
-    unite = "j ouvré(s)" if ouvre else "j"
+    unite = ("jour ouvré" if age < 2 else "jours ouvrés") if ouvre else ("jour" if age < 2 else "jours")
     etat = "vert" if age <= 2 * normal else "orange" if age <= 4 * normal else "rouge"
-    texte = f"{age} {unite} (normal : {normal} {unite} au plus)" + ("" if etat == "vert" else
+    texte = f"{age} {unite} (normal : {normal} au plus)" + ("" if etat == "vert" else
                                                                     " — plus de deux fois la normale" if etat == "orange" else
                                                                     " — plus de quatre fois la normale")
     return {"etat": etat, "age_jours": age, "normal_jours": normal, "texte": texte}

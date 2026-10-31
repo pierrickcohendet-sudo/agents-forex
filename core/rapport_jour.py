@@ -233,7 +233,7 @@ def point_marche(historiques, h5, technique, seance: dict | None, config: dict, 
         niveau = q.get("prix") if q.get("prix") is not None else (pts[-1][1] if pts else None)
         heure = q.get("heure_utc") if q.get("prix") is not None else (pts[-1][0] if pts else None)
         v5 = variation(pts, 5, unite)
-        v1 = q.get("variation_pct") if q.get("variation_pct") is not None and unite == "%" else variation(pts, 1, unite)
+        v1 = round(q["variation_pct"], 2) if q.get("variation_pct") is not None and unite == "%" else variation(pts, 1, unite)
         lecture = lecture_actif(cat, cle, v1, v5, unite)
         lignes.append({"actif": libelle, "niveau": niveau, "variation_j1": v1, "variation_5j": v5, "unite": unite,
                        "categorie": cat, **format_actif(cat, cle),
@@ -675,12 +675,13 @@ def publications_veille(agenda_donnees, h5, technique, aujourd: date) -> dict:
             attendu = "" if c is None or p == c else f" contre {_taux_txt(e['consensus'])} attendu ({round((p - c) * 100):+d} pb)".replace("-", "−")
             texte = f"{e['devise']} · {e['evenement']} : {decision} à {_taux_txt(e['publie'])}{attendu}" + ("" if attendu else ", conforme au consensus")
         else:
-            texte = f"{e['devise']} · {e['evenement']} : {e['publie']} contre {e.get('consensus') or 'n/d'} attendu" + (f", {ec['texte']}" if ec else "")
+            pct = lambda v: re.sub(r"(\d)%$", r"\1 %", str(v or "n/d"))
+            texte = f"{e['devise']} · {e['evenement']} : {pct(e['publie'])} contre {pct(e.get('consensus'))} attendu" + (f", {ec['texte']}" if ec else "")
         lignes.append({"devise": e["devise"], "evenement": e["evenement"], "heure": e.get("heure_paris"), "type": e.get("type"),
                        "publie": e["publie"], "consensus": e.get("consensus"), "precedent": e.get("precedent"), "ecart": ec or None,
                        "surprise_bc": e.get("type") == "Réunion BC" and bool(ec) and ec.get("sens") != "conforme",
                        "reaction": rea, "raison_reaction": None if rea else "séance suivante pas encore close ou série absente",
-                       "texte": texte.replace(".", ",") if e.get("type") != "Réunion BC" else texte, "statut": (e.get("statuts") or {}).get("publie")})
+                       "texte": re.sub(r"(\d)\.(\d)", r"\1,\2", texte) if e.get("type") != "Réunion BC" else texte, "statut": (e.get("statuts") or {}).get("publie")})
     lignes.sort(key=lambda l: (not l["surprise_bc"], l["type"] != "Réunion BC", -abs((l["ecart"] or {}).get("z") or 0)))
     return {"jour": veille, "publications": lignes,
             "note": "Réel contre consensus (ForexFactory) ; écart en écarts habituels (σ) de l'indicateur quand le registre donne son "
@@ -696,10 +697,10 @@ def depuis_veille(actuel: dict, veille: dict | None) -> list[str]:
         p = av.get(s["id"])
         if p and (p["remplies"], p["total"]) != (s["remplies"], s["total"]):
             lignes.append(f"Scénario « {s['titre']} » : {p['remplies']}/{p['total']} → {s['remplies']}/{s['total']} conditions.")
-    m0 = {m["id"] for m in ((veille.get("lecture") or {}).get("mecanismes") or []) if m["etat"] == "detecte"}
+    m0 = {m["id"]: m.get("libelle") for m in ((veille.get("lecture") or {}).get("mecanismes") or []) if m["etat"] == "detecte"}
     m1 = {m["id"]: m for m in ((actuel.get("lecture") or {}).get("mecanismes") or []) if m["etat"] == "detecte"}
     lignes += [f"Nouveau mécanisme : {m['libelle']}." for i, m in m1.items() if i not in m0]
-    lignes += [f"Mécanisme disparu : {i.replace('_', ' ')}." for i in m0 - set(m1)]
+    lignes += [f"Mécanisme disparu : {m0[i] or i.replace('_', ' ')}." for i in set(m0) - set(m1)]
     if (veille.get("theme") or {}).get("titre") != (actuel.get("theme") or {}).get("titre"):
         lignes.append(f"Thème : « {(veille.get('theme') or {}).get('titre')} » → « {(actuel.get('theme') or {}).get('titre')} ».")
     return lignes or ["Pas de changement de scénario, de mécanisme ni de thème depuis la veille."]

@@ -276,7 +276,7 @@ def generer(type_: str, dossiers: dict, llm: FournisseurLLM | None, existant: di
                 t, ordres = _retirer_ordres(str(textes.get(d) or "")[:600])
                 t, retirees = verifier_chiffres(t, autorises)
                 if ordres or retirees:
-                    sortie["controles"].append(f"{d} : {ordres + retirees} phrase(s) retirée(s) (ordre ou chiffre absent des faits)")
+                    sortie["controles"].append(f"{d} : {ordres + retirees} {'phrase retirée' if ordres + retirees < 2 else 'phrases retirées'} (ordre ou chiffre absent des faits)")
                 rejet = controler_texte(t, faits[d]["lignes"])
                 if rejet:
                     sortie["controles"].append(f"{d} : texte rejeté ({rejet}) : phrase Python publiée")

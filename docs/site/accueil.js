@@ -1,7 +1,7 @@
 /* Page d'accueil « Aujourd'hui » (lot V5, étape 7-ter) : le tableau de bord du jour, à lire en 30 secondes.
    Ne charge que docs/data/accueil.json (quelques Ko) ; le globe (d3-geo, world-atlas) arrive après l'affichage.
    Notes : lues dans ce navigateur (IndexedDB du Journal), jamais envoyées. Jamais un ordre d'achat ou de vente. */
-import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, DRAPEAUX, certifier } from "./commun.js";
+import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, DRAPEAUX, certifier, pluriel, badgeEcart } from "./commun.js";
 
 const DATE_LONGUE = new Intl.DateTimeFormat("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: "Europe/Paris" });
 const HEURE = new Intl.DateTimeFormat("fr-FR", { hour: "2-digit", minute: "2-digit", second: "2-digit", timeZone: "Europe/Paris" });
@@ -35,7 +35,7 @@ function blocTheme(a) {
   const ligne = el("div", "ac-ligne");
   ligne.appendChild(el("span", `ck-pastille dir-${t.direction?.classe || "nd"}`, t.direction?.libelle || "direction n/d"));
   ligne.appendChild(el("span", "ac-conviction", `Conviction ${{ faible: "faible", moyen: "moyenne", fort: "forte", forte: "forte" }[t.conviction] || t.conviction || "n/d"}`));
-  if (t.alignes != null) ligne.appendChild(el("span", "note", `${t.alignes} engrenage(s) aligné(s) sur ${t.evaluables}`));
+  if (t.alignes != null) ligne.appendChild(el("span", "note", `${pluriel(t.alignes, "engrenage aligné", "engrenages alignés")} sur ${t.evaluables}`));
   c.appendChild(ligne);
   if (t.texte) {
     const p = el("p", "ac-texte", t.texte);
@@ -61,7 +61,7 @@ function blocBord(a) {
     ul.appendChild(li);
   }
   c.appendChild(ul);
-  c.appendChild(el("p", "note", `${a.franchis || 0} seuil(s) déjà franchi(s) aujourd'hui · distances calculées en Python, en unité réelle.`));
+  c.appendChild(el("p", "note", `${pluriel(a.franchis || 0, "seuil déjà franchi", "seuils déjà franchis")} aujourd'hui · distances calculées en Python, en unité réelle.`));
   return c;
 }
 
@@ -150,7 +150,7 @@ function blocFraicheur(a) {
   const lien = el("a", "ac-lien", "Santé des données →"); lien.href = "#sante";
   tete.appendChild(lien);
   c.appendChild(tete);
-  c.appendChild(el("p", "ac-frais-ligne", `${f.vertes ?? "n/d"} source(s) à jour sur ${f.sources ?? "n/d"}`));
+  c.appendChild(el("p", "ac-frais-ligne", f.vertes == null ? "Sources à jour : n/d" : `${pluriel(f.vertes, "source à jour", "sources à jour")} sur ${f.sources ?? "n/d"}`));
   if ((f.alertes || []).length) {
     const ul = el("ul", "ac-alertes");
     for (const x of f.alertes) ul.appendChild(el("li", null, `${x.nom || x.libelle} : ${x.texte}`));
@@ -165,12 +165,12 @@ function bandeauAlertes(al) {
   const b = el("section", "ac-bandeau");
   b.setAttribute("role", "alert");
   const t = el("p", "ac-bandeau-titre");
-  t.append(el("b", null, `${al.actives.length} alerte(s) active(s)`),
+  t.append(el("b", null, pluriel(al.actives.length, "alerte active", "alertes actives")),
            document.createTextNode(` depuis le ${dateHeure(al.depuis)} · vérifié le ${dateHeure(al.maj)}`));
   b.appendChild(t);
   const ul = el("ul");
   for (const x of al.actives.slice(0, 5)) ul.appendChild(el("li", null, x.texte));
-  if (al.actives.length > 5) ul.appendChild(el("li", null, `… et ${al.actives.length - 5} autre(s)`));
+  if (al.actives.length > 5) ul.appendChild(el("li", null, `… et ${pluriel(al.actives.length - 5, "autre")}`));
   b.appendChild(ul);
   const lien = el("a", null, "Voir la page Santé des données →"); lien.href = "#sante";
   b.appendChild(lien);

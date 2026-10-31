@@ -86,6 +86,6 @@ def completer_tuiles(engrenages: dict, archive: dict) -> None:
         if not t:
             continue
         t["courbe"] = {"points": points, "periode": "depuis le début de l'archive quotidienne",
-                       "raison": None if len(points) >= 2 else f"archive trop récente ({len(points)} jour(s)) : {note}"}
+                       "raison": None if len(points) >= 2 else f"archive trop récente ({len(points)} {'jour' if len(points) < 2 else 'jours'}) : {note}"}
         if t.get("percentile_5a") is None:
-            t["raison_percentile"] = f"archive quotidienne trop courte pour un percentile ({len(points)} jour(s))"
+            t["raison_percentile"] = f"archive quotidienne trop courte pour un percentile ({len(points)} {'jour' if len(points) < 2 else 'jours'})"

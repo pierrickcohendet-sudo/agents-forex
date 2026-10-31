@@ -1,5 +1,5 @@
 /* Onglet Archives : liste des rapports (docs/data/index.json) et lecture d'un jour (#archives/AAAA-MM-JJ). */
-import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, DRAPEAUX } from "./commun.js";
+import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, DRAPEAUX , pluriel } from "./commun.js";
 
 const REGIME = { risk_on: "Risk On", risk_off: "Risk Off", neutre: "Neutre" };
 const RELECTURE = { ok: "relu", a_revoir: "points de vigilance", non_evalue: "non relu" };
@@ -45,7 +45,7 @@ export async function pageArchives(parametre) {
   const entrees = index.map(e => (typeof e === "string" ? { date: e } : e)).sort((a, b) => b.date.localeCompare(a.date));
   const c = el("section", "carte");
   c.appendChild(el("h2", null, "Archives"));
-  c.appendChild(el("p", "sous-titre", `${entrees.length} rapport(s), regroupés par mois. Touchez un jour pour le lire.`));
+  c.appendChild(el("p", "sous-titre", `${pluriel(entrees.length, "rapport")}, regroupés par mois. Touchez un jour pour le lire.`));
   const recherche = el("input", "recherche-archives");
   recherche.type = "search"; recherche.placeholder = "Rechercher une date (ex. 14/10 ou 2026-10)";
   recherche.setAttribute("aria-label", "Rechercher un rapport par date");
@@ -69,7 +69,7 @@ export async function pageArchives(parametre) {
       const d = el("details", "mois-archives");
       d.open = premier || Boolean(q); premier = false;
       const nomMois = MOIS[Number(cle.slice(5, 7)) - 1];
-      d.appendChild(el("summary", null, `${nomMois[0].toUpperCase()}${nomMois.slice(1)} ${cle.slice(0, 4)} · ${liste.length} rapport(s)`));
+      d.appendChild(el("summary", null, `${nomMois[0].toUpperCase()}${nomMois.slice(1)} ${cle.slice(0, 4)} · ${pluriel(liste.length, "rapport")}`));
       const ul = el("ul", "archives");
       for (const e of liste) {
         const li = el("li"); const a = el("a"); a.href = `#archives/${e.date}`;
@@ -80,7 +80,7 @@ export async function pageArchives(parametre) {
       }
       d.appendChild(ul); zone.appendChild(d);
     }
-    compteur.textContent = garde.length ? `${garde.length} rapport(s) affiché(s).` : "Aucun rapport ne correspond à cette date.";
+    compteur.textContent = garde.length ? `${pluriel(garde.length, "rapport affiché", "rapports affichés")}.` : "Aucun rapport ne correspond à cette date.";
   }
   recherche.addEventListener("input", rendre);
   rendre();

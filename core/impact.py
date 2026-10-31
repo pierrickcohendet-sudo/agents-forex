@@ -243,7 +243,7 @@ def calculer(h: h5m.Historique, technique: dict | None = None, registre: dict | 
     devises = {d: s for d, s in devises.items() if len(s.points) > 260}
     sortie = {"genere_le": datetime.now(timezone.utc).isoformat(timespec="seconds"), "debut": debut, "fin": fin,
               "horizons": HORIZONS, "ampleurs": list(AMPLEURS), "min_cas": MIN_CAS, "groupes": GROUPES, "note": NOTE,
-              "methode": ("Marchés : variation quotidienne de l'indicateur d'au moins 1 (ou 2) écart(s)-type(s) sur 5 ans, "
+              "methode": ("Marchés : variation quotidienne de l'indicateur d'au moins 1 écart-type (ou 2 écarts-types) sur 5 ans, "
                           "épisodes espacés d'au moins 28 jours. Indicateurs publiés (CPI, CPI core, PIB, Fed) : « variation "
                           "de la publication » (écart avec la publication précédente, valeurs telles que publiées, FRED/ALFRED) "
                           "sur 15 à 20 ans, seuil en écart-type robuste ; Fed : toute décision (1) ou au moins 50 pb (2) ; "
@@ -274,7 +274,7 @@ def calculer(h: h5m.Historique, technique: dict | None = None, registre: dict | 
                 sigma = statistics.pstdev([s for _, s in deltas]) if len(deltas) >= 3 else None
                 moteur = None
                 if sigma is None or sigma == 0:
-                    meta["raison"] = f"{len(deltas)} publication(s) avec consensus depuis le début du registre : écart-type non calculable"
+                    meta["raison"] = f"{len(deltas)} {'publication' if len(deltas) < 2 else 'publications'} avec consensus depuis le début du registre : écart-type non calculable"
             else:
                 pts = h.serie(ind["serie"])
                 if not pts:

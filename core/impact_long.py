@@ -175,7 +175,7 @@ def calculer(bruts: dict, aujourdhui: date | None = None) -> dict:
                       [(d, d, x) for d, x in fed], fed, True)
     for ident, (spec, pubs, chocs, est_fed) in sources.items():
         if len(chocs) < 12 or not devises:
-            sortie["indicateurs"][ident] = {"raison": f"historique insuffisant ({len(chocs)} publication(s))" if devises
+            sortie["indicateurs"][ident] = {"raison": f"historique insuffisant ({len(chocs)} {'publication' if len(chocs) < 2 else 'publications'})" if devises
                                             else "séries de change sur 20 ans indisponibles"}
             continue
         sigma = None if est_fed else sigma_robuste([x for _, x in chocs])

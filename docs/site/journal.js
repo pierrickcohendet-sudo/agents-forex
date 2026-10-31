@@ -1,7 +1,7 @@
 /* Espace Journal (lot V5, étape 7). Colonne gauche : fiche d'analyse de la paire (docs/data/paires.json, calcul Python)
    et graphiques. Colonne droite : mes notes, stockées dans le navigateur (IndexedDB), sans serveur ni clé ; export / import
    JSON (images intégrées) pour la sauvegarde et le transfert. Le biais personnel reste MA lecture, jamais un ordre. */
-import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, ouvrirDetail, certifier } from "./commun.js";
+import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, ouvrirDetail, certifier, pluriel } from "./commun.js";
 import { graphiqueSerie, dessinerReperes } from "./dossiers.js";
 
 const SVG = "http://www.w3.org/2000/svg";
@@ -484,7 +484,7 @@ export async function pageJournal() {
     const limite = fPeriode.value ? Date.now() - Number(fPeriode.value) * 864e5 : 0;
     const vues = toutes.filter(n => (!fPaire.value || n.paire === fPaire.value) && (!fEtiq.value || (n.etiquettes || []).includes(fEtiq.value))
       && Date.parse(n.cree_le) >= limite);
-    etat.textContent = `${vues.length} note(s) affichée(s) sur ${toutes.length}.`;
+    etat.textContent = `${pluriel(vues.length, "note affichée", "notes affichées")} sur ${toutes.length}.`;
     zoneListe.replaceChildren(...vues.map(entree));
     try {
       const meta = await lireMeta("derniere_sauvegarde");
@@ -572,7 +572,7 @@ export async function pageJournal() {
       const a = el("a"); a.href = URL.createObjectURL(blob); a.download = `journal-fxdesk-${new Date().toISOString().slice(0, 10)}.json`;
       document.body.appendChild(a); a.click(); a.remove();
       await ecrireMeta("derniere_sauvegarde", sortie.exporte_le);
-      await rendreListe(); etat.textContent = `${notes.length} note(s) exportée(s) ; sauvegarde enregistrée.`;
+      await rendreListe(); etat.textContent = `${pluriel(notes.length, "note exportée", "notes exportées")} ; sauvegarde enregistrée.`;
     } catch (err) { afficherErreur(`export impossible : ${messageErreur(err)}`); }
   });
   importer.addEventListener("click", () => fImport.click());
@@ -589,7 +589,7 @@ export async function pageJournal() {
         await ecrireNote({ ...n, images: imgs }); ajoutees++;
       }
       await rendreListe();
-      etat.textContent = `Import : ${ajoutees} note(s) ajoutée(s), ${doublons} doublon(s) ignoré(s).`;
+      etat.textContent = `Import : ${pluriel(ajoutees, "note ajoutée", "notes ajoutées")}, ${pluriel(doublons, "doublon ignoré", "doublons ignorés")}.`;
     } catch (err) { afficherErreur(`import impossible : ${messageErreur(err)}`); }
     fImport.value = "";
   });

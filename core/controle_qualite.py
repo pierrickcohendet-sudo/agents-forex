@@ -116,7 +116,7 @@ def controler(rapport: dict, config: dict) -> dict:
     tableau = (rapport.get("tableau_macro") or {}).get("anomalies", [])
     anomalies.extend(tableau[:10])
     if len(tableau) > 10:
-        anomalies.append(f"tableau macro : … +{len(tableau) - 10} autre(s) anomalie(s)")
+        anomalies.append(f"tableau macro : … +{len(tableau) - 10} {'autre anomalie' if len(tableau) - 10 < 2 else 'autres anomalies'}")
 
     resultat = {"conforme": not anomalies, "nb_anomalies": len(anomalies),
                 "anomalies": anomalies[:30]}

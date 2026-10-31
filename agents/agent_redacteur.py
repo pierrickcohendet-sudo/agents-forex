@@ -506,7 +506,7 @@ def _blocs_synthese(rapport: dict) -> list[dict]:
 
     if controle and not controle.get("conforme", True):
         blocs.append(nb.callout(
-            [nb.rt(f"Contrôle qualité : {controle.get('nb_anomalies', '?')} anomalie(s) — ", gras=True),
+            [nb.rt(f"Contrôle qualité : {controle.get('nb_anomalies', '?')} {'anomalie' if (controle.get('nb_anomalies') or 0) < 2 else 'anomalies'} — ", gras=True),
              nb.rt(" · ".join(controle.get("anomalies", [])[:5]))],
             "🧪", "orange_background"))
 

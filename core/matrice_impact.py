@@ -233,7 +233,7 @@ def matrice(cfg: dict, sig: dict, couv: dict, theme_fort: bool, coh_libelle: str
     comptes = {e: sum(1 for l in lignes for c in l["cases"] if c["etat"] == e) for e in ETATS}
     return {"lignes": lignes, "comptes": comptes, "cases_actives": comptes["active"], "cases_total": len(lignes) * 8,
             "compte_libelle": f"{comptes['active']} actives, {comptes['nd']} n/d, {comptes['sans_regle']} sans règle"
-                              + (f", {comptes['neutralise']} neutralisée(s)" if comptes["neutralise"] else ""),
+                              + (f", {comptes['neutralise']} {'neutralisée' if comptes['neutralise'] < 2 else 'neutralisées'}" if comptes["neutralise"] else ""),
             "seuils_bilan": seuils}
 
 

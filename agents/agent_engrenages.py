@@ -490,7 +490,7 @@ def signaux(config: dict, donnees: dict, macro: dict, devises: list[dict], biais
     theme["conviction"] = None if not theme["donnees"] else (
         "eleve" if accords >= 3 and desaccords == 0 else "moyen" if accords > desaccords else "faible")
     theme["regle"] += (f" ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème "
-                       f"({accords} accord(s), {desaccords} désaccord(s))")
+                       f"({accords} {'accord' if accords < 2 else 'accords'}, {desaccords} {'désaccord' if desaccords < 2 else 'désaccords'})")
     return resultat
 
 
@@ -543,8 +543,8 @@ def _theme_python(resultat: dict[int, dict], cat: _Catalogue, aujourdhui: str) -
     if source_risque:
         t["risque"] = resultat[source_risque]["risque"]
     if dollars or source_risque:
-        t["donnees"].append({"texte": f"Directions dollar des engrenages 2 à 8 : {h} haussière(s), {b} baissière(s), "
-                                      f"{len(dollars) - h - b} neutre(s)"
+        t["donnees"].append({"texte": f"Directions dollar des engrenages 2 à 8 : {h} {'haussière' if h < 2 else 'haussières'}, {b} {'baissière' if b < 2 else 'baissières'}, "
+                                      f"{len(dollars) - h - b} {'neutre' if len(dollars) - h - b < 2 else 'neutres'}"
                                       + (f" ; risque de l'engrenage {source_risque} : {t['risque']}" if source_risque else ""),
                              "source_id": cat.src("Calcul Python", "directions des engrenages 2 à 8 (règles Python et matrice d'impact)",
                                                   aujourdhui)})
@@ -734,7 +734,7 @@ def normaliser(brut: dict, sig: dict[int, dict], conflits_py: list[dict], concep
                           "exemple": propre(bc.get("exemple"), 500), "source_ids": _ids(bc.get("source_ids")),
                           "cycle": concept.get("cycle"), "pertinence": concept.get("pertinence")}
     if retraits:
-        controles.append(f"{retraits} phrase(s) retirée(s) : formulation d'ordre d'achat/vente")
+        controles.append(f"{retraits} {'phrase retirée' if retraits < 2 else 'phrases retirées'} : formulation d'ordre d'achat/vente")
     # Vocabulaire : « record » / « s'envole » seulement si les dossiers chiffrés le justifient.
     justif = justif or {}
     tout = {"record": any(v.get("record") for v in justif.values()), "envol": any(v.get("envol") for v in justif.values())}
@@ -760,7 +760,7 @@ def normaliser(brut: dict, sig: dict[int, dict], conflits_py: list[dict], concep
             concept_sortie[cle], k = moderer_vocabulaire(concept_sortie[cle], tout)
             moderes += k
     if moderes:
-        controles.append(f"{moderes} mot(s) « record » / « s'envole » remplacé(s) : non justifiés par les percentiles ou les variations")
+        controles.append(f"{moderes} {'mot' if moderes < 2 else 'mots'} « record » / « s'envole » {'remplacé' if moderes < 2 else 'remplacés'} : non justifiés par les percentiles ou les variations")
     return {"engrenages": engrenages, "chaines": chaines, "conflits": conflits, "concept": concept_sortie,
             "controles": controles}
 

@@ -91,7 +91,7 @@ def notifier_alertes(alertes: list[dict], change: bool, corps: str, session=requ
             session.post(f"{API}/repos/{depot}/labels", headers=entetes, timeout=30,   # 422 si elle existe déjà : sans effet
                          json={"name": ETIQUETTE, "color": "D97706", "description": "Alerte automatique du pipeline FX"})
             session.post(f"{API}/repos/{depot}/issues", headers=entetes, timeout=30,
-                         json={"title": f"Alerte pipeline FX : {len(alertes)} point(s) à vérifier", "body": corps,
+                         json={"title": f"Alerte pipeline FX : {len(alertes)} {'point' if len(alertes) < 2 else 'points'} à vérifier", "body": corps,
                                "labels": [ETIQUETTE]}).raise_for_status()
             return "issue ouverte"
         if alertes and change:

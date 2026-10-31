@@ -135,7 +135,7 @@ export function fraicheurLocale(date, regle, frequence) {
   const aujourd = new Date(new Date().toISOString().slice(0, 10) + "T00:00:00Z");
   const age = quotidien ? joursOuvres(d, aujourd) : Math.round((aujourd - d) / 864e5);
   const etat = age <= 2 * normal ? "vert" : age <= 4 * normal ? "orange" : "rouge";
-  return { etat, age_jours: age, normal_jours: normal, texte: `${age} ${quotidien ? "j ouvré(s)" : "j"} (normal : ${normal} au plus)` };
+  return { etat, age_jours: age, normal_jours: normal, texte: `${age} ${quotidien ? (age < 2 ? "jour ouvré" : "jours ouvrés") : (age < 2 ? "jour" : "jours")} (normal : ${normal} au plus)` };
 }
 
 function regleDe(src, sources) {
@@ -222,4 +222,20 @@ export function initialiserCertificats() {
   document.addEventListener("keydown", e => { if (e.key === "Escape") cacher(); });
   window.addEventListener("hashchange", cacher);
   window.addEventListener("scroll", cacher, { passive: true });
+}
+
+/* Accords : « 1 source », « 2 sources » (jamais « source(s) »). `pl` : forme plurielle si irrégulière. */
+export function pluriel(n, sg, pl) { return `${n} ${Math.abs(Number(n)) < 2 ? sg : (pl || `${sg}s`)}`; }
+
+/* Badge « au-dessus / en dessous / conforme » d'une publication (écart calculé en Python, sens du registre) :
+   vert si favorable à la devise, rouge sinon ; mis en valeur si |écart| ≥ 0,5 point ou ≥ 1 σ. */
+export function badgeEcart(ec) {
+  if (!ec) return null;
+  const cls = ec.sens === "conforme" ? "conforme" : ec.favorable ? "favorable" : "defavorable";
+  const b = el("span", `badge-ecart ${cls}${ec.marque ? " marque" : ""}`, ec.texte);
+  b.title = `${ec.sens === "conforme" ? "Publié égal au consensus" : `Écart ${ec.ecart > 0 ? "+" : ""}${String(ec.ecart).replace(".", ",")}`}`
+    + `${ec.z != null ? ` · ${String(ec.z).replace(".", ",")} écarts habituels (σ) de l'indicateur` : ""}`
+    + `${ec.inverse ? " · variable lue à l'inverse (une baisse soutient la devise)" : ""}`
+    + `${ec.marque ? " · écart marqué (≥ 0,5 point ou ≥ 1 σ)" : ""}`;
+  return b;
 }

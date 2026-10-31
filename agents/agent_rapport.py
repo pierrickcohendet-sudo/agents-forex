@@ -29,7 +29,7 @@ def _propre(texte, autorises, limite=1500) -> tuple[str, list[str]]:
     t, retirees = verifier_chiffres(t, autorises)
     notes = []
     if ordres or retirees:
-        notes.append(f"{ordres + retirees} phrase(s) retirée(s) (ordre ou chiffre absent des faits)")
+        notes.append(f"{ordres + retirees} {'phrase retirée' if ordres + retirees < 2 else 'phrases retirées'} (ordre ou chiffre absent des faits)")
     return t.strip(), notes
 
 
@@ -151,8 +151,32 @@ def _finir(sortie: dict) -> dict:
     return sortie
 
 
-def executer(racine: str | Path, config: dict, llm, maintenant: datetime | None = None) -> dict | None:
-    """Calcule le rapport (Python), archive les communiqués, rédige au plus une fois par jour (2 appels), écrit le fichier."""
+HEURE_SEANCE_UTC = 7   # avant 07:00 UTC : passage hors séance, jamais d'appel au modèle pour le rapport
+
+
+def faut_rediger(textes: dict | None, maintenant: datetime, complet: bool) -> tuple[bool, str | None]:
+    """(rédiger ?, raison sinon). (a) un « quota atteint » noté avant la remise à zéro (minuit Pacifique) ne bloque
+    jamais la journée de quota suivante ; (b) un run complet rédige toujours tant que les textes ne sont pas « ok » ;
+    (c) un passage hors séance (avant 07:00 UTC) n'appelle jamais le modèle."""
+    from core.llm import jour_quota_google
+    if (textes or {}).get("statut") == "ok":
+        return False, None
+    if maintenant.hour < HEURE_SEANCE_UTC:
+        return False, f"passage hors séance (avant {HEURE_SEANCE_UTC:02d}:00 UTC) : rédaction au run du matin"
+    if complet:
+        return True, None
+    t = textes or {}
+    if t.get("quota_atteint") and t.get("jour_quota") == jour_quota_google(maintenant).isoformat():
+        return False, "quota du modèle atteint aujourd'hui (journée de quota en cours)"
+    if int(t.get("essais", 0)) >= 3 and t.get("jour_quota") == jour_quota_google(maintenant).isoformat():
+        return False, "3 essais déjà faits dans la journée de quota"
+    return True, None
+
+
+def executer(racine: str | Path, config: dict, llm, maintenant: datetime | None = None, complet: bool = False) -> dict | None:
+    """Calcule le rapport (Python), archive les communiqués, rédige au plus une fois par jour (2 appels), écrit le fichier.
+    complet=True : run complet (après les engrenages et les devises), qui retente toujours des textes manquants."""
+    from core.llm import jour_quota_google
     from core import communiques, rapport_jour
     racine = Path(racine)
     docs = racine / config.get("publication_web", {}).get("dossier_docs", "docs") / "data"
@@ -171,9 +195,16 @@ def executer(racine: str | Path, config: dict, llm, maintenant: datetime | None 
     except (OSError, ValueError):
         ancien = {}
     textes = ancien.get("textes") if ancien.get("date") == r["date"] else None
-    if not textes or (textes.get("statut") != "ok" and not textes.get("quota_atteint") and int(textes.get("essais", 0)) < 3):
+    instant = maintenant or datetime.now(timezone.utc)
+    rediger_, raison = faut_rediger(textes, instant, complet)
+    if rediger_:
         textes_com = {d: communiques.textes_a_comparer(racine, index, d) for d in (index.get("par_devise") or {})}
         nouveaux = rediger(r, llm, textes_com)
-        nouveaux["essais"] = int((textes or {}).get("essais", 0)) + 1
+        meme_jour = (textes or {}).get("jour_quota") == jour_quota_google(instant).isoformat()
+        nouveaux["essais"] = (int((textes or {}).get("essais", 0)) if meme_jour else 0) + 1
+        nouveaux["jour_quota"] = jour_quota_google(instant).isoformat()
         textes = nouveaux
+    elif raison and (textes or {}).get("statut") != "ok":
+        textes = {**(textes or {}), "statut": (textes or {}).get("statut") or "en_attente", "raison": raison,
+                  "date": r["date"]}
     return rapport_jour.ecrire(racine, config, maintenant, textes)

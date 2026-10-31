@@ -153,3 +153,33 @@ def test_site_page_rapport_par_defaut_le_matin_et_journal():
     assert "beforeprint" in js and "window.print()" in js and "Lecture :" in js
     jn = (RACINE / "docs/site/journal.js").read_text(encoding="utf-8")
     assert "Déclencheur M30" in jn and "checklist:" in jn and "blocNiveaux" in jn
+
+
+def test_quota_de_nuit_ne_bloque_pas_le_run_du_matin():
+    """Cas du 30/10 : passage de 01:05 UTC « quota atteint », run complet de 08:15 qui n'avait pas retenté."""
+    from datetime import datetime, timezone
+    nuit = datetime(2026, 10, 30, 1, 5, tzinfo=timezone.utc)
+    matin = datetime(2026, 10, 30, 8, 15, tzinfo=timezone.utc)      # après minuit Pacifique (07:00 UTC) : quota neuf
+    textes_nuit = {"statut": "indisponible", "quota_atteint": True, "essais": 1, "jour_quota": "2026-10-29"}
+    assert ar.faut_rediger(None, nuit, complet=True) == (False, "passage hors séance (avant 07:00 UTC) : rédaction au run du matin")
+    assert ar.faut_rediger(textes_nuit, matin, complet=True) == (True, None)        # run complet : rédige toujours
+    assert ar.faut_rediger(textes_nuit, matin, complet=False) == (True, None)       # quota d'une autre journée Pacifique
+    meme_jour = {**textes_nuit, "jour_quota": "2026-10-30"}
+    assert ar.faut_rediger(meme_jour, datetime(2026, 10, 30, 10, tzinfo=timezone.utc), complet=False)[0] is False
+    assert ar.faut_rediger(meme_jour, datetime(2026, 10, 30, 10, tzinfo=timezone.utc), complet=True)[0] is True
+    assert ar.faut_rediger({"statut": "ok"}, matin, complet=True)[0] is False
+
+
+def test_affichage_badges_decimales_correlations_pip_et_accords():
+    js = (RACINE / "docs/site/rapport.js").read_text(encoding="utf-8")
+    assert "badgeEcart(x.ecart)" in js and "matriceCorrelations(" in js and "quasi la même exposition" in js
+    assert "pipCompte = v.valeur_pip_usd_lot / usd" in js and "l.decimales" in js and "varTxt(" in js
+    assert "badgeEcart(e.ecart)" in (RACINE / "docs/site/agenda.js").read_text(encoding="utf-8")
+    for page in ("accueil", "agenda", "sante", "journal", "archives", "rapport", "tableau", "commun"):
+        texte = (RACINE / f"docs/site/{page}.js").read_text(encoding="utf-8")
+        import re as _re
+        assert not _re.search(r"\b[a-zàâéèêëîïôûç]{3,}\(s\)(?= [a-zàâéèêç]|`)", texte.replace("« source(s) »", "")), page
+    from core import rapport_jour as r
+    assert r.format_actif("fx", "USD/JPY") == {"decimales": 2, "suffixe": ""} and r.format_actif("fx", "EUR/USD")["decimales"] == 4
+    assert r.format_actif("taux", "USD_2a") == {"decimales": 2, "suffixe": " %"}
+    assert r.pluriel(1, "condition") == "1 condition" and r.pluriel(3, "condition") == "3 conditions"

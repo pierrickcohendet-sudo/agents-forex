@@ -166,13 +166,13 @@ def normaliser_engrenage(brut: dict, numero: str, contexte: dict, permis: dict) 
         controles.append("précédent absent ou non vérifiable dans la réponse : texte Python repris")
     vides = [cle for cle in ("constat", "mecanisme", "ce_qui_pourrait_tout_changer") if not sortie[cle]]
     if vides:
-        controles.append(f"bloc(s) vide(s) après contrôle : {', '.join(vides)}")
+        controles.append(f"{'bloc vide' if len(vides) < 2 else 'blocs vides'} après contrôle : {', '.join(vides)}")
     if retraits_chiffres:
-        controles.append(f"{retraits_chiffres} phrase(s) retirée(s) : chiffre absent des tableaux fournis")
+        controles.append(f"{retraits_chiffres} {'phrase retirée' if retraits_chiffres < 2 else 'phrases retirées'} : chiffre absent des tableaux fournis")
     if retraits_ordres:
-        controles.append(f"{retraits_ordres} phrase(s) retirée(s) : formulation d'ordre d'achat/vente")
+        controles.append(f"{retraits_ordres} {'phrase retirée' if retraits_ordres < 2 else 'phrases retirées'} : formulation d'ordre d'achat/vente")
     if moderes:
-        controles.append(f"{moderes} mot(s) « record » / « s'envole » remplacé(s)")
+        controles.append(f"{moderes} {'mot' if moderes < 2 else 'mots'} « record » / « s'envole » {'remplacé' if moderes < 2 else 'remplacés'}")
     sortie["controles"] = controles
     sortie["precedents"] = precedents
     if not sortie["constat"]:
@@ -204,7 +204,7 @@ def normaliser_synthese(brut: dict, autorises: set[float], permis: dict) -> dict
               "conflits": [c for c in conflits if c["texte"]],
               "ce_qui_pourrait_tout_changer": propre(brut.get("ce_qui_pourrait_tout_changer"))}
     if retraits:
-        controles.append(f"{retraits} phrase(s) retirée(s) : chiffre absent des tableaux fournis")
+        controles.append(f"{retraits} {'phrase retirée' if retraits < 2 else 'phrases retirées'} : chiffre absent des tableaux fournis")
     if not sortie["theme_semaine"]:
         raise ValueError("thème de la semaine vide après contrôle")
     sortie["controles"] = controles
@@ -286,7 +286,7 @@ def generer(config: dict, llm: FournisseurLLM, dossiers: dict, precedents: dict[
         if quota:
             sortie["synthese"] = {"statut": "indisponible", "raison": MESSAGE_QUOTA_ATTEINT, "quota_atteint": True}
         elif len(reussis) < 5:
-            sortie["synthese"] = {"statut": "indisponible", "raison": f"{len(reussis)} engrenage(s) rédigé(s) sur 8 (minimum 5)"}
+            sortie["synthese"] = {"statut": "indisponible", "raison": f"{len(reussis)} {'engrenage rédigé' if len(reussis) < 2 else 'engrenages rédigés'} sur 8 (minimum 5)"}
         else:
             contexte = {"engrenages": {n: {"nom": e["nom"], "constat": e["constat"], "ce_qui_pourrait_tout_changer":
                                            e["ce_qui_pourrait_tout_changer"], "implications": e["implications"]}

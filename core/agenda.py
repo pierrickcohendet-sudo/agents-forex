@@ -449,7 +449,7 @@ def ecart(publie, consensus, indicateur: str | None, cfg_tm: dict, type_evt: str
     return {"sens": sens, "ecart": d, "unite": "point" if pourcent else (suffixe or "unité"), "z": z, "indicateur": indicateur,
             "favorable": None if d == 0 else ((d > 0) != inverse), "inverse": inverse,
             "marque": d != 0 and ((pourcent and abs(d) >= 0.5) or (z is not None and abs(z) >= 1)),
-            "texte": texte.replace(".", ",").replace("-", "−"), "echelle": echelle}
+            "texte": re.sub(r"-(?=\d)", "−", texte.replace(".", ",")), "echelle": echelle}
 
 
 def ecarts(ag: "Agenda", cfg_tm: dict) -> None:

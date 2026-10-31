@@ -97,7 +97,7 @@ export async function pageTableau() {
         corps.appendChild(tr);
       }
     }
-    compteur.textContent = n ? `${n} ligne(s) affichée(s) sur ${lignes.length}.` : "Aucune ligne ne correspond à la recherche.";
+    compteur.textContent = n ? `${n} ${n < 2 ? "ligne affichée" : "lignes affichées"} sur ${lignes.length}.` : "Aucune ligne ne correspond à la recherche.";
   }
   recherche.addEventListener("input", rendre);
   choix.addEventListener("change", rendre);

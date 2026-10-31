@@ -65,7 +65,7 @@ def decomposer(matrice: dict) -> dict[str, dict]:
         sortie[p] = {"base": base, "cotation": cot, "contributions": contributions, "solde": solde, "lecture": lecture,
                      "incompletes": incompletes,
                      "texte": f"Solde {p} : {solde:+d} · {lecture}".replace("-", "−") +
-                              (f" · {len(incompletes)} case(s) incomplète(s)" if incompletes else "")}
+                              (f" · {len(incompletes)} {'case incomplète' if len(incompletes) < 2 else 'cases incomplètes'}" if incompletes else "")}
     return sortie
 
 

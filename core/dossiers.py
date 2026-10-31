@@ -526,7 +526,7 @@ def engrenage_1(rapport: dict | None, dossier_rapports: Path | None, dossiers_ca
          "detail": "règle unique de la page (voir « Qui suit le thème ? »)" if coh else "",
          "source": "règles Python des 8 engrenages", "raison": None if coh else "synthèse 8 engrenages absente de ce rapport"},
         {"libelle": "Indice de surprise global (moyenne 9 devises)", "texte": f"{statistics.mean(indices):+.2f}".replace(".", ",") if indices else "n/d",
-         "detail": f"{len(indices)} devise(s) avec un indice", "source": "calcul Python (registre macro, 30 j)"},
+         "detail": f"{len(indices)} {'devise' if len(indices) < 2 else 'devises'} avec un indice", "source": "calcul Python (registre macro, 30 j)"},
         {"libelle": "Score de confluence USD", "texte": str(scores.get("USD")) if scores.get("USD") is not None else "n/d",
          "detail": "0-100, calcul Python", "source": "rapport du jour"},
     ]

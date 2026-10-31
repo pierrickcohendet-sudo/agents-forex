@@ -1,7 +1,7 @@
 /* Page « Santé » (lot V5, étape 7-bis) : docs/data/sources.json, calcul Python sans LLM ni requête de plus.
    Registre des sources (statut légal, dernière donnée, fraîcheur), alertes, certificats des indicateurs,
    extractions de pages remplacées ou restantes, et ce que le site peut annoncer honnêtement. */
-import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, certifier } from "./commun.js";
+import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, certifier, pluriel } from "./commun.js";
 
 const NOMBRE = new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 2 });
 const ETATS = { vert: "à jour", orange: "à surveiller", rouge: "trop ancienne", retiree: "retirée" };
@@ -24,7 +24,7 @@ function entete(s) {
   const alertes = [...(s.alertes || []), ...(s.alertes_indicateurs || [])];
   if (alertes.length) {
     const a = el("div", "alerte sa-alertes");
-    a.appendChild(el("b", null, `Fraîcheur : ${alertes.length} donnée(s) plus vieille(s) que deux fois la normale`));
+    a.appendChild(el("b", null, `Fraîcheur : ${pluriel(alertes.length, "donnée plus vieille", "données plus vieilles")} que deux fois la normale`));
     const ul = el("ul");
     for (const x of alertes) ul.appendChild(el("li", null, `${x.nom || x.libelle} : ${x.texte}`));
     a.appendChild(ul);

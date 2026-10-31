@@ -305,7 +305,7 @@ def complements_7(e: dict, technique: dict, flux: dict | None, h5=None) -> None:
     n_rsi = sum(1 for d in DEVISES if ((c.get(d) or {}).get("rsi") or {}).get("valeur") is not None)
     t = tuile("extremes_rsi", "Devises en surachat / survente (RSI)",
               {"valeur": len(sur) + len(sous), "unite": "nombre", "date": date.today().isoformat(),
-               "source": f"calcul local (RSI 14 de {n_rsi} devise(s))", "raison_percentile": "non applicable"},
+               "source": f"calcul local (RSI 14 de {n_rsi} {'devise' if n_rsi < 2 else 'devises'})", "raison_percentile": "non applicable"},
               None, raison_courbe="non historisé",
               lecture=f"surachat (≥ 70) : {', '.join(sur) or 'aucune'} ; survente (≤ 30) : {', '.join(sous) or 'aucune'}")
     t["texte"] = f"{len(sur)} / {len(sous)}"

@@ -210,7 +210,7 @@ def _carte_7(technique: dict, dossiers: dict) -> tuple[dict, str, dict]:
         morceaux.append(f"{_signe(t['variation_5j_pct'])} % sur 5 jours")
     texte = ", ".join(morceaux) + "." if morceaux else "Technique USD indisponible."
     if extremes:
-        texte = texte[:-1] + f" ; COT extrême : {', '.join(extremes[:3])}" +             (f" et {len(extremes) - 3} autre(s)" if len(extremes) > 3 else "") + "."
+        texte = texte[:-1] + f" ; COT extrême : {', '.join(extremes[:3])}" +             (f" et {len(extremes) - 3} {'autre' if len(extremes) - 3 < 2 else 'autres'}" if len(extremes) > 3 else "") + "."
     return (_chiffre("Indice USD synthétique", t.get("dernier"), "", pts[-1][0] if pts else None,
                      "calcul local (Twelve Data)", texte=None if t.get("dernier") is None else _fr(t["dernier"], 2),
                      raison="technique USD indisponible"),

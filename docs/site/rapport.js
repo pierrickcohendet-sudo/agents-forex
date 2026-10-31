@@ -2,11 +2,12 @@
    validés (ou phrases Python). Lundi : version complète (12 sections) ; mardi à vendredi : version courte, avec un bouton
    pour tout afficher. Sommaire cliquable, temps de lecture, impression A4, sections dépliables sur mobile.
    Calculateur de taille de position : calcul local dans le navigateur. Jamais un ordre d'achat ou de vente. */
-import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, certifier, DRAPEAUX } from "./commun.js";
+import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, certifier, pluriel, badgeEcart, DRAPEAUX } from "./commun.js";
 
 const virgule = (v, d = 2) => v == null ? "n/d" : Number(v).toLocaleString("fr-FR", { maximumFractionDigits: d, minimumFractionDigits: 0 });
 const signe = (v, d = 2) => v == null ? "n/d" : `${v > 0 ? "+" : ""}${virgule(v, d)}`.replace("-", "−");
 const unite = u => ({ pb: " pb", "%": " %", pts: " pts" }[u] || "");
+const varTxt = (v, u) => v == null ? "n/d" : `${signe(v, u === "pb" ? 0 : 2)}${unite(u)}`;   // jamais « n/d pb »
 const jj = iso => iso ? `${iso.slice(8, 10)}/${iso.slice(5, 7)}` : "n/d";
 
 function texteSection(x) {
@@ -42,10 +43,11 @@ const RENDUS = {
     const pm = r.point_marche || {};
     const b = [el("p", "rp-lecture", pm.lecture_modele || pm.lecture)];
     b.push(tableau(["Actif", "Niveau", "J-1", "5 séances", "Lecture", "Heure · source"], (pm.lignes || []).map(l => {
-      const n = el("span", "tabulaire", l.niveau == null ? "n/d" : virgule(l.niveau, l.unite === "pb" ? 2 : 4));
+      const d = l.decimales ?? 2;
+      const n = el("span", "tabulaire", l.niveau == null ? "n/d" : `${Number(l.niveau).toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d })}${l.suffixe || ""}`);
       if (l.niveau != null) certifier(n, { libelle: l.actif, valeur: n.textContent, source: l.source, date: l.heure, sansAge: l.statut === "provisoire" ? "cotation de séance (provisoire)" : undefined });
       else n.title = l.raison || "";
-      return [l.actif, n, `${signe(l.variation_j1)}${unite(l.unite)}`, `${signe(l.variation_5j)}${unite(l.unite)}`, l.lecture || l.raison || "", `${l.heure ? (l.heure.length > 10 ? dateHeure(l.heure) : dateCourte(l.heure)) : ""} · ${l.source || ""}`];
+      return [l.actif, n, varTxt(l.variation_j1, l.unite), varTxt(l.variation_5j, l.unite), l.lecture || l.raison || "", `${l.heure ? (l.heure.length > 10 ? dateHeure(l.heure) : dateCourte(l.heure)) : ""} · ${l.source || ""}`];
     }), "rp-marche"));
     b.push(el("p", "note", pm.note || ""));
     return b;
@@ -196,12 +198,40 @@ const RENDUS = {
   watchlist_top3(r) { return RENDUS.watchlist({ ...r, watchlist: { ...(r.watchlist || {}), top: r.watchlist_top3 || [] } }); },
   evenements_jour(r) {
     const e = r.evenements_jour || [];
-    return [e.length ? liste(e.map(x => `${x.heure_paris} ${DRAPEAUX[x.devise] || ""} ${x.devise} ${x.evenement} ${x.points || ""}${x.consensus ? ` · cons. ${String(x.consensus).replace(".", ",")}` : ""}${x.publie ? ` · réel ${String(x.publie).replace(".", ",")}` : ""}`))
-      : el("p", "note", "Aucun évènement notable aujourd'hui.")];
+    return [e.length ? liste(e.map(x => {
+      const li = el("li", null, `${x.heure_paris} ${DRAPEAUX[x.devise] || ""} ${x.devise} ${x.evenement} ${x.points || ""}${x.consensus ? ` · cons. ${String(x.consensus).replace(".", ",")}` : ""}${x.publie ? ` · réel ${String(x.publie).replace(".", ",")} ` : ""}`);
+      if (x.ecart) li.appendChild(badgeEcart(x.ecart));
+      return li;
+    })) : el("p", "note", "Aucun évènement notable aujourd'hui.")];
   },
 };
 
 /* ------------------------------------------------------------------ gestion du risque (outil local) */
+function matriceCorrelations(cor) {
+  const paires = [...new Set(Object.keys(cor).flatMap(k => k.split("|")))].sort();
+  const val = (a, b) => a === b ? 1 : cor[[a, b].sort().join("|")];
+  const t = el("table", "rp-corr");
+  const tete = el("tr"); tete.appendChild(el("th"));
+  for (const p of paires) tete.appendChild(el("th", null, p));
+  t.appendChild(tete);
+  for (const a of paires) {
+    const tr = el("tr"); tr.appendChild(el("th", null, a));
+    for (const b of paires) {
+      const v = val(a, b);
+      const td = el("td", null, v == null ? "—" : a === b ? "" : virgule(v).replace("-", "−"));
+      if (v != null && a !== b) {
+        const fort = Math.min(Math.abs(v), 1);
+        td.style.background = `color-mix(in srgb, ${v > 0 ? "var(--accent)" : "var(--alerte)"} ${Math.round(fort * 70)}%, var(--carte))`;
+        if (fort > 0.55) td.style.color = "#fff";
+        td.title = `${a} / ${b} : corrélation ${virgule(v)} sur 30 séances`;
+      }
+      tr.appendChild(td);
+    }
+    t.appendChild(tr);
+  }
+  const d = el("div", "defile"); d.appendChild(t); return d;
+}
+
 function lireNotesOuvertes() {
   return new Promise(ok => {
     try {
@@ -231,13 +261,25 @@ function risqueBloc(r) {
     const cap = parseFloat(capital.value), rk = parseFloat(pct.value), sp = parseFloat(stop.value);
     if (!v || !usd || !(cap > 0) || !(rk > 0) || !(sp > 0)) { res.textContent = "Renseigner capital, risque, stop et paire (cours du jour nécessaires)."; return; }
     const risqueUsd = cap * usd * rk / 100, lots = risqueUsd / (sp * v.valeur_pip_usd_lot);
-    res.textContent = `Taille : ${virgule(lots, 2)} lot(s) standard (${virgule(lots * 100000, 0)} unités) · risque ${virgule(cap * rk / 100, 2)} ${devise.value} · valeur du pip ${virgule(v.valeur_pip_usd_lot, 2)} USD par lot (cours ${virgule(v.prix, 5)}).`;
+    const pipCompte = v.valeur_pip_usd_lot / usd;   // valeur du pip dans la devise du compte
+    res.textContent = `Taille : ${virgule(lots, 2)} ${lots < 2 ? "lot standard" : "lots standard"} (${virgule(lots * 100000, 0)} unités) · risque ${virgule(cap * rk / 100, 2)} ${devise.value} · `
+      + `valeur du pip ${virgule(pipCompte, 2)} ${devise.value} par lot (cours ${virgule(v.prix, paire.value.includes("JPY") ? 2 : 4)}).`;
   };
   for (const i of [capital, devise, pct, stop, paire]) i.addEventListener("input", calc);
   calc();
   c.append(form, res);
   const corr = Object.entries(k.correlations_30j || {});
-  if (corr.length) c.appendChild(el("p", "note tabulaire", `Corrélations 30 j (Mes paires) : ${corr.map(([p, v]) => `${p.replace("|", " / ")} ${virgule(v)}`).join(" · ")}`));
+  if (corr.length) {
+    c.appendChild(el("h4", null, "Corrélations sur 30 séances (Mes paires)"));
+    c.appendChild(matriceCorrelations(k.correlations_30j));
+    const fortes = corr.filter(([, v]) => Math.abs(v) > (k.seuil_correlation || 0.7)).sort((a, b) => Math.abs(b[1]) - Math.abs(a[1]));
+    for (const [p, v] of fortes) {
+      const [a, b] = p.split("|");
+      c.appendChild(el("p", "rp-corr-forte", v > 0 ? `${a} et ${b} : ${virgule(v)}, quasi la même exposition.`
+        : `${a} et ${b} : ${virgule(v).replace("-", "−")}, exposition inverse : deux positions de sens opposé reviennent au même pari.`));
+    }
+    if (!fortes.length) c.appendChild(el("p", "note", "Aucune paire corrélée à plus de 0,7 en valeur absolue."));
+  }
   const alerte = el("p", "alerte"); alerte.hidden = true; c.appendChild(alerte);
   lireNotesOuvertes().then(notes => {   // notes des 7 derniers jours = « ouvertes » (le Journal n'a pas de clôture)
     const recentes = notes.filter(n => Date.now() - Date.parse(n.cree_le) < 7 * 864e5 && n.biais !== "neutre");
