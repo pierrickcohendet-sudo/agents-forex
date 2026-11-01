@@ -1,87 +1,138 @@
 {
  "hebdo": {
   "type": "hebdo",
-  "periode": "2026-W43",
-  "genere_le": "2026-10-25T12:36:11+00:00",
-  "donnees_du": "2026-10-25T12:36:06+00:00",
+  "periode": "2026-W44",
+  "genere_le": "2026-11-01T07:16:42+00:00",
+  "donnees_du": "2026-11-01T07:16:39+00:00",
   "mention": "Corrélation n'est pas causalité ; aide à la décision, jamais un ordre d'achat ou de vente.",
+  "contexte": {
+   "chiffres_semaine": [
+    {
+     "libelle": "Rendement 10 ans US",
+     "variation_5s": 2.0,
+     "unite": "pb",
+     "du": "2026-10-22",
+     "au": "2026-10-29",
+     "niveau": 4.98
+    },
+    {
+     "libelle": "S&P 500",
+     "variation_5s": -0.17,
+     "unite": "%",
+     "du": "2026-10-21",
+     "au": "2026-10-28",
+     "niveau": 7743.98
+    },
+    {
+     "libelle": "Indice or (proxy)",
+     "variation_5s": 0.15,
+     "unite": "%",
+     "du": "2026-10-22",
+     "au": "2026-10-29",
+     "niveau": 2460.63
+    }
+   ],
+   "semaine_suivante": [
+    {
+     "date": "2026-11-03",
+     "devise": "AUD",
+     "evenement": "Décision de la RBA (taux directeur)",
+     "type": "Réunion BC",
+     "consensus": null
+    },
+    {
+     "date": "2026-11-05",
+     "devise": "GBP",
+     "evenement": "Votes du MPC (BoE)",
+     "type": "Réunion BC",
+     "consensus": null
+    },
+    {
+     "date": "2026-11-05",
+     "devise": "GBP",
+     "evenement": "Décision de la BoE (Bank Rate)",
+     "type": "Réunion BC",
+     "consensus": null
+    },
+    {
+     "date": "2026-11-03",
+     "devise": "AUD",
+     "evenement": "Déclaration de politique monétaire de la RBA",
+     "type": "Chiffre",
+     "consensus": null
+    },
+    {
+     "date": "2026-11-03",
+     "devise": "AUD",
+     "evenement": "Communiqué de la RBA",
+     "type": "Chiffre",
+     "consensus": null
+    },
+    {
+     "date": "2026-11-03",
+     "devise": "AUD",
+     "evenement": "Conférence de presse de la RBA",
+     "type": "Conférence",
+     "consensus": null
+    },
+    {
+     "date": "2026-11-03",
+     "devise": "USD",
+     "evenement": "Élections de mi-mandat aux États-Unis",
+     "type": "Grand rendez-vous",
+     "consensus": null
+    },
+    {
+     "date": "2026-11-03",
+     "devise": "NZD",
+     "evenement": "Variation de l'emploi T/T",
+     "type": "Chiffre",
+     "consensus": null
+    }
+   ]
+  },
+  "synthese": {
+   "phrase_python": "Moteurs les plus actifs : stocks de brut US contre la moyenne saisonnière 5 ans −5,66 pts sur 1 mois (au-dessous de −1 écart-type, ±2,92) ; prime de terme 10 ans US −5,74 pb sur 1 mois (zone calme, ±14,68). Chiffres de la semaine : Rendement 10 ans US +2,00 pb sur 5 séances ; S&P 500 −0,17 % sur 5 séances ; Indice or (proxy) +0,15 % sur 5 séances. Semaine suivante : AUD Décision de la RBA (taux directeur) (03/11) ; GBP Votes du MPC (BoE) (05/11) ; GBP Décision de la BoE (Bank Rate) (05/11) ; AUD Déclaration de politique monétaire de la RBA (03/11) ; AUD Communiqué de la RBA (03/11).",
+   "texte": "Le moteur le plus actif est celui des stocks de brut US contre la moyenne saisonnière 5 ans (-5.66 pts, zone basse, au-delà d'un écart-type), à côté de la prime de terme 10 ans US (-5.74 pb, zone calme). Durant la semaine, le rendement 10 ans US a varié de 2.0 pb, le S&P 500 de -0.17 % et l'indice or (proxy) de 0.15 %. La semaine suivante sera marquée par les élections de mi-mandat aux États-Unis, les décisions de taux de la RBA et de la BoE, ainsi que la variation de l'emploi au NZD."
+  },
   "devises": {
    "USD": {
     "faits": {
      "devise": "USD",
      "lignes": [
       {
-       "engrenage": 2,
-       "nom": "Monétaire",
-       "moteur": "écart 2 ans US − taux effectif Fed",
-       "variation_moteur_1m": -6.0,
-       "date": "2026-10-22",
-       "lecture": "Neutre",
-       "n": 32,
-       "part_sens_attendu": 53,
-       "borne_wilson_90": 38.9,
-       "sensibilite": 0.4,
-       "mediane_si_hausse": 0.24,
-       "mediane_si_baisse": -0.02,
-       "raison": "moteur calme : −6,00 sur 1 mois, dans ±1 écart−type (±34,72)"
-      },
-      {
        "engrenage": 4,
        "nom": "Fiscale",
        "moteur": "prime de terme 10 ans US",
-       "variation_moteur_1m": 1.38,
-       "date": "2026-10-16",
+       "variation_moteur_1m": -5.74,
+       "unite": "pb",
+       "date": "2026-10-23",
+       "sigma_moteur": 14.68,
+       "zone": "calme",
        "lecture": "Neutre",
-       "n": 32,
-       "part_sens_attendu": 59,
-       "borne_wilson_90": 44.9,
-       "sensibilite": 0.52,
-       "mediane_si_hausse": 0.65,
-       "mediane_si_baisse": -1.78,
-       "raison": "moteur calme : +1,38 sur 1 mois, dans ±1 écart−type (±14,69)"
-      },
-      {
-       "engrenage": 5,
-       "nom": "Marchés",
-       "moteur": "VIX",
-       "variation_moteur_1m": 4.82,
-       "date": "2026-10-22",
-       "lecture": "Neutre",
-       "n": 38,
-       "part_sens_attendu": 39,
-       "borne_wilson_90": 27.6,
-       "sensibilite": 0.43,
-       "mediane_si_hausse": -0.96,
-       "mediane_si_baisse": -0.58,
-       "raison": "moteur calme : +4,82 sur 1 mois, dans ±1 écart−type (±5,13)"
-      },
-      {
-       "engrenage": 6,
-       "nom": "Géopolitique",
-       "moteur": "Brent",
-       "variation_moteur_1m": -3.78,
-       "date": "2026-10-20",
-       "lecture": "Neutre",
-       "n": 33,
+       "n": 3,
        "part_sens_attendu": null,
        "borne_wilson_90": null,
-       "sensibilite": 0.03,
-       "mediane_si_hausse": 0.55,
-       "mediane_si_baisse": 0.24,
-       "raison": "moteur calme : −3,78 sur 1 mois, dans ±1 écart−type (±12,01)"
+       "sensibilite": null,
+       "mediane_si_hausse": null,
+       "mediane_si_baisse": null,
+       "raison": "moteur calme : −5,74 sur 1 mois, dans ±1 écart−type (±14,68)"
       },
       {
        "engrenage": 8,
        "nom": "Offre",
        "moteur": "stocks de brut US contre la moyenne saisonnière 5 ans",
-       "variation_moteur_1m": -4.66,
-       "date": "2026-10-16",
+       "variation_moteur_1m": -5.66,
+       "unite": "pts",
+       "date": "2026-10-23",
+       "sigma_moteur": 2.92,
+       "zone": "basse",
        "lecture": "n/d",
-       "n": 10,
+       "n": 4,
        "part_sens_attendu": null,
        "borne_wilson_90": null,
-       "sensibilite": -0.07,
-       "mediane_si_hausse": -0.81,
+       "sensibilite": null,
+       "mediane_si_hausse": null,
        "mediane_si_baisse": null,
        "raison": "pas de sens attendu (sensibilité nulle ou non calculable)"
       }
@@ -90,94 +141,35 @@
       "Soutien": 0,
       "Pression": 0,
       "Indice faible": 0,
-      "Neutre": 4,
+      "Neutre": 1,
       "n/d": 1
      },
      "bilan": "sans direction établie"
     },
-    "phrase_python": "USD : bilan sans direction établie (0 soutien(s), 0 pression(s), 0 indice(s) faible(s), 4 moteur(s) calme(s), 1 n/d). Aucun moteur hors de sa zone calme.",
-    "texte": "Le bilan du dollar américain est sans direction établie, comptabilisant 4 cas neutres et 1 cas non disponible. Aucun soutien, pression ou indice faible n'est enregistré."
+    "phrase_python": "USD : bilan sans direction établie. Moteurs : stocks de brut US contre la moyenne saisonnière 5 ans −5,66 pts sur 1 mois (au-dessous de −1 écart-type, ±2,92) ; prime de terme 10 ans US −5,74 pb sur 1 mois (zone calme, ±14,68). Aucun moteur hors de sa zone calme.",
+    "texte": "L'USD reste sans direction établie face au moteur des stocks de brut US contre la moyenne saisonnière 5 ans (-5.66 pts, zone basse) et à la prime de terme 10 ans US (-5.74 pb, zone calme). La hausse du rendement 10 ans US (+2.0 pb) constitue un indice faible de soutien sans lien de causalité."
    },
    "EUR": {
     "faits": {
      "devise": "EUR",
      "lignes": [
       {
-       "engrenage": 2,
-       "nom": "Monétaire",
-       "moteur": "écart 2 ans US − taux effectif Fed",
-       "variation_moteur_1m": -6.0,
-       "date": "2026-10-22",
-       "lecture": "Neutre",
-       "n": 32,
-       "part_sens_attendu": 44,
-       "borne_wilson_90": 30.4,
-       "sensibilite": -0.34,
-       "mediane_si_hausse": 0.25,
-       "mediane_si_baisse": -0.19,
-       "raison": "moteur calme : −6,00 sur 1 mois, dans ±1 écart−type (±34,72)"
-      },
-      {
        "engrenage": 4,
        "nom": "Fiscale",
        "moteur": "prime de terme 10 ans US",
-       "variation_moteur_1m": 1.38,
-       "date": "2026-10-16",
+       "variation_moteur_1m": -5.74,
+       "unite": "pb",
+       "date": "2026-10-23",
+       "sigma_moteur": 14.68,
+       "zone": "calme",
        "lecture": "Neutre",
        "n": 32,
        "part_sens_attendu": 66,
        "borne_wilson_90": 51.1,
-       "sensibilite": -0.39,
+       "sensibilite": -0.6,
        "mediane_si_hausse": -0.44,
        "mediane_si_baisse": 1.53,
-       "raison": "moteur calme : +1,38 sur 1 mois, dans ±1 écart−type (±14,69)"
-      },
-      {
-       "engrenage": 6,
-       "nom": "Géopolitique",
-       "moteur": "Brent",
-       "variation_moteur_1m": -3.78,
-       "date": "2026-10-20",
-       "lecture": "Neutre",
-       "n": 33,
-       "part_sens_attendu": null,
-       "borne_wilson_90": null,
-       "sensibilite": -0.08,
-       "mediane_si_hausse": -1.02,
-       "mediane_si_baisse": -0.49,
-       "raison": "moteur calme : −3,78 sur 1 mois, dans ±1 écart−type (±12,01)"
-      }
-     ],
-     "comptes": {
-      "Soutien": 0,
-      "Pression": 0,
-      "Indice faible": 0,
-      "Neutre": 3,
-      "n/d": 0
-     },
-     "bilan": "sans direction établie"
-    },
-    "phrase_python": "EUR : bilan sans direction établie (0 soutien(s), 0 pression(s), 0 indice(s) faible(s), 3 moteur(s) calme(s)). Aucun moteur hors de sa zone calme.",
-    "texte": "L'euro présente un bilan sans direction établie avec 3 cas neutres répertoriés. Aucun cas de soutien, de pression ou d'indice faible n'est relevé."
-   },
-   "GBP": {
-    "faits": {
-     "devise": "GBP",
-     "lignes": [
-      {
-       "engrenage": 2,
-       "nom": "Monétaire",
-       "moteur": "écart 2 ans US − taux effectif Fed",
-       "variation_moteur_1m": -6.0,
-       "date": "2026-10-22",
-       "lecture": "Neutre",
-       "n": 32,
-       "part_sens_attendu": 53,
-       "borne_wilson_90": 38.9,
-       "sensibilite": -0.32,
-       "mediane_si_hausse": -0.61,
-       "mediane_si_baisse": -0.28,
-       "raison": "moteur calme : −6,00 sur 1 mois, dans ±1 écart−type (±34,72)"
+       "raison": "moteur calme : −5,74 sur 1 mois, dans ±1 écart−type (±14,68)"
       }
      ],
      "comptes": {
@@ -189,100 +181,77 @@
      },
      "bilan": "sans direction établie"
     },
-    "phrase_python": "GBP : bilan sans direction établie (0 soutien(s), 0 pression(s), 0 indice(s) faible(s), 1 moteur(s) calme(s)). Aucun moteur hors de sa zone calme.",
-    "texte": "Le bilan de la livre sterling est sans direction établie avec 1 cas neutre observé. On ne compte aucun soutien, pression, indice faible ou cas non disponible."
+    "phrase_python": "EUR : bilan sans direction établie. Moteurs : prime de terme 10 ans US −5,74 pb sur 1 mois (zone calme, ±14,68). Aucun moteur hors de sa zone calme.",
+    "texte": "L'EUR évolue sans direction établie sous l'influence de la prime de terme 10 ans US (-5.74 pb, zone calme). L'absence de pression spécifique locale laisse la dynamique dépendante du contexte global."
+   },
+   "GBP": {
+    "faits": {
+     "devise": "GBP",
+     "lignes": [],
+     "comptes": {
+      "Soutien": 0,
+      "Pression": 0,
+      "Indice faible": 0,
+      "Neutre": 0,
+      "n/d": 0
+     },
+     "bilan": "sans direction établie"
+    },
+    "phrase_python": "GBP : aucune ligne du tableau des conséquences ne la concerne cette période.",
+    "texte": "Le GBP est sans direction établie alors que le marché surveille la prime de terme 10 ans US (-5.74 pb, zone calme). Les annonces de la BoE et les votes du MPC la semaine suivante serviront de points d'attention."
    },
    "JPY": {
     "faits": {
      "devise": "JPY",
      "lignes": [
       {
-       "engrenage": 2,
-       "nom": "Monétaire",
-       "moteur": "écart 2 ans US − taux effectif Fed",
-       "variation_moteur_1m": -6.0,
-       "date": "2026-10-22",
-       "lecture": "Neutre",
-       "n": 32,
-       "part_sens_attendu": 56,
-       "borne_wilson_90": 41.9,
-       "sensibilite": -0.54,
-       "mediane_si_hausse": -0.37,
-       "mediane_si_baisse": -1.77,
-       "raison": "moteur calme : −6,00 sur 1 mois, dans ±1 écart−type (±34,72)"
-      },
-      {
        "engrenage": 4,
        "nom": "Fiscale",
        "moteur": "prime de terme 10 ans US",
-       "variation_moteur_1m": 1.38,
-       "date": "2026-10-16",
+       "variation_moteur_1m": -5.74,
+       "unite": "pb",
+       "date": "2026-10-23",
+       "sigma_moteur": 14.68,
+       "zone": "calme",
        "lecture": "Neutre",
        "n": 32,
        "part_sens_attendu": 62,
        "borne_wilson_90": 48.0,
-       "sensibilite": -0.63,
+       "sensibilite": -0.71,
        "mediane_si_hausse": -0.96,
        "mediane_si_baisse": 2.52,
-       "raison": "moteur calme : +1,38 sur 1 mois, dans ±1 écart−type (±14,69)"
-      },
-      {
-       "engrenage": 5,
-       "nom": "Marchés",
-       "moteur": "VIX",
-       "variation_moteur_1m": 4.82,
-       "date": "2026-10-22",
-       "lecture": "Neutre",
-       "n": 38,
-       "part_sens_attendu": 53,
-       "borne_wilson_90": 39.6,
-       "sensibilite": -0.13,
-       "mediane_si_hausse": -0.51,
-       "mediane_si_baisse": -0.07,
-       "raison": "moteur calme : +4,82 sur 1 mois, dans ±1 écart−type (±5,13)"
-      },
-      {
-       "engrenage": 6,
-       "nom": "Géopolitique",
-       "moteur": "Brent",
-       "variation_moteur_1m": -3.78,
-       "date": "2026-10-20",
-       "lecture": "Neutre",
-       "n": 33,
-       "part_sens_attendu": null,
-       "borne_wilson_90": null,
-       "sensibilite": -0.07,
-       "mediane_si_hausse": -1.2,
-       "mediane_si_baisse": -0.96,
-       "raison": "moteur calme : −3,78 sur 1 mois, dans ±1 écart−type (±12,01)"
+       "raison": "moteur calme : −5,74 sur 1 mois, dans ±1 écart−type (±14,68)"
       },
       {
        "engrenage": 8,
        "nom": "Offre",
        "moteur": "stocks de brut US contre la moyenne saisonnière 5 ans",
-       "variation_moteur_1m": -4.66,
-       "date": "2026-10-16",
+       "variation_moteur_1m": -5.66,
+       "unite": "pts",
+       "date": "2026-10-23",
+       "sigma_moteur": 2.92,
+       "zone": "basse",
        "lecture": "n/d",
-       "n": 10,
+       "n": 9,
        "part_sens_attendu": null,
        "borne_wilson_90": null,
-       "sensibilite": 0.04,
-       "mediane_si_hausse": 0.54,
+       "sensibilite": 0.34,
+       "mediane_si_hausse": 0.64,
        "mediane_si_baisse": null,
-       "raison": "pas de sens attendu (sensibilité nulle ou non calculable)"
+       "raison": "échantillon insuffisant (9 cas, minimum 20)"
       }
      ],
      "comptes": {
       "Soutien": 0,
       "Pression": 0,
       "Indice faible": 0,
-      "Neutre": 4,
+      "Neutre": 1,
       "n/d": 1
      },
      "bilan": "sans direction établie"
     },
-    "phrase_python": "JPY : bilan sans direction établie (0 soutien(s), 0 pression(s), 0 indice(s) faible(s), 4 moteur(s) calme(s), 1 n/d). Aucun moteur hors de sa zone calme.",
-    "texte": "Le yen japonais affiche un bilan sans direction établie incluant 4 cas neutres et 1 cas non disponible. Aucun cas de soutien, de pression ou d'indice faible n'a été relevé."
+    "phrase_python": "JPY : bilan sans direction établie. Moteurs : stocks de brut US contre la moyenne saisonnière 5 ans −5,66 pts sur 1 mois (au-dessous de −1 écart-type, ±2,92) ; prime de terme 10 ans US −5,74 pb sur 1 mois (zone calme, ±14,68). Aucun moteur hors de sa zone calme.",
+    "texte": "Le JPY affiche un bilan sans direction établie en présence des stocks de brut US contre la moyenne saisonnière 5 ans (-5.66 pts, zone basse) et de la prime de terme 10 ans US (-5.74 pb, zone calme). La légère hausse de l'indice or (+0.15 %) fait figure d'indice faible non causal."
    },
    "CHF": {
     "faits": {
@@ -292,187 +261,19 @@
        "engrenage": 4,
        "nom": "Fiscale",
        "moteur": "prime de terme 10 ans US",
-       "variation_moteur_1m": 1.38,
-       "date": "2026-10-16",
+       "variation_moteur_1m": -5.74,
+       "unite": "pb",
+       "date": "2026-10-23",
+       "sigma_moteur": 14.68,
+       "zone": "calme",
        "lecture": "Neutre",
        "n": 32,
        "part_sens_attendu": 56,
        "borne_wilson_90": 41.9,
-       "sensibilite": -0.57,
+       "sensibilite": -0.56,
        "mediane_si_hausse": -0.38,
        "mediane_si_baisse": 2.22,
-       "raison": "moteur calme : +1,38 sur 1 mois, dans ±1 écart−type (±14,69)"
-      },
-      {
-       "engrenage": 5,
-       "nom": "Marchés",
-       "moteur": "VIX",
-       "variation_moteur_1m": 4.82,
-       "date": "2026-10-22",
-       "lecture": "Neutre",
-       "n": 38,
-       "part_sens_attendu": 42,
-       "borne_wilson_90": 29.9,
-       "sensibilite": -0.23,
-       "mediane_si_hausse": 1.2,
-       "mediane_si_baisse": 0.22,
-       "raison": "moteur calme : +4,82 sur 1 mois, dans ±1 écart−type (±5,13)"
-      }
-     ],
-     "comptes": {
-      "Soutien": 0,
-      "Pression": 0,
-      "Indice faible": 0,
-      "Neutre": 2,
-      "n/d": 0
-     },
-     "bilan": "sans direction établie"
-    },
-    "phrase_python": "CHF : bilan sans direction établie (0 soutien(s), 0 pression(s), 0 indice(s) faible(s), 2 moteur(s) calme(s)). Aucun moteur hors de sa zone calme.",
-    "texte": "Pour le franc suisse, le bilan est sans direction établie avec 2 cas neutres enregistrés. Aucun soutien, pression ou indice faible n'est comptabilisé."
-   },
-   "CAD": {
-    "faits": {
-     "devise": "CAD",
-     "lignes": [
-      {
-       "engrenage": 5,
-       "nom": "Marchés",
-       "moteur": "VIX",
-       "variation_moteur_1m": 4.82,
-       "date": "2026-10-22",
-       "lecture": "Neutre",
-       "n": 38,
-       "part_sens_attendu": 42,
-       "borne_wilson_90": 29.9,
-       "sensibilite": -0.38,
-       "mediane_si_hausse": 0.87,
-       "mediane_si_baisse": -0.4,
-       "raison": "moteur calme : +4,82 sur 1 mois, dans ±1 écart−type (±5,13)"
-      },
-      {
-       "engrenage": 6,
-       "nom": "Géopolitique",
-       "moteur": "Brent",
-       "variation_moteur_1m": -3.78,
-       "date": "2026-10-20",
-       "lecture": "Neutre",
-       "n": 33,
-       "part_sens_attendu": 48,
-       "borne_wilson_90": 34.8,
-       "sensibilite": 0.14,
-       "mediane_si_hausse": -0.64,
-       "mediane_si_baisse": -0.69,
-       "raison": "moteur calme : −3,78 sur 1 mois, dans ±1 écart−type (±12,01)"
-      },
-      {
-       "engrenage": 8,
-       "nom": "Offre",
-       "moteur": "stocks de brut US contre la moyenne saisonnière 5 ans",
-       "variation_moteur_1m": -4.66,
-       "date": "2026-10-16",
-       "lecture": "n/d",
-       "n": 10,
-       "part_sens_attendu": null,
-       "borne_wilson_90": null,
-       "sensibilite": 0.2,
-       "mediane_si_hausse": -0.36,
-       "mediane_si_baisse": null,
-       "raison": "échantillon insuffisant (10 cas, minimum 20)"
-      }
-     ],
-     "comptes": {
-      "Soutien": 0,
-      "Pression": 0,
-      "Indice faible": 0,
-      "Neutre": 2,
-      "n/d": 1
-     },
-     "bilan": "sans direction établie"
-    },
-    "phrase_python": "CAD : bilan sans direction établie (0 soutien(s), 0 pression(s), 0 indice(s) faible(s), 2 moteur(s) calme(s), 1 n/d). Aucun moteur hors de sa zone calme.",
-    "texte": "Le dollar canadien montre un bilan sans direction établie regroupant 2 cas neutres et 1 cas non disponible. Aucun cas de soutien, de pression ou d'indice faible n'est répertorié."
-   },
-   "AUD": {
-    "faits": {
-     "devise": "AUD",
-     "lignes": [
-      {
-       "engrenage": 2,
-       "nom": "Monétaire",
-       "moteur": "écart 2 ans US − taux effectif Fed",
-       "variation_moteur_1m": -6.0,
-       "date": "2026-10-22",
-       "lecture": "Neutre",
-       "n": 32,
-       "part_sens_attendu": null,
-       "borne_wilson_90": null,
-       "sensibilite": -0.09,
-       "mediane_si_hausse": 0.1,
-       "mediane_si_baisse": 0.02,
-       "raison": "moteur calme : −6,00 sur 1 mois, dans ±1 écart−type (±34,72)"
-      },
-      {
-       "engrenage": 5,
-       "nom": "Marchés",
-       "moteur": "VIX",
-       "variation_moteur_1m": 4.82,
-       "date": "2026-10-22",
-       "lecture": "Neutre",
-       "n": 38,
-       "part_sens_attendu": 39,
-       "borne_wilson_90": 27.6,
-       "sensibilite": -0.62,
-       "mediane_si_hausse": 1.7,
-       "mediane_si_baisse": 0.42,
-       "raison": "moteur calme : +4,82 sur 1 mois, dans ±1 écart−type (±5,13)"
-      },
-      {
-       "engrenage": 6,
-       "nom": "Géopolitique",
-       "moteur": "Brent",
-       "variation_moteur_1m": -3.78,
-       "date": "2026-10-20",
-       "lecture": "Neutre",
-       "n": 33,
-       "part_sens_attendu": null,
-       "borne_wilson_90": null,
-       "sensibilite": 0.07,
-       "mediane_si_hausse": 0.27,
-       "mediane_si_baisse": 0.57,
-       "raison": "moteur calme : −3,78 sur 1 mois, dans ±1 écart−type (±12,01)"
-      }
-     ],
-     "comptes": {
-      "Soutien": 0,
-      "Pression": 0,
-      "Indice faible": 0,
-      "Neutre": 3,
-      "n/d": 0
-     },
-     "bilan": "sans direction établie"
-    },
-    "phrase_python": "AUD : bilan sans direction établie (0 soutien(s), 0 pression(s), 0 indice(s) faible(s), 3 moteur(s) calme(s)). Aucun moteur hors de sa zone calme.",
-    "texte": "Le dollar australien présente un bilan sans direction établie avec 3 cas neutres au total. Aucune donnée de soutien, de pression ou d'indice faible n'est observée."
-   },
-   "NZD": {
-    "faits": {
-     "devise": "NZD",
-     "lignes": [
-      {
-       "engrenage": 5,
-       "nom": "Marchés",
-       "moteur": "VIX",
-       "variation_moteur_1m": 4.82,
-       "date": "2026-10-22",
-       "lecture": "Neutre",
-       "n": 38,
-       "part_sens_attendu": 42,
-       "borne_wilson_90": 29.9,
-       "sensibilite": -0.54,
-       "mediane_si_hausse": 1.86,
-       "mediane_si_baisse": 0.41,
-       "raison": "moteur calme : +4,82 sur 1 mois, dans ±1 écart−type (±5,13)"
+       "raison": "moteur calme : −5,74 sur 1 mois, dans ±1 écart−type (±14,68)"
       }
      ],
      "comptes": {
@@ -484,8 +285,75 @@
      },
      "bilan": "sans direction établie"
     },
-    "phrase_python": "NZD : bilan sans direction établie (0 soutien(s), 0 pression(s), 0 indice(s) faible(s), 1 moteur(s) calme(s)). Aucun moteur hors de sa zone calme.",
-    "texte": "Le bilan du dollar néo-zélandais est sans direction établie avec 1 cas neutre comptabilisé. Aucun soutien, pression ou indice faible n'est enregistré."
+    "phrase_python": "CHF : bilan sans direction établie. Moteurs : prime de terme 10 ans US −5,74 pb sur 1 mois (zone calme, ±14,68). Aucun moteur hors de sa zone calme.",
+    "texte": "Le CHF s'inscrit sans direction établie au regard de la prime de terme 10 ans US (-5.74 pb, zone calme). Les mouvements modérés des taux mondiaux agissent comme des indices faibles d'environnement."
+   },
+   "CAD": {
+    "faits": {
+     "devise": "CAD",
+     "lignes": [
+      {
+       "engrenage": 8,
+       "nom": "Offre",
+       "moteur": "stocks de brut US contre la moyenne saisonnière 5 ans",
+       "variation_moteur_1m": -5.66,
+       "unite": "pts",
+       "date": "2026-10-23",
+       "sigma_moteur": 2.92,
+       "zone": "basse",
+       "lecture": "n/d",
+       "n": 4,
+       "part_sens_attendu": null,
+       "borne_wilson_90": null,
+       "sensibilite": null,
+       "mediane_si_hausse": null,
+       "mediane_si_baisse": null,
+       "raison": "pas de sens attendu (sensibilité nulle ou non calculable)"
+      }
+     ],
+     "comptes": {
+      "Soutien": 0,
+      "Pression": 0,
+      "Indice faible": 0,
+      "Neutre": 0,
+      "n/d": 1
+     },
+     "bilan": "sans direction établie"
+    },
+    "phrase_python": "CAD : bilan sans direction établie. Moteurs : stocks de brut US contre la moyenne saisonnière 5 ans −5,66 pts sur 1 mois (au-dessous de −1 écart-type, ±2,92). Aucun moteur hors de sa zone calme.",
+    "texte": "Le CAD demeure sans direction établie, influencé par le moteur des stocks de brut US contre la moyenne saisonnière 5 ans (-5.66 pts, zone basse). La baisse des stocks pétroliers exerce une pression relative mais ne constitue pas une causalité directe."
+   },
+   "AUD": {
+    "faits": {
+     "devise": "AUD",
+     "lignes": [],
+     "comptes": {
+      "Soutien": 0,
+      "Pression": 0,
+      "Indice faible": 0,
+      "Neutre": 0,
+      "n/d": 0
+     },
+     "bilan": "sans direction établie"
+    },
+    "phrase_python": "AUD : aucune ligne du tableau des conséquences ne la concerne cette période.",
+    "texte": "L'AUD se maintient sans direction établie dans un cadre régi par la prime de terme 10 ans US (-5.74 pb, zone calme). La décision de taux et les interventions de la RBA la semaine prochaine représenteront les principaux éléments de soutien ou de pression."
+   },
+   "NZD": {
+    "faits": {
+     "devise": "NZD",
+     "lignes": [],
+     "comptes": {
+      "Soutien": 0,
+      "Pression": 0,
+      "Indice faible": 0,
+      "Neutre": 0,
+      "n/d": 0
+     },
+     "bilan": "sans direction établie"
+    },
+    "phrase_python": "NZD : aucune ligne du tableau des conséquences ne la concerne cette période.",
+    "texte": "Le NZD évolue sans direction établie face à la prime de terme 10 ans US (-5.74 pb, zone calme). La publication de la variation de l'emploi demeure un événement clé à suivre sans valoir signal immédiat."
    },
    "CNY": {
     "faits": {
@@ -501,7 +369,389 @@
      "bilan": "sans direction établie"
     },
     "phrase_python": "CNY : aucune ligne du tableau des conséquences ne la concerne cette période.",
-    "texte": "Le yuan chinois affiche un bilan sans direction établie avec 0 cas neutre et 0 cas non disponible. Aucun soutien, pression ou indice faible n'est répertorié."
+    "texte": "Le CNY reste sans direction établie dans l'environnement marqué par la prime de terme 10 ans US (-5.74 pb, zone calme). Le repli du S&P 500 (-0.17 %) fournit un indice faible de pression sur l'appétit pour le risque."
+   }
+  },
+  "statut": "ok",
+  "tentatives": 1,
+  "controles": [],
+  "redige_par": {
+   "modele": "gemini-3.5-flash",
+   "libelle": "Flash 3.5"
+  },
+  "raison": null
+ },
+ "mensuel": {
+  "type": "mensuel",
+  "periode": "2026-10",
+  "genere_le": "2026-11-01T07:17:03+00:00",
+  "donnees_du": "2026-11-01T07:16:39+00:00",
+  "mention": "Corrélation n'est pas causalité ; aide à la décision, jamais un ordre d'achat ou de vente.",
+  "contexte": {
+   "chiffres_semaine": [
+    {
+     "libelle": "Rendement 10 ans US",
+     "variation_5s": 2.0,
+     "unite": "pb",
+     "du": "2026-10-22",
+     "au": "2026-10-29",
+     "niveau": 4.98
+    },
+    {
+     "libelle": "S&P 500",
+     "variation_5s": -0.17,
+     "unite": "%",
+     "du": "2026-10-21",
+     "au": "2026-10-28",
+     "niveau": 7743.98
+    },
+    {
+     "libelle": "Indice or (proxy)",
+     "variation_5s": 0.15,
+     "unite": "%",
+     "du": "2026-10-22",
+     "au": "2026-10-29",
+     "niveau": 2460.63
+    }
+   ],
+   "semaine_suivante": [
+    {
+     "date": "2026-11-03",
+     "devise": "AUD",
+     "evenement": "Décision de la RBA (taux directeur)",
+     "type": "Réunion BC",
+     "consensus": null
+    },
+    {
+     "date": "2026-11-05",
+     "devise": "GBP",
+     "evenement": "Votes du MPC (BoE)",
+     "type": "Réunion BC",
+     "consensus": null
+    },
+    {
+     "date": "2026-11-05",
+     "devise": "GBP",
+     "evenement": "Décision de la BoE (Bank Rate)",
+     "type": "Réunion BC",
+     "consensus": null
+    },
+    {
+     "date": "2026-11-03",
+     "devise": "AUD",
+     "evenement": "Déclaration de politique monétaire de la RBA",
+     "type": "Chiffre",
+     "consensus": null
+    },
+    {
+     "date": "2026-11-03",
+     "devise": "AUD",
+     "evenement": "Communiqué de la RBA",
+     "type": "Chiffre",
+     "consensus": null
+    },
+    {
+     "date": "2026-11-03",
+     "devise": "AUD",
+     "evenement": "Conférence de presse de la RBA",
+     "type": "Conférence",
+     "consensus": null
+    },
+    {
+     "date": "2026-11-03",
+     "devise": "USD",
+     "evenement": "Élections de mi-mandat aux États-Unis",
+     "type": "Grand rendez-vous",
+     "consensus": null
+    },
+    {
+     "date": "2026-11-03",
+     "devise": "NZD",
+     "evenement": "Variation de l'emploi T/T",
+     "type": "Chiffre",
+     "consensus": null
+    }
+   ]
+  },
+  "synthese": {
+   "phrase_python": "Moteurs les plus actifs : stocks de brut US contre la moyenne saisonnière 5 ans −5,66 pts sur 1 mois (au-dessous de −1 écart-type, ±2,92) ; prime de terme 10 ans US −5,74 pb sur 1 mois (zone calme, ±14,68). Chiffres de la semaine : Rendement 10 ans US +2,00 pb sur 5 séances ; S&P 500 −0,17 % sur 5 séances ; Indice or (proxy) +0,15 % sur 5 séances. Semaine suivante : AUD Décision de la RBA (taux directeur) (03/11) ; GBP Votes du MPC (BoE) (05/11) ; GBP Décision de la BoE (Bank Rate) (05/11) ; AUD Déclaration de politique monétaire de la RBA (03/11) ; AUD Communiqué de la RBA (03/11).",
+   "texte": "L'octobre 2026 est marqué par les stocks de brut US contre la moyenne saisonnière 5 ans (-5.66 pts, zone basse au-delà d'un écart-type) et la prime de terme 10 ans US (-5.74 pb, zone calme). Cette semaine, le rendement 10 ans US atteint 4.98 (+2.0 pb), le S&P 500 s'établit à 7743.98 (-0.17 %) et l'indice or grimpe à 2460.63 (+0.15 %). La semaine suivante verra les décisions de la RBA et les élections de mi-mandat US le 3 novembre, suivies des annonces de la BoE le 5 novembre."
+  },
+  "devises": {
+   "USD": {
+    "faits": {
+     "devise": "USD",
+     "lignes": [
+      {
+       "engrenage": 4,
+       "nom": "Fiscale",
+       "moteur": "prime de terme 10 ans US",
+       "variation_moteur_1m": -5.74,
+       "unite": "pb",
+       "date": "2026-10-23",
+       "sigma_moteur": 14.68,
+       "zone": "calme",
+       "lecture": "Neutre",
+       "n": 3,
+       "part_sens_attendu": null,
+       "borne_wilson_90": null,
+       "sensibilite": null,
+       "mediane_si_hausse": null,
+       "mediane_si_baisse": null,
+       "raison": "moteur calme : −5,74 sur 1 mois, dans ±1 écart−type (±14,68)"
+      },
+      {
+       "engrenage": 8,
+       "nom": "Offre",
+       "moteur": "stocks de brut US contre la moyenne saisonnière 5 ans",
+       "variation_moteur_1m": -5.66,
+       "unite": "pts",
+       "date": "2026-10-23",
+       "sigma_moteur": 2.92,
+       "zone": "basse",
+       "lecture": "n/d",
+       "n": 4,
+       "part_sens_attendu": null,
+       "borne_wilson_90": null,
+       "sensibilite": null,
+       "mediane_si_hausse": null,
+       "mediane_si_baisse": null,
+       "raison": "pas de sens attendu (sensibilité nulle ou non calculable)"
+      }
+     ],
+     "comptes": {
+      "Soutien": 0,
+      "Pression": 0,
+      "Indice faible": 0,
+      "Neutre": 1,
+      "n/d": 1
+     },
+     "bilan": "sans direction établie"
+    },
+    "phrase_python": "USD : bilan sans direction établie. Moteurs : stocks de brut US contre la moyenne saisonnière 5 ans −5,66 pts sur 1 mois (au-dessous de −1 écart-type, ±2,92) ; prime de terme 10 ans US −5,74 pb sur 1 mois (zone calme, ±14,68). Aucun moteur hors de sa zone calme.",
+    "texte": "Le dollar évolue sans direction établie sous l'effet des stocks de brut US contre la moyenne saisonnière 5 ans (-5.66 pts, zone basse) et de la prime de terme 10 ans US (-5.74 pb, zone calme). Les élections de mi-mandat du 3 novembre restent l'événement majeur à venir sans constituer une causalité automatique."
+   },
+   "EUR": {
+    "faits": {
+     "devise": "EUR",
+     "lignes": [
+      {
+       "engrenage": 4,
+       "nom": "Fiscale",
+       "moteur": "prime de terme 10 ans US",
+       "variation_moteur_1m": -5.74,
+       "unite": "pb",
+       "date": "2026-10-23",
+       "sigma_moteur": 14.68,
+       "zone": "calme",
+       "lecture": "Neutre",
+       "n": 32,
+       "part_sens_attendu": 66,
+       "borne_wilson_90": 51.1,
+       "sensibilite": -0.6,
+       "mediane_si_hausse": -0.44,
+       "mediane_si_baisse": 1.53,
+       "raison": "moteur calme : −5,74 sur 1 mois, dans ±1 écart−type (±14,68)"
+      }
+     ],
+     "comptes": {
+      "Soutien": 0,
+      "Pression": 0,
+      "Indice faible": 0,
+      "Neutre": 1,
+      "n/d": 0
+     },
+     "bilan": "sans direction établie"
+    },
+    "phrase_python": "EUR : bilan sans direction établie. Moteurs : prime de terme 10 ans US −5,74 pb sur 1 mois (zone calme, ±14,68). Aucun moteur hors de sa zone calme.",
+    "texte": "L'euro se maintient sans direction établie en présence du moteur de la prime de terme 10 ans US (-5.74 pb, zone calme). Les éléments disponibles représentent des indices faibles insuffisants pour valider un signal de pression ou de soutien."
+   },
+   "GBP": {
+    "faits": {
+     "devise": "GBP",
+     "lignes": [],
+     "comptes": {
+      "Soutien": 0,
+      "Pression": 0,
+      "Indice faible": 0,
+      "Neutre": 0,
+      "n/d": 0
+     },
+     "bilan": "sans direction établie"
+    },
+    "phrase_python": "GBP : aucune ligne du tableau des conséquences ne la concerne cette période.",
+    "texte": "Le sterling reste sans direction établie face à la prime de terme 10 ans US (-5.74 pb, zone calme). La décision sur le taux de la BoE et les votes du MPC le 5 novembre constitueront les prochains points d'observation."
+   },
+   "JPY": {
+    "faits": {
+     "devise": "JPY",
+     "lignes": [
+      {
+       "engrenage": 4,
+       "nom": "Fiscale",
+       "moteur": "prime de terme 10 ans US",
+       "variation_moteur_1m": -5.74,
+       "unite": "pb",
+       "date": "2026-10-23",
+       "sigma_moteur": 14.68,
+       "zone": "calme",
+       "lecture": "Neutre",
+       "n": 32,
+       "part_sens_attendu": 62,
+       "borne_wilson_90": 48.0,
+       "sensibilite": -0.71,
+       "mediane_si_hausse": -0.96,
+       "mediane_si_baisse": 2.52,
+       "raison": "moteur calme : −5,74 sur 1 mois, dans ±1 écart−type (±14,68)"
+      },
+      {
+       "engrenage": 8,
+       "nom": "Offre",
+       "moteur": "stocks de brut US contre la moyenne saisonnière 5 ans",
+       "variation_moteur_1m": -5.66,
+       "unite": "pts",
+       "date": "2026-10-23",
+       "sigma_moteur": 2.92,
+       "zone": "basse",
+       "lecture": "n/d",
+       "n": 9,
+       "part_sens_attendu": null,
+       "borne_wilson_90": null,
+       "sensibilite": 0.34,
+       "mediane_si_hausse": 0.64,
+       "mediane_si_baisse": null,
+       "raison": "échantillon insuffisant (9 cas, minimum 20)"
+      }
+     ],
+     "comptes": {
+      "Soutien": 0,
+      "Pression": 0,
+      "Indice faible": 0,
+      "Neutre": 1,
+      "n/d": 1
+     },
+     "bilan": "sans direction établie"
+    },
+    "phrase_python": "JPY : bilan sans direction établie. Moteurs : stocks de brut US contre la moyenne saisonnière 5 ans −5,66 pts sur 1 mois (au-dessous de −1 écart-type, ±2,92) ; prime de terme 10 ans US −5,74 pb sur 1 mois (zone calme, ±14,68). Aucun moteur hors de sa zone calme.",
+    "texte": "Le yen s'affiche sans direction établie alors que les stocks de brut US contre la moyenne saisonnière 5 ans régressent à -5.66 pts (zone basse) et la prime de terme 10 ans US varie de -5.74 pb (zone calme). Aucun soutien ferme ne se dégage des données hebdomadaires."
+   },
+   "CHF": {
+    "faits": {
+     "devise": "CHF",
+     "lignes": [
+      {
+       "engrenage": 4,
+       "nom": "Fiscale",
+       "moteur": "prime de terme 10 ans US",
+       "variation_moteur_1m": -5.74,
+       "unite": "pb",
+       "date": "2026-10-23",
+       "sigma_moteur": 14.68,
+       "zone": "calme",
+       "lecture": "Neutre",
+       "n": 32,
+       "part_sens_attendu": 56,
+       "borne_wilson_90": 41.9,
+       "sensibilite": -0.56,
+       "mediane_si_hausse": -0.38,
+       "mediane_si_baisse": 2.22,
+       "raison": "moteur calme : −5,74 sur 1 mois, dans ±1 écart−type (±14,68)"
+      }
+     ],
+     "comptes": {
+      "Soutien": 0,
+      "Pression": 0,
+      "Indice faible": 0,
+      "Neutre": 1,
+      "n/d": 0
+     },
+     "bilan": "sans direction établie"
+    },
+    "phrase_python": "CHF : bilan sans direction établie. Moteurs : prime de terme 10 ans US −5,74 pb sur 1 mois (zone calme, ±14,68). Aucun moteur hors de sa zone calme.",
+    "texte": "Le franc suisse demeure sans direction établie au regard du moteur de la prime de terme 10 ans US (-5.74 pb, zone calme). Les variations observées n'offrent que des indices faibles sans force de signal directionnel."
+   },
+   "CAD": {
+    "faits": {
+     "devise": "CAD",
+     "lignes": [
+      {
+       "engrenage": 8,
+       "nom": "Offre",
+       "moteur": "stocks de brut US contre la moyenne saisonnière 5 ans",
+       "variation_moteur_1m": -5.66,
+       "unite": "pts",
+       "date": "2026-10-23",
+       "sigma_moteur": 2.92,
+       "zone": "basse",
+       "lecture": "n/d",
+       "n": 4,
+       "part_sens_attendu": null,
+       "borne_wilson_90": null,
+       "sensibilite": null,
+       "mediane_si_hausse": null,
+       "mediane_si_baisse": null,
+       "raison": "pas de sens attendu (sensibilité nulle ou non calculable)"
+      }
+     ],
+     "comptes": {
+      "Soutien": 0,
+      "Pression": 0,
+      "Indice faible": 0,
+      "Neutre": 0,
+      "n/d": 1
+     },
+     "bilan": "sans direction établie"
+    },
+    "phrase_python": "CAD : bilan sans direction établie. Moteurs : stocks de brut US contre la moyenne saisonnière 5 ans −5,66 pts sur 1 mois (au-dessous de −1 écart-type, ±2,92). Aucun moteur hors de sa zone calme.",
+    "texte": "Le dollar canadien évolue sans direction établie avec le moteur des stocks de brut US contre la moyenne saisonnière 5 ans situé à -5.66 pts (zone basse). Les pressions environnantes ne permettent pas d'établir de tendance ferme."
+   },
+   "AUD": {
+    "faits": {
+     "devise": "AUD",
+     "lignes": [],
+     "comptes": {
+      "Soutien": 0,
+      "Pression": 0,
+      "Indice faible": 0,
+      "Neutre": 0,
+      "n/d": 0
+     },
+     "bilan": "sans direction établie"
+    },
+    "phrase_python": "AUD : aucune ligne du tableau des conséquences ne la concerne cette période.",
+    "texte": "Le dollar australien reste sans direction établie dans un cadre influencé par la prime de terme 10 ans US (-5.74 pb, zone calme). La décision de taux et la déclaration de politique monétaire de la RBA le 3 novembre monopoliseront l'attention."
+   },
+   "NZD": {
+    "faits": {
+     "devise": "NZD",
+     "lignes": [],
+     "comptes": {
+      "Soutien": 0,
+      "Pression": 0,
+      "Indice faible": 0,
+      "Neutre": 0,
+      "n/d": 0
+     },
+     "bilan": "sans direction établie"
+    },
+    "phrase_python": "NZD : aucune ligne du tableau des conséquences ne la concerne cette période.",
+    "texte": "Le dollar néo-zélandais s'inscrit sans direction établie au regard de la prime de terme 10 ans US (-5.74 pb, zone calme). Les chiffres de la variation de l'emploi du 3 novembre sont attendus comme de simples repères macroéconomiques."
+   },
+   "CNY": {
+    "faits": {
+     "devise": "CNY",
+     "lignes": [],
+     "comptes": {
+      "Soutien": 0,
+      "Pression": 0,
+      "Indice faible": 0,
+      "Neutre": 0,
+      "n/d": 0
+     },
+     "bilan": "sans direction établie"
+    },
+    "phrase_python": "CNY : aucune ligne du tableau des conséquences ne la concerne cette période.",
+    "texte": "Le yuan se montre sans direction établie sous la neutralité observée de la prime de terme 10 ans US (-5.74 pb, zone calme). Les facteurs actuels ne fournissent aucun soutien explicite ni pression caractérisée."
    }
   },
   "statut": "ok",

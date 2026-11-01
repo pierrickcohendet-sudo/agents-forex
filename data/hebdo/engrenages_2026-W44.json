@@ -1,0 +1,607 @@
+{
+ "semaine": "2026-W44",
+ "genere_le": "2026-11-01T07:17:18+00:00",
+ "donnees_du": "2026-11-01T07:16:39+00:00",
+ "engrenages": {
+  "1": {
+   "constat": "Le régime de risque calculé s'établit à Neutre au 31 octobre 2026, avec un écart de score risque contre refuge de -2,3 points. Le score de confluence de l'USD ressort à 71, en repli par rapport au sommet de 95 enregistré le 7 octobre 2026 et au niveau de 84 constaté lors de la décision de la Fed le 28 octobre 2026. La cohérence des engrenages reste particulièrement faible avec seulement 1 engrenage sur 7 aligné, tandis que l'indice de surprise global affiche -0,07.",
+   "mecanisme": "Le thème macroéconomique traduit la synthèse des flux globaux et détermine si les marchés privilégient la recherche de rendement ou la préservation du capital. Lorsqu'un unique engrenage valide le thème dominant, la dynamique reste hésitante et limite la persistance des mouvements de change.",
+   "ce_qui_pourrait_tout_changer": "Un basculement d'au moins 3 engrenages majeurs vers une direction commune réalignerait le thème macroéconomique et renforcerait la conviction. Une cassure du score de confluence USD sous le plus bas de 30 jours situé à 56 invaliderait le biais haussier du dollar.",
+   "precedent": "Précédents insuffisants : le thème est la synthèse des autres engrenages : pas d'indicateur unique à comparer.",
+   "comprendre": "Le thème macro regroupe l'ensemble des forces de marché pour déterminer le récit directeur du moment. Il indique si les capitaux se dirigent vers les actifs risqués ou vers les devises refuges selon la conjoncture.",
+   "desk": "Un desk d'arbitrage surveille la cohérence des engrenages et l'écart du score risque-refuge (-2,3 points) pour ajuster le niveau de conviction et la taille des positions sur le marché des devises.",
+   "implications": [
+    {
+     "devise": "USD",
+     "texte": "Le score de confluence à 71 préserve un biais haussier sur le dollar, bien qu'un seul engrenage sur 7 ne confirme cette orientation."
+    },
+    {
+     "devise": "EUR",
+     "texte": "La monnaie unique reste sous pression modérée face au billet vert dans un contexte d'indice de surprise global négatif à -0,07."
+    }
+   ],
+   "precedent_impose": true,
+   "controles": [],
+   "precedents": [
+    {
+     "indicateur": null,
+     "suffisant": false,
+     "texte": "Précédents insuffisants : le thème est la synthèse des autres engrenages : pas d'indicateur unique à comparer."
+    }
+   ],
+   "redige_par": {
+    "modele": "gemini-3.5-flash",
+    "libelle": "Flash 3.5"
+   },
+   "statut": "ok",
+   "numero": 1,
+   "nom": "Thème macro"
+  },
+  "2": {
+   "constat": "Données insuffisantes aujourd'hui. Les métriques de politique monétaire ne sont pas disponibles en raison d'une indisponibilité technique (calcul en échec : list index out of range). Dans ce contexte, la direction calculée sur le dollar demeure neutre avec une conviction faible.",
+   "mecanisme": "La politique monétaire dicte l'attractivité du rendement d'une devise à travers les taux directeurs et la courbe des taux. Un écart de rendement qui s'élargit attire les flux de capitaux vers la devise offrant la rémunération la plus élevée.",
+   "ce_qui_pourrait_tout_changer": "Un décalage brutal d'au moins 10 points de base sur le taux à 2 ans américain ou une révision majeure des anticipations de baisse de taux par les banques centrales refléterait un pivot de marché.",
+   "precedent": "Précédents insuffisants : historique trop court. Précédents insuffisants : historique trop court. Précédents insuffisants : historique trop court.",
+   "comprendre": "Le rendement à 2 ans est l'indicateur clé car il intègre les anticipations de trajectoire des taux directeurs sur l'horizon des réunions à venir. Un ajustement des anticipations modifie directement le coût du capital et les arbitrages de devises.",
+   "desk": "Le desk surveille l'écart de taux à 2 ans entre deux zones monétaires et la tarification des contrats OIS pour anticiper les ajustements de positionnement avant les réunions de banques centrales.",
+   "implications": [
+    {
+     "devise": "USD",
+     "texte": "Le biais demeure neutre en l'absence de impulsion claire sur le taux 2 ans américain."
+    },
+    {
+     "devise": "EUR",
+     "texte": "L'évolution de la devise reste dépendante de la réévaluation des anticipations de taux de la BCE par rapport à la Fed."
+    },
+    {
+     "devise": "JPY",
+     "texte": "La dynamique dépend de l'écart de taux souverain global face à la politique d'assouplissement ou de normalisation de la Banque du Japon."
+    }
+   ],
+   "precedent_impose": true,
+   "controles": [],
+   "precedents": [
+    {
+     "indicateur": "Écart de taux 2 ans EUR − US (pb)",
+     "devise": "EUR",
+     "minimum_cas": 5,
+     "source": "calcul Python : séries des dossiers (FRED, Bundesbank, MoF Japon, BoC) et taux de change Fed H.10 / indice dollar large",
+     "suffisant": false,
+     "texte": "Précédents insuffisants : historique trop court."
+    },
+    {
+     "indicateur": "Écart de taux 2 ans JPY − US (pb)",
+     "devise": "JPY",
+     "minimum_cas": 5,
+     "source": "calcul Python : séries des dossiers (FRED, Bundesbank, MoF Japon, BoC) et taux de change Fed H.10 / indice dollar large",
+     "suffisant": false,
+     "texte": "Précédents insuffisants : historique trop court."
+    },
+    {
+     "indicateur": "Écart de taux 2 ans CAD − US (pb)",
+     "devise": "CAD",
+     "minimum_cas": 5,
+     "source": "calcul Python : séries des dossiers (FRED, Bundesbank, MoF Japon, BoC) et taux de change Fed H.10 / indice dollar large",
+     "suffisant": false,
+     "texte": "Précédents insuffisants : historique trop court."
+    }
+   ],
+   "redige_par": {
+    "modele": "gemini-3.5-flash",
+    "libelle": "Flash 3.5"
+   },
+   "statut": "ok",
+   "numero": 2,
+   "nom": "Politique monétaire"
+  },
+  "3": {
+   "constat": "L'indice de surprise 30 jours de l'USD s'établit à 0,5 écarts, soutenu par des ventes au détail publiées à 0,8% le 15/10/2026 contre un consensus de 0,3%. À l'inverse, l'indice de surprise de l'EUR recule à -0,31 écarts, pénalisé par des PMI services à 51,7 le 23/10/2026 face à des attentes de 52,6. La GBP affiche un indice de surprise de 0,67 écarts, tandis que le CAD enregistre -0,74 écarts avec des créations d'emplois à -68,3K le 09/10/2026.",
+   "mecanisme": "Les publications macroéconomiques supérieures aux attentes forcent les banques centrales à maintenir ou durcir leur ton, ce qui soutient directement la devise concernée via les taux. Des surprises négatives récurrentes pèsent sur les anticipations de rendement et pénalisent la monnaie sur le marché des changes.",
+   "ce_qui_pourrait_tout_changer": "Un retournement brutal de l'indice de surprise US sous le seuil de -0,3 écarts couplé à une réaccélération simultanée des indices européens invaliderait la surperformance actuelle du dollar. La publication de chiffres d'inflation ou d'emploi s'écartant massivement du consensus déclencherait une révision immédiate des positions des desks.",
+   "precedent": "Précédents insuffisants : historique trop court.",
+   "comprendre": "L'engrenage des données économiques mesure l'écart entre les publications macroéconomiques réelles et les prévisions du consensus établi par les analystes. Une succession de surprises positives renforce la crédibilité de la banque centrale dans sa lutte contre l'inflation ou le soutien de la croissance, agissant comme un carburant pour la devise.",
+   "desk": "Le desk surveille l'indice de surprise glissant sur 30 jours et l'écart-type de la dispersion pour détecter le moment exact où la tendance macroéconomique s'invalide par rapport aux prix intégrés dans les taux.",
+   "implications": [
+    {
+     "devise": "USD",
+     "texte": "L'indice de surprise à 0,5 écarts conforte un biais neutre à haussier pour le dollar sur le plan purement statistique."
+    },
+    {
+     "devise": "EUR",
+     "texte": "Un indice de surprise négatif à -0,31 écarts pèse sur la monnaie unique et reflète la mollesse des récents indicateurs d'activité."
+    },
+    {
+     "devise": "GBP",
+     "texte": "La livre bénéficie d'un bon dynamisme avec un indice de surprise s'établissant à 0,67 écarts."
+    },
+    {
+     "devise": "JPY",
+     "texte": "L'indice de surprise stable à -0,12 écarts maintient le yen dans une dynamique neutre malgré un CPI core annuel affiché à 2,4%."
+    },
+    {
+     "devise": "CHF",
+     "texte": "Un indice de surprise neutre à 0,0 et un taux de chômage stable à 3,1% laissent le franc suisse sans catalyseur macroéconomique majeur."
+    },
+    {
+     "devise": "CAD",
+     "texte": "L'indice de surprise négatif à -0,74 écarts et la contraction de l'emploi à -68,3K fragilisent la devise canadienne."
+    }
+   ],
+   "precedent_impose": true,
+   "controles": [],
+   "precedents": [
+    {
+     "indicateur": "Inflation core US sur un an (%)",
+     "devise": "USD",
+     "minimum_cas": 5,
+     "source": "calcul Python : séries des dossiers (FRED, Bundesbank, MoF Japon, BoC) et taux de change Fed H.10 / indice dollar large",
+     "suffisant": false,
+     "texte": "Précédents insuffisants : historique trop court."
+    }
+   ],
+   "redige_par": {
+    "modele": "gemini-3.5-flash-lite",
+    "libelle": "Flash-Lite 3.5"
+   },
+   "statut": "ok",
+   "numero": 3,
+   "nom": "Données économiques"
+  },
+  "4": {
+   "constat": "Aux États-Unis, le solde public s'établit à -5,8 % du PIB pour 2025, tandis que le rendement à 10 ans atteint 4,98 % avec une prime de terme de 0,9358 %. Au Royaume-Uni, la dette brute atteint 101,2 % du PIB (2024) avec un rendement 10 ans de 5,3087 %, sur fond d'avertissements de Fitch concernant l'exécution budgétaire. Le Japon affiche une dette de 240,0 % du PIB (2023) pour un taux 10 ans de 2,876 %, tandis que l'Allemagne (proxy EUR) conserve une dette contenue à 63,9 % du PIB (2024).",
+   "mecanisme": "Des déficits budgétaires élevés imposent des émissions obligataires massives, ce qui tend à pousser les rendements à long terme et la prime de terme vers le haut. Si ces rendements élevés soutiennent temporairement la devise via le différentiel de taux, un dérapage fiscal incontrôlé finit par dégrader la signature souveraine et pénaliser la monnaie.",
+   "ce_qui_pourrait_tout_changer": "Une résurgence brutale de la prime de terme américaine au-delà des sommets récents, impulsée par des programmes d'adjudication du Trésor plus lourds que prévu, rallumerait les tensions sur l'ensemble des taux souverains. À l'inverse, l'annonce de plans d'austérité budgétaire crédibles réduirait la prime de risque et détendrait les rendements longs.",
+   "precedent": "Précédents insuffisants : historique trop court.",
+   "comprendre": "Lorsqu'un État dépense plus qu'il ne perçoit, il émet des obligations pour financer son déficit. Les investisseurs exigent une rémunération supplémentaire — la prime de terme — pour éponger cette offre abondante de titres et couvrir le risque d'inflation ou de soutenabilité budgétaire à long terme.",
+   "desk": "Le desk surveille la prime de terme à 10 ans américaine (0,9358 %) et le rendement du Gilt britannique (5,3087 %) afin de détecter si l'offre de dette souveraine commence à saturer la demande des investisseurs.",
+   "implications": [
+    {
+     "devise": "USD",
+     "texte": "Un déficit de -5,8 % du PIB maintient le rendement 10 ans proche de 4,98 %, offrant un soutien de rendement au dollar malgré le léger repli de la prime de terme à 0,9358 %."
+    },
+    {
+     "devise": "GBP",
+     "texte": "Avec une dette de 101,2 % du PIB et des taux 10 ans à 5,3087 %, la livre reste exposée aux doutes sur l'exécution du budget soulignés par Fitch."
+    },
+    {
+     "devise": "EUR",
+     "texte": "La dette contenue de l'Allemagne à 63,9 % du PIB ancre le rendement 10 ans à 3,4 %, apportant un gage de sobriété budgétaire à la zone euro."
+    },
+    {
+     "devise": "JPY",
+     "texte": "Le niveau de dette à 240,0 % du PIB restreint la marge de manœuvre budgétaire alors que le taux 10 ans se maintient à 2,876 %."
+    }
+   ],
+   "precedent_impose": true,
+   "controles": [],
+   "precedents": [
+    {
+     "indicateur": "Rendement 10 ans US (%)",
+     "devise": "USD",
+     "minimum_cas": 5,
+     "source": "calcul Python : séries des dossiers (FRED, Bundesbank, MoF Japon, BoC) et taux de change Fed H.10 / indice dollar large",
+     "suffisant": false,
+     "texte": "Précédents insuffisants : historique trop court."
+    }
+   ],
+   "redige_par": {
+    "modele": "gemini-3.5-flash",
+    "libelle": "Flash 3.5"
+   },
+   "statut": "ok",
+   "numero": 4,
+   "nom": "Politique fiscale"
+  },
+  "5": {
+   "constat": "Le S&P 500 s'établit à 7 743,98 points (-0,17 % sur une semaine, +1,21 % sur 4 semaines), au 99e percentile sur 5 ans. Le rendement du 10 ans US atteint 4,98 % (+2,0 % sur 1 semaine, -26,0 % sur 4 semaines), au 98e percentile sur 5 ans. L'indice or (proxy) ressort à 2 460,63 (+0,15 % sur une semaine, -3,51 % sur 4 semaines), tandis que les séries du VIX, du pétrole et de l'indice dollar large sont indisponibles.",
+   "mecanisme": "Les variations des taux obligataires américains et des actions orientent les arbitrages de capitaux transfrontaliers. Le rendement du 10 ans US affiche une corrélation positive de 0,52 avec l'USD sur 30 séances, tout en exerçant une pression baissière marquée sur le CHF (-0,66) et le JPY (-0,55).",
+   "ce_qui_pourrait_tout_changer": "Un décrochage simultané du S&P 500 et une rupture de sa corrélation positive avec l'indice or (proxy) (actuellement à 0,54) signaleraient une fuite généralisée vers le cash. De même, une désynchronisation entre le taux 10 ans US et le dollar invaliderait le moteur d'arbitrage actuel.",
+   "precedent": "Précédents insuffisants : historique trop court. Précédents insuffisants : historique trop court.",
+   "comprendre": "Les interconnexions inter-marchés traduisent les arbitrages globaux entre classes d'actifs (actions, obligations, devises). Quand les taux obligataires d'une zone clé comme les États-Unis progressent, ils modifient le coût du capital et attirent les flux vers les actifs libellés dans cette devise.",
+   "desk": "Le desk surveille la corrélation glissante 30 séances entre le rendement 10 ans US et l'USD (0,52) afin de vérifier si le canal des taux longs reste le moteur principal des flux de devises.",
+   "implications": [
+    {
+     "devise": "USD",
+     "texte": "Bénéficie de sa corrélation positive avec le rendement 10 ans US (0,52) et conserve une forte opposition au GBP (-0,90)."
+    },
+    {
+     "devise": "JPY",
+     "texte": "Subit la tension des taux longs américains du fait d'une corrélation négative de -0,55 avec le 10 ans US."
+    },
+    {
+     "devise": "CHF",
+     "texte": "Patit de la remontée hebdomadaire des taux US, affichant une corrélation de -0,66 avec le rendement 10 ans."
+    },
+    {
+     "devise": "AUD",
+     "texte": "Conserve un biais lié au risque equity avec une corrélation positive de 0,33 par rapport au S&P 500."
+    }
+   ],
+   "precedent_impose": true,
+   "controles": [],
+   "precedents": [
+    {
+     "indicateur": "VIX",
+     "devise": "AUD",
+     "minimum_cas": 5,
+     "source": "calcul Python : séries des dossiers (FRED, Bundesbank, MoF Japon, BoC) et taux de change Fed H.10 / indice dollar large",
+     "suffisant": false,
+     "texte": "Précédents insuffisants : historique trop court."
+    },
+    {
+     "indicateur": "VIX",
+     "devise": "JPY",
+     "minimum_cas": 5,
+     "source": "calcul Python : séries des dossiers (FRED, Bundesbank, MoF Japon, BoC) et taux de change Fed H.10 / indice dollar large",
+     "suffisant": false,
+     "texte": "Précédents insuffisants : historique trop court."
+    }
+   ],
+   "redige_par": {
+    "modele": "gemini-3.5-flash",
+    "libelle": "Flash 3.5"
+   },
+   "statut": "ok",
+   "numero": 5,
+   "nom": "Interconnexions de marchés"
+  },
+  "6": {
+   "constat": "Les tensions géopolitiques s'intensifient avec la hausse des attaques iraniennes dans le détroit d'Ormuz et les frappes russes frappant le réseau électrique ukrainien signalées le 30/10/2026 (cnbc_world). L'indice or (proxy) s'établit à 2 461 au 29/10/2026, progressant après son point bas à 2 444 le 23/10/2026 tout en restant sous son sommet sur 30 jours de 2 555 atteint le 09/10/2026 (FRED). Les échéances électorales mondiales renforcent parallèlement la prime de risque politique et budgétaire.",
+   "mecanisme": "Les chocs géopolitiques influencent le marché des changes par deux canaux principaux : les perturbations d'approvisionnement énergétique qui dégradent les termes de l'échange des pays importateurs, et les flux de fuite vers la qualité. La hausse du risque incite les opérateurs à rapatrier leurs capitaux vers des monnaies liquides et refuges.",
+   "ce_qui_pourrait_tout_changer": "Une désescalade confirmée dans le détroit d'Ormuz ou une trêve en Ukraine détendrait immédiatement la prime sur les matières premières. Un tel signal entraînerait un dégagement des positions de couverture et un retour violent vers les devises liées au risque global.",
+   "precedent": "Précédents insuffisants : pas de série chiffrée de la géopolitique.",
+   "comprendre": "En phase de crise internationale, les opérateurs arbitrent entre exposition au risque et préservation du capital. Les devises des économies fortement dépendantes des importations d'énergie subissent une détérioration rapide de leur balance commerciale, tandis que les devises dotées d'une grande liquidité internationale reçoivent des flux d'arbitrage défensifs.",
+   "desk": "Le desk surveille la prime de risque sur le fret maritime et les cours du pétrole pour évaluer si le choc géopolitique se transmet aux anticipations d'inflation et aux politiques monétaires.",
+   "implications": [
+    {
+     "devise": "USD",
+     "texte": "Recherché comme monnaie refuge face aux conflits armés et aux incertitudes budgétaires internationales."
+    },
+    {
+     "devise": "EUR",
+     "texte": "Exposé négativement à l'inflation importée par le canal énergétique et aux tensions politiques régionales."
+    },
+    {
+     "devise": "JPY",
+     "texte": "Tirailleur entre son statut de valeur refuge et sa sensibilité aux chocs d'offre sur le pétrole brut."
+    },
+    {
+     "devise": "CAD",
+     "texte": "Soutenu par le canal de l'énergie en cas d'escalade des risques sur les flux pétroliers au Moyen-Orient."
+    },
+    {
+     "devise": "CHF",
+     "texte": "Profite des flux de précaution orientés vers les devises refuges en période de stress géopolitique."
+    }
+   ],
+   "precedent_impose": true,
+   "controles": [],
+   "precedents": [
+    {
+     "indicateur": null,
+     "suffisant": false,
+     "texte": "Précédents insuffisants : pas de série chiffrée de la géopolitique."
+    }
+   ],
+   "redige_par": {
+    "modele": "gemini-3.5-flash",
+    "libelle": "Flash 3.5"
+   },
+   "statut": "ok",
+   "numero": 6,
+   "nom": "Géopolitique"
+  },
+  "7": {
+   "constat": "Le positionnement COT met en évidence des extrêmes spéculatifs vendeurs sur l'EUR (-143 894 contrats, percentile 52 semaines à 2) et sur l'AUD (-128 315 contrats, percentile 2), à l'opposé du JPY qui affiche un positionnement long extrême à 101 591 contrats (percentile 98). Du côté du price action, le JPY, l'AUD et le CNY sont orientés à la hausse, le CNY affichant un RSI de 76,8 en zone de surachat pour une volatilité réalisée de 0,8 %. L'EUR accuse de son côté des retards marqués sous ses moyennes mobiles (-2,31 % par rapport à la MM100 et -3,42 % sous la MM200) avec une volatilité de 4,6 %.",
+   "mecanisme": "Le price action et les flux COT mesurent l'accumulation des positions spéculatives et la force du momentum sur les devises. Lorsqu'un positionnement franchit des seuils extrêmes (percentiles proches de 0 ou 100), la capacité marginale des intervenants à poursuivre la tendance s'épuise. Cela rend la devise particulièrement vulnérable à des mouvements de couverture rapides ou des rajustements violents en cas de catalyseur inverse.",
+   "ce_qui_pourrait_tout_changer": "Un débouclage massif des positions spéculatives courtes sur l'EUR inverserait brusquement la dynamique de flux actuelle. La cassure des résistances techniques couplée à un rachat de shorts obligerait les vendeurs à racheter leurs positions, provoquant un squeeze haussier rapide.",
+   "precedent": "Précédents insuffisants : historique trop court.",
+   "comprendre": "Le rapport COT (Commitment of Traders) permet de suivre l'orientation des capitaux spéculatifs non commerciaux sur le marché des futures. Un positionnement extrême ne déclenche pas immédiatement un retournement, mais indique un encombrement du marché où le risque d'un débouclage brutal devient asymétrique.",
+   "desk": "Un desk surveille la divergence entre l'encombrement des positions COT et le franchissement de niveaux techniques clés (MM100, MM200) pour détecter les risques de squeeze.",
+   "implications": [
+    {
+     "devise": "EUR",
+     "texte": "Au vu d'un positionnement net vendeur au percentile 2 (-143 894 contrats) et d'un écart à la MM200 de -3,42 %, l'Euro est fortement vulnérable à un rachat compulsif de positions courtes."
+    },
+    {
+     "devise": "JPY",
+     "texte": "La dynamique haussière s'accompagne d'un positionnement long extrême (percentile 98 avec 101 591 contrats), ce qui limite le potentiel d'appréciation sans une phase préalable de consolidation."
+    },
+    {
+     "devise": "CNY",
+     "texte": "Son RSI quotidien atteint 76,8 en zone de surachat, reflétant un momentum haussier marqué dans un environnement de volatilité très faible (0,8 %)."
+    },
+    {
+     "devise": "AUD",
+     "texte": "Malgré un positionnement spéculatif très vendeur (percentile 2), la tendance hebdomadaire reste haussière, créant une divergence entre flux COT et price action."
+    }
+   ],
+   "precedent_impose": true,
+   "controles": [],
+   "precedents": [
+    {
+     "indicateur": "Variation sur 4 semaines de l'indice dollar large (%)",
+     "devise": "USD",
+     "minimum_cas": 5,
+     "source": "calcul Python : séries des dossiers (FRED, Bundesbank, MoF Japon, BoC) et taux de change Fed H.10 / indice dollar large",
+     "suffisant": false,
+     "texte": "Précédents insuffisants : historique trop court."
+    }
+   ],
+   "redige_par": {
+    "modele": "gemini-3.5-flash",
+    "libelle": "Flash 3.5"
+   },
+   "statut": "ok",
+   "numero": 7,
+   "nom": "Price action et flux"
+  },
+  "8": {
+   "constat": "La production de brut US atteint un record à 13 992.0 milliers b/j au 23 octobre 2026 (+5,45 % sur une semaine), tandis que les stocks de brut US s'établissent à 410,6 M barils (-16,2 M barils sous leur moyenne sur 5 ans). L'indice or (proxy) se situe à 2 460,63 au 29 octobre, proche de ses plus bas relatifs (percentile 3 sur 5 ans). Côté balances commerciales, les États-Unis enregistrent un déficit de -105,6B USD et la zone euro de -6,8B EUR, alors que la Chine affiche un excédent de 906B.",
+   "mecanisme": "Les balances commerciales et les flux physiques d'énergie déterminent la demande structurelle de monnaie commerciale. Un excédent commercial génère des conversions obligatoires de devises étrangères vers la monnaie locale par les exportateurs. Inversement, un déficit commercial persistant nécessite des entrées de capitaux financiers pour maintenir l'équilibre de la balance des paiements.",
+   "ce_qui_pourrait_tout_changer": "Un effondrement surprise de la production américaine combiné à une recompression des déficits commerciaux européens et japonais réorienterait les flux vers les devises d'importateurs. Un tel ajustement réduirait l'avantage du dollar sur les flux réels.",
+   "precedent": "Précédents insuffisants : historique trop court.",
+   "comprendre": "La balance commerciale reflète les échanges réels de biens entre une économie et le reste du monde. Un excédent signifie que le pays vend plus qu'il n'achète, imposant aux acheteurs étrangers d'acquérir sa devise pour régler les transactions. Sur le marché FX, ces flux commerciaux constituent la base fondamentale sur laquelle se superposent les flux financiers.",
+   "desk": "Le desk surveille l'écart entre la balance commerciale publiée et le consensus ForexFactory pour mesurer la taille des ajustements de trésorerie corporate à venir.",
+   "implications": [
+    {
+     "devise": "CAD",
+     "texte": "L'excédent commercial supérieur aux attentes à 4,2B (contre 1,5B anticipés) offre un soutien de flux solide au dollar canadien."
+    },
+    {
+     "devise": "EUR",
+     "texte": "La dégradation de la balance commerciale à -6,8B EUR (vs 4,5B attendus) crée un vent contraire structurel sur la monnaie unique."
+    },
+    {
+     "devise": "JPY",
+     "texte": "Le déficit commercial de -0,70T JPY, plus lourd que le consensus (-0,26T), entretient une pression de vente nette sur le yen."
+    },
+    {
+     "devise": "CNY",
+     "texte": "L'excédent massif de 906B (contre 790B attendus) confirme la solidité des flux entrants d'exportation pour le yuan."
+    }
+   ],
+   "precedent_impose": true,
+   "controles": [],
+   "precedents": [
+    {
+     "indicateur": "Pétrole WTI ($/baril)",
+     "devise": "CAD",
+     "minimum_cas": 5,
+     "source": "calcul Python : séries des dossiers (FRED, Bundesbank, MoF Japon, BoC) et taux de change Fed H.10 / indice dollar large",
+     "suffisant": false,
+     "texte": "Précédents insuffisants : historique trop court."
+    }
+   ],
+   "redige_par": {
+    "modele": "gemini-3.5-flash",
+    "libelle": "Flash 3.5"
+   },
+   "statut": "ok",
+   "numero": 8,
+   "nom": "Offre et demande"
+  }
+ },
+ "synthese": {
+  "theme_semaine": "Le régime de risque calculé s'établit à Neutre au 31 octobre 2026 avec un écart de score de -2,3 points, tandis que le score de confluence de l'USD se replie à 71. La cohérence globale reste très faible avec un seul engrenage sur 7 aligné sur le thème, reflétant un marché sans direction unifiée. La résilience des ventes au détail américaines à 0,8 % et la fermeté des taux longs avec un 10 ans US à 4,98 % maintiennent un soutien sous le dollar face à une zone euro pénalisée par des surprises économiques négatives.",
+  "chaines": [
+   {
+    "titre": "Tensions budgétaires et géopolitiques soutenant le rendement et le refuge dollar",
+    "maillons": [
+     {
+      "engrenage": 4,
+      "texte": "Le déficit public américain à -5,8 % du PIB maintient le rendement du 10 ans US à 4,98 % avec une prime de terme de 0,9358 %."
+     },
+     {
+      "engrenage": 6,
+      "texte": "Les tensions géopolitiques dans le détroit d'Ormuz et en Ukraine entretiennent le soutien à l'indice or (proxy) à 2 460,63."
+     },
+     {
+      "engrenage": 1,
+      "texte": "Ce contexte préserve le score de confluence du dollar à 71 et soutient un biais d'arbitrage face aux devises exposées."
+     }
+    ]
+   },
+   {
+    "titre": "Divergence d'activité et dégradation des flux commerciaux en Zone Euro",
+    "maillons": [
+     {
+      "engrenage": 3,
+      "texte": "L'indice de surprise de l'EUR chute à -0,31 écarts après des PMI services décevants à 51,7 contre un indice US à 0,5 écarts porté par des ventes au détail à 0,8 %."
+     },
+     {
+      "engrenage": 8,
+      "texte": "La balance commerciale de la zone euro se dégrade à -6,8B EUR alors que la production américaine de brut atteint 13 992,0 milliers b/j."
+     },
+     {
+      "engrenage": 7,
+      "texte": "Les flux spéculatifs accumulent des ventes extrêmes sur l'EUR (-143 894 contrats, percentile 2), maintenant la devise -3,42 % sous sa MM200."
+     }
+    ]
+   }
+  ],
+  "conflits": [
+   {
+    "engrenages": [
+     6,
+     5
+    ],
+    "texte": "L'engrenage géopolitique (6) pousse à la prudence face aux risques sur l'énergie, alors que les interconnexions de marchés (5) montrent un S&P 500 proche de ses plus hauts à 7 743,98 points, maintenant une posture de risque neutre."
+   },
+   {
+    "engrenages": [
+     3,
+     7
+    ],
+    "texte": "L'engrenage des données (3) affiche un indice de surprise négatif sur le CAD (-0,74 écarts) lié à la contraction de l'emploi (-68,3K), tandis que le price action (7) montre une divergence sur l'AUD où la tendance hebdo reste haussière malgré un positionnement vendeur extrême (-128 315 contrats)."
+   }
+  ],
+  "ce_qui_pourrait_tout_changer": "Un basculement d'au moins 3 engrenages majeurs vers une direction commune réalignerait le thème macroéconomique et renforcerait la conviction. Une rupture du score de confluence USD sous son plus bas de 30 jours à 56, ou un débouclage massif du positionnement spéculatif vendeur sur l'EUR, invaliderait la dynamique actuelle.",
+  "controles": [],
+  "redige_par": {
+   "modele": "gemini-3.5-flash",
+   "libelle": "Flash 3.5"
+  },
+  "statut": "ok"
+ },
+ "meta": {
+  "appels_llm": [
+   {
+    "heure": "07:17",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 0,
+    "tokens_message": 1035,
+    "tokens_total": 1035,
+    "ok": true,
+    "etiquette": "consequences:hebdo"
+   },
+   {
+    "heure": "07:17",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 0,
+    "tokens_message": 1034,
+    "tokens_total": 1034,
+    "ok": true,
+    "etiquette": "consequences:mensuel"
+   },
+   {
+    "heure": "07:17",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 887,
+    "tokens_message": 1975,
+    "tokens_total": 2862,
+    "ok": true,
+    "etiquette": "hebdo:1"
+   },
+   {
+    "heure": "07:17",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 887,
+    "tokens_message": 527,
+    "tokens_total": 1414,
+    "ok": true,
+    "etiquette": "hebdo:2"
+   },
+   {
+    "heure": "07:18",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 887,
+    "tokens_message": 4474,
+    "tokens_total": 5361,
+    "ok": false,
+    "etiquette": "hebdo:3"
+   },
+   {
+    "heure": "07:18",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 887,
+    "tokens_message": 4474,
+    "tokens_total": 5361,
+    "ok": false,
+    "etiquette": "hebdo:3"
+   },
+   {
+    "heure": "07:18",
+    "modele": "gemini-3.5-flash-lite",
+    "tokens_systeme": 887,
+    "tokens_message": 4474,
+    "tokens_total": 5361,
+    "ok": true,
+    "etiquette": "hebdo:3"
+   },
+   {
+    "heure": "07:19",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 887,
+    "tokens_message": 3897,
+    "tokens_total": 4784,
+    "ok": true,
+    "etiquette": "hebdo:4"
+   },
+   {
+    "heure": "07:19",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 887,
+    "tokens_message": 2729,
+    "tokens_total": 3616,
+    "ok": true,
+    "etiquette": "hebdo:5"
+   },
+   {
+    "heure": "07:19",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 887,
+    "tokens_message": 1523,
+    "tokens_total": 2410,
+    "ok": true,
+    "etiquette": "hebdo:6"
+   },
+   {
+    "heure": "07:19",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 887,
+    "tokens_message": 7434,
+    "tokens_total": 8321,
+    "ok": true,
+    "etiquette": "hebdo:7"
+   },
+   {
+    "heure": "07:20",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 887,
+    "tokens_message": 2360,
+    "tokens_total": 3247,
+    "ok": true,
+    "etiquette": "hebdo:8"
+   },
+   {
+    "heure": "07:20",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 887,
+    "tokens_message": 4752,
+    "tokens_total": 5639,
+    "ok": true,
+    "etiquette": "hebdo:synthese"
+   }
+  ],
+  "quota_llm": {
+   "date": "2026-11-01",
+   "ordre": [
+    "gemini-3.5-flash",
+    "gemini-3.8-flash",
+    "gemini-3.5-flash-lite"
+   ],
+   "appels_aujourdhui": 15,
+   "plafond_jour": 60,
+   "engrenages_faits": false,
+   "reserve_engrenages": 8,
+   "refus_reserve_ce_run": 0,
+   "modeles": {
+    "gemini-3.5-flash": {
+     "appels_aujourdhui": 12,
+     "plafond_jour": 20,
+     "epuise_jusqu_a": "2026-10-27T06:59:59+00:00",
+     "appels_ce_run": 11,
+     "reussites_ce_run": 10,
+     "sauts_ce_run": 0
+    },
+    "gemini-3.8-flash": {
+     "appels_aujourdhui": 2,
+     "plafond_jour": 20,
+     "epuise_jusqu_a": "2026-10-30T06:59:59+00:00",
+     "appels_ce_run": 1,
+     "reussites_ce_run": 0,
+     "sauts_ce_run": 0
+    },
+    "gemini-3.5-flash-lite": {
+     "appels_aujourdhui": 1,
+     "plafond_jour": 20,
+     "epuise_jusqu_a": null,
+     "appels_ce_run": 1,
+     "reussites_ce_run": 1,
+     "sauts_ce_run": 0
+    }
+   }
+  }
+ }
+}
