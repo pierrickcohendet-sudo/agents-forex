@@ -1,14 +1,14 @@
 {
  "version_schema": 1,
- "genere_le": "2026-10-31T01:01:56+00:00",
+ "genere_le": "2026-11-02T09:50:43+00:00",
  "sources": {
-  "rapport": "2026-10-31T01:01:02+00:00",
-  "tableau_macro": "2026-10-31T00:44:46+00:00"
+  "rapport": "2026-11-02T09:49:55+00:00",
+  "tableau_macro": "2026-11-02T09:16:28+00:00"
  },
  "regime": {
-  "biais": "neutre",
-  "libelle": "Neutre",
-  "ecart_points": -2.3,
+  "biais": "risk_off",
+  "libelle": "Risk Off",
+  "ecart_points": -14.5,
   "seuil_points": 5.0,
   "devises_risque": [
    "AUD",
@@ -21,14 +21,14 @@
    "USD"
   ],
   "explication": "Écart entre le score de confluence moyen des devises « risque » et celui des devises « refuge » (calcul Python) : au-delà du seuil, Risk On ; en deçà de son opposé, Risk Off ; sinon Neutre.",
-  "driver": "Sous un biais macro global neutre, l'USD (71) repasse en tête devant l'AUD (68), traduisant une demande persistante de valeurs refuges tandis que l'EUR (16) s'enfonce à la dernière place.",
+  "driver": "Biais risk-off confirmé propulsant l'USD et le GBP en tête tandis que le JPY et le CHF déçoivent, trahissant un marché en quête de liquidité souveraine plutôt que de refuges traditionnels.",
   "relecture": "non_evalue",
-  "date_rapport": "2026-10-31",
-  "maj": "2026-10-31T01:01:02+00:00",
-  "type_rapport": "quotidien",
+  "date_rapport": "2026-11-02",
+  "maj": "2026-11-02T09:49:55+00:00",
+  "type_rapport": "hebdomadaire",
   "nb_devises": 9,
-  "nb_devises_disponibles": 9,
-  "notion_url": "https://app.notion.com/p/FX-2026-10-31-quotidien-40a65bc6466181b28c12e63b5ceff5f9",
+  "nb_devises_disponibles": 8,
+  "notion_url": "https://app.notion.com/p/FX-2026-11-02-hebdomadaire-40c65bc646618147a2bbed2abc83d711",
   "notion_page_du_jour": true
  },
  "colonnes_cles": [
@@ -79,12 +79,12 @@
    "drapeau": "🇺🇸",
    "cellules": {
     "taux_directeur": {
-     "texte": "4,00 % [borne haute de la fourchette]",
-     "valeur_num": 4.0,
-     "date": "2026-10-28",
-     "source": "ForexFactory",
-     "consensus": "4,00 %",
-     "surprise": "=",
+     "texte": "3,88 % [borne haute de la fourchette]",
+     "valeur_num": 3.88,
+     "date": "2026-10-29",
+     "source": "FRED (DFF, taux effectif)",
+     "consensus": null,
+     "surprise": null,
      "precedent": "4,00 % [borne haute de la fourchette]",
      "manuel": false,
      "etat": "valeur",
@@ -139,26 +139,26 @@
      "raison": null
     },
     "indice_surprise": {
-     "texte": "+0,1",
-     "valeur_num": 0.1,
-     "tendance": "baisse",
-     "n": 9,
+     "texte": "+0,6",
+     "valeur_num": 0.63,
+     "tendance": "hausse",
+     "n": 6,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-10-31",
+     "date": "2026-11-02",
      "raison": null
     },
     "score": {
-     "texte": "71",
-     "valeur_num": 71,
+     "texte": "76",
+     "valeur_num": 76,
      "etat": "valeur",
      "source": "score de confluence (calcul Python)",
-     "date": "2026-10-31",
+     "date": "2026-11-02",
      "raison": null
     },
     "biais": {
      "texte": "Haussier",
-     "valeur_num": 71,
+     "valeur_num": 76,
      "code": "haussier",
      "etat": "valeur",
      "profil": "off",
@@ -208,13 +208,13 @@
      "raison": null
     },
     "pmi_manufacturier": {
-     "texte": "52,4",
-     "valeur_num": 52.4,
-     "date": "2026-10-23",
+     "texte": "52,7",
+     "valeur_num": 52.7,
+     "date": "2026-11-02",
      "source": "ForexFactory",
-     "consensus": "52,7",
-     "surprise": "▼",
-     "precedent": "52,9 (révisé)",
+     "consensus": "52,4",
+     "surprise": "▲",
+     "precedent": "52,4",
      "manuel": false,
      "etat": "valeur",
      "raison": null
@@ -232,27 +232,27 @@
      "raison": null
     },
     "indice_surprise": {
-     "texte": "-0,1",
-     "valeur_num": -0.12,
-     "tendance": "stable",
-     "n": 12,
+     "texte": "-0,3",
+     "valeur_num": -0.27,
+     "tendance": "baisse",
+     "n": 11,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-10-31",
+     "date": "2026-11-02",
      "raison": null
     },
     "score": {
-     "texte": "16",
-     "valeur_num": 16,
+     "texte": "52",
+     "valeur_num": 52,
      "etat": "valeur",
      "source": "score de confluence (calcul Python)",
-     "date": "2026-10-31",
+     "date": "2026-11-02",
      "raison": null
     },
     "biais": {
-     "texte": "Baissier",
-     "valeur_num": 16,
-     "code": "baissier",
+     "texte": "Neutre",
+     "valeur_num": 52,
+     "code": "neutre",
      "etat": "valeur",
      "profil": "neutre",
      "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
@@ -331,21 +331,21 @@
      "n": 9,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-10-31",
+     "date": "2026-11-02",
      "raison": null
     },
     "score": {
-     "texte": "58",
-     "valeur_num": 58,
+     "texte": "73",
+     "valeur_num": 73,
      "etat": "valeur",
      "source": "score de confluence (calcul Python)",
-     "date": "2026-10-31",
+     "date": "2026-11-02",
      "raison": null
     },
     "biais": {
-     "texte": "Neutre",
-     "valeur_num": 58,
-     "code": "neutre",
+     "texte": "Haussier",
+     "valeur_num": 73,
+     "code": "haussier",
      "etat": "valeur",
      "profil": "neutre",
      "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
@@ -396,49 +396,49 @@
     "pmi_manufacturier": {
      "texte": "53,3",
      "valeur_num": 53.3,
-     "date": "2026-10-23",
+     "date": "2026-11-02",
      "source": "ForexFactory",
-     "consensus": "54,5",
-     "surprise": "▼",
-     "precedent": "54,1",
+     "consensus": "53,3",
+     "surprise": "=",
+     "precedent": "53,3",
      "manuel": false,
      "etat": "valeur",
      "raison": null
     },
     "rendement_2a": {
-     "texte": "1,90 %",
-     "valeur_num": 1.9,
-     "date": "2026-10-29",
+     "texte": "1,88 %",
+     "valeur_num": 1.88,
+     "date": "2026-10-30",
      "source": "Ministère des Finances du Japon (JGB 2 ans)",
      "consensus": null,
      "surprise": null,
-     "precedent": "1,91 %",
+     "precedent": "1,87 %",
      "manuel": false,
      "etat": "valeur",
      "raison": null
     },
     "indice_surprise": {
      "texte": "-0,1",
-     "valeur_num": -0.12,
+     "valeur_num": -0.1,
      "tendance": "stable",
-     "n": 6,
+     "n": 7,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-10-31",
+     "date": "2026-11-02",
      "raison": null
     },
     "score": {
-     "texte": "46",
-     "valeur_num": 46,
+     "texte": "29",
+     "valeur_num": 29,
      "etat": "valeur",
      "source": "score de confluence (calcul Python)",
-     "date": "2026-10-31",
+     "date": "2026-11-02",
      "raison": null
     },
     "biais": {
-     "texte": "Neutre",
-     "valeur_num": 46,
-     "code": "neutre",
+     "texte": "Baissier",
+     "valeur_num": 29,
+     "code": "baissier",
      "etat": "valeur",
      "profil": "off",
      "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
@@ -487,13 +487,13 @@
      "raison": null
     },
     "pmi_manufacturier": {
-     "texte": "55,3",
-     "valeur_num": 55.3,
-     "date": "2026-10-01",
+     "texte": "56,7",
+     "valeur_num": 56.7,
+     "date": "2026-11-02",
      "source": "ForexFactory",
-     "consensus": "56,3",
-     "surprise": "▼",
-     "precedent": "57,1",
+     "consensus": "55,3",
+     "surprise": "▲",
+     "precedent": "55,3",
      "manuel": false,
      "etat": "valeur",
      "raison": null
@@ -511,27 +511,27 @@
      "raison": "SNB : rendements 2 ans indisponibles par le portail de données (série arrêtée 07/2025, portail en erreur le 24/10/2026)"
     },
     "indice_surprise": {
-     "texte": "0,0",
-     "valeur_num": 0.0,
+     "texte": "-0,5",
+     "valeur_num": -0.48,
      "tendance": "baisse",
-     "n": 1,
+     "n": 3,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-10-31",
+     "date": "2026-11-02",
      "raison": null
     },
     "score": {
-     "texte": "35",
-     "valeur_num": 35,
+     "texte": "45",
+     "valeur_num": 45,
      "etat": "valeur",
      "source": "score de confluence (calcul Python)",
-     "date": "2026-10-31",
+     "date": "2026-11-02",
      "raison": null
     },
     "biais": {
-     "texte": "Baissier",
-     "valeur_num": 35,
-     "code": "baissier",
+     "texte": "Neutre",
+     "valeur_num": 45,
+     "code": "neutre",
      "etat": "valeur",
      "profil": "off",
      "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
@@ -610,25 +610,20 @@
      "n": 9,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-10-31",
+     "date": "2026-11-02",
      "raison": null
     },
     "score": {
-     "texte": "49",
-     "valeur_num": 49,
-     "etat": "valeur",
-     "source": "score de confluence (calcul Python)",
-     "date": "2026-10-31",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "Analyse CAD impossible : tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite passé en dernier | gemini-3"
     },
     "biais": {
-     "texte": "Neutre",
-     "valeur_num": 49,
-     "code": "neutre",
-     "etat": "valeur",
-     "profil": "on",
-     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "score du jour indisponible"
     }
    }
   },
@@ -703,21 +698,21 @@
      "n": 4,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-10-31",
+     "date": "2026-11-02",
      "raison": null
     },
     "score": {
-     "texte": "68",
-     "valeur_num": 68,
+     "texte": "53",
+     "valeur_num": 53,
      "etat": "valeur",
      "source": "score de confluence (calcul Python)",
-     "date": "2026-10-31",
+     "date": "2026-11-02",
      "raison": null
     },
     "biais": {
-     "texte": "Haussier",
-     "valeur_num": 68,
-     "code": "haussier",
+     "texte": "Neutre",
+     "valeur_num": 53,
+     "code": "neutre",
      "etat": "valeur",
      "profil": "on",
      "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
@@ -796,20 +791,20 @@
      "n": 3,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-10-31",
+     "date": "2026-11-02",
      "raison": null
     },
     "score": {
-     "texte": "28",
-     "valeur_num": 28,
+     "texte": "18",
+     "valeur_num": 18,
      "etat": "valeur",
      "source": "score de confluence (calcul Python)",
-     "date": "2026-10-31",
+     "date": "2026-11-02",
      "raison": null
     },
     "biais": {
      "texte": "Baissier",
-     "valeur_num": 28,
+     "valeur_num": 18,
      "code": "baissier",
      "etat": "valeur",
      "profil": "on",
@@ -889,20 +884,20 @@
      "n": 6,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-10-31",
+     "date": "2026-11-02",
      "raison": null
     },
     "score": {
-     "texte": "46",
-     "valeur_num": 46,
+     "texte": "50",
+     "valeur_num": 50,
      "etat": "valeur",
      "source": "score de confluence (calcul Python)",
-     "date": "2026-10-31",
+     "date": "2026-11-02",
      "raison": null
     },
     "biais": {
      "texte": "Neutre",
-     "valeur_num": 46,
+     "valeur_num": 50,
      "code": "neutre",
      "etat": "valeur",
      "profil": "neutre",
@@ -971,17 +966,17 @@
     "devise": "USD",
     "cellules": {
      "taux_directeur": {
-      "texte": "4,00 % [borne haute de la fourchette]",
-      "valeur_num": 4.0,
-      "date": "2026-10-28",
-      "source": "ForexFactory",
-      "consensus": "4,00 %",
-      "surprise": "=",
+      "texte": "3,88 % [borne haute de la fourchette]",
+      "valeur_num": 3.88,
+      "date": "2026-10-29",
+      "source": "FRED (DFF, taux effectif)",
+      "consensus": null,
+      "surprise": null,
       "precedent": "4,00 % [borne haute de la fourchette]",
       "manuel": false,
       "etat": "valeur",
-      "raison": null,
-      "z": 0.0
+      "raison": "pas de consensus publié pour cette publication",
+      "z": null
      },
      "cpi": {
       "texte": "3,7 %",
@@ -1102,11 +1097,11 @@
      }
     },
     "indice_30j": {
-     "indice": 0.1,
-     "precedent": 0.78,
-     "tendance": "baisse",
-     "n": 9,
-     "texte": "+0,1 ▼ (n=9)"
+     "indice": 0.63,
+     "precedent": 0.33,
+     "tendance": "hausse",
+     "n": 6,
+     "texte": "+0,6 ▲ (n=6)"
     }
    },
    {
@@ -1165,17 +1160,17 @@
       "z": 0.67
      },
      "pmi_manufacturier": {
-      "texte": "52,4",
-      "valeur_num": 52.4,
-      "date": "2026-10-23",
+      "texte": "52,7",
+      "valeur_num": 52.7,
+      "date": "2026-11-02",
       "source": "ForexFactory",
-      "consensus": "52,7",
-      "surprise": "▼",
-      "precedent": "52,9 (révisé)",
+      "consensus": "52,4",
+      "surprise": "▲",
+      "precedent": "52,4",
       "manuel": false,
       "etat": "valeur",
       "raison": null,
-      "z": -0.3
+      "z": 0.3
      },
      "pmi_services": {
       "texte": "51,7",
@@ -1244,11 +1239,11 @@
      }
     },
     "indice_30j": {
-     "indice": -0.12,
-     "precedent": -0.13,
-     "tendance": "stable",
-     "n": 12,
-     "texte": "-0,1 = (n=12)"
+     "indice": -0.27,
+     "precedent": 0.0,
+     "tendance": "baisse",
+     "n": 11,
+     "texte": "-0,3 ▼ (n=11)"
     }
    },
    {
@@ -1451,15 +1446,15 @@
      "pmi_manufacturier": {
       "texte": "53,3",
       "valeur_num": 53.3,
-      "date": "2026-10-23",
+      "date": "2026-11-02",
       "source": "ForexFactory",
-      "consensus": "54,5",
-      "surprise": "▼",
-      "precedent": "54,1",
+      "consensus": "53,3",
+      "surprise": "=",
+      "precedent": "53,3",
       "manuel": false,
       "etat": "valeur",
       "raison": null,
-      "z": -1.2
+      "z": 0.0
      },
      "pmi_services": {
       "texte": "n/d",
@@ -1528,11 +1523,11 @@
      }
     },
     "indice_30j": {
-     "indice": -0.12,
+     "indice": -0.1,
      "precedent": -0.02,
      "tendance": "stable",
-     "n": 6,
-     "texte": "-0,1 = (n=6)"
+     "n": 7,
+     "texte": "-0,1 = (n=7)"
     }
    },
    {
@@ -1591,17 +1586,17 @@
       "z": 0.67
      },
      "pmi_manufacturier": {
-      "texte": "55,3",
-      "valeur_num": 55.3,
-      "date": "2026-10-01",
+      "texte": "56,7",
+      "valeur_num": 56.7,
+      "date": "2026-11-02",
       "source": "ForexFactory",
-      "consensus": "56,3",
-      "surprise": "▼",
-      "precedent": "57,1",
+      "consensus": "55,3",
+      "surprise": "▲",
+      "precedent": "55,3",
       "manuel": false,
       "etat": "valeur",
       "raison": null,
-      "z": -1.0
+      "z": 1.4
      },
      "pmi_services": {
       "texte": "n/d",
@@ -1643,17 +1638,17 @@
       "z": null
      },
      "ventes_detail": {
-      "texte": "3,2 % [a/a]",
-      "valeur_num": 3.2,
-      "date": "2026-10-01",
+      "texte": "1,6 % [a/a]",
+      "valeur_num": 1.6,
+      "date": "2026-11-02",
       "source": "ForexFactory",
-      "consensus": "2,1 %",
-      "surprise": "▲",
-      "precedent": "2,6 % [a/a] (révisé)",
+      "consensus": "3,0 %",
+      "surprise": "▼",
+      "precedent": "3,9 % [a/a] (révisé)",
       "manuel": false,
       "etat": "valeur",
       "raison": null,
-      "z": 3.0
+      "z": -3.0
      },
      "balance_commerciale": {
       "texte": "n/d",
@@ -1670,11 +1665,11 @@
      }
     },
     "indice_30j": {
-     "indice": 0.0,
-     "precedent": 0.83,
+     "indice": -0.48,
+     "precedent": 0.27,
      "tendance": "baisse",
-     "n": 1,
-     "texte": "+0,0 ▼ (n=1)"
+     "n": 3,
+     "texte": "-0,5 ▼ (n=3)"
     }
    },
    {
@@ -1813,7 +1808,7 @@
     },
     "indice_30j": {
      "indice": -0.74,
-     "precedent": 0.07,
+     "precedent": 0.14,
      "tendance": "baisse",
      "n": 9,
      "texte": "-0,7 ▼ (n=9)"
@@ -1955,7 +1950,7 @@
     },
     "indice_30j": {
      "indice": -0.19,
-     "precedent": -0.39,
+     "precedent": -0.52,
      "tendance": "hausse",
      "n": 4,
      "texte": "-0,2 ▲ (n=4)"
@@ -2097,7 +2092,7 @@
     },
     "indice_30j": {
      "indice": -0.91,
-     "precedent": 0.13,
+     "precedent": 0.27,
      "tendance": "baisse",
      "n": 3,
      "texte": "-0,9 ▼ (n=3)"
