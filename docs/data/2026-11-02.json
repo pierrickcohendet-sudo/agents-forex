@@ -4,7 +4,7 @@
   "type_rapport": "hebdomadaire",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-02T09:49:55+00:00",
+  "genere_le": "2026-11-02T10:23:33+00:00",
   "appels_llm": [
    {
     "heure": "09:24",
@@ -221,6 +221,33 @@
     "tokens_total": 9806,
     "ok": true,
     "etiquette": "synthese:USD"
+   },
+   {
+    "heure": "10:20",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 5038,
+    "tokens_message": 18847,
+    "tokens_total": 23885,
+    "ok": false,
+    "etiquette": "analyse:CAD"
+   },
+   {
+    "heure": "10:20",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 5038,
+    "tokens_message": 18847,
+    "tokens_total": 23885,
+    "ok": false,
+    "etiquette": "analyse:CAD"
+   },
+   {
+    "heure": "10:21",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 0,
+    "tokens_message": 1254,
+    "tokens_total": 1254,
+    "ok": false,
+    "etiquette": "commentaire_classement"
    }
   ],
   "quota_llm": {
@@ -230,7 +257,7 @@
     "gemini-3.8-flash",
     "gemini-3.5-flash-lite"
    ],
-   "appels_aujourdhui": 50,
+   "appels_aujourdhui": 56,
    "plafond_jour": 60,
    "engrenages_faits": true,
    "reserve_engrenages": 8,
@@ -240,37 +267,37 @@
      "appels_aujourdhui": 20,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-11-03T07:59:59+00:00",
-     "appels_ce_run": 5,
-     "reussites_ce_run": 2,
-     "sauts_ce_run": 40
+     "appels_ce_run": 0,
+     "reussites_ce_run": 0,
+     "sauts_ce_run": 32
     },
     "gemini-3.8-flash": {
-     "appels_aujourdhui": 10,
+     "appels_aujourdhui": 16,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-10-30T06:59:59+00:00",
-     "appels_ce_run": 6,
-     "reussites_ce_run": 1,
-     "sauts_ce_run": 37
+     "appels_ce_run": 3,
+     "reussites_ce_run": 0,
+     "sauts_ce_run": 29
     },
     "gemini-3.5-flash-lite": {
      "appels_aujourdhui": 20,
      "plafond_jour": 20,
      "epuise_jusqu_a": null,
-     "appels_ce_run": 13,
-     "reussites_ce_run": 9,
-     "sauts_ce_run": 29
+     "appels_ce_run": 0,
+     "reussites_ce_run": 0,
+     "sauts_ce_run": 32
     }
    }
   },
-  "resume_quota": "Gemini : 50/60, engrenages : fait",
+  "resume_quota": "Gemini : 56/60, engrenages : fait",
   "appels_par_modele": {
    "gemini-3.5-flash": {
     "appels": 5,
     "echecs": 3
    },
    "gemini-3.8-flash": {
-    "appels": 6,
-    "echecs": 5
+    "appels": 9,
+    "echecs": 8
    },
    "gemini-3.5-flash-lite": {
     "appels": 13,
@@ -311,13 +338,47 @@
       "ignores": 29
      }
     ]
+   },
+   {
+    "heure": "10:23",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": true,
+    "appels_total": 32,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 32
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": true,
+      "cause": "3 échecs consécutifs — 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:",
+      "ouvert_a_l_appel": 3,
+      "echecs_consecutifs": 3,
+      "ignores": 29
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 32
+     }
+    ]
    }
   ],
   "notion_url": "https://app.notion.com/p/FX-2026-11-02-hebdomadaire-40c65bc646618147a2bbed2abc83d711"
  },
  "synthese_globale": {
   "biais_macro_global": "risk_off",
-  "commentaire": "Biais risk-off confirmé propulsant l'USD et le GBP en tête tandis que le JPY et le CHF déçoivent, trahissant un marché en quête de liquidité souveraine plutôt que de refuges traditionnels.",
+  "commentaire": "Biais Risk Off ; USD en tête du classement de confluence.",
   "etat_du_monde": {
    "situation_economique": {
     "texte": "Les indicateurs PMI manufacturiers en Asie affichent des trajectoires contrastées, avec un secteur privé chinois résilient à 52.0 tandis que l'activité japonaise recule à un creux de sept mois sous l'effet des coûts.",
@@ -696,11 +757,11 @@
        "date": "2026-10-23"
       },
       {
-       "texte": "S&P 500 7743.98 le 2026-10-28 (+0.28 % sur la séance)",
-       "source_id": "src_013",
+       "texte": "S&P 500 7720.39 le 2026-10-29 (-0.30 % sur la séance)",
+       "source_id": "src_258",
        "indicateur": "sp500",
-       "valeur": 7743.98,
-       "date": "2026-10-28"
+       "valeur": 7720.39,
+       "date": "2026-10-29"
       },
       {
        "texte": "Indice or (proxy) — NASDAQ QGLDI, pas le cours spot : 2460.63 le 2026-10-29 (+0.15 % sur 7 j)",
@@ -1056,8 +1117,8 @@
     "libelle": "Flash-Lite 3.5"
    },
    "version": "quotidienne",
-   "titre_theme_impose": "Signaux mixtes",
-   "rafraichi_le": "2026-11-02T09:46:38+00:00"
+   "rafraichi_le": "2026-11-02T10:21:33+00:00",
+   "titre_theme_impose": "Signaux mixtes"
   },
   "classement_devises": [
    {
@@ -1819,9 +1880,9 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite passé en dernier | gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) |",
-    "tentatives": 1,
-    "genere_le": "2026-11-02T09:47:55+00:00"
+    "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint",
+    "tentatives": 2,
+    "genere_le": "2026-11-02T10:21:33+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.27,
@@ -2087,9 +2148,9 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite passé en dernier | gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) |",
-    "tentatives": 1,
-    "genere_le": "2026-11-02T09:48:15+00:00"
+    "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint",
+    "tentatives": 2,
+    "genere_le": "2026-11-02T10:21:53+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.67,
@@ -2350,9 +2411,9 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite passé en dernier | gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) |",
-    "tentatives": 1,
-    "genere_le": "2026-11-02T09:48:35+00:00"
+    "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint",
+    "tentatives": 2,
+    "genere_le": "2026-11-02T10:22:13+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.1,
@@ -2623,9 +2684,9 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite passé en dernier | gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) |",
-    "tentatives": 1,
-    "genere_le": "2026-11-02T09:48:55+00:00"
+    "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint",
+    "tentatives": 2,
+    "genere_le": "2026-11-02T10:22:33+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.48,
@@ -2665,12 +2726,12 @@
    "risk_on_off": "on",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "Analyse CAD impossible : tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite passé en dernier | gemini-3",
+   "raison_indisponibilite": "Analyse CAD impossible : tous les modèles de la chaîne en échec : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 Server Error: Serv",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (Analyse CAD impossible : tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite passé en dernier | gemini-3)",
+    "commentaire": "analyse indisponible (Analyse CAD impossible : tous les modèles de la chaîne en échec : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 Server Error: Serv)",
     "source_id": null
    },
    "detail_score": [],
@@ -3052,9 +3113,9 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite passé en dernier | gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) |",
-    "tentatives": 1,
-    "genere_le": "2026-11-02T09:49:15+00:00"
+    "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint",
+    "tentatives": 2,
+    "genere_le": "2026-11-02T10:22:53+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.19,
@@ -3310,9 +3371,9 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite passé en dernier | gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) |",
-    "tentatives": 1,
-    "genere_le": "2026-11-02T09:49:35+00:00"
+    "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint",
+    "tentatives": 2,
+    "genere_le": "2026-11-02T10:23:13+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.91,
@@ -3586,9 +3647,9 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite passé en dernier | gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) |",
-    "tentatives": 1,
-    "genere_le": "2026-11-02T09:49:55+00:00"
+    "raison": "tous les modèles de la chaîne en échec : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : quota du jour atteint",
+    "tentatives": 2,
+    "genere_le": "2026-11-02T10:23:33+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.45,
@@ -5423,6 +5484,13 @@
    "detail": "CNY — Ventes au détail",
    "date": "2026-10-19",
    "url": null
+  },
+  {
+   "id": "src_258",
+   "source": "FRED",
+   "detail": "sp500 (SP500)",
+   "date": "2026-10-29",
+   "url": "https://fred.stlouisfed.org/series/SP500"
   }
  ],
  "donnees_non_rafraichies": [],
@@ -8286,17 +8354,17 @@
   "conforme": false,
   "nb_anomalies": 11,
   "anomalies": [
-   "CAD : analyse indisponible aujourd'hui (Analyse CAD impossible : tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite passé en dernier | gemini-3) — exclue du classement",
-   "EUR : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite pa)",
-   "GBP : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite pa)",
-   "JPY : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite pa)",
-   "CHF : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite pa)",
-   "AUD : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite pa)",
-   "NZD : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite pa)",
-   "CNY : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : réponse précédente inexploitable : gemini-3.5-flash-lite pa)",
+   "CAD : analyse indisponible aujourd'hui (Analyse CAD impossible : tous les modèles de la chaîne en échec : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 Server Error: Serv) — exclue du classement",
+   "EUR : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash)",
+   "GBP : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash)",
+   "JPY : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash)",
+   "CHF : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash)",
+   "AUD : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash)",
+   "NZD : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash)",
+   "CNY : synthèse approfondie indisponible (tous les modèles de la chaîne en échec : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash)",
    "tableau macro : CNY/PMI manufacturier : publication manquée (prévue le 31/10, aucun « réel » reçu)",
    "tableau macro : CNY/PMI services : publication manquée (prévue le 31/10, aucun « réel » reçu)",
-   "prompt LLM volumineux : 19 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 21335 à 09:27 UTC, modèle gemini-3.5-flash) — le contexte envoyé au LLM a regrossi"
+   "prompt LLM volumineux : 21 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 23885 à 10:20 UTC, modèle gemini-3.8-flash) — le contexte envoyé au LLM a regrossi"
   ]
  },
  "analyse_weekly": {
@@ -8459,6 +8527,6 @@
   "suggestions_connaissances": [],
   "validation": "non_evalue",
   "indisponible": true,
-  "note": "relecture non effectuée (tous les modèles de la chaîne en échec : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : q)"
+  "note": "relecture non effectuée (tous les modèles de la chaîne en échec : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : ignoré (disjoncteur) | gemini-3.5-flash-lite : )"
  }
 }
