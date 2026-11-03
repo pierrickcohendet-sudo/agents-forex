@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-03T08:38:08+00:00",
+  "genere_le": "2026-11-03T09:17:51+00:00",
   "appels_llm": [
    {
     "heure": "08:17",
@@ -293,6 +293,42 @@
     "tokens_total": 1223,
     "ok": true,
     "etiquette": "rapport:analyse"
+   },
+   {
+    "heure": "09:17",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 5038,
+    "tokens_message": 17005,
+    "tokens_total": 22043,
+    "ok": false,
+    "etiquette": "etat_du_monde"
+   },
+   {
+    "heure": "09:17",
+    "modele": "gemini-3.5-flash-lite",
+    "tokens_systeme": 5038,
+    "tokens_message": 17005,
+    "tokens_total": 22043,
+    "ok": true,
+    "etiquette": "etat_du_monde"
+   },
+   {
+    "heure": "09:18",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 0,
+    "tokens_message": 35176,
+    "tokens_total": 35176,
+    "ok": false,
+    "etiquette": "critique"
+   },
+   {
+    "heure": "09:18",
+    "modele": "gemini-3.5-flash-lite",
+    "tokens_systeme": 0,
+    "tokens_message": 35176,
+    "tokens_total": 35176,
+    "ok": true,
+    "etiquette": "critique"
    }
   ],
   "quota_llm": {
@@ -302,7 +338,7 @@
     "gemini-3.8-flash",
     "gemini-3.5-flash-lite"
    ],
-   "appels_aujourdhui": 41,
+   "appels_aujourdhui": 47,
    "plafond_jour": 60,
    "engrenages_faits": true,
    "reserve_engrenages": 8,
@@ -312,40 +348,40 @@
      "appels_aujourdhui": 20,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-11-03T07:59:59+00:00",
-     "appels_ce_run": 13,
-     "reussites_ce_run": 9,
-     "sauts_ce_run": 12
+     "appels_ce_run": 0,
+     "reussites_ce_run": 0,
+     "sauts_ce_run": 2
     },
     "gemini-3.8-flash": {
-     "appels_aujourdhui": 5,
+     "appels_aujourdhui": 9,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-11-03T07:59:59+00:00",
-     "appels_ce_run": 3,
+     "appels_ce_run": 2,
      "reussites_ce_run": 0,
-     "sauts_ce_run": 13
+     "sauts_ce_run": 0
     },
     "gemini-3.5-flash-lite": {
-     "appels_aujourdhui": 16,
+     "appels_aujourdhui": 18,
      "plafond_jour": 20,
      "epuise_jusqu_a": null,
-     "appels_ce_run": 16,
-     "reussites_ce_run": 16,
+     "appels_ce_run": 2,
+     "reussites_ce_run": 2,
      "sauts_ce_run": 0
     }
    }
   },
-  "resume_quota": "Gemini : 41/60, engrenages : fait",
+  "resume_quota": "Gemini : 47/60, engrenages : fait",
   "appels_par_modele": {
    "gemini-3.5-flash": {
     "appels": 13,
     "echecs": 4
    },
    "gemini-3.8-flash": {
-    "appels": 3,
-    "echecs": 3
+    "appels": 5,
+    "echecs": 5
    },
    "gemini-3.5-flash-lite": {
-    "appels": 16,
+    "appels": 18,
     "echecs": 0
    }
   },
@@ -417,6 +453,40 @@
       "ignores": 0
      }
     ]
+   },
+   {
+    "heure": "09:18",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 2,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 2
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 2,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
    }
   ],
   "notion_url": "https://app.notion.com/p/FX-2026-11-03-quotidien-40d65bc64661812790c8d97fd8d8e121"
@@ -424,7 +494,66 @@
  "synthese_globale": {
   "biais_macro_global": "risk_off",
   "commentaire": "Sous un biais risk-off marqué, le dollar (USD, 1er avec 74 de score) s'impose nettement en tête des flux refuges, reléguant les devises pro-cycliques (AUD, CAD, NZD) en queue de classement.",
-  "etat_du_monde": null,
+  "etat_du_monde": {
+   "situation_economique": {
+    "texte": "L'activité manufacturière américaine affiche une résistance inattendue avec un ISM de 55.5 vs 54.5 attendu, tandis que les dépenses de construction reculent de -1.9% en septembre [src_121, src_122]. En zone euro, la faiblesse des ventes au détail en Allemagne pèse sur la consommation des ménages malgré la tenue des PMI manufacturiers [src_130, src_132].",
+    "source_ids": [
+     "src_121",
+     "src_122",
+     "src_130",
+     "src_132"
+    ],
+    "non_source": false
+   },
+   "politique_monetaire_budgetaire": {
+    "texte": "Les banques centrales restent globalement attachées à une approche prudente et dépendante des données face aux pressions sur les prix. Pour les postures institutionnelles spécifiques et les décisions de taux, se référer aux sections par devise.",
+    "source_ids": [
+     "src_014",
+     "src_016"
+    ],
+    "non_source": false
+   },
+   "geopolitique": {
+    "texte": "L'ouverture diplomatique entre les États-Unis et l'Iran provoque une détente marquée sur les cours du pétrole [src_110]. Parallèlement, l'approche des élections de mi-mandat aux États-Unis soutient un climat d'aversion au risque global [src_128].",
+    "source_ids": [
+     "src_110",
+     "src_128"
+    ],
+    "non_source": false
+   },
+   "indicateurs_du_jour": [
+    {
+     "symbole": "✅",
+     "texte": "US ISM manufacturing PMI : 55.5 vs 54.5 attendu (précédent 54.9) — l'activité industrielle américaine surprend à la hausse.",
+     "source_id": "src_122",
+     "non_sourcee": false
+    },
+    {
+     "symbole": "❌",
+     "texte": "US construction spending : -1.9% vs 0.3% attendu (précédent 0.0%) — nette contraction des dépenses de construction en septembre.",
+     "source_id": "src_121",
+     "non_sourcee": false
+    }
+   ],
+   "actualite": [
+    {
+     "texte": "Crude oil prices sell off more than 7% on Iran peace talk hopes ahead of U.S. midterms — les cours du brut chutent brutalement face aux perspectives de négociations diplomatiques entre Washington et Téhéran.",
+     "source_id": "src_110",
+     "non_sourcee": false
+    },
+    {
+     "texte": "Stock market after midterm elections: What S&P 500 history shows — les marchés analysent les précédents historiques à la veille des élections de mi-mandat aux États-Unis.",
+     "source_id": "src_113",
+     "non_sourcee": false
+    }
+   ],
+   "conclusion": "Le panorama macroéconomique est dominé par l'incertitude politique liée aux élections de mi-mandat aux États-Unis et par un net repli des cours pétroliers suite aux avancées diplomatiques avec l'Iran. Les indicateurs d'activité confirment une dynamique contrastée entre la résilience industrielle américaine et la faiblesse de la consommation européenne. Dans ce contexte de tension sur les actifs risqués, l'aversion au risque persiste sur l'ensemble des marchés. Les investisseurs maintiennent une surveillance accrue des prochaines publications sur l'emploi et des décisions des banques centrales.",
+   "incoherence_biais_detectee": false,
+   "redige_par": {
+    "modele": "gemini-3.5-flash-lite",
+    "libelle": "Flash-Lite 3.5"
+   }
+  },
   "engrenages": {
    "engrenages": [
     {
@@ -1111,8 +1240,8 @@
     "libelle": "Flash 3.5"
    },
    "version": "quotidienne",
-   "titre_theme_impose": "Signaux mixtes",
-   "rafraichi_le": "2026-11-03T08:34:05+00:00"
+   "rafraichi_le": "2026-11-03T09:17:51+00:00",
+   "titre_theme_impose": "Signaux mixtes"
   },
   "classement_devises": [
    {
@@ -9997,29 +10126,27 @@
  },
  "controle_qualite": {
   "conforme": false,
-  "nb_anomalies": 5,
+  "nb_anomalies": 4,
   "anomalies": [
    "8 engrenages : 1 phrase retirée : formulation d'ordre d'achat/vente",
-   "état du monde absent de la synthèse globale",
    "tableau macro : CNY/PMI manufacturier : publication manquée (prévue le 31/10, aucun « réel » reçu)",
    "tableau macro : CNY/PMI services : publication manquée (prévue le 31/10, aucun « réel » reçu)",
-   "prompt LLM volumineux : 17 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 34479 à 08:38 UTC, modèle gemini-3.5-flash-lite) — le contexte envoyé au LLM a regrossi"
+   "prompt LLM volumineux : 21 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 35176 à 09:18 UTC, modèle gemini-3.8-flash) — le contexte envoyé au LLM a regrossi"
   ]
  },
  "critique": {
   "incoherences": [
-   "L'état du monde est explicitement absent de la synthèse globale (valeur null), ce qui contredit la structure standard du rapport d'analyse.",
-   "Le contrôle qualité relève des anomalies non triviales, notamment des publications manquées sur le PMI manufacturier et services pour le CNY qui affectent la complétude des données."
+   "Pour le NZD, le score_confluence est de 26 (très bas) et la synthèse approfondie indique une orientation 'baissier', ce qui est globalement cohérent, mais la section 'detail_score' contient des indicateurs neutres sans qu'il y ait d'incohérence majeure relevée par programme, attention toutefois au f"
   ],
   "affirmations_non_sourcees": [],
   "suggestions_connaissances": [
    {
-    "theme": "Gestion des publications d'indicateurs chinois manquants en fin de mois",
-    "suggestion": "En cas de retard ou d'absence de publication officielle des PMI nationaux chinois en fin de mois, maintenir la dernière valeur connue tout en signalant l'anomalie dans le contrôle qualité du desk.",
+    "theme": "Gestion des données manquantes pour les PMI chinois en fin de mois",
+    "suggestion": "En cas de retard ou d'absence de publication des indices PMI officiels en provenance de Chine (NBS) en fin de période, le desk doit prolonger la dernière valeur connue ou neutraliser l'indicateur dans la table sans bloquer le rapport global.",
     "fichier_cible": "cas_particuliers.md"
    }
   ],
-  "validation": "a_revoir",
+  "validation": "ok",
   "redige_par": {
    "modele": "gemini-3.5-flash-lite",
    "libelle": "Flash-Lite 3.5"
