@@ -13,12 +13,13 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 import time
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 from core import overrides, scoring
-from core.llm import (MESSAGE_QUOTA_ATTEINT, FournisseurLLM, QuotaAtteint, attribution_modele,
+from core.llm import (MESSAGE_QUOTA_ATTEINT, FournisseurLLM, PlafondAnalyse, QuotaAtteint, attribution_modele,
                       definir_etiquette, extraire_json, repli_modele_suivant)
 from core.secrets import masquer_secrets
 
@@ -446,82 +447,138 @@ def _tableau_indicateurs(config: dict, devise: str, donnees: dict,
 
 
 # ------------------------------------------------------------ appels LLM
-def _analyser_devise(llm: FournisseurLLM, systeme: str, config: dict, devise: str,
-                     donnees: dict, catalogue: list[dict], memoire: list[dict],
-                     overrides_devise: dict | None = None) -> dict:
-    indicateurs = list(scoring.ponderations_devise(config, devise).keys())
-    contexte = {
-        "devise_analysee": devise,
-        "banque_centrale": config["devises"][devise]["banque_centrale"],
-        "indicateurs_a_evaluer": indicateurs,
-        "reprises_manuelles_du_jour": overrides_devise or {},
-        "note_reprises_manuelles": (
+NOTE_REPRISES = (
             "Si reprises_manuelles_du_jour contient un indicateur, sa valeur PRIME "
             "systématiquement sur toute donnée automatique du contexte ci-dessous pour "
             "ce même indicateur (donnée automatique erronée ou manquante, corrigée à la "
             "main) — base ton sens et ta justification dessus, pas sur la donnée brute."
-        ) if overrides_devise else None,
-        "note_indicateurs": (
-            "cpi_surprise / pmi_surprise : surprise vs prévision du calendrier pour CETTE devise. "
-            "yield_curve et vix : lire l'effet SUR cette devise (contexte risk on/off). "
-            "dxy : indice USD synthétique fourni dans technique.USD. "
-            "differentiel_taux : carry fourni dans macro.taux_directeurs.carry ET, s'il est présent, "
-            "spread des rendements souverains 2 ans vs États-Unis dans macro.taux_directeurs."
-            "spread_2a_vs_usd (le marché y intègre les anticipations de banque centrale : s'il "
-            "diverge du carry des taux directeurs, privilégie-le et dis-le ; cite son source_id). "
-            "rsi / trendline : données technique de la devise. "
-            "fixing_pboc (CNY uniquement) : direction du fixing quotidien PBoC et des "
-            "décisions de politique (LPR, MLF, RRR) d'après le calendrier et les news ; "
-            "0 si aucune information de fixing aujourd'hui."
-        ),
-        "note_contexte_geopolitique": (
-            "Pour contexte_geopolitique.banque_centrale_pourquoi : explique la posture "
-            "ACTUELLE de la banque centrale de cette devise EN UNE À DEUX PHRASES "
-            "(quel mandat elle poursuit là maintenant et pourquoi, ex. 'combat une "
-            "inflation encore au-dessus de la cible' ou 'attend confirmation avant de "
-            "bouger, prochaine réunion dans N semaines') — jamais juste le mot-clé "
-            "hawkish/dovish/data_dependent seul. "
-            "Pour contexte_geopolitique.evenements : décisions ou événements "
-            "géopolitiques de la semaine qui concernent SPÉCIFIQUEMENT cette devise "
-            "(pas les généralités déjà couvertes ailleurs) — liste vide si rien de "
-            "spécifique cette semaine, ne force jamais un événement générique."
-        ),
+        )
+
+NOTES_ANALYSE = {
+    "note_indicateurs": (
+        "cpi_surprise / pmi_surprise : surprise vs prévision du calendrier pour CETTE devise. "
+        "yield_curve et vix : lire l'effet SUR cette devise (contexte risk on/off). "
+        "dxy : indice USD synthétique fourni dans technique.USD. "
+        "differentiel_taux : carry fourni dans macro.taux_directeurs.carry ET, s'il est présent, "
+        "spread des rendements souverains 2 ans vs États-Unis dans macro.taux_directeurs."
+        "spread_2a_vs_usd (le marché y intègre les anticipations de banque centrale : s'il "
+        "diverge du carry des taux directeurs, privilégie-le et dis-le ; cite son source_id). "
+        "rsi / trendline : données technique de la devise. "
+        "fixing_pboc (CNY uniquement) : direction du fixing quotidien PBoC et des "
+        "décisions de politique (LPR, MLF, RRR) d'après le calendrier et les news ; "
+        "0 si aucune information de fixing aujourd'hui."
+    ),
+    "note_contexte_geopolitique": (
+        "Pour contexte_geopolitique.banque_centrale_pourquoi : explique la posture "
+        "ACTUELLE de la banque centrale de cette devise EN UNE À DEUX PHRASES "
+        "(quel mandat elle poursuit là maintenant et pourquoi, ex. 'combat une "
+        "inflation encore au-dessus de la cible' ou 'attend confirmation avant de "
+        "bouger, prochaine réunion dans N semaines') — jamais juste le mot-clé "
+        "hawkish/dovish/data_dependent seul. "
+        "Pour contexte_geopolitique.evenements : décisions ou événements "
+        "géopolitiques de la semaine qui concernent SPÉCIFIQUEMENT cette devise "
+        "(pas les généralités déjà couvertes ailleurs) — liste vide si rien de "
+        "spécifique cette semaine, ne force jamais un événement générique."
+    ),
+}
+
+_ID_SOURCE = re.compile(r"src_\d{3,}")
+
+
+def _contexte_devise(config: dict, devise: str, donnees: dict, overrides_devise: dict | None) -> dict:
+    """Partie propre à une devise du contexte d'analyse (le commun est envoyé une seule fois par groupe)."""
+    return {
+        "devise_analysee": devise,
+        "banque_centrale": config["devises"][devise]["banque_centrale"],
+        "indicateurs_a_evaluer": list(scoring.ponderations_devise(config, devise).keys()),
+        "reprises_manuelles_du_jour": overrides_devise or {},
         "technique_devise": donnees["technique"].get(devise),
-        "technique_usd_reference": donnees["technique"].get("USD"),
         "correlations_devise": (donnees.get("correlations", {}).get("matrice", {}) or {}).get(devise),
-        "macro": donnees["macro"],
         "calendrier_devise": [e for e in donnees["calendrier"]
                               if e["devise"] in ({devise} | ({"CNY"} if devise in ("AUD", "NZD") else set()))],
+    }
+
+
+def catalogue_utile(catalogue: list[dict], *blocs) -> list[dict]:
+    """Seules les sources citées par les données envoyées : en --completer, le catalogue du matin contient aussi les
+    sources des autres agents (+3 600 tokens pour CAD le 02/11, réponse hors délai) — inutiles à l'analyse."""
+    cites = set(_ID_SOURCE.findall(json.dumps(blocs, ensure_ascii=False, default=str)))
+    return [c for c in catalogue if c["id"] in cites]
+
+
+def valider_analyse(brut, devise: str) -> dict:
+    """Une analyse exploitable est un objet avec detail_score en liste (le 02/11 08:15, une liste JSON a fait
+    planter tout le run) ; sinon ValueError : nouvel essai puis repli Python pour cette devise."""
+    if not isinstance(brut, dict) or not isinstance(brut.get("detail_score"), list):
+        raise ValueError(f"analyse {devise} : réponse hors schéma ({type(brut).__name__})")
+    return brut
+
+
+def groupes_devises(config: dict) -> list[list[str]]:
+    """9 devises en groupes fixes de 3 (ordre de config.devises) : une étiquette stable par groupe et par jour."""
+    taille = max(1, int(((config.get("llm") or {}).get("budget") or {}).get("taille_groupe_devises", 3)))
+    devises = list(config["devises"])
+    return [devises[i:i + taille] for i in range(0, len(devises), taille)]
+
+
+def _analyser_groupe(llm: FournisseurLLM, systeme: str, config: dict, devises: list[str],
+                     donnees: dict, catalogue: list[dict], memoire: list[dict],
+                     overrides_du_jour: dict | None = None) -> dict[str, dict]:
+    """UN appel pour plusieurs devises (2 au plus en tout : 1 essai + 1 nouvel essai, puis repli Python).
+    -> {devise: analyse} pour les devises dont la réponse respecte le schéma (les autres manquent)."""
+    overrides_du_jour = overrides_du_jour or {}
+    par_devise = {d: _contexte_devise(config, d, donnees, overrides_du_jour.get(d)) for d in devises}
+    commun = {
+        "technique_usd_reference": donnees["technique"].get("USD"),
+        "macro": donnees["macro"],
         "news": donnees["news"],
         "sites_scrapes": donnees["sites_scrapes"],
         "memoire_rapports_precedents": memoire,
-        "catalogue_sources": catalogue,
     }
-    ids_valides = ", ".join(s["id"] for s in catalogue)
+    sources = catalogue_utile(catalogue, commun, par_devise)
+    contexte = {**NOTES_ANALYSE,
+                "note_reprises_manuelles": NOTE_REPRISES if any(overrides_du_jour.get(d) for d in devises) else None,
+                "donnees_communes": commun, "devises": par_devise, "catalogue_sources": sources}
+    ids_valides = ", ".join(c["id"] for c in sources)
+    liste = ", ".join(devises)
     prompt = (
-        f"Analyse la devise {devise} avec les données du jour ci-dessous.\n"
-        f"Réponds STRICTEMENT selon ce schéma JSON :\n{SCHEMA_DEVISE}\n\n"
-        "Le champ detail_score doit contenir UNE entrée par indicateur de "
+        f"Analyse SÉPARÉMENT chacune de ces devises : {liste}, avec les données du jour ci-dessous.\n"
+        "Réponds STRICTEMENT avec un objet JSON {\"analyses\": {\"<DEVISE>\": <analyse>}} : une entrée par devise, "
+        f"chaque <analyse> selon ce schéma :\n{SCHEMA_DEVISE}\n\n"
+        "Le champ detail_score de chaque devise doit contenir UNE entrée par indicateur de sa liste "
         "indicateurs_a_evaluer, avec son nom exact.\n"
         f"SEULS ces source_id existent : [{ids_valides}]. Tout autre identifiant "
         "sera invalidé et l'affirmation publiée comme « non sourcée » — mets null "
         "plutôt que d'inventer.\n\n"
         "DONNÉES DU JOUR (JSON) :\n" + json.dumps(contexte, ensure_ascii=False, default=str)
     )
-
     tentatives = int(config["llm"].get("max_tentatives_json", 2))
     derniere_erreur: Exception | None = None
     for essai in range(1, tentatives + 1):
         try:
-            return extraire_json(llm.appeler_llm(prompt, systeme=systeme))
+            brut = extraire_json(llm.appeler_llm(prompt, systeme=systeme))
+            analyses = brut.get("analyses", brut) if isinstance(brut, dict) else None
+            if not isinstance(analyses, dict):
+                raise ValueError(f"réponse hors schéma ({type(brut).__name__})")
+            sortie = {}
+            for d in devises:
+                try:
+                    sortie[d] = valider_analyse(analyses.get(d), d)
+                except ValueError as exc:
+                    log.warning("Analyse %s : %s", d, exc)
+            if not sortie:
+                raise ValueError("aucune devise du groupe au format attendu")
+            return sortie
         except QuotaAtteint:
-            raise   # inutile de retenter : plus aucun modèle disponible aujourd'hui
+            raise   # inutile de retenter : plus de budget aujourd'hui
+        except PlafondAnalyse:
+            raise   # 2 appels déjà faits pour ce groupe : repli Python
         except Exception as exc:  # noqa: BLE001 — parsing JSON ou erreur API : on retente
             repli_modele_suivant(llm)   # JSON ou schéma invalide : nouvel essai sur le modèle suivant
             derniere_erreur = exc
-            log.warning("Analyse %s, essai %d/%d en échec : %s", devise, essai, tentatives,
-                       masquer_secrets(str(exc)))
-    raise RuntimeError(f"Analyse {devise} impossible : {masquer_secrets(str(derniere_erreur))}")
+            log.warning("Analyse %s, essai %d/%d en échec : %s", liste, essai, tentatives,
+                        masquer_secrets(str(exc)))
+    raise RuntimeError(f"Analyse {liste} impossible : {masquer_secrets(str(derniere_erreur))}")
 
 
 def _devise_indisponible(devise: str, raison: str, biais: str = "neutre") -> dict:
@@ -803,6 +860,7 @@ def commenter_analyse_weekly(llm: FournisseurLLM, devise: str, metriques: dict) 
         f"biais a été stable ou erratique et pourquoi : {json.dumps(metriques, ensure_ascii=False)}. "
         'Réponds en JSON : {"commentaire": "..."}'
     )
+    definir_etiquette(f"weekly:{devise}")
     try:
         return str(extraire_json(llm.appeler_llm(prompt)).get("commentaire", ""))[:500]
     except Exception as exc:  # noqa: BLE001
@@ -819,6 +877,7 @@ def commenter_auto_evaluation(llm: FournisseurLLM, evaluation: dict) -> str:
         f"calculés par programme, ne les modifie pas : {json.dumps(evaluation, ensure_ascii=False)}. "
         'Réponds en JSON : {"commentaire": "..."}'
     )
+    definir_etiquette("auto_evaluation")
     try:
         return str(extraire_json(llm.appeler_llm(prompt)).get("commentaire", ""))[:500]
     except Exception as exc:  # noqa: BLE001
@@ -883,25 +942,40 @@ def analyser(config: dict, llm: FournisseurLLM, technique: dict, macro: dict,
     pause_devises_s = float(config["llm"].get("pause_entre_devises_s", 0))
     deja_appele = False
     nb_analysees = 0   # devises réellement envoyées au LLM dans ce passage (hors réutilisées)
+    # 9 devises en 3 appels groupés de 3 (correctif quota du 02/11) : étiquette stable par groupe, 2 appels au plus
+    # par groupe et par run (core/llm.py, budget), puis repli Python pour les devises du groupe sans réponse valide.
+    resultats: dict[str, tuple] = {}
+    for groupe in groupes_devises(config):
+        a_faire = [d for d in groupe if d not in devises_deja_ok]
+        if not a_faire:
+            continue
+        if deja_appele and pause_devises_s > 0:
+            time.sleep(pause_devises_s)  # évite la rafale de gros prompts consécutifs
+        deja_appele = True
+        nb_analysees += len(a_faire)
+        definir_etiquette("analyses:" + "-".join(groupe))
+        try:
+            bruts = _analyser_groupe(llm, systeme, config, a_faire, donnees, catalogue, memoire, overrides_du_jour)
+            redige_par = attribution_modele()   # modèle qui a RÉELLEMENT répondu
+            for d in a_faire:
+                resultats[d] = (bruts[d], redige_par) if d in bruts else                     (None, "analyse absente ou hors schéma dans la réponse groupée")
+        except Exception as exc:  # noqa: BLE001 — un groupe en échec ne coûte que ses devises
+            raison = MESSAGE_QUOTA_ATTEINT if isinstance(exc, QuotaAtteint) else masquer_secrets(str(exc))[:150]
+            for d in a_faire:
+                resultats[d] = (None, raison)
+    if all(b is not None for b, _ in resultats.values()) and hasattr(llm, "marquer_fait"):
+        llm.marquer_fait("devises")   # réserve des devises libérée pour le reste
     for devise in config["devises"]:
         if devise in devises_deja_ok:
             # --completer : déjà réussie plus tôt aujourd'hui — jamais retraitée.
             devises_finales.append(devises_deja_ok[devise])
             continue
-        if deja_appele and pause_devises_s > 0:
-            time.sleep(pause_devises_s)  # évite la rafale de 9 gros prompts consécutifs
-        deja_appele = True
-        nb_analysees += 1
         overrides_devise = overrides_du_jour.get(devise)
         # Biais Risk On/Off structurel : dérivé du profil configuré, pas du LLM.
         biais = scoring.biais_structurel(config["devises"][devise].get("profil_risque", "neutre"))
-        definir_etiquette(f"analyse:{devise}")
-        try:
-            brut = _analyser_devise(llm, systeme, config, devise, donnees, catalogue, memoire,
-                                    overrides_devise)
-            redige_par = attribution_modele()   # modèle qui a RÉELLEMENT répondu (principal ou secours)
-        except RuntimeError as exc:
-            raison = MESSAGE_QUOTA_ATTEINT if isinstance(exc, QuotaAtteint) else masquer_secrets(str(exc))[:150]
+        brut, redige_par = resultats.get(devise, (None, "analyse non lancée"))
+        if brut is None:
+            raison = redige_par
             entree = _devise_indisponible(devise, raison, biais)
             # Plutôt que « indisponible » : texte 100 % Python, marqué comme tel (retenté par --completer).
             auto = texte_automatique(devise, technique, macro, taux, carry)

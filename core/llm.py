@@ -113,7 +113,7 @@ def attribution_modele() -> dict | None:
     return {"modele": modele, "libelle": libelle_modele(modele)} if modele else None
 
 
-def _noter_appel(modele: str, systeme: str | None, prompt: str, ok: bool) -> None:
+def _noter_appel(modele: str, systeme: str | None, prompt: str, ok: bool, echec: str | None = None) -> None:
     tok_sys, tok_msg = _estimer_tokens(systeme or ""), _estimer_tokens(prompt)
     entree = {
         "heure": datetime.now(timezone.utc).strftime("%H:%M"), "modele": modele,
@@ -121,6 +121,8 @@ def _noter_appel(modele: str, systeme: str | None, prompt: str, ok: bool) -> Non
         "tokens_total": tok_sys + tok_msg, "ok": ok}
     if _ETIQUETTE_COURANTE[0]:
         entree["etiquette"] = _ETIQUETTE_COURANTE[0]
+    if echec:
+        entree["echec"] = echec
     _JOURNAL_APPELS.append(entree)
     if ok:
         _DERNIER_MODELE_OK[0] = modele
@@ -138,6 +140,50 @@ class QuotaAtteint(RuntimeError):
 
 
 MESSAGE_QUOTA_ATTEINT = "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)"
+
+
+class BudgetEpuise(QuotaAtteint):
+    """Budget du jour (plafond du run du matin ou réserve d'une catégorie prioritaire) atteint : refus avant envoi."""
+
+
+class PlafondAnalyse(RuntimeError):
+    """Une même analyse a déjà fait son nombre maximal d'appels (ce run) ou d'échecs (ce jour) : repli Python."""
+
+
+def categorie_budget(etiquette: str) -> str:
+    """Catégorie de budget d'un appel, d'après son étiquette (priorité : engrenages, rapport, devises, reste)."""
+    e = etiquette or ""
+    if e.startswith("engrenages"):
+        return "engrenages"
+    if e.startswith("rapport:"):
+        return "rapport"
+    if e.startswith(("analyse:", "analyses:")):
+        return "devises"
+    return "reste"
+
+
+def type_echec(exc: BaseException | None) -> str:
+    """Type d'un échec, pour le journal : 429, 503, delai, json_invalide, rejet_controle, budget, autre."""
+    if exc is None:
+        return "autre"
+    if isinstance(exc, (BudgetEpuise, PlafondAnalyse)):
+        return "budget"
+    if isinstance(exc, QuotaJournalierEpuise):
+        return "429"
+    if isinstance(exc, requests.exceptions.Timeout):
+        return "delai"
+    if isinstance(exc, requests.exceptions.HTTPError):
+        code = getattr(getattr(exc, "response", None), "status_code", None)
+        return str(code) if code in (429, 500, 503) else f"http_{code}" if code else "autre"
+    if isinstance(exc, ValueError):        # json.JSONDecodeError en hérite
+        return "json_invalide"
+    if isinstance(exc, (KeyError, TypeError, AttributeError)):
+        return "rejet_controle"
+    msg = str(exc)
+    for code in ("503", "429"):
+        if code in msg:
+            return code
+    return "autre"
 
 
 def _delai_reprise_s(rep_texte: str) -> float | None:
@@ -208,8 +254,18 @@ class RegistreQuotas:
         meme_jour = brut.get("date") == jour
         if not meme_jour:   # nouveau jour : compteurs à zéro, épuisements encore valides conservés
             modeles = {m: {"appels": 0, "epuise_jusqu_a": v.get("epuise_jusqu_a")} for m, v in modeles.items()}
+        jour_brut = (lambda cle: dict(brut.get(cle) or {}) if meme_jour else {})
         self.donnees = {"date": jour, "modeles": modeles,
-                        "engrenages_faits": bool(meme_jour and brut.get("engrenages_faits"))}
+                        "engrenages_faits": bool(meme_jour and brut.get("engrenages_faits")),
+                        "categories": jour_brut("categories"), "etiquettes": jour_brut("etiquettes"),
+                        "echecs": jour_brut("echecs"), "faits": list(brut.get("faits") or []) if meme_jour else []}
+        # Budget (configurer_budget) et compteurs de CE run, en mémoire seulement.
+        self.budget: dict | None = None
+        self.complet, self.lundi = True, False
+        self.run_id = datetime.now(timezone.utc).isoformat(timespec="microseconds")
+        self.run_etiquettes: dict[str, int] = {}
+        self.run_categories: dict[str, int] = {}
+        self.run_echecs: dict[str, int] = {}
 
     def _sauver(self) -> None:
         if not self.chemin:
@@ -239,8 +295,124 @@ class RegistreQuotas:
         return plafond is None or self._entree(modele)["appels"] < plafond
 
     def compter(self, modele: str) -> None:
+        """Une requête HTTP envoyée (Google compte chaque requête, nouvel essai après 503 compris)."""
         self._entree(modele)["appels"] += 1
+        etiquette = _ETIQUETTE_COURANTE[0]
+        cat = categorie_budget(etiquette)
+        cats = self.donnees.setdefault("categories", {})
+        cats[cat] = cats.get(cat, 0) + 1
+        self.run_categories[cat] = self.run_categories.get(cat, 0) + 1
+        if etiquette:
+            self.run_etiquettes[etiquette] = self.run_etiquettes.get(etiquette, 0) + 1
+            e = self._etiquette(etiquette)
+            e["appels"] = e.get("appels", 0) + 1
         self._sauver()
+
+    # ------------------------------------------------------------ budget du jour
+    def _etiquette(self, etiquette: str) -> dict:
+        return self.donnees.setdefault("etiquettes", {}).setdefault(etiquette, {"appels": 0, "echecs": 0, "ok": False})
+
+    def configurer_budget(self, budget: dict | None, complet: bool = True, lundi: bool = False) -> None:
+        self.budget, self.complet, self.lundi = (budget or None), bool(complet), bool(lundi)
+
+    def _max_appels(self) -> int:
+        return int((self.budget or {}).get("max_appels_par_analyse", 2))
+
+    def _max_echecs(self) -> int:
+        return int((self.budget or {}).get("max_echecs_jour_par_analyse", 2))
+
+    def prevu(self) -> dict[str, int]:
+        """Analyses prévues par catégorie prioritaire (le lundi : version longue du rapport)."""
+        return {p["categorie"]: int(p.get("lundi", p.get("analyses", 0)) if self.lundi else p.get("analyses", 0))
+                for p in (self.budget or {}).get("priorites", [])}
+
+    def plafond_run(self) -> int | None:
+        """Plafond applicable : celui du run du matin (complet) ou la somme des quotas gratuits des modèles."""
+        total = sum(self.plafonds.values()) if self.plafonds else None
+        matin = (self.budget or {}).get("plafond_matin")
+        if self.budget and self.complet and matin is not None:
+            return min(int(matin), total) if total else int(matin)
+        return total
+
+    def categorie_faite(self, cat: str) -> bool:
+        return (cat == "engrenages" and self.engrenages_faits) or cat in self.donnees.get("faits", [])
+
+    def marquer_fait(self, cat: str) -> None:
+        if cat == "engrenages":
+            self.marquer_engrenages_faits()
+        elif cat not in self.donnees.setdefault("faits", []):
+            self.donnees["faits"].append(cat)
+            self._sauver()
+
+    def reserve(self, cat: str) -> int:
+        """Requêtes gardées pour une catégorie prioritaire pas encore faite aujourd'hui."""
+        if self.categorie_faite(cat):
+            return 0
+        return max(0, self.prevu().get(cat, 0) * self._max_appels() - self.donnees.get("categories", {}).get(cat, 0))
+
+    def total_jour(self) -> int:
+        return sum(v.get("appels", 0) for v in self.donnees["modeles"].values())
+
+    def verifier_budget(self, etiquette: str) -> None:
+        """Lève AVANT tout envoi si l'appel dépasserait les échecs du jour de cette analyse, ses appels de ce run,
+        le plafond du run, ou la réserve d'une autre catégorie prioritaire (budget non configuré : sans effet)."""
+        if not self.budget:
+            return
+        if etiquette:
+            e = self.donnees.get("etiquettes", {}).get(etiquette) or {}
+            if not e.get("ok") and e.get("echecs_runs", 0) >= self._max_echecs():
+                raise PlafondAnalyse(f"{etiquette} : déjà en échec {e['echecs_runs']} fois aujourd'hui, "
+                                     "non rejouée (texte Python)")
+            if self.run_etiquettes.get(etiquette, 0) >= self._max_appels():
+                raise PlafondAnalyse(f"{etiquette} : {self._max_appels()} appels déjà faits pendant ce run "
+                                     "(repli Python)")
+        plafond = self.plafond_run()
+        if plafond is None:
+            return
+        cat = categorie_budget(etiquette)
+        autres = sum(self.reserve(c) for c in self.prevu() if c != cat)
+        if self.total_jour() + 1 > plafond - autres:
+            raise BudgetEpuise(f"{MESSAGE_QUOTA_ATTEINT} — budget du jour : {self.total_jour()}/{plafond} requêtes, "
+                               f"{autres} gardée(s) pour les sections prioritaires")
+
+    def noter_echec(self, etiquette: str, type_: str) -> None:
+        """Échec typé (429, 503, delai, json_invalide, rejet_controle…) ; une analyse compte un échec par run au plus."""
+        echecs = self.donnees.setdefault("echecs", {})
+        echecs[type_] = echecs.get(type_, 0) + 1
+        self.run_echecs[type_] = self.run_echecs.get(type_, 0) + 1
+        if etiquette and type_ != "budget":
+            e = self._etiquette(etiquette)
+            e["echecs"] = e.get("echecs", 0) + 1
+            types = e.setdefault("types", {})
+            types[type_] = types.get(type_, 0) + 1
+            if e.get("run_echec") != self.run_id and not e.get("ok"):
+                e["run_echec"] = self.run_id
+                e["echecs_runs"] = e.get("echecs_runs", 0) + 1
+        self._sauver()
+
+    def noter_reussite(self, etiquette: str) -> None:
+        if not etiquette:
+            return
+        e = self._etiquette(etiquette)
+        e["ok"] = True
+        if e.get("run_echec") == self.run_id:   # échec effacé par la réussite du nouvel essai de ce run
+            e["echecs_runs"] = max(0, e.get("echecs_runs", 1) - 1)
+            e["run_echec"] = None
+        self._sauver()
+
+    def resume_budget(self) -> dict:
+        """Budget prévu et consommé (résumé du run, meta.quota_llm.budget)."""
+        cats, prevu = self.donnees.get("categories", {}), self.prevu()
+        ordre = [*prevu, "reste"]
+        return {"plafond": self.plafond_run(), "mode": "complet" if self.complet else "complément",
+                "lundi": self.lundi, "max_appels_par_analyse": self._max_appels(),
+                "prevu_analyses": prevu, "prevu_appels_max": {c: n * self._max_appels() for c, n in prevu.items()},
+                "consomme_jour": {c: cats.get(c, 0) for c in ordre},
+                "consomme_run": {c: self.run_categories.get(c, 0) for c in ordre},
+                "total_jour": self.total_jour(), "echecs_jour": dict(self.donnees.get("echecs", {})),
+                "echecs_run": dict(self.run_echecs),
+                "abandonnees": sorted(k for k, v in self.donnees.get("etiquettes", {}).items()
+                                      if not v.get("ok") and v.get("echecs_runs", 0) >= self._max_echecs())}
 
     def marquer_epuise(self, modele: str, delai_s: float | None) -> None:
         e = self._entree(modele)
@@ -332,6 +504,7 @@ class FournisseurGemini(_FournisseurAvecCadence):
             # Plafond gratuit JAMAIS dépassé : refus AVANT l'envoi (y compris pour le nouvel essai).
             if not self.registre_quotas.autoriser(self.modele):
                 raise QuotaJournalierEpuise(f"plafond gratuit du jour atteint pour {self.modele} (compteur local)")
+            self.registre_quotas.verifier_budget(_ETIQUETTE_COURANTE[0])   # nouvel essai après 503 compris
             self.registre_quotas.compter(self.modele)
         self._attendre_cadence()
         # Clé en HEADER, jamais en query string : les erreurs HTTP embarquent
@@ -343,11 +516,17 @@ class FournisseurGemini(_FournisseurAvecCadence):
             timeout=180,
         )
 
+    def _noter_echec(self, type_: str) -> None:
+        if self.registre_quotas is not None:
+            self.registre_quotas.noter_echec(_ETIQUETTE_COURANTE[0], type_)
+
     def appeler_llm(self, prompt: str, systeme: str | None = None) -> str:
         try:
             texte = self._appeler(prompt, systeme)
-        except Exception:
-            _noter_appel(self.modele, systeme, prompt, False)
+        except (BudgetEpuise, PlafondAnalyse):
+            raise   # refus avant l'envoi : aucune requête de plus
+        except Exception as exc:
+            _noter_appel(self.modele, systeme, prompt, False, type_echec(exc))
             raise
         _noter_appel(self.modele, systeme, prompt, True)
         return texte
@@ -363,7 +542,15 @@ class FournisseurGemini(_FournisseurAvecCadence):
         }
         if systeme:
             corps["system_instruction"] = {"parts": [{"text": systeme}]}
-        rep = self._poster(corps)
+        try:
+            rep = self._poster(corps)
+        except requests.exceptions.Timeout:
+            # Surcharge (aucune réponse dans le délai) : comme un 503, un seul nouvel essai sur CE modèle.
+            self._noter_echec("delai")
+            log.warning("Gemini : délai dépassé (surcharge) — attente de %.0f s avant un unique nouvel essai",
+                        self.backoff_429_s)
+            time.sleep(self.backoff_429_s)
+            rep = self._poster(corps)
         if rep.status_code == 429 and "PerDay" in rep.text:
             # Quota gratuit journalier (ex. 20 requêtes/jour/modèle) : le délai de
             # reprise se compte en heures, attendre 30 s n'aurait aucun sens.
@@ -372,12 +559,14 @@ class FournisseurGemini(_FournisseurAvecCadence):
             raise QuotaJournalierEpuise(
                 f"quota gratuit journalier épuisé pour {self.modele} (HTTP 429, requêtes/jour)")
         if rep.status_code == 429:
+            self._noter_echec("429")
             attente = self._delai_apres_429(rep)
             log.warning("Gemini 429 (limite de requêtes/minute) : attente de %.0f s "
                         "avant un unique nouvel essai", attente)
             time.sleep(attente)
             rep = self._poster(corps)
         elif rep.status_code == 503:
+            self._noter_echec("503")
             # UNAVAILABLE (modèle surchargé côté Google, doc officielle : retry
             # conseillé) — même traitement que le 429 : un backoff réel, un
             # unique nouvel essai, jamais une boucle.
@@ -687,6 +876,8 @@ class FournisseurChaine(FournisseurLLM):
         # « engrenages ») tant qu'elle n'a pas réussi aujourd'hui : aucun autre appel ne les consomme.
         self.reserve_engrenages = max(0, int(reserve_engrenages))
         self.refus_reserve = 0
+        self.refus_budget = 0
+        self._dernier_ok = False
 
     def marquer_engrenages_faits(self) -> None:
         if self.registre is not None:
@@ -695,14 +886,27 @@ class FournisseurChaine(FournisseurLLM):
     def _bloque_par_reserve(self) -> int | None:
         """Nombre d'appels restants si l'appel courant doit être refusé pour préserver la réserve, sinon None."""
         if (self.registre is None or not self.reserve_engrenages or self.registre.engrenages_faits
-                or _ETIQUETTE_COURANTE[0].startswith("engrenages")):
+                or self.registre.budget or _ETIQUETTE_COURANTE[0].startswith("engrenages")):   # budget : il prime
             return None
         restants = self.registre.restants([m["modele"] for m in self.maillons])
         return restants if restants is not None and restants <= self.reserve_engrenages else None
 
-    def eviter_dernier_modele(self) -> None:
+    def configurer_budget(self, budget: dict | None, complet: bool = True, lundi: bool = False) -> None:
+        """Budget du jour (config llm.budget) : plafond du run du matin, priorités, appels et échecs par analyse."""
+        if self.registre is not None:
+            self.registre.configurer_budget(budget, complet=complet, lundi=lundi)
+
+    def marquer_fait(self, categorie: str) -> None:
+        """Catégorie prioritaire terminée aujourd'hui : sa réserve est libérée pour le reste."""
+        if self.registre is not None:
+            self.registre.marquer_fait(categorie)
+
+    def eviter_dernier_modele(self, exc: BaseException | None = None) -> None:
         """Réponse inexploitable (JSON invalide, schéma incomplet) : le PROCHAIN appel commence par
         le modèle suivant de la chaîne ; le modèle fautif n'est plus qu'un dernier recours."""
+        if self._dernier_ok and self.registre is not None:   # l'appel HTTP avait réussi : c'est la réponse qui est rejetée
+            self.registre.noter_echec(_ETIQUETTE_COURANTE[0], type_echec(exc) if exc is not None else "json_invalide")
+            self._dernier_ok = False
         if self.dernier_servi:
             self._a_eviter.add(self.dernier_servi)
             self.replis_json += 1
@@ -721,6 +925,14 @@ class FournisseurChaine(FournisseurLLM):
             self.refus_reserve += 1
             raise QuotaAtteint(f"{MESSAGE_QUOTA_ATTEINT} — {restants} appel(s) restant(s) aujourd'hui, réservés à la "
                                f"synthèse des engrenages (réserve de {self.reserve_engrenages})")
+        etiquette = _ETIQUETTE_COURANTE[0]
+        self._dernier_ok = False
+        if self.registre is not None:
+            try:
+                self.registre.verifier_budget(etiquette)   # refus AVANT tout envoi
+            except (BudgetEpuise, PlafondAnalyse):
+                self.refus_budget += 1
+                raise
         self.appels_total += 1
         raisons: list[str] = []
         autre_echec = False
@@ -729,8 +941,11 @@ class FournisseurChaine(FournisseurLLM):
                 [m for m in self.maillons if m["modele"] in a_eviter]
         if a_eviter:
             raisons.append("réponse précédente inexploitable : " + ", ".join(sorted(a_eviter)) + " passé en dernier")
+        # Sections prioritaires (engrenages, rapport du jour, devises) : le disjoncteur ne les prive pas de modèle
+        # (02/11 : 3 disjoncteurs ouverts, rapport du jour sans aucun essai) — leur coût reste borné par le budget.
+        prioritaire = self.registre is not None and categorie_budget(etiquette) in self.registre.prevu()
         for m in ordre:
-            if m["ouvert"]:
+            if m["ouvert"] and not prioritaire:
                 m["ignores"] += 1
                 raisons.append(f"{m['modele']} : ignoré (disjoncteur)")
                 autre_echec = autre_echec or "quota" not in (m["cause"] or "")
@@ -745,11 +960,20 @@ class FournisseurChaine(FournisseurLLM):
                 m["echecs"] = 0
                 m["reussites"] += 1
                 self.dernier_servi = m["modele"]
+                self._dernier_ok = True
+                if self.registre is not None:
+                    self.registre.noter_reussite(etiquette)
                 if raisons:
                     log.warning("Appel servi par %s après : %s", m["modele"], " | ".join(raisons))
                 return texte
+            except (BudgetEpuise, PlafondAnalyse) as exc:
+                # Plafond de l'analyse ou budget du jour : on s'arrête là, sans essayer les modèles suivants.
+                self.refus_budget += 1
+                raise type(exc)(f"{exc} — après : {' | '.join(raisons)}" if raisons else str(exc)) from exc
             except Exception as exc:  # noqa: BLE001
                 msg = masquer_secrets(str(exc))
+                if self.registre is not None:
+                    self.registre.noter_echec(etiquette, type_echec(exc))
                 self._echec(m, exc, msg)
                 raisons.append(f"{m['modele']} : {msg[:100]}")
                 autre_echec = autre_echec or not isinstance(exc, QuotaJournalierEpuise)
@@ -777,6 +1001,8 @@ class FournisseurChaine(FournisseurLLM):
                 "plafond_jour": sum(plafonds) if plafonds and None not in plafonds else None,
                 "engrenages_faits": etat.get("engrenages_faits"),
                 "reserve_engrenages": self.reserve_engrenages, "refus_reserve_ce_run": self.refus_reserve,
+                "refus_budget_ce_run": self.refus_budget,
+                "budget": self.registre.resume_budget() if self.registre is not None and self.registre.budget else None,
                 "modeles": {m["modele"]: {**jour.get(m["modele"], {}), "appels_ce_run": m["tentatives"],
                                           "reussites_ce_run": m["reussites"], "sauts_ce_run": m["ignores"]}
                             for m in self.maillons}}
@@ -832,9 +1058,12 @@ def _creer_chaine(config: dict) -> FournisseurChaine:
     disj = cfg.get("disjoncteur") or {}
     log.info("Chaîne de modèles : %s (quotas du jour : %s)", " -> ".join(m for m, _ in maillons),
              {m: registre.etat()["modeles"][m]["appels_aujourdhui"] for m in plafonds})
-    return FournisseurChaine(maillons, registre, disjoncteur_actif=disj.get("actif", True),
-                             seuil_echecs=disj.get("seuil_echecs_consecutifs", 3),
-                             reserve_engrenages=int(cfg.get("reserve_engrenages", 0)))
+    chaine = FournisseurChaine(maillons, registre, disjoncteur_actif=disj.get("actif", True),
+                               seuil_echecs=disj.get("seuil_echecs_consecutifs", 3),
+                               reserve_engrenages=int(cfg.get("reserve_engrenages", 0)))
+    if cfg.get("budget"):
+        chaine.configurer_budget(cfg["budget"])   # run complet par défaut ; l'orchestrateur précise le mode
+    return chaine
 
 
 def creer_fournisseur(config: dict) -> FournisseurLLM:
@@ -875,7 +1104,8 @@ def repli_modele_suivant(llm: FournisseurLLM) -> None:
     (sans effet sur un fournisseur unique)."""
     eviter = getattr(llm, "eviter_dernier_modele", None)
     if callable(eviter):
-        eviter()
+        import sys
+        eviter(sys.exc_info()[1])   # appelé dans un « except » : l'exception typée dit json_invalide ou rejet_controle
 
 
 def extraire_json(texte: str) -> dict | list:

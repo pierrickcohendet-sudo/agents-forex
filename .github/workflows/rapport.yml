@@ -123,6 +123,24 @@ jobs:
         # est fait par le pipeline lui-même (core/publication_web.py) quand
         # GITHUB_ACTIONS=true et publication_web.git_push = auto.
 
+      # Run en échec : le compteur de quota LLM est quand même poussé (incident du 02/11/2026 : le run de 08:15 a
+      # planté après 22 requêtes Gemini, son compteur n'a jamais été publié et le run suivant est reparti de 0).
+      # Seul ce fichier est poussé ; tout le reste du run en échec est abandonné.
+      - name: Garder le compteur de quota LLM si le run échoue
+        if: failure() && steps.decision.outputs.mode != 'rien'
+        run: |
+          [ -f data/cache/quota_llm.json ] || exit 0
+          cp data/cache/quota_llm.json "$RUNNER_TEMP/quota_llm.json"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch --quiet origin "${{ github.ref_name }}"
+          git reset --hard --quiet FETCH_HEAD
+          cp "$RUNNER_TEMP/quota_llm.json" data/cache/quota_llm.json
+          git add data/cache/quota_llm.json
+          git diff --cached --quiet && exit 0
+          git commit --quiet -m "quota LLM : compteur du run en échec"
+          git push --quiet origin "HEAD:${{ github.ref_name }}" || echo "Compteur de quota non poussé (course avec un autre push)"
+
       # Le run s'est arrêté (Python en erreur, installation, délai) : l'issue d'alerte reçoit le lien du run.
       - name: Alerte si le run échoue
         if: failure()

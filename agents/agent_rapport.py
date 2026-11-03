@@ -204,7 +204,9 @@ def executer(racine: str | Path, config: dict, llm, maintenant: datetime | None 
         nouveaux["essais"] = (int((textes or {}).get("essais", 0)) if meme_jour else 0) + 1
         nouveaux["jour_quota"] = jour_quota_google(instant).isoformat()
         textes = nouveaux
-    elif raison and (textes or {}).get("statut") != "ok":
+    if (textes or {}).get("statut") == "ok" and hasattr(llm, "marquer_fait"):
+        llm.marquer_fait("rapport")   # réserve du rapport du jour libérée pour le reste (budget, core/llm.py)
+    if not rediger_ and raison and (textes or {}).get("statut") != "ok":
         textes = {**(textes or {}), "statut": (textes or {}).get("statut") or "en_attente", "raison": raison,
                   "date": r["date"]}
     return rapport_jour.ecrire(racine, config, maintenant, textes)

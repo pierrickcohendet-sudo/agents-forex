@@ -78,7 +78,10 @@ def evaluer(rapport_precedent: dict, prix_actuels: dict[str, float],
     if len(variations) >= 3:
         s = pd.Series(scores).loc[list(variations)]
         v = pd.Series(variations)
-        spearman = round(float(s.corr(v, method="spearman")), 2)
+        # Spearman = Pearson sur les rangs : pandas exige scipy pour method="spearman" (absent du runner,
+        # ModuleNotFoundError du 02/11/2026), les rangs donnent le même coefficient sans dépendance.
+        r = s.rank().corr(v.rank())
+        spearman = None if pd.isna(r) else round(float(r), 2)
 
     return {
         "periode": {

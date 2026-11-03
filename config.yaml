@@ -28,7 +28,23 @@ llm:
   fichier_quota: data/cache/quota_llm.json
   # Les 8 derniers appels de chaque jour (somme des 3 modèles) sont réservés à la synthèse des
   # 8 engrenages tant qu'elle n'a pas réussi ce jour-là : aucune autre section ne les consomme.
-  reserve_engrenages: 8
+  reserve_engrenages: 8          # sans effet quand `budget` est présent (il prime)
+
+  # BUDGET DU JOUR (correctif du 02/11/2026), en requêtes HTTP sur les 3 modèles réunis (Google compte chaque
+  # requête, nouvel essai après un 503 compris). Ordre de priorité : engrenages, rapport du jour, devises, puis le
+  # reste. Chaque catégorie prioritaire garde `analyses × max_appels_par_analyse` requêtes tant qu'elle n'est pas
+  # faite aujourd'hui : aucune autre section ne les consomme. Le run du matin (complet) s'arrête à `plafond_matin`,
+  # le reste du quota gratuit sert aux compléments horaires. Une même analyse : 2 appels au plus par run, puis
+  # repli Python ; une analyse déjà en échec pendant 2 runs dans la journée n'est plus rejouée.
+  budget:
+    plafond_matin: 45
+    max_appels_par_analyse: 2
+    max_echecs_jour_par_analyse: 2
+    priorites:
+      - { categorie: engrenages, analyses: 1 }
+      - { categorie: rapport, analyses: 2, lundi: 4 }
+      - { categorie: devises, analyses: 3 }     # 9 devises en 3 appels groupés de 3
+    taille_groupe_devises: 3
 
   # Disjoncteur : après N échecs consécutifs du modèle principal pendant un run (ou dès
   # un quota journalier épuisé), il est ignoré pour le reste du run et les appels vont

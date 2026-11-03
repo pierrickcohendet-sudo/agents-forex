@@ -380,6 +380,10 @@ def main() -> int:
     reinitialiser_journal()
     try:
         llm = creer_fournisseur(config)
+        if hasattr(llm, "configurer_budget") and config["llm"].get("budget"):
+            # Budget du jour : plafond du run du matin (complet), réserves engrenages / rapport (4 le lundi) / devises.
+            llm.configurer_budget(config["llm"]["budget"], complet=not arguments.completer,
+                                  lundi=date.today().weekday() == 0)
         rapport = etape("agent stratège", agent_strategiste.analyser,
                         config, llm, technique, macro, news, calendrier,
                         dossier_rapports, type_rapport, overrides_du_jour, rapport_existant,
@@ -561,6 +565,29 @@ def ligne_quota(quota: dict | None, engrenages: dict | None) -> str:
     ligne = f"Gemini : {'n/d' if appels is None else appels}/{plafond or 'n/d'}, engrenages : {etat}"
     if q.get("refus_reserve_ce_run"):
         ligne += f" ; {q['refus_reserve_ce_run']} appel(s) refusé(s) pour garder la réserve des engrenages ({q.get('reserve_engrenages')})"
+    if q.get("budget"):
+        ligne += " — " + ligne_budget(q["budget"])
+    return ligne
+
+
+NOMS_CATEGORIES = {"engrenages": "engrenages", "rapport": "rapport du jour", "devises": "devises", "reste": "reste"}
+
+
+def ligne_budget(b: dict) -> str:
+    """« Budget (run complet, plafond 45) : prévu engrenages 1 analyse (≤ 2 requêtes)… ; consommé… ; échecs… »."""
+    prevu = "; ".join(f"{NOMS_CATEGORIES.get(c, c)} {n} {'analyse' if n < 2 else 'analyses'} (≤ {b['prevu_appels_max'][c]} "
+                      f"requêtes)" for c, n in (b.get("prevu_analyses") or {}).items())
+    prioritaire = sum((b.get("prevu_appels_max") or {}).values())
+    if b.get("plafond") is not None:
+        prevu += f"; reste ≤ {max(0, b['plafond'] - prioritaire)}"
+    conso = ", ".join(f"{NOMS_CATEGORIES.get(c, c)} {n}" for c, n in (b.get("consomme_run") or {}).items())
+    jour = b.get("total_jour")
+    echecs = ", ".join(f"{t} × {n}" for t, n in sorted((b.get("echecs_run") or {}).items())) or "aucun"
+    ligne = (f"Budget ({'run ' + b.get('mode', '?')}{', lundi' if b.get('lundi') else ''}, plafond "
+             f"{b.get('plafond') if b.get('plafond') is not None else 'n/d'}) : prévu {prevu} ; consommé ce run : {conso} "
+             f"(jour : {jour}/{b.get('plafond') if b.get('plafond') is not None else 'n/d'}) ; échecs ce run : {echecs}")
+    if b.get("abandonnees"):
+        ligne += " ; non rejouées aujourd'hui : " + ", ".join(b["abandonnees"])
     return ligne
 
 

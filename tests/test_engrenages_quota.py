@@ -144,7 +144,8 @@ class QuotaPartiel(unittest.TestCase):
         self.assertEqual(journal[0], "engrenages")
         self.assertTrue(registre.engrenages_faits)
         self.assertEqual(len(journal), 6)                                              # puis les devises
-        self.assertTrue(all(e.startswith("analyse:") for e in journal[1:]))
+        # réponses {} hors schéma : chaque groupe de 3 devises fait son nouvel essai (2 appels au plus)
+        self.assertEqual(journal[1:], ["analyses:USD-EUR-GBP"] * 2 + ["analyses:JPY-CHF-CAD"] * 2 + ["analyses:AUD-NZD-CNY"])
         self.assertEqual(rapport["synthese_globale"]["engrenages"]["statut"], "ok")
         self.assertTrue(L.RegistreQuotas(registre.chemin, {"a": 20}).engrenages_faits)  # persisté pour les compléments
 
