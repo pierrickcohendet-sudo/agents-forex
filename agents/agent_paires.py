@@ -23,7 +23,7 @@ SCHEMA = '{"paires": {"USD/JPY": "3 lignes au plus", "...": "..."}}'
 def faits(fiche: dict) -> dict:
     m, t = fiche.get("macro") or {}, fiche.get("technique") or {}
     return {"theme": m.get("theme"), "direction_paire": m.get("direction_paire"),
-            "solde_engrenages": (m.get("decomposition") or {}).get("solde"), "scores": m.get("scores"), "surprises": m.get("surprises"),
+            "solde_engrenages": (m.get("decomposition") or {}).get("solde"), "etats": m.get("etats"), "surprises": m.get("surprises"),
             "portage_pb": {k: (m.get("portage") or {}).get(k) for k in ("directeur_pb", "deux_ans_pb")},
             "technique": {k: t.get(k) for k in ("cours", "rsi14", "ecart_mm50", "ecart_mm200", "volatilite_30j")},
             "synthese_python": fiche.get("synthese_python")}

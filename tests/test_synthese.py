@@ -231,7 +231,7 @@ class ReprisePartielle(unittest.TestCase):
                                   extras_synthese={"registre": registre(), "indice_surprise": {}})
         self.assertEqual(len(llm.prompts), 1)                                   # UN seul appel : la synthèse GBP
         self.assertIn("devise GBP", llm.prompts[0])
-        self.assertEqual(rapport["synthese_globale"]["commentaire"], "commentaire existant")   # pas rappelé
+        self.assertTrue(rapport["synthese_globale"]["commentaire"].startswith("Régime de risque global"))   # lot V6 : sans appel
         gbp = next(d for d in rapport["devises"] if d["devise"] == "GBP")
         self.assertEqual(gbp["synthese_approfondie"]["statut"], "ok")
         self.assertEqual(gbp["synthese_approfondie"]["tentatives"], 2)

@@ -239,3 +239,69 @@ export function badgeEcart(ec) {
     + `${ec.marque ? " · écart marqué (≥ 0,5 point ou ≥ 1 σ)" : ""}`;
   return b;
 }
+
+/* ------------------------------------------------------------------ lot V6 : règles communes aux 6 onglets
+   « L'essentiel » : 3 lignes au plus, calculées en Python (ou dans la page à partir des données publiées). */
+export function essentiel(lignes, titre = "L'essentiel") {
+  const b = el("section", "essentiel");
+  b.appendChild(el("h3", null, titre));
+  const ul = el("ul");
+  for (const l of (lignes || []).filter(Boolean).slice(0, 5)) ul.appendChild(el("li", null, l));
+  b.appendChild(ul);
+  return b;
+}
+
+/* « Voir le détail » : tout ce qui dépasse un écran. */
+export function voirDetail(titre, ...noeuds) {
+  const d = el("details", "voir-detail");
+  d.appendChild(el("summary", null, titre || "Voir le détail"));
+  d.append(...noeuds.filter(Boolean));
+  return d;
+}
+
+/* Glossaire UNIQUE du site : une seule définition par terme, au survol (ou au focus) de sa première occurrence
+   dans chaque onglet. */
+export const GLOSSAIRE = {
+  "σ": "Écart habituel (écart-type) de l'indicateur : +1 σ = une surprise d'une taille habituelle, +2 σ = rare.",
+  "percentile": "Rang de la valeur du jour sur 5 ans : percentile 90 = plus haut que 90 % des jours observés.",
+  "BOS": "Cassure de structure (break of structure) : le cours dépasse le dernier sommet ou creux marquant.",
+  "FVG": "Zone de déséquilibre (fair value gap) : intervalle de prix traversé si vite qu'aucun échange n'y a eu lieu.",
+  "portage": "Gain ou coût de détention lié à l'écart de taux entre les deux devises d'une paire (carry).",
+  "carry": "Portage : on emprunte la devise à taux bas pour placer dans celle à taux haut.",
+  "corrélation": "Mesure de −1 à +1 du lien entre deux séries : elle dit ce qui bouge ensemble, jamais ce qui cause quoi.",
+  "consensus": "Prévision médiane des économistes publiée avant le chiffre.",
+  "pb": "Point de base : 0,01 point de pourcentage (25 pb = 0,25 %).",
+  "RSI": "Indice de force relative (0 à 100) : au-dessus de 70, hausse rapide ; en dessous de 30, baisse rapide.",
+  "MM200": "Moyenne mobile des 200 dernières séances : tendance de fond.",
+  "VIX": "Volatilité attendue des actions américaines : une hausse traduit plus de stress.",
+  "COT": "Positions des spéculateurs sur les contrats à terme (CFTC, chaque vendredi pour le mardi).",
+  "risk-off": "Phase d'aversion au risque : les investisseurs vendent les actifs risqués et cherchent les refuges.",
+  "risk-on": "Phase d'appétit pour le risque : actions et devises cycliques sont recherchées.",
+  "invalidation": "Niveau ou évènement qui annule le scénario : s'il se produit, on abandonne la lecture.",
+};
+
+export function appliquerGlossaire(racine) {
+  if (!racine) return;
+  const vus = new Set();
+  const termes = Object.keys(GLOSSAIRE).sort((a, b) => b.length - a.length);
+  const echapper = t => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const motif = new RegExp("(^|[^\\p{L}])(" + termes.map(echapper).join("|") + ")(?![\\p{L}])", "u");
+  const marcheur = document.createTreeWalker(racine, NodeFilter.SHOW_TEXT, {
+    acceptNode: n => (n.parentElement && !n.parentElement.closest("script, style, summary, .gloss, input, textarea, select, button, th, svg"))
+      ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT });
+  const noeuds = [];
+  while (marcheur.nextNode()) noeuds.push(marcheur.currentNode);
+  for (const n of noeuds) {
+    const m = n.nodeValue.match(motif);
+    if (!m || vus.has(m[2])) continue;
+    vus.add(m[2]);
+    const debut = m.index + m[1].length;
+    const apres = n.splitText(debut);
+    apres.nodeValue = apres.nodeValue.slice(m[2].length);
+    const g = el("span", "gloss", m[2]);
+    g.tabIndex = 0;
+    g.title = GLOSSAIRE[m[2]];
+    g.setAttribute("aria-label", `${m[2]} : ${GLOSSAIRE[m[2]]}`);
+    n.parentNode.insertBefore(g, apres);
+  }
+}

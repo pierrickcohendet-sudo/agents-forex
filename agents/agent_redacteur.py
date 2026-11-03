@@ -203,19 +203,15 @@ def _proprietes(rapport: dict) -> dict:
 
 
 # --------------------------------------------------------------- blocs corps
-def _fragments_titre_toggle(devise: dict, drapeau: str) -> list[dict]:
-    biais = devise["risk_on_off"]
-    if devise.get("score_confluence") is None:
+def _fragments_titre_toggle(devise: dict, drapeau: str, etat: str | None = None) -> list[dict]:
+    """Lot V6 : l'état de la devise (profil) remplace la note de confluence en % et le risk on / risk off par devise."""
+    if devise.get("score_confluence") is None and not etat:
         return [
             nb.rt(f"{drapeau} {devise['devise']}  ", gras=True),
             nb.rt("⏸ analyse indisponible aujourd'hui", couleur="gray", italique=True),
         ]
-    return [
-        nb.rt(f"{drapeau} {devise['devise']}  ", gras=True),
-        nb.rt(f"{EMOJI_BIAIS[biais]} {nb.LIBELLES_BIAIS[biais]}", gras=True,
-              couleur=nb.COULEURS_TEXTE[biais]),
-        nb.rt(f"  ·  confluence {devise['score_confluence']} %", couleur="gray"),
-    ]
+    return [nb.rt(f"{drapeau} {devise['devise']}  ", gras=True)] + (
+        [nb.rt(f"·  {etat}", gras=True, couleur="gray")] if etat else [])
 
 
 def _source_lisible(source_id: str | None, catalogue: dict[str, dict]) -> str:
@@ -571,11 +567,13 @@ def _blocs_synthese(rapport: dict) -> list[dict]:
 
     blocs.extend(_blocs_engrenages(rapport))
 
-    blocs.append(nb.tableau(
-        ["Rang", "Devise", "Biais", "Confluence"],
-        [[c["rang"], c["devise"], nb.LIBELLES_BIAIS[c["risk_on_off"]],
-          f"{c['score_confluence']} %"] for c in synthese["classement_devises"]],
-    ))
+    profil = rapport.get("profil_devises") or {}
+    if profil:   # lot V6 : tableau des états à la place du classement en %
+        blocs.append(nb.tableau(
+            ["Devise", "État", "Moteur du moment", "Raison"],
+            [[d, v.get("etat") or "n/d", (f"{v['moteur']} ({str(v['r60']).replace('.', ',').replace('-', '−')})" if v.get("moteur") else "aucun dominant"),
+              str(v.get("raison") or "")[:180]] for d, v in profil.items()],
+        ))
     if synthese.get("devises_indisponibles"):
         blocs.append(nb.paragraphe_gris(
             "⏸ Analyses indisponibles aujourd'hui (exclues du classement) : "
@@ -618,10 +616,6 @@ def _blocs_devise(devise: dict, rapport: dict,
                    "est exclue du classement du jour.", couleur="gray")],
             "⏸", "gray_background"))
     else:
-        blocs.append(nb.image_externe(
-            nb.url_jauge_confluence(devise["score_confluence"], biais),
-            f"Score de confluence : {devise['score_confluence']}/100",
-        ))
         blocs.append(nb.callout(
             [nb.rt(devise.get("synthese_une_phrase", ""), gras=True)],
             EMOJI_BIAIS[biais], nb.COULEURS_CALLOUT[biais]))
@@ -795,7 +789,7 @@ def _generer_contenu(client: Client, page_id: str, rapport: dict, config: dict,
 
     for devise in rapport["devises"]:
         drapeau = config["devises"].get(devise["devise"], {}).get("drapeau", "")
-        poser([nb.toggle(_fragments_titre_toggle(devise, drapeau))])
+        poser([nb.toggle(_fragments_titre_toggle(devise, drapeau, ((rapport.get("profil_devises") or {}).get(devise["devise"]) or {}).get("etat")))])
         toggle_id = dernier
         blocs, opportunites, menaces = _blocs_devise(devise, rapport, catalogue)
         enfants_synthese = _blocs_synthese_approfondie(devise, catalogue)

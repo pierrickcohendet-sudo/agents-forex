@@ -454,6 +454,8 @@ NOTE_REPRISES = (
             "main) — base ton sens et ta justification dessus, pas sur la donnée brute."
         )
 
+LIBELLES_REGIME = {"risk_on": "appétit pour le risque", "risk_off": "aversion au risque", "neutre": "neutre"}
+
 NOTES_ANALYSE = {
     "note_indicateurs": (
         "cpi_surprise / pmi_surprise : surprise vs prévision du calendrier pour CETTE devise. "
@@ -1036,13 +1038,10 @@ def analyser(config: dict, llm: FournisseurLLM, technique: dict, macro: dict,
             etat_du_monde["redige_par"] = attribution_modele()
     # Commentaire du classement : réutilisé tel quel en --completer tant qu'aucune devise
     # n'a été ré-analysée (une retentative de synthèse seule ne relance pas l'analyse de base).
-    commentaire_existant = (rapport_existant or {}).get("synthese_globale", {}).get("commentaire")
-    if (commentaire_existant and nb_analysees == 0
-            and "en tête du classement de confluence" not in commentaire_existant):   # pas le texte de repli
-        commentaire = commentaire_existant
-    else:
-        definir_etiquette("commentaire_classement")
-        commentaire = commenter_synthese_globale(llm, classement, biais, memoire)
+    # Lot V6 : plus de classement des devises affiché, donc plus d'appel au modèle pour le commenter (un appel de
+    # moins par jour) ; phrase Python sur le régime de risque global (engrenage 5), seul biais gardé.
+    commentaire = (f"Régime de risque global : {LIBELLES_REGIME.get(biais, biais)} (calcul Python). "
+                   "Le détail par devise est dans le profil des devises (état, moteur du moment, banque centrale).")
 
     # Partie Python des engrenages recalculée à chaque passage (une seule valeur par indicateur sur le site).
     engrenages = agent_engrenages.rafraichir(engrenages, config, donnees, macro, catalogue, devises_finales, biais,

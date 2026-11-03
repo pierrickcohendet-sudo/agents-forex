@@ -2,7 +2,9 @@
    validés (ou phrases Python). Lundi : version complète (12 sections) ; mardi à vendredi : version courte, avec un bouton
    pour tout afficher. Sommaire cliquable, temps de lecture, impression A4, sections dépliables sur mobile.
    Calculateur de taille de position : calcul local dans le navigateur. Jamais un ordre d'achat ou de vente. */
-import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, certifier, pluriel, badgeEcart, DRAPEAUX } from "./commun.js";
+import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, certifier, pluriel, badgeEcart, essentiel, DRAPEAUX } from "./commun.js";
+import { badgeEtat } from "./devises.js";
+import { RENDUS_LONGS } from "./synthese_longue.js";
 
 const virgule = (v, d = 2) => v == null ? "n/d" : Number(v).toLocaleString("fr-FR", { maximumFractionDigits: d, minimumFractionDigits: 0 });
 const signe = (v, d = 2) => v == null ? "n/d" : `${v > 0 ? "+" : ""}${virgule(v, d)}`.replace("-", "−");
@@ -67,6 +69,16 @@ const RENDUS = {
   },
   scenarios(r) {
     const s = r.scenarios || {}, b = [el("p", "rp-lecture", s.texte_mieux_confirme)];
+    const dominant = (s.liste || []).some(x => x.remplies >= (s.seuil_dominant || 3) && !x.invalide);
+    if (r.version === "courte" && !dominant) {   // pas de scénario dominant : une ligne, le détail replié
+      const d = el("details", "voir-detail"); d.appendChild(el("summary", null, "Voir le détail des scénarios"));
+      d.append(...RENDUS._scenariosDetail(s));
+      return [el("p", "rp-lecture", `Aucun scénario dominant (moins de ${s.seuil_dominant || 3} conditions remplies). ${s.texte_mieux_confirme}`), d];
+    }
+    return b.concat(RENDUS._scenariosDetail(s));
+  },
+  _scenariosDetail(s) {
+    const b = [];
     for (const x of s.liste || []) {
       const d = el("details", `rp-scen${x.mieux_confirme ? " mieux" : ""}${x.invalide ? " invalide" : ""}`);
       const sm = el("summary");
@@ -191,6 +203,20 @@ const RENDUS = {
     }
     return b;
   },
+  essentiel(r) {
+    const e = r.essentiel || {};
+    return [essentiel(e.lignes || [], "En cinq lignes"), el("p", "note", e.source || "")];
+  },
+  devises(r) {
+    const t = r.devises || {};
+    if (!(t.lignes || []).length) return [el("p", "indisponible", `Tableau des devises n/d : ${t.raison || "profil absent"}.`)];
+    const lignes = t.lignes.map(l => {
+      const etat = badgeEtat(l.etat); etat.title = l.raison || "";
+      return [`${DRAPEAUX[l.devise] || ""} ${l.devise}`, l.ancrage, l.moteur, l.banque_centrale || "n/d", etat];
+    });
+    return [tableau(["Devise", "Ancrage", "Moteur du moment", "Banque centrale", "État"], lignes, "rp-devises"),
+            el("p", "note", `${t.note || ""} État : ${t.regle_etat || ""} Détail par devise dans l'onglet Devises.`)];
+  },
   synthese_courte(r) {
     const s = r.synthese_courte || {};
     return [el("p", "rp-lecture", `${s.theme || "Thème n/d"} · ${s.direction || ""} · conviction ${s.conviction || "n/d"}`), liste(s.lignes || [])];
@@ -296,16 +322,45 @@ function risqueBloc(r) {
 }
 
 /* ------------------------------------------------------------------ page */
+/* Synthèse (lot V6) : fusion de l'Accueil, du Rapport, de l'Hebdo et du Mensuel. Mardi à vendredi : version courte
+   (l'essentiel, depuis hier, aujourd'hui, devises, scénarios, watchlist, plan) ; lundi : version longue au format du
+   rapport modèle (12 sections). Synthèses hebdomadaire et mensuelle : sections dépliables en bas de page. */
+async function sectionsPeriodiques() {
+  const [h, cs] = await Promise.all([chargerJson("data/dossiers_hebdo.json"), chargerJson("data/consequences_synthese.json")]);
+  const sortie = [];
+  const hebdo = el("details", "carte rp-section rp-periodique"); hebdo.id = "rp-hebdo";
+  hebdo.appendChild(el("summary", null, "Synthèse hebdomadaire"));
+  const syn = enErreur(h) ? null : h.synthese;
+  if (syn?.statut === "ok") {
+    hebdo.append(el("p", "surtitre", `Semaine ${h.semaine} · rédigée le ${dateHeure(h.genere_le)}`), el("p", "rp-texte", syn.theme_semaine || ""));
+    if (syn.ce_qui_pourrait_tout_changer) hebdo.append(el("h4", null, "Ce qui pourrait tout changer"), el("p", null, syn.ce_qui_pourrait_tout_changer));
+  } else if (!enErreur(cs) && cs.hebdo) {
+    const { sectionSynthese } = await import("./consequences_synthese.js");
+    hebdo.appendChild(sectionSynthese(cs.hebdo, "hebdo"));
+  } else hebdo.appendChild(el("p", "indisponible", `Données insuffisantes : ${enErreur(h) ? "dossier hebdomadaire pas encore produit (dimanche)" : syn?.raison || "synthèse non rédigée"}.`));
+  const lien = el("a", null, "Dossier complet de la semaine (8 engrenages)"); lien.href = "#engrenages/hebdo"; hebdo.appendChild(lien);
+  sortie.push(hebdo);
+  const mens = el("details", "carte rp-section rp-periodique"); mens.id = "rp-mensuel";
+  mens.appendChild(el("summary", null, "Synthèse mensuelle"));
+  if (!enErreur(cs) && cs.mensuel) {
+    const { sectionSynthese } = await import("./consequences_synthese.js");
+    mens.appendChild(sectionSynthese(cs.mensuel, "mensuel"));
+  } else mens.appendChild(el("p", "indisponible", "Données insuffisantes : synthèse mensuelle produite au premier passage du mois."));
+  sortie.push(mens);
+  return sortie;
+}
+
 export async function pageRapport() {
   const r = await chargerJson("data/rapport_jour.json");
-  if (enErreur(r)) return [indisponible("Rapport du jour", r?.__erreur || "rapport_jour.json absent (prochain run)")];
+  if (enErreur(r)) return [indisponible("Synthèse", r?.__erreur || "rapport_jour.json absent (prochain run)")];
+  Object.assign(RENDUS, RENDUS_LONGS);
   const tete = el("section", "carte rp-tete");
-  tete.appendChild(el("p", "surtitre", `Rapport du jour · ${new Date(`${r.date}T12:00:00Z`).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" })} · version ${r.version}`));
+  tete.appendChild(el("p", "surtitre", `Synthèse · ${new Date(`${r.date}T12:00:00Z`).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" })} · version ${r.version === "complète" || r.version === "longue" ? "longue (lundi)" : "courte"}`));
   tete.appendChild(el("h2", "ag-h1", r.theme?.titre || "Rapport FX"));
   tete.appendChild(el("p", "sous-titre", `Généré ${dateHeure(r.genere_le)} · ${r.redige_par?.libelle ? `textes formulés par ${r.redige_par.libelle}, chiffres et décisions en Python` : "textes et chiffres calculés en Python"} · ${r.mention}`));
   const sommaire = el("nav", "rp-sommaire"); sommaire.setAttribute("aria-label", "Sommaire du rapport");
   const actions = el("div", "rp-actions");
-  const toutes = el("button", "bouton", r.version === "courte" ? "Afficher la version complète" : "Version complète affichée"); toutes.type = "button";
+  const toutes = el("button", "bouton", r.version === "courte" ? "Afficher toutes les sections" : "Version longue affichée"); toutes.type = "button";
   const imprimer = el("button", "bouton", "Imprimer / PDF"); imprimer.type = "button"; imprimer.addEventListener("click", () => window.print());
   const temps = el("span", "note tabulaire");
   actions.append(temps, toutes, imprimer);
@@ -315,12 +370,12 @@ export async function pageRapport() {
   function rendre(cles) {
     corps.replaceChildren(); sommaire.replaceChildren();
     cles.forEach((cle, i) => {
-      const s = el("details", "carte rp-section"); s.id = `rp-${cle}`; s.open = ouvert || i === 0;
+      const s = el("details", "carte rp-section"); s.id = `rp-${cle}`; s.open = ouvert || i < 2 || cle === "essentiel";
       const sm = el("summary"); sm.appendChild(el("h3", null, `${i + 1}. ${r.titres?.[cle] || cle}`)); s.appendChild(sm);
       try { for (const n of (RENDUS[cle] ? RENDUS[cle](r) : [])) if (n) s.appendChild(n); }
       catch (e) { console.error(e); s.appendChild(el("p", "indisponible", `Section indisponible (${e.message}).`)); }
       corps.appendChild(s);
-      const a = el("a", null, r.titres?.[cle] || cle); a.href = `#rapport`; a.addEventListener("click", ev => { ev.preventDefault(); s.open = true; s.scrollIntoView({ behavior: "smooth" }); });
+      const a = el("a", null, r.titres?.[cle] || cle); a.href = `#synthese`; a.addEventListener("click", ev => { ev.preventDefault(); s.open = true; s.scrollIntoView({ behavior: "smooth" }); });
       sommaire.appendChild(a);
     });
     const mots = corps.innerText.split(/\s+/).length;
@@ -334,8 +389,10 @@ export async function pageRapport() {
   window.addEventListener("beforeprint", avant); window.addEventListener("afterprint", apres);
   window.addEventListener("hashchange", () => { window.removeEventListener("beforeprint", avant); window.removeEventListener("afterprint", apres); }, { once: true });
   toutes.addEventListener("click", () => {
-    rendre(["synthese", "point_marche", "depuis_veille", "evenements_jour", "lecture", "calendrier", "banques", "bilan", "watchlist", "technique", "tableau_de_bord", "plan", "conclusion"]);
-    toutes.disabled = true; toutes.textContent = "Version complète affichée";
+    rendre([...(r.sections || []), ...["point_marche", "lecture", "calendrier", "banques", "bilan", "watchlist", "technique", "tableau_de_bord", "conclusion"]
+      .filter(c => !(r.sections || []).includes(c))]);
+    toutes.disabled = true; toutes.textContent = "Toutes les sections affichées";
   });
-  return [tete, corps];
+  if (r.version === "complète" || r.version === "longue") toutes.hidden = true;
+  return [tete, corps, ...(await sectionsPeriodiques())];
 }

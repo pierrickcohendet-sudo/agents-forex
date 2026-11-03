@@ -173,6 +173,9 @@ export function cockpit(c, vue, matrice, choisir) {
   grille.append(...(c.thermometres || []).map(t => thermometre(t, choisir)));
   th.append(tete, grille, el("p", "note", c.methode || ""));
   const bas = el("div", "ck-bas");
-  bas.append(filSeances(c.fil || {}), matriceCompacte(matrice));
+  // Lot V6 : le fil des séances n'est affiché que s'il couvre au moins 10 jours de données.
+  const jours = (c.fil || {}).jours || [];
+  bas.append(jours.length >= 10 ? filSeances(c.fil || {}) : el("p", "note", `Fil des séances masqué : ${jours.length} ${jours.length < 2 ? "jour" : "jours"} de données (10 au minimum).`),
+             matriceCompacte(matrice));
   return [entete(c, vue), th, bas];
 }

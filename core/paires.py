@@ -1,7 +1,7 @@
 """Fiches d'analyse des 36 paires (lot V5, étape 7, Journal) → docs/data/paires.json. Calcul Python à chaque run.
 
 Pour chaque paire (convention de marché, core/outils.paires) :
-- macro : thème du jour, décomposition par engrenage (outil C), scores de confluence, écart des taux directeurs et
+- macro : thème du jour, décomposition par engrenage (outil C), états des devises (profil, lot V6), écart des taux directeurs et
   des taux 2 ans (portage), surprises macro, prochains évènements des deux devises (agenda) ;
 - technique : cours, RSI 14, écart aux MM50 et MM200, plus haut / plus bas sur 20 séances, volatilité 30 j, calculés
   sur le croisé des séries uniques 5 ans (force de chaque devise en dollars US ; USD = 1) ;
@@ -96,7 +96,8 @@ def fiche(paire: str, dossiers_donnees: dict, rapport: dict | None, registre: di
     vue = dossiers_donnees.get("vue_ensemble") or {}
     theme = vue.get("theme") or {}
     dec = decompositions.get(paire) or {}
-    scores = {d.get("devise"): d.get("score_confluence") for d in (rapport or {}).get("devises") or []}
+    # Lot V6 : plus de note de confluence en % ; état de chaque devise (profil des devises, calcul Python)
+    etats = {d: (v or {}).get("etat") for d, v in ((rapport or {}).get("profil_devises") or {}).items()}
     surprises = ((rapport or {}).get("tableau_macro") or {}).get("indice_surprise_30j") or {}
     tb, tc = _taux(registre, dossiers_donnees.get("engrenages"), base), _taux(registre, dossiers_donnees.get("engrenages"), cot)
     portage = {"directeur_pb": _ecart(tb["directeur"], tc["directeur"]), "deux_ans_pb": _ecart(tb["deux_ans"], tc["deux_ans"]),
@@ -113,14 +114,14 @@ def fiche(paire: str, dossiers_donnees: dict, rapport: dict | None, registre: di
             lect = lambda d: ((lignes.get(d) or {}).get("aujourdhui") or {}).get("lecture") or ("n/d" if d in lignes else "hors tableau")
             consequences.append({"engrenage": int(n), "moteur": (((e or {}).get("consequences") or {}).get("moteur") or {}).get("libelle"),
                                  "base": lect(base), "cotation": lect(cot)})
-    s_b, s_c = scores.get(base), scores.get(cot)
+    s_b, s_c = etats.get(base), etats.get(cot)
     i_b, i_c = (surprises.get(base) or {}).get("indice"), (surprises.get(cot) or {}).get("indice")
     l1 = (f"Thème : {theme.get('titre') or 'n/d'}. {dec.get('texte') or 'Décomposition n/d'}.")
     l2 = ("Portage : écart des taux directeurs " + ("n/d" if portage["directeur_pb"] is None else
           f"{'≤ ' if tb['borne'] == '<' or tc['borne'] == '>' else '≥ ' if tc['borne'] == '<' or tb['borne'] == '>' else ''}"
           f"{portage['directeur_pb']:+d} pb".replace("-", "−"))
           + ", taux 2 ans " + ("n/d" if portage["deux_ans_pb"] is None else f"{portage['deux_ans_pb']:+d} pb".replace("-", "−"))
-          + f" ; scores de confluence {base} {s_b if s_b is not None else 'n/d'} / {cot} {s_c if s_c is not None else 'n/d'}.")
+          + f" ; états : {base} {(s_b or 'n/d').lower()}, {cot} {(s_c or 'n/d').lower()}.")
     if tech.get("raison"):
         l3 = f"Technique : n/d ({tech['raison']})."
     else:
@@ -133,7 +134,7 @@ def fiche(paire: str, dossiers_donnees: dict, rapport: dict | None, registre: di
             "macro": {"theme": theme.get("titre"), "titre_impose": theme.get("titre_impose"),
                       "direction_theme": (theme.get("direction") or {}).get("libelle"),
                       "direction_paire": dec.get("lecture"), "decomposition": dec,
-                      "scores": {base: s_b, cot: s_c}, "surprises": {base: i_b, cot: i_c}, "portage": portage, "evenements": evts},
+                      "etats": {base: s_b, cot: s_c}, "surprises": {base: i_b, cot: i_c}, "portage": portage, "evenements": evts},
             "technique": tech, "consequences": consequences,
             "synthese_python": [l1, l2, l3], "synthese_modele": None,
             "graphique_1j": {"points": graph, "source": tech.get("source"),
@@ -210,6 +211,14 @@ def intraday_du_jour(racine: Path) -> dict | None:
 def ecrire(racine: str | Path, config: dict, dossiers_donnees: dict, rapport: dict | None, registre: dict | None,
            agenda_donnees: dict | None, h5, technique: dict | None) -> dict | None:
     try:
+        if rapport is not None and not rapport.get("profil_devises"):   # profil publié (calculé à chaque run)
+            try:
+                from core import profil_devises as pdv
+                prof = json.loads((Path(racine) / config.get("publication_web", {}).get("dossier_docs", "docs") / "data"
+                                   / "profil_devises.json").read_text(encoding="utf-8"))
+                rapport = {**rapport, "profil_devises": pdv.compact(prof)}
+            except (OSError, ValueError):
+                pass
         donnees = calculer(config, dossiers_donnees, rapport, registre, agenda_donnees, h5, technique,
                            intraday_du_jour(Path(racine)), textes_du_jour(Path(racine)))
         chemin = Path(racine) / config.get("publication_web", {}).get("dossier_docs", "docs") / "data" / "paires.json"

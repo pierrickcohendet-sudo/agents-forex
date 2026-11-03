@@ -79,6 +79,10 @@ SERIES_TWELVE = {
     "nasdaq_qqq": ("QQQ", "Twelve Data (ETF QQQ, réplique le Nasdaq 100 — pas l'indice lui-même)", "$"),
     "japon_ewj": ("EWJ", "Twelve Data (ETF EWJ, actions japonaises — indicateur du Nikkei, pas l'indice)", "$"),
     "allemagne_ewg": ("EWG", "Twelve Data (ETF EWG, actions allemandes — indicateur du DAX, pas l'indice)", "$"),
+    # Lot V6 (vérifié le 03/11/2026 sur le plan gratuit) : S&P 500 du jour (FRED SP500 a 2 jours de retard) et USD/SEK pour
+    # l'indice dollar calculé selon la formule du DXY. Brent : réservé aux plans payants (XBR/USD, BRENT) -> FRED/EIA.
+    "sp500_spy": ("SPY", "Twelve Data (ETF SPY, réplique le S&P 500 — pas l'indice lui-même)", "$"),
+    "usdsek": ("USD/SEK", "Twelve Data (USD/SEK)", "niveau"),
 }
 # Taux de change quotidiens (Fed H.10) pour les précédents historiques : « ce qu'a fait la devise ensuite ».
 # inverse = cotation en unités de devise pour 1 USD (la force de la devise est alors 1 / taux).

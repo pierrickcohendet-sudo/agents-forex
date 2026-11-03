@@ -139,11 +139,61 @@ def rediger(r: dict, llm, textes_com: dict[str, tuple[str | None, str | None]] |
             sortie["controles"] += [f"plan : {n}" for n in notes]
             if t:
                 sortie["plan"] = t
+    if r.get("version") == "longue":   # lundi : 2 appels groupés de plus (4 au total) pour reformuler les 12 sections
+        _rediger_long(r, llm, sortie, tentatives)
     return _finir(sortie)
 
 
+def faits_long(r: dict, cles: list[str]) -> dict:
+    """Phrase Python et contenu des blocs de chaque section longue : seuls faits que le modèle peut citer."""
+    faits = {}
+    for cle in cles:
+        s = r.get(cle) or {}
+        contenu = []
+        for b in s.get("blocs") or []:
+            contenu += [b.get("texte")] if b.get("texte") else []
+            contenu += b.get("items") or [] if b.get("type") == "liste" else []
+            contenu += [" | ".join(str(x) for x in l) for l in b.get("lignes") or []] if b.get("type") == "tableau" else []
+            contenu += [f"{i.get('titre')} : {i.get('texte') or ''}" for i in b.get("items") or []] if b.get("type") == "cartes" else []
+        faits[cle] = {"titre": s.get("titre"), "phrase": s.get("phrase_python"), "faits": [c for c in contenu if c][:30]}
+    return faits
+
+
+def _rediger_long(r: dict, llm, sortie: dict, tentatives: int) -> None:
+    from core.rapport_long import SECTIONS_LONGUES
+    sortie.setdefault("long", {})
+    for etiquette, cles in (("rapport:long1", SECTIONS_LONGUES[:6]), ("rapport:long2", SECTIONS_LONGUES[6:])):
+        faits = faits_long(r, cles)
+        autorises = _valeurs(faits, set())
+        prompt = ("Reformule en français, ton de desk institutionnel, la phrase de chaque section à partir de ses FAITS (calculés en "
+                  "Python). Réponds STRICTEMENT en JSON : {\"sections\": {\"<clé>\": \"2 ou 3 phrases\"}}. Aucun chiffre absent des faits, "
+                  "aucune probabilité, aucun ordre d'achat ou de vente, jamais « cause » pour une corrélation.\nFAITS :\n"
+                  + json.dumps(faits, ensure_ascii=False))
+        definir_etiquette(etiquette)
+        brut = None
+        for _ in range(max(1, tentatives)):
+            try:
+                sortie["appels"] += 1
+                brut = extraire_json(llm.appeler_llm(prompt))
+                if not isinstance(brut, dict) or not isinstance(brut.get("sections"), dict):
+                    raise ValueError("réponse sans « sections »")
+                break
+            except QuotaAtteint:
+                sortie["controles"].append(f"{etiquette} : quota atteint, phrases Python publiées")
+                return
+            except Exception as exc:  # noqa: BLE001
+                repli_modele_suivant(llm)
+                brut = None
+                sortie["controles"].append(f"{etiquette} : essai en échec ({masquer_secrets(str(exc))[:100]})")
+        for cle in cles:
+            t, notes = _propre(((brut or {}).get("sections") or {}).get(cle), autorises, 700)
+            sortie["controles"] += [f"{cle} : {n}" for n in notes]
+            if t:
+                sortie["long"][cle] = t
+
+
 def _finir(sortie: dict) -> dict:
-    if any(sortie.get(k) for k in ("synthese", "bilan", "conclusion", "watchlist", "communiques", "plan")):
+    if any(sortie.get(k) for k in ("synthese", "bilan", "conclusion", "watchlist", "communiques", "plan", "long")):
         sortie.update({"statut": "ok", "redige_par": attribution_modele()})
         sortie.pop("raison", None)
     elif not sortie.get("raison"):

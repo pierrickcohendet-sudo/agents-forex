@@ -1418,3 +1418,165 @@ simulateur:
     brent:        { CAD: 1, JPY: -1, EUR: -1 }
     or:           { USD: -1, CHF: 1, AUD: 1 }
     sp500:        { USD: -1, JPY: -1, CHF: -1, GBP: 1, CAD: 1, AUD: 1, NZD: 1 }
+
+# PROFIL DES DEVISES (lot V6, partie A) : remplace les notes de confluence en % et le risk on / risk off par devise.
+# Ancrage = ce qui porte la devise historiquement (liste fixe, texte pédagogique). Chaque ancrage mesurable a un
+# moteur et un sens attendu de la corrélation (+1 : la devise monte quand le moteur monte).
+# Moteur du moment = corrélation glissante des variations quotidiennes de l'indice de force de la devise avec chaque
+# moteur candidat, sur 60 séances et sur 20 séances : dominant si |corrélation 60 s| ≥ seuil ET même signe sur 20 s.
+# C'est une corrélation, jamais une cause.
+# État (règle Python, core/profil_devises.py) :
+#   1. « Ancrage contredit » : un ancrage mesurable a une corrélation ≥ seuil en valeur absolue, de même signe sur
+#      20 et 60 séances, mais de sens opposé au sens attendu (ex. JPY refuge qui baisse quand le VIX monte) ;
+#   2. sinon, total de trois signaux : banque centrale (surprise de la dernière décision ≥ 10 pb, ou ton du dernier
+#      communiqué archivé), macro (indice de surprise 30 j ≥ 0,3 en valeur absolue), tendance (force 20 séances ≥ 1 %
+#      en valeur absolue) ; total ≥ 2 : « Soutenue », ≤ −2 : « Sous pression », sinon « Sans direction ».
+profil_devises:
+  # L'indice dollar large n'est candidat que pour l'EUR (ancrage anti-dollar) et le CNY : chaque indice de force est
+  # mesuré contre le dollar, il ressortirait mécaniquement comme moteur de toutes les autres devises.
+  seuil_correlation: 0.30
+  seances_longues: 60
+  seances_courtes: 20
+  seuils_etat: { surprise_bc_pb: 10, indice_surprise: 0.3, tendance_pct: 1.0, jours_decision: 45, total: 2 }
+  moteurs:
+    us2a:         { libelle: "Rendement US 2 ans (écart de taux 2 ans, côté US)", nom: "le rendement US à 2 ans", serie: USD_2a }
+    us10a:        { libelle: "Rendement US 10 ans", nom: "le rendement US à 10 ans", serie: USD_10a }
+    vix:          { libelle: "VIX (volatilité des actions US)", nom: "le VIX", serie: vix }
+    actions:      { libelle: "Indice actions (S&P 500)", nom: "le S&P 500", serie: sp500 }
+    brent:        { libelle: "Pétrole Brent", nom: "le Brent", serie: brent }
+    or:           { libelle: "Or (indice, proxy)", nom: "l'or", serie: indice_or }
+    dollar_large: { libelle: "Indice dollar large (Fed)", nom: "l'indice dollar large", serie: dollar_large }
+    cuivre:       { libelle: "Cuivre", serie: null, raison: "série quotidienne du cuivre non collectée (aucune source gratuite configurée)" }
+    ecart_2a_etranger: { libelle: "Écart de taux 2 ans (taux étranger)", serie: null, raison: "pas d'historique quotidien des taux 2 ans hors États-Unis (seule la dernière valeur est collectée)" }
+    surprises_bc: { libelle: "Surprises de la banque centrale", serie: null, raison: "décisions trop rares (quelques-unes par an) pour une corrélation quotidienne sur 20 ou 60 séances" }
+  devises:
+    USD:
+      nom: Dollar américain
+      ancrages:
+        - { libelle: "Liquidité mondiale", moteur: vix, sens: 1, texte: "Le dollar est la monnaie de réserve : quand le stress monte, la demande de dollars aussi (financements, couvertures)." }
+        - { libelle: "Différentiel de taux", moteur: us2a, sens: 1, texte: "Des taux américains plus hauts que ceux des autres attirent les capitaux vers le dollar." }
+      candidats: [us2a, us10a, vix, actions, or, surprises_bc]
+    EUR:
+      nom: Euro
+      ancrages:
+        - { libelle: "Anti-dollar", moteur: dollar_large, sens: -1, texte: "L'euro est la première alternative au dollar : il monte souvent quand le dollar baisse en général." }
+        - { libelle: "Taux BCE", moteur: ecart_2a_etranger, sens: 1, texte: "Les anticipations sur la BCE, lues dans l'écart de taux 2 ans avec les États-Unis, guident l'euro." }
+        - { libelle: "Énergie", moteur: brent, sens: -1, texte: "La zone euro importe son énergie : un pétrole cher pèse sur sa balance commerciale." }
+      candidats: [dollar_large, us2a, brent, vix, actions, ecart_2a_etranger, surprises_bc]
+    GBP:
+      nom: Livre sterling
+      ancrages:
+        - { libelle: "Taux BoE", moteur: ecart_2a_etranger, sens: 1, texte: "La livre réagit d'abord aux anticipations sur la Banque d'Angleterre, dans un pays à l'inflation tenace." }
+        - { libelle: "Appétit pour le risque", moteur: actions, sens: 1, texte: "Devise d'un pays à déficit courant : elle profite des phases où les investisseurs prennent du risque." }
+      candidats: [us2a, actions, vix, ecart_2a_etranger, surprises_bc]
+    JPY:
+      nom: Yen
+      ancrages:
+        - { libelle: "Refuge", moteur: vix, sens: 1, texte: "Le Japon est créancier net : en cas de stress, les capitaux rentrent et le yen monte." }
+        - { libelle: "Devise de financement du carry", moteur: us10a, sens: -1, texte: "On emprunte en yen (taux bas) pour placer ailleurs : quand l'écart de taux se creuse, le yen baisse." }
+      candidats: [us10a, us2a, vix, actions, or, surprises_bc]
+    CHF:
+      nom: Franc suisse
+      ancrages:
+        - { libelle: "Refuge", moteur: vix, sens: 1, texte: "Stabilité, excédents et neutralité : le franc attire en cas de stress." }
+      candidats: [vix, or, actions, us10a, surprises_bc]
+    CAD:
+      nom: Dollar canadien
+      ancrages:
+        - { libelle: "Pétrole", moteur: brent, sens: 1, texte: "Le Canada exporte du pétrole : un baril plus cher soutient ses recettes et sa devise." }
+        - { libelle: "Économie US", moteur: actions, sens: 1, texte: "Les États-Unis achètent l'essentiel des exportations canadiennes : leur conjoncture compte." }
+      candidats: [brent, actions, us2a, vix, surprises_bc]
+    AUD:
+      nom: Dollar australien
+      ancrages:
+        - { libelle: "Chine et matières premières", moteur: cuivre, sens: 1, texte: "Minerai de fer, charbon, gaz : l'Australie vit de la demande chinoise en matières premières." }
+        - { libelle: "Appétit pour le risque", moteur: actions, sens: 1, texte: "Devise cyclique et liquide : elle sert de baromètre de l'appétit pour le risque." }
+      candidats: [actions, vix, or, cuivre, us2a, surprises_bc]
+    NZD:
+      nom: Dollar néo-zélandais
+      ancrages:
+        - { libelle: "Appétit pour le risque", moteur: actions, sens: 1, texte: "Petite devise à portage : elle suit les phases de prise de risque." }
+        - { libelle: "Produits agricoles", moteur: null, sens: null, texte: "Produits laitiers et viande : les prix agricoles (enchères laitières) pèsent sur ses exportations." }
+      candidats: [actions, vix, us2a, surprises_bc]
+    CNY:
+      nom: Yuan
+      ancrages:
+        - { libelle: "Change géré par la PBoC", moteur: null, sens: null, texte: "La banque centrale fixe chaque jour un cours de référence : la direction se lit d'abord dans ce fixing." }
+      candidats: [dollar_large, actions, us2a]
+  # Noms des décisions de taux dans l'archive des publications (ForexFactory) : dernière décision contre consensus.
+  decisions:
+    USD: ["Federal Funds Rate"]
+    EUR: ["Main Refinancing Rate"]
+    GBP: ["Official Bank Rate"]
+    JPY: ["BOJ Policy Rate"]
+    CHF: ["SNB Policy Rate"]
+    CAD: ["Overnight Rate"]
+    AUD: ["Cash Rate"]
+    NZD: ["Official Cash Rate"]
+    CNY: ["1-y Loan Prime Rate"]
+
+# SYNTHÈSE LONGUE DU LUNDI (lot V6, partie D) : plan du rapport modèle en 12 sections, tout en Python ; le modèle ne fait
+# que reformuler les phrases (4 appels groupés au plus le lundi). Tables ci-dessous : règles et textes fixes.
+rapport_long:
+  # Régime de marché qualitatif : nombre de signaux défensifs parmi les 4 (VIX, actions 1 mois, crédit, refuges).
+  regime:
+    vix_haut: 20
+    actions_1m_pct: 0            # performance 1 mois des actions (SPY) sous ce seuil = défensif
+    credit_1m_pb: 25             # écart high yield en hausse de plus de 25 pb sur 1 mois = défensif
+    or_1m_pct: 3                 # or en hausse de plus de 3 % sur 1 mois = demande de refuge
+    libelles: ["Confiant", "Prudent", "Prudent / fragile", "Défensif", "Défensif"]
+  # Les 4 forces du régime macro : engrenages qui les justifient (cockpit, thermomètres).
+  forces:
+    - { force: "Croissance", engrenages: [3, 5], consequence: { haussier: "Soutien aux devises cycliques (AUD, NZD, CAD) et au dollar si les données US surprennent en hausse", baissier: "Les refuges (JPY, CHF) reprennent la main, les devises cycliques souffrent", neutre: "Pas de signal net de croissance : les surprises de données décident au cas par cas" } }
+    - { force: "Inflation", engrenages: [3, 8], consequence: { haussier: "Banques centrales sous pression de rester restrictives : devises à taux élevés soutenues", baissier: "Les baisses de taux se rapprochent : devises à portage moins recherchées", neutre: "Inflation sans tendance nouvelle : les banques centrales restent dépendantes des données" } }
+    - { force: "Politique monétaire", engrenages: [2, 4], consequence: { haussier: "Écarts de taux favorables au dollar", baissier: "Écarts de taux qui se resserrent : dollar sous pression", neutre: "Écarts de taux stables : peu d'impulsion par les taux" } }
+    - { force: "Appétit pour le risque", engrenages: [5, 6, 7], consequence: { haussier: "Climat porteur pour AUD, NZD, CAD ; JPY et CHF délaissés", baissier: "Recherche de refuges : JPY, CHF et USD soutenus", neutre: "Appétit pour le risque sans direction : marchés en attente" } }
+  # « Risk-on ou risk-off ? » : chaque élément est une règle sur une variable du jour (rapport_jour.variables).
+  elements_defensifs:
+    - { si: [vix, ">", 20], texte: "VIX au-dessus de 20" }
+    - { si: [vix_5j, ">", 2], texte: "VIX en hausse sur 5 séances" }
+    - { si: [spread_hy_5j, ">", 10], texte: "Écart de crédit high yield qui s'élargit sur 5 séances" }
+    - { si: [or_5j, ">", 1.5], texte: "Or en hausse marquée sur 5 séances" }
+    - { si: [sp500_5j, "<", -1.5], texte: "Actions US en baisse sur 5 séances" }
+    - { si: [us10a_5j, "<", -15], texte: "Rendement US 10 ans en net repli (fuite vers la qualité)" }
+  elements_stabilisation:
+    - { si: [vix, "<", 18], texte: "VIX sous 18" }
+    - { si: [spread_hy_5j, "<=", 0], texte: "Écart de crédit high yield stable ou en baisse" }
+    - { si: [sp500_5j, ">", 0], texte: "Actions US en hausse sur 5 séances" }
+    - { si: [nasdaq_5j, ">", 0], texte: "Nasdaq (ETF QQQ) en hausse sur 5 séances" }
+  # « Transmission Forex » de chaque sous-partie de l'analyse des marchés (règle -> texte).
+  transmission:
+    obligations:
+      - { si: [us2a_5j, "<", -5], texte: "Rendements US 2 ans en baisse : l'écart de taux se resserre, moins de soutien pour le dollar" }
+      - { si: [us2a_5j, ">", 5], texte: "Rendements US 2 ans en hausse : l'écart de taux se creuse en faveur du dollar" }
+      - { si: [ecart_2a_us_de_5j, "<", -5], texte: "Écart US − Allemagne 2 ans qui se resserre : favorable à l'EUR/USD" }
+      - { si: [ecart_2a_us_de_5j, ">", 5], texte: "Écart US − Allemagne 2 ans qui se creuse : défavorable à l'EUR/USD" }
+    actions:
+      - { si: [sp500_5j, ">", 1], texte: "Actions en hausse : climat porteur pour AUD, NZD et CAD" }
+      - { si: [sp500_5j, "<", -1], texte: "Actions en baisse : JPY et CHF recherchés" }
+      - { si: [nasdaq_5j, "<", -2], texte: "Technologie en repli : risque de dénouement des positions de portage" }
+    petrole:
+      - { si: [brent_5j, ">", 3], texte: "Pétrole en hausse : soutien au CAD, poids pour le JPY et l'EUR (importateurs)" }
+      - { si: [brent_5j, "<", -3], texte: "Pétrole en baisse : CAD sous pression, soulagement pour le JPY et l'EUR" }
+    or:
+      - { si: [or_5j, ">", 1.5], texte: "Or en hausse : demande de refuge, CHF soutenu ; souvent un dollar plus faible" }
+      - { si: [or_5j, "<", -1.5], texte: "Or en baisse : moins de demande de refuge, dollar souvent plus ferme" }
+  # Banques centrales : conditions « haussière si / baissière si » (Python), reformulées par le modèle.
+  conditions_bc:
+    haussiere: ["décision plus restrictive que le consensus", "communiqué plus restrictif que le précédent", "projections de taux relevées"]
+    baissiere: ["décision plus accommodante que le consensus", "communiqué plus accommodant que le précédent", "insistance sur le ralentissement de l'économie"]
+  # Évènements politiques : « Résultat possible → conséquence potentielle » (mot-clé du titre -> table).
+  issues_politiques:
+    - { mots: ["élection", "mi-mandat"], issues: [["Résultat net, sans contestation", "Prime de risque politique qui se dégonfle : retour aux fondamentaux"], ["Résultat serré ou contesté", "Volatilité accrue : USD et refuges recherchés à court terme"], ["Changement de majorité", "Révision des attentes budgétaires : taux longs et dollar en mouvement"]] }
+    - { mots: ["opep", "opec"], issues: [["Hausse de production", "Pétrole en baisse : CAD sous pression"], ["Statu quo", "Peu d'effet si attendu"], ["Baisse de production", "Pétrole en hausse : CAD soutenu, JPY et EUR pénalisés"]] }
+    - { mots: ["sommet", "g20", "g7"], issues: [["Accord commercial", "Appétit pour le risque : AUD, NZD soutenus"], ["Échec ou tensions", "Refuges recherchés : JPY, CHF"]] }
+  resultats_entreprises:
+    raison: "pas de calendrier de résultats d'entreprises gratuit et licite configuré (les calendriers publics des places boursières interdisent la réutilisation automatisée)"
+  # Technique et exécution : tableau fixe des unités de temps (texte pédagogique).
+  unites_de_temps:
+    - ["Weekly", "Tendance de fond et zones majeures", "Fixe le sens dans lequel on cherche à travailler"]
+    - ["Daily", "Structure de marché et niveaux de la semaine", "Valide ou invalide le biais de travail"]
+    - ["H4", "Construction du scénario", "Repère les zones de réaction et les cassures de structure (BOS)"]
+    - ["H1", "Préparation de l'exécution", "Attend la confirmation au contact des zones"]
+    - ["M15", "Déclenchement", "Confirme le retournement ou la poursuite"]
+    - ["M5", "Exécution fine", "Ajuste l'entrée et le niveau d'invalidation, jamais le sens"]

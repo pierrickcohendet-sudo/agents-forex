@@ -105,7 +105,8 @@ class QuotaAZero(unittest.TestCase):
         attendu = vue_ensemble.TITRE_SIGNAUX_MIXTES if not v["theme"]["coherence"]["theme_fort"] else \
             vue_ensemble._titre_theme(v["theme"]["direction"], {"devises": DEVISES})
         self.assertEqual(v["theme"]["titre"], attendu)
-        self.assertEqual(v["theme"]["titre"], "Aversion au risque, dollar en tête")   # 2, 3, 5, 6, 7 haussiers ; VIX 31
+        self.assertEqual(v["theme"]["titre"], "Aversion au risque, dollar soutenu")   # 2, 3, 5, 6, 7 haussiers ; VIX 31
+        # lot V6 : « en tête » seulement si l'état du dollar (profil des devises) est « Soutenue », plus de classement en %
 
     def test_resume_du_run(self):
         sortie = ae.generer(self.cfg, self.llm, donnees(), macro(), [], DEVISES, "risk_off", EXTRAS_MATRICE)

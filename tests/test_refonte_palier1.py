@@ -184,7 +184,7 @@ class VueEnsemble(unittest.TestCase):
         self.assertEqual((coh["evaluables"], coh["libelle"]), (5, "3 sur 5 évaluables"))   # 6 et 8 sans direction
         self.assertTrue(coh["theme_fort"])
         self.assertFalse(v["theme"]["titre_impose"])
-        self.assertEqual(v["theme"]["titre"], "Aversion au risque, dollar en tête")
+        self.assertEqual(v["theme"]["titre"], "Aversion au risque, dollar soutenu")   # lot V6 : sans profil, pas « en tête »
         self.assertEqual(v["theme"]["texte"], "Diagnostic 1. Deuxième phrase. Troisième.")
         self.assertEqual(v["theme"]["direction"]["conviction"], 2)
 

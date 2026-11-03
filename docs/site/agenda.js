@@ -1,7 +1,7 @@
 /* Page Agenda (lot V5, complément) : docs/data/agenda.json, calcul Python sans LLM.
    Globe des 9 banques centrales (d3-geo + world-atlas, versions épinglées, repli en liste), horloges, onglets par jour,
    filtres par type, impact et devise, réaction passée, prises de parole et grands rendez-vous. Heures de Paris. */
-import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, ouvrirDetail, listeDefinitions, certifier, pluriel, badgeEcart, DRAPEAUX } from "./commun.js";
+import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, ouvrirDetail, listeDefinitions, certifier, pluriel, badgeEcart, DRAPEAUX, essentiel, voirDetail } from "./commun.js";
 
 const CDN = {
   d3geo: "https://cdn.jsdelivr.net/npm/d3-geo@3.1.1/+esm",
@@ -232,7 +232,9 @@ function ligneEvenement(e) {
   const src = el("p", "ag-source note",
     `${e.officiel ? `Date : ${e.officiel.source}${e.officiel.statut && e.officiel.statut !== "officiel" ? ` (${e.officiel.statut})` : ""} · ` : ""}`
     + `Source : ${e.source}${e.verifie_le ? ` · vérifié le ${dateCourte(e.verifie_le)}` : ""}`);
-  corps.append(t, src);
+  corps.appendChild(t);
+  if (e.pourquoi) corps.appendChild(el("p", "ag-pourquoi", e.pourquoi));
+  corps.appendChild(src);
   const valeurs = el("div", "ag-valeurs tabulaire");
   const v = (lib, x, raison, cls, champ) => {
     const st = e.statuts?.[champ];
@@ -371,10 +373,32 @@ export async function pageAgenda() {
   const cal = blocJours(a);
   const bas = el("div", "ag-bas");
   bas.append(blocParoles(a), blocGrands(a));
+  // Lot V6 : vue par défaut « Aujourd'hui et demain », le reste de la semaine replié ; globe réduit, sur le côté.
+  const demain = (a.jours || []).find(j => j.date > a.aujourdhui)?.date;
+  const courts = (a.jours || []).filter(j => j.date === a.aujourdhui || j.date === demain);
+  const forts = courts.flatMap(j => j.evenements).filter(e => e.impact === "fort");
+  tete.appendChild(essentiel([
+    `Aujourd'hui et demain : ${pluriel(forts.length, "évènement fort", "évènements forts")}${forts.length ? ` (${[...new Set(forts.map(e => e.devise))].join(", ")})` : ""}.`,
+    (a.banques_centrales || []).filter(b => b.cette_semaine).length
+      ? `Banques centrales cette semaine : ${(a.banques_centrales || []).filter(b => b.cette_semaine).map(b => `${b.court} (${dateCourte(b.prochaine).slice(0, 5)})`).join(", ")}.`
+      : "Aucune banque centrale ne se réunit cette semaine.",
+    `${pluriel(a.n_forts || 0, "évènement fort", "évènements forts")} sur toute la période affichée.`,
+  ]));
+  const proche = el("section", "carte ag-proche");
+  proche.appendChild(el("h2", null, "Aujourd'hui et demain"));
+  for (const j of courts) {
+    proche.appendChild(el("h3", null, JOUR_LONG.format(new Date(`${j.date}T12:00:00Z`))));
+    const ul = el("ul", "ag-liste");
+    ul.append(...j.evenements.filter(e => e.impact !== "faible").map(ligneEvenement));
+    proche.appendChild(ul.children.length ? ul : el("p", "note", "Aucun évènement moyen ou fort."));
+  }
+  if (!courts.length) proche.appendChild(el("p", "note", "Aucun évènement au calendrier collecté pour aujourd'hui et demain."));
+  const cote = el("div", "ag-cote");
+  cote.append(proche, globe);
   const minuterie = setInterval(() => {
     if (!document.body.contains(cal)) { clearInterval(minuterie); return; }
-    cal.querySelectorAll(".ag-rebours").forEach(s => { s.textContent = rebours(s.dataset.iso); });
+    document.querySelectorAll(".ag-rebours").forEach(s => { s.textContent = rebours(s.dataset.iso); });
     majHorloges();
   }, 30000);
-  return [tete, globe, cal, bas];
+  return [tete, cote, voirDetail("Voir le reste de la semaine : calendrier complet, filtres, prises de parole", cal, bas)];
 }

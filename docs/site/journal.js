@@ -2,6 +2,7 @@
    et graphiques. Colonne droite : mes notes, stockées dans le navigateur (IndexedDB), sans serveur ni clé ; export / import
    JSON (images intégrées) pour la sauvegarde et le transfert. Le biais personnel reste MA lecture, jamais un ordre. */
 import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, ouvrirDetail, certifier, pluriel } from "./commun.js";
+import { UNITES_V2, STATUTS, migrer, compter, performance, bilanMensuel, grilleMois, peutToucher, ics, suggestions, finDeSemaine, nombreFr } from "./journal_logique.js";
 import { graphiqueSerie, dessinerReperes } from "./dossiers.js";
 
 const SVG = "http://www.w3.org/2000/svg";
@@ -98,7 +99,7 @@ function instantane(f) {
   return { date_rapport: f.date_rapport, theme: m.theme, direction_paire: m.direction_paire,
            decomposition: (m.decomposition || {}).texte, synthese: f.synthese_modele?.texte ? [f.synthese_modele.texte] : f.synthese_python,
            technique: { cours: t.cours, date: t.date, rsi14: t.rsi14, ecart_mm200: t.ecart_mm200, volatilite_30j: t.volatilite_30j },
-           portage: { directeur_pb: m.portage?.directeur_pb, deux_ans_pb: m.portage?.deux_ans_pb }, scores: m.scores };
+           portage: { directeur_pb: m.portage?.directeur_pb, deux_ans_pb: m.portage?.deux_ans_pb }, etats: m.etats };
 }
 
 function chandeliers(serie, uniteLib, paire) {
@@ -264,7 +265,7 @@ function ficheAnalyse(f, mes) {
     macro.appendChild(ul);
   }
   const p = m.portage || {};
-  macro.appendChild(el("p", null, `Scores de confluence : ${f.base} ${m.scores?.[f.base] ?? "n/d"} · ${f.cotation} ${m.scores?.[f.cotation] ?? "n/d"}. `
+  macro.appendChild(el("p", null, `États : ${f.base} ${m.etats?.[f.base] ?? "n/d"} · ${f.cotation} ${m.etats?.[f.cotation] ?? "n/d"}. `
     + `Portage : taux directeurs ${p.directeur_pb == null ? "n/d" : `${signe(p.directeur_pb, 0)} pb`}${p.borne ? " (borne)" : ""}, 2 ans ${p.deux_ans_pb == null ? `n/d (${p.raison_2a})` : `${signe(p.deux_ans_pb, 0)} pb`}. `
     + `Surprises 30 j : ${f.base} ${signe(m.surprises?.[f.base])} · ${f.cotation} ${signe(m.surprises?.[f.cotation])}.`));
   if ((m.evenements || []).length) macro.appendChild(el("p", "ck-petit", "Prochains évènements : " + m.evenements.map(e => `${dateCourte(e.date_paris).slice(0, 5)} ${e.heure_paris} ${e.devise} ${e.evenement} (${e.impact})`).join(" · ")));
@@ -299,17 +300,18 @@ function suivi(note, paires) {
 }
 
 /* ------------------------------------------------------------------ Markdown pour Notion */
-function markdown(n) {
-  const i = n.instantane || {};
-  const lignes = [`## ${n.paire} — ${dateHeure(n.cree_le)}`, "",
-    `**Biais personnel (ma lecture, pas un ordre) :** ${BIAIS[n.biais] || "—"}`,
-    `**Unités de temps regardées :** ${(n.unites || []).map(u => UNITES.find(x => x[0] === u)?.[1]).join(", ") || "—"}`,
-    `**Étiquettes :** ${(n.etiquettes || []).join(", ") || "—"}`, "", n.texte || "", "",
-    `**Instantané de l'analyse (rapport du ${i.date_rapport || "n/d"}) :**`,
+function markdown(n0) {
+  const n = migrer(n0), i = n.instantane || {}, c = compter(n.elements);
+  const lignes = [`## ${n.paire} — ${dateHeure(n.date_heure || n.cree_le)}`, "",
+    `**Statut :** ${STATUTS[n.resultat?.statut || "analyse"]}` + (n.resultat?.statut === "cloturee" ? ` · ${n.resultat.pnl_eur ?? "n/d"} € · ${n.resultat.pips ?? "n/d"} pips · ${n.resultat.r ?? "n/d"} R` : ""),
+    `**Unités de temps :** ${[...new Set((n.captures || []).flatMap(x => x.unites || []))].join(", ") || "—"}`,
+    `**Confluence (ma lecture, pas un ordre) :** ${c.pour} pour · ${c.contre} contre`, "", n.contexte || "", "",
+    ...(n.elements || []).filter(x => x.avis).map(x => `- ${x.avis === "pour" ? "Pour" : "Contre"} · ${x.devise} : ${x.texte} (${x.source})`), "",
+    `**Instantané des données (rapport du ${i.date_rapport || "n/d"}) :**`,
     `- Thème : ${i.theme || "n/d"}`, `- ${i.decomposition || "Décomposition n/d"}`,
     `- Technique : cours ${i.technique?.cours ?? "n/d"}, RSI ${i.technique?.rsi14 ?? "n/d"}, écart MM200 ${i.technique?.ecart_mm200 ?? "n/d"} %`,
     ...((i.synthese || []).map(l => `- ${l}`)), ""];
-  if ((n.images || []).length) lignes.push(`_Images à joindre à la main : ${n.images.length} (${n.images.map(x => UNITES.find(u => u[0] === x.unite)?.[1] || x.unite).join(", ")})._`);
+  if ((n.captures || []).length) lignes.push(`_Captures à joindre à la main : ${n.captures.length} (${n.captures.map(x => (x.unites || []).join("+") || "sans unité").join(", ")})._`);
   lignes.push("_Aide à la décision, pas un conseil._");
   return lignes.join("\n");
 }
@@ -327,7 +329,7 @@ export async function pageJournal() {
   const paires = await chargerJson("data/paires.json");
   const tete = el("section", "carte");
   tete.appendChild(el("h2", null, "Journal"));
-  tete.appendChild(el("p", "sous-titre", "À gauche, la fiche d'analyse de la paire (calcul Python à chaque run). À droite, mes notes : elles restent dans ce navigateur (IndexedDB) ; l'export sert de sauvegarde et de transfert. Mon biais est ma lecture, jamais un ordre."));
+  tete.appendChild(el("p", "sous-titre", "À gauche, la fiche d'analyse de la paire (calcul Python à chaque run). À droite, mes entrées : elles restent dans ce navigateur (IndexedDB) ; l'export sert de sauvegarde et de transfert, captures comprises. Ma lecture, jamais un ordre."));
   if (enErreur(paires)) return [tete, indisponible("Fiches des paires", paires?.__erreur || "paires.json absent (prochain run)")];
   const mes = paires.mes_paires || [];
   const grille = el("div", "jn-grille");
@@ -346,7 +348,7 @@ export async function pageJournal() {
   if (!(paires.fiches || {})[paireActive]) paireActive = mes[0] || (paires.paires || [])[0];
   choix.value = paireActive;
   const zoneFiche = el("div");
-  const rendreFiche = () => { zoneFiche.replaceChildren(ficheAnalyse(paires.fiches[paireActive], mes)); champPaire.value = paireActive; };
+  const rendreFiche = () => { zoneFiche.replaceChildren(ficheAnalyse(paires.fiches[paireActive], mes)); };
   choix.addEventListener("change", () => { paireActive = choix.value; try { localStorage.setItem("fxdesk-journal-paire", paireActive); } catch (e) { /* préférence seulement */ } rendreFiche(); });
   const puces = el("div", "jn-puces"); puces.setAttribute("role", "group"); puces.setAttribute("aria-label", "Mes paires");
   const boutonsPuces = mes.map(p => {
@@ -360,57 +362,196 @@ export async function pageJournal() {
   marquerPuce();
   gauche.append(barre, zoneFiche);
 
-  // ------------- formulaire de note
+  // ------------- Journal V2 (lot V6) : nouvelle entrée en 7 étapes, calendrier des résultats, liste
+  const [profil, rapportJour, agenda] = await Promise.all([chargerJson("data/profil_devises.json"), chargerJson("data/rapport_jour.json"), chargerJson("data/agenda.json")]);
+  const donneesJour = { profil: enErreur(profil) ? null : profil, rapport: enErreur(rapportJour) ? null : rapportJour, agenda: enErreur(agenda) ? null : agenda };
+  const vues = el("div", "sc-seg jn-vues"); vues.setAttribute("role", "group"); vues.setAttribute("aria-label", "Vue du journal");
   const form = el("form", "carte jn-form");
-  form.appendChild(el("h2", null, "Nouvelle note"));
+  const calendrier = el("section", "carte jn-calendrier"); calendrier.hidden = true;
+  const boutonsVue = [["saisie", "Nouvelle entrée"], ["calendrier", "Calendrier"]].map(([v, lib]) => {
+    const b = el("button", null, lib); b.type = "button";
+    b.addEventListener("click", () => montrer(v));
+    vues.appendChild(b); return [v, b];
+  });
+  function montrer(v) {
+    form.hidden = v !== "saisie"; calendrier.hidden = v !== "calendrier";
+    boutonsVue.forEach(([x, b]) => b.setAttribute("aria-pressed", String(x === v)));
+    if (v === "calendrier") rendreCalendrier();
+  }
+
+  form.appendChild(el("h2", null, "Nouvelle entrée"));
   const erreur = el("p", "indisponible jn-erreur"); erreur.hidden = true;
-  const champPaire = el("select", "ot-select"); champPaire.setAttribute("aria-label", "Paire de la note");
+  const etape = (n, titre, aide) => { const s = el("fieldset", "jn-etape"); const l = el("legend", null, `${n} · ${titre}`); s.appendChild(l); if (aide) s.appendChild(el("p", "note", aide)); return s; };
+
+  // 1. Paire
+  const e1 = etape(1, "Paire");
+  const champPaire = el("select", "ot-select"); champPaire.setAttribute("aria-label", "Paire de l'entrée");
   for (const p of paires.paires || []) champPaire.appendChild(new Option(p, p));
-  const unites = el("fieldset", "jn-unites"); unites.appendChild(el("legend", null, "Unités de temps regardées"));
-  for (const [u, lib] of UNITES) { const l = el("label"); const c = el("input"); c.type = "checkbox"; c.value = u; l.append(c, document.createTextNode(` ${lib}`)); unites.appendChild(l); }
-  const biais = el("fieldset", "jn-unites jn-biais"); biais.appendChild(el("legend", null, "Mon biais (ma lecture, pas un ordre)"));
-  for (const [v, lib] of Object.entries(BIAIS)) { const l = el("label"); const r = el("input"); r.type = "radio"; r.name = "jn-biais"; r.value = v; if (v === "neutre") r.checked = true; l.append(r, document.createTextNode(` ${lib}`)); biais.appendChild(l); }
-  const texte = el("textarea", "jn-zone"); texte.rows = 6; texte.placeholder = "Mon analyse… (mise en forme : **gras**, *italique*, lignes « - » pour une liste)";
-  texte.setAttribute("aria-label", "Texte de la note");
-  const etiquettes = el("input", "jn-etiquettes"); etiquettes.type = "text"; etiquettes.placeholder = "Étiquettes, séparées par des virgules";
-  etiquettes.setAttribute("aria-label", "Étiquettes");
+  const pucesForm = el("div", "jn-puces"); pucesForm.setAttribute("role", "group"); pucesForm.setAttribute("aria-label", "Mes paires");
+  const autre = el("button", "jn-puce", "Autre…"); autre.type = "button";
+  const pucesP = mes.map(p => { const b = el("button", "jn-puce", p); b.type = "button"; b.addEventListener("click", () => choisirPaire(p)); pucesForm.appendChild(b); return b; });
+  pucesForm.appendChild(autre);
+  champPaire.hidden = true;
+  autre.addEventListener("click", () => { champPaire.hidden = false; champPaire.focus(); autre.setAttribute("aria-pressed", "true"); pucesP.forEach(b => b.setAttribute("aria-pressed", "false")); });
+  champPaire.addEventListener("change", () => choisirPaire(champPaire.value, true));
+  e1.append(pucesForm, champPaire);
+
+  // 2. Date et heure
+  const e2 = etape(2, "Date et heure");
+  const champDate = el("input"); champDate.type = "datetime-local"; champDate.setAttribute("aria-label", "Date et heure de l'entrée");
+  const maintenantLocal = () => { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 16); };
+  champDate.value = maintenantLocal();
+  e2.appendChild(champDate);
+
+  // 3. Captures et unités de temps
+  const e3 = etape(3, "Captures et unités de temps", "Coller (Ctrl+V), glisser ou choisir · une ou plusieurs unités par capture · compression à 1 600 px, rien n'est envoyé.");
   const depot = el("div", "jn-depot"); depot.tabIndex = 0;
-  depot.appendChild(el("p", "jn-depot-titre", "Coller (Ctrl+V) ou glisser mes captures"));
-  depot.appendChild(el("p", null, "Chaque image reçoit son unité de temps (30 min · 4 h · 1 j) ; compression à 1600 px, rien n'est envoyé."));
-  const fichier = el("input"); fichier.type = "file"; fichier.accept = "image/*"; fichier.multiple = true; fichier.setAttribute("aria-label", "Ajouter des images");
+  depot.appendChild(el("p", "jn-depot-titre", "+ Ajouter une capture"));
+  const fichier = el("input"); fichier.type = "file"; fichier.accept = "image/*"; fichier.multiple = true; fichier.setAttribute("aria-label", "Ajouter des captures");
   const apercus = el("div", "jn-apercus");
-  depot.append(fichier, apercus);
-  const enregistrer = el("button", "bouton jn-principal", "Enregistrer · avec l'instantané de l'analyse du jour"); enregistrer.type = "submit";
+  depot.appendChild(fichier);
+  e3.append(apercus, depot);
+
+  // 4. Contexte
+  const e4 = etape(4, "Contexte");
+  const texte = el("textarea", "jn-zone"); texte.rows = 4; texte.placeholder = "Range, niveaux, ce que j'attends… (**gras**, *italique*, lignes « - » pour une liste)";
+  texte.setAttribute("aria-label", "Contexte");
+  e4.appendChild(texte);
+
+  // 5. Éléments confluents
+  const e5 = etape(5, "Éléments confluents", "Proposés par le site à partir des données du jour · je marque ce qui va dans le sens de mon scénario, ou contre.");
+  const colonnes = el("div", "jn-colonnes");
+  const compteurC = el("p", "jn-compteur");
+  e5.append(colonnes, compteurC, el("p", "note", "C'est ma lecture, enregistrée avec l'instantané des données du jour."));
+  let elements = [];
+  function rendreElements() {
+    const [base, cot] = champPaire.value.split("/");
+    colonnes.replaceChildren(...[[base, "devise de base"], [cot, "devise de cotation"]].map(([dev, role]) => {
+      const col = el("div", "jn-colonne");
+      const t = el("div", "jn-col-tete"); t.append(el("b", null, dev), el("span", "note", role)); col.appendChild(t);
+      for (const it of elements.filter(x => x.devise === dev)) {
+        const ligne = el("div", "jn-element");
+        const txt = el("div", "jn-el-texte"); txt.append(el("span", null, it.texte), el("span", "note", it.perso ? "mon élément" : it.source));
+        const g = el("div", "jn-avis"); g.setAttribute("role", "group"); g.setAttribute("aria-label", "Mon avis sur cet élément");
+        for (const [v, lib] of [["pour", "Pour"], ["contre", "Contre"]]) {
+          const b = el("button", `jn-avis-${v}`, lib); b.type = "button"; b.setAttribute("aria-pressed", String(it.avis === v));
+          b.addEventListener("click", () => { it.avis = it.avis === v ? null : v; rendreElements(); rendreAgenda(); });
+          g.appendChild(b);
+        }
+        ligne.append(txt, g); col.appendChild(ligne);
+      }
+      const ajout = el("div", "jn-ajout");
+      const champ = el("input"); champ.type = "text"; champ.placeholder = "+ Ajouter mon propre élément"; champ.setAttribute("aria-label", `Ajouter un élément ${dev}`);
+      const ok = el("button", "bouton", "Ajouter"); ok.type = "button";
+      const ajouter = () => { const v = champ.value.trim(); if (!v) return; elements.push({ id: crypto.randomUUID(), devise: dev, texte: v, source: "mon élément", perso: true, avis: "pour", mots: v.split(/\s+/).filter(m => m.length > 3) }); rendreElements(); rendreAgenda(); };
+      ok.addEventListener("click", ajouter); champ.addEventListener("keydown", ev => { if (ev.key === "Enter") { ev.preventDefault(); ajouter(); } });
+      ajout.append(champ, ok); col.appendChild(ajout);
+      return col;
+    }));
+    const c = compter(elements);
+    compteurC.textContent = `Confluence de mon scénario : ${c.pour} pour · ${c.contre} contre`;
+  }
+
+  // 6. Ce qui peut toucher mon scénario
+  const e6 = etape(6, "Ce qui peut toucher mon scénario");
+  const horizonLigne = el("label", "jn-horizon"); const champHorizon = el("input"); champHorizon.type = "date";
+  champHorizon.value = finDeSemaine().slice(0, 10);
+  horizonLigne.append(document.createTextNode("Jusqu'au "), champHorizon);
+  const listeAgenda = el("ul", "jn-agenda");
+  const actionsAgenda = el("div", "jn-actions");
+  const boutonIcs = el("button", "bouton", "Ajouter à mon agenda (.ics)"); boutonIcs.type = "button";
+  const boutonNotif = el("button", "bouton", "Me prévenir 30 min avant"); boutonNotif.type = "button";
+  const etatNotif = el("p", "note", "Rappel du navigateur 30 min avant chaque évènement marqué : il ne fonctionne que si le site reste ouvert. Le fichier .ics, lui, reste dans votre agenda.");
+  actionsAgenda.append(boutonIcs, boutonNotif);
+  e6.append(horizonLigne, listeAgenda, actionsAgenda, etatNotif);
+  let evenementsTouchent = [];
+  function rendreAgenda() {
+    const horizon = `${champHorizon.value || finDeSemaine().slice(0, 10)}T22:00:00Z`;
+    const evts = donneesJour.agenda ? peutToucher(donneesJour.agenda, champPaire.value, elements, horizon) : [];
+    evenementsTouchent = evts.filter(x => x.touche);
+    listeAgenda.replaceChildren(...(evts.length ? evts.map(x => {
+      const li = el("li", "jn-agenda-ligne");
+      li.append(el("span", "tabulaire", `${dateCourte(x.date_paris).slice(0, 5)} ${x.heure_paris || ""}`), el("b", null, x.devise), el("span", null, x.evenement),
+                el("span", `jn-badge${x.touche ? " fort" : ""}`, x.touche ? "Peut toucher mon scénario" : "À surveiller"));
+      if (x.raison) li.title = `Raison : ${x.raison}`;
+      return li;
+    }) : [el("li", "note", donneesJour.agenda ? "Aucun évènement de ces deux devises d'ici l'horizon." : "Agenda indisponible (prochain run).")]));
+    boutonIcs.disabled = !evenementsTouchent.length;
+  }
+  champHorizon.addEventListener("change", rendreAgenda);
+  boutonIcs.addEventListener("click", () => {
+    const blob = new Blob([ics(evenementsTouchent, champPaire.value)], { type: "text/calendar;charset=utf-8" });
+    const a = el("a"); a.href = URL.createObjectURL(blob); a.download = `fxdesk-${champPaire.value.replace("/", "")}-${new Date().toISOString().slice(0, 10)}.ics`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 60000);
+  });
+  boutonNotif.addEventListener("click", async () => {
+    if (!("Notification" in window)) { etatNotif.textContent = "Notifications indisponibles dans ce navigateur : utilisez le fichier .ics."; return; }
+    const ok = Notification.permission === "granted" || (await Notification.requestPermission()) === "granted";
+    if (!ok) { etatNotif.textContent = "Notifications refusées : utilisez le fichier .ics."; return; }
+    let n = 0;
+    for (const x of evenementsTouchent) {
+      const delai = Date.parse(x.iso_utc) - 30 * 60000 - Date.now();
+      if (delai > 0 && delai < 2 ** 31 - 1) { n++; setTimeout(() => new Notification(`${x.devise} ${x.evenement} dans 30 min`, { body: `Peut toucher mon scénario ${champPaire.value}.` }), delai); }
+    }
+    etatNotif.textContent = `${pluriel(n, "rappel programmé", "rappels programmés")}, tant que cette page reste ouverte.`;
+  });
+
+  // 7. Résultat
+  const e7 = etape(7, "Résultat (à compléter à la clôture)");
+  const grilleR = el("div", "jn-resultat");
+  const statut = el("select"); statut.setAttribute("aria-label", "Statut");
+  for (const [v, lib] of Object.entries(STATUTS)) statut.appendChild(new Option(lib, v));
+  const champ = (lib, ph) => { const l = el("label", "jn-champ"); const i = el("input"); i.type = "text"; i.inputMode = "decimal"; i.placeholder = ph; l.append(el("span", null, lib), i); return [l, i]; };
+  const [lPnl, pnl] = champ("Profit / perte (€)", "ex. +120 ou −45");
+  const [lPips, pips] = champ("Pips", "ex. +35");
+  const [lR, r] = champ("R", "ex. 1,8");
+  const lStatut = el("label", "jn-champ"); lStatut.append(el("span", null, "Statut"), statut);
+  grilleR.append(lStatut, lPnl, lPips, lR);
+  e7.appendChild(grilleR);
+
+  const enregistrer = el("button", "bouton jn-principal", "Enregistrer l'entrée"); enregistrer.type = "submit";
   const annuler = el("button", "bouton", "Annuler la modification"); annuler.type = "button"; annuler.hidden = true;
   const actions = el("div", "jn-actions"); actions.append(enregistrer, annuler);
-  const checklist = el("fieldset", "jn-unites jn-checklist"); checklist.appendChild(el("legend", null, "Checklist avant d'agir (8 étapes, à cocher moi-même)"));
-  for (const [v, lib] of CHECKLIST) { const l = el("label"); const c = el("input"); c.type = "checkbox"; c.value = v; l.append(c, document.createTextNode(` ${lib}`)); checklist.appendChild(l); }
-  form.append(erreur, el("label", "jn-lab", "Paire"), champPaire, unites, biais, checklist, texte, etiquettes, depot, actions,
-              el("p", "note", "Date et heure ajoutées automatiquement ; un instantané de la fiche d'analyse du moment est gardé avec la note."));
-  let images = [];       // {id, unite, blob, largeur, hauteur}
+  form.append(erreur, e1, e2, e3, e4, e5, e6, e7, actions, el("p", "note", "L'entrée garde un instantané des données du jour (fiche de la paire, états des devises)."));
+
+  let captures = [];       // {id, unites[], blob, largeur, hauteur}
   let enEdition = null;
   const afficherErreur = m => { erreur.textContent = `Journal : ${m}.`; erreur.hidden = !m; };
+  function choisirPaire(p, depuisListe) {
+    champPaire.value = p;
+    pucesP.forEach(b => b.setAttribute("aria-pressed", String(b.textContent === p)));
+    if (!depuisListe) { champPaire.hidden = true; autre.setAttribute("aria-pressed", "false"); }
+    const [b, c] = p.split("/");
+    const perso = elements.filter(x => x.perso && [b, c].includes(x.devise));
+    elements = [...suggestions(b, { ...donneesJour, paire: p }), ...suggestions(c, { ...donneesJour, paire: p }), ...perso];
+    rendreElements(); rendreAgenda();
+  }
   function rendreApercus() {
-    apercus.replaceChildren(...images.map((im, k) => {
+    apercus.replaceChildren(...captures.map((im, k) => {
       const b = el("div", "jn-apercu");
       const img = el("img"); img.alt = `Capture ${k + 1}`; img.src = URL.createObjectURL(im.blob);
-      const u = el("select"); u.setAttribute("aria-label", "Unité de temps de l'image");
-      for (const [v, lib] of UNITES) u.appendChild(new Option(lib, v));
-      u.value = im.unite; u.addEventListener("change", () => { im.unite = u.value; });
-      const x = el("button", "bouton", "Retirer"); x.type = "button"; x.addEventListener("click", () => { images.splice(k, 1); rendreApercus(); });
-      b.append(img, u, x);
+      const ut = el("div", "jn-ut"); ut.setAttribute("role", "group"); ut.setAttribute("aria-label", `Unités de temps de la capture ${k + 1}`);
+      for (const u of UNITES_V2) {
+        const bt = el("button", "jn-ut-b", u); bt.type = "button"; bt.setAttribute("aria-pressed", String(im.unites.includes(u)));
+        bt.addEventListener("click", () => { im.unites = im.unites.includes(u) ? im.unites.filter(x => x !== u) : [...im.unites, u]; bt.setAttribute("aria-pressed", String(im.unites.includes(u))); });
+        ut.appendChild(bt);
+      }
+      const x = el("button", "bouton", "Retirer"); x.type = "button"; x.addEventListener("click", () => { captures.splice(k, 1); rendreApercus(); });
+      b.append(img, ut, x);
       return b;
     }));
   }
   async function ajouterFichiers(liste) {
     for (const f of liste) {
       if (!f.type.startsWith("image/")) continue;
-      try { const c = await compresser(f); images.push({ id: crypto.randomUUID(), unite: "4h", ...c }); }
+      try { const c = await compresser(f); captures.push({ id: crypto.randomUUID(), unites: [], ...c }); }
       catch (e) { afficherErreur(`image illisible (${e.message || e})`); }
     }
     rendreApercus();
   }
   fichier.addEventListener("change", () => ajouterFichiers([...fichier.files]));
+  depot.addEventListener("click", ev => { if (ev.target !== fichier) fichier.click(); });
   depot.addEventListener("dragover", e => { e.preventDefault(); depot.classList.add("survol"); });
   depot.addEventListener("dragleave", () => depot.classList.remove("survol"));
   depot.addEventListener("drop", e => { e.preventDefault(); depot.classList.remove("survol"); ajouterFichiers([...(e.dataTransfer?.files || [])]); });
@@ -420,47 +561,118 @@ export async function pageJournal() {
     if (fichiers.length) { e.preventDefault(); ajouterFichiers(fichiers); }
   };
   document.addEventListener("paste", coller);
-  function remplir(n) {
-    enEdition = n; champPaire.value = n.paire; texte.value = n.texte || ""; etiquettes.value = (n.etiquettes || []).join(", ");
-    unites.querySelectorAll("input").forEach(c => { c.checked = (n.unites || []).includes(c.value); });
-    biais.querySelectorAll("input").forEach(r => { r.checked = r.value === n.biais; });
-    checklist.querySelectorAll("input").forEach(c => { c.checked = (n.checklist || []).includes(c.value); });
-    images = (n.images || []).map(x => ({ ...x }));
-    rendreApercus(); annuler.hidden = false; enregistrer.textContent = "Enregistrer les modifications";
+  function remplir(n0) {
+    const n = migrer(n0);
+    enEdition = n; montrer("saisie");
+    choisirPaire(n.paire, !mes.includes(n.paire));
+    texte.value = n.contexte || "";
+    const d = new Date(n.date_heure || n.cree_le); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); champDate.value = d.toISOString().slice(0, 16);
+    elements = (n.elements || []).map(x => ({ ...x }));
+    captures = (n.captures || []).map(x => ({ ...x, unites: [...(x.unites || [])] }));
+    statut.value = n.resultat?.statut || "analyse"; pnl.value = n.resultat?.pnl_eur ?? ""; pips.value = n.resultat?.pips ?? ""; r.value = n.resultat?.r ?? "";
+    rendreApercus(); rendreElements(); rendreAgenda();
+    annuler.hidden = false; enregistrer.textContent = "Enregistrer les modifications";
     form.scrollIntoView({ block: "start" });
   }
   function vider() {
-    enEdition = null; texte.value = ""; etiquettes.value = ""; images = []; rendreApercus();
-    unites.querySelectorAll("input").forEach(c => { c.checked = false; });
-    checklist.querySelectorAll("input").forEach(c => { c.checked = false; });
-    annuler.hidden = true; enregistrer.textContent = "Enregistrer la note";
+    enEdition = null; texte.value = ""; captures = []; rendreApercus(); champDate.value = maintenantLocal();
+    statut.value = "analyse"; pnl.value = ""; pips.value = ""; r.value = "";
+    choisirPaire(champPaire.value || mes[0], !mes.includes(champPaire.value));
+    annuler.hidden = true; enregistrer.textContent = "Enregistrer l'entrée";
   }
   annuler.addEventListener("click", vider);
   form.addEventListener("submit", async e => {
     e.preventDefault();
     const maintenant = new Date().toISOString();
     const n = {
+      ...(enEdition || {}), version: 2,
       id: enEdition?.id || crypto.randomUUID(), cree_le: enEdition?.cree_le || maintenant, modifie_le: maintenant,
-      paire: champPaire.value, unites: [...unites.querySelectorAll("input:checked")].map(c => c.value),
-      biais: biais.querySelector("input:checked")?.value || "neutre", texte: texte.value.trim(),
-      etiquettes: etiquettes.value.split(",").map(x => x.trim()).filter(Boolean),
-      checklist: [...checklist.querySelectorAll("input:checked")].map(c => c.value),
-      images: images.map(({ id, unite, blob, largeur, hauteur }) => ({ id, unite, blob, largeur, hauteur })),
-      instantane: enEdition?.instantane || instantane(paires.fiches[champPaire.value] || {}),
+      date_heure: champDate.value ? new Date(champDate.value).toISOString() : maintenant,
+      paire: champPaire.value, contexte: texte.value.trim(),
+      captures: captures.map(({ id, unites, blob, largeur, hauteur }) => ({ id, unites, blob, largeur, hauteur })),
+      elements: elements.filter(x => x.avis || x.perso), compteur: compter(elements),
+      evenements_suivis: evenementsTouchent.map(({ id, iso_utc, devise, evenement, raison }) => ({ id, iso_utc, devise, evenement, raison })),
+      horizon: champHorizon.value,
+      resultat: { statut: statut.value, pnl_eur: pnl.value.trim() || null, pips: pips.value.trim() || null, r: r.value.trim() || null },
+      instantane: enEdition?.instantane || { ...instantane(paires.fiches[champPaire.value] || {}),
+        etats: donneesJour.profil ? Object.fromEntries(donneesJour.profil.devises.map(p => [p.devise, p.etat.valeur])) : null },
     };
-    if (!n.texte && !n.images.length) { afficherErreur("note vide (texte ou image attendu)"); return; }
+    n.performance = performance(n);   // onglet Performance (préparé, pas encore affiché)
+    if (!n.contexte && !n.captures.length && !n.elements.length) { afficherErreur("entrée vide (contexte, capture ou élément attendu)"); return; }
     try { await ecrireNote(n); afficherErreur(""); vider(); await rendreListe(); }
     catch (err) { afficherErreur(messageErreur(err)); }
   });
 
+  // ------------- calendrier du mois (écran 9)
+  let moisCourant = new Date().toISOString().slice(0, 7), filtreCal = "";
+  const eur = v => v === null || v === undefined ? "" : `${v > 0 ? "+" : v < 0 ? "−" : ""}${Math.abs(v).toLocaleString("fr-FR", { maximumFractionDigits: 2 })} €`;
+  function rendreCalendrier() {
+    const [a, m] = moisCourant.split("-").map(Number);
+    const tete = el("div", "jn-cal-tete");
+    const prec = el("button", "bouton", "‹"); prec.type = "button"; prec.setAttribute("aria-label", "Mois précédent");
+    const suiv = el("button", "bouton", "›"); suiv.type = "button"; suiv.setAttribute("aria-label", "Mois suivant");
+    const titre = el("h2", null, new Date(Date.UTC(a, m - 1, 15)).toLocaleDateString("fr-FR", { month: "long", year: "numeric" }).replace(/^./, c => c.toUpperCase()));
+    const decaler = k => { const d = new Date(Date.UTC(a, m - 1 + k, 15)); moisCourant = d.toISOString().slice(0, 7); rendreCalendrier(); };
+    prec.addEventListener("click", () => decaler(-1)); suiv.addEventListener("click", () => decaler(1));
+    const nouvelle = el("button", "bouton jn-principal", "+ Nouvelle entrée"); nouvelle.type = "button"; nouvelle.addEventListener("click", () => { vider(); montrer("saisie"); });
+    tete.append(prec, titre, suiv, nouvelle);
+    const b = bilanMensuel(toutes, moisCourant, filtreCal);
+    const bilan = el("div", "jn-bilan");
+    for (const [lib, v, cls] of [["Résultat du mois", eur(b.total_eur) || "0 €", b.total_eur > 0 ? "pos" : b.total_eur < 0 ? "neg" : ""], ["Trades clôturés", String(b.clotures)],
+                                 ["Gagnants", b.gagnants_pct == null ? "n/d" : `${b.gagnants_pct} %`], ["R moyen", b.r_moyen == null ? "n/d" : String(b.r_moyen).replace(".", ",").replace("-", "−")],
+                                 ["Meilleure paire", b.meilleure ? `${b.meilleure.paire} ${eur(b.meilleure.eur)}` : "n/d"], ["Pire paire", b.pire ? `${b.pire.paire} ${eur(b.pire.eur)}` : "n/d"]]) {
+      const t = el("div", "jn-bilan-t"); t.append(el("span", "note", lib), el("b", `tabulaire ${cls || ""}`, v)); bilan.appendChild(t);
+    }
+    const filtres = el("div", "jn-puces"); filtres.setAttribute("role", "group"); filtres.setAttribute("aria-label", "Filtrer par paire");
+    for (const p of ["", ...new Set(toutes.map(n => n.paire))]) {
+      const f = el("button", "jn-puce", p || "Toutes"); f.type = "button"; f.setAttribute("aria-pressed", String(p === filtreCal));
+      f.addEventListener("click", () => { filtreCal = p; rendreCalendrier(); }); filtres.appendChild(f);
+    }
+    const defile = el("div", "defile");
+    const grille = el("div", "jn-cal-grille");
+    for (const h of ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim", "Semaine"]) grille.appendChild(el("span", "jn-cal-h", h));
+    const detailJour = el("aside", "jn-cal-detail");
+    const montrerJour = j => {
+      detailJour.replaceChildren(el("h3", null, new Date(`${j.iso}T12:00:00Z`).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })));
+      if (!j.entrees.length) { detailJour.appendChild(el("p", "note", "Aucune entrée ce jour-là.")); return; }
+      for (const n of j.entrees) {
+        const art = el("article", "jn-cal-entree");
+        const t = el("div", "jn-entree-tete"); t.append(el("b", null, n.paire), el("span", `tabulaire ${nombreFr(n.resultat?.pnl_eur) > 0 ? "pos" : nombreFr(n.resultat?.pnl_eur) < 0 ? "neg" : ""}`,
+          n.resultat?.statut === "cloturee" ? eur(nombreFr(n.resultat.pnl_eur)) : STATUTS[n.resultat?.statut || "analyse"]));
+        const c = compter(n.elements);
+        art.append(t, el("p", null, n.contexte || "—"),
+                   el("p", "note", `Unités : ${[...new Set((n.captures || []).flatMap(x => x.unites || []))].join(" · ") || "—"} · confluence : ${c.pour} pour · ${c.contre} contre`));
+        if ((n.captures || []).length) art.appendChild(miniatures(n));
+        const o = el("button", "bouton", "Ouvrir"); o.type = "button"; o.addEventListener("click", () => detail(n)); art.appendChild(o);
+        detailJour.appendChild(art);
+      }
+    };
+    for (const s of grilleMois(toutes, moisCourant, filtreCal)) {
+      for (const j of s.jours) {
+        if (!j) { grille.appendChild(el("span", "jn-cal-vide")); continue; }
+        const c = el("button", `jn-cal-case${j.net > 0 ? " pos" : j.net < 0 ? " neg" : ""}`); c.type = "button";
+        c.setAttribute("aria-label", `${j.jour} : ${j.entrees.length} ${j.entrees.length < 2 ? "entrée" : "entrées"}${j.net !== null ? `, ${eur(j.net)}` : ""}`);
+        c.append(el("span", "jn-cal-num", String(j.jour)), ...[...new Set(j.entrees.map(n => n.paire))].slice(0, 3).map(p => el("span", "jn-cal-paire", p)));
+        if (j.net !== null) c.appendChild(el("span", "jn-cal-net tabulaire", eur(j.net)));
+        c.addEventListener("click", () => montrerJour(j));
+        grille.appendChild(c);
+      }
+      grille.appendChild(el("span", `jn-cal-sem tabulaire${s.total > 0 ? " pos" : s.total < 0 ? " neg" : ""}`, s.total === null ? "—" : eur(s.total)));
+    }
+    defile.appendChild(grille);
+    const corps = el("div", "jn-cal-corps"); corps.append(defile, detailJour);
+    detailJour.appendChild(el("p", "note", "Touchez un jour pour voir ses entrées."));
+    calendrier.replaceChildren(tete, bilan, filtres, corps, el("p", "note", "Résultat net des entrées clôturées, jour par jour et par semaine. Mes chiffres, saisis à la main : un constat, pas un conseil."));
+  }
+
   // ------------- liste, filtres, sauvegarde
   const liste = el("section", "carte jn-liste");
-  liste.appendChild(el("h2", null, "Mes notes"));
+  liste.appendChild(el("h2", null, "Mes entrées"));
   const rappel = el("p", "jn-rappel"); rappel.hidden = true;
   const filtres = el("div", "outils jn-filtres");
   const fPaire = el("select"); fPaire.setAttribute("aria-label", "Filtrer par paire"); fPaire.appendChild(new Option("Toutes les paires", ""));
   for (const p of paires.paires || []) fPaire.appendChild(new Option(p, p));
-  const fEtiq = el("select"); fEtiq.setAttribute("aria-label", "Filtrer par étiquette");
+  const fEtiq = el("select"); fEtiq.setAttribute("aria-label", "Filtrer par statut");
   const fPeriode = el("select"); fPeriode.setAttribute("aria-label", "Filtrer par période");
   for (const [v, l] of [["", "Toute la période"], ["7", "7 derniers jours"], ["30", "30 derniers jours"], ["90", "90 derniers jours"]]) fPeriode.appendChild(new Option(l, v));
   filtres.append(fPaire, fEtiq, fPeriode);
@@ -471,43 +683,52 @@ export async function pageJournal() {
   const sauvegarde = el("div", "jn-actions"); sauvegarde.append(exporter, importer, fImport);
   const zoneListe = el("ol", "jn-entrees");
   liste.append(rappel, filtres, sauvegarde, etat, zoneListe);
-  droite.append(form, liste);
+  droite.append(vues, form, calendrier, liste);
 
   let toutes = [];
   async function rendreListe() {
-    try { toutes = (await lireNotes()).sort((a, b) => b.cree_le.localeCompare(a.cree_le)); }
-    catch (err) { etat.textContent = `Notes indisponibles : ${messageErreur(err)}.`; zoneListe.replaceChildren(); return; }
-    const etiqs = [...new Set(toutes.flatMap(n => n.etiquettes || []))].sort();
+    try {
+      const brutes = await lireNotes();
+      toutes = [];
+      for (const n of brutes) {   // migration V1 -> V2 sans perte, écrite une seule fois
+        const m = migrer(n);
+        if (m !== n) await ecrireNote(m);
+        toutes.push(m);
+      }
+      toutes.sort((a, b) => String(b.date_heure || b.cree_le).localeCompare(String(a.date_heure || a.cree_le)));
+    } catch (err) { etat.textContent = `Entrées indisponibles : ${messageErreur(err)}.`; zoneListe.replaceChildren(); return; }
     const garde = fEtiq.value;
-    fEtiq.replaceChildren(new Option("Toutes les étiquettes", ""), ...etiqs.map(t => new Option(t, t)));
-    fEtiq.value = etiqs.includes(garde) ? garde : "";
+    fEtiq.replaceChildren(new Option("Tous les statuts", ""), ...Object.entries(STATUTS).map(([v, l]) => new Option(l, v)));
+    fEtiq.value = garde;
     const limite = fPeriode.value ? Date.now() - Number(fPeriode.value) * 864e5 : 0;
-    const vues = toutes.filter(n => (!fPaire.value || n.paire === fPaire.value) && (!fEtiq.value || (n.etiquettes || []).includes(fEtiq.value))
-      && Date.parse(n.cree_le) >= limite);
-    etat.textContent = `${pluriel(vues.length, "note affichée", "notes affichées")} sur ${toutes.length}.`;
-    zoneListe.replaceChildren(...vues.map(entree));
+    const vuesL = toutes.filter(n => (!fPaire.value || n.paire === fPaire.value) && (!fEtiq.value || (n.resultat?.statut || "analyse") === fEtiq.value)
+      && Date.parse(n.date_heure || n.cree_le) >= limite);
+    etat.textContent = `${pluriel(vuesL.length, "entrée affichée", "entrées affichées")} sur ${toutes.length}.`;
+    zoneListe.replaceChildren(...vuesL.map(entree));
+    if (!calendrier.hidden) rendreCalendrier();
     try {
       const meta = await lireMeta("derniere_sauvegarde");
       const ref = meta?.valeur || (toutes.length ? toutes[toutes.length - 1].cree_le : null);
       const jours = ref ? Math.floor((Date.now() - Date.parse(ref)) / 864e5) : 0;
       rappel.hidden = !(toutes.length && jours > 7);
-      rappel.textContent = meta?.valeur ? `Dernière sauvegarde il y a ${jours} jours : pensez à exporter vos notes.` : `Aucune sauvegarde depuis ${jours} jours : pensez à exporter vos notes.`;
+      rappel.textContent = meta?.valeur ? `Dernière sauvegarde il y a ${jours} jours : pensez à exporter vos entrées.` : `Aucune sauvegarde depuis ${jours} jours : pensez à exporter vos entrées.`;
     } catch (e) { rappel.hidden = true; }
   }
   function miniatures(n) {
     const z = el("div", "jn-miniatures");
-    for (const im of n.images || []) {
-      const b = el("button", "jn-mini"); b.type = "button"; b.setAttribute("aria-label", `Agrandir l'image ${UNITES.find(u => u[0] === im.unite)?.[1] || ""}`);
+    for (const im of n.captures || []) {
+      const lib = (im.unites || []).join(" · ") || "sans unité";
+      const b = el("button", "jn-mini"); b.type = "button"; b.setAttribute("aria-label", `Agrandir la capture ${lib}`);
       const img = el("img"); img.alt = ""; img.src = URL.createObjectURL(im.blob); b.appendChild(img);
-      b.appendChild(el("span", null, UNITES.find(u => u[0] === im.unite)?.[1] || im.unite));
+      b.appendChild(el("span", null, lib));
       b.addEventListener("click", e => { e.stopPropagation(); pleinEcran(im); });
       z.appendChild(b);
     }
     return z;
   }
   function pleinEcran(im) {
-    const d = el("dialog", "jn-plein"); d.setAttribute("aria-label", "Image en plein écran");
-    const img = el("img"); img.alt = `Capture ${im.unite}`; img.src = URL.createObjectURL(im.blob);
+    const d = el("dialog", "jn-plein"); d.setAttribute("aria-label", "Capture en plein écran");
+    const img = el("img"); img.alt = `Capture ${(im.unites || []).join(", ")}`; img.src = URL.createObjectURL(im.blob);
     const f = el("button", "bouton", "Fermer"); f.type = "button";
     const fin = () => { d.close?.(); d.remove(); };
     f.addEventListener("click", fin); d.addEventListener("click", e => { if (e.target === d) fin(); });
@@ -517,13 +738,15 @@ export async function pageJournal() {
   function entree(n) {
     const li = el("li", "jn-entree");
     const t = el("div", "jn-entree-tete");
-    t.append(el("b", null, n.paire), el("span", "ck-petit", dateHeure(n.cree_le)), el("span", `ck-pastille petite biais-${n.biais}`, BIAIS[n.biais] || "—"));
-    for (const e of n.etiquettes || []) t.appendChild(el("span", "jn-etiq", e));
+    const c = compter(n.elements);
+    t.append(el("b", null, n.paire), el("span", "ck-petit", dateHeure(n.date_heure || n.cree_le)),
+             el("span", "jn-etiq", STATUTS[n.resultat?.statut || "analyse"]), el("span", "ck-petit", `${c.pour} pour · ${c.contre} contre`));
+    if (n.resultat?.statut === "cloturee" && nombreFr(n.resultat.pnl_eur) !== null) t.appendChild(el("b", `tabulaire ${nombreFr(n.resultat.pnl_eur) >= 0 ? "pos" : "neg"}`, eur(nombreFr(n.resultat.pnl_eur))));
     li.appendChild(t);
-    li.appendChild(el("p", "jn-extrait", (n.texte || "").slice(0, 180) + ((n.texte || "").length > 180 ? "…" : "")));
-    if ((n.images || []).length) li.appendChild(miniatures(n));
+    li.appendChild(el("p", "jn-extrait", (n.contexte || "").slice(0, 180) + ((n.contexte || "").length > 180 ? "…" : "")));
+    if ((n.captures || []).length) li.appendChild(miniatures(n));
     const sv = suivi(n, paires);
-    if (sv && !sv.raison) li.appendChild(el("p", "jn-suivi", `Depuis la note (${nombre(sv.depuis[1])} le ${dateCourte(sv.depuis[0])}) : 1 j ${sv.j1 == null ? "n/d" : `${signe(sv.j1)} %`} · 1 sem. ${sv.s1 == null ? "n/d" : `${signe(sv.s1)} %`} · 1 mois ${sv.m1 == null ? "n/d" : `${signe(sv.m1)} %`} — un constat, pas un score.`));
+    if (sv && !sv.raison) li.appendChild(el("p", "jn-suivi", `Depuis l'entrée (${nombre(sv.depuis[1])} le ${dateCourte(sv.depuis[0])}) : 1 j ${sv.j1 == null ? "n/d" : `${signe(sv.j1)} %`} · 1 sem. ${sv.s1 == null ? "n/d" : `${signe(sv.s1)} %`} · 1 mois ${sv.m1 == null ? "n/d" : `${signe(sv.m1)} %`} — un constat, pas un score.`));
     const ouvrir = el("button", "bouton", "Ouvrir"); ouvrir.type = "button";
     ouvrir.addEventListener("click", () => detail(n));
     li.appendChild(ouvrir);
@@ -531,15 +754,22 @@ export async function pageJournal() {
   }
   function detail(n) {
     const noeuds = [];
-    const t = el("p", "ck-petit", `${dateHeure(n.cree_le)}${n.modifie_le !== n.cree_le ? ` · modifiée ${dateHeure(n.modifie_le)}` : ""} · unités : ${(n.unites || []).map(u => UNITES.find(x => x[0] === u)?.[1]).join(", ") || "—"} · biais : ${BIAIS[n.biais]} (ma lecture, pas un ordre)`);
-    noeuds.push(t, texteMisEnForme(n.texte));
-    if ((n.checklist || []).length) noeuds.push(el("p", "ck-petit", `Checklist : ${CHECKLIST.map(([v, l]) => `${(n.checklist || []).includes(v) ? "☑" : "☐"} ${l}`).join(" · ")}`));
-    if ((n.images || []).length) noeuds.push(miniatures(n));
+    const c = compter(n.elements);
+    noeuds.push(el("p", "ck-petit", `${dateHeure(n.date_heure || n.cree_le)}${n.modifie_le !== n.cree_le ? ` · modifiée ${dateHeure(n.modifie_le)}` : ""} · ${STATUTS[n.resultat?.statut || "analyse"]}`
+      + (n.resultat?.statut === "cloturee" ? ` · ${n.resultat.pnl_eur ?? "n/d"} € · ${n.resultat.pips ?? "n/d"} pips · ${n.resultat.r ?? "n/d"} R` : "")), texteMisEnForme(n.contexte));
+    if ((n.elements || []).length) {
+      noeuds.push(el("h3", null, `Éléments confluents : ${c.pour} pour · ${c.contre} contre`));
+      noeuds.push(el("ul", null)); for (const x of n.elements) noeuds[noeuds.length - 1].appendChild(el("li", null, `${x.avis === "pour" ? "✓ Pour" : x.avis === "contre" ? "✗ Contre" : "·"} ${x.devise} : ${x.texte} (${x.source})`));
+    }
+    if (n.biais) noeuds.push(el("p", "ck-petit", `Note V1 : biais ${BIAIS[n.biais] || n.biais} · étiquettes ${(n.etiquettes || []).join(", ") || "—"}`));
+    if ((n.captures || []).length) noeuds.push(miniatures(n));
+    if ((n.evenements_suivis || []).length) noeuds.push(el("p", "ck-petit", `Évènements suivis : ${n.evenements_suivis.map(x => `${x.devise} ${x.evenement}`).join(" · ")}`));
     const i = n.instantane || {};
     const inst = el("div", "jn-instantane");
-    inst.append(el("h3", null, `Ce que disait l'analyse (rapport du ${dateCourte(i.date_rapport)})`),
+    inst.append(el("h3", null, `Ce que disaient les données (rapport du ${dateCourte(i.date_rapport)})`),
                 el("p", null, `Thème : ${i.theme || "n/d"} · ${i.decomposition || "décomposition n/d"}`),
                 el("p", null, `Cours ${nombre(i.technique?.cours)} · RSI ${i.technique?.rsi14 ?? "n/d"} · MM200 ${i.technique?.ecart_mm200 == null ? "n/d" : `${signe(i.technique.ecart_mm200)} %`}`),
+                ...(i.etats ? [el("p", "ck-petit", `États des devises : ${Object.entries(i.etats).map(([d, e]) => `${d} ${e}`).join(" · ")}`)] : []),
                 ...(i.synthese || []).map(l => el("p", "ck-petit", l)));
     noeuds.push(inst);
     const actions = el("div", "jn-actions");
@@ -549,7 +779,7 @@ export async function pageJournal() {
     const confirmation = el("span", "jn-confirm"); confirmation.hidden = true;
     const oui = el("button", "bouton jn-danger", "Oui, supprimer définitivement"); oui.type = "button";
     const non = el("button", "bouton", "Annuler"); non.type = "button";
-    confirmation.append(el("span", null, "Supprimer cette note ? "), oui, non);
+    confirmation.append(el("span", null, "Supprimer cette entrée ? "), oui, non);
     supprimer.addEventListener("click", () => { confirmation.hidden = false; supprimer.hidden = true; oui.focus(); });
     non.addEventListener("click", () => { confirmation.hidden = true; supprimer.hidden = false; });
     oui.addEventListener("click", async () => {
@@ -560,19 +790,21 @@ export async function pageJournal() {
     notion.addEventListener("click", () => copier(markdown(n), notion));
     actions.append(modifier, notion, supprimer, confirmation);
     noeuds.push(actions);
-    ouvrirDetail(`${n.paire} — note du ${dateCourte(n.cree_le)}`, noeuds);
+    ouvrirDetail(`${n.paire} — entrée du ${dateCourte(n.date_heure || n.cree_le)}`, noeuds);
   }
   for (const f of [fPaire, fEtiq, fPeriode]) f.addEventListener("change", rendreListe);
   exporter.addEventListener("click", async () => {
     try {
-      const notes = await lireNotes();
-      const sortie = { format: "fxdesk-journal", version: 1, exporte_le: new Date().toISOString(), notes: [] };
-      for (const n of notes) sortie.notes.push({ ...n, images: await Promise.all((n.images || []).map(async im => ({ ...im, blob: undefined, donnees: await versDataURL(im.blob), type: im.blob.type }))) });
+      const notes = (await lireNotes()).map(migrer);
+      const sortie = { format: "fxdesk-journal", version: 2, exporte_le: new Date().toISOString(), notes: [] };
+      const versDonnees = async im => ({ ...im, blob: undefined, donnees: await versDataURL(im.blob), type: im.blob.type });
+      for (const n of notes) sortie.notes.push({ ...n, captures: await Promise.all((n.captures || []).map(versDonnees)),
+                                                 images: await Promise.all((n.images || []).map(versDonnees)) });
       const blob = new Blob([JSON.stringify(sortie)], { type: "application/json" });
       const a = el("a"); a.href = URL.createObjectURL(blob); a.download = `journal-fxdesk-${new Date().toISOString().slice(0, 10)}.json`;
       document.body.appendChild(a); a.click(); a.remove();
       await ecrireMeta("derniere_sauvegarde", sortie.exporte_le);
-      await rendreListe(); etat.textContent = `${pluriel(notes.length, "note exportée", "notes exportées")} ; sauvegarde enregistrée.`;
+      await rendreListe(); etat.textContent = `${pluriel(notes.length, "entrée exportée", "entrées exportées")} avec leurs captures ; sauvegarde enregistrée.`;
     } catch (err) { afficherErreur(`export impossible : ${messageErreur(err)}`); }
   });
   importer.addEventListener("click", () => fImport.click());
@@ -582,19 +814,22 @@ export async function pageJournal() {
       if (doc.format !== "fxdesk-journal") throw new Error("fichier qui n'est pas un export du journal");
       const existants = new Set((await lireNotes()).map(n => n.id));
       let ajoutees = 0, doublons = 0;
+      const versBlob = async im => ({ ...im, donnees: undefined, type: undefined, blob: await depuisDataURL(im.donnees) });
       for (const n of doc.notes || []) {
         if (existants.has(n.id)) { doublons++; continue; }
-        const imgs = [];
-        for (const im of n.images || []) imgs.push({ id: im.id, unite: im.unite, largeur: im.largeur, hauteur: im.hauteur, blob: await depuisDataURL(im.donnees) });
-        await ecrireNote({ ...n, images: imgs }); ajoutees++;
+        await ecrireNote(migrer({ ...n, images: await Promise.all((n.images || []).filter(x => x.donnees).map(versBlob)),
+                                  ...(n.captures ? { captures: await Promise.all(n.captures.filter(x => x.donnees).map(versBlob)) } : {}) }));
+        ajoutees++;
       }
       await rendreListe();
-      etat.textContent = `Import : ${pluriel(ajoutees, "note ajoutée", "notes ajoutées")}, ${pluriel(doublons, "doublon ignoré", "doublons ignorés")}.`;
+      etat.textContent = `Import : ${pluriel(ajoutees, "entrée ajoutée", "entrées ajoutées")}, ${pluriel(doublons, "doublon ignoré", "doublons ignorés")}.`;
     } catch (err) { afficherErreur(`import impossible : ${messageErreur(err)}`); }
     fImport.value = "";
   });
 
   rendreFiche();
+  choisirPaire(paireActive, !mes.includes(paireActive));
+  montrer("saisie");
   try { await ouvrirBase(); } catch (err) { afficherErreur(messageErreur(err)); enregistrer.disabled = true; }
   await rendreListe();
   return [tete, grille];

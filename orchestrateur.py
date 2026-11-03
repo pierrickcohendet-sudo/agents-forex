@@ -39,7 +39,7 @@ from dotenv import load_dotenv
 from agents import (agent_consequences, agent_critique, agent_paires, agent_rapport, collecte_intraday, agent_dossier_hebdo, agent_engrenages, agent_redacteur, agent_strategiste, agent_synthese,
                     collecte_calendrier, collecte_flux, collecte_historiques, collecte_macro, collecte_news,
                     collecte_technique)
-from core import (accueil, alertes, collecte_cache, controle_qualite, quota_twelve, seance, sources, indicateurs, cours, dossiers, evaluation, hebdo, historique_5ans, impact, marche_taux, overrides, precedents,
+from core import (accueil, alertes, profil_devises, collecte_cache, controle_qualite, quota_twelve, seance, sources, indicateurs, cours, dossiers, evaluation, hebdo, historique_5ans, impact, marche_taux, overrides, precedents,
                   publication_web,
                   registre_macro, saisies_manuelles, site_donnees, tableau_macro)
 from core.llm import creer_fournisseur, journal_appels, reinitialiser_journal
@@ -248,6 +248,8 @@ def main() -> int:
         if rapport_existant is not None:
             # Mises à jour en séance : cotations, « réel » de l'agenda, thermomètres, santé, accueil (sans LLM)
             etape("mises à jour en séance", seance.rafraichir, RACINE, config, rapport_existant, defaut={})
+            # Profil des devises (lot V6) : état, moteur du moment, banque centrale (100 % Python, sans LLM)
+            etape("profil des devises", profil_devises.ecrire, RACINE, config, defaut=None)
         if rapport_existant is None:
             log.info("--completer sans rapport existant aujourd'hui : passage complet effectué à la place")
         else:
@@ -414,6 +416,13 @@ def main() -> int:
     dossiers_theme = etape("dossiers des engrenages (thème)", dossiers.ecrire, RACINE, historiques,
                            registre_macro.charger(donnees_dir / "registre_macro.json"), technique, config,
                            rapport, flux, news, dossier_rapports, defaut=None)
+
+    # Profil des devises (lot V6, partie A) : ancrage, moteur du moment, banque centrale, état — remplace les notes
+    # de confluence en % à l'affichage. Copie compacte dans le rapport archivé (auto-évaluation par état).
+    profil = etape("profil des devises", profil_devises.ecrire, RACINE, config, historique_5ans.charger(), technique,
+                   defaut=None)
+    if profil:
+        rapport["profil_devises"] = profil_devises.compact(profil)
 
     # ------------------------------------------- contrôle qualité (chaque run)
     rapport["controle_qualite"] = etape(

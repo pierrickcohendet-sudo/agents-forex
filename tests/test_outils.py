@@ -95,5 +95,6 @@ def test_onglet_outils_branche_sur_outils_json():
     html = (RACINE / "docs/index.html").read_text(encoding="utf-8")
     app = (RACINE / "docs/site/app.js").read_text(encoding="utf-8")
     js = (RACINE / "docs/site/outils.js").read_text(encoding="utf-8")
-    assert 'data-onglet="outils"' in html and "pageOutils" in app
+    eng = (RACINE / "docs/site/engrenages.js").read_text(encoding="utf-8")
+    assert "outils: \"engrenages\"" in app and "pageOutils" in eng   # lot V6 : outils dans un panneau des 8 engrenages
     assert "data/outils.json" in js and "fetch(" not in js

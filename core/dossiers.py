@@ -521,19 +521,21 @@ def engrenage_1(rapport: dict | None, dossier_rapports: Path | None, dossiers_ca
     evolution = uniques
     lignes = [
         {"libelle": "Régime de risque (biais calculé)", "texte": {"risk_on": "Risk On", "risk_off": "Risk Off", "neutre": "Neutre"}.get(sg.get("biais_macro_global"), "n/d"),
-         "detail": f"écart de score risque − refuge : {_ecart_regime(scores)} pts", "source": "calcul Python (scores de confluence)"},
+         "detail": "régime de risque global (engrenage 5), sans attribution devise par devise", "source": "calcul Python"},
         {"libelle": "Cohérence des engrenages", "texte": coh["libelle"] if coh else "n/d",
          "detail": "règle unique de la page (voir « Qui suit le thème ? »)" if coh else "",
          "source": "règles Python des 8 engrenages", "raison": None if coh else "synthèse 8 engrenages absente de ce rapport"},
         {"libelle": "Indice de surprise global (moyenne 9 devises)", "texte": f"{statistics.mean(indices):+.2f}".replace(".", ",") if indices else "n/d",
          "detail": f"{len(indices)} {'devise' if len(indices) < 2 else 'devises'} avec un indice", "source": "calcul Python (registre macro, 30 j)"},
-        {"libelle": "Score de confluence USD", "texte": str(scores.get("USD")) if scores.get("USD") is not None else "n/d",
-         "detail": "0-100, calcul Python", "source": "rapport du jour"},
+        {"libelle": "État du dollar (profil des devises)", "texte": ((rapport.get("profil_devises") or {}).get("USD") or {}).get("etat") or "n/d",
+         "detail": ((rapport.get("profil_devises") or {}).get("USD") or {}).get("raison") or "profil calculé au prochain run",
+         "source": "calcul Python (profil des devises)"},
     ]
-    graphes = [graphique_serie("Écart de score risque − refuge, rapports des 4 dernières semaines", "pts",
-                               [("Écart risque − refuge", [[x["date"], x["ecart"]] for x in evolution if x["ecart"] is not None])],
-                               "rapports archivés (data/rapports)"),
-               graphique_barres("Scores de confluence du jour", "0-100", [(d, scores.get(d)) for d in DEVISES], "calcul Python")]
+    # Lot V6 : plus de notes de confluence en % ; le graphique compte les devises par état (profil des devises).
+    etats = [v.get("etat") for v in (rapport.get("profil_devises") or {}).values()]
+    graphes = [graphique_barres("Devises par état aujourd'hui", "nombre",
+                                [(e, etats.count(e)) for e in ("Soutenue", "Sous pression", "Sans direction", "Ancrage contredit")] if etats else [],
+                                "calcul Python (profil des devises)")]
     return {"numero": 1, "titre": "Thème macro", "indicateurs": lignes, "evolution": evolution, "graphiques": graphes,
             "notes": ["Le thème découle des 7 autres engrenages ; la cohérence compte les directions calculées en Python qui vont dans son sens."]}
 

@@ -30,14 +30,16 @@ OPS = {">": lambda a, b: a > b, "<": lambda a, b: a < b, ">=": lambda a, b: a >=
 POIDS_IMPACT = {"fort": 3, "moyen": 2, "faible": 1}
 SECTIONS_COMPLETES = ["synthese", "point_marche", "lecture", "calendrier", "banques", "bilan", "watchlist", "technique",
                       "scenarios", "tableau_de_bord", "plan", "conclusion"]
-SECTIONS_COURTES = ["synthese_courte", "point_marche", "depuis_veille", "evenements_jour", "scenarios", "watchlist_top3", "plan"]
+# Lot V6 (partie B) : Synthèse du mardi au vendredi, dans cet ordre.
+SECTIONS_COURTES = ["essentiel", "depuis_veille", "evenements_jour", "devises", "scenarios", "watchlist_top3", "plan"]
 SEUIL_DOMINANT = 3   # en dessous de 3 conditions remplies : « aucun scénario dominant »
 TITRES = {"synthese": "Synthèse exécutive", "point_marche": "Point de marché", "lecture": "Lecture institutionnelle",
           "calendrier": "Calendrier commenté", "banques": "Banques centrales de la semaine", "bilan": "Bilan de la semaine passée",
           "watchlist": "Watchlist des paires", "technique": "Technique multi-unités", "scenarios": "Scénarios de la semaine",
           "tableau_de_bord": "Tableau de bord", "plan": "Plan d'action du jour", "conclusion": "Conclusion",
           "depuis_veille": "Mises à jour depuis la veille", "evenements_jour": "Évènements du jour",
-          "synthese_courte": "Synthèse exécutive", "watchlist_top3": "Watchlist : les 3 premières paires"}
+          "synthese_courte": "Synthèse exécutive", "watchlist_top3": "Watchlist : les 3 premières paires",
+          "essentiel": "L'essentiel", "devises": "Les devises : ancrage, moteur, banque centrale, état"}
 
 
 def pluriel(n, singulier: str, pluriel_: str | None = None) -> str:
@@ -552,8 +554,13 @@ def watchlist(paires_donnees: dict | None, agenda_donnees, historiques, scen: di
             (haussier if sens_scen > 0 else baissier).append(f"le scénario « {meilleur['titre']} » se confirme")
         for e in ev_paire:
             cible = haussier if e["devise"] == base else baissier
-            cible.append(f"{e['devise']} {e['evenement']} ({e['date_paris'][8:10]}/{e['date_paris'][5:7]}) au-dessus du consensus"
-                         if e.get("type") != "Réunion BC" else f"{e['devise']} : décision ({e['date_paris'][8:10]}/{e['date_paris'][5:7]}) plus restrictive qu'attendu")
+            jour = f"{e['date_paris'][8:10]}/{e['date_paris'][5:7]}"
+            if e.get("type") == "Réunion BC":
+                cible.append(f"{e['devise']} : décision ({jour}) plus restrictive qu'attendu")
+            elif e.get("type") == "Chiffre" or e.get("consensus") is not None:
+                cible.append(f"{e['devise']} {e['evenement']} ({jour}) au-dessus du consensus")
+            else:   # élection, sommet : pas de consensus chiffré
+                cible.append(f"{e['devise']} {e['evenement']} ({jour}) : issue jugée favorable à {e['devise']}")
         top.append({**l, "libelle": lib,
                     "scenario_haussier": {"conditions": haussier, "texte": None}, "scenario_baissier": {"conditions": baissier, "texte": None},
                     "confirmations": f"écart de taux à 2 ans {base} − {cot} ; " + ((cfg.get("confirmations") or {}).get(cot if cot != "USD" else base) or "indices liés"),
@@ -706,6 +713,46 @@ def depuis_veille(actuel: dict, veille: dict | None) -> list[str]:
     return lignes or ["Pas de changement de scénario, de mécanisme ni de thème depuis la veille."]
 
 
+def tableau_devises(profil: dict) -> dict:
+    """Synthèse (lot V6) : Devise · Ancrage · Moteur · Banque centrale · État, depuis profil_devises.json (Python)."""
+    lignes = []
+    for d in profil.get("devises") or []:
+        dom = (d.get("moteur") or {}).get("dominant")
+        lignes.append({"devise": d["devise"], "ancrage": ", ".join(a["libelle"] for a in d.get("ancrages") or []),
+                       "moteur": (f"{dom['libelle']} ({_fr(dom['r60'], 2, True)}, {dom['n60']} séances)" if dom else "aucun moteur dominant"),
+                       "banque_centrale": (d.get("banque_centrale") or {}).get("texte"),
+                       "etat": (d.get("etat") or {}).get("valeur"), "raison": (d.get("etat") or {}).get("raison"),
+                       "semaine": (d.get("semaine") or {}).get("score")})
+    return {"lignes": lignes, "raison": None if lignes else "profil des devises non calculé (prochain run)",
+            "note": profil.get("note"), "regle_etat": profil.get("regle_etat")}
+
+
+def essentiel(sortie: dict, profil: dict, du_jour: list[dict]) -> dict:
+    """L'essentiel de la Synthèse : 5 lignes Python (thème, scénario, devises, aujourd'hui, watchlist)."""
+    ent = (sortie.get("theme") or {})
+    lignes = [f"Thème : {ent['titre']}." if ent.get("titre") else "Thème du jour n/d (dossiers des engrenages absents).",
+              sortie["scenarios"]["texte_mieux_confirme"]]
+    par = {}
+    for d in profil.get("devises") or []:
+        par.setdefault((d.get("etat") or {}).get("valeur") or "n/d", []).append(d["devise"])
+    if par:
+        nets = [f"{e} : {', '.join(v)}" for e, v in par.items() if e != "Sans direction"]
+        reste = par.get("Sans direction") or []
+        lignes.append(" · ".join(nets + ([f"{pluriel(len(reste), 'autre')} sans direction" if nets else "toutes sans direction"]
+                                         if reste else [])) + ".")
+    else:
+        lignes.append("Profil des devises n/d (calculé au prochain run).")
+    groupes: dict[tuple, list] = {}
+    for e in du_jour:   # annonces simultanées d'une même devise (décision, communiqué, conférence) : une seule entrée
+        groupes.setdefault((e.get("heure_paris"), e["devise"]), []).append(e["evenement"])
+    morceaux = [f"{h} {d} {ev[0]}" + (f" (et {pluriel(len(ev) - 1, 'autre annonce', 'autres annonces')})" if len(ev) > 1 else "")
+                for (h, d), ev in list(groupes.items())[:3]]
+    lignes.append(f"Aujourd'hui : {', '.join(morceaux)}." if morceaux else "Aucune publication à fort impact aujourd'hui.")
+    top = (sortie.get("watchlist_top3") or [])[:1]
+    lignes.append(f"Paire à suivre en premier : {top[0]['paire']} ({top[0]['libelle'].lower()})." if top else "Watchlist vide aujourd'hui.")
+    return {"lignes": lignes, "source": "calcul Python (thème, scénarios, profil des devises, Agenda, watchlist)"}
+
+
 def calculer(racine: str | Path, config: dict, maintenant: datetime | None = None) -> dict:
     from core import historique_5ans, registre_macro, technique_niveaux
     racine = Path(racine)
@@ -738,7 +785,7 @@ def calculer(racine: str | Path, config: dict, maintenant: datetime | None = Non
         technique_mes[p] = technique_niveaux.calculer(f.get("chandeliers"), pm.serie_paire(h5, technique, p))
     sortie = {
         "genere_le": maintenant.isoformat(timespec="seconds"), "date": aujourd.isoformat(),
-        "version": "complète" if aujourd.weekday() == 0 else "courte",
+        "version": "longue" if aujourd.weekday() == 0 else "courte",
         "date_rapport": (rapport.get("meta") or {}).get("date_rapport"),
         "theme": {k: (cockpit.get("entete") or {}).get(k) for k in ("titre", "direction", "conviction", "texte")},
         "point_marche": point_marche(historiques, h5, technique, seance, config, vars_),
@@ -777,10 +824,17 @@ def calculer(racine: str | Path, config: dict, maintenant: datetime | None = Non
                    (f"Aujourd'hui : {', '.join(f'{e['heure_paris']} {e['devise']} {e['evenement']}' for e in du_jour[:3])}."
                     if du_jour else "Aucune publication à fort impact aujourd'hui.")]}
     sortie["watchlist_top3"] = sortie["watchlist"]["top"][:3]
+    profil = _lire(docs / "profil_devises.json") or {}
+    sortie["devises"] = tableau_devises(profil)
+    sortie["essentiel"] = essentiel(sortie, profil, du_jour)
     sortie["conclusion"] = {"phrase_python": f"{sortie['scenarios']['texte_mieux_confirme']} {sortie['point_marche']['lecture'].capitalize()}. "
                                              f"{MENTION_BIAIS}", "texte": None}
-    sortie["sections"] = SECTIONS_COMPLETES if sortie["version"] == "complète" else SECTIONS_COURTES
-    sortie["titres"] = TITRES
+    # Lundi (lot V6, partie D) : version longue au format du rapport modèle, 12 sections calculées en Python.
+    from core import rapport_long
+    if sortie["version"] == "longue":
+        sortie.update(rapport_long.calculer(sortie, config, agenda_donnees, profil, historiques, h5, technique, aujourd, racine))
+    sortie["sections"] = rapport_long.SECTIONS_LONGUES if sortie["version"] == "longue" else SECTIONS_COURTES
+    sortie["titres"] = {**TITRES, **rapport_long.TITRES_LONGS}
     return sortie
 
 
@@ -798,6 +852,7 @@ def ecrire(racine: str | Path, config: dict, maintenant: datetime | None = None,
         arch = racine / "data" / "archives" / "rapport_jour"
         arch.mkdir(parents=True, exist_ok=True)
         leger = {k: donnees[k] for k in ("date", "theme", "scenarios", "lecture", "synthese")}
+        leger["textes"] = {"communiques": (donnees.get("textes") or {}).get("communiques")}   # ton relu (profil des devises)
         (arch / f"{donnees['date']}.json").write_text(json.dumps(leger, ensure_ascii=False), encoding="utf-8")
         for vieux in sorted(arch.glob("*.json"))[:-30]:   # 30 jours d'archive
             vieux.unlink()
@@ -836,4 +891,7 @@ def appliquer_textes(donnees: dict, textes: dict) -> None:
         tb = (t.get("communiques") or {}).get(c["devise"]) or {}
         if tb.get("ton"):
             c.update(ton=tb["ton"], citations=tb.get("citations"), raison_ton=None)
+    for cle, texte in (t.get("long") or {}).items():   # synthèse longue du lundi : reformulations validées
+        if isinstance(donnees.get(cle), dict) and texte:
+            donnees[cle]["texte"] = texte
     donnees["redige_par"] = t.get("redige_par")

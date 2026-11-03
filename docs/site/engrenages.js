@@ -1,5 +1,5 @@
 /* Onglet « 8 engrenages » : synthèse globale (rapport du jour, synthese_globale.engrenages). */
-import { chargerJson, enErreur, el, indisponible, dateHeure, enBref } from "./commun.js";
+import { chargerJson, enErreur, el, indisponible, dateHeure, dateCourte, enBref, essentiel, voirDetail } from "./commun.js";
 import { carteDossiers } from "./dossiers.js";
 import { vueHebdo } from "./hebdo.js";
 import { chargerSyntheses, sectionSynthese } from "./consequences_synthese.js";
@@ -186,9 +186,19 @@ async function pageQuotidienne(engrenageDemande = null) {
   const vignette = el("details", "carte ck-vignette");
   vignette.appendChild(el("summary", null, "Roue des 8 engrenages, cartes, chaînes et matrice complète"));
   vignette.append(...vue.noeuds);
-  const blocs = [...noeudsCockpit, vignette, dossier];
+  // Lot V6 : un écran d'abord (l'essentiel + une carte par engrenage), tout le reste dans « Voir le détail ».
+  const outils = el("details", "carte voir-detail");
+  outils.appendChild(el("summary", null, "Outils : radar des déclencheurs, « Et si… », décomposer une paire, jours similaires"));
+  outils.addEventListener("toggle", async () => {
+    if (!outils.open || outils.dataset.charge) return;
+    outils.dataset.charge = "1";
+    try { outils.append(...await (await import("./outils.js")).pageOutils()); } catch (e) { outils.appendChild(indisponible("Outils", e.message)); }
+  }, { once: false });
+  const eng = enErreur(rapport) ? null : rapport.synthese_globale?.engrenages;
+  const premier = [...entete8(enErreur(d) ? null : d, eng), cartes8(enErreur(d) ? null : d, eng, choisir)];
+  const detail = voirDetail("Voir le détail : cockpit, roue, matrice, fil des séances, dossiers chiffrés", ...noeudsCockpit, vignette, dossier);
+  const blocs = [...premier, detail, outils];
   if (enErreur(rapport)) return [...blocs, indisponible("Analyse rédigée", rapport?.__erreur)];
-  const eng = rapport.synthese_globale?.engrenages;
   if (!eng) return [...blocs, indisponible("Analyse rédigée", "pas encore générée pour ce rapport (premier run complet à venir)")];
   if (eng.statut !== "ok") return [...blocs, indisponible("Analyse rédigée", String(eng.raison || eng.statut).replace(/^indisponible\s*:\s*/i, ""))];
   const sources = new Map((rapport.sources_citees || []).map(s => [s.id, s]));
@@ -201,5 +211,53 @@ async function pageQuotidienne(engrenageDemande = null) {
   if (cpt) fin.appendChild(cpt);
   if ((eng.controles || []).length) fin.appendChild(el("p", "tag-alerte", `Points de vigilance : ${eng.controles.join(" · ")}`));
   fin.appendChild(el("p", "note", "Aide à la décision uniquement : aucun signal d'achat ou de vente."));
-  return [...blocs, tete, ...fiches, fin];
+  return [...blocs, voirDetail("Voir le détail : analyse rédigée du jour, engrenage par engrenage", tete, ...fiches, fin)];
+}
+
+/* ------------------------------------------------- lot V6 : l'essentiel et une carte par engrenage */
+function entete8(d, eng) {
+  const c = d?.cockpit || {};
+  const ent = c.entete || {};
+  const franchis = (c.franchis || []).length, bord = (c.au_bord || []).length;
+  const tete = el("section", "carte");
+  tete.appendChild(el("h2", null, "Les 8 engrenages du marché"));
+  tete.appendChild(essentiel([
+    ent.titre ? `Thème du jour : ${ent.titre}${ent.direction?.libelle ? ` (${ent.direction.libelle})` : ""}.` : "Thème du jour n/d (dossiers absents).",
+    `${franchis} ${franchis < 2 ? "seuil franchi" : "seuils franchis"} · ${bord} ${bord < 2 ? "engrenage au bord de son seuil" : "engrenages au bord de leur seuil"}.`,
+    eng?.statut === "ok" ? "Analyse rédigée disponible dans « Voir le détail »." : "Analyse rédigée indisponible aujourd'hui : chiffres et directions en calcul Python.",
+  ]));
+  return [tete];
+}
+
+function cartes8(d, eng, choisir) {
+  const grille = el("section", "eg-grille");
+  const thermos = new Map((d?.cockpit?.thermometres || []).map(t => [t.numero, t]));
+  const textes = new Map((eng?.engrenages || []).map(e => [e.numero, e]));
+  const devisesPar = n => (d?.matrice_impact?.lignes || []).flatMap(l => (l.cases || [])
+    .filter(x => x.engrenage === n && x.valeur).map(x => `${l.devise} ${x.valeur > 0 ? "▲" : "▼"}`));
+  for (let n = 1; n <= 8; n++) {
+    const t = thermos.get(n) || {}, e = textes.get(n) || {};
+    const c = el("article", "eg-carte");
+    const tete = el("div", "eg-tete");
+    tete.append(el("span", "eg-num", String(n)), el("b", null, t.nom || e.nom || t.titre || `Engrenage ${n}`));
+    if (t.direction?.libelle) tete.appendChild(el("span", `eg-dir dir-${t.direction.classe || "nd"}`, t.direction.libelle));
+    c.appendChild(tete);
+    const phrase = (e.diagnostic || "").split(/(?<=\.)\s/)[0] || (t.note ? `${t.libelle} : ${t.texte_valeur}. ${t.note}` : "Ce qui se passe : n/d (texte non rédigé aujourd'hui).");
+    c.appendChild(el("p", "eg-phrase", phrase));
+    const devs = devisesPar(n);
+    c.appendChild(el("p", "note", devs.length ? `Devises concernées : ${devs.join(" · ")}` : "Aucune devise touchée par une règle de la matrice aujourd'hui."));
+    if (t.valeur !== null && t.valeur !== undefined && t.pos !== undefined) {   // thermomètre seulement si la donnée existe
+      const th = el("div", "eg-thermo"); th.setAttribute("role", "img");
+      th.setAttribute("aria-label", `${t.libelle} : ${t.texte_valeur}, seuils ${t.seuil_bas} et ${t.seuil_haut}`);
+      const z = el("span", "eg-zone"); z.style.left = `${t.pos_bas}%`; z.style.width = `${t.pos_haut - t.pos_bas}%`;
+      const m = el("span", `eg-marque ${t.etat || ""}`); m.style.left = `${Math.max(0, Math.min(100, t.pos))}%`;
+      th.append(z, m);
+      c.append(th, el("p", "eg-valeur tabulaire", `${t.libelle} : ${t.texte_valeur}${t.date ? ` · ${dateCourte(t.date)}` : ""}`));
+    }
+    const ouvrir = el("button", "bouton-lien", "Ouvrir le dossier"); ouvrir.type = "button";
+    ouvrir.addEventListener("click", () => { document.querySelector(".voir-detail")?.setAttribute("open", ""); choisir(n, true); });
+    c.appendChild(ouvrir);
+    grille.appendChild(c);
+  }
+  return grille;
 }

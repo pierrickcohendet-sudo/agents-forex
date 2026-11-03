@@ -452,6 +452,38 @@ def ecart(publie, consensus, indicateur: str | None, cfg_tm: dict, type_evt: str
             "texte": re.sub(r"-(?=\d)", "−", texte.replace(".", ",")), "echelle": echelle}
 
 
+NOMS_ENGRENAGES = {1: "thème", 2: "politique monétaire", 3: "données économiques", 4: "politique budgétaire",
+                   5: "marchés", 6: "géopolitique", 7: "flux", 8: "offre"}
+# Indicateur (registre) -> clé de la lecture classique du simulateur et variable des scénarios (rapport du jour)
+LIENS_INDICATEURS = {("USD", "pib"): ("pib_us", None), ("USD", "cpi"): ("cpi_us", "surprise_cpi_us"),
+                     ("USD", "cpi_core"): ("cpi_core_us", "surprise_cpi_us"), ("USD", "taux_directeur"): ("fed", None)}
+
+
+def pourquoi(ag: "Agenda", config: dict) -> None:
+    """Lot V6 : « Pourquoi c'est important » (une ligne Python) sur chaque évènement fort : devises touchées (lecture
+    classique du simulateur), engrenage et scénario du rapport du jour dont une condition dépend de cette publication."""
+    cfg_tm = config.get("tableau_macro") or {}
+    lc = (config.get("simulateur") or {}).get("lecture_classique") or {}
+    scen = ((config.get("rapport") or {}).get("scenarios")) or []
+    for e in ag.lignes.values():
+        if e.get("impact") != "fort":
+            continue
+        ind = _indicateur(e, cfg_tm)
+        cle_lc, var = LIENS_INDICATEURS.get((e["devise"], ind), (None, None))
+        if e["devise"] == "USD" and re.search(r"PCE", e.get("evenement_en") or ""):
+            var = "surprise_pce_us"
+        autres = [d for d in (lc.get(cle_lc) or {}) if d != e["devise"]][:4]
+        morceaux = [e["devise"] + (f" et par ricochet {', '.join(autres)}" if autres else "")]
+        if e.get("engrenage"):
+            morceaux.append(f"engrenage {e['engrenage']} ({NOMS_ENGRENAGES.get(e['engrenage'], '')})")
+        elif e.get("type") == "Réunion BC":
+            morceaux.append("engrenage 2 (politique monétaire)")
+        titres = [x["titre"] for x in scen if var and any(c[0] == var for c in x.get("conditions") or [])]
+        if titres:
+            morceaux.append(f"scénario « {titres[0]} »")
+        e["pourquoi"] = "Pourquoi c'est important : " + " · ".join(morceaux) + "."
+
+
 def ecarts(ag: "Agenda", cfg_tm: dict) -> None:
     for e in ag.lignes.values():
         if e.get("publie") and e.get("consensus"):
@@ -623,8 +655,11 @@ def banques_centrales(registre: dict | None, config: dict | None, ag: Agenda, re
             reunions.append({"date": i["prochaine"][:10], "source": "registre macro (ForexFactory)", "statut": "secondaire"})
         reunions = sorted(reunions, key=lambda r: r["date"])[:3]
         prochaine = reunions[0]["date"] if reunions else None
-        ligne = next((e for e in ag.lignes.values() if e["devise"] == devise and e["type"] == "Réunion BC"
-                      and e["date_paris"] == prochaine), None)
+        # La décision de taux, jamais le décompte des votes (BoE « MPC Official Bank Rate Votes » : consensus « 7-0-2 »)
+        candidates = [e for e in ag.lignes.values() if e["devise"] == devise and e["type"] == "Réunion BC"
+                      and e["date_paris"] == prochaine and not re.search(r"vote", e.get("evenement_en") or "", re.I)]
+        ligne = next((e for e in candidates if re.search(r"rate|taux", e.get("evenement_en") or e.get("evenement") or "", re.I)),
+                     candidates[0] if candidates else None)
         tp = taux_principal(devise, actuel, macro)
         if tp.get("valeur") is not None:
             valeur, borne = tp["valeur"], None
@@ -669,6 +704,7 @@ def calculer(ff_brut: str | None, glissants: list[dict] | None, registre: dict |
     reactions(ag, impact, archive, series or {})
     statuts(ag, revisions)
     ecarts(ag, (config or {}).get("tableau_macro") or {})
+    pourquoi(ag, config or {})
     for e in ag.lignes.values():
         if not e.get("consensus"):
             e.setdefault("raison_consensus", "pas de consensus publié" if e["type"] in ("Chiffre", "Réunion BC") else

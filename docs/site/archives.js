@@ -14,16 +14,15 @@ async function jour(date) {
   c.appendChild(el("h2", null, `Rapport du ${dateCourte(date)}`));
   const sg = r.synthese_globale || {};
   c.appendChild(el("p", "sous-titre", `${TYPES[r.meta?.type_rapport] || r.meta?.type_rapport || ""} · régime ${REGIME[sg.biais_macro_global] || "n/d"} · relecture ${RELECTURE[r.critique?.validation] || "non relu"} · généré ${dateHeure(r.meta?.genere_le)}`));
-  if (sg.commentaire) c.appendChild(el("p", "phrase", sg.commentaire));
   const defile = el("div", "defile");
   const t = el("table", "dense");
-  const tete = el("tr"); for (const h of ["Devise", "Score", "Résumé du jour"]) tete.appendChild(el("th", null, h));
+  const tete = el("tr"); for (const h of ["Devise", "État", "Résumé du jour"]) tete.appendChild(el("th", null, h));
   const thead = el("thead"); thead.appendChild(tete); t.appendChild(thead);
   const corps = el("tbody");
   for (const d of r.devises || []) {
     const tr = el("tr");
     tr.appendChild(el("td", null, `${DRAPEAUX[d.devise] || ""} ${d.devise}`));
-    tr.appendChild(el("td", null, d.score_confluence ?? "n/d"));
+    tr.appendChild(el("td", null, r.profil_devises?.[d.devise]?.etat ?? "n/d"));
     const td = el("td", "texte-long", d.score_confluence === null || d.score_confluence === undefined
       ? `Analyse indisponible : ${d.raison_indisponibilite || "raison inconnue"}` : d.synthese_une_phrase || "—");
     tr.appendChild(td);

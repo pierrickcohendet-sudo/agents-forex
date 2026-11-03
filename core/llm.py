@@ -1108,8 +1108,39 @@ def repli_modele_suivant(llm: FournisseurLLM) -> None:
         eviter(sys.exc_info()[1])   # appelé dans un « except » : l'exception typée dit json_invalide ou rejet_controle
 
 
+# Chiffres à la française dans TOUS les textes du modèle (lot V6) : « 6.84 % » -> « 6,84 % », « -0.3 » -> « −0,3 ».
+# Jamais dans les citations mot pour mot (comparées au communiqué officiel), les URL et les identifiants de source.
+CLES_SANS_CONVERSION = {"citations", "url", "source_id", "source_ids", "id", "date", "heure", "heure_utc"}
+_DECIMAL_POINT = re.compile(r"(?<![\w.,−-])(-?)(\d+)\.(\d+)(?!\d|\.\d)")
+
+
+def chiffres_fr(texte: str) -> str:
+    """Virgule décimale et vrai signe moins devant un nombre ; les dates ISO et les heures ne bougent pas."""
+    if not isinstance(texte, str) or "." not in texte and "-" not in texte:
+        return texte
+    t = _DECIMAL_POINT.sub(lambda m: f"{'−' if m.group(1) else ''}{m.group(2)},{m.group(3)}", texte)
+    return re.sub(r"(?<![\w-])-(?=\d)", "−", t)
+
+
+def franciser(valeur, cle: str | None = None):
+    """Applique chiffres_fr à toutes les chaînes d'une réponse JSON (sauf CLES_SANS_CONVERSION)."""
+    if cle in CLES_SANS_CONVERSION:
+        return valeur
+    if isinstance(valeur, str):
+        return chiffres_fr(valeur)
+    if isinstance(valeur, list):
+        return [franciser(v, cle) for v in valeur]
+    if isinstance(valeur, dict):
+        return {k: franciser(v, k) for k, v in valeur.items()}
+    return valeur
+
+
 def extraire_json(texte: str) -> dict | list:
-    """Parse le JSON d'une réponse LLM, en tolérant les clôtures ```json ... ```."""
+    """Parse le JSON d'une réponse LLM (clôtures ```json ... ``` tolérées), chiffres des textes à la française."""
+    return franciser(_extraire_json(texte))
+
+
+def _extraire_json(texte: str) -> dict | list:
     texte = texte.strip()
     texte = re.sub(r"^```(?:json)?\s*", "", texte)
     texte = re.sub(r"\s*```$", "", texte)

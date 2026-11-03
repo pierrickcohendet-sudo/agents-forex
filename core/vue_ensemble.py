@@ -112,17 +112,17 @@ def _cellule(e: dict, devise: str, colonne: str) -> dict:
 
 # ------------------------------------------------------------------ cartes
 def _carte_1(rapport: dict | None, dossiers: dict) -> tuple[dict, str, dict]:
-    scores = sorted([(d.get("score_confluence"), d["devise"]) for d in (rapport or {}).get("devises") or []
-                     if d.get("score_confluence") is not None], reverse=True)
-    usd = next((s for s, d in scores if d == "USD"), None)
+    # Lot V6 : l'état des devises (profil) remplace les notes de confluence en %.
+    profil = (rapport or {}).get("profil_devises") or {}
     jour = ((rapport or {}).get("meta") or {}).get("date_rapport")
-    ligne = (", ".join(f"{d} {s:.0f}" for s, d in (scores[:2] + scores[-1:])) +
-             f" : écart de {scores[0][0] - scores[-1][0]:.0f} points entre extrêmes.") if len(scores) >= 3 else \
-        "Scores de confluence indisponibles."
-    pts = _courbe_graphique(dossiers.get("1"), "Écart de score", "Écart risque − refuge")
-    return (_chiffre("Score USD", usd, "", jour, "calcul Python (scores de confluence)",
-                     texte=None if usd is None else f"{usd:.0f}", raison="rapport du jour indisponible"),
-            ligne, _courbe(pts, "rapports quotidiens (écart de score risque − refuge)", "4 semaines"))
+    usd = (profil.get("USD") or {}).get("etat")
+    par = {}
+    for d, v in profil.items():
+        par.setdefault(v.get("etat") or "n/d", []).append(d)
+    ligne = (" · ".join(f"{e} : {', '.join(ds)}" for e, ds in par.items()) + ".") if par else "Profil des devises indisponible."
+    return (_chiffre("État du dollar", 1 if usd else None, "", jour, "calcul Python (profil des devises)",
+                     texte=usd, raison="profil des devises pas encore calculé"),
+            ligne, _courbe([], "profil des devises (état du jour, pas de série)", "jour"))
 
 
 def _carte_2(historiques: dict) -> tuple[dict, str, dict]:
@@ -320,12 +320,10 @@ def phrase_signaux_mixtes(coh: dict, theme_dir: dict) -> str:
 
 
 def _titre_theme(theme: dict, rapport: dict | None) -> str:
-    scores = sorted([(d.get("score_confluence"), d["devise"]) for d in (rapport or {}).get("devises") or []
-                     if d.get("score_confluence") is not None], reverse=True)
-    premier = scores[0][1] if scores else None
+    usd_soutenu = (((rapport or {}).get("profil_devises") or {}).get("USD") or {}).get("etat") == "Soutenue"   # lot V6
     regime = {"risk_off": "Aversion au risque", "risk_on": "Appétit pour le risque"}.get(theme["risque"],
                                                                                          "Pas de régime de risque net")
-    dollar = {"haussier": "dollar en tête" if premier == "USD" else "dollar soutenu",
+    dollar = {"haussier": "dollar en tête" if usd_soutenu else "dollar soutenu",
               "baissier": "dollar sous pression", "neutre": "dollar neutre"}.get(theme["dollar"])
     return f"{regime}, {dollar}" if dollar else regime
 

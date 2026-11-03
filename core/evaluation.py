@@ -46,6 +46,11 @@ def evaluer(rapport_precedent: dict, prix_actuels: dict[str, float],
             seuil_neutre_pct: float = 0.15) -> dict | None:
     prix_avant = rapport_precedent.get("prix_cloture") or {}
     classement_prevu = rapport_precedent.get("synthese_globale", {}).get("classement_devises", [])
+    # Lot V6 : la prévision vient de l'ÉTAT de la devise (profil des devises) quand le rapport J-7 l'a archivé
+    # (Soutenue -> hausse, Sous pression -> baisse, sinon neutre) ; le score de confluence ne sert qu'aux anciens rapports.
+    etats = rapport_precedent.get("profil_devises") or {}
+    if etats:
+        classement_prevu = [{"devise": d, "etat": v.get("etat"), "score_confluence": None} for d, v in etats.items()]
     if not prix_avant or not classement_prevu:
         log.warning("Rapport précédent sans prix_cloture/classement : auto-évaluation impossible")
         return None
@@ -57,17 +62,23 @@ def evaluer(rapport_precedent: dict, prix_actuels: dict[str, float],
         if not avant or not apres:
             continue
         variation = (apres - avant) / avant * 100
-        score = entree["score_confluence"]
-        prevu = "hausse" if score > 55 else "baisse" if score < 45 else "neutre"
+        score = entree.get("score_confluence")
+        if entree.get("etat"):
+            prevu = {"Soutenue": "hausse", "Sous pression": "baisse"}.get(entree["etat"], "neutre")
+        elif score is None:
+            continue
+        else:
+            prevu = "hausse" if score > 55 else "baisse" if score < 45 else "neutre"
         correct = (
             (prevu == "hausse" and variation > 0)
             or (prevu == "baisse" and variation < 0)
             or (prevu == "neutre" and abs(variation) <= seuil_neutre_pct)
         )
         variations[devise] = variation
-        scores[devise] = score
+        if score is not None:
+            scores[devise] = score
         par_devise.append({
-            "devise": devise, "score_prevu": score, "prevu": prevu,
+            "devise": devise, "score_prevu": score, "etat_prevu": entree.get("etat"), "prevu": prevu,
             "variation_reelle_pct": round(variation, 2), "correct": correct,
         })
 
@@ -75,8 +86,8 @@ def evaluer(rapport_precedent: dict, prix_actuels: dict[str, float],
         return None
     taux = round(100 * sum(d["correct"] for d in par_devise) / len(par_devise), 1)
     spearman = None
-    if len(variations) >= 3:
-        s = pd.Series(scores).loc[list(variations)]
+    if len(scores) >= 3:
+        s = pd.Series(scores).loc[[d for d in variations if d in scores]]
         v = pd.Series(variations)
         # Spearman = Pearson sur les rangs : pandas exige scipy pour method="spearman" (absent du runner,
         # ModuleNotFoundError du 02/11/2026), les rangs donnent le même coefficient sans dépendance.

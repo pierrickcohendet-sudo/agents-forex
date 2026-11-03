@@ -34,20 +34,21 @@
       </div>
     </div>
     <nav class="onglets" aria-label="Sections">
-      <a href="#rapport" data-onglet="rapport">Rapport</a>
-      <a href="#accueil" data-onglet="accueil">Aujourd'hui</a>
       <a href="#synthese" data-onglet="synthese">Synthèse</a>
-      <a href="#engrenages" data-onglet="engrenages">8 engrenages</a>
-      <a href="#scenarios" data-onglet="scenarios">Scénarios</a>
-      <a href="#outils" data-onglet="outils">Outils</a>
+      <a href="#tableau" data-onglet="tableau">Tableau de bord</a>
       <a href="#devises" data-onglet="devises">Devises</a>
-      <a href="#tableau" data-onglet="tableau">Tableau macro</a>
       <a href="#agenda" data-onglet="agenda">Agenda</a>
-      <a href="#institutions" data-onglet="institutions">Institutions</a>
+      <a href="#engrenages" data-onglet="engrenages">8 engrenages</a>
       <a href="#journal" data-onglet="journal">Journal</a>
-      <a href="#archives" data-onglet="archives">Archives</a>
-      <a href="#sante" data-onglet="sante">Santé</a>
-      <a href="#apprendre" data-onglet="apprendre">Apprendre</a>
+      <details class="menu-plus" id="menu-plus">
+        <summary>Plus</summary>
+        <div class="menu-plus-liste">
+          <a href="#scenarios" data-onglet="scenarios">Scénarios et simulateur</a>
+          <a href="#sante" data-onglet="sante">Santé des données</a>
+          <a href="#archives" data-onglet="archives">Archives</a>
+          <a href="ancien/">Ancien dashboard</a>
+        </div>
+      </details>
     </nav>
   </header>
 
@@ -66,7 +67,7 @@
   <footer class="pied">
     <p>Aide à la décision uniquement : aucun signal d'achat ou de vente, pas un conseil en investissement.
        Chiffres sourcés et datés ; une donnée absente est affichée « n/d » avec sa raison.</p>
-    <p><a href="ancien/">Ancien dashboard</a> · <span id="pied-meta"></span></p>
+    <p><span id="pied-meta"></span></p>
   </footer>
 
   <script type="module" src="site/app.js"></script>

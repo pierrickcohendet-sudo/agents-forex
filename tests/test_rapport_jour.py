@@ -145,14 +145,17 @@ def test_notion_ecrit_puis_met_l_ancienne_version_a_la_corbeille():
 
 def test_site_page_rapport_par_defaut_le_matin_et_journal():
     app = (RACINE / "docs/site/app.js").read_text(encoding="utf-8")
-    assert 'rapport: { titre: "Rapport", module: "./rapport.js"' in app and "h < 13" in app
+    assert 'synthese: { titre: "Synthèse", module: "./rapport.js"' in app and 'rapport: "synthese"' in app   # lot V6
     assert CONFIG["rapport"]["heure_bascule_accueil"] == "13:00"
     js = (RACINE / "docs/site/rapport.js").read_text(encoding="utf-8")
     for cle in rj.SECTIONS_COMPLETES + rj.SECTIONS_COURTES:
         assert f"  {cle}(r)" in js, cle
+    from core import rapport_long
+    lg = (RACINE / "docs/site/synthese_longue.js").read_text(encoding="utf-8")
+    assert all(f'"{c}"' in lg for c in rapport_long.SECTIONS_LONGUES)
     assert "beforeprint" in js and "window.print()" in js and "Lecture :" in js
     jn = (RACINE / "docs/site/journal.js").read_text(encoding="utf-8")
-    assert "Déclencheur M30" in jn and "checklist:" in jn and "blocNiveaux" in jn
+    assert "blocNiveaux" in jn and "UNITES_V2" in jn and "migrer(" in jn   # lot V6 : Journal V2, notes V1 migrées
 
 
 def test_quota_de_nuit_ne_bloque_pas_le_run_du_matin():

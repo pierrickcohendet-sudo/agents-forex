@@ -1,10 +1,8 @@
 /* Onglet Devises : une fiche par devise (9), analyse du jour, indicateurs, synthèse approfondie. */
-import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, DRAPEAUX , enBref } from "./commun.js";
+import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, DRAPEAUX, enBref, essentiel } from "./commun.js";
 import { blocDevises } from "./consequences_synthese.js";
 import { graphiqueSerie } from "./dossiers.js";
 
-const BIAIS = { haussier: "Haussier", baissier: "Baissier", neutre: "Neutre" };
-const PROFIL = { on: "Risk On", off: "Risk Off", neutre: "Neutre" };
 const PROBA = { faible: "faible", moyenne: "moyenne", elevee: "élevée" };
 const ORIENTATION = { haussier: "haussière", baissier: "baissière", neutre: "neutre" };
 const MOTEURS = { croissance: "Croissance", inflation: "Inflation", emploi: "Emploi", banque_centrale: "Banque centrale" };
@@ -135,19 +133,15 @@ function syntheseApprofondie(syn, sources) {
   return bloc;
 }
 
-function fiche(d, cles, sources, ouverte) {
+function fiche(d, cles, sources, ouverte, etat) {
   const f = el("details", "carte fiche");
   f.id = `fiche-${d.devise}`;
   if (ouverte) f.open = true;
   const s = el("summary");
   s.appendChild(el("span", "fiche-nom", `${DRAPEAUX[d.devise] || ""} ${d.devise}`));
-  const biais = cles?.cellules?.biais;
-  if ((d.score_confluence === null || d.score_confluence === undefined) && d.texte_automatique) s.appendChild(el("span", "note", "score n/d · texte automatique"));
+  if (etat) s.appendChild(badgeEtat(etat.etat));
+  else if ((d.score_confluence === null || d.score_confluence === undefined) && d.texte_automatique) s.appendChild(el("span", "note", "texte automatique"));
   else if (d.score_confluence === null || d.score_confluence === undefined) s.appendChild(el("span", "note", "analyse indisponible"));
-  else {
-    s.appendChild(el("span", "tabulaire fiche-score", `${d.score_confluence}/100`));
-    if (biais?.code) s.appendChild(el("span", `biais ${biais.code}`, BIAIS[biais.code]));
-  }
   { const b = enBref(d.synthese_une_phrase); if (b) s.appendChild(b); }
   f.appendChild(s);
   const corps = el("div", "fiche-corps");
@@ -164,7 +158,6 @@ function fiche(d, cles, sources, ouverte) {
   const meta = el("p", "note");
   meta.textContent = [
     d.redige_par?.libelle ? `Analyse rédigée par ${d.redige_par.libelle}` : null,
-    `Profil structurel : ${PROFIL[d.risk_on_off] || d.risk_on_off}`,
     d.biais_banque_centrale ? `Banque centrale : ${d.biais_banque_centrale}` : null,
     d.carry?.taux_directeur !== undefined ? `Taux directeur ${String(d.carry.taux_directeur).replace(".", ",")} % (écart médiane G8 ${d.carry.differentiel_vs_mediane_g8 > 0 ? "+" : ""}${String(d.carry.differentiel_vs_mediane_g8).replace(".", ",")})` : null,
   ].filter(Boolean).join(" · ");
@@ -232,14 +225,11 @@ function moteurs(dos, devise) {
   if (!ligne) return [];
   return ligne.cases.filter(c => c.valeur !== 0).sort((a, b) => Math.abs(b.valeur) - Math.abs(a.valeur)).slice(0, 2);
 }
-export function carteDevise(d, dos, coursDev, cles, rapportDev) {
+export function carteDevise(d, dos, coursDev, cles, rapportDev, etat) {
   const c = el("article", "dc-carte");
   const tete = el("div", "dc-tete");
   tete.append(el("span", "dc-code", d), el("span", "dc-nom", NOMS[d]));
-  const score = rapportDev?.score_confluence;
-  tete.appendChild(el("span", "dc-score tabulaire", score === null || score === undefined ? "score n/d" : `${score}/100`));
-  const biais = cles?.cellules?.biais?.code;
-  if (biais) tete.appendChild(el("span", `dc-pastille ${biais === "haussier" ? "pos" : biais === "baissier" ? "neg" : ""}`, BIAIS[biais] || biais));
+  if (etat) tete.appendChild(badgeEtat(etat));
   c.appendChild(tete);
   if (coursDev?.points?.length) {
     const explication = d === "USD"
@@ -264,7 +254,7 @@ export function carteDevise(d, dos, coursDev, cles, rapportDev) {
   c.appendChild(ind);
   const mots = moteurs(dos, d);
   const bloc = el("div", "dc-moteurs");
-  bloc.appendChild(el("span", "dc-lab", "Moteurs du jour"));
+  bloc.appendChild(el("span", "dc-lab", "Engrenages actifs"));
   if (!mots.length) bloc.appendChild(el("p", "note", "Aucune case active dans la matrice d'impact aujourd'hui."));
   for (const m of mots) {
     const r = m.regles?.[0];
@@ -278,24 +268,111 @@ export function carteDevise(d, dos, coursDev, cles, rapportDev) {
   return c;
 }
 
+/* ------------------------------------------- profil des devises (lot V6, écran 7) */
+const CLASSE_ETAT = { "Soutenue": "soutenue", "Sous pression": "pression", "Sans direction": "neutre", "Ancrage contredit": "tension" };
+export function badgeEtat(etat) { return el("span", `etat-devise ${CLASSE_ETAT[etat] || "neutre"}`, etat || "n/d"); }
+const fr2 = v => (v > 0 ? "+" : "−") + Math.abs(v).toFixed(2).replace(".", ",");
+
+function barreCorrelation(r) {
+  const b = el("div", "corr-barre"); b.setAttribute("aria-hidden", "true");
+  const f = el("div", `corr-rempli ${r >= 0 ? "pos" : "neg"}`);
+  f.style.width = `${Math.min(Math.abs(r), 1) * 50}%`;
+  b.appendChild(f);
+  return b;
+}
+
+export function carteProfil(p) {
+  const c = el("article", "pf-carte");
+  const tete = el("div", "pf-tete");
+  const nom = el("div", "pf-nom");
+  nom.append(el("span", "pf-code", p.devise), el("span", "pf-libelle", p.nom));
+  tete.append(nom, badgeEtat(p.etat.valeur));
+  c.appendChild(tete);
+  const anc = el("div", "pf-ancrages");
+  anc.appendChild(el("span", "pf-lab", "Ancrage"));
+  for (const a of p.ancrages) {
+    const puce = el("span", `pf-puce ${a.verdict === "contredit" ? "contredit" : a.verdict === "confirmé" ? "confirme" : ""}`, a.libelle);
+    puce.title = `${a.texte} Aujourd'hui : ${a.mesure}.`;
+    puce.tabIndex = 0;
+    anc.appendChild(puce);
+  }
+  c.appendChild(anc);
+  const g = el("dl", "pf-grille");
+  const ligne = (lab, contenu, classe) => {
+    g.appendChild(el("dt", null, lab));
+    const dd = el("dd", classe || null);
+    if (typeof contenu === "string") dd.textContent = contenu; else dd.appendChild(contenu);
+    g.appendChild(dd);
+  };
+  const dom = p.moteur.dominant;
+  const mot = el("div", "pf-moteur");
+  if (dom) {
+    mot.appendChild(el("span", "pf-moteur-nom", dom.libelle));
+    const l = el("div", "pf-corr");
+    l.append(barreCorrelation(dom.r60), el("span", "tabulaire", `${fr2(dom.r60)} · ${dom.n60} séances`));
+    mot.appendChild(l);
+    mot.title = `${p.moteur.texte}. ${p.moteur.avertissement || ""}`;
+  } else mot.appendChild(el("span", "note", p.moteur.texte));
+  ligne("Moteur du moment", mot);
+  ligne("Banque centrale", p.banque_centrale.texte);
+  ligne("Macro", p.macro.texte);
+  ligne("Cette semaine", p.semaine.texte, p.semaine.score >= 3 ? "pf-fort" : null);
+  c.appendChild(g);
+  c.appendChild(el("p", "pf-lecture", p.etat.raison));
+  return c;
+}
+
+export function essentielDevises(profil) {
+  const par = {};
+  for (const p of profil.devises) (par[p.etat.valeur] = par[p.etat.valeur] || []).push(p.devise);
+  const lignes = [Object.entries(par).map(([e, ds]) => `${e} : ${ds.join(", ")}`).join(" · ")];
+  const doms = profil.devises.filter(p => p.moteur.dominant)
+    .sort((a, b) => Math.abs(b.moteur.dominant.r60) - Math.abs(a.moteur.dominant.r60));
+  if (doms.length) {
+    const m = doms[0].moteur.dominant;
+    lignes.push(`Lien le plus net : ${doms[0].devise} et ${m.nom || m.libelle} (corrélation ${fr2(m.r60)} sur ${m.n60} séances).`);
+  }
+  const fortes = profil.devises.filter(p => p.semaine.score >= 3).map(p => p.devise);
+  lignes.push(fortes.length ? `Semaine chargée pour ${fortes.join(", ")}.` : "Aucune devise n'a de catalyseur majeur cette semaine.");
+  return essentiel(lignes);
+}
+
 export async function pageDevises(parametre) {
-  const [rapport, site, dossiers] = await Promise.all([chargerJson("data/latest.json"), chargerJson("data/site.json"), chargerJson("data/dossiers.json")]);
+  const [rapport, site, dossiers, profil] = await Promise.all([chargerJson("data/latest.json"), chargerJson("data/site.json"),
+    chargerJson("data/dossiers.json"), chargerJson("data/profil_devises.json")]);
   if (enErreur(rapport)) return [indisponible("Devises", rapport?.__erreur || "rapport du jour absent")];
   const sources = new Map((rapport.sources_citees || []).map(s => [s.id, s]));
   const cles = new Map(((enErreur(site) ? {} : site).indicateurs_cles || []).map(l => [l.devise, l]));
+  const etats = new Map(enErreur(profil) ? [] : profil.devises.map(p => [p.devise, p.etat.valeur]));
   const tete = el("section", "carte");
-  tete.appendChild(el("h2", null, `Devises — rapport du ${dateCourte(rapport.meta?.date_rapport)}`));
-  tete.appendChild(el("p", "sous-titre", "Neuf devises, yuan inclus. Touchez une devise pour ouvrir sa fiche."));
+  tete.appendChild(el("h2", null, "Devises : qui mène, et pourquoi"));
+  tete.appendChild(el("p", "sous-titre", "Chaque devise a un ancrage stable (ce qui la porte historiquement) et un moteur du moment mesuré sur 60 séances. "
+    + "On regarde si sa banque centrale et ses chiffres renforcent ou contredisent cet ancrage."));
+  const sortie = [tete];
+  if (enErreur(profil)) sortie.push(indisponible("Profil des devises", profil?.__erreur || "profil_devises.json absent"));
+  else {
+    tete.appendChild(essentielDevises(profil));
+    const grille = el("section", "pf-grille-cartes");
+    for (const p of profil.devises) grille.appendChild(carteProfil(p));
+    sortie.push(grille);
+    sortie.push(el("p", "note", `Moteur du moment : corrélation des variations quotidiennes avec chaque moteur candidat, retenu s'il atteint ${String(profil.seuil_correlation).replace(".", ",")} en valeur absolue et garde le même signe sur 20 séances. Une corrélation décrit ce qui bouge ensemble, pas une cause. État : ${profil.regle_etat}`));
+  }
   const nav = el("nav", "puces-devises");
   for (const d of rapport.devises || []) { const a = el("a", null, `${DRAPEAUX[d.devise] || ""} ${d.devise}`); a.href = `#devises/${d.devise}`; nav.appendChild(a); }
-  tete.appendChild(nav);
   const dos = enErreur(dossiers) ? null : dossiers;
   const cours = await chargerJson("data/cours.json");   // chargé par cette page seulement
   const grille = el("div", "dc-grille");
   const parDevise = new Map((rapport.devises || []).map(d => [d.devise, d]));
-  for (const d of Object.keys(NOMS)) grille.appendChild(carteDevise(d, dos, enErreur(cours) ? null : cours.devises?.[d], cles.get(d), parDevise.get(d)));
-  const note = el("p", "note", "Indicateurs : série unique 5 ans (mêmes valeurs que le dossier 7 et le tableau de chaque fiche), survol pour la source. Moteurs : cases les plus fortes de la matrice d'impact. Aide à la décision, jamais un ordre.");
+  for (const d of Object.keys(NOMS)) grille.appendChild(carteDevise(d, dos, enErreur(cours) ? null : cours.devises?.[d], cles.get(d), parDevise.get(d), etats.get(d)));
+  const note = el("p", "note", "Indicateurs : série unique 5 ans (mêmes valeurs que le dossier 7 et le tableau de chaque fiche), survol pour la source. Engrenages actifs : cases les plus fortes de la matrice d'impact (−2 à +2). Aide à la décision, jamais un ordre.");
   const syntheses = await blocDevises();
-  return [tete, grille, note, syntheses, ...(rapport.devises || []).map(d => fiche({ ...d, indicateurs_tableau: lignesTechniques(techniqueUnique(dos, d.devise), d.indicateurs_tableau || []) },
-                                                           cles.get(d.devise), sources, d.devise === parametre))];
+  const detail = el("details", "voir-detail");
+  detail.open = !!parametre;
+  detail.appendChild(el("summary", null, "Voir le détail : graphiques, indicateurs et fiches"));
+  detail.append(nav, grille, note, syntheses, ...(rapport.devises || []).map(d => fiche(
+    { ...d, indicateurs_tableau: lignesTechniques(techniqueUnique(dos, d.devise), d.indicateurs_tableau || []) },
+    cles.get(d.devise), sources, d.devise === parametre, etats.has(d.devise) ? { etat: etats.get(d.devise) } : null)));
+  sortie.push(detail);
+  if (parametre) setTimeout(() => document.getElementById(`fiche-${parametre}`)?.scrollIntoView({ block: "start" }), 50);
+  return sortie;
 }

@@ -1,22 +1,22 @@
 /* FX Desk — site V1. Lit uniquement docs/data/*.json (produits par le pipeline), aucune clé, aucun appel externe. */
-import { chargerJson, enErreur, el, indisponible, initialiserDetail, initialiserCertificats, dateHeure } from "./commun.js";
+import { chargerJson, enErreur, el, indisponible, initialiserDetail, initialiserCertificats, dateHeure, appliquerGlossaire } from "./commun.js";
 
+/* Lot V6 : 6 onglets principaux, le reste dans le menu « Plus ». */
 const ONGLETS = {
-  rapport: { titre: "Rapport", module: "./rapport.js", fonction: "pageRapport" },   // Rapport du jour : page d'accueil le matin
-  accueil: { titre: "Aujourd'hui", module: "./accueil.js", fonction: "pageAccueil" },   // lot V5 : tableau de bord du jour, accueil.json seul
-  synthese: { titre: "Synthèse", module: "./synthese.js", fonction: "pageSynthese" },
-  engrenages: { titre: "8 engrenages", module: "./engrenages.js", fonction: "pageEngrenages" },
-  scenarios: { titre: "Scénarios", module: "./scenarios.js", fonction: "pageScenarios" },   // impact.json chargé à l'ouverture
-  outils: { titre: "Outils", module: "./outils.js", fonction: "pageOutils" },   // lot V5 : radar, et si, paires, jours similaires
+  synthese: { titre: "Synthèse", module: "./rapport.js", fonction: "pageRapport" },   // fusion Accueil + Rapport + Hebdo + Mensuel
+  tableau: { titre: "Tableau de bord", module: "./tableau.js", fonction: "pageTableauDeBord" },   // tableau macro + point de marché
   devises: { titre: "Devises", module: "./devises.js", fonction: "pageDevises" },
-  tableau: { titre: "Tableau macro", module: "./tableau.js", fonction: "pageTableau" },
-  agenda: { titre: "Agenda", module: "./agenda.js", fonction: "pageAgenda" },   // lot V5 : 7 jours + banques centrales
-  institutions: { titre: "Institutions", bientot: "Le positionnement des institutions (rapport COT de la CFTC) arrive dans une prochaine version." },
-  journal: { titre: "Journal", module: "./journal.js", fonction: "pageJournal" },   // lot V5 : fiches des paires + mes notes (IndexedDB)
+  agenda: { titre: "Agenda", module: "./agenda.js", fonction: "pageAgenda" },
+  engrenages: { titre: "8 engrenages", module: "./engrenages.js", fonction: "pageEngrenages" },   // cockpit, dossiers, outils
+  journal: { titre: "Journal", module: "./journal.js", fonction: "pageJournal" },
+  // Menu « Plus »
+  scenarios: { titre: "Scénarios et simulateur", module: "./scenarios.js", fonction: "pageScenarios" },
+  sante: { titre: "Santé des données", module: "./sante.js", fonction: "pageSante" },
   archives: { titre: "Archives", module: "./archives.js", fonction: "pageArchives" },
-  sante: { titre: "Santé des données", module: "./sante.js", fonction: "pageSante" },   // lot V5 : registre des sources, fraîcheur
-  apprendre: { titre: "Apprendre", bientot: "Les fiches de formation (concept du jour, glossaire) arrivent dans une prochaine version." },
 };
+/* Anciennes adresses (#…) : redirigées vers le bon onglet. */
+const REDIRECTIONS = { rapport: "synthese", accueil: "synthese", hebdo: "synthese", mensuel: "synthese", apprendre: "synthese",
+                       institutions: "engrenages", outils: "engrenages", "tableau-macro": "tableau" };
 
 /* ------------------------------------------------------------------ thème */
 const CYCLE_THEME = ["auto", "clair", "noir"];
@@ -35,18 +35,22 @@ function appliquerTheme(t) {
 /* ---------------------------------------------------------------- routage */
 // Page par défaut : le Rapport du jour le matin (avant 13:00 à Paris, comme rapport.heure_bascule_accueil dans
 // config.yaml), le tableau de bord « Aujourd'hui » ensuite.
-function pageParDefaut() {
-  const h = Number(new Intl.DateTimeFormat("fr-FR", { hour: "2-digit", hour12: false, timeZone: "Europe/Paris" }).format(new Date()));
-  return h < 13 ? "rapport" : "accueil";
-}
+function pageParDefaut() { return "synthese"; }
 async function afficher() {
-  const hash = (location.hash || `#${pageParDefaut()}`).slice(1);
+  let hash = (location.hash || `#${pageParDefaut()}`).slice(1);
+  const [base, ...reste] = hash.split("/");
+  if (REDIRECTIONS[base]) {   // ancienne adresse : remplacée sans nouvelle entrée d'historique
+    hash = [REDIRECTIONS[base], ...(base === "outils" ? ["outils"] : base === "hebdo" ? [] : reste)].join("/");
+    history.replaceState(null, "", `#${hash}`);
+  }
   // Lien direct vers un dossier d'engrenage : #g=N (équivaut à #engrenages/g=N)
   const [id, parametre] = /^g=[1-8]$/.test(hash) ? ["engrenages", hash] : hash.split("/");
   const onglet = ONGLETS[id] ? id : pageParDefaut();
-  document.querySelectorAll(".onglets a").forEach(a => {
+  document.querySelectorAll(".onglets a[data-onglet]").forEach(a => {
     if (a.dataset.onglet === onglet) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
   });
+  const plus = document.getElementById("menu-plus");
+  if (plus) { plus.open = false; plus.classList.toggle("actif", ["scenarios", "sante", "archives"].includes(onglet)); }
   const conf = ONGLETS[onglet];
   document.title = `${conf.titre} — FX Desk`;
   const main = document.getElementById("contenu");
@@ -70,15 +74,18 @@ async function afficher() {
   }
   if ((location.hash || `#${pageParDefaut()}`).slice(1) !== hash) return;   // l'utilisateur a changé d'onglet entre-temps
   main.replaceChildren(...blocs);
-  if (parametre && !parametre.startsWith("g=")) document.getElementById(`fiche-${parametre}`)?.scrollIntoView();
+  appliquerGlossaire(main);   // glossaire unique au survol (lot V6)
+  if (parametre === "outils") { const o = [...main.querySelectorAll("details.voir-detail")].find(d => /Outils/.test(d.textContent)); if (o) { o.open = true; o.scrollIntoView(); } }
+  else if (parametre && !parametre.startsWith("g=")) document.getElementById(`fiche-${parametre}`)?.scrollIntoView();
   else window.scrollTo(0, 0);
 }
 
 async function initialiser() {
   initialiserDetail();
   initialiserCertificats();
-  document.querySelectorAll(".onglets a").forEach(a => {
-    if (ONGLETS[a.dataset.onglet]?.bientot) { a.classList.add("bientot"); a.title = "Bientôt disponible"; }
+  document.addEventListener("click", ev => {   // menu « Plus » : se ferme au clic à l'extérieur
+    const plus = document.getElementById("menu-plus");
+    if (plus?.open && !plus.contains(ev.target)) plus.open = false;
   });
   appliquerTheme(themeCourant());
   document.getElementById("bouton-theme").addEventListener("click", () => {

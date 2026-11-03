@@ -616,9 +616,9 @@ function contenuTheme(e) {
   })));
   bloc.push(el("h3", null, "Évolution du thème (rapports archivés)"));
   const regime = { risk_on: "Risk On", risk_off: "Risk Off", neutre: "Neutre" };
-  bloc.push(tableau(["Rapport", "Régime", "Écart risque − refuge", "Score USD"], e.evolution.map(x => {
+  bloc.push(tableau(["Rapport", "Régime de risque global"], e.evolution.map(x => {   // lot V6 : plus de score en %
     const tr = el("tr");
-    for (const v of [dateCourte(x.date), regime[x.biais] || "n/d", x.ecart === null ? "n/d" : `${signe(x.ecart, 1)} pts`, x.score_usd ?? "n/d"])
+    for (const v of [dateCourte(x.date), regime[x.biais] || "n/d"])
       tr.appendChild(el("td", "tabulaire", String(v)));
     return tr;
   })));
