@@ -1,6 +1,6 @@
 {
  "version_schema": 1,
- "genere_le": "2026-11-03T18:16:55+00:00",
+ "genere_le": "2026-11-03T19:17:06+00:00",
  "debut_historique": "2021-09-02",
  "erreurs_collecte": [],
  "engrenages": {
@@ -11,8 +11,8 @@
     {
      "libelle": "Régime de risque (biais calculé)",
      "texte": "Risk Off",
-     "detail": "écart de score risque − refuge : -15.7 pts",
-     "source": "calcul Python (scores de confluence)"
+     "detail": "régime de risque global (engrenage 5), sans attribution devise par devise",
+     "source": "calcul Python"
     },
     {
      "libelle": "Cohérence des engrenages",
@@ -28,10 +28,10 @@
      "source": "calcul Python (registre macro, 30 j)"
     },
     {
-     "libelle": "Score de confluence USD",
-     "texte": "74",
-     "detail": "0-100, calcul Python",
-     "source": "rapport du jour"
+     "libelle": "État du dollar (profil des devises)",
+     "texte": "n/d",
+     "detail": "profil calculé au prochain run",
+     "source": "calcul Python (profil des devises)"
     }
    ],
    "evolution": [
@@ -12291,7 +12291,7 @@
      "raison": null
     }
    ],
-   "actualites_maj": "2026-11-03T18:16+00:00",
+   "actualites_maj": "2026-11-03T19:17+00:00",
    "actualites_nb_titres_lus": 31,
    "notes": [
     "Dette et solde publics : FMI (annuel, avec 1 à 3 ans de retard) ; EUR = Allemagne. Pas de série gratuite pour CHF et NZD.",
@@ -41436,19 +41436,19 @@
     "numero": 1,
     "titre": "Thème macro",
     "chiffre": {
-     "libelle": "Score USD",
-     "valeur": 74,
-     "texte": "74",
+     "libelle": "État du dollar",
+     "valeur": null,
+     "texte": null,
      "unite": "",
      "date": "2026-11-03",
-     "source": "calcul Python (scores de confluence)",
-     "raison": null
+     "source": "calcul Python (profil des devises)",
+     "raison": "profil des devises pas encore calculé"
     },
-    "ligne": "USD 74, GBP 58, NZD 26 : écart de 48 points entre extrêmes.",
+    "ligne": "Profil des devises indisponible.",
     "courbe": {
      "points": [],
-     "periode": "4 semaines",
-     "source": "rapports quotidiens (écart de score risque − refuge)",
+     "periode": "jour",
+     "source": "profil des devises (état du jour, pas de série)",
      "raison": "historique insuffisant pour une mini-courbe"
     },
     "direction": {
@@ -42234,15 +42234,15 @@
      "surtitre": "Engrenage 1",
      "titre": "Thème macro",
      "chiffre": {
-      "libelle": "Score USD",
-      "valeur": 74,
-      "texte": "74",
+      "libelle": "État du dollar",
+      "valeur": null,
+      "texte": null,
       "unite": "",
       "date": "2026-11-03",
-      "source": "calcul Python (scores de confluence)",
-      "raison": null
+      "source": "calcul Python (profil des devises)",
+      "raison": "profil des devises pas encore calculé"
      },
-     "ligne": "USD 74, GBP 58, NZD 26 : écart de 48 points entre extrêmes.",
+     "ligne": "Profil des devises indisponible.",
      "verdict": {
       "libelle": "Dollar neutre · Risque neutre",
       "classe": "nd",
@@ -46082,7 +46082,7 @@
     "precedent": "ForexFactory, page « mois » (extraction de page, déjà lue pour le tableau macro)",
     "consensus": "ForexFactory, page « mois » (extraction de page, déjà lue pour le tableau macro)"
    },
-   "verifie_le": "2026-11-03T08:15",
+   "verifie_le": "2026-11-03T19:16",
    "engrenage": 3,
    "simulateur": null,
    "reaction": null,
@@ -46090,7 +46090,8 @@
    "statuts": {
     "consensus": "estimation",
     "precedent": "confirmé"
-   }
+   },
+   "pourquoi": "Pourquoi c'est important : NZD · engrenage 3 (données économiques)."
   },
   "fil": {
    "jours": [

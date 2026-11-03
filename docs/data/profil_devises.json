@@ -1,0 +1,1619 @@
+{
+ "genere_le": "2026-11-03T19:17:14+00:00",
+ "date": "2026-11-03",
+ "devises": [
+  {
+   "devise": "USD",
+   "nom": "Dollar américain",
+   "ancrages": [
+    {
+     "libelle": "Liquidité mondiale",
+     "texte": "Le dollar est la monnaie de réserve : quand le stress monte, la demande de dollars aussi (financements, couvertures).",
+     "moteur": "vix",
+     "sens": 1,
+     "verdict": "faible",
+     "mesure": "corrélation +0,29 avec VIX (volatilité des actions US) sur 60 séances : peu marquée",
+     "r60": 0.29
+    },
+    {
+     "libelle": "Différentiel de taux",
+     "texte": "Des taux américains plus hauts que ceux des autres attirent les capitaux vers le dollar.",
+     "moteur": "us2a",
+     "sens": 1,
+     "verdict": "confirmé",
+     "mesure": "corrélation +0,45 avec Rendement US 2 ans (écart de taux 2 ans, côté US) sur 60 séances, dans le sens attendu",
+     "r60": 0.45
+    }
+   ],
+   "moteur": {
+    "dominant": {
+     "moteur": "or",
+     "libelle": "Or (indice, proxy)",
+     "nom": "l'or",
+     "source": "FRED (NASDAQQGLDI, indice or proxy)",
+     "r60": -0.51,
+     "r20": -0.37,
+     "n60": 60,
+     "du": "2026-08-06",
+     "au": "2026-10-29",
+     "stable": true
+    },
+    "texte": "Or (indice, proxy) : corrélation −0,51 sur 60 séances (06/08 → 29/10), −0,37 sur 20 séances",
+    "mesures": [
+     {
+      "moteur": "or",
+      "libelle": "Or (indice, proxy)",
+      "nom": "l'or",
+      "source": "FRED (NASDAQQGLDI, indice or proxy)",
+      "r60": -0.51,
+      "r20": -0.37,
+      "n60": 60,
+      "du": "2026-08-06",
+      "au": "2026-10-29",
+      "stable": true
+     },
+     {
+      "moteur": "us10a",
+      "libelle": "Rendement US 10 ans",
+      "nom": "le rendement US à 10 ans",
+      "source": "FRED (DGS10)",
+      "r60": 0.47,
+      "r20": 0.36,
+      "n60": 60,
+      "du": "2026-08-06",
+      "au": "2026-10-30",
+      "stable": true
+     },
+     {
+      "moteur": "us2a",
+      "libelle": "Rendement US 2 ans (écart de taux 2 ans, côté US)",
+      "nom": "le rendement US à 2 ans",
+      "source": "FRED (DGS2)",
+      "r60": 0.45,
+      "r20": 0.24,
+      "n60": 60,
+      "du": "2026-08-06",
+      "au": "2026-10-30",
+      "stable": true
+     },
+     {
+      "moteur": "vix",
+      "libelle": "VIX (volatilité des actions US)",
+      "nom": "le VIX",
+      "source": "FRED (VIXCLS)",
+      "r60": 0.29,
+      "r20": -0.13,
+      "n60": 60,
+      "du": "2026-08-10",
+      "au": "2026-10-30",
+      "stable": false
+     },
+     {
+      "moteur": "actions",
+      "libelle": "Indice actions (S&P 500)",
+      "nom": "le S&P 500",
+      "source": "FRED (SP500)",
+      "r60": -0.28,
+      "r20": 0.11,
+      "n60": 60,
+      "du": "2026-08-07",
+      "au": "2026-10-30",
+      "stable": false
+     }
+    ],
+    "non_testes": [
+     {
+      "moteur": "surprises_bc",
+      "libelle": "Surprises de la banque centrale",
+      "raison": "décisions trop rares (quelques-unes par an) pour une corrélation quotidienne sur 20 ou 60 séances"
+     }
+    ],
+    "seuil": 0.3,
+    "seances": [
+     60,
+     20
+    ],
+    "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python) ; séries des moteurs : historique 5 ans (FRED)",
+    "avertissement": "Corrélation des variations quotidiennes : elle décrit ce qui bouge ensemble, pas une cause."
+   },
+   "banque_centrale": {
+    "derniere": {
+     "date": "2026-10-28",
+     "publie": "4.00%",
+     "consensus": "4.00%",
+     "precedent": "4.00%",
+     "source": "ForexFactory (archive des publications)",
+     "decision": "maintien",
+     "surprise_pb": 0,
+     "texte": "maintien à 4,00 % le 28/10, conforme au consensus"
+    },
+    "prochaine": {
+     "date": "2026-12-09",
+     "taux": "3.75–4.00%",
+     "banque": "Fed",
+     "raison": null
+    },
+    "ton": {
+     "valeur": null,
+     "raison": "aucun communiqué comparé à son précédent dans les 30 derniers rapports"
+    },
+    "texte": "Fed : maintien à 4,00 % le 28/10, conforme au consensus · prochaine 09/12"
+   },
+   "macro": {
+    "inflation": {
+     "valeur": 3.7,
+     "texte": "3.7%",
+     "cible": 2.0,
+     "date": "2026-10-14",
+     "source": "ForexFactory",
+     "ecart": 1.7,
+     "raison": null
+    },
+    "surprise_30j": {
+     "indice": 0.67,
+     "n": 7,
+     "tendance": "hausse",
+     "source": "indice de surprise 30 jours (tableau macro, calcul Python)",
+     "raison": null
+    },
+    "marquante": {
+     "z": -1.1,
+     "date": "2026-11-02",
+     "evenement": "PMI manufacturier, définitif",
+     "texte": "en dessous du consensus (−1,1, −1,1 σ)"
+    },
+    "texte": "inflation 3,7 % (cible 2,0 %) · surprises 30 j +0,7 · PMI manufacturier, définitif en dessous du consensus (−1,1, −1,1 σ)"
+   },
+   "semaine": {
+    "score": 3,
+    "texte": "Élections de mi-mandat aux États-Unis (03/11) · 4 publications fortes",
+    "banque_centrale": null,
+    "forts": [
+     {
+      "date": "2026-11-03",
+      "evenement": "Élections de mi-mandat aux États-Unis"
+     },
+     {
+      "date": "2026-11-06",
+      "evenement": "Salaire horaire moyen M/M"
+     },
+     {
+      "date": "2026-11-06",
+      "evenement": "Créations d'emplois non agricoles (NFP)"
+     },
+     {
+      "date": "2026-11-06",
+      "evenement": "Taux de chômage"
+     }
+    ],
+    "rendez_vous": [
+     {
+      "date": "2026-11-03",
+      "fin": null,
+      "titre": "Élections de mi-mandat aux États-Unis",
+      "devises": [
+       "USD"
+      ],
+      "statut": "officiel",
+      "source": "Loi fédérale (2 U.S.C. § 7 : mardi suivant le premier lundi de novembre)",
+      "verifie_le": "2026-10-24"
+     }
+    ],
+    "source": "Agenda de la semaine"
+   },
+   "tendance_20s": {
+    "pct": -0.48,
+    "du": "2026-10-06",
+    "au": "2026-11-03",
+    "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python)"
+   },
+   "etat": {
+    "valeur": "Sans direction",
+    "raison": "Signaux favorables : surprises macro 30 j +0,7. Total +1 : il faut 2 signaux concordants.",
+    "signaux": [
+     {
+      "sens": 1,
+      "texte": "surprises macro 30 j +0,7"
+     }
+    ],
+    "total": 1
+   },
+   "lecture": "L'or est en ce moment le moteur le plus corrélé à la devise (−0,51 sur 60 séances). Signaux favorables : surprises macro 30 j +0,7. Total +1 : il faut 2 signaux concordants. Cette semaine : Élections de mi-mandat aux États-Unis (03/11) · 4 publications fortes."
+  },
+  {
+   "devise": "EUR",
+   "nom": "Euro",
+   "ancrages": [
+    {
+     "libelle": "Anti-dollar",
+     "texte": "L'euro est la première alternative au dollar : il monte souvent quand le dollar baisse en général.",
+     "moteur": "dollar_large",
+     "sens": -1,
+     "verdict": "confirmé",
+     "mesure": "corrélation −0,73 avec Indice dollar large (Fed) sur 60 séances, dans le sens attendu",
+     "r60": -0.73
+    },
+    {
+     "libelle": "Taux BCE",
+     "texte": "Les anticipations sur la BCE, lues dans l'écart de taux 2 ans avec les États-Unis, guident l'euro.",
+     "moteur": "ecart_2a_etranger",
+     "sens": 1,
+     "verdict": "non mesurable",
+     "mesure": "pas d'historique quotidien des taux 2 ans hors États-Unis (seule la dernière valeur est collectée)",
+     "r60": null
+    },
+    {
+     "libelle": "Énergie",
+     "texte": "La zone euro importe son énergie : un pétrole cher pèse sur sa balance commerciale.",
+     "moteur": "brent",
+     "sens": -1,
+     "verdict": "faible",
+     "mesure": "corrélation −0,08 avec Pétrole Brent sur 60 séances : peu marquée",
+     "r60": -0.08
+    }
+   ],
+   "moteur": {
+    "dominant": {
+     "moteur": "dollar_large",
+     "libelle": "Indice dollar large (Fed)",
+     "nom": "l'indice dollar large",
+     "source": "FRED (DTWEXBGS, indice dollar large de la Fed)",
+     "r60": -0.73,
+     "r20": -0.65,
+     "n60": 60,
+     "du": "2026-08-06",
+     "au": "2026-10-30",
+     "stable": true
+    },
+    "texte": "Indice dollar large (Fed) : corrélation −0,73 sur 60 séances (06/08 → 30/10), −0,65 sur 20 séances",
+    "mesures": [
+     {
+      "moteur": "dollar_large",
+      "libelle": "Indice dollar large (Fed)",
+      "nom": "l'indice dollar large",
+      "source": "FRED (DTWEXBGS, indice dollar large de la Fed)",
+      "r60": -0.73,
+      "r20": -0.65,
+      "n60": 60,
+      "du": "2026-08-06",
+      "au": "2026-10-30",
+      "stable": true
+     },
+     {
+      "moteur": "us2a",
+      "libelle": "Rendement US 2 ans (écart de taux 2 ans, côté US)",
+      "nom": "le rendement US à 2 ans",
+      "source": "FRED (DGS2)",
+      "r60": -0.31,
+      "r20": -0.25,
+      "n60": 60,
+      "du": "2026-08-06",
+      "au": "2026-10-30",
+      "stable": true
+     },
+     {
+      "moteur": "vix",
+      "libelle": "VIX (volatilité des actions US)",
+      "nom": "le VIX",
+      "source": "FRED (VIXCLS)",
+      "r60": -0.2,
+      "r20": -0.02,
+      "n60": 60,
+      "du": "2026-08-10",
+      "au": "2026-10-30",
+      "stable": true
+     },
+     {
+      "moteur": "actions",
+      "libelle": "Indice actions (S&P 500)",
+      "nom": "le S&P 500",
+      "source": "FRED (SP500)",
+      "r60": 0.18,
+      "r20": 0.03,
+      "n60": 60,
+      "du": "2026-08-07",
+      "au": "2026-10-30",
+      "stable": true
+     },
+     {
+      "moteur": "brent",
+      "libelle": "Pétrole Brent",
+      "nom": "le Brent",
+      "source": "FRED (DCOILBRENTEU)",
+      "r60": -0.08,
+      "r20": 0.06,
+      "n60": 60,
+      "du": "2026-08-04",
+      "au": "2026-10-27",
+      "stable": false
+     }
+    ],
+    "non_testes": [
+     {
+      "moteur": "ecart_2a_etranger",
+      "libelle": "Écart de taux 2 ans (taux étranger)",
+      "raison": "pas d'historique quotidien des taux 2 ans hors États-Unis (seule la dernière valeur est collectée)"
+     },
+     {
+      "moteur": "surprises_bc",
+      "libelle": "Surprises de la banque centrale",
+      "raison": "décisions trop rares (quelques-unes par an) pour une corrélation quotidienne sur 20 ou 60 séances"
+     }
+    ],
+    "seuil": 0.3,
+    "seances": [
+     60,
+     20
+    ],
+    "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python) ; séries des moteurs : historique 5 ans (FRED)",
+    "avertissement": "Corrélation des variations quotidiennes : elle décrit ce qui bouge ensemble, pas une cause."
+   },
+   "banque_centrale": {
+    "derniere": {
+     "date": "2026-10-29",
+     "publie": "2.65%",
+     "consensus": "2.65%",
+     "precedent": "2.65%",
+     "source": "ForexFactory (archive des publications)",
+     "decision": "maintien",
+     "surprise_pb": 0,
+     "texte": "maintien à 2,65 % le 29/10, conforme au consensus"
+    },
+    "prochaine": {
+     "date": "2026-12-17",
+     "taux": "2.50%",
+     "banque": "BCE",
+     "raison": null
+    },
+    "ton": {
+     "valeur": null,
+     "raison": "aucun communiqué comparé à son précédent dans les 30 derniers rapports"
+    },
+    "texte": "BCE : maintien à 2,65 % le 29/10, conforme au consensus · prochaine 17/12"
+   },
+   "macro": {
+    "inflation": {
+     "valeur": 3.8,
+     "texte": "3.8%",
+     "cible": 2.0,
+     "date": "2026-10-16",
+     "source": "ForexFactory",
+     "ecart": 1.8,
+     "raison": null
+    },
+    "surprise_30j": {
+     "indice": -0.27,
+     "n": 11,
+     "tendance": "baisse",
+     "source": "indice de surprise 30 jours (tableau macro, calcul Python)",
+     "raison": null
+    },
+    "marquante": {
+     "z": -8.0,
+     "date": "2026-11-02",
+     "evenement": "Allemagne : Ventes au détail M/M",
+     "texte": "en dessous du consensus (−2,4 pt, −8,0 σ)"
+    },
+    "texte": "inflation 3,8 % (cible 2,0 %) · surprises 30 j −0,3 · Allemagne : Ventes au détail M/M en dessous du consensus (−2,4 pt, −8,0 σ)"
+   },
+   "semaine": {
+    "score": 1,
+    "texte": "pas de catalyseur majeur dans l'Agenda",
+    "banque_centrale": null,
+    "forts": [],
+    "rendez_vous": [],
+    "source": "Agenda de la semaine"
+   },
+   "tendance_20s": {
+    "pct": -0.67,
+    "du": "2026-10-06",
+    "au": "2026-11-03",
+    "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python)"
+   },
+   "etat": {
+    "valeur": "Sans direction",
+    "raison": "Aucun signal net : ni surprise de la banque centrale, ni surprises macro marquées, ni tendance sur 20 séances.",
+    "signaux": [],
+    "total": 0
+   },
+   "lecture": "L'indice dollar large est en ce moment le moteur le plus corrélé à la devise (−0,73 sur 60 séances). Aucun signal net : ni surprise de la banque centrale, ni surprises macro marquées, ni tendance sur 20 séances. Cette semaine : pas de catalyseur majeur dans l'Agenda."
+  },
+  {
+   "devise": "GBP",
+   "nom": "Livre sterling",
+   "ancrages": [
+    {
+     "libelle": "Taux BoE",
+     "texte": "La livre réagit d'abord aux anticipations sur la Banque d'Angleterre, dans un pays à l'inflation tenace.",
+     "moteur": "ecart_2a_etranger",
+     "sens": 1,
+     "verdict": "non mesurable",
+     "mesure": "pas d'historique quotidien des taux 2 ans hors États-Unis (seule la dernière valeur est collectée)",
+     "r60": null
+    },
+    {
+     "libelle": "Appétit pour le risque",
+     "texte": "Devise d'un pays à déficit courant : elle profite des phases où les investisseurs prennent du risque.",
+     "moteur": "actions",
+     "sens": 1,
+     "verdict": "faible",
+     "mesure": "corrélation +0,14 avec Indice actions (S&P 500) sur 60 séances : peu marquée",
+     "r60": 0.14
+    }
+   ],
+   "moteur": {
+    "dominant": {
+     "moteur": "us2a",
+     "libelle": "Rendement US 2 ans (écart de taux 2 ans, côté US)",
+     "nom": "le rendement US à 2 ans",
+     "source": "FRED (DGS2)",
+     "r60": -0.3,
+     "r20": -0.25,
+     "n60": 60,
+     "du": "2026-08-06",
+     "au": "2026-10-30",
+     "stable": true
+    },
+    "texte": "Rendement US 2 ans (écart de taux 2 ans, côté US) : corrélation −0,30 sur 60 séances (06/08 → 30/10), −0,25 sur 20 séances",
+    "mesures": [
+     {
+      "moteur": "us2a",
+      "libelle": "Rendement US 2 ans (écart de taux 2 ans, côté US)",
+      "nom": "le rendement US à 2 ans",
+      "source": "FRED (DGS2)",
+      "r60": -0.3,
+      "r20": -0.25,
+      "n60": 60,
+      "du": "2026-08-06",
+      "au": "2026-10-30",
+      "stable": true
+     },
+     {
+      "moteur": "actions",
+      "libelle": "Indice actions (S&P 500)",
+      "nom": "le S&P 500",
+      "source": "FRED (SP500)",
+      "r60": 0.14,
+      "r20": 0.01,
+      "n60": 60,
+      "du": "2026-08-07",
+      "au": "2026-10-30",
+      "stable": true
+     },
+     {
+      "moteur": "vix",
+      "libelle": "VIX (volatilité des actions US)",
+      "nom": "le VIX",
+      "source": "FRED (VIXCLS)",
+      "r60": -0.13,
+      "r20": 0.02,
+      "n60": 60,
+      "du": "2026-08-10",
+      "au": "2026-10-30",
+      "stable": false
+     }
+    ],
+    "non_testes": [
+     {
+      "moteur": "ecart_2a_etranger",
+      "libelle": "Écart de taux 2 ans (taux étranger)",
+      "raison": "pas d'historique quotidien des taux 2 ans hors États-Unis (seule la dernière valeur est collectée)"
+     },
+     {
+      "moteur": "surprises_bc",
+      "libelle": "Surprises de la banque centrale",
+      "raison": "décisions trop rares (quelques-unes par an) pour une corrélation quotidienne sur 20 ou 60 séances"
+     }
+    ],
+    "seuil": 0.3,
+    "seances": [
+     60,
+     20
+    ],
+    "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python) ; séries des moteurs : historique 5 ans (FRED)",
+    "avertissement": "Corrélation des variations quotidiennes : elle décrit ce qui bouge ensemble, pas une cause."
+   },
+   "banque_centrale": {
+    "derniere": null,
+    "prochaine": {
+     "date": "2026-11-05",
+     "taux": "3.75%",
+     "banque": "BoE",
+     "raison": null
+    },
+    "ton": {
+     "valeur": null,
+     "raison": "aucun communiqué comparé à son précédent dans les 30 derniers rapports"
+    },
+    "texte": "BoE : dernière décision n/d (absente de l'archive) · prochaine 05/11"
+   },
+   "macro": {
+    "inflation": {
+     "valeur": 3.5,
+     "texte": "3.5%",
+     "cible": 2.0,
+     "date": "2026-10-21",
+     "source": "ForexFactory",
+     "ecart": 1.5,
+     "raison": null
+    },
+    "surprise_30j": {
+     "indice": 0.62,
+     "n": 10,
+     "tendance": "hausse",
+     "source": "indice de surprise 30 jours (tableau macro, calcul Python)",
+     "raison": null
+    },
+    "marquante": null,
+    "texte": "inflation 3,5 % (cible 2,0 %) · surprises 30 j +0,6"
+   },
+   "semaine": {
+    "score": 3,
+    "texte": "décision de la banque centrale (05/11) · 3 publications fortes",
+    "banque_centrale": {
+     "date": "2026-11-05",
+     "evenement": "Votes du MPC (BoE)"
+    },
+    "forts": [
+     {
+      "date": "2026-11-05",
+      "evenement": "Rapport de politique monétaire de la BoE"
+     },
+     {
+      "date": "2026-11-05",
+      "evenement": "Résumé de politique monétaire (BoE)"
+     },
+     {
+      "date": "2026-11-05",
+      "evenement": "Discours de Bailey, gouverneur de la BoE"
+     }
+    ],
+    "rendez_vous": [],
+    "source": "Agenda de la semaine"
+   },
+   "tendance_20s": {
+    "pct": 0.94,
+    "du": "2026-10-06",
+    "au": "2026-11-03",
+    "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python)"
+   },
+   "etat": {
+    "valeur": "Sans direction",
+    "raison": "Signaux favorables : surprises macro 30 j +0,6. Total +1 : il faut 2 signaux concordants.",
+    "signaux": [
+     {
+      "sens": 1,
+      "texte": "surprises macro 30 j +0,6"
+     }
+    ],
+    "total": 1
+   },
+   "lecture": "Le rendement US à 2 ans est en ce moment le moteur le plus corrélé à la devise (−0,30 sur 60 séances). Signaux favorables : surprises macro 30 j +0,6. Total +1 : il faut 2 signaux concordants. Cette semaine : décision de la banque centrale (05/11) · 3 publications fortes."
+  },
+  {
+   "devise": "JPY",
+   "nom": "Yen",
+   "ancrages": [
+    {
+     "libelle": "Refuge",
+     "texte": "Le Japon est créancier net : en cas de stress, les capitaux rentrent et le yen monte.",
+     "moteur": "vix",
+     "sens": 1,
+     "verdict": "faible",
+     "mesure": "corrélation −0,20 avec VIX (volatilité des actions US) sur 60 séances : peu marquée",
+     "r60": -0.2
+    },
+    {
+     "libelle": "Devise de financement du carry",
+     "texte": "On emprunte en yen (taux bas) pour placer ailleurs : quand l'écart de taux se creuse, le yen baisse.",
+     "moteur": "us10a",
+     "sens": -1,
+     "verdict": "confirmé",
+     "mesure": "corrélation −0,46 avec Rendement US 10 ans sur 60 séances, dans le sens attendu",
+     "r60": -0.46
+    }
+   ],
+   "moteur": {
+    "dominant": {
+     "moteur": "us10a",
+     "libelle": "Rendement US 10 ans",
+     "nom": "le rendement US à 10 ans",
+     "source": "FRED (DGS10)",
+     "r60": -0.46,
+     "r20": -0.68,
+     "n60": 60,
+     "du": "2026-08-06",
+     "au": "2026-10-30",
+     "stable": true
+    },
+    "texte": "Rendement US 10 ans : corrélation −0,46 sur 60 séances (06/08 → 30/10), −0,68 sur 20 séances",
+    "mesures": [
+     {
+      "moteur": "us10a",
+      "libelle": "Rendement US 10 ans",
+      "nom": "le rendement US à 10 ans",
+      "source": "FRED (DGS10)",
+      "r60": -0.46,
+      "r20": -0.68,
+      "n60": 60,
+      "du": "2026-08-06",
+      "au": "2026-10-30",
+      "stable": true
+     },
+     {
+      "moteur": "us2a",
+      "libelle": "Rendement US 2 ans (écart de taux 2 ans, côté US)",
+      "nom": "le rendement US à 2 ans",
+      "source": "FRED (DGS2)",
+      "r60": -0.46,
+      "r20": -0.63,
+      "n60": 60,
+      "du": "2026-08-06",
+      "au": "2026-10-30",
+      "stable": true
+     },
+     {
+      "moteur": "or",
+      "libelle": "Or (indice, proxy)",
+      "nom": "l'or",
+      "source": "FRED (NASDAQQGLDI, indice or proxy)",
+      "r60": 0.29,
+      "r20": -0.43,
+      "n60": 60,
+      "du": "2026-08-06",
+      "au": "2026-10-29",
+      "stable": false
+     },
+     {
+      "moteur": "vix",
+      "libelle": "VIX (volatilité des actions US)",
+      "nom": "le VIX",
+      "source": "FRED (VIXCLS)",
+      "r60": -0.2,
+      "r20": 0.58,
+      "n60": 60,
+      "du": "2026-08-10",
+      "au": "2026-10-30",
+      "stable": false
+     },
+     {
+      "moteur": "actions",
+      "libelle": "Indice actions (S&P 500)",
+      "nom": "le S&P 500",
+      "source": "FRED (SP500)",
+      "r60": 0.2,
+      "r20": -0.63,
+      "n60": 60,
+      "du": "2026-08-07",
+      "au": "2026-10-30",
+      "stable": false
+     }
+    ],
+    "non_testes": [
+     {
+      "moteur": "surprises_bc",
+      "libelle": "Surprises de la banque centrale",
+      "raison": "décisions trop rares (quelques-unes par an) pour une corrélation quotidienne sur 20 ou 60 séances"
+     }
+    ],
+    "seuil": 0.3,
+    "seances": [
+     60,
+     20
+    ],
+    "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python) ; séries des moteurs : historique 5 ans (FRED)",
+    "avertissement": "Corrélation des variations quotidiennes : elle décrit ce qui bouge ensemble, pas une cause."
+   },
+   "banque_centrale": {
+    "derniere": {
+     "date": "2026-10-30",
+     "publie": "<1.25%",
+     "consensus": "<1.25%",
+     "precedent": "<1.25%",
+     "source": "ForexFactory (archive des publications)",
+     "decision": "maintien",
+     "surprise_pb": 0,
+     "texte": "maintien à <1,25 % le 30/10, conforme au consensus"
+    },
+    "prochaine": {
+     "date": "2026-12-18",
+     "taux": "<1.25%",
+     "banque": "BoJ",
+     "raison": null
+    },
+    "ton": {
+     "valeur": null,
+     "raison": "aucun communiqué comparé à son précédent dans les 30 derniers rapports"
+    },
+    "texte": "BoJ : maintien à <1,25 % le 30/10, conforme au consensus · prochaine 18/12"
+   },
+   "macro": {
+    "inflation": {
+     "valeur": 2.1,
+     "texte": "2.1%",
+     "cible": 2.0,
+     "date": "2026-10-22",
+     "source": "ForexFactory",
+     "ecart": 0.1,
+     "raison": null
+    },
+    "surprise_30j": {
+     "indice": -0.1,
+     "n": 7,
+     "tendance": "stable",
+     "source": "indice de surprise 30 jours (tableau macro, calcul Python)",
+     "raison": null
+    },
+    "marquante": null,
+    "texte": "inflation 2,1 % (cible 2,0 %) · surprises 30 j −0,1"
+   },
+   "semaine": {
+    "score": 2,
+    "texte": "1 publication forte",
+    "banque_centrale": null,
+    "forts": [
+     {
+      "date": "2026-11-06",
+      "evenement": "Discours de Ueda, gouverneur de la BoJ"
+     }
+    ],
+    "rendez_vous": [],
+    "source": "Agenda de la semaine"
+   },
+   "tendance_20s": {
+    "pct": 0.16,
+    "du": "2026-10-06",
+    "au": "2026-11-03",
+    "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python)"
+   },
+   "etat": {
+    "valeur": "Sans direction",
+    "raison": "Aucun signal net : ni surprise de la banque centrale, ni surprises macro marquées, ni tendance sur 20 séances.",
+    "signaux": [],
+    "total": 0
+   },
+   "lecture": "Le rendement US à 10 ans est en ce moment le moteur le plus corrélé à la devise (−0,46 sur 60 séances). Aucun signal net : ni surprise de la banque centrale, ni surprises macro marquées, ni tendance sur 20 séances. Cette semaine : 1 publication forte."
+  },
+  {
+   "devise": "CHF",
+   "nom": "Franc suisse",
+   "ancrages": [
+    {
+     "libelle": "Refuge",
+     "texte": "Stabilité, excédents et neutralité : le franc attire en cas de stress.",
+     "moteur": "vix",
+     "sens": 1,
+     "verdict": "faible",
+     "mesure": "corrélation −0,14 avec VIX (volatilité des actions US) sur 60 séances : peu marquée",
+     "r60": -0.14
+    }
+   ],
+   "moteur": {
+    "dominant": {
+     "moteur": "us10a",
+     "libelle": "Rendement US 10 ans",
+     "nom": "le rendement US à 10 ans",
+     "source": "FRED (DGS10)",
+     "r60": -0.55,
+     "r20": -0.62,
+     "n60": 60,
+     "du": "2026-08-06",
+     "au": "2026-10-30",
+     "stable": true
+    },
+    "texte": "Rendement US 10 ans : corrélation −0,55 sur 60 séances (06/08 → 30/10), −0,62 sur 20 séances",
+    "mesures": [
+     {
+      "moteur": "us10a",
+      "libelle": "Rendement US 10 ans",
+      "nom": "le rendement US à 10 ans",
+      "source": "FRED (DGS10)",
+      "r60": -0.55,
+      "r20": -0.62,
+      "n60": 60,
+      "du": "2026-08-06",
+      "au": "2026-10-30",
+      "stable": true
+     },
+     {
+      "moteur": "or",
+      "libelle": "Or (indice, proxy)",
+      "nom": "l'or",
+      "source": "FRED (NASDAQQGLDI, indice or proxy)",
+      "r60": 0.43,
+      "r20": 0.27,
+      "n60": 60,
+      "du": "2026-08-06",
+      "au": "2026-10-29",
+      "stable": true
+     },
+     {
+      "moteur": "actions",
+      "libelle": "Indice actions (S&P 500)",
+      "nom": "le S&P 500",
+      "source": "FRED (SP500)",
+      "r60": 0.19,
+      "r20": -0.2,
+      "n60": 60,
+      "du": "2026-08-07",
+      "au": "2026-10-30",
+      "stable": false
+     },
+     {
+      "moteur": "vix",
+      "libelle": "VIX (volatilité des actions US)",
+      "nom": "le VIX",
+      "source": "FRED (VIXCLS)",
+      "r60": -0.14,
+      "r20": 0.23,
+      "n60": 60,
+      "du": "2026-08-10",
+      "au": "2026-10-30",
+      "stable": false
+     }
+    ],
+    "non_testes": [
+     {
+      "moteur": "surprises_bc",
+      "libelle": "Surprises de la banque centrale",
+      "raison": "décisions trop rares (quelques-unes par an) pour une corrélation quotidienne sur 20 ou 60 séances"
+     }
+    ],
+    "seuil": 0.3,
+    "seances": [
+     60,
+     20
+    ],
+    "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python) ; séries des moteurs : historique 5 ans (FRED)",
+    "avertissement": "Corrélation des variations quotidiennes : elle décrit ce qui bouge ensemble, pas une cause."
+   },
+   "banque_centrale": {
+    "derniere": null,
+    "prochaine": {
+     "date": "2026-12-10",
+     "taux": "0.00%",
+     "banque": "BNS",
+     "raison": null
+    },
+    "ton": {
+     "valeur": null,
+     "raison": "aucun communiqué comparé à son précédent dans les 30 derniers rapports"
+    },
+    "texte": "BNS : dernière décision n/d (absente de l'archive) · prochaine 10/12"
+   },
+   "macro": {
+    "inflation": {
+     "valeur": 0.2,
+     "texte": "0.2%",
+     "cible": 1.0,
+     "date": "2026-11-03",
+     "source": "ForexFactory",
+     "ecart": null,
+     "raison": "inflation publiée en variation mensuelle ou trimestrielle : non comparable à la cible annuelle"
+    },
+    "surprise_30j": {
+     "indice": 0.45,
+     "n": 4,
+     "tendance": "hausse",
+     "source": "indice de surprise 30 jours (tableau macro, calcul Python)",
+     "raison": null
+    },
+    "marquante": {
+     "z": -4.67,
+     "date": "2026-11-02",
+     "evenement": "Ventes au détail A/A",
+     "texte": "en dessous du consensus (−1,4 pt, −4,7 σ)"
+    },
+    "texte": "surprises 30 j +0,5 · Ventes au détail A/A en dessous du consensus (−1,4 pt, −4,7 σ)"
+   },
+   "semaine": {
+    "score": 1,
+    "texte": "pas de catalyseur majeur dans l'Agenda",
+    "banque_centrale": null,
+    "forts": [],
+    "rendez_vous": [],
+    "source": "Agenda de la semaine"
+   },
+   "tendance_20s": {
+    "pct": 1.45,
+    "du": "2026-10-06",
+    "au": "2026-11-03",
+    "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python)"
+   },
+   "etat": {
+    "valeur": "Soutenue",
+    "raison": "Signaux favorables : surprises macro 30 j +0,5 ; force +1,4 % sur 20 séances.",
+    "signaux": [
+     {
+      "sens": 1,
+      "texte": "surprises macro 30 j +0,5"
+     },
+     {
+      "sens": 1,
+      "texte": "force +1,4 % sur 20 séances"
+     }
+    ],
+    "total": 2
+   },
+   "lecture": "Le rendement US à 10 ans est en ce moment le moteur le plus corrélé à la devise (−0,55 sur 60 séances). Signaux favorables : surprises macro 30 j +0,5 ; force +1,4 % sur 20 séances. Cette semaine : pas de catalyseur majeur dans l'Agenda."
+  },
+  {
+   "devise": "CAD",
+   "nom": "Dollar canadien",
+   "ancrages": [
+    {
+     "libelle": "Pétrole",
+     "texte": "Le Canada exporte du pétrole : un baril plus cher soutient ses recettes et sa devise.",
+     "moteur": "brent",
+     "sens": 1,
+     "verdict": "faible",
+     "mesure": "corrélation −0,10 avec Pétrole Brent sur 60 séances : peu marquée",
+     "r60": -0.1
+    },
+    {
+     "libelle": "Économie US",
+     "texte": "Les États-Unis achètent l'essentiel des exportations canadiennes : leur conjoncture compte.",
+     "moteur": "actions",
+     "sens": 1,
+     "verdict": "faible",
+     "mesure": "corrélation +0,09 avec Indice actions (S&P 500) sur 60 séances : peu marquée",
+     "r60": 0.09
+    }
+   ],
+   "moteur": {
+    "dominant": {
+     "moteur": "us2a",
+     "libelle": "Rendement US 2 ans (écart de taux 2 ans, côté US)",
+     "nom": "le rendement US à 2 ans",
+     "source": "FRED (DGS2)",
+     "r60": -0.42,
+     "r20": -0.44,
+     "n60": 60,
+     "du": "2026-08-06",
+     "au": "2026-10-30",
+     "stable": true
+    },
+    "texte": "Rendement US 2 ans (écart de taux 2 ans, côté US) : corrélation −0,42 sur 60 séances (06/08 → 30/10), −0,44 sur 20 séances",
+    "mesures": [
+     {
+      "moteur": "us2a",
+      "libelle": "Rendement US 2 ans (écart de taux 2 ans, côté US)",
+      "nom": "le rendement US à 2 ans",
+      "source": "FRED (DGS2)",
+      "r60": -0.42,
+      "r20": -0.44,
+      "n60": 60,
+      "du": "2026-08-06",
+      "au": "2026-10-30",
+      "stable": true
+     },
+     {
+      "moteur": "vix",
+      "libelle": "VIX (volatilité des actions US)",
+      "nom": "le VIX",
+      "source": "FRED (VIXCLS)",
+      "r60": -0.13,
+      "r20": 0.09,
+      "n60": 60,
+      "du": "2026-08-10",
+      "au": "2026-10-30",
+      "stable": false
+     },
+     {
+      "moteur": "brent",
+      "libelle": "Pétrole Brent",
+      "nom": "le Brent",
+      "source": "FRED (DCOILBRENTEU)",
+      "r60": -0.1,
+      "r20": -0.21,
+      "n60": 60,
+      "du": "2026-08-04",
+      "au": "2026-10-27",
+      "stable": true
+     },
+     {
+      "moteur": "actions",
+      "libelle": "Indice actions (S&P 500)",
+      "nom": "le S&P 500",
+      "source": "FRED (SP500)",
+      "r60": 0.09,
+      "r20": -0.13,
+      "n60": 60,
+      "du": "2026-08-07",
+      "au": "2026-10-30",
+      "stable": false
+     }
+    ],
+    "non_testes": [
+     {
+      "moteur": "surprises_bc",
+      "libelle": "Surprises de la banque centrale",
+      "raison": "décisions trop rares (quelques-unes par an) pour une corrélation quotidienne sur 20 ou 60 séances"
+     }
+    ],
+    "seuil": 0.3,
+    "seances": [
+     60,
+     20
+    ],
+    "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python) ; séries des moteurs : historique 5 ans (FRED)",
+    "avertissement": "Corrélation des variations quotidiennes : elle décrit ce qui bouge ensemble, pas une cause."
+   },
+   "banque_centrale": {
+    "derniere": {
+     "date": "2026-10-28",
+     "publie": "2.50%",
+     "consensus": "2.50%",
+     "precedent": "2.25%",
+     "source": "ForexFactory (archive des publications)",
+     "decision": "hausse",
+     "surprise_pb": 0,
+     "texte": "hausse à 2,50 % le 28/10, conforme au consensus"
+    },
+    "prochaine": {
+     "date": "2026-12-09",
+     "taux": "2.50%",
+     "banque": "BoC",
+     "raison": null
+    },
+    "ton": {
+     "valeur": null,
+     "raison": "aucun communiqué comparé à son précédent dans les 30 derniers rapports"
+    },
+    "texte": "BoC : hausse à 2,50 % le 28/10, conforme au consensus · prochaine 09/12"
+   },
+   "macro": {
+    "inflation": {
+     "valeur": 0.1,
+     "texte": "0.1%",
+     "cible": 2.0,
+     "date": "2026-10-19",
+     "source": "ForexFactory",
+     "ecart": null,
+     "raison": "inflation publiée en variation mensuelle ou trimestrielle : non comparable à la cible annuelle"
+    },
+    "surprise_30j": {
+     "indice": -0.74,
+     "n": 9,
+     "tendance": "baisse",
+     "source": "indice de surprise 30 jours (tableau macro, calcul Python)",
+     "raison": null
+    },
+    "marquante": null,
+    "texte": "surprises 30 j −0,7"
+   },
+   "semaine": {
+    "score": 2,
+    "texte": "2 publications fortes",
+    "banque_centrale": null,
+    "forts": [
+     {
+      "date": "2026-11-06",
+      "evenement": "Variation de l'emploi"
+     },
+     {
+      "date": "2026-11-06",
+      "evenement": "Taux de chômage"
+     }
+    ],
+    "rendez_vous": [],
+    "source": "Agenda de la semaine"
+   },
+   "tendance_20s": {
+    "pct": 1.55,
+    "du": "2026-10-06",
+    "au": "2026-11-03",
+    "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python)"
+   },
+   "etat": {
+    "valeur": "Sans direction",
+    "raison": "Signaux partagés : surprises macro 30 j −0,7 ; force +1,6 % sur 20 séances. Total 0 : il faut 2 signaux concordants.",
+    "signaux": [
+     {
+      "sens": -1,
+      "texte": "surprises macro 30 j −0,7"
+     },
+     {
+      "sens": 1,
+      "texte": "force +1,6 % sur 20 séances"
+     }
+    ],
+    "total": 0
+   },
+   "lecture": "Le rendement US à 2 ans est en ce moment le moteur le plus corrélé à la devise (−0,42 sur 60 séances). Signaux partagés : surprises macro 30 j −0,7 ; force +1,6 % sur 20 séances. Total 0 : il faut 2 signaux concordants. Cette semaine : 2 publications fortes."
+  },
+  {
+   "devise": "AUD",
+   "nom": "Dollar australien",
+   "ancrages": [
+    {
+     "libelle": "Chine et matières premières",
+     "texte": "Minerai de fer, charbon, gaz : l'Australie vit de la demande chinoise en matières premières.",
+     "moteur": "cuivre",
+     "sens": 1,
+     "verdict": "non mesurable",
+     "mesure": "série quotidienne du cuivre non collectée (aucune source gratuite configurée)",
+     "r60": null
+    },
+    {
+     "libelle": "Appétit pour le risque",
+     "texte": "Devise cyclique et liquide : elle sert de baromètre de l'appétit pour le risque.",
+     "moteur": "actions",
+     "sens": 1,
+     "verdict": "confirmé",
+     "mesure": "corrélation +0,41 avec Indice actions (S&P 500) sur 60 séances, dans le sens attendu",
+     "r60": 0.41
+    }
+   ],
+   "moteur": {
+    "dominant": {
+     "moteur": "or",
+     "libelle": "Or (indice, proxy)",
+     "nom": "l'or",
+     "source": "FRED (NASDAQQGLDI, indice or proxy)",
+     "r60": 0.46,
+     "r20": 0.26,
+     "n60": 60,
+     "du": "2026-08-06",
+     "au": "2026-10-29",
+     "stable": true
+    },
+    "texte": "Or (indice, proxy) : corrélation +0,46 sur 60 séances (06/08 → 29/10), +0,26 sur 20 séances",
+    "mesures": [
+     {
+      "moteur": "or",
+      "libelle": "Or (indice, proxy)",
+      "nom": "l'or",
+      "source": "FRED (NASDAQQGLDI, indice or proxy)",
+      "r60": 0.46,
+      "r20": 0.26,
+      "n60": 60,
+      "du": "2026-08-06",
+      "au": "2026-10-29",
+      "stable": true
+     },
+     {
+      "moteur": "vix",
+      "libelle": "VIX (volatilité des actions US)",
+      "nom": "le VIX",
+      "source": "FRED (VIXCLS)",
+      "r60": -0.43,
+      "r20": -0.14,
+      "n60": 60,
+      "du": "2026-08-10",
+      "au": "2026-10-30",
+      "stable": true
+     },
+     {
+      "moteur": "actions",
+      "libelle": "Indice actions (S&P 500)",
+      "nom": "le S&P 500",
+      "source": "FRED (SP500)",
+      "r60": 0.41,
+      "r20": 0.19,
+      "n60": 60,
+      "du": "2026-08-07",
+      "au": "2026-10-30",
+      "stable": true
+     },
+     {
+      "moteur": "us2a",
+      "libelle": "Rendement US 2 ans (écart de taux 2 ans, côté US)",
+      "nom": "le rendement US à 2 ans",
+      "source": "FRED (DGS2)",
+      "r60": -0.22,
+      "r20": 0.51,
+      "n60": 60,
+      "du": "2026-08-06",
+      "au": "2026-10-30",
+      "stable": false
+     }
+    ],
+    "non_testes": [
+     {
+      "moteur": "cuivre",
+      "libelle": "Cuivre",
+      "raison": "série quotidienne du cuivre non collectée (aucune source gratuite configurée)"
+     },
+     {
+      "moteur": "surprises_bc",
+      "libelle": "Surprises de la banque centrale",
+      "raison": "décisions trop rares (quelques-unes par an) pour une corrélation quotidienne sur 20 ou 60 séances"
+     }
+    ],
+    "seuil": 0.3,
+    "seances": [
+     60,
+     20
+    ],
+    "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python) ; séries des moteurs : historique 5 ans (FRED)",
+    "avertissement": "Corrélation des variations quotidiennes : elle décrit ce qui bouge ensemble, pas une cause."
+   },
+   "banque_centrale": {
+    "derniere": {
+     "date": "2026-11-03",
+     "publie": "4.85%",
+     "consensus": "4.85%",
+     "precedent": "4.60%",
+     "source": "ForexFactory (archive des publications)",
+     "decision": "hausse",
+     "surprise_pb": 0,
+     "texte": "hausse à 4,85 % le 03/11, conforme au consensus"
+    },
+    "prochaine": {
+     "date": "2026-11-03",
+     "taux": "4.85%",
+     "banque": "RBA",
+     "raison": null
+    },
+    "ton": {
+     "valeur": null,
+     "raison": "aucun communiqué comparé à son précédent dans les 30 derniers rapports"
+    },
+    "texte": "RBA : hausse à 4,85 % le 03/11, conforme au consensus · prochaine 03/11"
+   },
+   "macro": {
+    "inflation": {
+     "valeur": 4.3,
+     "texte": "4.3%",
+     "cible": 2.5,
+     "date": "2026-10-28",
+     "source": "ForexFactory",
+     "ecart": 1.8,
+     "raison": null
+    },
+    "surprise_30j": {
+     "indice": -0.15,
+     "n": 5,
+     "tendance": "hausse",
+     "source": "indice de surprise 30 jours (tableau macro, calcul Python)",
+     "raison": null
+    },
+    "marquante": null,
+    "texte": "inflation 4,3 % (cible 2,5 %) · surprises 30 j −0,1"
+   },
+   "semaine": {
+    "score": 3,
+    "texte": "décision de la banque centrale (03/11) · 3 publications fortes",
+    "banque_centrale": {
+     "date": "2026-11-03",
+     "evenement": "Décision de la RBA (taux directeur)"
+    },
+    "forts": [
+     {
+      "date": "2026-11-03",
+      "evenement": "Déclaration de politique monétaire de la RBA"
+     },
+     {
+      "date": "2026-11-03",
+      "evenement": "Communiqué de la RBA"
+     },
+     {
+      "date": "2026-11-03",
+      "evenement": "Conférence de presse de la RBA"
+     }
+    ],
+    "rendez_vous": [],
+    "source": "Agenda de la semaine"
+   },
+   "tendance_20s": {
+    "pct": 0.18,
+    "du": "2026-10-06",
+    "au": "2026-11-03",
+    "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python)"
+   },
+   "etat": {
+    "valeur": "Sans direction",
+    "raison": "Aucun signal net : ni surprise de la banque centrale, ni surprises macro marquées, ni tendance sur 20 séances.",
+    "signaux": [],
+    "total": 0
+   },
+   "lecture": "L'or est en ce moment le moteur le plus corrélé à la devise (+0,46 sur 60 séances). Aucun signal net : ni surprise de la banque centrale, ni surprises macro marquées, ni tendance sur 20 séances. Cette semaine : décision de la banque centrale (03/11) · 3 publications fortes."
+  },
+  {
+   "devise": "NZD",
+   "nom": "Dollar néo-zélandais",
+   "ancrages": [
+    {
+     "libelle": "Appétit pour le risque",
+     "texte": "Petite devise à portage : elle suit les phases de prise de risque.",
+     "moteur": "actions",
+     "sens": 1,
+     "verdict": "faible",
+     "mesure": "corrélation +0,27 avec Indice actions (S&P 500) sur 60 séances : peu marquée",
+     "r60": 0.27
+    },
+    {
+     "libelle": "Produits agricoles",
+     "texte": "Produits laitiers et viande : les prix agricoles (enchères laitières) pèsent sur ses exportations.",
+     "moteur": null,
+     "sens": null,
+     "verdict": "non mesurable",
+     "mesure": "pas de moteur quotidien mesurable",
+     "r60": null
+    }
+   ],
+   "moteur": {
+    "dominant": null,
+    "texte": "Aucun moteur dominant (le plus corrélé : VIX (volatilité des actions US), −0,28 sur 60 séances, sous le seuil de 0,30)",
+    "mesures": [
+     {
+      "moteur": "vix",
+      "libelle": "VIX (volatilité des actions US)",
+      "nom": "le VIX",
+      "source": "FRED (VIXCLS)",
+      "r60": -0.28,
+      "r20": 0.01,
+      "n60": 60,
+      "du": "2026-08-10",
+      "au": "2026-10-30",
+      "stable": false
+     },
+     {
+      "moteur": "actions",
+      "libelle": "Indice actions (S&P 500)",
+      "nom": "le S&P 500",
+      "source": "FRED (SP500)",
+      "r60": 0.27,
+      "r20": 0.04,
+      "n60": 60,
+      "du": "2026-08-07",
+      "au": "2026-10-30",
+      "stable": true
+     },
+     {
+      "moteur": "us2a",
+      "libelle": "Rendement US 2 ans (écart de taux 2 ans, côté US)",
+      "nom": "le rendement US à 2 ans",
+      "source": "FRED (DGS2)",
+      "r60": -0.26,
+      "r20": 0.17,
+      "n60": 60,
+      "du": "2026-08-06",
+      "au": "2026-10-30",
+      "stable": false
+     }
+    ],
+    "non_testes": [
+     {
+      "moteur": "surprises_bc",
+      "libelle": "Surprises de la banque centrale",
+      "raison": "décisions trop rares (quelques-unes par an) pour une corrélation quotidienne sur 20 ou 60 séances"
+     }
+    ],
+    "seuil": 0.3,
+    "seances": [
+     60,
+     20
+    ],
+    "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python) ; séries des moteurs : historique 5 ans (FRED)",
+    "avertissement": "Corrélation des variations quotidiennes : elle décrit ce qui bouge ensemble, pas une cause."
+   },
+   "banque_centrale": {
+    "derniere": {
+     "date": "2026-10-28",
+     "publie": "2.75%",
+     "consensus": "3.00%",
+     "precedent": "2.75%",
+     "source": "ForexFactory (archive des publications)",
+     "decision": "maintien",
+     "surprise_pb": -25,
+     "texte": "maintien à 2,75 % le 28/10, 3,00 % attendu (−25 pb)"
+    },
+    "prochaine": {
+     "date": "2026-12-09",
+     "taux": "2.75%",
+     "banque": "RBNZ",
+     "raison": null
+    },
+    "ton": {
+     "valeur": null,
+     "raison": "aucun communiqué comparé à son précédent dans les 30 derniers rapports"
+    },
+    "texte": "RBNZ : maintien à 2,75 % le 28/10, 3,00 % attendu (−25 pb) · prochaine 09/12"
+   },
+   "macro": {
+    "inflation": {
+     "valeur": 0.7,
+     "texte": "0.7%",
+     "cible": 2.0,
+     "date": "2026-10-21",
+     "source": "ForexFactory",
+     "ecart": null,
+     "raison": "inflation publiée en variation mensuelle ou trimestrielle : non comparable à la cible annuelle"
+    },
+    "surprise_30j": {
+     "indice": -0.91,
+     "n": 3,
+     "tendance": "baisse",
+     "source": "indice de surprise 30 jours (tableau macro, calcul Python)",
+     "raison": null
+    },
+    "marquante": null,
+    "texte": "surprises 30 j −0,9"
+   },
+   "semaine": {
+    "score": 3,
+    "texte": "3 publications fortes",
+    "banque_centrale": null,
+    "forts": [
+     {
+      "date": "2026-11-03",
+      "evenement": "Variation de l'emploi T/T"
+     },
+     {
+      "date": "2026-11-03",
+      "evenement": "Taux de chômage"
+     },
+     {
+      "date": "2026-11-06",
+      "evenement": "Élections législatives"
+     }
+    ],
+    "rendez_vous": [],
+    "source": "Agenda de la semaine"
+   },
+   "tendance_20s": {
+    "pct": -0.34,
+    "du": "2026-10-06",
+    "au": "2026-11-03",
+    "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python)"
+   },
+   "etat": {
+    "valeur": "Sous pression",
+    "raison": "Signaux défavorables : banque centrale : maintien à 2,75 % le 28/10, 3,00 % attendu (−25 pb) ; surprises macro 30 j −0,9.",
+    "signaux": [
+     {
+      "sens": -1,
+      "texte": "banque centrale : maintien à 2,75 % le 28/10, 3,00 % attendu (−25 pb)"
+     },
+     {
+      "sens": -1,
+      "texte": "surprises macro 30 j −0,9"
+     }
+    ],
+    "total": -2
+   },
+   "lecture": "Aucun moteur ne domine en ce moment. Signaux défavorables : banque centrale : maintien à 2,75 % le 28/10, 3,00 % attendu (−25 pb) ; surprises macro 30 j −0,9. Cette semaine : 3 publications fortes."
+  },
+  {
+   "devise": "CNY",
+   "nom": "Yuan",
+   "ancrages": [
+    {
+     "libelle": "Change géré par la PBoC",
+     "texte": "La banque centrale fixe chaque jour un cours de référence : la direction se lit d'abord dans ce fixing.",
+     "moteur": null,
+     "sens": null,
+     "verdict": "non mesurable",
+     "mesure": "pas de moteur quotidien mesurable",
+     "r60": null
+    }
+   ],
+   "moteur": {
+    "dominant": {
+     "moteur": "dollar_large",
+     "libelle": "Indice dollar large (Fed)",
+     "nom": "l'indice dollar large",
+     "source": "FRED (DTWEXBGS, indice dollar large de la Fed)",
+     "r60": -0.43,
+     "r20": -0.52,
+     "n60": 60,
+     "du": "2026-08-06",
+     "au": "2026-10-30",
+     "stable": true
+    },
+    "texte": "Indice dollar large (Fed) : corrélation −0,43 sur 60 séances (06/08 → 30/10), −0,52 sur 20 séances",
+    "mesures": [
+     {
+      "moteur": "dollar_large",
+      "libelle": "Indice dollar large (Fed)",
+      "nom": "l'indice dollar large",
+      "source": "FRED (DTWEXBGS, indice dollar large de la Fed)",
+      "r60": -0.43,
+      "r20": -0.52,
+      "n60": 60,
+      "du": "2026-08-06",
+      "au": "2026-10-30",
+      "stable": true
+     },
+     {
+      "moteur": "actions",
+      "libelle": "Indice actions (S&P 500)",
+      "nom": "le S&P 500",
+      "source": "FRED (SP500)",
+      "r60": 0.26,
+      "r20": 0.24,
+      "n60": 60,
+      "du": "2026-08-07",
+      "au": "2026-10-30",
+      "stable": true
+     },
+     {
+      "moteur": "us2a",
+      "libelle": "Rendement US 2 ans (écart de taux 2 ans, côté US)",
+      "nom": "le rendement US à 2 ans",
+      "source": "FRED (DGS2)",
+      "r60": -0.2,
+      "r20": 0.34,
+      "n60": 60,
+      "du": "2026-08-06",
+      "au": "2026-10-30",
+      "stable": false
+     }
+    ],
+    "non_testes": [],
+    "seuil": 0.3,
+    "seances": [
+     60,
+     20
+    ],
+    "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python) ; séries des moteurs : historique 5 ans (FRED)",
+    "avertissement": "Corrélation des variations quotidiennes : elle décrit ce qui bouge ensemble, pas une cause."
+   },
+   "banque_centrale": {
+    "derniere": null,
+    "prochaine": {
+     "date": "2026-11-20",
+     "taux": "3.00%",
+     "banque": "PBoC",
+     "raison": null
+    },
+    "ton": {
+     "valeur": null,
+     "raison": "aucun communiqué comparé à son précédent dans les 30 derniers rapports"
+    },
+    "texte": "PBoC : dernière décision n/d (absente de l'archive) · prochaine 20/11"
+   },
+   "macro": {
+    "inflation": {
+     "valeur": 0.9,
+     "texte": "0.9%",
+     "cible": 3.0,
+     "date": "2026-10-14",
+     "source": "ForexFactory",
+     "ecart": -2.1,
+     "raison": null
+    },
+    "surprise_30j": {
+     "indice": 0.45,
+     "n": 6,
+     "tendance": "hausse",
+     "source": "indice de surprise 30 jours (tableau macro, calcul Python)",
+     "raison": null
+    },
+    "marquante": null,
+    "texte": "inflation 0,9 % (cible 3,0 %) · surprises 30 j +0,5"
+   },
+   "semaine": {
+    "score": 1,
+    "texte": "pas de catalyseur majeur dans l'Agenda",
+    "banque_centrale": null,
+    "forts": [],
+    "rendez_vous": [],
+    "source": "Agenda de la semaine"
+   },
+   "tendance_20s": {
+    "pct": 0.52,
+    "du": "2026-10-06",
+    "au": "2026-11-03",
+    "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python)"
+   },
+   "etat": {
+    "valeur": "Sans direction",
+    "raison": "Signaux favorables : surprises macro 30 j +0,5. Total +1 : il faut 2 signaux concordants.",
+    "signaux": [
+     {
+      "sens": 1,
+      "texte": "surprises macro 30 j +0,5"
+     }
+    ],
+    "total": 1
+   },
+   "lecture": "L'indice dollar large est en ce moment le moteur le plus corrélé à la devise (−0,43 sur 60 séances). Signaux favorables : surprises macro 30 j +0,5. Total +1 : il faut 2 signaux concordants. Cette semaine : pas de catalyseur majeur dans l'Agenda."
+  }
+ ],
+ "seuil_correlation": 0.3,
+ "regle_etat": "« Ancrage contredit » si un ancrage mesurable est corrélé, de façon stable, à l'inverse du sens attendu ; sinon somme de trois signaux (banque centrale, surprises macro 30 j, tendance 20 séances) : 2 ou plus « Soutenue », −2 ou moins « Sous pression », sinon « Sans direction ».",
+ "note": "Corrélations des variations quotidiennes : elles décrivent ce qui bouge ensemble, jamais une cause."
+}
