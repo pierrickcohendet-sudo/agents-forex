@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-04T08:28:53+00:00",
+  "genere_le": "2026-11-04T09:24:28+00:00",
   "appels_llm": [
    {
     "heure": "08:26",
@@ -94,6 +94,74 @@
     "tokens_total": 1098,
     "ok": true,
     "etiquette": "rapport:analyse"
+   },
+   {
+    "heure": "09:18",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 768,
+    "tokens_message": 7066,
+    "tokens_total": 7834,
+    "ok": false,
+    "etiquette": "engrenages",
+    "echec": "503"
+   },
+   {
+    "heure": "09:18",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 5038,
+    "tokens_message": 17742,
+    "tokens_total": 22780,
+    "ok": false,
+    "etiquette": "analyses:USD-EUR-GBP",
+    "echec": "503"
+   },
+   {
+    "heure": "09:19",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 5038,
+    "tokens_message": 14409,
+    "tokens_total": 19447,
+    "ok": false,
+    "etiquette": "analyses:JPY-CHF-CAD",
+    "echec": "503"
+   },
+   {
+    "heure": "09:19",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 5038,
+    "tokens_message": 13340,
+    "tokens_total": 18378,
+    "ok": false,
+    "etiquette": "analyses:AUD-NZD-CNY",
+    "echec": "429"
+   },
+   {
+    "heure": "09:24",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 5038,
+    "tokens_message": 12640,
+    "tokens_total": 17678,
+    "ok": true,
+    "etiquette": "etat_du_monde"
+   },
+   {
+    "heure": "09:24",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 0,
+    "tokens_message": 23337,
+    "tokens_total": 23337,
+    "ok": true,
+    "etiquette": "critique"
+   },
+   {
+    "heure": "09:30",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 0,
+    "tokens_message": 1115,
+    "tokens_total": 1115,
+    "ok": false,
+    "etiquette": "paires:synthese",
+    "echec": "503"
    }
   ],
   "quota_llm": {
@@ -103,15 +171,15 @@
     "gemini-3.8-flash",
     "gemini-3.5-flash-lite"
    ],
-   "appels_aujourdhui": 17,
+   "appels_aujourdhui": 32,
    "plafond_jour": 60,
    "engrenages_faits": false,
    "reserve_engrenages": 8,
    "refus_reserve_ce_run": 0,
-   "refus_budget_ce_run": 11,
+   "refus_budget_ce_run": 7,
    "budget": {
-    "plafond": 45,
-    "mode": "complet",
+    "plafond": 60,
+    "mode": "complément",
     "lundi": false,
     "max_appels_par_analyse": 2,
     "prevu_analyses": {
@@ -125,62 +193,140 @@
      "devises": 6
     },
     "consomme_jour": {
-     "engrenages": 2,
+     "engrenages": 4,
      "rapport": 3,
-     "devises": 6,
-     "reste": 6
+     "devises": 12,
+     "reste": 11
     },
     "consomme_run": {
      "engrenages": 2,
-     "rapport": 3,
+     "rapport": 0,
      "devises": 6,
-     "reste": 6
+     "reste": 5
     },
-    "total_jour": 17,
+    "total_jour": 32,
     "echecs_jour": {
-     "503": 16
+     "503": 25,
+     "429": 1,
+     "delai": 1
     },
     "echecs_run": {
-     "503": 16
+     "503": 9,
+     "429": 1,
+     "delai": 1
     },
-    "abandonnees": []
+    "abandonnees": [],
+    "analyses": {
+     "analyses:AUD-NZD-CNY": {
+      "statut": "à rejouer",
+      "echec": "503",
+      "types": {
+       "503": 3,
+       "429": 1
+      },
+      "appels": 4
+     },
+     "analyses:JPY-CHF-CAD": {
+      "statut": "à rejouer",
+      "echec": "503",
+      "types": {
+       "503": 4
+      },
+      "appels": 4
+     },
+     "analyses:USD-EUR-GBP": {
+      "statut": "à rejouer",
+      "echec": "503",
+      "types": {
+       "503": 4
+      },
+      "appels": 4
+     },
+     "critique": {
+      "statut": "faite",
+      "echec": null,
+      "types": {
+       "503": 2
+      },
+      "appels": 3
+     },
+     "engrenages": {
+      "statut": "à rejouer",
+      "echec": "503",
+      "types": {
+       "503": 4
+      },
+      "appels": 4
+     },
+     "etat_du_monde": {
+      "statut": "faite",
+      "echec": null,
+      "types": {
+       "503": 2,
+       "delai": 1
+      },
+      "appels": 4
+     },
+     "paires:synthese": {
+      "statut": "à rejouer",
+      "echec": "503",
+      "types": {
+       "503": 4
+      },
+      "appels": 4
+     },
+     "rapport:analyse": {
+      "statut": "faite",
+      "echec": null,
+      "types": {},
+      "appels": 1
+     },
+     "rapport:redaction": {
+      "statut": "à rejouer",
+      "echec": null,
+      "types": {
+       "503": 2
+      },
+      "appels": 2
+     }
+    }
    },
    "modeles": {
     "gemini-3.5-flash": {
-     "appels_aujourdhui": 11,
+     "appels_aujourdhui": 20,
      "plafond_jour": 20,
-     "epuise_jusqu_a": "2026-11-03T07:59:59+00:00",
-     "appels_ce_run": 6,
-     "reussites_ce_run": 1,
+     "epuise_jusqu_a": "2026-11-05T07:59:59+00:00",
+     "appels_ce_run": 4,
+     "reussites_ce_run": 0,
      "sauts_ce_run": 3
     },
     "gemini-3.8-flash": {
-     "appels_aujourdhui": 6,
+     "appels_aujourdhui": 12,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-11-03T07:59:59+00:00",
-     "appels_ce_run": 8,
-     "reussites_ce_run": 0,
+     "appels_ce_run": 7,
+     "reussites_ce_run": 2,
      "sauts_ce_run": 0
     },
     "gemini-3.5-flash-lite": {
      "appels_aujourdhui": 0,
      "plafond_jour": 20,
      "epuise_jusqu_a": null,
-     "appels_ce_run": 3,
+     "appels_ce_run": 1,
      "reussites_ce_run": 0,
      "sauts_ce_run": 0
     }
    }
   },
-  "resume_quota": "Gemini : 17/60, engrenages : en attente — Budget (run complet, plafond 45) : prévu engrenages 1 analyse (≤ 2 requêtes); rapport du jour 2 analyses (≤ 4 requêtes); devises 3 analyses (≤ 6 requêtes); reste ≤ 33 ; consommé ce run : engrenages 2, rapport du jour 3, devises 6, reste 6 (jour : 17/45) ; échecs ce run : 503 × 16",
+  "resume_quota": "Gemini : 32/60, engrenages : en attente — Budget (run complément, plafond 60) : prévu engrenages 1 analyse (≤ 2 requêtes); rapport du jour 2 analyses (≤ 4 requêtes); devises 3 analyses (≤ 6 requêtes); reste ≤ 48 ; consommé ce run : engrenages 2, rapport du jour 0, devises 6, reste 5 (jour : 32/60) ; échecs ce run : 429 × 1, 503 × 9, delai × 1 ; analyses : analyses:AUD-NZD-CNY à rejouer (503), analyses:JPY-CHF-CAD à rejouer (503), analyses:USD-EUR-GBP à rejouer (503), critique faite, engrenages à rejouer (503), etat_du_monde faite, paires:synthese à rejouer (503), rapport:analyse faite, rapport:redaction à rejouer",
   "appels_par_modele": {
    "gemini-3.5-flash": {
-    "appels": 6,
-    "echecs": 5
+    "appels": 10,
+    "echecs": 9
    },
    "gemini-3.8-flash": {
-    "appels": 3,
-    "echecs": 3
+    "appels": 6,
+    "echecs": 4
    }
   },
   "disjoncteur": [
@@ -217,6 +363,40 @@
       "ignores": 0
      }
     ]
+   },
+   {
+    "heure": "09:30",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": true,
+    "appels_total": 7,
+    "replis_json_modele_suivant": 2,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": true,
+      "cause": "3 échecs consécutifs — 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:",
+      "ouvert_a_l_appel": 3,
+      "echecs_consecutifs": 4,
+      "ignores": 3
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 1,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
    }
   ],
   "notion_url": "https://app.notion.com/p/FX-2026-11-04-quotidien-40e65bc6466181c897bec305e70d14f5"
@@ -224,12 +404,77 @@
  "synthese_globale": {
   "biais_macro_global": "neutre",
   "commentaire": "Régime de risque global : neutre (calcul Python). Le détail par devise est dans le profil des devises (état, moteur du moment, banque centrale).",
-  "etat_du_monde": null,
+  "etat_du_monde": {
+   "situation_economique": {
+    "texte": "La courbe des taux américains présente un spread 10Y-2Y à 0,32 point en régime d'aplatissement, avec un 10 ans à 4,91 % et un 2 ans à 4,59 %. Le VIX progresse à 21,15 (+8,91 %), signalant une nervosité accrue alors que le S&P 500 recule légèrement à 7541,4. Les matières premières énergétiques restent sous pression avec un Brent à 123,10 $ et un WTI à 103,37 $.",
+    "source_ids": [
+     "src_008",
+     "src_009",
+     "src_010",
+     "src_011",
+     "src_012",
+     "src_013",
+     "src_015"
+    ],
+    "non_source": false
+   },
+   "politique_monetaire_budgetaire": {
+    "texte": "Les différentiels de taux directeurs restent dispersés autour d'une médiane G8 à 2,75 %, maintenant des flux de carry hétérogènes entre devises. La victoire démocrate au Congrès américain modifie l'horizon budgétaire et déclenche un afflux vers les obligations souveraines avec repli des rendements. Les trajectoires monétaires détaillées de chaque banque centrale sont traitées dans leurs sections respectives.",
+    "source_ids": [
+     "src_016",
+     "src_105",
+     "src_110"
+    ],
+    "non_source": false
+   },
+   "geopolitique": {
+    "texte": "Le basculement du Congrès américain aux élections de mi-mandat remet en cause la conduite de la politique étrangère à Washington, notamment sur l'Ukraine et le Moyen-Orient. Le risque de frappes militaires contre l'Iran demeure présent dans les analyses de renseignement, maintenant une prime de risque géopolitique. Les négociations commerciales entre le Canada et les États-Unis montrent en parallèle des signaux de reprise des discussions.",
+    "source_ids": [
+     "src_106",
+     "src_109",
+     "src_127",
+     "src_130",
+     "src_133"
+    ],
+    "non_source": false
+   },
+   "indicateurs_du_jour": [
+    {
+     "symbole": "❌",
+     "texte": "Taux de chômage T3 (Nouvelle-Zélande) : 5,7% vs 5,5% attendu (précédent 5,6%) — hausse inattendue à un plus haut de 11 ans, affaiblissant les anticipations de resserrement de la RBNZ.",
+     "source_id": "src_129",
+     "non_sourcee": false
+    }
+   ],
+   "actualite": [
+    {
+     "texte": "Midterm Election Day recap: Democrats flip Senate and House in stunning victory — La reprise des deux chambres par les démocrates crée un blocage institutionnel face à la Maison-Blanche.",
+     "source_id": "src_105",
+     "non_sourcee": false
+    },
+    {
+     "texte": "Treasury yields fall as investors crowd into bonds for safety amid election stock sell-off — Les opérateurs se réfugient sur les emprunts d'État américains face au repli des actions post-électorales.",
+     "source_id": "src_110",
+     "non_sourcee": false
+    },
+    {
+     "texte": "Iran tensions rise as report details U.S. strike contingency and intelligence divisions — La persistance du risque militaire maintient une prime d'incertitude sur les marchés énergétiques.",
+     "source_id": "src_133",
+     "non_sourcee": false
+    }
+   ],
+   "conclusion": "Le paysage macroéconomique global affiche une configuration neutre, les forces directionnelles se compensant mutuellement. D'un côté, le repli des rendements obligataires et la fermeté du pétrole limitent la baisse du dollar, tandis que le rebond du VIX invite à la retenue sur les actifs risqués. De l'autre, la dégradation du marché de l'emploi néo-zélandais rappelle la vulnérabilité des devises liées au cycle mondial face aux politiques monétaires restrictives. Dans l'attente des chiffres majeurs de l'emploi américain en fin de semaine, la neutralité tactique constitue la posture de référence sur l'ensemble du complexe FX.",
+   "incoherence_biais_detectee": false,
+   "redige_par": {
+    "modele": "gemini-3.8-flash",
+    "libelle": "Flash 3.8"
+   }
+  },
   "engrenages": {
    "statut": "indisponible",
    "raison": "engrenages : 2 appels déjà faits pendant ce run (repli Python)",
    "tentatives": 1,
-   "genere_le": "2026-11-04T08:25:28+00:00",
+   "genere_le": "2026-11-04T09:17:11+00:00",
    "engrenages": [
     {
      "numero": 1,
@@ -305,15 +550,15 @@
       "justification": ""
      },
      "source_ids": [
-      "src_135",
+      "src_173",
       "src_136",
       "src_137",
       "src_138"
      ],
      "donnees_calculees": [
       {
-       "texte": "USD taux directeur 3.88% le 2026-10-30 (baisse, précédent 4.00%)",
-       "source_id": "src_135"
+       "texte": "USD taux directeur 3.88% le 2026-11-02 (baisse, précédent 4.00%)",
+       "source_id": "src_173"
       },
       {
        "texte": "EUR taux directeur 2.65% le 2026-10-29 (statu quo, précédent 2.65%)",
@@ -838,7 +1083,7 @@
    "repli_python": true,
    "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
    "titre_theme_impose": "Signaux mixtes",
-   "rafraichi_le": "2026-11-04T08:28:53+00:00"
+   "rafraichi_le": "2026-11-04T09:24:28+00:00"
   },
   "classement_devises": [],
   "devises_indisponibles": [
@@ -1876,12 +2121,12 @@
    "risk_on_off": "on",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: h",
+   "raison_indisponibilite": "analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota gratuit journalier épuisé pour gemini-3.5-",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: h)",
+    "commentaire": "analyse indisponible (analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota gratuit journalier épuisé pour gemini-3.5-)",
     "source_id": null
    },
    "detail_score": [],
@@ -2041,12 +2286,12 @@
    "risk_on_off": "on",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: h",
+   "raison_indisponibilite": "analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota gratuit journalier épuisé pour gemini-3.5-",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: h)",
+    "commentaire": "analyse indisponible (analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota gratuit journalier épuisé pour gemini-3.5-)",
     "source_id": null
    },
    "detail_score": [],
@@ -2206,12 +2451,12 @@
    "risk_on_off": "neutre",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: h",
+   "raison_indisponibilite": "analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota gratuit journalier épuisé pour gemini-3.5-",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: h)",
+    "commentaire": "analyse indisponible (analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota gratuit journalier épuisé pour gemini-3.5-)",
     "source_id": null
    },
    "detail_score": [],
@@ -3580,6 +3825,13 @@
    "source": "Calcul Python",
    "detail": "directions des engrenages 2 à 8 (règles Python et matrice d'impact)",
    "date": "2026-11-04",
+   "url": null
+  },
+  {
+   "id": "src_173",
+   "source": "FRED (DFF, taux effectif) (registre macro)",
+   "detail": "USD — Taux directeur",
+   "date": "2026-11-02",
    "url": null
   }
  ],
@@ -6444,14 +6696,14 @@
   "USD": {
    "etat": "Sans direction",
    "raison": "Signaux partagés : surprises macro 30 j +0,8 ; force −1,0 % sur 20 séances. Total 0 : il faut 2 signaux concordants.",
-   "moteur": "Rendement US 10 ans",
-   "r60": 0.46
+   "moteur": "Or (XAU/USD)",
+   "r60": -0.51
   },
   "EUR": {
    "etat": "Sans direction",
    "raison": "Aucun signal net : ni surprise de la banque centrale, ni surprises macro marquées, ni tendance sur 20 séances.",
-   "moteur": "Indice dollar large (Fed)",
-   "r60": -0.73
+   "moteur": "Or (XAU/USD)",
+   "r60": 0.46
   },
   "GBP": {
    "etat": "Soutenue",
@@ -6492,13 +6744,13 @@
   "CNY": {
    "etat": "Sans direction",
    "raison": "Signaux favorables : surprises macro 30 j +0,5. Total +1 : il faut 2 signaux concordants.",
-   "moteur": "Indice dollar large (Fed)",
-   "r60": -0.43
+   "moteur": "Or (XAU/USD)",
+   "r60": 0.37
   }
  },
  "controle_qualite": {
   "conforme": false,
-  "nb_anomalies": 14,
+  "nb_anomalies": 13,
   "anomalies": [
    "USD : analyse indisponible aujourd'hui (analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: h) — exclue du classement",
    "EUR : analyse indisponible aujourd'hui (analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: h) — exclue du classement",
@@ -6506,22 +6758,38 @@
    "JPY : analyse indisponible aujourd'hui (analyses:JPY-CHF-CAD : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: h) — exclue du classement",
    "CHF : analyse indisponible aujourd'hui (analyses:JPY-CHF-CAD : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: h) — exclue du classement",
    "CAD : analyse indisponible aujourd'hui (analyses:JPY-CHF-CAD : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: h) — exclue du classement",
-   "AUD : analyse indisponible aujourd'hui (analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: h) — exclue du classement",
-   "NZD : analyse indisponible aujourd'hui (analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: h) — exclue du classement",
-   "CNY : analyse indisponible aujourd'hui (analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: h) — exclue du classement",
+   "AUD : analyse indisponible aujourd'hui (analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota gratuit journalier épuisé pour gemini-3.5-) — exclue du classement",
+   "NZD : analyse indisponible aujourd'hui (analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota gratuit journalier épuisé pour gemini-3.5-) — exclue du classement",
+   "CNY : analyse indisponible aujourd'hui (analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota gratuit journalier épuisé pour gemini-3.5-) — exclue du classement",
    "8 engrenages : indisponible (engrenages : 2 appels déjà faits pendant ce run (repli Python))",
-   "état du monde absent de la synthèse globale",
    "tableau macro : CNY/PMI manufacturier : publication manquée (prévue le 31/10, aucun « réel » reçu)",
    "tableau macro : CNY/PMI services : publication manquée (prévue le 31/10, aucun « réel » reçu)",
-   "prompt LLM volumineux : 3 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 22466 à 08:29 UTC, modèle gemini-3.8-flash) — le contexte envoyé au LLM a regrossi"
+   "prompt LLM volumineux : 7 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 23337 à 09:24 UTC, modèle gemini-3.8-flash) — le contexte envoyé au LLM a regrossi"
   ]
  },
  "critique": {
-  "incoherences": [],
+  "incoherences": [
+   "Échec critique de génération sur l'ensemble du rapport : les 9 devises présentent une analyse indisponible (score_confluence null, opportunités/menaces vides, pas de scénarios) suite à des erreurs d'API (503 et quota épuisé). Le classement des devises est totalement vide, ce qui rend la note inexplo",
+   "Contradiction sur le taux directeur EUR entre l'engrenage 2 (indiqué à 2,65 % au 2026-10-29 via ForexFactory/taux refi) et le tableau d'indicateurs EUR (indiqué à 2,50 % au 2026-11-03 via FRED/facilité de dépôt ECBDFR).",
+   "Les 8 engrenages sont en statut indisponible (repli Python avec textes inexploitables), privant le rapport d'analyse qualitative sur la dynamique macro globale."
+  ],
   "affirmations_non_sourcees": [],
-  "suggestions_connaissances": [],
-  "validation": "non_evalue",
-  "indisponible": true,
-  "note": "relecture non effectuée (critique : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : 503 Server Error: )"
+  "suggestions_connaissances": [
+   {
+    "theme": "Procédure en cas de panne globale d'API / épuisement de quota",
+    "suggestion": "Définir une règle de publication stricte lorsque plus de la moitié des devises ou les engrenages sont en repli Python complet pour indisponibilité de service (503 / quota) : le rapport doit être mis en attente ou estampillé 'version technique dégradée sans analyse LLM' plutôt que publié sous le format habituel.",
+    "fichier_cible": "cas_particuliers.md"
+   },
+   {
+    "theme": "Harmonisation du taux directeur de la BCE",
+    "suggestion": "Standardiser le choix du taux directeur de référence pour l'EUR dans l'ensemble des modules (engrenage 2 et profil devise) afin d'éviter la coexistence du taux de refinancement principal (2,65 %) et du taux de dépôt (2,50 %).",
+    "fichier_cible": "cas_particuliers.md"
+   }
+  ],
+  "validation": "a_revoir",
+  "redige_par": {
+   "modele": "gemini-3.8-flash",
+   "libelle": "Flash 3.8"
+  }
  }
 }
