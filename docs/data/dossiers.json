@@ -1,6 +1,6 @@
 {
  "version_schema": 1,
- "genere_le": "2026-11-04T09:24:29+00:00",
+ "genere_le": "2026-11-04T10:21:58+00:00",
  "debut_historique": "2021-09-03",
  "erreurs_collecte": [],
  "engrenages": {
@@ -10,7 +10,7 @@
    "indicateurs": [
     {
      "libelle": "Régime de risque (biais calculé)",
-     "texte": "Neutre",
+     "texte": "Risk Off",
      "detail": "régime de risque global (engrenage 5), sans attribution devise par devise",
      "source": "calcul Python"
     },
@@ -61,9 +61,9 @@
     },
     {
      "date": "2026-11-04",
-     "biais": "neutre",
+     "biais": "risk_off",
      "score_usd": null,
-     "ecart": null
+     "ecart": -13.8
     }
    ],
    "graphiques": [
@@ -182,6 +182,228 @@
         [
          "2026-11-03",
          74
+        ]
+       ]
+      },
+      {
+       "nom": "CNY",
+       "points": [
+        [
+         "2026-10-02",
+         42
+        ],
+        [
+         "2026-10-03",
+         48
+        ],
+        [
+         "2026-10-05",
+         41
+        ],
+        [
+         "2026-10-06",
+         41
+        ],
+        [
+         "2026-10-07",
+         41
+        ],
+        [
+         "2026-10-08",
+         36
+        ],
+        [
+         "2026-10-09",
+         41
+        ],
+        [
+         "2026-10-10",
+         36
+        ],
+        [
+         "2026-10-11",
+         40
+        ],
+        [
+         "2026-10-12",
+         36
+        ],
+        [
+         "2026-10-13",
+         40
+        ],
+        [
+         "2026-10-14",
+         40
+        ],
+        [
+         "2026-10-15",
+         30
+        ],
+        [
+         "2026-10-19",
+         62
+        ],
+        [
+         "2026-10-20",
+         49
+        ],
+        [
+         "2026-10-21",
+         48
+        ],
+        [
+         "2026-10-22",
+         50
+        ],
+        [
+         "2026-10-23",
+         40
+        ],
+        [
+         "2026-10-26",
+         36
+        ],
+        [
+         "2026-10-27",
+         58
+        ],
+        [
+         "2026-10-28",
+         60
+        ],
+        [
+         "2026-10-29",
+         48
+        ],
+        [
+         "2026-10-30",
+         53
+        ],
+        [
+         "2026-10-31",
+         46
+        ],
+        [
+         "2026-11-02",
+         50
+        ],
+        [
+         "2026-11-03",
+         50
+        ]
+       ]
+      },
+      {
+       "nom": "NZD",
+       "points": [
+        [
+         "2026-10-02",
+         30
+        ],
+        [
+         "2026-10-03",
+         16
+        ],
+        [
+         "2026-10-05",
+         26
+        ],
+        [
+         "2026-10-06",
+         24
+        ],
+        [
+         "2026-10-07",
+         12
+        ],
+        [
+         "2026-10-08",
+         26
+        ],
+        [
+         "2026-10-09",
+         12
+        ],
+        [
+         "2026-10-10",
+         30
+        ],
+        [
+         "2026-10-11",
+         30
+        ],
+        [
+         "2026-10-12",
+         26
+        ],
+        [
+         "2026-10-13",
+         30
+        ],
+        [
+         "2026-10-14",
+         22
+        ],
+        [
+         "2026-10-15",
+         42
+        ],
+        [
+         "2026-10-16",
+         35
+        ],
+        [
+         "2026-10-19",
+         36
+        ],
+        [
+         "2026-10-20",
+         38
+        ],
+        [
+         "2026-10-21",
+         38
+        ],
+        [
+         "2026-10-22",
+         42
+        ],
+        [
+         "2026-10-23",
+         48
+        ],
+        [
+         "2026-10-26",
+         40
+        ],
+        [
+         "2026-10-27",
+         38
+        ],
+        [
+         "2026-10-28",
+         30
+        ],
+        [
+         "2026-10-29",
+         32
+        ],
+        [
+         "2026-10-30",
+         42
+        ],
+        [
+         "2026-10-31",
+         28
+        ],
+        [
+         "2026-11-02",
+         18
+        ],
+        [
+         "2026-11-03",
+         26
         ]
        ]
       },
@@ -452,21 +674,40 @@
      "type": "barres",
      "titre": "Classement des 9 devises aujourd'hui",
      "unite": "0-100",
-     "barres": [],
+     "barres": [
+      {
+       "nom": "CNY",
+       "valeur": 65
+      },
+      {
+       "nom": "CHF",
+       "valeur": 45
+      },
+      {
+       "nom": "AUD",
+       "valeur": 44
+      },
+      {
+       "nom": "JPY",
+       "valeur": 38
+      },
+      {
+       "nom": "CAD",
+       "valeur": 24
+      },
+      {
+       "nom": "NZD",
+       "valeur": 15
+      }
+     ],
      "source": "calcul Python (scores de confluence)",
      "note": null,
      "absentes": [
       "USD",
       "EUR",
-      "GBP",
-      "JPY",
-      "CHF",
-      "CAD",
-      "AUD",
-      "NZD",
-      "CNY"
+      "GBP"
      ],
-     "raison": "valeurs indisponibles"
+     "raison": null
     }
    ],
    "notes": [
@@ -621,14 +862,14 @@
     {
      "id": "score_cad",
      "libelle": "Score CAD",
-     "valeur": null,
-     "texte": null,
+     "valeur": 24,
+     "texte": "24",
      "unite": "score",
      "date": "2026-11-04",
      "frequence": null,
      "age_jours": 0,
      "source": "calcul Python (score de confluence 0-100)",
-     "raison": "donnée indisponible",
+     "raison": null,
      "variation": {
       "valeur": 15,
       "unite": "pts",
@@ -758,14 +999,14 @@
     {
      "id": "score_aud",
      "libelle": "Score AUD",
-     "valeur": null,
-     "texte": null,
+     "valeur": 44,
+     "texte": "44",
      "unite": "score",
      "date": "2026-11-04",
      "frequence": null,
      "age_jours": 0,
      "source": "calcul Python (score de confluence 0-100)",
-     "raison": "donnée indisponible",
+     "raison": null,
      "variation": {
       "valeur": -21,
       "unite": "pts",
@@ -895,14 +1136,14 @@
     {
      "id": "ecart_max",
      "libelle": "Écart meilleur − moins bon score",
-     "valeur": null,
-     "texte": null,
+     "valeur": 50,
+     "texte": "50",
      "unite": "score",
      "date": "2026-11-04",
      "frequence": null,
      "age_jours": 0,
-     "source": null,
-     "raison": "scores indisponibles",
+     "source": "calcul Python (CNY − NZD)",
+     "raison": null,
      "variation": {
       "valeur": -18,
       "unite": "pts",
@@ -1240,14 +1481,14 @@
     {
      "id": "duree_theme",
      "libelle": "Régime actuel depuis",
-     "valeur": 0,
-     "texte": "< 1 sem.",
+     "valeur": null,
+     "texte": null,
      "unite": "semaines",
      "date": "2026-11-04",
      "frequence": null,
      "age_jours": 0,
      "source": "rapports archivés (biais calculé)",
-     "raison": null,
+     "raison": "biais du jour indisponible",
      "variation": null,
      "percentile_5a": null,
      "n_5a": null,
@@ -1258,7 +1499,7 @@
       "periode": "30 jours",
       "raison": "non applicable"
      },
-     "lecture": "régime neutre sans interruption depuis le rapport du 2026-11-04"
+     "lecture": null
     },
     {
      "id": "vix",
@@ -1670,7 +1911,7 @@
        "var_1s": null,
        "var_4s": null,
        "unite": "%",
-       "date": "2026-10-16",
+       "date": "2026-11-04",
        "raison_percentile": "historique de l'inflation core trop court dans le registre"
       },
       "pente_2_10": {
@@ -7118,7 +7359,7 @@
      "devise": "EUR",
      "cellules": {
       "indice_surprise": {
-       "valeur": -0.29,
+       "valeur": -0.23,
        "raison": null,
        "source": "calcul Python (registre macro, 30 j)",
        "percentile_5a": null,
@@ -7127,18 +7368,18 @@
        "unite": "écarts",
        "date": "2026-11-04",
        "tendance": "baisse",
-       "n": 10,
+       "n": 13,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
       },
       "dispersion": {
-       "valeur": 0.94,
+       "valeur": 0.84,
        "raison": null,
        "source": "calcul Python (écart-type des surprises 30 j)",
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "n": 11,
+       "n": 14,
        "raison_percentile": "historique trop court"
       },
       "publications": {
@@ -7159,11 +7400,11 @@
          "consensus": "6.4%"
         },
         {
-         "indicateur": "PMI services",
-         "date": "2026-10-23",
-         "surprise": -0.9,
-         "reel": "51.7",
-         "consensus": "52.6"
+         "indicateur": "PIB trimestriel",
+         "date": "2026-10-30",
+         "surprise": 0.67,
+         "reel": "0.4%",
+         "consensus": "0.2%"
         }
        ],
        "source": "registre macro (ForexFactory)",
@@ -7177,7 +7418,7 @@
        "var_1s": null,
        "var_4s": null,
        "unite": "%",
-       "date": "2026-10-16",
+       "date": "2026-11-04",
        "tendance_3m": null,
        "raison_tendance": "pas de publication 2 à 4 mois plus tôt dans le registre",
        "raison_percentile": "pas de série gratuite à jour sur 5 ans pour ce pays (séries OCDE arrêtées)"
@@ -7201,7 +7442,7 @@
      "devise": "GBP",
      "cellules": {
       "indice_surprise": {
-       "valeur": 0.64,
+       "valeur": 0.56,
        "raison": null,
        "source": "calcul Python (registre macro, 30 j)",
        "percentile_5a": null,
@@ -7210,18 +7451,18 @@
        "unite": "écarts",
        "date": "2026-11-04",
        "tendance": "hausse",
-       "n": 9,
+       "n": 10,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
       },
       "dispersion": {
-       "valeur": 0.82,
+       "valeur": 0.83,
        "raison": null,
        "source": "calcul Python (écart-type des surprises 30 j)",
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "n": 10,
+       "n": 11,
        "raison_percentile": "historique trop court"
       },
       "publications": {
@@ -7235,18 +7476,18 @@
          "consensus": "4.9%"
         },
         {
-         "indicateur": "PMI services",
-         "date": "2026-10-23",
-         "surprise": 1.3,
-         "reel": "53.1",
-         "consensus": "51.8"
-        },
-        {
          "indicateur": "Balance commerciale",
          "date": "2026-10-15",
          "surprise": 1.3,
          "reel": "-18.0B",
          "consensus": "-21.9B"
+        },
+        {
+         "indicateur": "CPI annuel",
+         "date": "2026-10-21",
+         "surprise": 1.0,
+         "reel": "3.5%",
+         "consensus": "3.4%"
         }
        ],
        "source": "registre macro (ForexFactory)",
@@ -7962,7 +8203,7 @@
         ],
         [
          "2026-11-04",
-         0.64
+         0.56
         ]
        ]
       }
@@ -8095,11 +8336,11 @@
       },
       {
        "nom": "EUR",
-       "valeur": -0.29
+       "valeur": -0.23
       },
       {
        "nom": "GBP",
-       "valeur": 0.64
+       "valeur": 0.56
       },
       {
        "nom": "JPY",
@@ -8213,8 +8454,8 @@
     {
      "id": "surprise_gbp",
      "libelle": "Surprise GBP (30 j)",
-     "valeur": 0.64,
-     "texte": "+0,64",
+     "valeur": 0.56,
+     "texte": "+0,56",
      "unite": "écarts",
      "date": "2026-11-04",
      "frequence": null,
@@ -8222,10 +8463,10 @@
      "source": "calcul Python (registre macro, 30 j)",
      "raison": null,
      "variation": {
-      "valeur": 0.28,
+      "valeur": 0.2,
       "unite": "écarts",
       "periode": "4 semaines",
-      "texte": "+0,28 sur 4 semaines"
+      "texte": "+0,20 sur 4 semaines"
      },
      "percentile_5a": null,
      "n_5a": null,
@@ -8263,7 +8504,7 @@
        ],
        [
         "2026-11-04",
-        0.64
+        0.56
        ]
       ],
       "periode": "90 jours (hebdomadaire)",
@@ -8656,13 +8897,13 @@
     {
      "id": "part_positives",
      "libelle": "Publications au-dessus du consensus",
-     "valeur": 38,
-     "texte": "38 %",
+     "valeur": 36,
+     "texte": "36 %",
      "unite": "part",
      "date": "2026-11-04",
      "frequence": null,
      "age_jours": 0,
-     "source": "calcul Python (registre macro, 65 publications avec consensus sur 30 jours)",
+     "source": "calcul Python (registre macro, 69 publications avec consensus sur 30 jours)",
      "raison": null,
      "variation": null,
      "percentile_5a": null,
@@ -11975,7 +12216,7 @@
      "raison": null
     }
    ],
-   "actualites_maj": "2026-11-04T09:24+00:00",
+   "actualites_maj": "2026-11-04T10:21+00:00",
    "actualites_nb_titres_lus": 31,
    "notes": [
     "Dette et solde publics : FMI (annuel, avec 1 à 3 ans de retard) ; EUR = Allemagne. Pas de série gratuite pour CHF et NZD.",
@@ -41147,7 +41388,7 @@
     "conviction": 2,
     "conviction_niveau": "moyen",
     "regle": "dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (1 accord, 0 désaccord)",
-    "raison_couleur": "Vert (Dollar haussier · Risque neutre) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (1 accord, 0 désaccord). Chiffre du jour : Directions dollar des engrenages 2 à 8 : 2 haussières, 0 baissière, 5 neutres ; risque de l'engrenage 5 : neutre"
+    "raison_couleur": "Vert (Dollar haussier · Risque neutre) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (1 accord, 0 désaccord). Chiffre du jour : Biais global risk_off ; classement : CNY 65, CHF 45, AUD 44, JPY 38, CAD 24, NZD 15"
    },
    "coherence": {
     "alignes": 2,
@@ -41247,7 +41488,7 @@
      "conviction": 2,
      "conviction_niveau": "moyen",
      "regle": "dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (1 accord, 0 désaccord)",
-     "raison_couleur": "Vert (Dollar haussier · Risque neutre) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (1 accord, 0 désaccord). Chiffre du jour : Directions dollar des engrenages 2 à 8 : 2 haussières, 0 baissière, 5 neutres ; risque de l'engrenage 5 : neutre"
+     "raison_couleur": "Vert (Dollar haussier · Risque neutre) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (1 accord, 0 désaccord). Chiffre du jour : Biais global risk_off ; classement : CNY 65, CHF 45, AUD 44, JPY 38, CAD 24, NZD 15"
     }
    },
    {
@@ -41411,7 +41652,7 @@
      "conviction": 1,
      "conviction_niveau": "faible",
      "regle": "dollar : indice de surprise 30 j de l'USD (≥ +0,3 haussier, ≤ -0,3 baissier)",
-     "raison_couleur": "Vert (Dollar haussier) : dollar : indice de surprise 30 j de l'USD (≥ +0,3 haussier, ≤ -0,3 baissier). Chiffre du jour : Indice de surprise 30 j : USD +0.79, EUR -0.29, GBP +0.64, JPY -0.10, CHF +0.45, CAD -0.74, AUD +0.00, NZD -1.62, CNY +0.45"
+     "raison_couleur": "Vert (Dollar haussier) : dollar : indice de surprise 30 j de l'USD (≥ +0,3 haussier, ≤ -0,3 baissier). Chiffre du jour : Indice de surprise 30 j : USD +0.79, EUR -0.23, GBP +0.56, JPY -0.10, CHF +0.45, CAD -0.74, AUD +0.00, NZD -1.62, CNY +0.45"
     }
    },
    {
@@ -42006,7 +42247,7 @@
      "a_retenir": "Les engrenages ne s'accordent pas : 2 sur 7 évaluables vont dans le sens du thème calculé (Dollar haussier · Risque neutre), sous le seuil de 3 pour parler d'un thème établi.",
      "a_retenir_source": "calcul Python",
      "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
-     "raison_couleur": "Vert (Dollar haussier · Risque neutre) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (1 accord, 0 désaccord). Chiffre du jour : Directions dollar des engrenages 2 à 8 : 2 haussières, 0 baissière, 5 neutres ; risque de l'engrenage 5 : neutre"
+     "raison_couleur": "Vert (Dollar haussier · Risque neutre) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (1 accord, 0 désaccord). Chiffre du jour : Biais global risk_off ; classement : CNY 65, CHF 45, AUD 44, JPY 38, CAD 24, NZD 15"
     },
     {
      "numero": 1,
@@ -42031,7 +42272,7 @@
      "a_retenir": "Dollar haussier · Risque neutre. Règle Python : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (1 accord, 0 désaccord).",
      "a_retenir_source": "calcul Python",
      "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
-     "raison_couleur": "Vert (Dollar haussier · Risque neutre) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (1 accord, 0 désaccord). Chiffre du jour : Directions dollar des engrenages 2 à 8 : 2 haussières, 0 baissière, 5 neutres ; risque de l'engrenage 5 : neutre"
+     "raison_couleur": "Vert (Dollar haussier · Risque neutre) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (1 accord, 0 désaccord). Chiffre du jour : Biais global risk_off ; classement : CNY 65, CHF 45, AUD 44, JPY 38, CAD 24, NZD 15"
     },
     {
      "numero": 2,
@@ -42081,7 +42322,7 @@
      "a_retenir": "Dollar haussier. Règle Python : dollar : indice de surprise 30 j de l'USD (≥ +0,3 haussier, ≤ -0,3 baissier).",
      "a_retenir_source": "calcul Python",
      "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
-     "raison_couleur": "Vert (Dollar haussier) : dollar : indice de surprise 30 j de l'USD (≥ +0,3 haussier, ≤ -0,3 baissier). Chiffre du jour : Indice de surprise 30 j : USD +0.79, EUR -0.29, GBP +0.64, JPY -0.10, CHF +0.45, CAD -0.74, AUD +0.00, NZD -1.62, CNY +0.45"
+     "raison_couleur": "Vert (Dollar haussier) : dollar : indice de surprise 30 j de l'USD (≥ +0,3 haussier, ≤ -0,3 baissier). Chiffre du jour : Indice de surprise 30 j : USD +0.79, EUR -0.23, GBP +0.56, JPY -0.10, CHF +0.45, CAD -0.74, AUD +0.00, NZD -1.62, CNY +0.45"
     },
     {
      "numero": 4,
@@ -42372,7 +42613,7 @@
       "valeur": 0,
       "libelle": "Neutre",
       "regles": [],
-      "raison": "indice de surprise macro 30 jours : −0,29, sous les seuils",
+      "raison": "indice de surprise macro 30 jours : −0,23, sous les seuils",
       "bornee": false,
       "etat": "neutre"
      },
@@ -42469,7 +42710,7 @@
       "regles": [
        {
         "regle": "indice de surprise macro 30 jours ≥ 0,50 → +1",
-        "chiffre": "+0,64",
+        "chiffre": "+0,56",
         "source": "calcul Python (registre macro, 30 j)",
         "date": "2026-11-04",
         "points": 1
@@ -44009,12 +44250,12 @@
      "2026-11-04"
     ],
     "EUR": [
-     -0.29,
+     -0.23,
      "calcul Python (registre macro, 30 j)",
      "2026-11-04"
     ],
     "GBP": [
-     0.64,
+     0.56,
      "calcul Python (registre macro, 30 j)",
      "2026-11-04"
     ],
@@ -44595,8 +44836,8 @@
     "libelle": "indice de surprise macro 30 jours — GBP",
     "effet_haut": "GBP +1 (règle 3)",
     "effet_bas": "GBP −1 (règle 3)",
-    "valeur": 0.64,
-    "texte_valeur": "+0,64",
+    "valeur": 0.56,
+    "texte_valeur": "+0,56",
     "unite": "écarts",
     "date": "2026-11-04",
     "source": "calcul Python (registre macro, 30 j)",
@@ -45061,26 +45302,6 @@
     "distance_texte": "1,63"
    },
    {
-    "id": "surprise_30j-EUR",
-    "engrenage": 3,
-    "devise": "EUR",
-    "libelle": "indice de surprise macro 30 jours — EUR",
-    "effet_haut": "EUR +1 (règle 3)",
-    "effet_bas": "EUR −1 (règle 3)",
-    "valeur": -0.29,
-    "texte_valeur": "−0,29",
-    "unite": "écarts",
-    "date": "2026-11-04",
-    "source": "calcul Python (registre macro, 30 j)",
-    "seuil_bas": -0.5,
-    "seuil_haut": 0.5,
-    "etat": "non",
-    "distance": 0.21,
-    "distance_pct": 21.0,
-    "cote": "bas",
-    "distance_texte": "0,21"
-   },
-   {
     "id": "thermometre-7",
     "engrenage": 7,
     "devise": null,
@@ -45100,6 +45321,26 @@
     "distance_pct": 26.7,
     "cote": "bas",
     "distance_texte": "0,16 %"
+   },
+   {
+    "id": "surprise_30j-EUR",
+    "engrenage": 3,
+    "devise": "EUR",
+    "libelle": "indice de surprise macro 30 jours — EUR",
+    "effet_haut": "EUR +1 (règle 3)",
+    "effet_bas": "EUR −1 (règle 3)",
+    "valeur": -0.23,
+    "texte_valeur": "−0,23",
+    "unite": "écarts",
+    "date": "2026-11-04",
+    "source": "calcul Python (registre macro, 30 j)",
+    "seuil_bas": -0.5,
+    "seuil_haut": 0.5,
+    "etat": "non",
+    "distance": 0.27,
+    "distance_pct": 27.0,
+    "cote": "bas",
+    "distance_texte": "0,27"
    },
    {
     "id": "ecart_mm200-USD",
@@ -45549,8 +45790,8 @@
     "libelle": "indice de surprise macro 30 jours — GBP",
     "effet_haut": "GBP +1 (règle 3)",
     "effet_bas": "GBP −1 (règle 3)",
-    "valeur": 0.64,
-    "texte_valeur": "+0,64",
+    "valeur": 0.56,
+    "texte_valeur": "+0,56",
     "unite": "écarts",
     "date": "2026-11-04",
     "source": "calcul Python (registre macro, 30 j)",
@@ -45561,7 +45802,7 @@
     "distance_pct": 0.0,
     "cote": "haut",
     "distance_texte": "franchi",
-    "phrase": "indice de surprise macro 30 jours — GBP : +0,64, seuil haut franchi"
+    "phrase": "indice de surprise macro 30 jours — GBP : +0,56, seuil haut franchi"
    },
    {
     "id": "surprise_30j-CAD",
@@ -45864,7 +46105,7 @@
     "ForexFactory, flux public JSON de la semaine"
    ],
    "sources_champs": {},
-   "verifie_le": "2026-11-04T08:15",
+   "verifie_le": "2026-11-04T10:16",
    "engrenage": 2,
    "simulateur": null,
    "reaction": null,
@@ -46595,30 +46836,30 @@
      },
      {
       "libelle": "Score CAD",
-      "texte": "n/d",
+      "texte": "24",
       "date": "2026-11-04",
       "source": "calcul Python (score de confluence 0-100)",
-      "raison": "donnée indisponible",
+      "raison": null,
       "variation": "+15 pts sur 4 semaines",
       "percentile_5a": null,
       "rang": "rang 5 ans n/d : scores archivés depuis août 2026 seulement"
      },
      {
       "libelle": "Score AUD",
-      "texte": "n/d",
+      "texte": "44",
       "date": "2026-11-04",
       "source": "calcul Python (score de confluence 0-100)",
-      "raison": "donnée indisponible",
+      "raison": null,
       "variation": "−21 pts sur 4 semaines",
       "percentile_5a": null,
       "rang": "rang 5 ans n/d : scores archivés depuis août 2026 seulement"
      },
      {
       "libelle": "Écart meilleur − moins bon score",
-      "texte": "n/d",
+      "texte": "50",
       "date": "2026-11-04",
-      "source": null,
-      "raison": "scores indisponibles",
+      "source": "calcul Python (CNY − NZD)",
+      "raison": null,
       "variation": "−18 pts sur 4 semaines",
       "percentile_5a": null,
       "rang": "rang 5 ans n/d : scores archivés depuis août 2026 seulement"
@@ -47850,11 +48091,11 @@
      },
      {
       "libelle": "Surprise GBP (30 j)",
-      "texte": "+0,64",
+      "texte": "+0,56",
       "date": "2026-11-04",
       "source": "calcul Python (registre macro, 30 j)",
       "raison": null,
-      "variation": "+0,28 sur 4 semaines",
+      "variation": "+0,20 sur 4 semaines",
       "percentile_5a": null,
       "rang": "rang 5 ans n/d : indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
      },
@@ -47904,7 +48145,7 @@
       "libelle": "indice de surprise macro 30 jours — GBP",
       "etat": "déclenchée",
       "distance": "franchi",
-      "valeur": "+0,64",
+      "valeur": "+0,56",
       "date": "2026-11-04",
       "source": "calcul Python (registre macro, 30 j)",
       "neutralise": null
@@ -47948,8 +48189,8 @@
      {
       "libelle": "indice de surprise macro 30 jours — EUR",
       "etat": "non",
-      "distance": "0,21",
-      "valeur": "−0,29",
+      "distance": "0,27",
+      "valeur": "−0,23",
       "date": "2026-11-04",
       "source": "calcul Python (registre macro, 30 j)",
       "neutralise": null
