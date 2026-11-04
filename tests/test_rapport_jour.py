@@ -145,7 +145,7 @@ def test_notion_ecrit_puis_met_l_ancienne_version_a_la_corbeille():
 
 def test_site_page_rapport_par_defaut_le_matin_et_journal():
     app = (RACINE / "docs/site/app.js").read_text(encoding="utf-8")
-    assert 'synthese: { titre: "Synthèse", module: "./rapport.js"' in app and 'rapport: "synthese"' in app   # lot V6
+    assert 'synthese: { titre: "Synthèse", module: "./ecran_synthese.js"' in app and 'rapport: "synthese"' in app   # lot V6
     assert CONFIG["rapport"]["heure_bascule_accueil"] == "13:00"
     js = (RACINE / "docs/site/rapport.js").read_text(encoding="utf-8")
     for cle in rj.SECTIONS_COMPLETES + rj.SECTIONS_COURTES:

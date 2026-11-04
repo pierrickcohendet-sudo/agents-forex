@@ -92,7 +92,7 @@ class Engrenages(unittest.TestCase):
         self.assertIn("indisponible", l["JPY"]["taux_directeur"]["raison"])          # sans série BoJ : n/d, jamais « <1.25% » deviné
         self.assertIn("pas de rendement 2 ans", l["GBP"]["ecart_2a_us"]["raison"])
         self.assertEqual(l["USD"]["prochaine_reunion"]["texte"], "2026-10-28")
-        self.assertIn("borne haute", l["USD"]["taux_directeur"]["note"])
+        self.assertIn("fourchette cible", l["USD"]["taux_directeur"]["note"])   # lot V7 (E1) : fourchette, DFF en secondaire
 
     def test_engrenage_5_instruments_et_correlations(self):
         technique = {"graphiques": {"EUR": {"dates": [d for d, _ in historiques()["series"]["vix"]["points"][-90:]],

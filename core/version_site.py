@@ -13,6 +13,8 @@ import re
 from pathlib import Path
 
 DEBUT, FIN = "<!-- version-site:debut -->", "<!-- version-site:fin -->"
+# Lot V7 : anciens composants (cabinet.css, restylés par les tokens), tokens de la maquette, composants V7 — dans cet ordre.
+FEUILLES = ("cabinet.css", "tokens.css", "v7.css")
 
 
 def empreinte(dossier_site: Path) -> str:
@@ -28,7 +30,7 @@ def bloc_tete(version: str, modules: list[str]) -> str:
     carte = {"imports": {f"./site/{m}": f"./site/{m}?v={version}" for m in modules}}
     return (f"{DEBUT}\n  <meta name=\"fxdesk-version\" content=\"{version}\">\n"
             f"  <script type=\"importmap\">{json.dumps(carte, ensure_ascii=False)}</script>\n"
-            f"  <link rel=\"stylesheet\" href=\"site/cabinet.css?v={version}\">\n  {FIN}")
+            + "".join(f"  <link rel=\"stylesheet\" href=\"site/{f}?v={version}\">\n" for f in FEUILLES) + f"  {FIN}")
 
 
 def appliquer(racine: str | Path) -> dict:

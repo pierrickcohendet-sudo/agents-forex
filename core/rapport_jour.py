@@ -222,6 +222,34 @@ def format_actif(cat: str, cle: str) -> dict:
     return {"decimales": 2, "suffixe": ""}
 
 
+SEUIL_RETARD_BRENT = 5   # jours ouvrés
+
+
+def jours_ouvres_entre(debut: date, fin: date) -> int:
+    n, d = 0, debut
+    while d < fin:
+        d += timedelta(days=1)
+        n += d.weekday() < 5
+    return n
+
+
+def alerte_fraicheur_brent(date_valeur: str, aujourd: date) -> dict | None:
+    """Lot V7 (E3) : Brent (FRED DCOILBRENTEU = prix spot EIA). Cause du retard : l'EIA ne publie ses prix spot
+    quotidiens qu'une fois par semaine (mise à jour du mercredi), FRED les reprend ensuite ; l'âge normal va donc
+    jusqu'à 5 jours ouvrés. Au-delà : alerte de fraîcheur affichée."""
+    try:
+        retard = jours_ouvres_entre(date.fromisoformat(str(date_valeur)[:10]), aujourd)
+    except ValueError:
+        return None
+    if retard <= SEUIL_RETARD_BRENT:
+        return None
+    return {"jours_ouvres": retard, "seuil": SEUIL_RETARD_BRENT,
+            "texte": f"Dernière valeur au {str(date_valeur)[8:10]}/{str(date_valeur)[5:7]} : {retard} jours ouvrés de retard "
+                     f"(au-delà de {SEUIL_RETARD_BRENT}). L'EIA publie ses prix spot une fois par semaine ; FRED les reprend "
+                     "ensuite. Valeur à confirmer.",
+            "cause": "EIA : publication hebdomadaire des prix spot quotidiens, reprise par FRED (DCOILBRENTEU)"}
+
+
 def point_marche(historiques, h5, technique, seance: dict | None, config: dict, vars_: dict) -> dict:
     from core import paires as pm
     lignes = []
@@ -243,14 +271,17 @@ def point_marche(historiques, h5, technique, seance: dict | None, config: dict, 
         v5 = variation(pts, 5, unite)
         v1 = round(q["variation_pct"], 2) if q.get("variation_pct") is not None and unite == "%" else variation(pts, 1, unite)
         lecture = lecture_actif(cat, cle, v1, v5, unite)
+        alerte = None
         if cle == "brent" and pts and q.get("prix") is None:
             source = f"{source} — clôture EIA du {pts[-1][0][8:10]}/{pts[-1][0][5:7]} (publication EIA différée)"
+            alerte = alerte_fraicheur_brent(pts[-1][0], date.today())
         debut30 = (date.fromisoformat(pts[-1][0]) - timedelta(days=30)).isoformat() if pts else None
         lignes.append({"actif": libelle, "niveau": niveau, "variation_j1": v1, "variation_5j": v5, "unite": unite,
                        "serie_30j": [[d, round(v, 6)] for d, v in pts if debut30 and d >= debut30],
                        "categorie": cat, **format_actif(cat, cle),
                        "heure": heure, "source": (q.get("source") + " ; " + source) if q.get("prix") is not None else source,
                        "statut": "provisoire" if q.get("prix") is not None and q.get("marche_ouvert") else ("confirmé" if niveau is not None else None),
+                       "alerte_fraicheur": alerte,
                        "lecture": lecture if niveau is not None else None,
                        "raison": None if niveau is not None else ("USD/SEK ou un des 5 cours absent de la collecte Twelve Data"
                                                                      if cle == "dxy_formule" else f"série {cle} absente de la collecte du jour")})
@@ -287,6 +318,9 @@ def scenarios(config: dict, vars_: dict, historique: dict[str, dict] | None = No
     for s in liste:
         s["mieux_confirme"] = bool(meilleur and s["id"] == meilleur["id"])
         s["plus_avance"] = bool(avance and s["id"] == avance["id"])
+    # Lot V7 : rang d'affichage (le mieux confirmé, puis le plus de conditions remplies) — le site n'ordonne rien lui-même
+    for rang, s in enumerate(sorted(liste, key=lambda x: (not x["mieux_confirme"], -(x.get("remplies") or 0), x.get("nd") or 0)), 1):
+        s["rang"] = rang
     hist = dict(historique or {})
     if aujourdhui:
         hist[aujourdhui] = {s["id"]: [s["remplies"], s["total"]] for s in liste}

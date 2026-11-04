@@ -122,4 +122,4 @@ def test_agenda_precedent_de_repli_jamais_affiche_comme_publication():
     fed = next(e for j in a["jours"] for e in j["evenements"] if e["evenement_en"] == "Federal Funds Rate")
     assert fed["precedent"] is None and "pas la dernière publication" in fed["raison_precedent"] and fed["consensus"] == "4.00%"
     app = (RACINE / "docs/site/app.js").read_text(encoding="utf-8")
-    assert 'agenda: { titre: "Agenda", module: "./agenda.js"' in app
+    assert 'agenda: { titre: "Agenda", module: "./ecran_agenda.js"' in app   # lot V7

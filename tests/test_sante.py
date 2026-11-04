@@ -70,7 +70,7 @@ def test_resume_du_run_noms_non_traduits_et_fraicheur(tmp_path):
 
 def test_page_sante_et_certificat_partage_branches():
     app = (RACINE / "docs/site/app.js").read_text(encoding="utf-8")
-    assert 'sante: { titre: "Santé des données", module: "./sante.js"' in app and "initialiserCertificats();" in app
+    assert 'sante: { titre: "Santé des données", ancien: "./sante.js"' in app and "initialiserCertificats();" in app
     commun = (RACINE / "docs/site/commun.js").read_text(encoding="utf-8")
     assert "export function certifier" in commun
     for page in ("cockpit", "dossiers", "tableau", "agenda", "journal", "sante"):

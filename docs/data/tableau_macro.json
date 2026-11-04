@@ -100,15 +100,17 @@
   "taux_directeur": {
    "USD": {
     "Actuel": {
-     "texte": "3,88 % [borne haute de la fourchette] (02/11)",
-     "valeur": "3,88 % [borne haute de la fourchette]",
+     "texte": "3,75–4,00 % [fourchette cible] · taux effectif 3,88 % (03/11)",
+     "valeur": "3,75–4,00 % [fourchette cible] · taux effectif 3,88 %",
      "manuel": false,
      "origine": "officiel",
      "surprise": null,
      "etat": "valeur",
-     "date": "2026-11-02",
-     "source": "FRED (DFF, taux effectif)",
-     "consensus": null
+     "date": "2026-11-03",
+     "source": "FRED (DFEDTARL / DFEDTARU)",
+     "consensus": null,
+     "reference": "fourchette cible",
+     "secondaire": "taux effectif 3,88 %"
     },
     "Précédent": {
      "texte": "4,00 % [borne haute de la fourchette] (26/10)",
@@ -129,15 +131,17 @@
    },
    "EUR": {
     "Actuel": {
-     "texte": "2,65 % [taux de refinancement] (29/10) =",
-     "valeur": "2,65 % [taux de refinancement]",
+     "texte": "2,50 % [dépôt] · refinancement 2,65 % (registre macro) (03/11)",
+     "valeur": "2,50 % [dépôt] · refinancement 2,65 % (registre macro)",
      "manuel": false,
      "origine": "officiel",
      "surprise": "=",
      "etat": "valeur",
-     "date": "2026-10-29",
-     "source": "ForexFactory",
-     "consensus": "2.65%"
+     "date": "2026-11-03",
+     "source": "FRED (ECBDFR, taux de la facilité de dépôt de la BCE)",
+     "consensus": "2.65%",
+     "reference": "dépôt",
+     "secondaire": "refinancement 2,65 % (registre macro)"
     },
     "Précédent": {
      "texte": "2,65 % [taux de refinancement] (10/09)",
@@ -3536,14 +3540,14 @@
    },
    "marche": false,
    "frequence": null,
-   "Actuel": "3,88 % [borne haute de la fourchette]",
+   "Actuel": "3,75–4,00 % [fourchette cible] · taux effectif 3,88 %",
    "Précédent": "4,00 % [borne haute de la fourchette]",
    "Prévision": "proj. BC 4,1 % (fin 2026)",
    "surprise": "Δ n/d (taux actuel = FRED (DFF, taux effectif), non comparable à la décision précédente) · prochaine 09/12",
    "variation": null,
    "date_pub": "2026-11-02",
    "prochaine": "2026-12-09T19:00+00:00",
-   "source": "FRED (DFF, taux effectif) · proj. BC : Fed SEP, médiane (FEDTARMD)",
+   "source": "FRED (DFEDTARL / DFEDTARU)",
    "taux": {
     "borne": null,
     "date_decision": "2026-11-02",
@@ -3573,14 +3577,14 @@
    },
    "marche": false,
    "frequence": null,
-   "Actuel": "2,65 % [taux de refinancement]",
+   "Actuel": "2,50 % [dépôt] · refinancement 2,65 % (registre macro)",
    "Précédent": "2,65 % [taux de refinancement]",
    "Prévision": "consensus à venir",
    "surprise": "inchangé le 29/10 · écart US −123 pb · prochaine 17/12",
    "variation": null,
    "date_pub": "2026-10-29",
    "prochaine": "2026-12-17T13:15+00:00",
-   "source": "ForexFactory",
+   "source": "FRED (ECBDFR, taux de la facilité de dépôt de la BCE)",
    "taux": {
     "borne": null,
     "date_decision": "2026-10-29",
@@ -6929,63 +6933,72 @@
    "precedent": 0.06,
    "tendance": "hausse",
    "n": 6,
-   "texte": "+0,8 ▲ (n=6)"
+   "texte": "+0,8 ▲ (n=6)",
+   "rang": 1
   },
   "EUR": {
    "indice": -0.23,
    "precedent": 0.17,
    "tendance": "baisse",
    "n": 13,
-   "texte": "-0,2 ▼ (n=13)"
+   "texte": "-0,2 ▼ (n=13)",
+   "rang": 7
   },
   "GBP": {
    "indice": 0.56,
    "precedent": 0.36,
    "tendance": "hausse",
    "n": 10,
-   "texte": "+0,6 ▲ (n=10)"
+   "texte": "+0,6 ▲ (n=10)",
+   "rang": 2
   },
   "JPY": {
    "indice": -0.1,
    "precedent": -0.02,
    "tendance": "stable",
    "n": 7,
-   "texte": "-0,1 = (n=7)"
+   "texte": "-0,1 = (n=7)",
+   "rang": 6
   },
   "CHF": {
    "indice": 0.45,
    "precedent": 0.27,
    "tendance": "hausse",
    "n": 4,
-   "texte": "+0,5 ▲ (n=4)"
+   "texte": "+0,5 ▲ (n=4)",
+   "rang": 3
   },
   "CAD": {
    "indice": -0.74,
    "precedent": 0.06,
    "tendance": "baisse",
    "n": 9,
-   "texte": "-0,7 ▼ (n=9)"
+   "texte": "-0,7 ▼ (n=9)",
+   "rang": 8
   },
   "AUD": {
    "indice": 0.0,
    "precedent": -0.52,
    "tendance": "hausse",
    "n": 6,
-   "texte": "+0,0 ▲ (n=6)"
+   "texte": "+0,0 ▲ (n=6)",
+   "rang": 5
   },
   "NZD": {
    "indice": -1.62,
    "precedent": 0.27,
    "tendance": "baisse",
    "n": 5,
-   "texte": "-1,6 ▼ (n=5)"
+   "texte": "-1,6 ▼ (n=5)",
+   "rang": 9
   },
   "CNY": {
    "indice": 0.45,
    "precedent": -0.05,
    "tendance": "hausse",
    "n": 6,
-   "texte": "+0,5 ▲ (n=6)"
+   "texte": "+0,5 ▲ (n=6)",
+   "rang": 4
   }
  },
  "remplissage": {

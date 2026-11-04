@@ -325,6 +325,11 @@ def calculer(config: dict, h5, technique: dict | None, registre: dict | None, ag
         b = banques.get(devise) or {}
         prochaine = {"date": b.get("prochaine"), "taux": b.get("taux_texte"), "banque": b.get("court") or b.get("banque"),
                      "raison": None if b.get("prochaine") else "prochaine réunion non publiée dans l'Agenda"}
+        if bc and devise in ("USD", "EUR") and b.get("taux_texte"):
+            # Lot V7 (E1, E2) : ForexFactory publie la borne haute (Fed) et le refinancement (BCE) ; le taux de référence
+            # affiché partout est la fourchette cible et le taux de dépôt (même source que l'Agenda).
+            ref = str(b["taux_texte"]).replace(".", ",").replace("%", " %")
+            bc = {**bc, "texte": re.sub(r" à [−-]?\d+(?:,\d+)? %", "", bc["texte"]) + f" · {b.get('type_taux') or 'taux'} {ref}"}
         bc_txt = (f"{prochaine['banque'] or 'Banque centrale'} : " + (bc["texte"] if bc else "dernière décision n/d (absente de l'archive)")
                   + (f" · prochaine {_jj_mm(prochaine['date'])}" if prochaine["date"] else ""))
         inf = mac["inflation"]

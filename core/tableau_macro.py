@@ -223,6 +223,10 @@ def construire_matrice(registre: dict, saisies: dict, overrides_jour: dict,
                            "surprise": fleche, "variation": (f"n={i['n']}" if i.get("n") else None),
                            "date_pub": None, "prochaine": None, "marche": False, "frequence": None,
                            "source": "Calcul Python : surprises vs consensus, fenêtre 30 j"})
+    # Lot V7 : rang d'affichage de l'indice de surprise (du plus positif au plus négatif ; n/d en dernier)
+    for rang, d in enumerate(sorted(indice_txt, key=lambda d: (indice_txt[d].get("indice") is None, -(indice_txt[d].get("indice") or 0))), 1):
+        indice_txt[d]["rang"] = rang
+    harmoniser_taux_reference(cellules, lignes, registre, macro_cache())
     remplissage = {t: {**n, "total": sum(n.values()),
                        "taux_pct": round(100 * (n["valeur"] + n["explique"]) / max(1, sum(n.values())), 1)}
                    for t, n in compte.items()}
@@ -234,6 +238,45 @@ def construire_matrice(registre: dict, saisies: dict, overrides_jour: dict,
         "cellules": cellules, "lignes": lignes, "indice_surprise": indice_txt,
         "remplissage": remplissage, "_a_archiver": archives,
     }
+
+
+def macro_cache(racine: str | Path | None = None) -> dict | None:
+    """Dernière collecte FRED du jour (cache) : fourchette de la Fed et taux de dépôt de la BCE."""
+    chemin = Path(racine or Path(__file__).resolve().parent.parent) / "data" / "cache" / "collecte_macro.json"
+    try:
+        return (json.loads(chemin.read_text(encoding="utf-8")) or {}).get("donnees")
+    except (OSError, ValueError):
+        return None
+
+
+def _pct_fr(texte: str) -> str:
+    return re.sub(r"(\d)\.(\d)", r"\1,\2", str(texte)).replace("%", " %").replace("  %", " %")
+
+
+def harmoniser_taux_reference(cellules: dict, lignes: list[dict], registre: dict, macro: dict | None) -> None:
+    """Lot V7 (E1, E2) : même taux de référence que l'Agenda et les Banques centrales (agenda.taux_principal).
+    Fed : fourchette cible « 3,75–4,00 % » (DFEDTARL / DFEDTARU), taux effectif DFF en secondaire ;
+    BCE : taux de DÉPÔT (ECBDFR), refinancement du registre en secondaire. Sans série : valeur du registre inchangée."""
+    from core.agenda import taux_principal   # import local : agenda importe ce module
+    cases = (registre or {}).get("cases") or {}
+    for devise in ("USD", "EUR"):
+        case = cases.get(rm.cle("taux_directeur", devise)) or {}
+        tp = taux_principal(devise, case.get("actuel") or {}, macro)
+        if tp.get("valeur") is None or not tp.get("texte"):
+            continue
+        texte = _pct_fr(tp["texte"])
+        secondaire = _pct_fr(tp["secondaire"]) if tp.get("secondaire") else None
+        valeur = f"{texte} [{tp['type']}]" + (f" · {secondaire}" if secondaire else "")
+        cell = ((cellules.get("taux_directeur") or {}).get(devise) or {}).get("Actuel")
+        if cell is not None:
+            date_ = tp.get("date")
+            cell.update({"valeur": valeur, "texte": valeur + (f" ({date_[8:10]}/{date_[5:7]})" if date_ else ""),
+                         "source": tp.get("source"), "date": date_ or cell.get("date"), "reference": tp["type"],
+                         "secondaire": secondaire})
+        for ligne in lignes:
+            if ligne.get("indicateur") == "taux_directeur" and ligne.get("devise") == devise:
+                ligne["Actuel"] = valeur
+                ligne["source"] = tp.get("source") or ligne.get("source")
 
 
 def ecrire_web(matrice: dict, dossier_docs: str | Path) -> None:

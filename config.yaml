@@ -38,6 +38,10 @@ llm:
   # repli Python ; une analyse déjà en échec pendant 2 runs dans la journée n'est plus rejouée.
   budget:
     plafond_matin: 45
+    # Lot V7 (V6.1-bis) : plafond de RÉPONSES REÇUES par run, matin comme complément. Le « 60 » affiché pour un complément
+    # est le plafond du JOUR (3 modèles × 20 requêtes gratuites), jamais un plafond par run. Les 503, 429 et délais ne
+    # consomment pas ce budget : ils sont comptés à part (« tentatives en panne », 20 par jour au plus).
+    plafond_run: 45
     max_appels_par_analyse: 2
     max_echecs_jour_par_analyse: 2
     priorites:

@@ -1,0 +1,42 @@
+/* Lot V7 — Devises (maquette #devises) : profil_devises.json (état, moteur, banque centrale, ancrages : Python),
+   cours.json (graphique 6 mois), variation sur 20 séances : profil_devises.tendance_20s (Python). */
+import { $, h, nf, sgn, esc, ddm, nd, classeEtat, donnees, bloc, graphique, blocDetaille } from "./v7_commun.js";
+
+const SIX_MOIS = 183;
+
+export async function ecranDevises(section) {
+  section.innerHTML = `<div class="sec-head"><h2>Qui mène, et pourquoi</h2><p>Ancrage, moteur du moment (60 séances), banque centrale</p></div>
+    <div class="grid dvs" id="dvs"></div><p class="src" id="dvSrc"></p><div id="detaille"></div>`;
+  const [profil, cours] = await Promise.all([donnees("profil_devises"), donnees("cours")]);
+  const box = $("#dvs", section);
+  if (!profil) { box.innerHTML = '<div class="card pad muted">Profil des devises indisponible (profil_devises.json absent : prochain run).</div>'; return; }
+  const aDessiner = [];
+  for (const d of profil.devises || []) {
+    const carte = h("article", "card dv");
+    bloc(carte, () => {
+      const e = d.etat?.valeur || "n/d", c = cours?.devises?.[d.devise] || {};
+      const pts = c.points || [], dernier = pts.length ? pts[pts.length - 1] : null;
+      const depuis = dernier ? new Date(new Date(dernier[0]) - SIX_MOIS * 864e5).toISOString().slice(0, 10) : null;
+      const t20 = d.tendance_20s || {}, dom = d.moteur?.dominant, r = dom?.r60 ?? null, w = r == null ? 0 : Math.min(Math.abs(r), 1) * 50;
+      const decs = dernier && dernier[1] > 20 ? 2 : 4;
+      carte.innerHTML = `<div class="dv-head"><div><div class="code">${d.devise}</div><div class="nm">${esc(d.nom)}</div></div><span class="chip ${classeEtat(e)}" title="${esc(d.etat?.raison || "")}"><span class="dot"></span>${esc(e)}</span></div>
+        <div class="dv-px">${dernier ? `<b>${nf(dernier[1], decs)}</b><span class="${t20.pct > 0 ? "pos" : t20.pct < 0 ? "neg" : "muted"}" style="font-weight:600;font-size:13px">${t20.pct == null ? nd(t20.raison) : sgn(t20.pct, 2, " %")} sur 20 séances</span>` : `<span class="muted">Cours ${nd("série absente de cours.json")}</span>`}</div>
+        <div class="src" style="padding:2px 20px 0">${esc(c.libelle || "")}${dernier ? " · au " + ddm(dernier[0]) : ""}</div>
+        <div class="chart" data-c="${d.devise}" role="img" aria-label="Cours ${d.devise} sur 6 mois"></div>
+        <div class="dv-body">
+          <div class="kv"><span>Moteur du moment</span><span><b>${dom ? esc(dom.libelle) : "aucun moteur net"}</b> ${r != null ? `<span class="muted">${sgn(r, 2)} sur 60 séances</span>` : ""}<div class="corr" title="${esc(d.moteur?.texte || "")}"><i style="${r >= 0 ? "left:50%" : "right:50%"};width:${w}%;background:${r >= 0 ? "var(--accent)" : "var(--warn)"}"></i></div></span>
+          <span>Banque centrale</span><span>${esc(d.banque_centrale?.texte || "n/d")}</span></div>
+          <div class="ancs full">${(d.ancrages || []).map(a => `<span class="chip ${a.verdict === "confirmé" ? "up" : a.verdict === "contredit" ? "dn" : ""}" title="${esc((a.texte || "") + (a.mesure ? " · " + a.mesure : ""))}">${esc(a.libelle)} · ${esc(a.verdict || "n/d")}</span>`).join("")}</div>
+          <div class="muted full" style="font-size:13px">${esc(d.etat?.raison || "")}</div>
+        </div>`;
+      if (pts.length) aDessiner.push([carte.querySelector(".chart"), pts.filter(p => p[0] >= depuis), decs]);
+    });
+    box.appendChild(carte);
+  }
+  $("#dvSrc", section).textContent = `${cours?.source || ""} · ${profil.note || ""} · ${profil.regle_etat || ""}`;
+  // Graphiques : l'écran est visible quand cette fonction tourne (initialisation à l'ouverture de l'onglet)
+  for (const [div, pts, decs] of aDessiner) graphique(div, [{ l: "", p: pts }], decs, { handleScroll: false, handleScale: false });
+  $("#detaille", section).appendChild(blocDetaille("Fiches détaillées des devises", "scores, dossiers, graphiques annotés", async () => {
+    const m = await import("./devises.js"); return m.pageDevises();
+  }));
+}

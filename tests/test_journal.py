@@ -106,4 +106,4 @@ def test_page_journal_indexeddb_sans_alert_ni_requete_externe():
     assert "http" not in js.replace("http://www.w3.org", "") and "data/paires.json" in js
     assert "image/webp" in js and "1600" in js and "QuotaExceededError" in js
     html = (RACINE / "docs/index.html").read_text(encoding="utf-8")
-    assert 'data-onglet="journal"' in html
+    assert 'data-t="journal"' in html   # lot V7

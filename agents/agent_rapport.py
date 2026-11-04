@@ -38,8 +38,14 @@ def _norm(s: str) -> str:
     return re.sub(r"\s+", " ", str(s or "")).strip().lower()
 
 
+MENTION_ENGRENAGES = "engrenages indisponibles"
+CLES_PARTIE = {"1": ("synthese", "bilan", "conclusion", "lecture_marche"), "2": ("watchlist", "communiques", "plan")}
+
+
 def faits_redaction(r: dict) -> dict:
-    return {"theme": r.get("theme"), "lecture_marche": r["point_marche"]["lecture"],
+    extra = {"engrenages": f"{MENTION_ENGRENAGES} (synthèse du modèle non faite aujourd'hui : thème et directions calculés "
+                           "en Python seulement)"} if r.get("engrenages_indisponibles") else {}
+    return {**extra, "theme": r.get("theme"), "lecture_marche": r["point_marche"]["lecture"],
             "point_marche": [{k: l[k] for k in ("actif", "variation_5j", "unite", "lecture")} for l in r["point_marche"]["lignes"] if l.get("niveau") is not None],
             "mecanismes": [{"libelle": m["libelle"], "chiffres": [c["chiffre"] for c in m["conditions"]]} for m in r["lecture"]["detectes"]],
             "scenarios": [{"titre": s["titre"], "statut": s["statut"], "mieux_confirme": s["mieux_confirme"]} for s in r["scenarios"]["liste"]],
@@ -73,11 +79,16 @@ def _prompt2(faits: dict) -> str:
             "aucun ordre d'achat ou de vente.\nFAITS :\n" + json.dumps(faits, ensure_ascii=False))
 
 
-def rediger(r: dict, llm, textes_com: dict[str, tuple[str | None, str | None]] | None = None, tentatives: int = 2) -> dict:
+def rediger(r: dict, llm, textes_com: dict[str, tuple[str | None, str | None]] | None = None, tentatives: int = 2,
+            parties: tuple[str, ...] = ("1", "2")) -> dict:
     """Textes validés du jour. Ne lève jamais. -> {date, statut, synthese?, bilan?, conclusion?, lecture_marche?,
-    watchlist?, communiques?, plan?, controles, appels}."""
-    sortie = {"date": r.get("date"), "statut": "indisponible", "controles": [], "appels": 0,
+    watchlist?, communiques?, plan?, controles, appels, parties_faites}.
+    `parties` : « 1 » = rédaction (rapport:redaction), « 2 » = analyse (rapport:analyse) ; un complément ne rejoue que
+    la partie manquante (V6.1-bis : le 04/11, l'analyse réussie faisait passer le rapport pour rédigé)."""
+    sortie = {"date": r.get("date"), "statut": "indisponible", "controles": [], "appels": 0, "parties_faites": [],
               "genere_le": datetime.now(timezone.utc).isoformat(timespec="seconds")}
+    if r.get("engrenages_indisponibles"):
+        sortie["mention_engrenages"] = MENTION_ENGRENAGES
     if llm is None:
         sortie["raison"] = "fournisseur LLM indisponible"
         return sortie
@@ -85,6 +96,8 @@ def rediger(r: dict, llm, textes_com: dict[str, tuple[str | None, str | None]] |
     f1 = faits_redaction(r)
     aut1 = _valeurs(f1, set())
     for etiquette, prompt, traiter in (("rapport:redaction", _prompt1(f1), "1"), ("rapport:analyse", None, "2")):
+        if traiter not in parties:
+            continue
         f2 = faits_analyse(r, textes_com) if traiter == "2" else None
         if traiter == "2":
             prompt = _prompt2(f2)
@@ -107,6 +120,7 @@ def rediger(r: dict, llm, textes_com: dict[str, tuple[str | None, str | None]] |
                 sortie["controles"].append(f"{etiquette} : essai en échec ({masquer_secrets(str(exc))[:100]})")
         if not brut:
             continue
+        sortie["parties_faites"].append(traiter)
         if traiter == "1":
             for cle in ("synthese", "bilan", "conclusion", "lecture_marche"):
                 t, notes = _propre(brut.get(cle), aut1)
@@ -140,7 +154,7 @@ def rediger(r: dict, llm, textes_com: dict[str, tuple[str | None, str | None]] |
             sortie["controles"] += [f"plan : {n}" for n in notes]
             if t:
                 sortie["plan"] = t
-    if r.get("version") == "longue":   # lundi : 2 appels groupés de plus (4 au total) pour reformuler les 12 sections
+    if r.get("version") == "longue" and "1" in parties:   # lundi : 2 appels groupés de plus pour les 12 sections
         _rediger_long(r, llm, sortie, tentatives)
     return _finir(sortie)
 
@@ -193,10 +207,49 @@ def _rediger_long(r: dict, llm, sortie: dict, tentatives: int) -> None:
                 sortie["long"][cle] = t
 
 
+def statut_textes(sortie: dict) -> str:
+    """ok : rédaction ET analyse reçues ; partiel : une seule des deux ; indisponible : aucune."""
+    faites = set(sortie.get("parties_faites") or [])
+    if {"1", "2"} <= faites:
+        return "ok"
+    return "partiel" if faites else "indisponible"
+
+
+def parties_manquantes(textes: dict | None) -> tuple[str, ...]:
+    faites = set((textes or {}).get("parties_faites") or [])
+    if not faites and (textes or {}).get("statut") == "ok":   # textes écrits avant le lot V7 : déduits de leurs clés
+        faites = {k for k, cles in CLES_PARTIE.items() if any((textes or {}).get(c) for c in cles)} or {"1", "2"}
+    return tuple(p for p in ("1", "2") if p not in faites)
+
+
+def fusionner(ancien: dict | None, nouveaux: dict) -> dict:
+    """Garde la partie déjà rédigée (complément qui ne rejoue que la partie manquante)."""
+    if not ancien:
+        return nouveaux
+    sortie = dict(nouveaux)
+    for p in set(ancien.get("parties_faites") or []) - set(nouveaux.get("parties_faites") or []):
+        for c in CLES_PARTIE[p]:
+            if ancien.get(c) is not None:
+                sortie[c] = ancien[c]
+    sortie["parties_faites"] = sorted(set(ancien.get("parties_faites") or []) | set(nouveaux.get("parties_faites") or []))
+    sortie["controles"] = (ancien.get("controles") or []) + (nouveaux.get("controles") or [])
+    sortie["appels"] = int(ancien.get("appels", 0)) + int(nouveaux.get("appels", 0))
+    if not nouveaux.get("redige_par") and ancien.get("redige_par"):
+        sortie["redige_par"] = ancien["redige_par"]
+    return _finir(sortie)
+
+
 def _finir(sortie: dict) -> dict:
-    if any(sortie.get(k) for k in ("synthese", "bilan", "conclusion", "watchlist", "communiques", "plan", "long")):
-        sortie.update({"statut": "ok", "redige_par": attribution_modele()})
-        sortie.pop("raison", None)
+    statut = statut_textes(sortie)
+    sortie["statut"] = statut
+    if statut != "indisponible":
+        sortie["redige_par"] = sortie.get("redige_par") or attribution_modele()
+        if statut == "ok":
+            sortie.pop("raison", None)
+        else:
+            sortie["raison"] = ("rédaction du rapport non faite (texte Python) : rejouée au complément suivant"
+                                if "1" not in sortie["parties_faites"] else
+                                "analyse (watchlist, plan) non faite : rejouée au complément suivant")
     elif not sortie.get("raison"):
         sortie["raison"] = "réponses du modèle inexploitables : phrases Python publiées"
     return sortie
@@ -205,12 +258,21 @@ def _finir(sortie: dict) -> dict:
 HEURE_SEANCE_UTC = 7   # avant 07:00 UTC : passage hors séance, jamais d'appel au modèle pour le rapport
 
 
+def engrenages_faits(docs: Path) -> bool:
+    """Synthèse des 8 engrenages faite aujourd'hui par le modèle ? La rédaction du rapport ne l'attend jamais."""
+    try:
+        sg = json.loads((Path(docs) / "latest.json").read_text(encoding="utf-8")).get("synthese_globale") or {}
+    except (OSError, ValueError):
+        return False
+    return ((sg.get("engrenages") or {}).get("statut")) == "ok"
+
+
 def faut_rediger(textes: dict | None, maintenant: datetime, complet: bool) -> tuple[bool, str | None]:
     """(rédiger ?, raison sinon). (a) un « quota atteint » noté avant la remise à zéro (minuit Pacifique) ne bloque
     jamais la journée de quota suivante ; (b) un run complet rédige toujours tant que les textes ne sont pas « ok » ;
     (c) un passage hors séance (avant 07:00 UTC) n'appelle jamais le modèle."""
     from core.llm import jour_quota_google
-    if (textes or {}).get("statut") == "ok":
+    if (textes or {}).get("statut") == "ok" and not parties_manquantes(textes):
         return False, None
     if maintenant.hour < HEURE_SEANCE_UTC:
         return False, f"passage hors séance (avant {HEURE_SEANCE_UTC:02d}:00 UTC) : rédaction au run du matin"
@@ -247,10 +309,14 @@ def executer(racine: str | Path, config: dict, llm, maintenant: datetime | None 
         ancien = {}
     textes = ancien.get("textes") if ancien.get("date") == r["date"] else None
     instant = maintenant or datetime.now(timezone.utc)
+    r["engrenages_indisponibles"] = not engrenages_faits(docs)
     rediger_, raison = faut_rediger(textes, instant, complet)
     if rediger_:
         textes_com = {d: communiques.textes_a_comparer(racine, index, d) for d in (index.get("par_devise") or {})}
-        nouveaux = rediger(r, llm, textes_com)
+        partiel = (textes or {}).get("statut") in ("ok", "partiel") and bool(parties_manquantes(textes))
+        nouveaux = rediger(r, llm, textes_com, parties=parties_manquantes(textes) if partiel else ("1", "2"))
+        if partiel:
+            nouveaux = fusionner(textes, nouveaux)
         meme_jour = (textes or {}).get("jour_quota") == jour_quota_google(instant).isoformat()
         # Un échec seulement transitoire (503, 429, délai) ne compte pas comme un essai : rejoué au complément suivant
         transitoire = nouveaux.get("statut") != "ok" and all(echec_transitoire(llm, e) for e in ("rapport:redaction", "rapport:analyse"))

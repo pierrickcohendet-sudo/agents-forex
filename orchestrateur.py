@@ -614,6 +614,13 @@ def ligne_budget(b: dict) -> str:
     ligne = (f"Budget ({'run ' + b.get('mode', '?')}{', lundi' if b.get('lundi') else ''}, plafond "
              f"{b.get('plafond') if b.get('plafond') is not None else 'n/d'}) : prévu {prevu} ; consommé ce run : {conso} "
              f"(jour : {jour}/{b.get('plafond') if b.get('plafond') is not None else 'n/d'}) ; échecs ce run : {echecs}")
+    if b.get("pannes_jour") is not None:   # V6.1-bis : 503, 429, délais hors budget, comptés à part
+        ligne += (f" ; tentatives en panne (hors budget) : {b.get('pannes_run', 0)} ce run, {b['pannes_jour']}/"
+                  f"{b.get('plafond_pannes', 20)} aujourd'hui")
+    if b.get("plafond_run") is not None:
+        ligne += f" ; réponses reçues ce run : {b.get('recues_run', 0)}/{b['plafond_run']}"
+    if b.get("mode_panne"):
+        ligne += " ; MODE PANNE : priorités seulement, 1 essai chacune, sans repli"
     analyses = b.get("analyses") or {}
     if analyses:
         ligne += " ; analyses : " + ", ".join(

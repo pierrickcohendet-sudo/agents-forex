@@ -1,0 +1,20 @@
+/* Design system V7 — tokens repris EXACTEMENT de docs/design/maquette_v7.html (bloc :root, clair et sombres).
+   Sombre : préférence système (sauf data-theme="light") et data-theme="dark". Règles : docs/design/DESIGN.md. */
+:root{
+  --bg:#EEF1F5; --surface:#FFFFFF; --surface-2:#F6F8FB; --ink:#0D1626; --ink-2:#364153; --muted:#677286; --line:#DDE2EA; --line-2:#C9D0DB;
+  --accent:#2F55D4; --accent-soft:#E6ECFD; --up:#0E8A5A; --up-soft:#DDF3E9; --down:#C23B32; --down-soft:#FBE4E1; --warn:#A86A00; --warn-soft:#FBF0D9;
+  --c1:#3B5BDB; --c2:#1098AD; --c3:#E67700; --c4:#9C36B5;
+  --shadow:0 1px 2px rgba(13,22,38,.05),0 8px 24px -12px rgba(13,22,38,.12);
+  --f-display:"Newsreader",Georgia,"Times New Roman",serif;
+  --f-body:"Instrument Sans",-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --r:14px; --ease:cubic-bezier(.2,.7,.2,1);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#06080C; --surface:#0D1119; --surface-2:#121825; --ink:#E8ECF4; --ink-2:#BCC4D2; --muted:#848FA3; --line:#1C2330; --line-2:#2A3343;
+  --accent:#8AA4FF; --accent-soft:#18223F; --up:#43D39E; --up-soft:#0F2A20; --down:#FF7F73; --down-soft:#2D1513; --warn:#F2BE5C; --warn-soft:#2B2210;
+  --c1:#5C7CFA; --c2:#1CA3B8; --c3:#D17A0A; --c4:#B65BD6; --shadow:0 1px 0 rgba(255,255,255,.03),0 12px 32px -16px rgba(0,0,0,.8); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#06080C; --surface:#0D1119; --surface-2:#121825; --ink:#E8ECF4; --ink-2:#BCC4D2; --muted:#848FA3; --line:#1C2330; --line-2:#2A3343;
+  --accent:#8AA4FF; --accent-soft:#18223F; --up:#43D39E; --up-soft:#0F2A20; --down:#FF7F73; --down-soft:#2D1513; --warn:#F2BE5C; --warn-soft:#2B2210;
+  --c1:#5C7CFA; --c2:#1CA3B8; --c3:#D17A0A; --c4:#B65BD6; --shadow:0 1px 0 rgba(255,255,255,.03),0 12px 32px -16px rgba(0,0,0,.8); color-scheme:dark}

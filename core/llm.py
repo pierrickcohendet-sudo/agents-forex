@@ -153,6 +153,18 @@ class PlafondAnalyse(RuntimeError):
 # Lot V6.1 : erreurs TRANSITOIRES (surcharge Google, quota par minute, délai, réseau) : elles ne comptent jamais dans la
 # règle « 2 échecs par jour » ; seuls les échecs de format ou de contrôle bloquent une analyse pour la journée.
 TRANSITOIRES = {"503", "500", "429", "delai", "reseau", "budget"}
+# Lot V7 (V6.1-bis) : une requête sans réponse exploitable de Google (503, 500, 429, délai, réseau) ne consomme PAS le
+# budget interne du jour ; elle est comptée à part (« tentatives en panne »), avec ce plafond de sécurité par jour.
+PANNES = {"503", "500", "429", "delai", "reseau"}
+PLAFOND_PANNES_JOUR = 20
+# Mode panne : si plus de la moitié des requêtes du run précédent ont reçu un 503, le complément suivant ne tente que
+# ces analyses prioritaires, 1 essai chacune, sans nouvel essai après 503 ni repli sur les autres modèles.
+ANALYSES_PANNE = ("engrenages", "rapport:redaction", "analyses:")
+
+
+def analyse_prioritaire_panne(etiquette: str | None) -> bool:
+    e = etiquette or ""
+    return e == "engrenages" or e == "rapport:redaction" or e.startswith("analyses:")
 
 
 def echec_transitoire(llm, etiquette: str) -> bool:
@@ -272,7 +284,12 @@ class RegistreQuotas:
         self.donnees = {"date": jour, "modeles": modeles,
                         "engrenages_faits": bool(meme_jour and brut.get("engrenages_faits")),
                         "categories": jour_brut("categories"), "etiquettes": jour_brut("etiquettes"),
-                        "echecs": jour_brut("echecs"), "faits": list(brut.get("faits") or []) if meme_jour else []}
+                        "echecs": jour_brut("echecs"), "faits": list(brut.get("faits") or []) if meme_jour else [],
+                        "pannes": int(brut.get("pannes", 0)) if meme_jour else 0,
+                        "dernier_run": brut.get("dernier_run") if isinstance(brut.get("dernier_run"), dict) else None}
+        dr = self.donnees["dernier_run"] or {}
+        # Panne en cours : plus de la moitié des requêtes du run précédent en 503 (V6.1-bis, point 2)
+        self.panne_precedente = int(dr.get("envois", 0)) > 0 and int(dr.get("503", 0)) * 2 > int(dr.get("envois", 0))
         # Budget (configurer_budget) et compteurs de CE run, en mémoire seulement.
         self.budget: dict | None = None
         self.complet, self.lundi = True, False
@@ -281,8 +298,15 @@ class RegistreQuotas:
         self.run_categories: dict[str, int] = {}
         self.run_echecs: dict[str, int] = {}
         self.run_types: dict[str, set] = {}
+        self.run_envois = 0          # requêtes HTTP envoyées pendant ce run (reçues ou non)
+        self.run_503 = 0
+        self.run_recues = 0          # réponses reçues pendant ce run (consomment le budget)
+        self.run_pannes = 0
 
     def _sauver(self) -> None:
+        if self.run_envois:
+            self.donnees["dernier_run"] = {"id": self.run_id, "envois": self.run_envois, "503": self.run_503,
+                                           "recues": self.run_recues, "mode": "complet" if self.complet else "complément"}
         if not self.chemin:
             return
         try:
@@ -309,16 +333,47 @@ class RegistreQuotas:
         plafond = self.plafonds.get(modele)
         return plafond is None or self._entree(modele)["appels"] < plafond
 
+    @property
+    def mode_panne(self) -> bool:
+        """Complément pendant une panne Google (run précédent à plus de 50 % de 503) : priorités seulement, 1 essai."""
+        return bool(self.budget) and not self.complet and self.panne_precedente
+
+    def verifier_envoi(self) -> None:
+        """Avant chaque requête HTTP : plafond de sécurité des tentatives en panne (20 par jour)."""
+        pannes = self.donnees.get("pannes", 0)
+        etiquette = _ETIQUETTE_COURANTE[0]
+        # Les 5 dernières tentatives en panne du jour sont gardées aux 5 analyses prioritaires (engrenages, rédaction
+        # du rapport, 3 groupes de devises) : une panne longue ne les prive jamais d'un essai.
+        limite = PLAFOND_PANNES_JOUR if analyse_prioritaire_panne(etiquette) else PLAFOND_PANNES_JOUR - 5
+        if pannes >= limite:
+            raise BudgetEpuise(f"{MESSAGE_QUOTA_ATTEINT} — {PLAFOND_PANNES_JOUR} tentatives en panne (503, 429, délai) "
+                               "déjà faites aujourd'hui : plafond de sécurité atteint")
+
+    def noter_envoi(self) -> None:
+        etiquette = _ETIQUETTE_COURANTE[0]
+        self.run_envois += 1
+        if etiquette:   # plafond d'appels par analyse et par run : compté à l'envoi (borne le coût d'un run)
+            self.run_etiquettes[etiquette] = self.run_etiquettes.get(etiquette, 0) + 1
+
+    def compter_panne(self, modele: str, type_: str) -> None:
+        """Requête sans réponse exploitable (503, 500, 429, délai, réseau) : hors budget, comptée à part."""
+        self.donnees["pannes"] = self.donnees.get("pannes", 0) + 1
+        self.run_pannes += 1
+        self.run_503 += 1 if type_ == "503" else 0
+        self._entree(modele).setdefault("pannes", 0)
+        self._entree(modele)["pannes"] += 1
+        self._sauver()
+
     def compter(self, modele: str) -> None:
-        """Une requête HTTP envoyée (Google compte chaque requête, nouvel essai après 503 compris)."""
+        """Une réponse REÇUE de Google (réussie, ou rejetée ensuite par nos contrôles) : elle consomme le budget."""
         self._entree(modele)["appels"] += 1
+        self.run_recues += 1
         etiquette = _ETIQUETTE_COURANTE[0]
         cat = categorie_budget(etiquette)
         cats = self.donnees.setdefault("categories", {})
         cats[cat] = cats.get(cat, 0) + 1
         self.run_categories[cat] = self.run_categories.get(cat, 0) + 1
         if etiquette:
-            self.run_etiquettes[etiquette] = self.run_etiquettes.get(etiquette, 0) + 1
             e = self._etiquette(etiquette)
             e["appels"] = e.get("appels", 0) + 1
         self._sauver()
@@ -331,7 +386,14 @@ class RegistreQuotas:
         self.budget, self.complet, self.lundi = (budget or None), bool(complet), bool(lundi)
 
     def _max_appels(self) -> int:
+        if self.mode_panne:
+            return 1
         return int((self.budget or {}).get("max_appels_par_analyse", 2))
+
+    def plafond_par_run(self) -> int | None:
+        """Plafond de réponses reçues par run (config llm.budget.plafond_run, 45) : matin comme complément."""
+        v = (self.budget or {}).get("plafond_run")
+        return int(v) if v is not None else None
 
     def _max_echecs(self) -> int:
         return int((self.budget or {}).get("max_echecs_jour_par_analyse", 2))
@@ -373,6 +435,9 @@ class RegistreQuotas:
         le plafond du run, ou la réserve d'une autre catégorie prioritaire (budget non configuré : sans effet)."""
         if not self.budget:
             return
+        if self.mode_panne and not analyse_prioritaire_panne(etiquette):
+            raise PlafondAnalyse(f"{etiquette or 'appel'} : mode panne (plus de la moitié des requêtes du run précédent "
+                                 "en 503) — seules les analyses prioritaires sont tentées (repli Python)")
         if etiquette:
             e = self.donnees.get("etiquettes", {}).get(etiquette) or {}
             if not e.get("ok") and e.get("echecs_runs", 0) >= self._max_echecs():
@@ -381,6 +446,9 @@ class RegistreQuotas:
             if self.run_etiquettes.get(etiquette, 0) >= self._max_appels():
                 raise PlafondAnalyse(f"{etiquette} : {self._max_appels()} appels déjà faits pendant ce run "
                                      "(repli Python)")
+        par_run = self.plafond_par_run()
+        if par_run is not None and self.run_recues + 1 > par_run:
+            raise BudgetEpuise(f"{MESSAGE_QUOTA_ATTEINT} — plafond du run : {self.run_recues}/{par_run} réponses reçues")
         plafond = self.plafond_run()
         if plafond is None:
             return
@@ -427,7 +495,10 @@ class RegistreQuotas:
                 "prevu_analyses": prevu, "prevu_appels_max": {c: n * self._max_appels() for c, n in prevu.items()},
                 "consomme_jour": {c: cats.get(c, 0) for c in ordre},
                 "consomme_run": {c: self.run_categories.get(c, 0) for c in ordre},
-                "total_jour": self.total_jour(), "echecs_jour": dict(self.donnees.get("echecs", {})),
+                "total_jour": self.total_jour(), "plafond_run": self.plafond_par_run(), "recues_run": self.run_recues,
+                "pannes_jour": self.donnees.get("pannes", 0), "pannes_run": self.run_pannes,
+                "plafond_pannes": PLAFOND_PANNES_JOUR, "mode_panne": self.mode_panne,
+                "echecs_jour": dict(self.donnees.get("echecs", {})),
                 "echecs_run": dict(self.run_echecs),
                 "abandonnees": sorted(k for k, v in self.donnees.get("etiquettes", {}).items()
                                       if not v.get("ok") and v.get("echecs_runs", 0) >= self._max_echecs()),
@@ -447,10 +518,7 @@ class RegistreQuotas:
         delai = delai_s if delai_s else max(
             (prochaine_remise_a_zero(self._maintenant()) - self._maintenant()).total_seconds(), 60)
         e["epuise_jusqu_a"] = (self._maintenant() + timedelta(seconds=delai)).isoformat(timespec="seconds")
-        plafond = self.plafonds.get(modele)
-        if plafond:
-            e["appels"] = max(e["appels"], plafond)
-        self._sauver()
+        self._sauver()   # V6.1-bis : le compteur n'est plus porté au plafond (il ne compte que les réponses reçues)
 
     def restants(self, modeles: list[str]) -> int | None:
         """Appels encore possibles aujourd'hui sur ces modèles (None : un modèle sans plafond local)."""
@@ -533,16 +601,37 @@ class FournisseurGemini(_FournisseurAvecCadence):
             if not self.registre_quotas.autoriser(self.modele):
                 raise QuotaJournalierEpuise(f"plafond gratuit du jour atteint pour {self.modele} (compteur local)")
             self.registre_quotas.verifier_budget(_ETIQUETTE_COURANTE[0])   # nouvel essai après 503 compris
-            self.registre_quotas.compter(self.modele)
+            self.registre_quotas.verifier_envoi()
+            self.registre_quotas.noter_envoi()
         self._attendre_cadence()
         # Clé en HEADER, jamais en query string : les erreurs HTTP embarquent
         # l'URL dans leur message et finissent dans les logs.
-        return requests.post(
-            self.URL.format(modele=self.modele),
-            headers={"x-goog-api-key": self.cle},
-            json=corps,
-            timeout=180,
-        )
+        try:
+            rep = requests.post(
+                self.URL.format(modele=self.modele),
+                headers={"x-goog-api-key": self.cle},
+                json=corps,
+                timeout=180,
+            )
+        except requests.exceptions.Timeout:
+            self._compter_panne("delai")
+            raise
+        except requests.exceptions.ConnectionError:
+            self._compter_panne("reseau")
+            raise
+        code = getattr(rep, "status_code", 200)
+        if code in (429, 500, 503):
+            self._compter_panne(str(code))   # aucune réponse exploitable : hors budget
+        elif self.registre_quotas is not None:
+            self.registre_quotas.compter(self.modele)   # réponse reçue : consomme le budget du jour
+        return rep
+
+    def _compter_panne(self, type_: str) -> None:
+        if self.registre_quotas is not None:
+            self.registre_quotas.compter_panne(self.modele, type_)
+
+    def _en_panne(self) -> bool:
+        return self.registre_quotas is not None and self.registre_quotas.mode_panne
 
     def _noter_echec(self, type_: str) -> None:
         if self.registre_quotas is not None:
@@ -575,6 +664,8 @@ class FournisseurGemini(_FournisseurAvecCadence):
         except requests.exceptions.Timeout:
             # Surcharge (aucune réponse dans le délai) : comme un 503, un seul nouvel essai sur CE modèle.
             self._noter_echec("delai")
+            if self._en_panne():
+                raise   # mode panne : 1 essai, pas de nouvel essai
             log.warning("Gemini : délai dépassé (surcharge) — attente de %.0f s avant un unique nouvel essai",
                         self.backoff_429_s)
             time.sleep(self.backoff_429_s)
@@ -593,6 +684,9 @@ class FournisseurGemini(_FournisseurAvecCadence):
                         "avant un unique nouvel essai", attente)
             time.sleep(attente)
             rep = self._poster(corps)
+        elif rep.status_code == 503 and self._en_panne():
+            self._noter_echec("503")
+            rep.raise_for_status()   # mode panne : 1 essai, pas de nouvel essai
         elif rep.status_code == 503:
             self._noter_echec("503")
             # UNAVAILABLE (modèle surchargé côté Google, doc officielle : retry
@@ -1005,6 +1099,9 @@ class FournisseurChaine(FournisseurLLM):
                 self._echec(m, exc, msg)
                 raisons.append(f"{m['modele']} : {msg[:100]}")
                 autre_echec = autre_echec or not isinstance(exc, QuotaJournalierEpuise)
+                if self.registre is not None and self.registre.mode_panne and not isinstance(exc, QuotaJournalierEpuise):
+                    log.warning("Mode panne : %s en échec (%s) — pas de repli sur les autres modèles", m["modele"], msg[:150])
+                    break
                 log.warning("Modèle %s en échec (%s) — essai du modèle suivant", m["modele"], msg[:150])
         if not autre_echec:
             raise QuotaAtteint(f"{MESSAGE_QUOTA_ATTEINT} — " + " | ".join(raisons))

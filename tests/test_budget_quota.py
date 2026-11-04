@@ -144,8 +144,11 @@ class Rejeu0211(unittest.TestCase):
         llm, sim, rapport, textes = self._rejouer(lambda n: n % 2 == 1)          # 50 % d'échecs, le premier aussi
         reg = llm.registre
         self.assertLessEqual(reg.total_jour(), 45)                                # plafond du run du matin
-        self.assertEqual(reg.total_jour(), sim.n)                                 # chaque requête HTTP comptée
-        self.assertEqual(textes["statut"], "ok")                                  # rapport du jour rédigé
+        # V6.1-bis : réponses reçues dans le budget, 503 à part ; chaque requête HTTP comptée une fois
+        self.assertEqual(reg.total_jour() + reg.donnees["pannes"], sim.n)
+        # rédaction du rapport faite ; l'analyse peut attendre si le plafond de sécurité des pannes (20) est atteint
+        self.assertIn(textes["statut"], ("ok", "partiel"))
+        self.assertIn("1", textes["parties_faites"])
         self.assertTrue(textes.get("synthese"))
         self.assertEqual(rapport["synthese_globale"]["engrenages"]["statut"], "ok")
         self.assertEqual(rapport["synthese_globale"]["devises_indisponibles"], [])
@@ -171,9 +174,12 @@ class Rejeu0211(unittest.TestCase):
             self.assertLessEqual(reg.total_jour(), 45, graine)
             self.assertTrue(all(n <= 2 for n in reg.run_etiquettes.values()), (graine, reg.run_etiquettes))
             # la réserve du rapport n'a jamais été prise par une autre section : il a eu ses requêtes
-            self.assertGreaterEqual(reg.run_categories.get("rapport", 0), 2, graine)
-            self.assertNotIn("quota_atteint", textes, graine)
-            self.assertIn(textes["statut"], ("ok", "indisponible"))
+            # V6.1-bis : le budget ne compte que les réponses reçues ; le rapport a bien eu ses essais (envois)
+            attendu = 1 if reg.donnees["pannes"] >= L.PLAFOND_PANNES_JOUR - 5 else 2   # plafond de sécurité atteint : 1 essai
+            self.assertGreaterEqual(sum(n for k, n in reg.run_etiquettes.items() if k.startswith("rapport:")), attendu, graine)
+            if textes.get("quota_atteint"):   # seul refus admis : le plafond de sécurité des tentatives en panne
+                self.assertIn("tentatives en panne", textes["detail_quota"], graine)
+            self.assertIn(textes["statut"], ("ok", "partiel", "indisponible"))
             b = reg.resume_budget()
             self.assertEqual(sum(b["consomme_run"].values()), reg.total_jour())
 
@@ -268,7 +274,8 @@ class Budget(unittest.TestCase):
         ligne = orchestrateur.ligne_quota(llm.etat_quota(), {"statut": "ok"})
         self.assertIn("Budget (run complet, lundi, plafond 45)", ligne)
         self.assertIn("prévu engrenages 1 analyse (≤ 2 requêtes); rapport du jour 4 analyses (≤ 8 requêtes)", ligne)
-        self.assertIn("consommé ce run : engrenages 2, rapport du jour 0, devises 0, reste 0", ligne)
+        self.assertIn("consommé ce run : engrenages 1, rapport du jour 0, devises 0, reste 0", ligne)   # le 503 : hors budget
+        self.assertIn("tentatives en panne (hors budget) : 1 ce run, 1/20 aujourd'hui", ligne)
         self.assertIn("échecs ce run : 503 × 1", ligne)
 
 

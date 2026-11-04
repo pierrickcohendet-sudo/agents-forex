@@ -63,7 +63,10 @@ class Rejeu0411(unittest.TestCase):
                 textes2 = ar.rediger(rj.calculer(RACINE, CONFIG), llm2)
         self.assertEqual(apres["synthese_globale"]["engrenages"]["statut"], "ok")
         self.assertEqual(apres["synthese_globale"]["devises_indisponibles"], [])
-        self.assertEqual(textes2["statut"], "ok")
+        # V6.1-bis : complément en MODE PANNE (run précédent 100 % en 503) : priorités seulement, rapport:analyse attendra
+        self.assertTrue(llm2.registre.mode_panne)
+        self.assertIn(textes2["statut"], ("ok", "partiel"))
+        self.assertIn("1", textes2["parties_faites"])
         s2 = llm2.registre.statut_analyses()
         for cle in ("engrenages", "analyses:USD-EUR-GBP", "analyses:JPY-CHF-CAD", "analyses:AUD-NZD-CNY", "rapport:redaction"):
             self.assertEqual(s2[cle]["statut"], "faite", cle)

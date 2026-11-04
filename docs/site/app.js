@@ -1,132 +1,152 @@
-/* FX Desk — site V1. Lit uniquement docs/data/*.json (produits par le pipeline), aucune clé, aucun appel externe. */
-import { chargerJson, enErreur, el, indisponible, initialiserDetail, initialiserCertificats, dateHeure, appliquerGlossaire,
-         marquerNombres, vueCourante, enregistrerVue, vueComplete, VERSION } from "./commun.js";
+/* Trading baby — site V7 (refonte selon docs/design/maquette_v7.html). Lit uniquement docs/data/*.json (produits par le
+   pipeline Python), aucune clé, aucun appel à un modèle. Chaque onglet se construit à sa première ouverture, une seule fois. */
+import { chargerJson, enErreur, initialiserDetail, initialiserCertificats, appliquerGlossaire, VERSION, CLE_VUE } from "./commun.js";
+import { $, h, esc, store, squelette, rethemer, recadrer } from "./v7_commun.js";
 
-/* Lot V6 : 6 onglets principaux, le reste dans le menu « Plus ». */
 const ONGLETS = {
-  synthese: { titre: "Synthèse", module: "./rapport.js", fonction: "pageRapport" },   // fusion Accueil + Rapport + Hebdo + Mensuel
-  tableau: { titre: "Tableau de bord", module: "./tableau.js", fonction: "pageTableauDeBord" },   // tableau macro + point de marché
-  devises: { titre: "Devises", module: "./devises.js", fonction: "pageDevises" },
-  agenda: { titre: "Agenda", module: "./agenda.js", fonction: "pageAgenda" },
-  engrenages: { titre: "8 engrenages", module: "./engrenages.js", fonction: "pageEngrenages" },   // cockpit, dossiers, outils
-  journal: { titre: "Journal", module: "./journal.js", fonction: "pageJournal" },
-  // Menu « Plus »
-  scenarios: { titre: "Scénarios et simulateur", module: "./scenarios.js", fonction: "pageScenarios" },
-  sante: { titre: "Santé des données", module: "./sante.js", fonction: "pageSante" },
-  archives: { titre: "Archives", module: "./archives.js", fonction: "pageArchives" },
+  synthese: { titre: "Synthèse", module: "./ecran_synthese.js", fonction: "ecranSynthese" },
+  tableau: { titre: "Tableau de bord", module: "./ecran_tableau.js", fonction: "ecranTableau" },
+  devises: { titre: "Devises", module: "./ecran_devises.js", fonction: "ecranDevises" },
+  agenda: { titre: "Agenda", module: "./ecran_agenda.js", fonction: "ecranAgenda" },
+  engrenages: { titre: "8 engrenages", module: "./ecran_engrenages.js", fonction: "ecranEngrenages" },
+  journal: { titre: "Journal", module: "./ecran_journal.js", fonction: "ecranJournal" },
+  // Menu « Plus » : anciens modules, restylés par les tokens V7
+  scenarios: { titre: "Scénarios et simulateur", ancien: "./scenarios.js", fonction: "pageScenarios" },
+  sante: { titre: "Santé des données", ancien: "./sante.js", fonction: "pageSante" },
+  archives: { titre: "Archives", ancien: "./archives.js", fonction: "pageArchives" },
 };
+const PLUS = ["scenarios", "sante", "archives"];
 /* Anciennes adresses (#…) : redirigées vers le bon onglet. */
 const REDIRECTIONS = { rapport: "synthese", accueil: "synthese", hebdo: "synthese", mensuel: "synthese", apprendre: "synthese",
                        institutions: "engrenages", outils: "engrenages", "tableau-macro": "tableau" };
+const construits = new Map();   // onglet -> section (construite une seule fois)
 
-/* ------------------------------------------------------------------ thème */
-const CYCLE_THEME = ["auto", "clair", "noir"];
-function themeCourant() {
-  const t = document.documentElement.getAttribute("data-theme");
-  return t === "clair" || t === "noir" ? t : "auto";
-}
-function appliquerTheme(t) {
-  if (t === "auto") document.documentElement.removeAttribute("data-theme");
-  else document.documentElement.setAttribute("data-theme", t);
-  try { if (t === "auto") localStorage.removeItem("fxdesk-theme"); else localStorage.setItem("fxdesk-theme", t); }
-  catch (e) { /* stockage indisponible : le choix vaut pour cette visite */ }
-  document.getElementById("bouton-theme").textContent = `Thème : ${t}`;
+/* ------------------------------------------------------------------ en-tête : sessions de marché */
+function sessions() {
+  const now = new Date(), hr = now.getUTCHours() + now.getUTCMinutes() / 60;
+  const S = [["Asie", 0, 8], ["Londres", 7, 16], ["New York", 12, 21]];   // heures UTC fixes (comme la technique Python)
+  const bar = $("#sessBar"); bar.innerHTML = "";
+  for (const [n, a, b] of S) {
+    const on = hr >= a && hr < b, s = h("div", "sess" + (on ? " on" : ""), n);
+    s.style.left = (a / 24 * 100) + "%"; s.style.width = ((b - a) / 24 * 100) + "%";
+    s.style.background = on ? "var(--accent-soft)" : "transparent";
+    bar.appendChild(s);
+  }
+  const nw = h("div", "sess-now"); nw.style.left = (hr / 24 * 100) + "%"; nw.title = "maintenant"; bar.appendChild(nw);
+  const ouverts = S.filter(([, a, b]) => hr >= a && hr < b).map(s => s[0]);
+  $("#sessTxt").textContent = ouverts.length ? ouverts.join(" + ") + " ouvert" + (ouverts.length > 1 ? "s" : "") : "Marchés calmes";
+  $("#clock").textContent = "Paris " + now.toLocaleTimeString("fr-FR", { timeZone: "Europe/Paris", hour: "2-digit", minute: "2-digit" });
 }
 
-/* ---------------------------------------------------------------- routage */
-// Page par défaut : le Rapport du jour le matin (avant 13:00 à Paris, comme rapport.heure_bascule_accueil dans
-// config.yaml), le tableau de bord « Aujourd'hui » ensuite.
-function pageParDefaut() { return "synthese"; }
-async function afficher() {
-  let hash = (location.hash || `#${pageParDefaut()}`).slice(1);
+/* ------------------------------------------------------------------ thème et vue */
+function sombre() {
+  const t = document.documentElement.dataset.theme;
+  return t ? t === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+}
+function changerTheme() {
+  document.documentElement.dataset.theme = sombre() ? "light" : "dark";
+  store.set("fxdesk-theme", document.documentElement.dataset.theme);
+  rethemer();
+}
+function poserVue(v, memoriser = true) {
+  document.documentElement.dataset.vue = v;
+  const b = $("#vueBtn");
+  b.setAttribute("aria-pressed", String(v === "complete"));
+  b.lastElementChild.innerHTML = '<span class="lab-long">Vue </span>' + (v === "complete" ? "complète" : "essentielle");
+  if (memoriser) store.set(CLE_VUE, v);
+  requestAnimationFrame(deplacerSoulignement);
+}
+
+/* ------------------------------------------------------------------ onglets */
+function deplacerSoulignement() {
+  const b = document.querySelector('.tab[aria-selected="true"]'), ink = $("#ink");
+  if (!b || !b.offsetWidth) { ink.style.width = "0"; return; }
+  ink.style.left = b.offsetLeft + 14 + "px"; ink.style.width = Math.max(0, b.offsetWidth - 28) + "px";
+}
+function lireAdresse() {
+  let hash = (location.hash || "#synthese").slice(1);
   const [base, ...reste] = hash.split("/");
   if (REDIRECTIONS[base]) {   // ancienne adresse : remplacée sans nouvelle entrée d'historique
-    hash = [REDIRECTIONS[base], ...(base === "outils" ? ["outils"] : base === "hebdo" ? [] : reste)].join("/");
+    hash = [REDIRECTIONS[base], ...(base === "hebdo" ? [] : reste)].join("/");
     history.replaceState(null, "", `#${hash}`);
   }
-  // Lien direct vers un dossier d'engrenage : #g=N (équivaut à #engrenages/g=N)
-  const [id, parametre] = /^g=[1-8]$/.test(hash) ? ["engrenages", hash] : hash.split("/");
-  const onglet = ONGLETS[id] ? id : pageParDefaut();
-  document.querySelectorAll(".onglets a[data-onglet]").forEach(a => {
-    if (a.dataset.onglet === onglet) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
-  });
-  const plus = document.getElementById("menu-plus");
-  if (plus) { plus.open = false; plus.classList.toggle("actif", ["scenarios", "sante", "archives"].includes(onglet)); }
-  const conf = ONGLETS[onglet];
-  document.title = `${conf.titre} — FX Desk`;
-  const main = document.getElementById("contenu");
-  main.replaceChildren(el("p", "chargement", "Chargement…"));
-  let blocs;
+  if (/^g=[1-8]$/.test(hash)) hash = `engrenages/${hash}`;   // lien direct vers un dossier d'engrenage
+  const [id, parametre] = hash.split("/");
+  return [ONGLETS[id] ? id : "synthese", parametre];
+}
+async function construire(id, parametre) {
+  const conf = ONGLETS[id];
+  const s = h("section", "screen"); s.id = "s-" + id; s.setAttribute("role", "tabpanel"); s.setAttribute("aria-label", conf.titre);
+  s.innerHTML = squelette(3, 140);   // squelettes de chargement à la place des blocs vides
+  $("#contenu").appendChild(s);
+  construits.set(id, s);
   try {
-    if (conf.bientot) {
-      const c = el("section", "carte");
-      c.appendChild(el("h2", null, conf.titre));
-      c.appendChild(el("p", "indisponible", `Bientôt disponible. ${conf.bientot}`));
-      blocs = [c];
-    } else if (conf.rendu) {
-      blocs = await conf.rendu(parametre);
+    if (conf.ancien) {
+      const m = await import(conf.ancien);
+      const blocs = await m[conf.fonction](parametre);
+      s.replaceChildren(h("div", "sec-head", `<h2>${esc(conf.titre)}</h2><p>Menu Plus</p>`), h("div", "legacy"));
+      s.lastChild.append(...blocs);
+      appliquerGlossaire(s);
     } else {
-      const module = await import(conf.module);
-      blocs = await module[conf.fonction](parametre);
+      const m = await import(conf.module);
+      await m[conf.fonction](s, parametre);
     }
   } catch (e) {
     console.error(e);
-    blocs = [indisponible(conf.titre, `erreur d'affichage (${e.message})`)];
+    s.innerHTML = `<div class="card pad"><h2>${esc(conf.titre)}</h2><p class="muted">Affichage indisponible : ${esc(e.message)}</p></div>`;
   }
-  if ((location.hash || `#${pageParDefaut()}`).slice(1) !== hash) return;   // l'utilisateur a changé d'onglet entre-temps
-  main.replaceChildren(...blocs);
-  appliquerGlossaire(main);   // glossaire unique au survol (lot V6)
-  marquerNombres(main);       // seuls les nombres en chasse fixe (lot V6.1)
-  if (parametre === "outils") { const o = [...main.querySelectorAll("details.voir-detail")].find(d => /Outils/.test(d.textContent)); if (o) { o.open = true; o.scrollIntoView(); } }
-  else if (parametre && !parametre.startsWith("g=")) document.getElementById(`fiche-${parametre}`)?.scrollIntoView();
-  else window.scrollTo(0, 0);
+  return s;
+}
+async function afficher() {
+  const [id, parametre] = lireAdresse();
+  document.querySelectorAll(".tab[data-t]").forEach(a => {
+    const actif = a.dataset.t === id;
+    a.setAttribute("aria-selected", String(actif));
+    if (actif) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+  });
+  const plus = $("#menu-plus");
+  plus.open = false;
+  plus.querySelector("summary").setAttribute("aria-selected", String(PLUS.includes(id)));
+  document.title = `${ONGLETS[id].titre} — Trading baby`;
+  deplacerSoulignement();
+  let s = construits.get(id);
+  if (s && PLUS.includes(id) && parametre) { s.remove(); construits.delete(id); s = null; }   // archives/<date> : nouvelle page
+  for (const [k, x] of construits) x.classList.toggle("on", k === id);
+  if (!s) { s = await construire(id, parametre); }
+  for (const [k, x] of construits) x.classList.toggle("on", k === id);
+  requestAnimationFrame(() => recadrer(s));
+  if (id === "engrenages" && parametre) { const b = s.querySelector(`#engSel button[data-n="${parametre.slice(2)}"]`); if (b && b.getAttribute("aria-pressed") !== "true") b.click(); }
+  window.scrollTo(0, 0);
 }
 
 async function initialiser() {
   initialiserDetail();
   initialiserCertificats();
+  sessions(); setInterval(sessions, 60000);
+  poserVue(document.documentElement.dataset.vue === "essentielle" ? "essentielle" : "complete", false);
+  $("#vueBtn").onclick = () => poserVue(document.documentElement.dataset.vue === "complete" ? "essentielle" : "complete");
+  $("#themeBtn").onclick = changerTheme;
+  matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", () => { if (!document.documentElement.dataset.theme) rethemer(); });
   document.addEventListener("click", ev => {   // menu « Plus » : se ferme au clic à l'extérieur
-    const plus = document.getElementById("menu-plus");
-    if (plus?.open && !plus.contains(ev.target)) plus.open = false;
+    const plus = $("#menu-plus");
+    if (plus.open && !plus.contains(ev.target)) plus.open = false;
   });
-  appliquerTheme(themeCourant());
-  // Vue complète / Vue essentielle (lot V6.1) : mémorisée, vue complète par défaut, fonctionne sans stockage.
-  const boutonVue = document.getElementById("bouton-vue");
-  const majVue = () => { const c = vueComplete(); boutonVue.textContent = c ? "Vue complète" : "Vue essentielle"; boutonVue.setAttribute("aria-pressed", String(c)); };
-  document.documentElement.dataset.vue = vueCourante(); majVue();
-  boutonVue.addEventListener("click", () => { enregistrerVue(vueComplete() ? "essentielle" : "complete"); majVue(); afficher(); });
-  // Tableaux re-rendus (tri, recherche, filtres) : les nouvelles cellules numériques passent en chasse fixe.
-  let attente = null;
-  new MutationObserver(() => { clearTimeout(attente); attente = setTimeout(() => marquerNombres(document.getElementById("contenu")), 60); })
-    .observe(document.getElementById("contenu"), { childList: true, subtree: true });
-  document.getElementById("bouton-theme").addEventListener("click", () => {
-    appliquerTheme(CYCLE_THEME[(CYCLE_THEME.indexOf(themeCourant()) + 1) % CYCLE_THEME.length]);
+  const imprimer = $("#bouton-imprimer");
+  imprimer.addEventListener("click", async () => {
+    try { (await import("./impression.js")).ouvrirApercu(imprimer); } catch (e) { console.error(e); window.print(); }
   });
-  // Impression / PDF : aperçu avant impression (3 pages A4), module chargé au premier clic seulement
-  const boutonImprimer = document.getElementById("bouton-imprimer");
-  boutonImprimer.addEventListener("click", async () => {
-    try { (await import("./impression.js")).ouvrirApercu(boutonImprimer); }
-    catch (e) { console.error(e); window.print(); }
-  });
-  // #g=N mis à jour par le sélecteur via history.replaceState : pas d'événement hashchange, pas de rechargement
   window.addEventListener("hashchange", afficher);
-  const entete = document.querySelector(".entete");
-  const hauteur = () => document.documentElement.style.setProperty("--entete-h",
-    `${entete && getComputedStyle(entete).position === "sticky" ? entete.offsetHeight : 0}px`);
-  hauteur(); window.addEventListener("resize", hauteur);
+  window.addEventListener("resize", deplacerSoulignement);
+  if (document.fonts) document.fonts.ready.then(deplacerSoulignement);
   const site = await chargerJson("data/site.json");
   if (!enErreur(site)) {
     const r = site.regime || {};
-    const lien = document.getElementById("lien-notion");
-    if (r.notion_url) {
-      lien.href = r.notion_url;
-      lien.hidden = false;
-      lien.textContent = r.notion_page_du_jour ? "Ouvrir dans Notion" : "Ouvrir la base Notion";
-    }
+    const lien = $("#lien-notion");
+    if (r.notion_url) { lien.href = r.notion_url; lien.hidden = false; lien.textContent = r.notion_page_du_jour ? "Ouvrir dans Notion" : "Ouvrir la base Notion"; }
     const g = site.genere_le ? new Date(site.genere_le) : null;
     const quand = g && !isNaN(g) ? `${g.toLocaleDateString("fr-FR", { timeZone: "Europe/Paris" })} ${g.toLocaleTimeString("fr-FR", { timeZone: "Europe/Paris", hour: "2-digit", minute: "2-digit" })}` : "n/d";
-    document.getElementById("pied-meta").textContent = `version ${VERSION} · généré le ${quand} · rapport du ${r.date_rapport || "—"}`;
-  }
+    $("#pied-meta").textContent = `version ${VERSION} · généré le ${quand} · rapport du ${r.date_rapport || "—"}`;
+  } else $("#pied-meta").textContent = `version ${VERSION}`;
   afficher();
 }
 

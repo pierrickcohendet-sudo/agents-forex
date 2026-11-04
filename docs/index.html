@@ -1,69 +1,72 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-vue="complete">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>FX Desk</title>
+  <title>Trading baby</title>
   <meta name="description" content="Aide à la décision macro et technique sur 9 devises (yuan inclus) — aucun signal d'achat ou de vente.">
   <meta name="color-scheme" content="light dark">
   <script>
-    /* Thème appliqué AVANT le rendu (pas de flash) ; repli silencieux si localStorage est indisponible. */
+    /* Thème et vue appliqués AVANT le rendu (pas de flash) ; repli silencieux si localStorage est indisponible.
+       ?theme=light|dark et ?vue=complete|essentielle : forçage ponctuel (contrôles), non mémorisé. */
     (function () {
-      var q = new URLSearchParams(location.search);   // ?theme= et ?vue= : forçage ponctuel (contrôles), non mémorisé
-      if (q.get("theme") === "clair" || q.get("theme") === "noir") document.documentElement.setAttribute("data-theme", q.get("theme"));
-      try {
-        var t = q.get("theme") || localStorage.getItem("fxdesk-theme");
-        if (t === "clair" || t === "noir") document.documentElement.setAttribute("data-theme", t);
-        document.documentElement.setAttribute("data-vue", localStorage.getItem("fxdesk-vue") === "essentielle" ? "essentielle" : "complete");
-      } catch (e) { document.documentElement.setAttribute("data-vue", "complete"); /* stockage indisponible */ }
+      var r = document.documentElement, q = new URLSearchParams(location.search), ANCIEN = { clair: "light", noir: "dark" };
+      var t = q.get("theme"), v = q.get("vue");
+      try { t = t || localStorage.getItem("fxdesk-theme"); v = v || localStorage.getItem("fxdesk-vue"); } catch (e) { /* stockage indisponible */ }
+      t = ANCIEN[t] || t;
+      if (t === "light" || t === "dark") r.setAttribute("data-theme", t);
+      r.setAttribute("data-vue", v === "essentielle" ? "essentielle" : "complete");
     })();
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=JetBrains+Mono:wght@500;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
   <!-- version-site:debut -->
-  <meta name="fxdesk-version" content="5ba3ee2">
-  <script type="importmap">{"imports": {"./site/accueil.js": "./site/accueil.js?v=5ba3ee2", "./site/agenda.js": "./site/agenda.js?v=5ba3ee2", "./site/app.js": "./site/app.js?v=5ba3ee2", "./site/archives.js": "./site/archives.js?v=5ba3ee2", "./site/briefing.js": "./site/briefing.js?v=5ba3ee2", "./site/cockpit.js": "./site/cockpit.js?v=5ba3ee2", "./site/commun.js": "./site/commun.js?v=5ba3ee2", "./site/consequences_synthese.js": "./site/consequences_synthese.js?v=5ba3ee2", "./site/devises.js": "./site/devises.js?v=5ba3ee2", "./site/dossier_detail.js": "./site/dossier_detail.js?v=5ba3ee2", "./site/dossiers.js": "./site/dossiers.js?v=5ba3ee2", "./site/engrenages.js": "./site/engrenages.js?v=5ba3ee2", "./site/hebdo.js": "./site/hebdo.js?v=5ba3ee2", "./site/impression.js": "./site/impression.js?v=5ba3ee2", "./site/journal.js": "./site/journal.js?v=5ba3ee2", "./site/journal_logique.js": "./site/journal_logique.js?v=5ba3ee2", "./site/outils.js": "./site/outils.js?v=5ba3ee2", "./site/rapport.js": "./site/rapport.js?v=5ba3ee2", "./site/sante.js": "./site/sante.js?v=5ba3ee2", "./site/scenarios.js": "./site/scenarios.js?v=5ba3ee2", "./site/synthese.js": "./site/synthese.js?v=5ba3ee2", "./site/synthese_longue.js": "./site/synthese_longue.js?v=5ba3ee2", "./site/synthese_suite.js": "./site/synthese_suite.js?v=5ba3ee2", "./site/tableau.js": "./site/tableau.js?v=5ba3ee2", "./site/vue_ensemble.js": "./site/vue_ensemble.js?v=5ba3ee2"}}</script>
-  <link rel="stylesheet" href="site/cabinet.css?v=5ba3ee2">
+  <meta name="fxdesk-version" content="acaf224">
+  <script type="importmap">{"imports": {"./site/accueil.js": "./site/accueil.js?v=acaf224", "./site/agenda.js": "./site/agenda.js?v=acaf224", "./site/app.js": "./site/app.js?v=acaf224", "./site/archives.js": "./site/archives.js?v=acaf224", "./site/briefing.js": "./site/briefing.js?v=acaf224", "./site/cockpit.js": "./site/cockpit.js?v=acaf224", "./site/commun.js": "./site/commun.js?v=acaf224", "./site/consequences_synthese.js": "./site/consequences_synthese.js?v=acaf224", "./site/devises.js": "./site/devises.js?v=acaf224", "./site/dossier_detail.js": "./site/dossier_detail.js?v=acaf224", "./site/dossiers.js": "./site/dossiers.js?v=acaf224", "./site/ecran_agenda.js": "./site/ecran_agenda.js?v=acaf224", "./site/ecran_devises.js": "./site/ecran_devises.js?v=acaf224", "./site/ecran_engrenages.js": "./site/ecran_engrenages.js?v=acaf224", "./site/ecran_journal.js": "./site/ecran_journal.js?v=acaf224", "./site/ecran_synthese.js": "./site/ecran_synthese.js?v=acaf224", "./site/ecran_tableau.js": "./site/ecran_tableau.js?v=acaf224", "./site/engrenages.js": "./site/engrenages.js?v=acaf224", "./site/hebdo.js": "./site/hebdo.js?v=acaf224", "./site/impression.js": "./site/impression.js?v=acaf224", "./site/journal.js": "./site/journal.js?v=acaf224", "./site/journal_logique.js": "./site/journal_logique.js?v=acaf224", "./site/outils.js": "./site/outils.js?v=acaf224", "./site/rapport.js": "./site/rapport.js?v=acaf224", "./site/sante.js": "./site/sante.js?v=acaf224", "./site/scenarios.js": "./site/scenarios.js?v=acaf224", "./site/synthese.js": "./site/synthese.js?v=acaf224", "./site/synthese_longue.js": "./site/synthese_longue.js?v=acaf224", "./site/synthese_suite.js": "./site/synthese_suite.js?v=acaf224", "./site/tableau.js": "./site/tableau.js?v=acaf224", "./site/v7_commun.js": "./site/v7_commun.js?v=acaf224", "./site/vue_ensemble.js": "./site/vue_ensemble.js?v=acaf224"}}</script>
+  <link rel="stylesheet" href="site/cabinet.css?v=acaf224">
+  <link rel="stylesheet" href="site/tokens.css?v=acaf224">
+  <link rel="stylesheet" href="site/v7.css?v=acaf224">
   <!-- version-site:fin -->
 </head>
 <body>
-  <header class="entete">
-    <div class="entete-ligne">
-      <div class="marque">
-        <span class="marque-titre">FX Desk</span>
-        <span class="marque-sous-titre">Macro et technique · 9 devises (yuan inclus)</span>
-      </div>
-      <div class="entete-actions">
-        <a id="lien-notion" class="bouton-lien" href="#" target="_blank" rel="noopener" hidden>Ouvrir dans Notion</a>
-        <button id="bouton-imprimer" class="bouton" type="button" aria-label="Imprimer ou enregistrer en PDF : aperçu avant impression">Imprimer / PDF</button>
-        <button id="bouton-vue" class="bouton" type="button" aria-pressed="true" aria-label="Basculer entre la vue complète et la vue essentielle">Vue complète</button>
-        <button id="bouton-theme" class="bouton" type="button" aria-label="Changer de thème">Thème : auto</button>
-      </div>
-    </div>
-    <nav class="onglets" aria-label="Sections">
-      <a href="#synthese" data-onglet="synthese">Synthèse</a>
-      <a href="#tableau" data-onglet="tableau">Tableau de bord</a>
-      <a href="#devises" data-onglet="devises">Devises</a>
-      <a href="#agenda" data-onglet="agenda">Agenda</a>
-      <a href="#engrenages" data-onglet="engrenages">8 engrenages</a>
-      <a href="#journal" data-onglet="journal">Journal</a>
-      <a href="#scenarios" data-onglet="scenarios" class="onglet-complet">Scénarios</a>
-      <details class="menu-plus" id="menu-plus">
-        <summary>Plus</summary>
-        <div class="menu-plus-liste">
-          <a href="#scenarios" data-onglet="scenarios">Scénarios et simulateur</a>
-          <a href="#sante" data-onglet="sante">Santé des données</a>
-          <a href="#archives" data-onglet="archives">Archives</a>
-          <a href="ancien/">Ancien dashboard</a>
+  <header class="top">
+    <div class="wrap">
+      <div class="top-row">
+        <div class="brand"><span>Desk FX · aide à la décision</span><b>Trading baby</b></div>
+        <div class="sessions" aria-label="Sessions de marché">
+          <div class="sess-bar" id="sessBar"></div>
+          <div class="sess-cap"><span id="sessTxt"></span><span id="clock"></span></div>
         </div>
-      </details>
-    </nav>
+        <div class="ctrls">
+          <button class="switch" id="vueBtn" type="button" aria-pressed="true" title="Vue complète ou essentielle"><i></i><span><span class="lab-long">Vue </span>complète</span></button>
+          <button class="iconbtn" id="themeBtn" type="button" aria-label="Changer de thème (clair ou sombre)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg></button>
+        </div>
+      </div>
+      <nav class="tabs" id="tabs" aria-label="Sections">
+        <a class="tab" href="#synthese" data-t="synthese">Synthèse</a>
+        <a class="tab" href="#tableau" data-t="tableau">Tableau de bord</a>
+        <a class="tab" href="#devises" data-t="devises">Devises</a>
+        <a class="tab" href="#agenda" data-t="agenda">Agenda</a>
+        <a class="tab" href="#engrenages" data-t="engrenages">8 engrenages</a>
+        <a class="tab" href="#journal" data-t="journal">Journal</a>
+        <details class="plus" id="menu-plus">
+          <summary class="tab">Plus</summary>
+          <div class="plus-liste" role="menu">
+            <a href="#scenarios" data-t="scenarios" role="menuitem">Scénarios et simulateur</a>
+            <a href="#sante" data-t="sante" role="menuitem">Santé des données</a>
+            <a href="#archives" data-t="archives" role="menuitem">Archives</a>
+            <button type="button" id="bouton-imprimer" role="menuitem">Imprimer / PDF</button>
+            <a id="lien-notion" href="#" target="_blank" rel="noopener" role="menuitem" hidden>Ouvrir dans Notion</a>
+            <a href="ancien/" role="menuitem">Ancien dashboard</a>
+          </div>
+        </details>
+        <span class="tab-ink" id="ink"></span>
+      </nav>
+    </div>
   </header>
 
-  <main id="contenu" tabindex="-1">
-    <p class="chargement">Chargement…</p>
-  </main>
+  <main class="wrap" id="contenu" tabindex="-1"></main>
 
   <dialog id="detail" class="detail" aria-labelledby="detail-titre">
     <div class="detail-entete">
@@ -73,12 +76,8 @@
     <div id="detail-corps"></div>
   </dialog>
 
-  <footer class="pied">
-    <p>Aide à la décision uniquement : aucun signal d'achat ou de vente, pas un conseil en investissement.
-       Chiffres sourcés et datés ; une donnée absente est affichée « n/d » avec sa raison.</p>
-    <p><span id="pied-meta"></span></p>
-  </footer>
+  <footer class="wrap pied-v7"><span id="pied-meta"></span><span>Aide à la décision. Aucun ordre d'achat ou de vente. Chiffres sourcés et datés ; une donnée absente est affichée « n/d » avec sa raison au survol.</span></footer>
 
-  <script type="module" src="site/app.js?v=5ba3ee2"></script>
+  <script type="module" src="site/app.js?v=acaf224"></script>
 </body>
 </html>

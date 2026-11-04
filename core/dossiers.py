@@ -119,6 +119,16 @@ def _registre_valeur(case: dict) -> tuple[float | None, str | None]:
     return rm.vers_nombre(str(actuel.get("valeur") or "").replace(" ", "")), actuel.get("date_pub")
 
 
+def fourchette_fed() -> dict | None:
+    """« 3,75–4,00 % » (FRED DFEDTARL / DFEDTARU), même source que l'Agenda et le tableau macro."""
+    from core.tableau_macro import macro_cache
+    series = (macro_cache() or {}).get("series") or {}
+    bas, haut = (series.get("fed_cible_basse") or {}).get("valeur"), (series.get("fed_cible_haute") or {}).get("valeur")
+    if bas is None or haut is None:
+        return None
+    return {"texte": f"{bas:.2f}–{haut:.2f} %".replace(".", ","), "source": "FRED (DFEDTARL / DFEDTARU)"}
+
+
 def engrenage_2(historiques: dict, registre: dict, config: dict) -> dict:
     cases = registre.get("cases") or {}
     sources_taux = ((config.get("tableau_macro") or {}).get("taux_obligataires") or {}).get("sources") or {}
@@ -147,6 +157,13 @@ def engrenage_2(historiques: dict, registre: dict, config: dict) -> dict:
             c["taux_directeur"] = stats(serie_eff, "%", source_eff) if serie_eff else \
                 absent("série officielle du taux effectif indisponible aujourd'hui", source_eff)
             c["taux_directeur"]["note"] = note if actuel.get("valeur") else None
+            if devise == "USD":   # lot V7 (E1) : taux directeur affiché = fourchette cible, taux effectif en secondaire
+                fourchette = fourchette_fed()
+                if fourchette and c["taux_directeur"].get("valeur") is not None:
+                    c["taux_directeur"].update({
+                        "texte_reference": fourchette["texte"], "source_reference": fourchette["source"],
+                        "secondaire": f"taux effectif {str(c['taux_directeur']['valeur']).replace('.', ',')} %",
+                        "note": "taux directeur : fourchette cible de la Fed ; valeur, percentile et écarts calculés sur le taux effectif (DFF)"})
             directeur, d_dir = (c["taux_directeur"].get("valeur"), c["taux_directeur"].get("date"))
         else:
             directeur, d_dir = _registre_valeur(case)

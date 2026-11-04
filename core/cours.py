@@ -49,6 +49,8 @@ def ecrire(racine: str | Path, h: h5m.Historique, technique: dict | None, config
         donnees = calculer(h, technique, registre=registre)
         chemin = Path(racine) / config.get("publication_web", {}).get("dossier_docs", "docs") / "data" / "cours.json"
         chemin.write_text(json.dumps(donnees, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+        from core import force_devises   # lot V7 : force 1/5/20 séances et écart à la MM200 (bloc isolé)
+        force_devises.ecrire(racine, config, donnees)
         return donnees
     except Exception as exc:  # noqa: BLE001
         log.error("cours.json non écrit : %s", exc)
