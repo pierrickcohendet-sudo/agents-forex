@@ -1,6 +1,6 @@
 {
  "version_schema": 1,
- "genere_le": "2026-11-04T13:17:01+00:00",
+ "genere_le": "2026-11-04T14:17:11+00:00",
  "debut_historique": "2021-09-03",
  "erreurs_collecte": [],
  "engrenages": {
@@ -29,8 +29,8 @@
     },
     {
      "libelle": "État du dollar (profil des devises)",
-     "texte": "Sans direction",
-     "detail": "Signaux partagés : surprises macro 30 j +0,8 ; force −1,0 % sur 20 séances. Total 0 : il faut 2 signaux concordants.",
+     "texte": "n/d",
+     "detail": "profil calculé au prochain run",
      "source": "calcul Python (profil des devises)"
     }
    ],
@@ -1779,7 +1779,10 @@
        "percentile_5a": 42,
        "n_5a": 262,
        "raison_percentile": null,
-       "note": "fourchette cible : borne haute 3.88% (ForexFactory)"
+       "note": "taux directeur : fourchette cible de la Fed ; valeur, percentile et écarts calculés sur le taux effectif (DFF)",
+       "texte_reference": "3,75–4,00 %",
+       "source_reference": "FRED (DFEDTARL / DFEDTARU)",
+       "secondaire": "taux effectif 3,88 %"
       },
       "taux_2a": {
        "valeur": 4.59,
@@ -6226,7 +6229,7 @@
       "periode": "30 jours",
       "raison": null
      },
-     "lecture": "fourchette cible : borne haute 3.88% (ForexFactory)"
+     "lecture": "taux directeur : fourchette cible de la Fed ; valeur, percentile et écarts calculés sur le taux effectif (DFF)"
     },
     {
      "id": "us2a",
@@ -12260,7 +12263,7 @@
      "raison": null
     }
    ],
-   "actualites_maj": "2026-11-04T13:17+00:00",
+   "actualites_maj": "2026-11-04T14:17+00:00",
    "actualites_nb_titres_lus": 31,
    "notes": [
     "Dette et solde publics : FMI (annuel, avec 1 à 3 ans de retard) ; EUR = Allemagne. Pas de série gratuite pour CHF et NZD.",
@@ -41509,14 +41512,14 @@
     "titre": "Thème macro",
     "chiffre": {
      "libelle": "État du dollar",
-     "valeur": 1,
-     "texte": "Sans direction",
+     "valeur": null,
+     "texte": null,
      "unite": "",
      "date": "2026-11-04",
      "source": "calcul Python (profil des devises)",
-     "raison": null
+     "raison": "profil des devises pas encore calculé"
     },
-    "ligne": "Sans direction : USD, EUR, JPY, CAD, AUD, CNY · Soutenue : GBP, CHF · Sous pression : NZD.",
+    "ligne": "Profil des devises indisponible.",
     "courbe": {
      "points": [],
      "periode": "jour",
@@ -41983,7 +41986,7 @@
      "source": "calcul local (Twelve Data)",
      "raison": null
     },
-    "ligne": "RSI USD 42,3, −0,14 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 2 autres.",
+    "ligne": "RSI USD 44,7, −0,14 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 2 autres.",
     "courbe": {
      "points": [
       [
@@ -42299,14 +42302,14 @@
      "titre": "Thème macro",
      "chiffre": {
       "libelle": "État du dollar",
-      "valeur": 1,
-      "texte": "Sans direction",
+      "valeur": null,
+      "texte": null,
       "unite": "",
       "date": "2026-11-04",
       "source": "calcul Python (profil des devises)",
-      "raison": null
+      "raison": "profil des devises pas encore calculé"
      },
-     "ligne": "Sans direction : USD, EUR, JPY, CAD, AUD, CNY · Soutenue : GBP, CHF · Sous pression : NZD.",
+     "ligne": "Profil des devises indisponible.",
      "verdict": {
       "libelle": "Dollar haussier · Risque neutre",
       "classe": "up",
@@ -42457,7 +42460,7 @@
       "source": "calcul local (Twelve Data)",
       "raison": null
      },
-     "ligne": "RSI USD 42,3, −0,14 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 2 autres.",
+     "ligne": "RSI USD 44,7, −0,14 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 2 autres.",
      "verdict": {
       "libelle": "Dollar neutre · Risk off",
       "classe": "dn",
@@ -44744,7 +44747,7 @@
      "classe": "dn"
     },
     "neutralise": null,
-    "note": "seuils ±0,30 %. RSI USD 42,3, −0,14 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 2 autres.",
+    "note": "seuils ±0,30 %. RSI USD 44,7, −0,14 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 2 autres.",
     "indicateur": null
    },
    {
@@ -51920,7 +51923,7 @@
       "classe": "dn"
      },
      "neutralise": null,
-     "note": "seuils ±0,30 %. RSI USD 42,3, −0,14 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 2 autres.",
+     "note": "seuils ±0,30 %. RSI USD 44,7, −0,14 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 2 autres.",
      "indicateur": null
     },
     "chiffres": [
@@ -52824,7 +52827,7 @@
     "lecture": {
      "texte": "L'indice USD synthétique recule de 0,14 % sur 5 jours avec un RSI à 44,7, tandis que le CHF progresse de 1,01 %. Les positions nettes des spéculateurs montrent des extrêmes sur le JPY et le CHF, signalant un risque de retournement.",
      "source": "modèle",
-     "phrase_python": "Dollar neutre · Risk off. seuils ±0,30 %. RSI USD 42,3, −0,14 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 2 autres.",
+     "phrase_python": "Dollar neutre · Risk off. seuils ±0,30 %. RSI USD 44,7, −0,14 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 2 autres.",
      "texte_indisponible": null,
      "redige_par": "Flash-Lite 3.5",
      "redige_le": "2026-11-04T11:17:01+00:00",

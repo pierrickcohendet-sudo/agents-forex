@@ -1,8 +1,8 @@
 {
  "version_schema": 1,
- "genere_le": "2026-11-04T11:19:18+00:00",
+ "genere_le": "2026-11-04T14:18:21+00:00",
  "sources": {
-  "rapport": "2026-11-04T11:18:19+00:00",
+  "rapport": "2026-11-04T14:17:10+00:00",
   "tableau_macro": "2026-11-04T10:16:07+00:00"
  },
  "regime": {
@@ -22,9 +22,9 @@
   ],
   "explication": "Écart entre le score de confluence moyen des devises « risque » et celui des devises « refuge » (calcul Python) : au-delà du seuil, Risk On ; en deçà de son opposé, Risk Off ; sinon Neutre.",
   "driver": "Régime de risque global : aversion au risque (calcul Python). Le détail par devise est dans le profil des devises (état, moteur du moment, banque centrale).",
-  "relecture": "a_revoir",
+  "relecture": "non_evalue",
   "date_rapport": "2026-11-04",
-  "maj": "2026-11-04T11:18:19+00:00",
+  "maj": "2026-11-04T14:17:10+00:00",
   "type_rapport": "quotidien",
   "nb_devises": 9,
   "nb_devises_disponibles": 9,
@@ -79,10 +79,10 @@
    "drapeau": "🇺🇸",
    "cellules": {
     "taux_directeur": {
-     "texte": "3,88 % [borne haute de la fourchette]",
-     "valeur_num": 3.88,
-     "date": "2026-11-02",
-     "source": "FRED (DFF, taux effectif)",
+     "texte": "3,75–4,00 % [fourchette cible] · taux effectif 3,88 %",
+     "valeur_num": 3.75,
+     "date": "2026-11-03",
+     "source": "FRED (DFEDTARL / DFEDTARU)",
      "consensus": null,
      "surprise": null,
      "precedent": "4,00 % [borne haute de la fourchette]",
@@ -172,10 +172,10 @@
    "drapeau": "🇪🇺",
    "cellules": {
     "taux_directeur": {
-     "texte": "2,65 % [taux de refinancement]",
-     "valeur_num": 2.65,
-     "date": "2026-10-29",
-     "source": "ForexFactory",
+     "texte": "2,50 % [dépôt] · refinancement 2,65 % (registre macro)",
+     "valeur_num": 2.5,
+     "date": "2026-11-03",
+     "source": "FRED (ECBDFR, taux de la facilité de dépôt de la BCE)",
      "consensus": "2,65 %",
      "surprise": "=",
      "precedent": "2,65 % [taux de refinancement]",
@@ -971,10 +971,10 @@
     "devise": "USD",
     "cellules": {
      "taux_directeur": {
-      "texte": "3,88 % [borne haute de la fourchette]",
-      "valeur_num": 3.88,
-      "date": "2026-11-02",
-      "source": "FRED (DFF, taux effectif)",
+      "texte": "3,75–4,00 % [fourchette cible] · taux effectif 3,88 %",
+      "valeur_num": 3.75,
+      "date": "2026-11-03",
+      "source": "FRED (DFEDTARL / DFEDTARU)",
       "consensus": null,
       "surprise": null,
       "precedent": "4,00 % [borne haute de la fourchette]",
@@ -1106,17 +1106,18 @@
      "precedent": 0.06,
      "tendance": "hausse",
      "n": 6,
-     "texte": "+0,8 ▲ (n=6)"
+     "texte": "+0,8 ▲ (n=6)",
+     "rang": 1
     }
    },
    {
     "devise": "EUR",
     "cellules": {
      "taux_directeur": {
-      "texte": "2,65 % [taux de refinancement]",
-      "valeur_num": 2.65,
-      "date": "2026-10-29",
-      "source": "ForexFactory",
+      "texte": "2,50 % [dépôt] · refinancement 2,65 % (registre macro)",
+      "valeur_num": 2.5,
+      "date": "2026-11-03",
+      "source": "FRED (ECBDFR, taux de la facilité de dépôt de la BCE)",
       "consensus": "2,65 %",
       "surprise": "=",
       "precedent": "2,65 % [taux de refinancement]",
@@ -1248,7 +1249,8 @@
      "precedent": 0.17,
      "tendance": "baisse",
      "n": 13,
-     "texte": "-0,2 ▼ (n=13)"
+     "texte": "-0,2 ▼ (n=13)",
+     "rang": 7
     }
    },
    {
@@ -1390,7 +1392,8 @@
      "precedent": 0.36,
      "tendance": "hausse",
      "n": 10,
-     "texte": "+0,6 ▲ (n=10)"
+     "texte": "+0,6 ▲ (n=10)",
+     "rang": 2
     }
    },
    {
@@ -1532,7 +1535,8 @@
      "precedent": -0.02,
      "tendance": "stable",
      "n": 7,
-     "texte": "-0,1 = (n=7)"
+     "texte": "-0,1 = (n=7)",
+     "rang": 6
     }
    },
    {
@@ -1674,7 +1678,8 @@
      "precedent": 0.27,
      "tendance": "hausse",
      "n": 4,
-     "texte": "+0,5 ▲ (n=4)"
+     "texte": "+0,5 ▲ (n=4)",
+     "rang": 3
     }
    },
    {
@@ -1816,7 +1821,8 @@
      "precedent": 0.06,
      "tendance": "baisse",
      "n": 9,
-     "texte": "-0,7 ▼ (n=9)"
+     "texte": "-0,7 ▼ (n=9)",
+     "rang": 8
     }
    },
    {
@@ -1958,7 +1964,8 @@
      "precedent": -0.52,
      "tendance": "hausse",
      "n": 6,
-     "texte": "+0,0 ▲ (n=6)"
+     "texte": "+0,0 ▲ (n=6)",
+     "rang": 5
     }
    },
    {
@@ -2100,7 +2107,8 @@
      "precedent": 0.27,
      "tendance": "baisse",
      "n": 5,
-     "texte": "-1,6 ▼ (n=5)"
+     "texte": "-1,6 ▼ (n=5)",
+     "rang": 9
     }
    },
    {
@@ -2242,7 +2250,8 @@
      "precedent": -0.05,
      "tendance": "hausse",
      "n": 6,
-     "texte": "+0,5 ▲ (n=6)"
+     "texte": "+0,5 ▲ (n=6)",
+     "rang": 4
     }
    }
   ],
