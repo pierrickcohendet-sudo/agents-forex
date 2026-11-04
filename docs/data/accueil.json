@@ -1,33 +1,33 @@
 {
- "genere_le": "2026-11-03T22:18:08+00:00",
- "date_rapport": "2026-11-03",
+ "genere_le": "2026-11-04T08:31:47+00:00",
+ "date_rapport": "2026-11-04",
  "theme": {
   "titre": "Signaux mixtes",
   "titre_impose": true,
   "direction": {
-   "libelle": "Dollar neutre · Risque neutre",
-   "classe": "nd"
+   "libelle": "Dollar haussier · Risque neutre",
+   "classe": "up"
   },
-  "conviction": "faible",
-  "alignes": 0,
-  "evaluables": 0,
+  "conviction": "moyen",
+  "alignes": 2,
+  "evaluables": 7,
   "compte_matrice": "18 actives, 5 n/d, 19 sans règle",
-  "explication": "Engrenages orientés : 2. Monétaire (Dollar baissier) ; 3. Données (Dollar haussier) ; 6. Géopolitique (Dollar neutre · Risk on) ; 7. Flux (Dollar neutre · Risk off). Les autres restent dans leur couloir neutre.",
-  "texte": "La divergence entre les données économiques et les anticipations de taux maintient un biais neutre.",
-  "texte_source": "modèle"
+  "explication": "Engrenages orientés : 3. Données (Dollar haussier) ; 6. Géopolitique (Dollar haussier · Risk off) ; 7. Flux (Dollar neutre · Risk off). Les autres restent dans leur couloir neutre.",
+  "texte": "Les engrenages ne s'accordent pas : 2 sur 7 évaluables vont dans le sens du thème calculé (Dollar haussier · Risque neutre), sous le seuil de 3 pour parler d'un thème établi.",
+  "texte_source": "calcul Python"
  },
  "au_bord": [
   {
-   "id": "ecart_mm200-CNY",
-   "engrenage": 7,
-   "devise": "CNY",
-   "libelle": "écart du cours à sa moyenne mobile 200 jours (tendance) — CNY",
-   "texte_valeur": "+1,81 %",
-   "distance_texte": "0,19 %",
-   "phrase": "écart du cours à sa moyenne mobile 200 jours (tendance) — CNY à +1,81 % : 0,19 % du seuil haut (+2,00 %), soit 4,7 % du couloir neutre",
+   "id": "thermometre-2",
+   "engrenage": 2,
+   "devise": null,
+   "libelle": "2 ans US sur 7 j",
+   "texte_valeur": "−9 pb",
+   "distance_texte": "1 pb",
+   "phrase": "2 ans US sur 7 j à −9 pb : 1 pb du seuil bas (−10 pb), soit 5,0 % du couloir neutre",
    "etat": "proche",
-   "date": "2026-11-03",
-   "source": "calcul Python (écart à la MM200) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période"
+   "date": "2026-11-02",
+   "source": "FRED (DGS2)"
   },
   {
    "id": "surprise_30j-CHF",
@@ -38,7 +38,7 @@
    "distance_texte": "0,05",
    "phrase": "indice de surprise macro 30 jours — CHF à +0,45 : 0,05 du seuil haut (+0,50), soit 5,0 % du couloir neutre",
    "etat": "proche",
-   "date": "2026-11-03",
+   "date": "2026-11-04",
    "source": "calcul Python (registre macro, 30 j)"
   },
   {
@@ -50,42 +50,12 @@
    "distance_texte": "0,05",
    "phrase": "indice de surprise macro 30 jours — CNY à +0,45 : 0,05 du seuil haut (+0,50), soit 5,0 % du couloir neutre",
    "etat": "proche",
-   "date": "2026-11-03",
+   "date": "2026-11-04",
    "source": "calcul Python (registre macro, 30 j)"
   }
  ],
- "franchis": 19,
+ "franchis": 20,
  "evenements": [
-  {
-   "iso_utc": "2026-11-03T21:45+00:00",
-   "date_paris": "2026-11-03",
-   "heure_paris": "22:45",
-   "devise": "NZD",
-   "evenement": "Variation de l'emploi T/T",
-   "type": "Chiffre",
-   "impact": "fort",
-   "points": "●●●",
-   "precedent": "0.5%",
-   "consensus": "0.4%",
-   "publie": "-0.1%",
-   "badge": null,
-   "engrenage": 3
-  },
-  {
-   "iso_utc": "2026-11-03T21:45+00:00",
-   "date_paris": "2026-11-03",
-   "heure_paris": "22:45",
-   "devise": "NZD",
-   "evenement": "Taux de chômage",
-   "type": "Chiffre",
-   "impact": "fort",
-   "points": "●●●",
-   "precedent": "5.6%",
-   "consensus": "5.5%",
-   "publie": "5.7%",
-   "badge": null,
-   "engrenage": 2
-  },
   {
    "iso_utc": "2026-11-04T10:00+00:00",
    "date_paris": "2026-11-04",
@@ -352,6 +322,21 @@
    "publie": null,
    "badge": null,
    "engrenage": null
+  },
+  {
+   "iso_utc": "2026-11-06T00:00+00:00",
+   "date_paris": "2026-11-06",
+   "heure_paris": "01:00",
+   "devise": "USD",
+   "evenement": "Discours de Logan, membre du FOMC",
+   "type": "Discours",
+   "impact": "faible",
+   "points": "●○○",
+   "precedent": null,
+   "consensus": null,
+   "publie": null,
+   "badge": null,
+   "engrenage": 2
   }
  ],
  "raison_evenements": null,
@@ -441,16 +426,10 @@
     -33.87,
     151.21
    ],
-   "cette_semaine": true,
-   "prochaine": "2026-11-03",
+   "cette_semaine": false,
+   "prochaine": "2026-12-08",
    "taux_texte": "4.85%",
-   "badge": {
-    "sens": "hausse",
-    "texte": "hausse attendue",
-    "pb": 25,
-    "reference": "4.60%",
-    "source_reference": "précédent publié"
-   }
+   "badge": null
   },
   {
    "devise": "NZD",
@@ -480,14 +459,8 @@
  "fraicheur": {
   "sources": 16,
   "vertes": 16,
-  "alertes": [
-   {
-    "id": "USD_prime_terme",
-    "libelle": "Prime de terme 10 ans US",
-    "texte": "7 jours ouvrés (normal : 3 au plus) — plus de deux fois la normale"
-   }
-  ],
-  "calcule_le": "2026-11-03T22:18:08+00:00"
+  "alertes": [],
+  "calcule_le": "2026-11-04T08:31:47+00:00"
  },
  "note": "Tableau de bord du jour : faits datés et lectures historiques, jamais un ordre d'achat ou de vente."
 }
