@@ -1,6 +1,6 @@
 {
  "version_schema": 1,
- "genere_le": "2026-11-04T14:17:11+00:00",
+ "genere_le": "2026-11-04T16:16:59+00:00",
  "debut_historique": "2021-09-03",
  "erreurs_collecte": [],
  "engrenages": {
@@ -23,14 +23,14 @@
     },
     {
      "libelle": "Indice de surprise global (moyenne 9 devises)",
-     "texte": "-0,05",
+     "texte": "-0,06",
      "detail": "9 devises avec un indice",
      "source": "calcul Python (registre macro, 30 j)"
     },
     {
      "libelle": "État du dollar (profil des devises)",
-     "texte": "n/d",
-     "detail": "profil calculé au prochain run",
+     "texte": "Sans direction",
+     "detail": "Signaux partagés : surprises macro 30 j +0,8 ; force −1,0 % sur 20 séances. Total 0 : il faut 2 signaux concordants.",
      "source": "calcul Python (profil des devises)"
     }
    ],
@@ -1421,8 +1421,8 @@
     {
      "id": "surprise_globale",
      "libelle": "Surprise globale (moyenne 9 devises)",
-     "valeur": -0.05,
-     "texte": "−0,05",
+     "valeur": -0.06,
+     "texte": "−0,06",
      "unite": "écarts",
      "date": "2026-11-04",
      "frequence": null,
@@ -1514,7 +1514,7 @@
        ],
        [
         "2026-11-04",
-        -0.05
+        -0.06
        ]
       ],
       "periode": "depuis le début de l'archive quotidienne",
@@ -1548,21 +1548,21 @@
     {
      "id": "vix",
      "libelle": "VIX",
-     "valeur": 21.15,
-     "texte": "21,15",
+     "valeur": 20.83,
+     "texte": "20,83",
      "unite": "niveau",
-     "date": "2026-11-02",
+     "date": "2026-11-03",
      "frequence": "quotidien",
-     "age_jours": 2,
+     "age_jours": 1,
      "source": "FRED (VIXCLS)",
      "raison": null,
      "variation": {
-      "valeur": 36.28,
+      "valeur": 38.77,
       "unite": "%",
       "periode": "4 semaines",
-      "texte": "+36,28 % sur 4 semaines"
+      "texte": "+38,77 % sur 4 semaines"
      },
-     "percentile_5a": 73,
+     "percentile_5a": 71,
      "n_5a": 262,
      "percentile_autre": null,
      "raison_percentile": null,
@@ -1651,6 +1651,10 @@
        [
         "2026-11-02",
         21.15
+       ],
+       [
+        "2026-11-03",
+        20.83
        ]
       ],
       "periode": "30 jours",
@@ -7321,7 +7325,7 @@
      "devise": "USD",
      "cellules": {
       "indice_surprise": {
-       "valeur": 0.79,
+       "valeur": 0.69,
        "raison": null,
        "source": "calcul Python (registre macro, 30 j)",
        "percentile_5a": null,
@@ -7330,18 +7334,18 @@
        "unite": "écarts",
        "date": "2026-11-04",
        "tendance": "hausse",
-       "n": 6,
+       "n": 8,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
       },
       "dispersion": {
-       "valeur": 1.0,
+       "valeur": 0.94,
        "raison": null,
        "source": "calcul Python (écart-type des surprises 30 j)",
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "n": 7,
+       "n": 9,
        "raison_percentile": "historique trop court"
       },
       "publications": {
@@ -7355,18 +7359,18 @@
          "consensus": "0.3%"
         },
         {
-         "indicateur": "Balance commerciale",
-         "date": "2026-10-06",
-         "surprise": -1.6,
-         "reel": "-105.6B",
-         "consensus": "-100.8B"
-        },
-        {
          "indicateur": "CPI annuel",
          "date": "2026-10-14",
          "surprise": 1.0,
          "reel": "3.7%",
          "consensus": "3.6%"
+        },
+        {
+         "indicateur": "CPI core annuel",
+         "date": "2026-10-14",
+         "surprise": 1.0,
+         "reel": "2.6%",
+         "consensus": "2.5%"
         }
        ],
        "source": "registre macro (ForexFactory)",
@@ -7735,7 +7739,7 @@
      "devise": "CAD",
      "cellules": {
       "indice_surprise": {
-       "valeur": -0.74,
+       "valeur": -0.7,
        "raison": null,
        "source": "calcul Python (registre macro, 30 j)",
        "percentile_5a": null,
@@ -7744,18 +7748,18 @@
        "unite": "écarts",
        "date": "2026-11-04",
        "tendance": "baisse",
-       "n": 9,
+       "n": 10,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
       },
       "dispersion": {
-       "valeur": 1.02,
+       "valeur": 1.01,
        "raison": null,
        "source": "calcul Python (écart-type des surprises 30 j)",
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "n": 9,
+       "n": 10,
        "raison_percentile": "historique trop court"
       },
       "publications": {
@@ -8107,7 +8111,7 @@
         ],
         [
          "2026-11-04",
-         0.79
+         0.69
         ]
        ]
       },
@@ -8213,7 +8217,7 @@
         ],
         [
          "2026-11-04",
-         -0.74
+         -0.7
         ]
        ]
       },
@@ -8282,9 +8286,9 @@
         {
          "type": "dernier",
          "date": "2026-11-04",
-         "valeur": 0.79,
-         "texte": "0,79 écarts au 04/11",
-         "detail": "USD : dernière valeur 0,79 écarts le 04/11/2026 (plus haut de la période)",
+         "valeur": 0.69,
+         "texte": "0,69 écarts au 04/11",
+         "detail": "USD : dernière valeur 0,69 écarts le 04/11/2026 (plus haut de la période)",
          "source": "calcul Python (registre macro)"
         }
        ],
@@ -8298,6 +8302,14 @@
          "source": "calcul Python (registre macro)"
         },
         {
+         "type": "haut",
+         "date": "2026-09-30",
+         "valeur": 0.75,
+         "texte": "Plus haut 0,75 écarts",
+         "detail": "USD : plus haut sur 90 j : 0,75 écarts le 30/09/2026",
+         "source": "calcul Python (registre macro)"
+        },
+        {
          "type": "evenement",
          "date": "2026-10-21",
          "valeur": 0.28,
@@ -8309,9 +8321,9 @@
         {
          "type": "dernier",
          "date": "2026-11-04",
-         "valeur": 0.79,
-         "texte": "0,79 écarts au 04/11",
-         "detail": "USD : dernière valeur 0,79 écarts le 04/11/2026 (plus haut de la période)",
+         "valeur": 0.69,
+         "texte": "0,69 écarts au 04/11",
+         "detail": "USD : dernière valeur 0,69 écarts le 04/11/2026",
          "source": "calcul Python (registre macro)"
         }
        ],
@@ -8325,6 +8337,14 @@
          "source": "calcul Python (registre macro)"
         },
         {
+         "type": "haut",
+         "date": "2026-09-30",
+         "valeur": 0.75,
+         "texte": "Plus haut 0,75 écarts",
+         "detail": "USD : plus haut sur 1 an : 0,75 écarts le 30/09/2026",
+         "source": "calcul Python (registre macro)"
+        },
+        {
          "type": "evenement",
          "date": "2026-10-21",
          "valeur": 0.28,
@@ -8336,9 +8356,9 @@
         {
          "type": "dernier",
          "date": "2026-11-04",
-         "valeur": 0.79,
-         "texte": "0,79 écarts au 04/11",
-         "detail": "USD : dernière valeur 0,79 écarts le 04/11/2026 (plus haut de la période)",
+         "valeur": 0.69,
+         "texte": "0,69 écarts au 04/11",
+         "detail": "USD : dernière valeur 0,69 écarts le 04/11/2026",
          "source": "calcul Python (registre macro)"
         }
        ],
@@ -8352,6 +8372,14 @@
          "source": "calcul Python (registre macro)"
         },
         {
+         "type": "haut",
+         "date": "2026-09-30",
+         "valeur": 0.75,
+         "texte": "Plus haut 0,75 écarts",
+         "detail": "USD : plus haut sur la série : 0,75 écarts le 30/09/2026",
+         "source": "calcul Python (registre macro)"
+        },
+        {
          "type": "evenement",
          "date": "2026-10-21",
          "valeur": 0.28,
@@ -8363,9 +8391,9 @@
         {
          "type": "dernier",
          "date": "2026-11-04",
-         "valeur": 0.79,
-         "texte": "0,79 écarts au 04/11",
-         "detail": "USD : dernière valeur 0,79 écarts le 04/11/2026 (plus haut de la période)",
+         "valeur": 0.69,
+         "texte": "0,69 écarts au 04/11",
+         "detail": "USD : dernière valeur 0,69 écarts le 04/11/2026",
          "source": "calcul Python (registre macro)"
         }
        ]
@@ -8379,7 +8407,7 @@
      "barres": [
       {
        "nom": "USD",
-       "valeur": 0.79
+       "valeur": 0.69
       },
       {
        "nom": "EUR",
@@ -8399,7 +8427,7 @@
       },
       {
        "nom": "CAD",
-       "valeur": -0.74
+       "valeur": -0.7
       },
       {
        "nom": "AUD",
@@ -8432,8 +8460,8 @@
     {
      "id": "surprise_usd",
      "libelle": "Surprise USD (30 j)",
-     "valeur": 0.79,
-     "texte": "+0,79",
+     "valeur": 0.69,
+     "texte": "+0,69",
      "unite": "écarts",
      "date": "2026-11-04",
      "frequence": null,
@@ -8441,10 +8469,10 @@
      "source": "calcul Python (registre macro, 30 j)",
      "raison": null,
      "variation": {
-      "valeur": 0.83,
+      "valeur": 0.73,
       "unite": "écarts",
       "periode": "4 semaines",
-      "texte": "+0,83 sur 4 semaines"
+      "texte": "+0,73 sur 4 semaines"
      },
      "percentile_5a": null,
      "n_5a": null,
@@ -8490,7 +8518,7 @@
        ],
        [
         "2026-11-04",
-        0.79
+        0.69
        ]
       ],
       "periode": "90 jours (hebdomadaire)",
@@ -8562,8 +8590,8 @@
     {
      "id": "surprise_cad",
      "libelle": "Surprise CAD (30 j)",
-     "valeur": -0.74,
-     "texte": "−0,74",
+     "valeur": -0.7,
+     "texte": "−0,70",
      "unite": "écarts",
      "date": "2026-11-04",
      "frequence": null,
@@ -8571,10 +8599,10 @@
      "source": "calcul Python (registre macro, 30 j)",
      "raison": null,
      "variation": {
-      "valeur": -0.46,
+      "valeur": -0.42,
       "unite": "écarts",
       "periode": "4 semaines",
-      "texte": "−0,46 sur 4 semaines"
+      "texte": "−0,42 sur 4 semaines"
      },
      "percentile_5a": null,
      "n_5a": null,
@@ -8620,7 +8648,7 @@
        ],
        [
         "2026-11-04",
-        -0.74
+        -0.7
        ]
       ],
       "periode": "90 jours (hebdomadaire)",
@@ -8944,13 +8972,13 @@
     {
      "id": "part_positives",
      "libelle": "Publications au-dessus du consensus",
-     "valeur": 36,
-     "texte": "36 %",
+     "valeur": 38,
+     "texte": "38 %",
      "unite": "part",
      "date": "2026-11-04",
      "frequence": null,
      "age_jours": 0,
-     "source": "calcul Python (registre macro, 69 publications avec consensus sur 30 jours)",
+     "source": "calcul Python (registre macro, 72 publications avec consensus sur 30 jours)",
      "raison": null,
      "variation": null,
      "percentile_5a": null,
@@ -12263,7 +12291,7 @@
      "raison": null
     }
    ],
-   "actualites_maj": "2026-11-04T14:17+00:00",
+   "actualites_maj": "2026-11-04T16:16+00:00",
    "actualites_nb_titres_lus": 31,
    "notes": [
     "Dette et solde publics : FMI (annuel, avec 1 à 3 ans de retard) ; EUR = Allemagne. Pas de série gratuite pour CHF et NZD.",
@@ -13319,15 +13347,15 @@
      "libelle": "VIX",
      "unite_affichage": "pts",
      "cellule": {
-      "valeur": 21.15,
+      "valeur": 20.83,
       "unite": "niveau",
-      "date": "2026-11-02",
+      "date": "2026-11-03",
       "source": "FRED (VIXCLS)",
       "frequence": "quotidien",
       "raison": null,
-      "var_1s": 15.01,
-      "var_4s": 36.28,
-      "percentile_5a": 73,
+      "var_1s": 18.89,
+      "var_4s": 38.77,
+      "percentile_5a": 71,
       "n_5a": 262,
       "raison_percentile": null
      }
@@ -13410,14 +13438,14 @@
      "libelle": "S&P 500",
      "unite_affichage": "indice",
      "cellule": {
-      "valeur": 7541.4,
+      "valeur": 7568.92,
       "unite": "niveau",
-      "date": "2026-11-02",
+      "date": "2026-11-03",
       "source": "FRED (SP500)",
       "frequence": "quotidien",
       "raison": null,
-      "var_1s": -1.76,
-      "var_4s": -2.99,
+      "var_1s": -1.99,
+      "var_4s": -3.2,
       "percentile_5a": 94,
       "n_5a": 262,
       "raison_percentile": null
@@ -16148,6 +16176,10 @@
         [
          "2026-11-02",
          7541.4
+        ],
+        [
+         "2026-11-03",
+         7568.92
         ]
        ]
       }
@@ -16674,21 +16706,21 @@
     {
      "id": "vix",
      "libelle": "VIX",
-     "valeur": 21.15,
-     "texte": "21,15",
+     "valeur": 20.83,
+     "texte": "20,83",
      "unite": "niveau",
-     "date": "2026-11-02",
+     "date": "2026-11-03",
      "frequence": "quotidien",
-     "age_jours": 2,
+     "age_jours": 1,
      "source": "FRED (VIXCLS)",
      "raison": null,
      "variation": {
-      "valeur": 36.28,
+      "valeur": 38.77,
       "unite": "%",
       "periode": "4 semaines",
-      "texte": "+36,28 % sur 4 semaines"
+      "texte": "+38,77 % sur 4 semaines"
      },
-     "percentile_5a": 73,
+     "percentile_5a": 71,
      "n_5a": 262,
      "percentile_autre": null,
      "raison_percentile": null,
@@ -16777,6 +16809,10 @@
        [
         "2026-11-02",
         21.15
+       ],
+       [
+        "2026-11-03",
+        20.83
        ]
       ],
       "periode": "30 jours",
@@ -16787,19 +16823,19 @@
     {
      "id": "sp500",
      "libelle": "S&P 500",
-     "valeur": 7541.4,
-     "texte": "7 541",
+     "valeur": 7568.92,
+     "texte": "7 569",
      "unite": "niveau",
-     "date": "2026-11-02",
+     "date": "2026-11-03",
      "frequence": "quotidien",
-     "age_jours": 2,
+     "age_jours": 1,
      "source": "FRED (SP500)",
      "raison": null,
      "variation": {
-      "valeur": -2.99,
+      "valeur": -3.2,
       "unite": "%",
       "periode": "4 semaines",
-      "texte": "−2,99 % sur 4 semaines"
+      "texte": "−3,20 % sur 4 semaines"
      },
      "percentile_5a": 94,
      "n_5a": 262,
@@ -16890,6 +16926,10 @@
        [
         "2026-11-02",
         7541.4
+       ],
+       [
+        "2026-11-03",
+        7568.92
        ]
       ],
       "periode": "30 jours",
@@ -39778,9 +39818,9 @@
    "balances": [
     {
      "devise": "USD",
-     "valeur": "-105.6B",
-     "consensus": "-100.8B",
-     "date": "2026-10-06",
+     "valeur": "-105.0B",
+     "consensus": "-107.9B",
+     "date": "2026-11-04",
      "source": "ForexFactory",
      "raison": null
     },
@@ -39818,9 +39858,9 @@
     },
     {
      "devise": "CAD",
-     "valeur": "4.2B",
-     "consensus": "1.5B",
-     "date": "2026-10-06",
+     "valeur": "5.4B",
+     "consensus": "4.8B",
+     "date": "2026-11-04",
      "source": "ForexFactory",
      "raison": null
     },
@@ -40402,7 +40442,7 @@
      "barres": [
       {
        "nom": "USD",
-       "valeur": -105.6
+       "valeur": -105.0
       },
       {
        "nom": "EUR",
@@ -40422,7 +40462,7 @@
       },
       {
        "nom": "CAD",
-       "valeur": 3.0
+       "valeur": 3.9
       },
       {
        "nom": "AUD",
@@ -41394,12 +41434,12 @@
     {
      "id": "balance_cad",
      "libelle": "Balance commerciale du Canada",
-     "valeur": 4.2,
-     "texte": "+4,2 Md CAD",
+     "valeur": 5.4,
+     "texte": "+5,4 Md CAD",
      "unite": "Md CAD",
-     "date": "2026-10-06",
+     "date": "2026-11-04",
      "frequence": null,
-     "age_jours": 29,
+     "age_jours": 0,
      "source": "registre macro (ForexFactory)",
      "raison": null,
      "variation": null,
@@ -41412,7 +41452,7 @@
       "periode": "30 jours",
       "raison": "publication mensuelle, historique court"
      },
-     "lecture": "consensus : 1.5B"
+     "lecture": "consensus : 4.8B"
     }
    ]
   }
@@ -41512,14 +41552,14 @@
     "titre": "Thème macro",
     "chiffre": {
      "libelle": "État du dollar",
-     "valeur": null,
-     "texte": null,
+     "valeur": 1,
+     "texte": "Sans direction",
      "unite": "",
      "date": "2026-11-04",
      "source": "calcul Python (profil des devises)",
-     "raison": "profil des devises pas encore calculé"
+     "raison": null
     },
-    "ligne": "Profil des devises indisponible.",
+    "ligne": "Sans direction : USD, EUR, JPY, CAD, AUD, CNY · Soutenue : GBP, CHF · Sous pression : NZD.",
     "courbe": {
      "points": [],
      "periode": "jour",
@@ -41655,14 +41695,14 @@
     "titre": "Données économiques",
     "chiffre": {
      "libelle": "Surprise USD (30 j)",
-     "valeur": 0.79,
-     "texte": "+0,79",
+     "valeur": 0.69,
+     "texte": "+0,69",
      "unite": "",
      "date": "2026-11-04",
      "source": "calcul Python (registre macro, 30 j)",
      "raison": null
     },
-    "ligne": "Plus fortes surprises ailleurs : NZD −1,62, CAD −0,74.",
+    "ligne": "Plus fortes surprises ailleurs : NZD −1,62, CAD −0,70.",
     "courbe": {
      "points": [
       [
@@ -41683,7 +41723,7 @@
       ],
       [
        "2026-11-04",
-       0.79
+       0.69
       ]
      ],
      "periode": "30 jours",
@@ -41835,7 +41875,7 @@
      "raison": null,
      "indicateur": "dollar_large"
     },
-    "ligne": "Indice dollar +0,28 % sur 7 jours, VIX à 21,1.",
+    "ligne": "Indice dollar +0,28 % sur 7 jours, VIX à 20,8.",
     "courbe": {
      "points": [
       [
@@ -41986,7 +42026,7 @@
      "source": "calcul local (Twelve Data)",
      "raison": null
     },
-    "ligne": "RSI USD 44,7, −0,14 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 2 autres.",
+    "ligne": "RSI USD 42,3, −0,14 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 2 autres.",
     "courbe": {
      "points": [
       [
@@ -42302,14 +42342,14 @@
      "titre": "Thème macro",
      "chiffre": {
       "libelle": "État du dollar",
-      "valeur": null,
-      "texte": null,
+      "valeur": 1,
+      "texte": "Sans direction",
       "unite": "",
       "date": "2026-11-04",
       "source": "calcul Python (profil des devises)",
-      "raison": "profil des devises pas encore calculé"
+      "raison": null
      },
-     "ligne": "Profil des devises indisponible.",
+     "ligne": "Sans direction : USD, EUR, JPY, CAD, AUD, CNY · Soutenue : GBP, CHF · Sous pression : NZD.",
      "verdict": {
       "libelle": "Dollar haussier · Risque neutre",
       "classe": "up",
@@ -42352,14 +42392,14 @@
      "titre": "Données économiques",
      "chiffre": {
       "libelle": "Surprise USD (30 j)",
-      "valeur": 0.79,
-      "texte": "+0,79",
+      "valeur": 0.69,
+      "texte": "+0,69",
       "unite": "",
       "date": "2026-11-04",
       "source": "calcul Python (registre macro, 30 j)",
       "raison": null
      },
-     "ligne": "Plus fortes surprises ailleurs : NZD −1,62, CAD −0,74.",
+     "ligne": "Plus fortes surprises ailleurs : NZD −1,62, CAD −0,70.",
      "verdict": {
       "libelle": "Dollar haussier",
       "classe": "up",
@@ -42410,7 +42450,7 @@
       "raison": null,
       "indicateur": "dollar_large"
      },
-     "ligne": "Indice dollar +0,28 % sur 7 jours, VIX à 21,1.",
+     "ligne": "Indice dollar +0,28 % sur 7 jours, VIX à 20,8.",
      "verdict": {
       "libelle": "Dollar neutre · Risque neutre",
       "classe": "nd",
@@ -42460,7 +42500,7 @@
       "source": "calcul local (Twelve Data)",
       "raison": null
      },
-     "ligne": "RSI USD 44,7, −0,14 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 2 autres.",
+     "ligne": "RSI USD 42,3, −0,14 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 2 autres.",
      "verdict": {
       "libelle": "Dollar neutre · Risk off",
       "classe": "dn",
@@ -42579,7 +42619,7 @@
       "regles": [
        {
         "regle": "indice de surprise macro 30 jours ≥ 0,50 → +1",
-        "chiffre": "+0,79",
+        "chiffre": "+0,69",
         "source": "calcul Python (registre macro, 30 j)",
         "date": "2026-11-04",
         "points": 1
@@ -42604,10 +42644,10 @@
       "libelle": "Soutien",
       "regles": [
        {
-        "regle": "S&P 500, variation sur 4 semaines ≤ −2,80 % (15e percentile sur 5 ans) → +1 pour USD ; confirmé sur 5 ans : 69 % des 26 cas, borne de Wilson 53,1 %",
-        "chiffre": "−2,99 %",
+        "regle": "S&P 500, variation sur 4 semaines ≤ −2,86 % (15e percentile sur 5 ans) → +1 pour USD ; confirmé sur 5 ans : 69 % des 26 cas, borne de Wilson 53,1 %",
+        "chiffre": "−3,20 %",
         "source": "FRED (SP500)",
-        "date": "2026-11-02",
+        "date": "2026-11-03",
         "points": 1,
         "couverture": true
        }
@@ -42899,7 +42939,7 @@
       "valeur": 0,
       "libelle": "Neutre",
       "regles": [],
-      "raison": "niveau du VIX : 21,15 pts, aucun effet sur JPY; S&P 500, variation sur 4 semaines : −2,99 %, aucun effet sur JPY",
+      "raison": "niveau du VIX : 20,83 pts, aucun effet sur JPY; S&P 500, variation sur 4 semaines : −3,20 %, aucun effet sur JPY",
       "bornee": false,
       "etat": "neutre"
      },
@@ -42995,7 +43035,7 @@
       "valeur": 0,
       "libelle": "Neutre",
       "regles": [],
-      "raison": "niveau du VIX : 21,15 pts, aucun effet sur CHF; indice dollar large (Fed), variation sur 4 semaines : +0,23 %, dans le couloir (seuils −1,28 % / +1,79 %)",
+      "raison": "niveau du VIX : 20,83 pts, aucun effet sur CHF; indice dollar large (Fed), variation sur 4 semaines : +0,23 %, dans le couloir (seuils −1,28 % / +1,79 %)",
       "bornee": false,
       "etat": "neutre"
      },
@@ -43090,7 +43130,7 @@
       "regles": [
        {
         "regle": "indice de surprise macro 30 jours ≤ −0,50 → −1",
-        "chiffre": "−0,74",
+        "chiffre": "−0,70",
         "source": "calcul Python (registre macro, 30 j)",
         "date": "2026-11-04",
         "points": -1
@@ -43115,10 +43155,10 @@
       "libelle": "Pression",
       "regles": [
        {
-        "regle": "S&P 500, variation sur 4 semaines ≤ −2,80 % (15e percentile sur 5 ans) → −1 pour CAD ; confirmé sur 5 ans : 81 % des 26 cas, borne de Wilson 65,4 %",
-        "chiffre": "−2,99 %",
+        "regle": "S&P 500, variation sur 4 semaines ≤ −2,86 % (15e percentile sur 5 ans) → −1 pour CAD ; confirmé sur 5 ans : 81 % des 26 cas, borne de Wilson 65,4 %",
+        "chiffre": "−3,20 %",
         "source": "FRED (SP500)",
-        "date": "2026-11-02",
+        "date": "2026-11-03",
         "points": -1,
         "couverture": true
        }
@@ -43203,7 +43243,7 @@
       "valeur": 0,
       "libelle": "Neutre",
       "regles": [],
-      "raison": "niveau du VIX : 21,15 pts, aucun effet sur AUD; S&P 500, variation sur 4 semaines : −2,99 %, aucun effet sur AUD",
+      "raison": "niveau du VIX : 20,83 pts, aucun effet sur AUD; S&P 500, variation sur 4 semaines : −3,20 %, aucun effet sur AUD",
       "bornee": false,
       "etat": "neutre"
      },
@@ -43299,7 +43339,7 @@
       "valeur": 0,
       "libelle": "Neutre",
       "regles": [],
-      "raison": "niveau du VIX : 21,15 pts, aucun effet sur NZD; S&P 500, variation sur 4 semaines : −2,99 %, aucun effet sur NZD",
+      "raison": "niveau du VIX : 20,83 pts, aucun effet sur NZD; S&P 500, variation sur 4 semaines : −3,20 %, aucun effet sur NZD",
       "bornee": false,
       "etat": "neutre"
      },
@@ -43642,20 +43682,20 @@
       "haut": 25,
       "bas": 14
      },
-     "valeur": 21.15,
-     "date": "2026-11-02",
+     "valeur": 20.83,
+     "date": "2026-11-03",
      "source": "FRED (VIXCLS)",
      "percentiles": {
       "15": 14.51,
-      "85": 22.7765
+      "85": 22.763
      },
-     "seuil_haut": 22.7765,
+     "seuil_haut": 22.763,
      "seuil_bas": 14.51,
      "direction": null,
      "declencheur": null,
      "neutralise": false,
      "serie_heurtee": null,
-     "n_5a": 342,
+     "n_5a": 343,
      "devises": {
       "USD": {
        "signe_classique": 1,
@@ -43806,20 +43846,20 @@
       "haut": 4,
       "bas": -4
      },
-     "valeur": -2.9914,
-     "date": "2026-11-02",
+     "valeur": -3.1975,
+     "date": "2026-11-03",
      "source": "FRED (SP500)",
      "percentiles": {
-      "15": -2.7996,
-      "85": 4.1005
+      "15": -2.8626,
+      "85": 4.0967
      },
      "seuil_haut": 4,
-     "seuil_bas": -2.7996,
+     "seuil_bas": -2.8626,
      "direction": "bas",
      "declencheur": "15e percentile sur 5 ans",
      "neutralise": false,
      "serie_heurtee": null,
-     "n_5a": 339,
+     "n_5a": 340,
      "devises": {
       "USD": {
        "signe_classique": -1,
@@ -44322,7 +44362,7 @@
    ],
    "surprise_30j": {
     "USD": [
-     0.79,
+     0.69,
      "calcul Python (registre macro, 30 j)",
      "2026-11-04"
     ],
@@ -44347,7 +44387,7 @@
      "2026-11-04"
     ],
     "CAD": [
-     -0.74,
+     -0.7,
      "calcul Python (registre macro, 30 j)",
      "2026-11-04"
     ],
@@ -44378,15 +44418,15 @@
     "2026-08-01"
    ],
    "vix": [
-    21.15,
+    20.83,
     "FRED (VIXCLS)",
-    "2026-11-02",
+    "2026-11-03",
     null
    ],
    "sp500_var_4s": [
-    -2.99,
+    -3.2,
     "FRED (SP500)",
-    "2026-11-02"
+    "2026-11-03"
    ],
    "titres_refuge": [
     7,
@@ -44619,7 +44659,7 @@
      "classe": "up"
     },
     "neutralise": null,
-    "note": "seuils ±0,30. Plus fortes surprises ailleurs : NZD −1,62, CAD −0,74.",
+    "note": "seuils ±0,30. Plus fortes surprises ailleurs : NZD −1,62, CAD −0,70.",
     "indicateur": null
    },
    {
@@ -44683,7 +44723,7 @@
      "classe": "nd"
     },
     "neutralise": null,
-    "note": "seuils bas 14,00 / haut 25,00. Indice dollar +0,28 % sur 7 jours, VIX à 21,1.",
+    "note": "seuils bas 14,00 / haut 25,00. Indice dollar +0,28 % sur 7 jours, VIX à 20,8.",
     "indicateur": "vix"
    },
    {
@@ -44747,7 +44787,7 @@
      "classe": "dn"
     },
     "neutralise": null,
-    "note": "seuils ±0,30 %. RSI USD 44,7, −0,14 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 2 autres.",
+    "note": "seuils ±0,30 %. RSI USD 42,3, −0,14 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 2 autres.",
     "indicateur": null
    },
    {
@@ -44893,8 +44933,8 @@
     "libelle": "indice de surprise macro 30 jours — USD",
     "effet_haut": "USD +1 (règle 3)",
     "effet_bas": "USD −1 (règle 3)",
-    "valeur": 0.79,
-    "texte_valeur": "+0,79",
+    "valeur": 0.69,
+    "texte_valeur": "+0,69",
     "unite": "écarts",
     "date": "2026-11-04",
     "source": "calcul Python (registre macro, 30 j)",
@@ -44933,8 +44973,8 @@
     "libelle": "indice de surprise macro 30 jours — CAD",
     "effet_haut": "CAD +1 (règle 3)",
     "effet_bas": "CAD −1 (règle 3)",
-    "valeur": -0.74,
-    "texte_valeur": "−0,74",
+    "valeur": -0.7,
+    "texte_valeur": "−0,70",
     "unite": "écarts",
     "date": "2026-11-04",
     "source": "calcul Python (registre macro, 30 j)",
@@ -45155,12 +45195,12 @@
     "libelle": "S&P 500, variation sur 4 semaines",
     "effet_haut": "devises confirmées : CAD, NZD, USD",
     "effet_bas": null,
-    "valeur": -2.9914,
-    "texte_valeur": "−2,99 %",
+    "valeur": -3.1975,
+    "texte_valeur": "−3,20 %",
     "unite": "%",
-    "date": "2026-11-02",
+    "date": "2026-11-03",
     "source": "FRED (SP500)",
-    "seuil_bas": -2.7996,
+    "seuil_bas": -2.8626,
     "seuil_haut": 4,
     "declencheur": "15e percentile sur 5 ans",
     "neutralise": null,
@@ -45363,20 +45403,20 @@
     "libelle": "niveau du VIX",
     "effet_haut": "devises confirmées : CAD",
     "effet_bas": null,
-    "valeur": 21.15,
-    "texte_valeur": "21,15",
+    "valeur": 20.83,
+    "texte_valeur": "20,83",
     "unite": "pts",
-    "date": "2026-11-02",
+    "date": "2026-11-03",
     "source": "FRED (VIXCLS)",
     "seuil_bas": 14.51,
-    "seuil_haut": 22.7765,
+    "seuil_haut": 22.763,
     "declencheur": null,
     "neutralise": null,
     "etat": "non",
-    "distance": 1.6265,
-    "distance_pct": 19.7,
+    "distance": 1.933,
+    "distance_pct": 23.4,
     "cote": "haut",
-    "distance_texte": "1,63"
+    "distance_texte": "1,93"
    },
    {
     "id": "thermometre-7",
@@ -45846,8 +45886,8 @@
     "libelle": "indice de surprise macro 30 jours — USD",
     "effet_haut": "USD +1 (règle 3)",
     "effet_bas": "USD −1 (règle 3)",
-    "valeur": 0.79,
-    "texte_valeur": "+0,79",
+    "valeur": 0.69,
+    "texte_valeur": "+0,69",
     "unite": "écarts",
     "date": "2026-11-04",
     "source": "calcul Python (registre macro, 30 j)",
@@ -45858,7 +45898,7 @@
     "distance_pct": 0.0,
     "cote": "haut",
     "distance_texte": "franchi",
-    "phrase": "indice de surprise macro 30 jours — USD : +0,79, seuil haut franchi"
+    "phrase": "indice de surprise macro 30 jours — USD : +0,69, seuil haut franchi"
    },
    {
     "id": "surprise_30j-GBP",
@@ -45888,8 +45928,8 @@
     "libelle": "indice de surprise macro 30 jours — CAD",
     "effet_haut": "CAD +1 (règle 3)",
     "effet_bas": "CAD −1 (règle 3)",
-    "valeur": -0.74,
-    "texte_valeur": "−0,74",
+    "valeur": -0.7,
+    "texte_valeur": "−0,70",
     "unite": "écarts",
     "date": "2026-11-04",
     "source": "calcul Python (registre macro, 30 j)",
@@ -45900,7 +45940,7 @@
     "distance_pct": 0.0,
     "cote": "bas",
     "distance_texte": "franchi",
-    "phrase": "indice de surprise macro 30 jours — CAD : −0,74, seuil bas franchi"
+    "phrase": "indice de surprise macro 30 jours — CAD : −0,70, seuil bas franchi"
    },
    {
     "id": "surprise_30j-NZD",
@@ -46121,12 +46161,12 @@
     "libelle": "S&P 500, variation sur 4 semaines",
     "effet_haut": "devises confirmées : CAD, NZD, USD",
     "effet_bas": null,
-    "valeur": -2.9914,
-    "texte_valeur": "−2,99 %",
+    "valeur": -3.1975,
+    "texte_valeur": "−3,20 %",
     "unite": "%",
-    "date": "2026-11-02",
+    "date": "2026-11-03",
     "source": "FRED (SP500)",
-    "seuil_bas": -2.7996,
+    "seuil_bas": -2.8626,
     "seuil_haut": 4,
     "declencheur": "15e percentile sur 5 ans",
     "neutralise": null,
@@ -46135,7 +46175,7 @@
     "distance_pct": 0.0,
     "cote": "bas",
     "distance_texte": "franchi",
-    "phrase": "S&P 500, variation sur 4 semaines : −2,99 %, seuil bas franchi"
+    "phrase": "S&P 500, variation sur 4 semaines : −3,20 %, seuil bas franchi"
    },
    {
     "id": "couverture-or",
@@ -46182,7 +46222,7 @@
     "ForexFactory, flux public JSON de la semaine"
    ],
    "sources_champs": {},
-   "verifie_le": "2026-11-04T10:16",
+   "verifie_le": "2026-11-04T16:15",
    "engrenage": 2,
    "simulateur": null,
    "reaction": null,
@@ -48152,17 +48192,17 @@
       "classe": "up"
      },
      "neutralise": null,
-     "note": "seuils ±0,30. Plus fortes surprises ailleurs : NZD −1,62, CAD −0,74.",
+     "note": "seuils ±0,30. Plus fortes surprises ailleurs : NZD −1,62, CAD −0,70.",
      "indicateur": null
     },
     "chiffres": [
      {
       "libelle": "Surprise USD (30 j)",
-      "texte": "+0,79",
+      "texte": "+0,69",
       "date": "2026-11-04",
       "source": "calcul Python (registre macro, 30 j)",
       "raison": null,
-      "variation": "+0,83 sur 4 semaines",
+      "variation": "+0,73 sur 4 semaines",
       "percentile_5a": null,
       "rang": "rang 5 ans n/d : indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
      },
@@ -48178,11 +48218,11 @@
      },
      {
       "libelle": "Surprise CAD (30 j)",
-      "texte": "−0,74",
+      "texte": "−0,70",
       "date": "2026-11-04",
       "source": "calcul Python (registre macro, 30 j)",
       "raison": null,
-      "variation": "−0,46 sur 4 semaines",
+      "variation": "−0,42 sur 4 semaines",
       "percentile_5a": null,
       "rang": "rang 5 ans n/d : indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
      },
@@ -48213,7 +48253,7 @@
       "libelle": "indice de surprise macro 30 jours — USD",
       "etat": "déclenchée",
       "distance": "franchi",
-      "valeur": "+0,79",
+      "valeur": "+0,69",
       "date": "2026-11-04",
       "source": "calcul Python (registre macro, 30 j)",
       "neutralise": null
@@ -48231,7 +48271,7 @@
       "libelle": "indice de surprise macro 30 jours — CAD",
       "etat": "déclenchée",
       "distance": "franchi",
-      "valeur": "−0,74",
+      "valeur": "−0,70",
       "date": "2026-11-04",
       "source": "calcul Python (registre macro, 30 j)",
       "neutralise": null
@@ -48376,7 +48416,7 @@
     "lecture": {
      "texte": "L'indice de surprise macroéconomique à 30 jours atteint +0,79 pour l'USD, contre −1,62 pour le NZD et −0,23 pour l'EUR. Les publications américaines dépassent globalement le consensus, soutenant la devise.",
      "source": "modèle",
-     "phrase_python": "Dollar haussier. seuils ±0,30. Plus fortes surprises ailleurs : NZD −1,62, CAD −0,74.",
+     "phrase_python": "Dollar haussier. seuils ±0,30. Plus fortes surprises ailleurs : NZD −1,62, CAD −0,70.",
      "texte_indisponible": null,
      "redige_par": "Flash-Lite 3.5",
      "redige_le": "2026-11-04T11:17:01+00:00",
@@ -49595,7 +49635,7 @@
       "classe": "nd"
      },
      "neutralise": null,
-     "note": "seuils bas 14,00 / haut 25,00. Indice dollar +0,28 % sur 7 jours, VIX à 21,1.",
+     "note": "seuils bas 14,00 / haut 25,00. Indice dollar +0,28 % sur 7 jours, VIX à 20,8.",
      "indicateur": "vix"
     },
     "chiffres": [
@@ -49611,21 +49651,21 @@
      },
      {
       "libelle": "VIX",
-      "texte": "21,15",
-      "date": "2026-11-02",
+      "texte": "20,83",
+      "date": "2026-11-03",
       "source": "FRED (VIXCLS)",
       "raison": null,
-      "variation": "+36,28 % sur 4 semaines",
-      "percentile_5a": 73,
-      "rang": "73e percentile sur 5 ans"
+      "variation": "+38,77 % sur 4 semaines",
+      "percentile_5a": 71,
+      "rang": "71e percentile sur 5 ans"
      },
      {
       "libelle": "S&P 500",
-      "texte": "7 541",
-      "date": "2026-11-02",
+      "texte": "7 569",
+      "date": "2026-11-03",
       "source": "FRED (SP500)",
       "raison": null,
-      "variation": "−2,99 % sur 4 semaines",
+      "variation": "−3,20 % sur 4 semaines",
       "percentile_5a": 94,
       "rang": "94e percentile sur 5 ans"
      },
@@ -50271,17 +50311,17 @@
       "libelle": "S&P 500, variation sur 4 semaines",
       "etat": "déclenchée",
       "distance": "franchi",
-      "valeur": "−2,99 %",
-      "date": "2026-11-02",
+      "valeur": "−3,20 %",
+      "date": "2026-11-03",
       "source": "FRED (SP500)",
       "neutralise": null
      },
      {
       "libelle": "niveau du VIX",
       "etat": "non",
-      "distance": "1,63",
-      "valeur": "21,15",
-      "date": "2026-11-02",
+      "distance": "1,93",
+      "valeur": "20,83",
+      "date": "2026-11-03",
       "source": "FRED (VIXCLS)",
       "neutralise": null
      },
@@ -50310,7 +50350,7 @@
       "engrenage": 5,
       "libelle": "niveau du VIX ≥ 30 pts",
       "description": "Engrenage 5 : USD +1, JPY +2, CHF +2, AUD −2, NZD −2, CAD −1",
-      "valeur_actuelle": 21.15,
+      "valeur_actuelle": 20.83,
       "unite": "pts",
       "bilans": [
        {
@@ -50422,7 +50462,7 @@
       "engrenage": 5,
       "libelle": "niveau du VIX ≥ 25 pts",
       "description": "Engrenage 5 : USD +1, JPY +1, CHF +1, AUD −1, NZD −1, CAD −1",
-      "valeur_actuelle": 21.15,
+      "valeur_actuelle": 20.83,
       "unite": "pts",
       "bilans": [
        {
@@ -50534,7 +50574,7 @@
       "engrenage": 5,
       "libelle": "niveau du VIX ≤ 14 pts",
       "description": "Engrenage 5 : JPY −1, CHF −1, AUD +1, NZD +1",
-      "valeur_actuelle": 21.15,
+      "valeur_actuelle": 20.83,
       "unite": "pts",
       "bilans": [
        {
@@ -50634,7 +50674,7 @@
       "engrenage": 5,
       "libelle": "S&P 500, variation sur 4 semaines ≥ 4,00 %",
       "description": "Engrenage 5 : AUD +1, NZD +1",
-      "valeur_actuelle": -2.99,
+      "valeur_actuelle": -3.2,
       "unite": "%",
       "bilans": [
        {
@@ -50722,7 +50762,7 @@
       "engrenage": 5,
       "libelle": "S&P 500, variation sur 4 semaines ≤ −4,00 %",
       "description": "Engrenage 5 : AUD −1, NZD −1, JPY +1",
-      "valeur_actuelle": -2.99,
+      "valeur_actuelle": -3.2,
       "unite": "%",
       "bilans": [
        {
@@ -50814,9 +50854,9 @@
      {
       "id": "couverture-vix-haut",
       "engrenage": 5,
-      "libelle": "niveau du VIX ≥ 22,78",
+      "libelle": "niveau du VIX ≥ 22,76",
       "description": "Engrenage 5, règle par devise confirmée sur 5 ans pour : CAD",
-      "valeur_actuelle": 21.15,
+      "valeur_actuelle": 20.83,
       "unite": "pts",
       "bilans": [
        {
@@ -50891,7 +50931,7 @@
       "engrenage": 5,
       "libelle": "niveau du VIX ≤ 14,51",
       "description": "Engrenage 5, règle par devise confirmée sur 5 ans pour : aucune devise",
-      "valeur_actuelle": 21.15,
+      "valeur_actuelle": 20.83,
       "unite": "pts",
       "bilans": [
        {
@@ -50966,7 +51006,7 @@
       "engrenage": 5,
       "libelle": "S&P 500, variation sur 4 semaines ≥ +4,00 %",
       "description": "Engrenage 5, règle par devise confirmée sur 5 ans pour : aucune devise",
-      "valeur_actuelle": -2.9914,
+      "valeur_actuelle": -3.1975,
       "unite": "%",
       "bilans": [
        {
@@ -51052,9 +51092,9 @@
      {
       "id": "couverture-sp500-bas",
       "engrenage": 5,
-      "libelle": "S&P 500, variation sur 4 semaines ≤ −2,80 %",
+      "libelle": "S&P 500, variation sur 4 semaines ≤ −2,86 %",
       "description": "Engrenage 5, règle par devise confirmée sur 5 ans pour : USD, CAD, NZD",
-      "valeur_actuelle": -2.9914,
+      "valeur_actuelle": -3.1975,
       "unite": "%",
       "bilans": [
        {
@@ -51373,7 +51413,7 @@
     "lecture": {
      "texte": "Le VIX s'établit à 21,15 le 2026-11-02, en hausse de 15,0 % sur 7 jours, tandis que l'indice dollar large de la Fed progresse de 0,28 % à 121,6656. L'indice or (proxy) — NASDAQ QGLDI recule de 3,02 % sur la semaine à 2404,59.",
      "source": "modèle",
-     "phrase_python": "Dollar neutre · Risque neutre. seuils bas 14,00 / haut 25,00. Indice dollar +0,28 % sur 7 jours, VIX à 21,1.",
+     "phrase_python": "Dollar neutre · Risque neutre. seuils bas 14,00 / haut 25,00. Indice dollar +0,28 % sur 7 jours, VIX à 20,8.",
      "texte_indisponible": null,
      "redige_par": "Flash-Lite 3.5",
      "redige_le": "2026-11-04T11:17:01+00:00",
@@ -51923,7 +51963,7 @@
       "classe": "dn"
      },
      "neutralise": null,
-     "note": "seuils ±0,30 %. RSI USD 44,7, −0,14 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 2 autres.",
+     "note": "seuils ±0,30 %. RSI USD 42,3, −0,14 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 2 autres.",
      "indicateur": null
     },
     "chiffres": [
@@ -52827,7 +52867,7 @@
     "lecture": {
      "texte": "L'indice USD synthétique recule de 0,14 % sur 5 jours avec un RSI à 44,7, tandis que le CHF progresse de 1,01 %. Les positions nettes des spéculateurs montrent des extrêmes sur le JPY et le CHF, signalant un risque de retournement.",
      "source": "modèle",
-     "phrase_python": "Dollar neutre · Risk off. seuils ±0,30 %. RSI USD 44,7, −0,14 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 2 autres.",
+     "phrase_python": "Dollar neutre · Risk off. seuils ±0,30 %. RSI USD 42,3, −0,14 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 2 autres.",
      "texte_indisponible": null,
      "redige_par": "Flash-Lite 3.5",
      "redige_le": "2026-11-04T11:17:01+00:00",
