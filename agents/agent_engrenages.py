@@ -19,7 +19,7 @@ from pathlib import Path
 
 from agents.agent_synthese import _Catalogue, _ids, _norm, _retirer_ordres, _texte
 from core import indicateurs, vue_ensemble
-from core.llm import (MESSAGE_QUOTA_ATTEINT, FournisseurLLM, QuotaAtteint, attribution_modele,
+from core.llm import (MESSAGE_QUOTA_ATTEINT, FournisseurLLM, QuotaAtteint, attribution_modele, echec_transitoire,
                       definir_etiquette, extraire_json, repli_modele_suivant)
 from core.secrets import masquer_secrets
 
@@ -852,7 +852,8 @@ def generer(config: dict, llm: FournisseurLLM, donnees: dict, macro: dict, catal
                 "tentatives": precedentes, "genere_le": horodatage,
                 **repli_python(config, donnees, macro, catalogue, devises, biais, extras, TEXTE_QUOTA)}
     except Exception as exc:  # noqa: BLE001
-        n = precedentes + 1
+        # 503, 429, délai : transitoire, ne compte pas comme une tentative (rejouée au complément suivant, lot V6.1)
+        n = precedentes + (0 if echec_transitoire(llm, "engrenages") else 1)
         statut = "abandonnee" if n >= int(cfg.get("tentatives_max", 4)) else "indisponible"
         log.error("8 engrenages %s (tentative %d) : %s", statut, n, masquer_secrets(str(exc)))
         if statut == "abandonnee":

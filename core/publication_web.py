@@ -34,6 +34,11 @@ class ConflitCode(PushEchoue):
 def ecrire_donnees(rapport: dict, dossier_docs: str | Path) -> Path:
     dossier = Path(dossier_docs) / "data"
     dossier.mkdir(parents=True, exist_ok=True)
+    try:   # version du site dans index.html (cache navigateur, lot V6.1) : ne change que si le code du site change
+        from core import version_site
+        version_site.appliquer(Path(dossier_docs).resolve().parent)
+    except Exception as exc:  # noqa: BLE001
+        log.warning("Version du site non mise à jour : %s", exc)
     date_rapport = rapport["meta"]["date_rapport"]
     contenu = json.dumps(rapport, ensure_ascii=False, indent=1)
     (dossier / f"{date_rapport}.json").write_text(contenu, encoding="utf-8")

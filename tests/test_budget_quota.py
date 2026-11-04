@@ -193,10 +193,20 @@ class Budget(unittest.TestCase):
         self.assertEqual(llm.registre.run_echecs.get("503"), 2)
 
     def test_complement_ne_rejoue_pas_une_analyse_deja_en_echec_deux_fois(self):
+        # Lot V6.1 : seuls les échecs de FORMAT ou de contrôle comptent (un 503 est transitoire, voir test_v61.py)
+        def post(url, headers=None, json=None, timeout=None):
+            return Rep(200, "réponse sans JSON")
         for complet in (True, False):                                   # matin puis complément : 2 runs en échec
             llm, _ = chaine_reelle(self.tmp, complet=complet)
-            with mock.patch.object(L.requests, "post", Simulateur(lambda n: True)), mock.patch("time.sleep"):
-                essayer(llm, "analyses:JPY-CHF-CAD")
+            L.definir_etiquette("analyses:JPY-CHF-CAD")
+            with mock.patch.object(L.requests, "post", post), mock.patch("time.sleep"):
+                for _ in range(2):
+                    try:
+                        L.extraire_json(llm.appeler_llm("x"))
+                    except L.PlafondAnalyse:
+                        break
+                    except ValueError:
+                        L.repli_modele_suivant(llm)
         llm, _ = chaine_reelle(self.tmp, complet=False)
         sim = Simulateur(lambda n: False)
         L.definir_etiquette("analyses:JPY-CHF-CAD")

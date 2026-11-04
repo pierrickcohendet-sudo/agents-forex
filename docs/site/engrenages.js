@@ -1,5 +1,5 @@
 /* Onglet « 8 engrenages » : synthèse globale (rapport du jour, synthese_globale.engrenages). */
-import { chargerJson, enErreur, el, indisponible, dateHeure, dateCourte, enBref, essentiel, voirDetail } from "./commun.js";
+import { chargerJson, enErreur, el, indisponible, dateHeure, dateCourte, enBref, essentiel, voirDetail, vueComplete } from "./commun.js";
 import { carteDossiers } from "./dossiers.js";
 import { vueHebdo } from "./hebdo.js";
 import { chargerSyntheses, sectionSynthese } from "./consequences_synthese.js";
@@ -184,6 +184,7 @@ async function pageQuotidienne(engrenageDemande = null) {
   };
   const noeudsCockpit = cockpit(enErreur(d) ? null : d.cockpit, enErreur(d) ? null : d.vue_ensemble, enErreur(d) ? null : d.matrice_impact, choisir);
   const vignette = el("details", "carte ck-vignette");
+  vignette.open = vueComplete();
   vignette.appendChild(el("summary", null, "Roue des 8 engrenages, cartes, chaînes et matrice complète"));
   vignette.append(...vue.noeuds);
   // Lot V6 : un écran d'abord (l'essentiel + une carte par engrenage), tout le reste dans « Voir le détail ».
@@ -194,6 +195,7 @@ async function pageQuotidienne(engrenageDemande = null) {
     outils.dataset.charge = "1";
     try { outils.append(...await (await import("./outils.js")).pageOutils()); } catch (e) { outils.appendChild(indisponible("Outils", e.message)); }
   }, { once: false });
+  if (vueComplete()) outils.open = true;   // vue complète : les 4 outils chargés et visibles sans clic
   const eng = enErreur(rapport) ? null : rapport.synthese_globale?.engrenages;
   const premier = [...entete8(enErreur(d) ? null : d, eng), cartes8(enErreur(d) ? null : d, eng, choisir)];
   const detail = voirDetail("Voir le détail : cockpit, roue, matrice, fil des séances, dossiers chiffrés", ...noeudsCockpit, vignette, dossier);

@@ -7,7 +7,7 @@ import { dessinerReperes } from "./dossiers.js";
 const SVG = "http://www.w3.org/2000/svg";
 const COURTS = { 1: "Thème", 2: "Monétaire", 3: "Données", 4: "Fiscale", 5: "Marchés", 6: "Géopolitique", 7: "Flux", 8: "Offre" };
 function s(tag, attrs, texte) { const n = document.createElementNS(SVG, tag); for (const [k, v] of Object.entries(attrs || {})) n.setAttribute(k, v); if (texte != null) n.textContent = texte; return n; }
-const fr = (v, d = 2) => v == null ? "n/d" : Number(v).toLocaleString("fr-FR", { maximumFractionDigits: d });
+const fr = (v, d = 2) => v == null ? "n/d" : Number(v).toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d });
 const signe = (v, d = 2) => v == null ? "n/d" : `${v > 0 ? "+" : ""}${fr(v, d)}`.replace("-", "−");
 
 function courbe(c) {

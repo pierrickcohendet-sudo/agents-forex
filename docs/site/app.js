@@ -1,5 +1,6 @@
 /* FX Desk — site V1. Lit uniquement docs/data/*.json (produits par le pipeline), aucune clé, aucun appel externe. */
-import { chargerJson, enErreur, el, indisponible, initialiserDetail, initialiserCertificats, dateHeure, appliquerGlossaire } from "./commun.js";
+import { chargerJson, enErreur, el, indisponible, initialiserDetail, initialiserCertificats, dateHeure, appliquerGlossaire,
+         marquerNombres, vueCourante, enregistrerVue, vueComplete, VERSION } from "./commun.js";
 
 /* Lot V6 : 6 onglets principaux, le reste dans le menu « Plus ». */
 const ONGLETS = {
@@ -75,6 +76,7 @@ async function afficher() {
   if ((location.hash || `#${pageParDefaut()}`).slice(1) !== hash) return;   // l'utilisateur a changé d'onglet entre-temps
   main.replaceChildren(...blocs);
   appliquerGlossaire(main);   // glossaire unique au survol (lot V6)
+  marquerNombres(main);       // seuls les nombres en chasse fixe (lot V6.1)
   if (parametre === "outils") { const o = [...main.querySelectorAll("details.voir-detail")].find(d => /Outils/.test(d.textContent)); if (o) { o.open = true; o.scrollIntoView(); } }
   else if (parametre && !parametre.startsWith("g=")) document.getElementById(`fiche-${parametre}`)?.scrollIntoView();
   else window.scrollTo(0, 0);
@@ -88,6 +90,15 @@ async function initialiser() {
     if (plus?.open && !plus.contains(ev.target)) plus.open = false;
   });
   appliquerTheme(themeCourant());
+  // Vue complète / Vue essentielle (lot V6.1) : mémorisée, vue complète par défaut, fonctionne sans stockage.
+  const boutonVue = document.getElementById("bouton-vue");
+  const majVue = () => { const c = vueComplete(); boutonVue.textContent = c ? "Vue complète" : "Vue essentielle"; boutonVue.setAttribute("aria-pressed", String(c)); };
+  document.documentElement.dataset.vue = vueCourante(); majVue();
+  boutonVue.addEventListener("click", () => { enregistrerVue(vueComplete() ? "essentielle" : "complete"); majVue(); afficher(); });
+  // Tableaux re-rendus (tri, recherche, filtres) : les nouvelles cellules numériques passent en chasse fixe.
+  let attente = null;
+  new MutationObserver(() => { clearTimeout(attente); attente = setTimeout(() => marquerNombres(document.getElementById("contenu")), 60); })
+    .observe(document.getElementById("contenu"), { childList: true, subtree: true });
   document.getElementById("bouton-theme").addEventListener("click", () => {
     appliquerTheme(CYCLE_THEME[(CYCLE_THEME.indexOf(themeCourant()) + 1) % CYCLE_THEME.length]);
   });
@@ -112,8 +123,9 @@ async function initialiser() {
       lien.hidden = false;
       lien.textContent = r.notion_page_du_jour ? "Ouvrir dans Notion" : "Ouvrir la base Notion";
     }
-    document.getElementById("pied-meta").textContent =
-      `Rapport du ${r.date_rapport || "—"} · site.json généré ${dateHeure(site.genere_le)}`;
+    const g = site.genere_le ? new Date(site.genere_le) : null;
+    const quand = g && !isNaN(g) ? `${g.toLocaleDateString("fr-FR", { timeZone: "Europe/Paris" })} ${g.toLocaleTimeString("fr-FR", { timeZone: "Europe/Paris", hour: "2-digit", minute: "2-digit" })}` : "n/d";
+    document.getElementById("pied-meta").textContent = `version ${VERSION} · généré le ${quand} · rapport du ${r.date_rapport || "—"}`;
   }
   afficher();
 }

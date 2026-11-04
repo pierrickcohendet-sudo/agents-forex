@@ -481,7 +481,9 @@ def _proprietes_ligne(ligne: dict, jour: date) -> dict:
         "Actuel": {"rich_text": _rt(ligne.get("Actuel"))},
         "Précédent": {"rich_text": _rt(ligne.get("Précédent"))},
         "Prévision": {"rich_text": _rt(ligne.get("Prévision"))},
-        "Surprise": {"select": {"name": ligne["surprise"]} if ligne.get("surprise") else None},
+        # Notion refuse les virgules dans une option « select » (erreur du 02/11 et du 04/11) : virgule décimale
+        # remplacée par la virgule basse « ‚ » (même aspect), 100 caractères au plus.
+        "Surprise": {"select": {"name": option_select(ligne["surprise"])} if ligne.get("surprise") else None},
         "Variation": {"rich_text": _rt(ligne.get("variation"))},
         "Date de publication": {"date": {"start": ligne["date_pub"]} if ligne.get("date_pub") else None},
         "Prochaine publication": {"date": {"start": ligne["prochaine"]} if ligne.get("prochaine") else None},
@@ -850,3 +852,8 @@ def mettre_a_jour(config: dict, racine: str | Path, chemin_config: str | Path | 
     log.info("Tableau macro : remplissage Actuel %.0f %% · Précédent %.0f %% · Prévision %.0f %%",
              r["Actuel"]["taux_pct"], r["Précédent"]["taux_pct"], r["Prévision"]["taux_pct"])
     return resultat
+
+
+def option_select(texte: str) -> str:
+    """Nom d'option « select » accepté par Notion : sans virgule, 100 caractères au plus."""
+    return str(texte).replace(",", "\u201a")[:100]

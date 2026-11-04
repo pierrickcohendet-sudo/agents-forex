@@ -1162,7 +1162,12 @@ details.ck-vignette[open] > summary { margin-bottom: 10px; }
 
 /* ================================================================ passe design (lot V5, étape 7-ter) */
 /* Chiffres : police à chasse fixe, alignés à droite dans les tableaux */
-.tabulaire, table.dense td, .chiffre { font-family: var(--mono); font-size: .93em; letter-spacing: -0.01em; }
+/* Lot V6.1 : seuls les NOMBRES sont en chasse fixe (classe « num » posée au rendu par marquerNombres) ; le texte des
+   tableaux reste en police normale, aligné à gauche, avec retour à la ligne (régression du V6 corrigée, cf. 96deb96). */
+.tabulaire, .chiffre, table.dense td.num { font-family: var(--mono); font-size: .93em; letter-spacing: -0.01em; }
+table.dense td { text-align: left; white-space: normal; }
+table.dense td.num { text-align: right; white-space: nowrap; }
+table.dense th { text-align: left; }
 table.dense td.source-cellule, table.dense td.sa-nom, table.dense td.sa-alimente, .sa-table td { font-family: var(--sans); font-size: 1em; letter-spacing: 0; }
 
 /* Micro-animations sobres, coupées par « moins d'animations » */
@@ -1440,3 +1445,16 @@ table.dense.texte td, table.dense.texte th, table.dense.rp-devises td, table.den
 .jn-cal-detail { background: var(--carte-2); border-radius: 8px; padding: 12px; min-width: 0; }
 .jn-cal-entree { background: var(--carte); border-radius: 6px; padding: 10px; margin: 8px 0; }
 .jn-form[hidden], .jn-calendrier[hidden], [hidden].carte { display: none !important; }
+
+/* Lot V6.1 : micro-graphique 30 jours du point de marché */
+.mini-courbe { width: 88px; height: 22px; display: block; }
+.mini-courbe path { fill: none; stroke: var(--accent); stroke-width: 1.4; }
+.mini-courbe circle { fill: var(--accent); }
+
+/* Lot V6.1 : Vue complète / Vue essentielle */
+html[data-vue="essentielle"] .onglet-complet { display: none; }
+#bouton-vue[aria-pressed="true"] { border-color: var(--accent); }
+html[data-vue="complete"] .dc-grille { grid-template-columns: repeat(auto-fill, minmax(min(100%, 520px), 1fr)); }
+html[data-vue="complete"] .ag-globe .ag-globe-zone { max-width: 560px; }
+.ag-globe.grand .ag-globe-zone { max-width: 560px; }
+.rp-actif { display: flex; flex-direction: column; gap: 2px; }

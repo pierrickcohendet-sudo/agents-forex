@@ -9,9 +9,11 @@ export function el(tag, classe, texte) {
 
 /* Données : chaque fichier est chargé une fois ; un échec renvoie {erreur} (jamais d'exception). */
 const cache = new Map();
+/* Version du site (meta posée par core/version_site.py) : ajoutée à chaque fichier de données chargé. */
+export const VERSION = (typeof document !== "undefined" && document.querySelector('meta[name="fxdesk-version"]')?.content) || "dev";
 export function chargerJson(chemin) {
   if (!cache.has(chemin)) {
-    cache.set(chemin, fetch(chemin, { cache: "no-store" })
+    cache.set(chemin, fetch(`${chemin}${chemin.includes("?") ? "&" : "?"}v=${VERSION}`, { cache: "no-store" })
       .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
       .catch(e => ({ __erreur: `${chemin} : ${e.message}` })));
   }
@@ -254,6 +256,7 @@ export function essentiel(lignes, titre = "L'essentiel") {
 /* « Voir le détail » : tout ce qui dépasse un écran. */
 export function voirDetail(titre, ...noeuds) {
   const d = el("details", "voir-detail");
+  d.open = vueComplete();   // vue complète : tout est déplié sans clic (lot V6.1)
   d.appendChild(el("summary", null, titre || "Voir le détail"));
   d.append(...noeuds.filter(Boolean));
   return d;
@@ -305,3 +308,60 @@ export function appliquerGlossaire(racine) {
     n.parentNode.insertBefore(g, apres);
   }
 }
+
+/* ------------------------------------------------------------------ lot V6.1 : formats uniques des nombres
+   Décimales FIXES par type de donnée, appliquées partout : « 0,00 % » et jamais « 0 % », « 158,70 » et jamais « 158,7 ». */
+const nf = (v, d) => Number(v).toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d }).replace("-", "−");
+export const FMT = {
+  nombre: (v, d = 2) => v == null || !isFinite(v) ? "n/d" : nf(v, d),
+  signe: (v, d = 2) => v == null || !isFinite(v) ? "n/d" : `${v > 0 ? "+" : ""}${nf(v, d)}`,
+  pct: (v, d = 2) => v == null || !isFinite(v) ? "n/d" : `${nf(v, d)} %`,
+  varPct: (v, d = 2) => v == null || !isFinite(v) ? "n/d" : `${v > 0 ? "+" : ""}${nf(v, d)} %`,
+  taux: v => v == null || !isFinite(v) ? "n/d" : `${nf(v, 2)} %`,
+  pb: v => v == null || !isFinite(v) ? "n/d" : `${v > 0 ? "+" : ""}${nf(v, 0)} pb`,
+  /* Prix d'une paire : décimales usuelles (4, ou 2 si le yen est en jeu) ; indices et matières premières : 2. */
+  prix: (v, paire = "") => v == null || !isFinite(v) ? "n/d" : nf(v, /JPY/.test(paire) ? 2 : /\//.test(paire) ? 4 : 2),
+};
+
+/* Cellules numériques des tableaux : chasse fixe, alignées à droite (le texte reste en police normale). */
+const NUMERIQUE = /^[+−\-–]?\s?(\d[\d\s\u202f\u00a0]*([.,]\d+)?|n\/d|—)\s*(%|pb|pts?|€|\$|K|M|Md|B|σ|R|pips|séances?|ans?)?$/;
+export function marquerNombres(racine) {
+  for (const td of (racine || document).querySelectorAll("table.dense td:not(.num)")) {
+    const t = td.textContent.trim();
+    if (t.length <= 22 && NUMERIQUE.test(t)) td.classList.add("num");
+  }
+}
+
+/* Micro-graphique SVG (30 jours) : JavaScript et SVG purs, sans bibliothèque. */
+export function miniCourbe(points, titre) {
+  const NS = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(NS, "svg");
+  svg.setAttribute("viewBox", "0 0 88 22"); svg.setAttribute("class", "mini-courbe"); svg.setAttribute("role", "img");
+  svg.setAttribute("aria-label", titre || "évolution sur 30 jours");
+  const v = (points || []).map(p => Number(p[1])).filter(isFinite);
+  if (v.length < 2) return svg;
+  const min = Math.min(...v), max = Math.max(...v), et = max - min || 1;
+  const xy = v.map((y, i) => [2 + (84 * i) / (v.length - 1), 20 - (18 * (y - min)) / et]);
+  const path = document.createElementNS(NS, "path");
+  path.setAttribute("d", xy.map(([x, y], i) => `${i ? "L" : "M"}${x.toFixed(1)},${y.toFixed(1)}`).join(""));
+  const c = document.createElementNS(NS, "circle");
+  c.setAttribute("cx", xy[xy.length - 1][0].toFixed(1)); c.setAttribute("cy", xy[xy.length - 1][1].toFixed(1)); c.setAttribute("r", "1.8");
+  const t = document.createElementNS(NS, "title"); t.textContent = titre || "";
+  svg.append(t, path, c);
+  return svg;
+}
+
+/* ------------------------------------------------------------------ lot V6.1 : Vue complète / Vue essentielle
+   Mémorisée dans le navigateur (try/catch : sans stockage, la vue complète s'applique). Vue complète par défaut. */
+export const CLE_VUE = "fxdesk-vue";
+export function vueCourante() {
+  const q = typeof location !== "undefined" ? new URLSearchParams(location.search).get("vue") : null;   // forçage ponctuel
+  if (q === "essentielle" || q === "complete") return q;
+  try { return localStorage.getItem(CLE_VUE) === "essentielle" ? "essentielle" : "complete"; }
+  catch (e) { return "complete"; }
+}
+export function enregistrerVue(v) {
+  try { localStorage.setItem(CLE_VUE, v === "essentielle" ? "essentielle" : "complete"); } catch (e) { /* sans stockage : pour cette visite */ }
+  document.documentElement.dataset.vue = v === "essentielle" ? "essentielle" : "complete";
+}
+export const vueComplete = () => (document.documentElement.dataset.vue || vueCourante()) !== "essentielle";

@@ -105,24 +105,30 @@ def variation_mois_pb(points, aujourd: date) -> dict:
     return {"pb": round((b[-1][1] - a[-1][1]) * 100), "mois": MOIS[fin.month - 1], "du": a[-1][0], "au": b[-1][0]}
 
 
-def indice_dxy(h5, technique, usdsek: list[tuple[str, float]]) -> dict:
-    """Indice dollar calculé selon la formule publique du DXY (moyenne géométrique pondérée de 6 devises) ;
-    non officiel. Cours : série unique Twelve Data (EUR, JPY, GBP, CAD, CHF) et USD/SEK (Twelve Data)."""
-    if not usdsek:
-        return {"valeur": None, "raison": "USD/SEK pas encore collecté (Twelve Data, ajouté au lot V6 : prochain run complet)"}
-    forces = {d: dict(h5.force(d, technique)) for d in ("EUR", "JPY", "GBP", "CAD", "CHF")} if h5 is not None else {}
+def serie_dxy(h5, technique, usdsek: list[tuple[str, float]]) -> list[tuple[str, float]]:
+    """Indice dollar calculé selon la formule publique du DXY (moyenne géométrique pondérée de 6 devises), non officiel,
+    sur les dates communes aux 6 cours : série unique Twelve Data (EUR, JPY, GBP, CAD, CHF) et USD/SEK (Twelve Data)."""
+    if not usdsek or h5 is None:
+        return []
+    forces = {d: dict(h5.force(d, technique)) for d in ("EUR", "JPY", "GBP", "CAD", "CHF")}
     sek = dict(usdsek)
-    dates = sorted(set(sek).intersection(*[set(v) for v in forces.values()])) if forces else []
-    if not dates:
-        return {"valeur": None, "raison": "aucune date commune aux 6 cours"}
+    dates = sorted(set(sek).intersection(*[set(v) for v in forces.values()]))
 
     def niveau(d):
         cours = {"EUR": forces["EUR"][d], "GBP": forces["GBP"][d], "JPY": 1 / forces["JPY"][d], "CAD": 1 / forces["CAD"][d],
                  "CHF": 1 / forces["CHF"][d], "SEK": sek[d]}   # EUR/USD, GBP/USD, puis USD/JPY, USD/CAD, USD/CHF, USD/SEK
         return DXY_CONSTANTE * math.prod(cours[k] ** p for k, p in DXY_POIDS.items())
-    v = niveau(dates[-1])
-    v5 = niveau(dates[-6]) if len(dates) > 5 else None
-    return {"valeur": round(v, 2), "date": dates[-1], "variation_5j": round((v / v5 - 1) * 100, 2) if v5 else None,
+    return [(d, round(niveau(d), 4)) for d in dates]
+
+
+def indice_dxy(h5, technique, usdsek: list[tuple[str, float]]) -> dict:
+    if not usdsek:
+        return {"valeur": None, "raison": "USD/SEK absent de la collecte Twelve Data (historiques)"}
+    pts = serie_dxy(h5, technique, usdsek)
+    if not pts:
+        return {"valeur": None, "raison": "aucune date commune aux 6 cours"}
+    v, v5 = pts[-1][1], (pts[-6][1] if len(pts) > 5 else None)
+    return {"valeur": round(v, 2), "date": pts[-1][0], "variation_5j": round((v / v5 - 1) * 100, 2) if v5 else None,
             "libelle": "indice dollar calculé selon la formule du DXY (non officiel)",
             "source": "calcul Python, formule publique ICE : Twelve Data (EUR, JPY, GBP, CAD, CHF, SEK contre USD)"}
 

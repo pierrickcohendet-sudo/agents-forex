@@ -1,7 +1,7 @@
 /* Page Agenda (lot V5, complément) : docs/data/agenda.json, calcul Python sans LLM.
    Globe des 9 banques centrales (d3-geo + world-atlas, versions épinglées, repli en liste), horloges, onglets par jour,
    filtres par type, impact et devise, réaction passée, prises de parole et grands rendez-vous. Heures de Paris. */
-import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, ouvrirDetail, listeDefinitions, certifier, pluriel, badgeEcart, DRAPEAUX, essentiel, voirDetail } from "./commun.js";
+import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, ouvrirDetail, listeDefinitions, certifier, pluriel, badgeEcart, DRAPEAUX, essentiel, voirDetail, vueComplete } from "./commun.js";
 
 const CDN = {
   d3geo: "https://cdn.jsdelivr.net/npm/d3-geo@3.1.1/+esm",
@@ -400,5 +400,9 @@ export async function pageAgenda() {
     document.querySelectorAll(".ag-rebours").forEach(s => { s.textContent = rebours(s.dataset.iso); });
     majHorloges();
   }, 30000);
+  if (vueComplete()) {   // lot V6.1 : globe en grand en tête, semaine complète affichée, puis aujourd'hui et demain
+    globe.classList.add("grand");
+    return [tete, globe, cal, bas];
+  }
   return [tete, cote, voirDetail("Voir le reste de la semaine : calendrier complet, filtres, prises de parole", cal, bas)];
 }

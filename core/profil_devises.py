@@ -69,37 +69,59 @@ def correlation(force: dict[str, float], moteur: dict[str, float], seances: int)
     return {"r": round(r, 2), "n": len(communes), "du": communes[0], "au": communes[-1]}
 
 
-def moteurs_du_moment(h5, technique: dict | None, devise: str, cfg: dict) -> dict:
-    """Corrélations 60 / 20 séances de la devise avec ses moteurs candidats ; dominant ou « aucun moteur dominant »."""
+def serie_moteur(m: dict, h5, historiques: dict | None, veille: str | None) -> tuple[list, str | None]:
+    """Série d'un moteur jusqu'à la veille : Twelve Data (cours du jour, `serie_twelve`) quand elle existe, sinon la
+    série 5 ans FRED. -> (points, source)."""
+    pts, source = [], None
+    if m.get("serie_twelve"):
+        s = ((historiques or {}).get("series") or {}).get(m["serie_twelve"]) or {}
+        pts = [(str(p[0])[:10], float(p[1])) for p in s.get("points") or [] if p and p[1] is not None]
+        source = s.get("source")
+    if len(pts) < 70 and m.get("serie") and h5 is not None:
+        pts, source = h5.serie(m["serie"]), h5.source(m["serie"]) or m["serie"]
+    if veille:
+        pts = [p for p in pts if p[0] <= veille]
+    return pts, source
+
+
+def moteurs_du_moment(h5, technique: dict | None, devise: str, cfg: dict, historiques: dict | None = None,
+                      aujourd: date | None = None) -> dict:
+    """Corrélations 60 / 20 séances de la devise avec ses moteurs candidats ; dominant ou « aucun moteur dominant ».
+    Calcul jusqu'à la veille (séance du jour incomplète), Twelve Data quand FRED est en retard (or, actions)."""
     defs = cfg.get("moteurs") or {}
     seuil = float(cfg.get("seuil_correlation", 0.30))
     longues, courtes = int(cfg.get("seances_longues", 60)), int(cfg.get("seances_courtes", 20))
+    veille = (aujourd - timedelta(days=1)).isoformat() if aujourd else None
     pts = h5.force(devise, technique) if h5 is not None else []
+    if veille:
+        pts = [p for p in pts if p[0] <= veille]
     force = _rendements(pts, False)
     mesures, non_testes = [], []
     for cle in ((cfg.get("devises") or {}).get(devise) or {}).get("candidats") or []:
         m = defs.get(cle) or {}
-        if not m.get("serie"):
+        if not m.get("serie") and not m.get("serie_twelve"):
             non_testes.append({"moteur": cle, "libelle": m.get("libelle", cle), "raison": m.get("raison") or "série absente"})
             continue
-        serie = h5.serie(m["serie"]) if h5 is not None else []
+        serie, source = serie_moteur(m, h5, historiques, veille)
         if not serie or not force:
             non_testes.append({"moteur": cle, "libelle": m.get("libelle", cle),
                                "raison": "série absente de l'historique 5 ans" if force else "indice de force indisponible"})
             continue
-        rm = _rendements(serie, m["serie"].startswith("USD_"))
+        rm = _rendements(serie, str(m.get("serie") or "").startswith("USD_") and not m.get("serie_twelve"))
         c60, c20 = correlation(force, rm, longues), correlation(force, rm, courtes)
         if c60 is None:
             non_testes.append({"moteur": cle, "libelle": m.get("libelle", cle), "raison": f"moins de {longues} séances communes"})
             continue
-        mesures.append({"moteur": cle, "libelle": m["libelle"], "nom": m.get("nom") or m["libelle"], "source": h5.source(m["serie"]) or m["serie"],
+        mesures.append({"moteur": cle, "libelle": m["libelle"], "nom": m.get("nom") or m["libelle"], "source": source,
+                        "derniere_observation": serie[-1][0] if serie else None,
                         "r60": c60["r"], "r20": c20["r"] if c20 else None, "n60": c60["n"], "du": c60["du"], "au": c60["au"],
                         "stable": bool(c20 and c20["r"] * c60["r"] > 0)})
     mesures.sort(key=lambda x: -abs(x["r60"]))
     dominant = next((x for x in mesures if abs(x["r60"]) >= seuil and x["stable"]), None)
     if dominant:
         texte = (f"{dominant['libelle']} : corrélation {fr(dominant['r60'], signe=True)} sur {dominant['n60']} séances "
-                 f"({_jj_mm(dominant['du'])} → {_jj_mm(dominant['au'])}), {fr(dominant['r20'], signe=True)} sur {courtes} séances")
+                 f"({_jj_mm(dominant['du'])} → {_jj_mm(dominant['au'])}), {fr(dominant['r20'], signe=True)} sur {courtes} séances ; "
+                 f"dernière observation commune : {_jj_mm(dominant['au'])}")
     elif mesures:
         p = mesures[0]
         motif = ("sous le seuil de " + fr(seuil)) if abs(p["r60"]) < seuil else f"signe différent sur {courtes} séances"
@@ -107,7 +129,8 @@ def moteurs_du_moment(h5, technique: dict | None, devise: str, cfg: dict) -> dic
     else:
         texte = "Aucun moteur dominant : aucune corrélation mesurable (séries absentes)"
     return {"dominant": dominant, "texte": texte, "mesures": mesures, "non_testes": non_testes, "seuil": seuil,
-            "seances": [longues, courtes], "source": f"{SOURCE_FORCE} ; séries des moteurs : historique 5 ans (FRED)",
+            "seances": [longues, courtes], "jusqu_au": veille,
+            "source": f"{SOURCE_FORCE} ; moteurs : Twelve Data pour l'or (XAU/USD) et les actions (SPY), sinon FRED",
             "avertissement": "Corrélation des variations quotidiennes : elle décrit ce qui bouge ensemble, pas une cause."}
 
 
@@ -284,13 +307,14 @@ def lecture(devise: str, nom: str, moteurs: dict, et: dict, sem: dict) -> str:
 
 # ---------------------------------------------------------------- assemblage
 def calculer(config: dict, h5, technique: dict | None, registre: dict | None, agenda: dict | None,
-             publications: dict | None, tableau: dict | None, racine: Path, aujourd: date | None = None) -> dict:
+             publications: dict | None, tableau: dict | None, racine: Path, aujourd: date | None = None,
+             historiques: dict | None = None) -> dict:
     aujourd = aujourd or date.today()
     cfg = config.get("profil_devises") or {}
     banques = {b.get("devise"): b for b in (agenda or {}).get("banques_centrales") or []}
     sortie = []
     for devise, dcfg in (cfg.get("devises") or {}).items():
-        mot = moteurs_du_moment(h5, technique, devise, cfg)
+        mot = moteurs_du_moment(h5, technique, devise, cfg, historiques, aujourd)
         anc = ancrages(devise, cfg, mot)
         bc = derniere_decision(devise, cfg, publications, agenda, aujourd)
         ton = ton_communique(racine, devise)
@@ -345,6 +369,7 @@ def ecrire(racine: str | Path, config: dict, h5=None, technique: dict | None = N
         technique = (_lire(racine / "data" / "cache" / "collecte_technique.json") or {}).get("donnees")
     profil = calculer(config, h5, technique, registre_macro.charger(racine / "data" / "registre_macro.json"),
                       _lire(docs / "agenda.json"), _lire(racine / "data" / "archives" / "publications.json"),
-                      _lire(docs / "tableau_macro.json"), racine, aujourd)
+                      _lire(docs / "tableau_macro.json"), racine, aujourd,
+                      (_lire(racine / "data" / "cache" / "collecte_historiques.json") or {}).get("donnees"))
     (docs / "profil_devises.json").write_text(json.dumps(profil, ensure_ascii=False, indent=1), encoding="utf-8")
     return profil

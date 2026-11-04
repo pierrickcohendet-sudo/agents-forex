@@ -3,7 +3,7 @@
 import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure } from "./commun.js";
 
 const COURTS = { 1: "Thème", 2: "Monétaire", 3: "Données", 4: "Fiscale", 5: "Marchés", 6: "Géopolitique", 7: "Flux", 8: "Offre" };
-const signe = (v, d = 0) => v == null ? "n/d" : `${v > 0 ? "+" : ""}${Number(v).toLocaleString("fr-FR", { maximumFractionDigits: d })}`.replace("-", "−");
+const signe = (v, d = 0) => v == null ? "n/d" : `${v > 0 ? "+" : ""}${Number(v).toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d })}`.replace("-", "−");
 const ETAT = { franchi: "franchi", proche: "proche", non: "dans le couloir", "n/d": "n/d", "sans seuil": "sans seuil" };
 
 function carte(titre, badge) {

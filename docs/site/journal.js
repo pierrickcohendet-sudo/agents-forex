@@ -12,8 +12,8 @@ const BIAIS = { haussier: "Haussier", neutre: "Neutre", baissier: "Baissier" };
 const CHECKLIST = [["biais", "Biais supérieur"], ["liquidite", "Liquidité"], ["structure", "Structure"], ["zone", "Zone d'intérêt"],
                    ["macro", "Confirmation macro"], ["declencheur", "Déclencheur M30"], ["invalidation", "Invalidation"], ["risque", "Risque"]];
 const COURTS = { 1: "Thème", 2: "Monétaire", 3: "Données", 4: "Fiscale", 5: "Marchés", 6: "Géopolitique", 7: "Flux", 8: "Offre" };
-const signe = (v, d = 2) => v == null ? "n/d" : `${v > 0 ? "+" : ""}${Number(v).toLocaleString("fr-FR", { maximumFractionDigits: d })}`.replace("-", "−");
-const nombre = (v, d = 4) => v == null ? "n/d" : Number(v).toLocaleString("fr-FR", { maximumFractionDigits: d });
+const signe = (v, d = 2) => v == null ? "n/d" : `${v > 0 ? "+" : ""}${Number(v).toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d })}`.replace("-", "−");
+const nombre = (v, d = 4) => v == null ? "n/d" : Number(v).toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d });
 function s(tag, attrs, texte) { const n = document.createElementNS(SVG, tag); for (const [k, v] of Object.entries(attrs || {})) n.setAttribute(k, v); if (texte != null) n.textContent = texte; return n; }
 
 /* ------------------------------------------------------------------ stockage (IndexedDB) */
@@ -605,7 +605,7 @@ export async function pageJournal() {
 
   // ------------- calendrier du mois (écran 9)
   let moisCourant = new Date().toISOString().slice(0, 7), filtreCal = "";
-  const eur = v => v === null || v === undefined ? "" : `${v > 0 ? "+" : v < 0 ? "−" : ""}${Math.abs(v).toLocaleString("fr-FR", { maximumFractionDigits: 2 })} €`;
+  const eur = v => v === null || v === undefined ? "" : `${v > 0 ? "+" : v < 0 ? "−" : ""}${Math.abs(v).toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`;
   function rendreCalendrier() {
     const [a, m] = moisCourant.split("-").map(Number);
     const tete = el("div", "jn-cal-tete");

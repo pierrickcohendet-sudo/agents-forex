@@ -188,7 +188,7 @@ function blocSeance(s) {
   const g = el("div", "ac-cours");
   for (const [p, q] of cot) {
     const d = el("div", "ac-cours-case");
-    const prix = el("b", "tabulaire", q.prix == null ? "n/d" : Number(q.prix).toLocaleString("fr-FR", { maximumFractionDigits: p.includes("JPY") ? 3 : 5 }));
+    const prix = el("b", "tabulaire", q.prix == null ? "n/d" : Number(q.prix).toLocaleString("fr-FR", { minimumFractionDigits: p.includes("JPY") ? 3 : 5, maximumFractionDigits: p.includes("JPY") ? 3 : 5 }));
     if (q.prix != null) certifier(prix, { libelle: p, valeur: prix.textContent, source: q.source, date: q.heure_utc,
                                          sansAge: `cotation de ${q.heure_utc ? dateHeure(q.heure_utc) : "n/d"}` });
     else prix.title = q.raison || "";

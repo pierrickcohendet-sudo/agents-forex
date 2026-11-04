@@ -4,7 +4,7 @@ import { chargerJson, enErreur, el, dateCourte, dateHeure, ouvrirDetail, listeDe
 import { detailEngrenage } from "./dossier_detail.js";
 
 const nombre = (v, dec = 2) => v === null || v === undefined ? "—" :
-  Number(v).toLocaleString("fr-FR", { minimumFractionDigits: 0, maximumFractionDigits: dec });
+  Number(v).toLocaleString("fr-FR", { minimumFractionDigits: dec, maximumFractionDigits: dec });
 const signe = (v, dec = 1) => v === null || v === undefined ? "—" : `${v > 0 ? "+" : ""}${nombre(v, dec)}`;
 const estTaux = u => u === "%" || u === "pb";
 

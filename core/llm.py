@@ -150,6 +150,18 @@ class PlafondAnalyse(RuntimeError):
     """Une même analyse a déjà fait son nombre maximal d'appels (ce run) ou d'échecs (ce jour) : repli Python."""
 
 
+# Lot V6.1 : erreurs TRANSITOIRES (surcharge Google, quota par minute, délai, réseau) : elles ne comptent jamais dans la
+# règle « 2 échecs par jour » ; seuls les échecs de format ou de contrôle bloquent une analyse pour la journée.
+TRANSITOIRES = {"503", "500", "429", "delai", "reseau", "budget"}
+
+
+def echec_transitoire(llm, etiquette: str) -> bool:
+    """Vrai si les échecs de CE run pour cette analyse ne sont que transitoires (503, 429, délai, réseau, budget)."""
+    reg = getattr(llm, "registre", None)
+    types = (getattr(reg, "run_types", {}) or {}).get(etiquette) if reg is not None else None
+    return bool(types) and set(types) <= TRANSITOIRES
+
+
 def categorie_budget(etiquette: str) -> str:
     """Catégorie de budget d'un appel, d'après son étiquette (priorité : engrenages, rapport, devises, reste)."""
     e = etiquette or ""
@@ -172,6 +184,8 @@ def type_echec(exc: BaseException | None) -> str:
         return "429"
     if isinstance(exc, requests.exceptions.Timeout):
         return "delai"
+    if isinstance(exc, requests.exceptions.ConnectionError):
+        return "reseau"
     if isinstance(exc, requests.exceptions.HTTPError):
         code = getattr(getattr(exc, "response", None), "status_code", None)
         return str(code) if code in (429, 500, 503) else f"http_{code}" if code else "autre"
@@ -266,6 +280,7 @@ class RegistreQuotas:
         self.run_etiquettes: dict[str, int] = {}
         self.run_categories: dict[str, int] = {}
         self.run_echecs: dict[str, int] = {}
+        self.run_types: dict[str, set] = {}
 
     def _sauver(self) -> None:
         if not self.chemin:
@@ -380,12 +395,18 @@ class RegistreQuotas:
         echecs = self.donnees.setdefault("echecs", {})
         echecs[type_] = echecs.get(type_, 0) + 1
         self.run_echecs[type_] = self.run_echecs.get(type_, 0) + 1
+        if etiquette:
+            self.run_types.setdefault(etiquette, set()).add(type_)
         if etiquette and type_ != "budget":
             e = self._etiquette(etiquette)
             e["echecs"] = e.get("echecs", 0) + 1
             types = e.setdefault("types", {})
             types[type_] = types.get(type_, 0) + 1
-            if e.get("run_echec") != self.run_id and not e.get("ok"):
+            e["dernier_echec"] = type_
+            if type_ in ("json_invalide", "rejet_controle"):
+                e["ok"] = False   # la réponse reçue est rejetée : l'analyse n'est pas faite
+            # Seuls les échecs de format ou de contrôle comptent pour la journée (lot V6.1).
+            if type_ not in TRANSITOIRES and e.get("run_echec") != self.run_id and not e.get("ok"):
                 e["run_echec"] = self.run_id
                 e["echecs_runs"] = e.get("echecs_runs", 0) + 1
         self._sauver()
@@ -394,10 +415,7 @@ class RegistreQuotas:
         if not etiquette:
             return
         e = self._etiquette(etiquette)
-        e["ok"] = True
-        if e.get("run_echec") == self.run_id:   # échec effacé par la réussite du nouvel essai de ce run
-            e["echecs_runs"] = max(0, e.get("echecs_runs", 1) - 1)
-            e["run_echec"] = None
+        e["ok"] = True   # réponse reçue ; une réponse ensuite rejetée par les contrôles repasse « ok » à faux
         self._sauver()
 
     def resume_budget(self) -> dict:
@@ -412,7 +430,17 @@ class RegistreQuotas:
                 "total_jour": self.total_jour(), "echecs_jour": dict(self.donnees.get("echecs", {})),
                 "echecs_run": dict(self.run_echecs),
                 "abandonnees": sorted(k for k, v in self.donnees.get("etiquettes", {}).items()
-                                      if not v.get("ok") and v.get("echecs_runs", 0) >= self._max_echecs())}
+                                      if not v.get("ok") and v.get("echecs_runs", 0) >= self._max_echecs()),
+                "analyses": self.statut_analyses()}
+
+    def statut_analyses(self) -> dict[str, dict]:
+        """Par analyse du jour : faite / à rejouer / bloquée, et la nature de son dernier échec."""
+        sortie = {}
+        for k, v in sorted(self.donnees.get("etiquettes", {}).items()):
+            statut = "faite" if v.get("ok") else "bloquée" if v.get("echecs_runs", 0) >= self._max_echecs() else "à rejouer"
+            sortie[k] = {"statut": statut, "echec": None if v.get("ok") else v.get("dernier_echec"),
+                         "types": v.get("types") or {}, "appels": v.get("appels", 0)}
+        return sortie
 
     def marquer_epuise(self, modele: str, delai_s: float | None) -> None:
         e = self._entree(modele)
@@ -1111,7 +1139,7 @@ def repli_modele_suivant(llm: FournisseurLLM) -> None:
 # Chiffres à la française dans TOUS les textes du modèle (lot V6) : « 6.84 % » -> « 6,84 % », « -0.3 » -> « −0,3 ».
 # Jamais dans les citations mot pour mot (comparées au communiqué officiel), les URL et les identifiants de source.
 CLES_SANS_CONVERSION = {"citations", "url", "source_id", "source_ids", "id", "date", "heure", "heure_utc"}
-_DECIMAL_POINT = re.compile(r"(?<![\w.,−-])(-?)(\d+)\.(\d+)(?!\d|\.\d)")
+_DECIMAL_POINT = re.compile(r"(?<![\w.,−-])([-−]?)(\d+)\.(\d+)(?!\d|\.\d)")   # « − » typographique compris
 
 
 def chiffres_fr(texte: str) -> str:

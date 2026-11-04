@@ -266,8 +266,11 @@ def main() -> int:
                                        donnees_dir / "cache", n, date.today())]
             engrenages_manquants = agent_engrenages.a_faire(rapport_existant.get("synthese_globale"),
                                                             config.get("engrenages") or {})
+            # Lot V6.1 : le rapport du jour non rédigé (503 du matin par exemple) est aussi rejoué par les compléments
+            rapport_manquant = agent_rapport.faut_rediger(rapport_jour_textes(RACINE, config), datetime.now(timezone.utc),
+                                                         False)[0]
             if (not a_completer and not etat_manquant and not collectes_a_refaire
-                    and not synthese_manquantes and not engrenages_manquants):
+                    and not synthese_manquantes and not engrenages_manquants and not rapport_manquant):
                 log.info("--completer : rien à compléter aujourd'hui (rapport déjà complet) — analyses inchangées")
                 etape("alertes de fin de run", _alertes_fin_run, RACINE, config, rapport_existant)
                 etape("résumé du run : agenda et fraîcheur des données", _ecrire_resume_donnees, RACINE, config)
@@ -500,8 +503,14 @@ def main() -> int:
     rapport_jour_donnees = etape("rapport du jour", agent_rapport.executer, RACINE, config, llm,
                                  complet=not arguments.completer, defaut=None)
     if rapport_jour_donnees and not arguments.completer and not arguments.sans_notion:
-        etape("rapport du jour dans Notion", agent_redacteur.publier_rapport_jour, config, rapport_jour_donnees,
-              RACINE / "config.yaml")
+        # Lot V6.1 : une copie Notion en échec ne rend pas le run rouge ; l'erreur exacte va dans le récapitulatif.
+        try:
+            agent_redacteur.publier_rapport_jour(config, rapport_jour_donnees, RACINE / "config.yaml")
+            log.info("Étape « rapport du jour dans Notion » : OK")
+        except Exception as exc:  # noqa: BLE001
+            message = agent_redacteur.erreur_notion(exc)
+            log.warning("Rapport du jour dans Notion : copie en échec (%s)", message)
+            _ecrire_resume_run(f"Notion, rapport du jour : copie en échec — {message}", titre="Copie Notion")
 
     # Journal léger des appels LLM (taille estimée + modèle utilisé) : en
     # --completer, s'ajoute à ceux du matin (plafonné) ; puis alerte qualité
@@ -563,6 +572,16 @@ def main() -> int:
     return 0
 
 
+def rapport_jour_textes(racine: Path, config: dict) -> dict | None:
+    """Textes du rapport du jour déjà publiés aujourd'hui (None sinon)."""
+    try:
+        r = json.loads((Path(racine) / config.get("publication_web", {}).get("dossier_docs", "docs") / "data"
+                        / "rapport_jour.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    return r.get("textes") if r.get("date") == date.today().isoformat() else None
+
+
 def ligne_quota(quota: dict | None, engrenages: dict | None) -> str:
     """« Gemini : 17/60, engrenages : fait » — lisible d'un coup d'œil dans le résumé du run."""
     q = quota or {}
@@ -595,18 +614,20 @@ def ligne_budget(b: dict) -> str:
     ligne = (f"Budget ({'run ' + b.get('mode', '?')}{', lundi' if b.get('lundi') else ''}, plafond "
              f"{b.get('plafond') if b.get('plafond') is not None else 'n/d'}) : prévu {prevu} ; consommé ce run : {conso} "
              f"(jour : {jour}/{b.get('plafond') if b.get('plafond') is not None else 'n/d'}) ; échecs ce run : {echecs}")
-    if b.get("abandonnees"):
-        ligne += " ; non rejouées aujourd'hui : " + ", ".join(b["abandonnees"])
+    analyses = b.get("analyses") or {}
+    if analyses:
+        ligne += " ; analyses : " + ", ".join(
+            f"{k} {v['statut']}" + (f" ({v['echec']})" if v.get("echec") else "") for k, v in analyses.items())
     return ligne
 
 
-def _ecrire_resume_run(ligne: str) -> None:
-    log.info("Quota LLM : %s", ligne)
+def _ecrire_resume_run(ligne: str, titre: str = "Quota LLM du jour") -> None:
+    log.info("%s : %s", titre, ligne)
     resume = os.environ.get("GITHUB_STEP_SUMMARY")
     if resume:
         try:
             with open(resume, "a", encoding="utf-8") as f:
-                f.write(f"## Quota LLM du jour\n\n{ligne}\n\n")
+                f.write(f"## {titre}\n\n{ligne}\n\n")
         except OSError:
             pass
 

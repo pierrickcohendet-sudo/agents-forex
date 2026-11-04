@@ -145,7 +145,7 @@ function marches(marche) {
     const sens = variation === null ? "" : variation > 0 ? "pos" : variation < 0 ? "neg" : "";
     tuile.appendChild(el("span", `tuile-variation tabulaire ${sens}`,
       variation === null ? "variation 7 j n/d" :
-      `${variation > 0 ? "+" : ""}${variation.toLocaleString("fr-FR", { maximumFractionDigits: dec })} (${k.variation_pct > 0 ? "+" : ""}${String(k.variation_pct).replace(".", ",")} %) sur 7 j`));
+      `${variation > 0 ? "+" : ""}${variation.toLocaleString("fr-FR", { minimumFractionDigits: dec, maximumFractionDigits: dec })} (${k.variation_pct > 0 ? "+" : ""}${String(k.variation_pct).replace(".", ",")} %) sur 7 j`));
     const limite = new Date(k.date); limite.setDate(limite.getDate() - 92);
     const pts = k.points.filter(p => new Date(p[0]) >= limite);
     tuile.appendChild(sparkline(pts.length > 1 ? pts : k.points, "var(--accent)"));

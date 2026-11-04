@@ -25,7 +25,7 @@ import unicodedata
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
-from core.llm import (MESSAGE_QUOTA_ATTEINT, FournisseurLLM, QuotaAtteint, attribution_modele,
+from core.llm import (MESSAGE_QUOTA_ATTEINT, FournisseurLLM, QuotaAtteint, attribution_modele, echec_transitoire,
                       definir_etiquette, extraire_json, repli_modele_suivant)
 from core.secrets import masquer_secrets
 
@@ -529,7 +529,7 @@ def synthetiser(config: dict, llm: FournisseurLLM, devises: list[dict], donnees:
             log.warning("Synthèses approfondies : quota atteint sur tous les modèles — arrêt (retentées au "
                         "prochain passage après remise à zéro)")
         except Exception as exc:  # noqa: BLE001
-            n = precedentes + 1
+            n = precedentes + (0 if echec_transitoire(llm, f"synthese:{devise}") else 1)   # 503 : rejouée (V6.1)
             raison = masquer_secrets(str(exc))[:200]
             statut = "abandonnee" if n >= maximum else "indisponible"
             log.error("Synthèse approfondie %s %s (tentative %d/%d) : %s", devise, statut, n, maximum, raison)

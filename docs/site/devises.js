@@ -1,5 +1,5 @@
 /* Onglet Devises : une fiche par devise (9), analyse du jour, indicateurs, synthèse approfondie. */
-import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, DRAPEAUX, enBref, essentiel } from "./commun.js";
+import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, DRAPEAUX, enBref, essentiel, vueComplete } from "./commun.js";
 import { blocDevises } from "./consequences_synthese.js";
 import { graphiqueSerie } from "./dossiers.js";
 
@@ -367,7 +367,7 @@ export async function pageDevises(parametre) {
   const note = el("p", "note", "Indicateurs : série unique 5 ans (mêmes valeurs que le dossier 7 et le tableau de chaque fiche), survol pour la source. Engrenages actifs : cases les plus fortes de la matrice d'impact (−2 à +2). Aide à la décision, jamais un ordre.");
   const syntheses = await blocDevises();
   const detail = el("details", "voir-detail");
-  detail.open = !!parametre;
+  detail.open = !!parametre || vueComplete();
   detail.appendChild(el("summary", null, "Voir le détail : graphiques, indicateurs et fiches"));
   detail.append(nav, grille, note, syntheses, ...(rapport.devises || []).map(d => fiche(
     { ...d, indicateurs_tableau: lignesTechniques(techniqueUnique(dos, d.devise), d.indicateurs_tableau || []) },

@@ -1,7 +1,7 @@
 /* Onglet Tableau macro : docs/data/tableau_macro.json, regroupé par devise, tri et recherche. */
-import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, ouvrirDetail, listeDefinitions, certifier, fraicheurLocale, essentiel, voirDetail, DRAPEAUX } from "./commun.js";
+import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, ouvrirDetail, listeDefinitions, certifier, fraicheurLocale, essentiel, voirDetail, DRAPEAUX, vueComplete, miniCourbe } from "./commun.js";
 
-const COLONNES = [
+const COLONNES_BASE = [
   { cle: "libelle", titre: "Indicateur" }, { cle: "Actuel", titre: "Actuel" }, { cle: "Précédent", titre: "Précédent" },
   { cle: "surprise", titre: "Surprise · taux" },   // lot V6 : « Prévision » repliée (audit : 19 % remplie), dans le détail { cle: "date_pub", titre: "Publié le" },
   { cle: "prochaine", titre: "Prochaine" }, { cle: "source", titre: "Source" },
@@ -13,6 +13,8 @@ function nombre(t) {
 }
 
 export async function pageTableau() {
+  // Lot V6.1 : vue complète = colonne « Prévision » visible ; vue essentielle = repliée (audit : peu remplie)
+  const COLONNES = vueComplete() ? [...COLONNES_BASE.slice(0, 3), { cle: "Prévision", titre: "Prévision" }, ...COLONNES_BASE.slice(3)] : COLONNES_BASE;
   const t = await chargerJson("data/tableau_macro.json");
   if (enErreur(t)) return [indisponible("Tableau macro", t?.__erreur || "tableau absent")];
   const c = el("section", "carte");
@@ -43,7 +45,7 @@ export async function pageTableau() {
   c.appendChild(defile);
   const compteur = el("p", "note"); c.appendChild(compteur);
   const prevues = (t.lignes || []).filter(l => l.etat?.["Prévision"] === "valeur").length;
-  c.appendChild(el("p", "note", `Prévision : données insuffisantes pour une colonne (${prevues} ${prevues < 2 ? "ligne renseignée" : "lignes renseignées"} sur ${(t.lignes || []).length} : le consensus de la prochaine publication est rarement connu à l'avance). Elle reste dans le détail de chaque ligne.`));
+  if (!vueComplete()) c.appendChild(el("p", "note", `Prévision : données insuffisantes pour une colonne (${prevues} ${prevues < 2 ? "ligne renseignée" : "lignes renseignées"} sur ${(t.lignes || []).length} : le consensus de la prochaine publication est rarement connu à l'avance). Elle reste dans le détail de chaque ligne.`));
   if (JSON.stringify(t.lignes || []).includes("taux de refinancement")) c.appendChild(el("p", "note",
     "EUR, « taux de refinancement » : taux principal publié par ForexFactory. Le site utilise le taux de dépôt de la BCE (ECBDFR, 15 pb plus bas) pour le portage et les dossiers des engrenages."));
 
@@ -115,14 +117,14 @@ export async function pageTableau() {
 /* ------------------------------------------------------------------ lot V6 : onglet « Tableau de bord »
    L'essentiel, le point de marché (rapport du jour), une ligne de lecture par devise (profil des devises), puis le
    tableau macro complet. Tout est calculé en Python ; la page n'affiche que des fichiers publiés. */
-const v2 = (v, d = 2) => v == null ? "n/d" : Number(v).toLocaleString("fr-FR", { minimumFractionDigits: 0, maximumFractionDigits: d });
+const v2 = (v, d = 2) => v == null ? "n/d" : Number(v).toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d });
 const sg = (v, d = 2) => v == null ? "n/d" : `${v > 0 ? "+" : ""}${v2(v, d)}`.replace("-", "−");
 
 function pointMarche(pm) {
   const c = el("section", "carte");
   c.appendChild(el("h3", null, "Point de marché"));
   const d = el("div", "defile"); const t = el("table", "dense td-pm");
-  const tr = el("tr"); for (const h of ["Actif", "Niveau", "J-1", "5 séances", "Lecture", "Date"]) tr.appendChild(el("th", null, h));
+  const tr = el("tr"); for (const h of ["Actif", "Niveau", "J-1", "5 séances", "30 jours", "Lecture", "Date"]) tr.appendChild(el("th", null, h));
   const th = el("thead"); th.appendChild(tr); t.appendChild(th);
   const tb = el("tbody");
   for (const l of pm.lignes || []) {
@@ -130,8 +132,9 @@ function pointMarche(pm) {
     const u = l.unite === "pb" ? " pb" : l.unite === "%" ? " %" : "";
     r.append(el("td", null, l.actif), el("td", "tabulaire", l.niveau == null ? `n/d` : `${v2(l.niveau, l.decimales ?? 2)}${l.suffixe || ""}`),
              el("td", "tabulaire", l.variation_j1 == null ? "n/d" : `${sg(l.variation_j1, l.unite === "pb" ? 0 : 2)}${u}`),
-             el("td", "tabulaire", l.variation_5j == null ? "n/d" : `${sg(l.variation_5j, l.unite === "pb" ? 0 : 2)}${u}`),
-             el("td", null, l.lecture || l.raison || "n/d"));
+             el("td", "tabulaire", l.variation_5j == null ? "n/d" : `${sg(l.variation_5j, l.unite === "pb" ? 0 : 2)}${u}`));
+    const mini = el("td"); mini.appendChild(miniCourbe(l.serie_30j, `${l.actif} : 30 derniers jours`));
+    r.append(mini, el("td", "td-lecture", l.lecture || l.raison || "n/d"));
     const date = String(l.heure || "").slice(0, 10);
     const td = el("td", "tabulaire", date ? dateCourte(date) : "n/d");
     const f = date ? fraicheurLocale(date, { frequence: "quotidienne (jours ouvrés)", retard_jours: 1 }) : null;

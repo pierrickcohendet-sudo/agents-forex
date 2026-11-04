@@ -1432,8 +1432,9 @@ simulateur:
 #      communiqué archivé), macro (indice de surprise 30 j ≥ 0,3 en valeur absolue), tendance (force 20 séances ≥ 1 %
 #      en valeur absolue) ; total ≥ 2 : « Soutenue », ≤ −2 : « Sous pression », sinon « Sans direction ».
 profil_devises:
-  # L'indice dollar large n'est candidat que pour l'EUR (ancrage anti-dollar) et le CNY : chaque indice de force est
-  # mesuré contre le dollar, il ressortirait mécaniquement comme moteur de toutes les autres devises.
+  # Lot V6.1 : l'indice dollar large n'est candidat pour AUCUNE devise. Chaque indice de force est mesuré contre le
+  # dollar : sa corrélation avec un indice du dollar est mécanique (raisonnement circulaire), y compris pour l'EUR et le
+  # CNY. L'ancrage « anti-dollar » de l'EUR est donc déclaré non mesurable.
   seuil_correlation: 0.30
   seances_longues: 60
   seances_courtes: 20
@@ -1442,9 +1443,9 @@ profil_devises:
     us2a:         { libelle: "Rendement US 2 ans (écart de taux 2 ans, côté US)", nom: "le rendement US à 2 ans", serie: USD_2a }
     us10a:        { libelle: "Rendement US 10 ans", nom: "le rendement US à 10 ans", serie: USD_10a }
     vix:          { libelle: "VIX (volatilité des actions US)", nom: "le VIX", serie: vix }
-    actions:      { libelle: "Indice actions (S&P 500)", nom: "le S&P 500", serie: sp500 }
+    actions:      { libelle: "Indice actions (S&P 500, ETF SPY)", nom: "le S&P 500", serie: sp500, serie_twelve: sp500_spy }
     brent:        { libelle: "Pétrole Brent", nom: "le Brent", serie: brent }
-    or:           { libelle: "Or (indice, proxy)", nom: "l'or", serie: indice_or }
+    or:           { libelle: "Or (XAU/USD)", nom: "l'or", serie: indice_or, serie_twelve: or_xau }
     dollar_large: { libelle: "Indice dollar large (Fed)", nom: "l'indice dollar large", serie: dollar_large }
     cuivre:       { libelle: "Cuivre", serie: null, raison: "série quotidienne du cuivre non collectée (aucune source gratuite configurée)" }
     ecart_2a_etranger: { libelle: "Écart de taux 2 ans (taux étranger)", serie: null, raison: "pas d'historique quotidien des taux 2 ans hors États-Unis (seule la dernière valeur est collectée)" }
@@ -1459,10 +1460,10 @@ profil_devises:
     EUR:
       nom: Euro
       ancrages:
-        - { libelle: "Anti-dollar", moteur: dollar_large, sens: -1, texte: "L'euro est la première alternative au dollar : il monte souvent quand le dollar baisse en général." }
+        - { libelle: "Anti-dollar", moteur: null, sens: null, texte: "L'euro est la première alternative au dollar : il monte souvent quand le dollar baisse en général." }
         - { libelle: "Taux BCE", moteur: ecart_2a_etranger, sens: 1, texte: "Les anticipations sur la BCE, lues dans l'écart de taux 2 ans avec les États-Unis, guident l'euro." }
         - { libelle: "Énergie", moteur: brent, sens: -1, texte: "La zone euro importe son énergie : un pétrole cher pèse sur sa balance commerciale." }
-      candidats: [dollar_large, us2a, brent, vix, actions, ecart_2a_etranger, surprises_bc]
+      candidats: [us2a, brent, vix, actions, or, ecart_2a_etranger, surprises_bc]
     GBP:
       nom: Livre sterling
       ancrages:
@@ -1502,7 +1503,7 @@ profil_devises:
       nom: Yuan
       ancrages:
         - { libelle: "Change géré par la PBoC", moteur: null, sens: null, texte: "La banque centrale fixe chaque jour un cours de référence : la direction se lit d'abord dans ce fixing." }
-      candidats: [dollar_large, actions, us2a]
+      candidats: [actions, us2a, or, vix]
   # Noms des décisions de taux dans l'archive des publications (ForexFactory) : dernière décision contre consensus.
   decisions:
     USD: ["Federal Funds Rate"]

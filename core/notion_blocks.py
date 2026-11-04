@@ -5,6 +5,7 @@ Couleurs par biais : Risk On = vert, Risk Off = rouge, Neutre = jaune.
 from __future__ import annotations
 
 import json
+import re
 from urllib.parse import quote
 
 COULEURS_HEX = {"on": "#22c55e", "off": "#ef4444", "neutre": "#eab308"}
@@ -14,18 +15,53 @@ LIBELLES_BIAIS = {"on": "Risk On", "off": "Risk Off", "neutre": "Neutre"}
 
 
 # --------------------------------------------------------------- rich text
+LIMITE_TEXTE = 2000      # limite Notion d'un objet rich text
+LIMITE_BLOCS = 100       # limite Notion de blocs par requête d'ajout
+
+
+def decouper(texte: str, limite: int = LIMITE_TEXTE) -> list[str]:
+    """Morceaux de `limite` caractères au plus, coupés sur une fin de phrase (sinon sur un espace) : rien n'est perdu."""
+    texte, sortie = str(texte), []
+    while len(texte) > limite:
+        fenetre = texte[:limite]
+        fins = [m.end() for m in re.finditer(r"[.!?…](?:\s|$)", fenetre)]
+        coupe = fins[-1] if fins and fins[-1] > limite // 3 else (fenetre.rfind(" ") + 1 or limite)
+        sortie.append(texte[:coupe].rstrip())
+        texte = texte[coupe:].lstrip()
+    return sortie + ([texte] if texte or not sortie else [])
+
+
 def rt(texte: str, gras: bool = False, couleur: str = "default", italique: bool = False) -> dict:
+    """Un fragment ; au-delà de 2000 caractères, le texte reste entier et `_rich` le découpe en plusieurs fragments."""
     return {
         "type": "text",
-        "text": {"content": str(texte)[:2000]},
+        "text": {"content": str(texte)},
         "annotations": {"bold": gras, "italic": italique, "color": couleur,
                         "strikethrough": False, "underline": False, "code": False},
     }
 
 
+def _rich(fragments: list[dict]) -> list[dict]:
+    """Limite de 2000 caractères par fragment : découpe sur une fin de phrase, même mise en forme."""
+    sortie = []
+    for f in fragments:
+        contenu = ((f.get("text") or {}).get("content")) if f.get("type") == "text" else None
+        if contenu is None or len(contenu) <= LIMITE_TEXTE:
+            sortie.append(f)
+            continue
+        for morceau in decouper(contenu):
+            sortie.append({**f, "text": {**f["text"], "content": morceau}})
+    return sortie[:100]   # limite Notion : 100 objets rich text par bloc
+
+
+def lots(blocs: list[dict], taille: int = LIMITE_BLOCS) -> list[list[dict]]:
+    """Blocs envoyés par lots de 100 au plus (limite de l'API)."""
+    return [blocs[i:i + taille] for i in range(0, len(blocs), taille)]
+
+
 # ------------------------------------------------------------------- blocs
 def paragraphe(fragments: list[dict]) -> dict:
-    return {"type": "paragraph", "paragraph": {"rich_text": fragments}}
+    return {"type": "paragraph", "paragraph": {"rich_text": _rich(fragments)}}
 
 
 def paragraphe_gris(texte: str) -> dict:
@@ -34,24 +70,24 @@ def paragraphe_gris(texte: str) -> dict:
 
 def titre(niveau: int, texte: str) -> dict:
     cle = f"heading_{niveau}"
-    return {"type": cle, cle: {"rich_text": [rt(texte, gras=True)]}}
+    return {"type": cle, cle: {"rich_text": _rich([rt(texte, gras=True)])}}
 
 
 def callout(fragments: list[dict], emoji: str, couleur: str) -> dict:
     return {"type": "callout", "callout": {
-        "rich_text": fragments, "icon": {"type": "emoji", "emoji": emoji}, "color": couleur,
+        "rich_text": _rich(fragments), "icon": {"type": "emoji", "emoji": emoji}, "color": couleur,
     }}
 
 
 def toggle(fragments: list[dict], enfants: list[dict] | None = None) -> dict:
-    bloc = {"type": "toggle", "toggle": {"rich_text": fragments}}
+    bloc = {"type": "toggle", "toggle": {"rich_text": _rich(fragments)}}
     if enfants:
         bloc["toggle"]["children"] = enfants
     return bloc
 
 
 def puce(fragments: list[dict]) -> dict:
-    return {"type": "bulleted_list_item", "bulleted_list_item": {"rich_text": fragments}}
+    return {"type": "bulleted_list_item", "bulleted_list_item": {"rich_text": _rich(fragments)}}
 
 
 def image_externe(url: str, legende: str = "") -> dict:
@@ -68,7 +104,7 @@ def tableau(entetes: list[str], lignes: list[list]) -> dict:
     largeur = len(entetes)
     rangees = [{"type": "table_row", "table_row": {"cells": [[rt(e, gras=True)] for e in entetes]}}]
     for ligne in lignes:
-        cellules = [c if isinstance(c, list) else [rt(str(c) if c not in (None, "") else "—")]
+        cellules = [_rich(c) if isinstance(c, list) else _rich([rt(str(c) if c not in (None, "") else "—")])
                     for c in ligne[:largeur]]
         cellules += [[rt("—")]] * (largeur - len(cellules))
         rangees.append({"type": "table_row", "table_row": {"cells": cellules}})

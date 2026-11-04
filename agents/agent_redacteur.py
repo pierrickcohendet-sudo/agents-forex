@@ -1026,7 +1026,11 @@ def publier_dossier_hebdo(config: dict, contenu: dict, chemin_config: str | Path
 
 
 # ------------------------------------------------------- rapport du jour (lot « Rapport du jour »)
-TYPE_RAPPORT_JOUR = "rapport du jour"
+# Options existantes de la propriété « Type » (quotidien, hebdomadaire, mensuel, dossier hebdo) : le 04/11/2026,
+# « rapport du jour » n'existait pas (APIResponseError). Le pipeline ne modifie jamais la base : le rapport du jour est
+# classé « quotidien » et reconnu par son titre.
+TYPE_RAPPORT_JOUR = "quotidien"
+PREFIXE_RAPPORT_JOUR = "Rapport du jour — "
 
 
 def _f(v, d: int = 2) -> str:
@@ -1099,6 +1103,13 @@ def blocs_rapport_jour(r: dict) -> list[dict]:
     return b
 
 
+def erreur_notion(exc: Exception) -> str:
+    """« statut HTTP · code Notion : message » au lieu du seul nom « APIResponseError »."""
+    code = getattr(exc, "code", None)
+    entete = " · ".join(str(x) for x in (getattr(exc, "status", None), getattr(code, "value", code)) if x)
+    return masquer_secrets(f"{entete} : {exc}" if entete else str(exc))[:400]
+
+
 def publier_rapport_jour(config: dict, r: dict, chemin_config: str | Path | None = None, client: Client | None = None) -> str | None:
     """Écrit le Rapport du jour dans la base Notion existante (nouvelle entrée), puis, l'écriture réussie, met à la
     corbeille les versions précédentes du même jour (récupérables dans Notion). Retourne l'URL."""
@@ -1115,9 +1126,10 @@ def publier_rapport_jour(config: dict, r: dict, chemin_config: str | Path | None
     if not database_id:
         return None
     ds = _obtenir_data_source(client, database_id)
-    filtre = {"and": [{"property": "Date", "date": {"equals": r["date"]}}, {"property": "Type", "select": {"equals": TYPE_RAPPORT_JOUR}}]}
+    filtre = {"and": [{"property": "Date", "date": {"equals": r["date"]}}, {"property": "Type", "select": {"equals": TYPE_RAPPORT_JOUR}},
+                      {"property": "Nom", "title": {"starts_with": PREFIXE_RAPPORT_JOUR}}]}
     anciennes = client.data_sources.query(ds, filter=filtre, page_size=10).get("results") or []
-    titre = f"Rapport du jour — {r['date']} ({r.get('version')})"
+    titre = f"{PREFIXE_RAPPORT_JOUR}{r['date']} ({r.get('version')})"
     semaine = hebdo.semaine_iso(date.fromisoformat(r["date"]))
     page = client.pages.create(
         parent={"type": "data_source_id", "data_source_id": ds}, icon={"type": "emoji", "emoji": "🗞️"},
@@ -1125,8 +1137,13 @@ def publier_rapport_jour(config: dict, r: dict, chemin_config: str | Path | None
                     "Date": {"date": {"start": r["date"]}}, "Type": {"select": {"name": TYPE_RAPPORT_JOUR}},
                     "Semaine": {"rich_text": [{"type": "text", "text": {"content": semaine}}]}})
     blocs = blocs_rapport_jour(r)
-    for i in range(0, len(blocs), 90):   # limite de l'API : 100 blocs par ajout
-        client.blocks.children.append(page["id"], children=blocs[i:i + 90])
+    paquets = nb.lots(blocs)   # limite de l'API : 100 blocs par ajout
+    for k, lot in enumerate(paquets):
+        try:
+            client.blocks.children.append(page["id"], children=lot)
+        except Exception as exc:   # erreur exacte : code, message, lot et premier bloc concernés
+            raise RuntimeError(f"Notion, ajout du lot {k + 1}/{len(paquets)} ({len(lot)} blocs, premier : "
+                               f"{lot[0].get('type')}) : {erreur_notion(exc)}") from exc
     for a in anciennes:   # l'écriture a réussi : les anciennes versions du jour vont à la corbeille (récupérables)
         try:
             client.pages.update(a["id"], in_trash=True)

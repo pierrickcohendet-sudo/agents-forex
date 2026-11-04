@@ -1,0 +1,55 @@
+"""Identifiant de version du site (lot V6.1) : plus de page ancienne servie par le cache du navigateur après une
+publication. L'identifiant est l'empreinte (SHA-1, 7 caractères) du code du site (docs/site/*.js, *.css) : il ne
+change que si le code change, donc index.html n'est réécrit qu'à ce moment-là.
+
+docs/index.html reçoit : la feuille de style et app.js suffixés « ?v=<id> », une importmap qui suffixe chaque module
+importé (imports internes compris) et une balise meta lue par le site pour versionner les JSON de données et
+l'afficher dans le pied de page (« version abc1234 · généré le JJ/MM/AAAA HH:MM »)."""
+from __future__ import annotations
+
+import hashlib
+import json
+import re
+from pathlib import Path
+
+DEBUT, FIN = "<!-- version-site:debut -->", "<!-- version-site:fin -->"
+
+
+def empreinte(dossier_site: Path) -> str:
+    h = hashlib.sha1()
+    for f in sorted(Path(dossier_site).glob("*")):
+        if f.suffix in (".js", ".css"):
+            h.update(f.name.encode())
+            h.update(f.read_bytes().replace(b"\r\n", b"\n"))
+    return h.hexdigest()[:7]
+
+
+def bloc_tete(version: str, modules: list[str]) -> str:
+    carte = {"imports": {f"./site/{m}": f"./site/{m}?v={version}" for m in modules}}
+    return (f"{DEBUT}\n  <meta name=\"fxdesk-version\" content=\"{version}\">\n"
+            f"  <script type=\"importmap\">{json.dumps(carte, ensure_ascii=False)}</script>\n"
+            f"  <link rel=\"stylesheet\" href=\"site/cabinet.css?v={version}\">\n  {FIN}")
+
+
+def appliquer(racine: str | Path) -> dict:
+    """Met index.html à jour avec la version courante. -> {version, modifie}."""
+    racine = Path(racine)
+    site = racine / "docs" / "site"
+    index = racine / "docs" / "index.html"
+    version = empreinte(site)
+    modules = sorted(f.name for f in site.glob("*.js"))
+    html = index.read_text(encoding="utf-8")
+    bloc = bloc_tete(version, modules)
+    if DEBUT in html:
+        nouveau = re.sub(re.escape(DEBUT) + r".*?" + re.escape(FIN), lambda _: bloc, html, flags=re.S)
+    else:
+        nouveau = re.sub(r'  <link rel="stylesheet" href="site/cabinet\.css[^"]*">', lambda _: "  " + bloc, html, count=1)
+    nouveau = re.sub(r'<script type="module" src="site/app\.js[^"]*"></script>',
+                     f'<script type="module" src="site/app.js?v={version}"></script>', nouveau)
+    if nouveau != html:
+        index.write_text(nouveau, encoding="utf-8")
+    return {"version": version, "modifie": nouveau != html}
+
+
+if __name__ == "__main__":
+    print(appliquer(Path(__file__).resolve().parent.parent))

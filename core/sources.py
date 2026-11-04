@@ -32,6 +32,10 @@ CERTIFIES = {"vix": ("VIX", "pts"), "sp500": ("S&P 500", "pts"), "wti": ("Pétro
              "CAD_10a": ("Rendement 10 ans Canada", "%"), "eia_stocks": ("Stocks de brut US (EIA)", "milliers de barils")}
 
 
+# Séries hebdomadaires lues dans des sources quotidiennes : (fréquence, retard en jours ouvrés) propres à la série.
+# Prime de terme Kim-Wright : mise à jour hebdomadaire -> normal = 7 jours ouvrés avant toute alerte (lot V6.1).
+FREQUENCES_SERIE = {"USD_prime_terme": ("quotidienne", 6)}
+
 # Calendrier réel de publication (certificat) : explique l'âge normal d'une valeur
 CALENDRIERS = {
     "USD_2a": "Trésor US (H.15) via FRED : la valeur du jour J paraît le lendemain vers 20 h UTC ; le run de 08:15 voit J-2, "
@@ -180,12 +184,15 @@ def certificats(historiques: dict, registre_sources: list[dict], config: dict, r
         frq = (conf or {}).get("frequence", "quotidienne")
         if "mensuel" in source.lower():
             frq = "mensuelle"
+        retard = (conf or {}).get("retard_jours", 1)
+        if cle in FREQUENCES_SERIE:
+            frq, retard = FREQUENCES_SERIE[cle]
         ctrl, detail = _controle(cle, rapport)
         sortie[cle] = {"libelle": libelle, "valeur": pts[-1][1], "unite": unite, "source": source, "serie": cle,
                        "calendrier": CALENDRIERS.get(cle),
                        "date_valeur": str(pts[-1][0])[:10], "recupere_le": (src or {}).get("recupere_le"),
                        "statut": (src or {}).get("statut_libelle"), "controle": ctrl, "controle_detail": detail,
-                       "fraicheur": fraicheur(pts[-1][0], frq, (conf or {}).get("retard_jours", 1), aujourdhui)}
+                       "fraicheur": fraicheur(pts[-1][0], frq, retard, aujourdhui)}
     return sortie
 
 

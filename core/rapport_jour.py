@@ -123,7 +123,7 @@ def variables(historiques: dict | None, rapport: dict | None, agenda_donnees: di
     defs = [("us2a_5j", "USD_2a", "pb"), ("us10a_5j", "USD_10a", "pb"), ("us30a_5j", "USD_30a", "pb"),
             ("reel_10a_5j", "USD_reel_10a", "pb"), ("point_mort_10a_5j", "USD_point_mort_10a", "pb"),
             ("spread_hy_5j", "USD_spread_hy", "pb"), ("vix_5j", "vix", "pts"), ("brent_5j", "brent", "%"),
-            ("or_5j", "or_xau", "%"), ("nasdaq_5j", "nasdaq_qqq", "%"), ("sp500_5j", "sp500", "%"), ("dollar_5j", "dollar_large", "%")]
+            ("or_5j", "or_xau", "%"), ("nasdaq_5j", "nasdaq_qqq", "%"), ("sp500_5j", "sp500_spy", "%"), ("dollar_5j", "dollar_large", "%")]
     for nom, cle, unite in defs:
         pts = _points(historiques, cle)
         v[nom] = _v(variation(pts, 5, unite), unite, pts[-1][0] if pts else None, _source(historiques, cle),
@@ -168,12 +168,14 @@ def evaluer(conditions: list, vars_: dict) -> list[dict]:
 
 # ------------------------------------------------------------------ 2. point de marché
 ACTIFS = [  # (libellé, clé historique ou paire, unité de variation, catégorie)
-    ("Indice dollar (Fed, large)", "dollar_large", "%", "dollar"), ("EUR/USD", "EUR/USD", "%", "fx"), ("GBP/USD", "GBP/USD", "%", "fx"),
+    # Lot V6.1 : indice calculé selon la formule du DXY en premier ; l'indice large de la Fed passe en secondaire.
+    ("Indice dollar (formule du DXY, non officiel)", "dxy_formule", "%", "dollar"),
+    ("Indice dollar large (Fed, publication hebdomadaire)", "dollar_large", "%", "dollar"), ("EUR/USD", "EUR/USD", "%", "fx"), ("GBP/USD", "GBP/USD", "%", "fx"),
     ("USD/JPY", "USD/JPY", "%", "fx"), ("AUD/USD", "AUD/USD", "%", "fx"), ("USD/CAD", "USD/CAD", "%", "fx"),
     ("USD/CHF", "USD/CHF", "%", "fx"), ("NZD/USD", "NZD/USD", "%", "fx"), ("US 2 ans", "USD_2a", "pb", "taux"),
     ("US 10 ans", "USD_10a", "pb", "taux"), ("US 30 ans", "USD_30a", "pb", "taux"), ("Taux réel US 10 ans", "USD_reel_10a", "pb", "taux"),
     ("Brent", "brent", "%", "petrole"), ("Or (XAU/USD)", "or_xau", "%", "or"), ("VIX", "vix", "pts", "vix"),
-    ("S&P 500", "sp500", "%", "actions"), ("Nasdaq 100 (ETF QQQ)", "nasdaq_qqq", "%", "actions"), ("Japon (ETF EWJ)", "japon_ewj", "%", "actions")]
+    ("S&P 500 (ETF SPY)", "sp500_spy", "%", "actions"), ("Nasdaq 100 (ETF QQQ)", "nasdaq_qqq", "%", "actions"), ("Japon (ETF EWJ)", "japon_ewj", "%", "actions")]
 LECTURES_ACTIF = {
     ("dollar", 1): "dollar plus fort face à ses partenaires", ("dollar", -1): "dollar plus faible face à ses partenaires",
     ("taux", 1): "rendement en hausse : conditions plus strictes", ("taux", -1): "rendement en baisse : détente des taux",
@@ -207,7 +209,7 @@ def lecture_actif(cat: str, cle: str, v1: float | None, v5: float | None, unite:
         qui = f"{cle} : " if cat == "fx" else ""
         base += f" ({qui}{'rebond' if v1 > 0 else 'repli'} J-1 dans {'une baisse' if sens < 0 else 'une hausse'} sur 5 séances)"
     elif not sens and v1 is not None and abs(v1) >= SEUILS_J1[unite] * 2:
-        base += f" (mouvement J-1 de {v1:+g}{' pb' if unite == 'pb' else ' %' if unite == '%' else ' pts'})".replace(".", ",")
+        base += f" (mouvement J-1 de {_fr(v1, 0 if unite == 'pb' else 2)}{' pb' if unite == 'pb' else ' %' if unite == '%' else ' pts'})"
     return majuscule(base)
 
 
@@ -224,10 +226,14 @@ def point_marche(historiques, h5, technique, seance: dict | None, config: dict, 
     from core import paires as pm
     lignes = []
     cot = (seance or {}).get("cotations") or {}
+    from core import rapport_long
     for libelle, cle, unite, cat in ACTIFS:
         if cat == "fx":
             pts = pm.serie_paire(h5, technique, cle) if h5 is not None else []
             source = "série unique 5 ans (Twelve Data raccordé à la Fed H.10)"
+        elif cle == "dxy_formule":
+            pts = rapport_long.serie_dxy(h5, technique, _points(historiques, "usdsek"))
+            source = "calcul Python, formule publique du DXY (ICE) : Twelve Data (EUR, JPY, GBP, CAD, CHF, SEK contre USD)"
         else:
             pts = _points(historiques, cle)
             source = _source(historiques, cle)
@@ -237,12 +243,17 @@ def point_marche(historiques, h5, technique, seance: dict | None, config: dict, 
         v5 = variation(pts, 5, unite)
         v1 = round(q["variation_pct"], 2) if q.get("variation_pct") is not None and unite == "%" else variation(pts, 1, unite)
         lecture = lecture_actif(cat, cle, v1, v5, unite)
+        if cle == "brent" and pts and q.get("prix") is None:
+            source = f"{source} — clôture EIA du {pts[-1][0][8:10]}/{pts[-1][0][5:7]} (publication EIA différée)"
+        debut30 = (date.fromisoformat(pts[-1][0]) - timedelta(days=30)).isoformat() if pts else None
         lignes.append({"actif": libelle, "niveau": niveau, "variation_j1": v1, "variation_5j": v5, "unite": unite,
+                       "serie_30j": [[d, round(v, 6)] for d, v in pts if debut30 and d >= debut30],
                        "categorie": cat, **format_actif(cat, cle),
                        "heure": heure, "source": (q.get("source") + " ; " + source) if q.get("prix") is not None else source,
                        "statut": "provisoire" if q.get("prix") is not None and q.get("marche_ouvert") else ("confirmé" if niveau is not None else None),
                        "lecture": lecture if niveau is not None else None,
-                       "raison": None if niveau is not None else "Série absente (ajoutée au lot Rapport du jour : prochain run)"})
+                       "raison": None if niveau is not None else ("USD/SEK ou un des 5 cours absent de la collecte Twelve Data"
+                                                                     if cle == "dxy_formule" else f"série {cle} absente de la collecte du jour")})
     globale = next((r["texte"] for r in (config.get("rapport") or {}).get("lectures_marche") or []
                     if all(c["remplie"] for c in evaluer(r["si"], vars_))), "Mouvement sans signal d'ensemble net")
     return {"lignes": lignes, "lecture": globale,

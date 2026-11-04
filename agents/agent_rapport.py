@@ -17,7 +17,8 @@ from pathlib import Path
 
 from agents.agent_dossier_hebdo import _valeurs, verifier_chiffres
 from agents.agent_synthese import _retirer_ordres
-from core.llm import MESSAGE_QUOTA_ATTEINT, QuotaAtteint, attribution_modele, definir_etiquette, extraire_json, repli_modele_suivant
+from core.llm import (MESSAGE_QUOTA_ATTEINT, QuotaAtteint, attribution_modele, definir_etiquette, echec_transitoire, extraire_json,
+                      repli_modele_suivant)
 from core.secrets import masquer_secrets
 
 log = logging.getLogger(__name__)
@@ -251,7 +252,10 @@ def executer(racine: str | Path, config: dict, llm, maintenant: datetime | None 
         textes_com = {d: communiques.textes_a_comparer(racine, index, d) for d in (index.get("par_devise") or {})}
         nouveaux = rediger(r, llm, textes_com)
         meme_jour = (textes or {}).get("jour_quota") == jour_quota_google(instant).isoformat()
-        nouveaux["essais"] = (int((textes or {}).get("essais", 0)) if meme_jour else 0) + 1
+        # Un échec seulement transitoire (503, 429, délai) ne compte pas comme un essai : rejoué au complément suivant
+        transitoire = nouveaux.get("statut") != "ok" and all(echec_transitoire(llm, e) for e in ("rapport:redaction", "rapport:analyse"))
+        nouveaux["essais"] = (int((textes or {}).get("essais", 0)) if meme_jour else 0) + (0 if transitoire else 1)
+        nouveaux["echec_transitoire"] = transitoire
         nouveaux["jour_quota"] = jour_quota_google(instant).isoformat()
         textes = nouveaux
     if (textes or {}).get("statut") == "ok" and hasattr(llm, "marquer_fait"):

@@ -2,11 +2,12 @@
    validés (ou phrases Python). Lundi : version complète (12 sections) ; mardi à vendredi : version courte, avec un bouton
    pour tout afficher. Sommaire cliquable, temps de lecture, impression A4, sections dépliables sur mobile.
    Calculateur de taille de position : calcul local dans le navigateur. Jamais un ordre d'achat ou de vente. */
-import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, certifier, pluriel, badgeEcart, essentiel, DRAPEAUX } from "./commun.js";
+import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, certifier, pluriel, badgeEcart, essentiel, DRAPEAUX,
+         vueComplete, miniCourbe } from "./commun.js";
 import { badgeEtat } from "./devises.js";
 import { RENDUS_LONGS } from "./synthese_longue.js";
 
-const virgule = (v, d = 2) => v == null ? "n/d" : Number(v).toLocaleString("fr-FR", { maximumFractionDigits: d, minimumFractionDigits: 0 });
+const virgule = (v, d = 2) => v == null ? "n/d" : Number(v).toLocaleString("fr-FR", { maximumFractionDigits: d, minimumFractionDigits: d });
 const signe = (v, d = 2) => v == null ? "n/d" : `${v > 0 ? "+" : ""}${virgule(v, d)}`.replace("-", "−");
 const unite = u => ({ pb: " pb", "%": " %", pts: " pts" }[u] || "");
 const varTxt = (v, u) => v == null ? "n/d" : `${signe(v, u === "pb" ? 0 : 2)}${unite(u)}`;   // jamais « n/d pb »
@@ -49,7 +50,8 @@ const RENDUS = {
       const n = el("span", "tabulaire", l.niveau == null ? "n/d" : `${Number(l.niveau).toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d })}${l.suffixe || ""}`);
       if (l.niveau != null) certifier(n, { libelle: l.actif, valeur: n.textContent, source: l.source, date: l.heure, sansAge: l.statut === "provisoire" ? "cotation de séance (provisoire)" : undefined });
       else n.title = l.raison || "";
-      return [l.actif, n, varTxt(l.variation_j1, l.unite), varTxt(l.variation_5j, l.unite), l.lecture || l.raison || "", `${l.heure ? (l.heure.length > 10 ? dateHeure(l.heure) : dateCourte(l.heure)) : ""} · ${l.source || ""}`];
+      const actif = el("span", "rp-actif"); actif.append(document.createTextNode(l.actif), miniCourbe(l.serie_30j, `${l.actif} : 30 derniers jours`));
+      return [actif, n, varTxt(l.variation_j1, l.unite), varTxt(l.variation_5j, l.unite), l.lecture || l.raison || "", `${l.heure ? (l.heure.length > 10 ? dateHeure(l.heure) : dateCourte(l.heure)) : ""} · ${l.source || ""}`];
     }), "rp-marche"));
     b.push(el("p", "note", pm.note || ""));
     return b;
@@ -328,7 +330,7 @@ function risqueBloc(r) {
 async function sectionsPeriodiques() {
   const [h, cs] = await Promise.all([chargerJson("data/dossiers_hebdo.json"), chargerJson("data/consequences_synthese.json")]);
   const sortie = [];
-  const hebdo = el("details", "carte rp-section rp-periodique"); hebdo.id = "rp-hebdo";
+  const hebdo = el("details", "carte rp-section rp-periodique"); hebdo.id = "rp-hebdo"; hebdo.open = vueComplete();
   hebdo.appendChild(el("summary", null, "Synthèse hebdomadaire"));
   const syn = enErreur(h) ? null : h.synthese;
   if (syn?.statut === "ok") {
@@ -340,7 +342,7 @@ async function sectionsPeriodiques() {
   } else hebdo.appendChild(el("p", "indisponible", `Données insuffisantes : ${enErreur(h) ? "dossier hebdomadaire pas encore produit (dimanche)" : syn?.raison || "synthèse non rédigée"}.`));
   const lien = el("a", null, "Dossier complet de la semaine (8 engrenages)"); lien.href = "#engrenages/hebdo"; hebdo.appendChild(lien);
   sortie.push(hebdo);
-  const mens = el("details", "carte rp-section rp-periodique"); mens.id = "rp-mensuel";
+  const mens = el("details", "carte rp-section rp-periodique"); mens.id = "rp-mensuel"; mens.open = vueComplete();
   mens.appendChild(el("summary", null, "Synthèse mensuelle"));
   if (!enErreur(cs) && cs.mensuel) {
     const { sectionSynthese } = await import("./consequences_synthese.js");
@@ -366,7 +368,7 @@ export async function pageRapport() {
   actions.append(temps, toutes, imprimer);
   tete.append(actions, sommaire);
   const corps = el("div", "rp-corps");
-  const ouvert = window.innerWidth > 720;
+  const ouvert = window.innerWidth > 720 || vueComplete();
   function rendre(cles) {
     corps.replaceChildren(); sommaire.replaceChildren();
     cles.forEach((cle, i) => {
