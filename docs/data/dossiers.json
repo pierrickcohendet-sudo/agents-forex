@@ -1,6 +1,6 @@
 {
  "version_schema": 1,
- "genere_le": "2026-11-05T11:17:44+00:00",
+ "genere_le": "2026-11-05T12:17:46+00:00",
  "debut_historique": "2021-09-04",
  "erreurs_collecte": [],
  "engrenages": {
@@ -23,7 +23,7 @@
     },
     {
      "libelle": "Indice de surprise global (moyenne 9 devises)",
-     "texte": "-0,02",
+     "texte": "-0,03",
      "detail": "9 devises avec un indice",
      "source": "calcul Python (registre macro, 30 j)"
     },
@@ -802,10 +802,10 @@
      "source": "calcul Python (score de confluence 0-100)",
      "raison": null,
      "variation": {
-      "valeur": 2,
+      "valeur": 19,
       "unite": "pts",
       "periode": "4 semaines",
-      "texte": "+2 pts sur 4 semaines"
+      "texte": "+19 pts sur 4 semaines"
      },
      "percentile_5a": null,
      "n_5a": null,
@@ -924,6 +924,10 @@
        [
         "2026-11-04",
         24
+       ],
+       [
+        "2026-11-05",
+        50
        ]
       ],
       "periode": "30 jours (rapports archivés)",
@@ -1332,8 +1336,8 @@
     {
      "id": "surprise_globale",
      "libelle": "Surprise globale (moyenne 9 devises)",
-     "valeur": -0.02,
-     "texte": "−0,02",
+     "valeur": -0.03,
+     "texte": "−0,03",
      "unite": "écarts",
      "date": "2026-11-05",
      "frequence": null,
@@ -1429,7 +1433,7 @@
        ],
        [
         "2026-11-05",
-        -0.02
+        -0.03
        ]
       ],
       "periode": "depuis le début de l'archive quotidienne",
@@ -2456,15 +2460,15 @@
      "devise": "GBP",
      "cellules": {
       "taux_directeur": {
-       "valeur": 3.75,
+       "valeur": 4.0,
        "unite": "%",
-       "date": "2026-09-17",
+       "date": "2026-11-05",
        "source": "registre macro (ForexFactory)",
        "frequence": "quotidien",
        "raison": null,
-       "var_1s": 0.0,
-       "var_4s": 0.0,
-       "percentile_5a": 43,
+       "var_1s": 25.0,
+       "var_4s": 25.0,
+       "percentile_5a": 53,
        "n_5a": 262,
        "raison_percentile": null,
        "note_percentile": "percentile du taux du registre parmi le SONIA quotidien (Banque d'Angleterre) sur 5 ans"
@@ -2486,7 +2490,7 @@
        "var_4s": null
       },
       "taux_reel": {
-       "valeur": 0.95,
+       "valeur": 1.2,
        "raison": null,
        "source": "calcul : taux directeur − CPI core a/a (registre)",
        "percentile_5a": null,
@@ -5734,7 +5738,7 @@
       },
       {
        "nom": "GBP",
-       "valeur": 3.75
+       "valeur": 4.0
       },
       {
        "nom": "JPY",
@@ -6855,21 +6859,21 @@
     {
      "id": "boe",
      "libelle": "BoE, taux directeur",
-     "valeur": 3.75,
-     "texte": "3,75 %",
+     "valeur": 4.0,
+     "texte": "4,00 %",
      "unite": "%",
-     "date": "2026-09-17",
+     "date": "2026-11-05",
      "frequence": "quotidien",
-     "age_jours": 49,
+     "age_jours": 0,
      "source": "registre macro (ForexFactory)",
      "raison": null,
      "variation": {
-      "valeur": 0.0,
+      "valeur": 25.0,
       "unite": "pb",
       "periode": "4 semaines",
-      "texte": "0 pb sur 4 semaines"
+      "texte": "+25 pb sur 4 semaines"
      },
-     "percentile_5a": 43,
+     "percentile_5a": 53,
      "n_5a": 262,
      "percentile_autre": null,
      "raison_percentile": null,
@@ -7420,7 +7424,7 @@
      "devise": "GBP",
      "cellules": {
       "indice_surprise": {
-       "valeur": 0.56,
+       "valeur": 0.48,
        "raison": null,
        "source": "calcul Python (registre macro, 30 j)",
        "percentile_5a": null,
@@ -7428,19 +7432,19 @@
        "var_4s": null,
        "unite": "écarts",
        "date": "2026-11-05",
-       "tendance": "hausse",
-       "n": 10,
+       "tendance": "stable",
+       "n": 11,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
       },
       "dispersion": {
-       "valeur": 0.87,
+       "valeur": 0.84,
        "raison": null,
        "source": "calcul Python (écart-type des surprises 30 j)",
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "n": 10,
+       "n": 11,
        "raison_percentile": "historique trop court"
       },
       "publications": {
@@ -8181,7 +8185,7 @@
         ],
         [
          "2026-11-05",
-         0.56
+         0.48
         ]
        ]
       }
@@ -8318,7 +8322,7 @@
       },
       {
        "nom": "GBP",
-       "valeur": 0.56
+       "valeur": 0.48
       },
       {
        "nom": "JPY",
@@ -8432,8 +8436,8 @@
     {
      "id": "surprise_gbp",
      "libelle": "Surprise GBP (30 j)",
-     "valeur": 0.56,
-     "texte": "+0,56",
+     "valeur": 0.48,
+     "texte": "+0,48",
      "unite": "écarts",
      "date": "2026-11-05",
      "frequence": null,
@@ -8441,10 +8445,10 @@
      "source": "calcul Python (registre macro, 30 j)",
      "raison": null,
      "variation": {
-      "valeur": 0.2,
+      "valeur": 0.12,
       "unite": "écarts",
       "periode": "4 semaines",
-      "texte": "+0,20 sur 4 semaines"
+      "texte": "+0,12 sur 4 semaines"
      },
      "percentile_5a": null,
      "n_5a": null,
@@ -8482,7 +8486,7 @@
        ],
        [
         "2026-11-05",
-        0.56
+        0.48
        ]
       ],
       "periode": "90 jours (hebdomadaire)",
@@ -8881,7 +8885,7 @@
      "date": "2026-11-05",
      "frequence": null,
      "age_jours": 0,
-     "source": "calcul Python (registre macro, 71 publications avec consensus sur 30 jours)",
+     "source": "calcul Python (registre macro, 72 publications avec consensus sur 30 jours)",
      "raison": null,
      "variation": null,
      "percentile_5a": null,
@@ -12213,7 +12217,7 @@
      "raison": null
     }
    ],
-   "actualites_maj": "2026-11-05T11:17+00:00",
+   "actualites_maj": "2026-11-05T12:17+00:00",
    "actualites_nb_titres_lus": 34,
    "notes": [
     "Dette et solde publics : FMI (annuel, avec 1 à 3 ans de retard) ; EUR = Allemagne. Pas de série gratuite pour CHF et NZD.",
@@ -41631,7 +41635,7 @@
      "conviction": 1,
      "conviction_niveau": "faible",
      "regle": "dollar : indice de surprise 30 j de l'USD (≥ +0,3 haussier, ≤ -0,3 baissier)",
-     "raison_couleur": "Vert (Dollar haussier) : dollar : indice de surprise 30 j de l'USD (≥ +0,3 haussier, ≤ -0,3 baissier). Chiffre du jour : Indice de surprise 30 j : USD +0.87, EUR -0.23, GBP +0.56, JPY -0.10, CHF +0.45, CAD -0.59, AUD +0.04, NZD -1.62, CNY +0.45"
+     "raison_couleur": "Vert (Dollar haussier) : dollar : indice de surprise 30 j de l'USD (≥ +0,3 haussier, ≤ -0,3 baissier). Chiffre du jour : Indice de surprise 30 j : USD +0.87, EUR -0.23, GBP +0.48, JPY -0.10, CHF +0.45, CAD -0.59, AUD +0.04, NZD -1.62, CNY +0.45"
     }
    },
    {
@@ -42301,7 +42305,7 @@
      "a_retenir": "L'indice de surprise économique 30j de l'USD ressort solide à +0,87, contre −0,23 pour l'EUR et −1,62 pour le NZD.",
      "a_retenir_source": "modèle",
      "texte_indisponible": null,
-     "raison_couleur": "Vert (Dollar haussier) : dollar : indice de surprise 30 j de l'USD (≥ +0,3 haussier, ≤ -0,3 baissier). Chiffre du jour : Indice de surprise 30 j : USD +0.87, EUR -0.23, GBP +0.56, JPY -0.10, CHF +0.45, CAD -0.59, AUD +0.04, NZD -1.62, CNY +0.45"
+     "raison_couleur": "Vert (Dollar haussier) : dollar : indice de surprise 30 j de l'USD (≥ +0,3 haussier, ≤ -0,3 baissier). Chiffre du jour : Indice de surprise 30 j : USD +0.87, EUR -0.23, GBP +0.48, JPY -0.10, CHF +0.45, CAD -0.59, AUD +0.04, NZD -1.62, CNY +0.45"
     },
     {
      "numero": 4,
@@ -42742,20 +42746,12 @@
      },
      {
       "engrenage": 3,
-      "valeur": 1,
-      "libelle": "Soutien",
-      "regles": [
-       {
-        "regle": "indice de surprise macro 30 jours ≥ 0,50 → +1",
-        "chiffre": "+0,56",
-        "source": "calcul Python (registre macro, 30 j)",
-        "date": "2026-11-05",
-        "points": 1
-       }
-      ],
-      "raison": null,
+      "valeur": 0,
+      "libelle": "Neutre",
+      "regles": [],
+      "raison": "indice de surprise macro 30 jours : +0,48, sous les seuils",
       "bornee": false,
-      "etat": "active"
+      "etat": "neutre"
      },
      {
       "engrenage": 4,
@@ -42803,7 +42799,7 @@
       "etat": "sans_regle"
      }
     ],
-    "bilan": 1,
+    "bilan": 0,
     "lecture": "neutre",
     "incompletes": 1
    },
@@ -43408,15 +43404,15 @@
    }
   ],
   "comptes": {
-   "active": 19,
+   "active": 18,
    "neutralise": 1,
-   "neutre": 28,
+   "neutre": 29,
    "nd": 5,
    "sans_regle": 19
   },
-  "cases_actives": 19,
+  "cases_actives": 18,
   "cases_total": 72,
-  "compte_libelle": "19 actives, 5 n/d, 19 sans règle, 1 neutralisée",
+  "compte_libelle": "18 actives, 5 n/d, 19 sans règle, 1 neutralisée",
   "seuils_bilan": {
    "soutenue": 3,
    "pression": -3
@@ -44308,7 +44304,7 @@
      "2026-11-05"
     ],
     "GBP": [
-     0.56,
+     0.48,
      "calcul Python (registre macro, 30 j)",
      "2026-11-05"
     ],
@@ -44492,9 +44488,9 @@
     "classe": "up"
    },
    "conviction": "moyen",
-   "cases_actives": 19,
+   "cases_actives": 18,
    "cases_total": 72,
-   "compte_matrice": "19 actives, 5 n/d, 19 sans règle, 1 neutralisée",
+   "compte_matrice": "18 actives, 5 n/d, 19 sans règle, 1 neutralisée",
    "explication": "Engrenages orientés : 3. Données (Dollar haussier) ; 6. Géopolitique (Dollar haussier) ; 7. Flux (Dollar neutre · Risk off). Les autres restent dans leur couloir neutre.",
    "texte": "Les engrenages ne s'accordent pas : 2 sur 7 évaluables vont dans le sens du thème calculé (Dollar haussier · Risque neutre), sous le seuil de 3 pour parler d'un thème établi.",
    "texte_source": "calcul Python",
@@ -44864,26 +44860,6 @@
     "distance_texte": "franchi"
    },
    {
-    "id": "surprise_30j-GBP",
-    "engrenage": 3,
-    "devise": "GBP",
-    "libelle": "indice de surprise macro 30 jours — GBP",
-    "effet_haut": "GBP +1 (règle 3)",
-    "effet_bas": "GBP −1 (règle 3)",
-    "valeur": 0.56,
-    "texte_valeur": "+0,56",
-    "unite": "écarts",
-    "date": "2026-11-05",
-    "source": "calcul Python (registre macro, 30 j)",
-    "seuil_bas": -0.5,
-    "seuil_haut": 0.5,
-    "etat": "franchi",
-    "distance": 0.0,
-    "distance_pct": 0.0,
-    "cote": "haut",
-    "distance_texte": "franchi"
-   },
-   {
     "id": "surprise_30j-CAD",
     "engrenage": 3,
     "devise": "CAD",
@@ -45148,6 +45124,26 @@
     "distance_pct": 0.0,
     "cote": "bas",
     "distance_texte": "franchi"
+   },
+   {
+    "id": "surprise_30j-GBP",
+    "engrenage": 3,
+    "devise": "GBP",
+    "libelle": "indice de surprise macro 30 jours — GBP",
+    "effet_haut": "GBP +1 (règle 3)",
+    "effet_bas": "GBP −1 (règle 3)",
+    "valeur": 0.48,
+    "texte_valeur": "+0,48",
+    "unite": "écarts",
+    "date": "2026-11-05",
+    "source": "calcul Python (registre macro, 30 j)",
+    "seuil_bas": -0.5,
+    "seuil_haut": 0.5,
+    "etat": "proche",
+    "distance": 0.02,
+    "distance_pct": 2.0,
+    "cote": "haut",
+    "distance_texte": "0,02"
    },
    {
     "id": "ecart_2a_us_var_4s-EUR",
@@ -45643,6 +45639,27 @@
   ],
   "au_bord": [
    {
+    "id": "surprise_30j-GBP",
+    "engrenage": 3,
+    "devise": "GBP",
+    "libelle": "indice de surprise macro 30 jours — GBP",
+    "effet_haut": "GBP +1 (règle 3)",
+    "effet_bas": "GBP −1 (règle 3)",
+    "valeur": 0.48,
+    "texte_valeur": "+0,48",
+    "unite": "écarts",
+    "date": "2026-11-05",
+    "source": "calcul Python (registre macro, 30 j)",
+    "seuil_bas": -0.5,
+    "seuil_haut": 0.5,
+    "etat": "proche",
+    "distance": 0.02,
+    "distance_pct": 2.0,
+    "cote": "haut",
+    "distance_texte": "0,02",
+    "phrase": "indice de surprise macro 30 jours — GBP à +0,48 : 0,02 du seuil haut (+0,50), soit 2,0 % du couloir neutre"
+   },
+   {
     "id": "ecart_2a_us_var_4s-EUR",
     "engrenage": 2,
     "devise": "EUR",
@@ -45683,28 +45700,6 @@
     "cote": "haut",
     "distance_texte": "0,17 %",
     "phrase": "écart du cours à sa moyenne mobile 200 jours (tendance) — CNY à +1,83 % : 0,17 % du seuil haut (+2,00 %), soit 4,2 % du couloir neutre"
-   },
-   {
-    "id": "thermometre-2",
-    "engrenage": 2,
-    "devise": null,
-    "libelle": "2 ans US sur 7 j",
-    "effet_haut": "Dollar haussier",
-    "effet_bas": "Dollar baissier",
-    "valeur": -9.0,
-    "texte_valeur": "−9 pb",
-    "unite": "pb",
-    "date": "2026-11-03",
-    "source": "FRED (DGS2)",
-    "seuil_bas": -10,
-    "seuil_haut": 10,
-    "neutralise": null,
-    "etat": "proche",
-    "distance": 1.0,
-    "distance_pct": 5.0,
-    "cote": "bas",
-    "distance_texte": "1 pb",
-    "phrase": "2 ans US sur 7 j à −9 pb : 1 pb du seuil bas (−10 pb), soit 5,0 % du couloir neutre"
    }
   ],
   "franchis": [
@@ -45815,27 +45810,6 @@
     "cote": "haut",
     "distance_texte": "franchi",
     "phrase": "indice de surprise macro 30 jours — USD : +0,87, seuil haut franchi"
-   },
-   {
-    "id": "surprise_30j-GBP",
-    "engrenage": 3,
-    "devise": "GBP",
-    "libelle": "indice de surprise macro 30 jours — GBP",
-    "effet_haut": "GBP +1 (règle 3)",
-    "effet_bas": "GBP −1 (règle 3)",
-    "valeur": 0.56,
-    "texte_valeur": "+0,56",
-    "unite": "écarts",
-    "date": "2026-11-05",
-    "source": "calcul Python (registre macro, 30 j)",
-    "seuil_bas": -0.5,
-    "seuil_haut": 0.5,
-    "etat": "franchi",
-    "distance": 0.0,
-    "distance_pct": 0.0,
-    "cote": "haut",
-    "distance_texte": "franchi",
-    "phrase": "indice de surprise macro 30 jours — GBP : +0,56, seuil haut franchi"
    },
    {
     "id": "surprise_30j-CAD",
@@ -46118,15 +46092,15 @@
    }
   ],
   "rendez_vous": {
-   "iso_utc": "2026-11-05T12:00+00:00",
+   "iso_utc": "2026-11-05T12:30+00:00",
    "date_paris": "2026-11-05",
-   "heure_paris": "13:00",
+   "heure_paris": "13:30",
    "heure_connue": true,
    "devise": "GBP",
-   "evenement": "Rapport de politique monétaire de la BoE",
-   "evenement_en": "BOE Monetary Policy Report",
+   "evenement": "Discours de Bailey, gouverneur de la BoE",
+   "evenement_en": "BOE Gov Bailey Speaks",
    "traduit": true,
-   "type": "Chiffre",
+   "type": "Discours",
    "impact": "fort",
    "points": "●●●",
    "precedent": null,
@@ -46138,14 +46112,12 @@
     "ForexFactory, flux public JSON de la semaine"
    ],
    "sources_champs": {},
-   "verifie_le": "2026-11-05T08:16",
+   "verifie_le": "2026-11-05T12:16",
    "engrenage": 2,
    "simulateur": null,
-   "reaction": null,
-   "raison_reaction": "pas d'historique des publications passées pour cet évènement (ALFRED ne couvre que les États-Unis ; archive du site commencée le 24/10/2026)",
    "statuts": {},
    "pourquoi": "Pourquoi c'est important : GBP · engrenage 2 (politique monétaire).",
-   "raison_consensus": "pas de consensus publié"
+   "raison_consensus": "sans objet (pas un chiffre)"
   },
   "fil": {
    "jours": [
@@ -46873,7 +46845,7 @@
       "date": "2026-11-05",
       "source": "calcul Python (score de confluence 0-100)",
       "raison": null,
-      "variation": "+2 pts sur 4 semaines",
+      "variation": "+19 pts sur 4 semaines",
       "percentile_5a": null,
       "rang": "rang 5 ans n/d : scores archivés depuis août 2026 seulement"
      },
@@ -47691,8 +47663,8 @@
        },
        {
         "devise": "GBP",
-        "avant": 1,
-        "apres": 1,
+        "avant": 0,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -47773,8 +47745,8 @@
        },
        {
         "devise": "GBP",
-        "avant": 1,
-        "apres": 1,
+        "avant": 0,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -47855,8 +47827,8 @@
        },
        {
         "devise": "GBP",
-        "avant": 1,
-        "apres": 1,
+        "avant": 0,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -47937,8 +47909,8 @@
        },
        {
         "devise": "GBP",
-        "avant": 1,
-        "apres": 1,
+        "avant": 0,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -48128,11 +48100,11 @@
      },
      {
       "libelle": "Surprise GBP (30 j)",
-      "texte": "+0,56",
+      "texte": "+0,48",
       "date": "2026-11-05",
       "source": "calcul Python (registre macro, 30 j)",
       "raison": null,
-      "variation": "+0,20 sur 4 semaines",
+      "variation": "+0,12 sur 4 semaines",
       "percentile_5a": null,
       "rang": "rang 5 ans n/d : indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
      },
@@ -48179,15 +48151,6 @@
       "neutralise": null
      },
      {
-      "libelle": "indice de surprise macro 30 jours — GBP",
-      "etat": "déclenchée",
-      "distance": "franchi",
-      "valeur": "+0,56",
-      "date": "2026-11-05",
-      "source": "calcul Python (registre macro, 30 j)",
-      "neutralise": null
-     },
-     {
       "libelle": "indice de surprise macro 30 jours — CAD",
       "etat": "déclenchée",
       "distance": "franchi",
@@ -48201,6 +48164,15 @@
       "etat": "déclenchée",
       "distance": "franchi",
       "valeur": "−1,62",
+      "date": "2026-11-05",
+      "source": "calcul Python (registre macro, 30 j)",
+      "neutralise": null
+     },
+     {
+      "libelle": "indice de surprise macro 30 jours — GBP",
+      "etat": "proche",
+      "distance": "0,02",
+      "valeur": "+0,48",
       "date": "2026-11-05",
       "source": "calcul Python (registre macro, 30 j)",
       "neutralise": null
@@ -49059,8 +49031,8 @@
        },
        {
         "devise": "GBP",
-        "avant": 1,
-        "apres": 1,
+        "avant": 0,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -49141,8 +49113,8 @@
        },
        {
         "devise": "GBP",
-        "avant": 1,
-        "apres": 1,
+        "avant": 0,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -49223,8 +49195,8 @@
        },
        {
         "devise": "GBP",
-        "avant": 1,
-        "apres": 1,
+        "avant": 0,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -49305,8 +49277,8 @@
        },
        {
         "devise": "GBP",
-        "avant": 1,
-        "apres": 1,
+        "avant": 0,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -49380,8 +49352,8 @@
        },
        {
         "devise": "GBP",
-        "avant": 1,
-        "apres": 1,
+        "avant": 0,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -50309,8 +50281,8 @@
        },
        {
         "devise": "GBP",
-        "avant": 1,
-        "apres": 1,
+        "avant": 0,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -50421,8 +50393,8 @@
        },
        {
         "devise": "GBP",
-        "avant": 1,
-        "apres": 1,
+        "avant": 0,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -50533,8 +50505,8 @@
        },
        {
         "devise": "GBP",
-        "avant": 1,
-        "apres": 1,
+        "avant": 0,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -50633,8 +50605,8 @@
        },
        {
         "devise": "GBP",
-        "avant": 1,
-        "apres": 1,
+        "avant": 0,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -50721,8 +50693,8 @@
        },
        {
         "devise": "GBP",
-        "avant": 1,
-        "apres": 1,
+        "avant": 0,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -50815,8 +50787,8 @@
        },
        {
         "devise": "GBP",
-        "avant": 1,
-        "apres": 1,
+        "avant": 0,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -50890,8 +50862,8 @@
        },
        {
         "devise": "GBP",
-        "avant": 1,
-        "apres": 1,
+        "avant": 0,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -50965,8 +50937,8 @@
        },
        {
         "devise": "GBP",
-        "avant": 1,
-        "apres": 1,
+        "avant": 0,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -51053,8 +51025,8 @@
        },
        {
         "devise": "GBP",
-        "avant": 1,
-        "apres": 1,
+        "avant": 0,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -51128,8 +51100,8 @@
        },
        {
         "devise": "GBP",
-        "avant": 1,
-        "apres": 1,
+        "avant": 0,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -51210,8 +51182,8 @@
        },
        {
         "devise": "GBP",
-        "avant": 1,
-        "apres": 1,
+        "avant": 0,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -51484,8 +51456,8 @@
        },
        {
         "devise": "GBP",
-        "avant": 1,
-        "apres": 1,
+        "avant": 0,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -51559,8 +51531,8 @@
        },
        {
         "devise": "GBP",
-        "avant": 1,
-        "apres": 1,
+        "avant": 0,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -51634,8 +51606,8 @@
        },
        {
         "devise": "GBP",
-        "avant": 1,
-        "apres": 1,
+        "avant": 0,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -51709,8 +51681,8 @@
        },
        {
         "devise": "GBP",
-        "avant": 1,
-        "apres": 1,
+        "avant": 0,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -53535,8 +53507,8 @@
        },
        {
         "devise": "GBP",
-        "avant": 1,
-        "apres": 1,
+        "avant": 0,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -53629,8 +53601,8 @@
        },
        {
         "devise": "GBP",
-        "avant": 1,
-        "apres": 1,
+        "avant": 0,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -53717,8 +53689,8 @@
        },
        {
         "devise": "GBP",
-        "avant": 1,
-        "apres": 1,
+        "avant": 0,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -53792,8 +53764,8 @@
        },
        {
         "devise": "GBP",
-        "avant": 1,
-        "apres": 1,
+        "avant": 0,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -53874,8 +53846,8 @@
        },
        {
         "devise": "GBP",
-        "avant": 1,
-        "apres": 1,
+        "avant": 0,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -53949,8 +53921,8 @@
        },
        {
         "devise": "GBP",
-        "avant": 1,
-        "apres": 1,
+        "avant": 0,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },

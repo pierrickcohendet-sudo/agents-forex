@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-05T11:17:44+00:00",
+  "genere_le": "2026-11-05T12:17:45+00:00",
   "appels_llm": [
    {
     "heure": "08:25",
@@ -179,12 +179,12 @@
     "consomme_run": {
      "engrenages": 0,
      "rapport": 0,
-     "devises": 1,
+     "devises": 0,
      "reste": 0
     },
     "total_jour": 5,
     "plafond_run": 45,
-    "recues_run": 1,
+    "recues_run": 0,
     "pannes_jour": 18,
     "pannes_run": 0,
     "plafond_pannes": 20,
@@ -281,8 +281,8 @@
      "appels_aujourdhui": 5,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-11-05T07:59:59+00:00",
-     "appels_ce_run": 5,
-     "reussites_ce_run": 1,
+     "appels_ce_run": 4,
+     "reussites_ce_run": 0,
      "sauts_ce_run": 0
     },
     "gemini-3.8-flash": {
@@ -303,7 +303,7 @@
     }
    }
   },
-  "resume_quota": "Gemini : 5/60, engrenages : fait — Budget (run complément, plafond 60) : prévu engrenages 1 analyse (≤ 2 requêtes); rapport du jour 2 analyses (≤ 4 requêtes); devises 3 analyses (≤ 6 requêtes); reste ≤ 48 ; consommé ce run : engrenages 0, rapport du jour 0, devises 1, reste 0 (jour : 5/60) ; échecs ce run : aucun ; tentatives en panne (hors budget) : 0 ce run, 18/20 aujourd'hui ; réponses reçues ce run : 1/45 ; analyses : analyses:AUD-NZD-CNY faite, analyses:JPY-CHF-CAD faite, analyses:USD-EUR-GBP faite, critique à rejouer (503), engrenages faite, etat_du_monde à rejouer (503), rapport:redaction faite, synthese:EUR à rejouer (503), synthese:GBP à rejouer (503), synthese:USD à rejouer (503)",
+  "resume_quota": "Gemini : 5/60, engrenages : fait — Budget (run complément, plafond 60) : prévu engrenages 1 analyse (≤ 2 requêtes); rapport du jour 2 analyses (≤ 4 requêtes); devises 3 analyses (≤ 6 requêtes); reste ≤ 48 ; consommé ce run : engrenages 0, rapport du jour 0, devises 0, reste 0 (jour : 5/60) ; échecs ce run : aucun ; tentatives en panne (hors budget) : 0 ce run, 18/20 aujourd'hui ; réponses reçues ce run : 0/45 ; analyses : analyses:AUD-NZD-CNY faite, analyses:JPY-CHF-CAD faite, analyses:USD-EUR-GBP faite, critique à rejouer (503), engrenages faite, etat_du_monde à rejouer (503), rapport:redaction faite, synthese:EUR à rejouer (503), synthese:GBP à rejouer (503), synthese:USD à rejouer (503)",
   "appels_par_modele": {
    "gemini-3.5-flash": {
     "appels": 11,
@@ -450,6 +450,40 @@
       "ignores": 0
      }
     ]
+   },
+   {
+    "heure": "12:17",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 4,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
    }
   ],
   "notion_url": "https://app.notion.com/p/FX-2026-11-05-quotidien-40f65bc64661810ab6b5fcaf7046f6b3"
@@ -553,8 +587,8 @@
        "source_id": "src_136"
       },
       {
-       "texte": "GBP taux directeur 3.75% le 2026-09-17 (statu quo, précédent 3.75%)",
-       "source_id": "src_137"
+       "texte": "GBP taux directeur 4.00% le 2026-11-05 (hausse, précédent 3.75%)",
+       "source_id": "src_243"
       },
       {
        "texte": "JPY taux directeur <1.25% le 2026-10-30 (statu quo, précédent <1.25%)",
@@ -637,7 +671,7 @@
      ],
      "donnees_calculees": [
       {
-       "texte": "Indice de surprise 30 j : USD +0.87, EUR -0.23, GBP +0.56, JPY -0.10, CHF +0.45, CAD -0.59, AUD +0.04, NZD -1.62, CNY +0.45",
+       "texte": "Indice de surprise 30 j : USD +0.87, EUR -0.23, GBP +0.48, JPY -0.10, CHF +0.45, CAD -0.59, AUD +0.04, NZD -1.62, CNY +0.45",
        "source_id": "src_145"
       }
      ],
@@ -1157,7 +1191,7 @@
     "libelle": "Flash 3.5"
    },
    "version": "quotidienne",
-   "rafraichi_le": "2026-11-05T11:17:44+00:00",
+   "rafraichi_le": "2026-11-05T12:17:45+00:00",
    "titre_theme_impose": "Signaux mixtes"
   },
   "classement_devises": [
@@ -1443,7 +1477,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 2,
-    "genere_le": "2026-11-05T11:17:44+00:00"
+    "genere_le": "2026-11-05T12:17:45+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.87,
@@ -1717,7 +1751,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 2,
-    "genere_le": "2026-11-05T11:17:44+00:00"
+    "genere_le": "2026-11-05T12:17:45+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.23,
@@ -1981,13 +2015,13 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 2,
-    "genere_le": "2026-11-05T11:17:44+00:00"
+    "genere_le": "2026-11-05T12:17:45+00:00"
    },
    "indice_surprise_30j": {
-    "indice": 0.56,
+    "indice": 0.48,
     "precedent": 0.36,
-    "tendance": "hausse",
-    "n": 10
+    "tendance": "stable",
+    "n": 11
    },
    "historique_score_7j": [
     {
@@ -2235,7 +2269,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-05T11:17:44+00:00"
+    "genere_le": "2026-11-05T12:17:45+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.1,
@@ -2499,7 +2533,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-05T11:17:44+00:00"
+    "genere_le": "2026-11-05T12:17:45+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.45,
@@ -2764,7 +2798,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-05T11:17:44+00:00"
+    "genere_le": "2026-11-05T12:17:45+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.59,
@@ -3024,7 +3058,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 1,
-    "genere_le": "2026-11-05T11:17:44+00:00"
+    "genere_le": "2026-11-05T12:17:45+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.04,
@@ -3283,7 +3317,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 1,
-    "genere_le": "2026-11-05T11:17:44+00:00"
+    "genere_le": "2026-11-05T12:17:45+00:00"
    },
    "indice_surprise_30j": {
     "indice": -1.62,
@@ -3565,7 +3599,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 1,
-    "genere_le": "2026-11-05T11:17:44+00:00"
+    "genere_le": "2026-11-05T12:17:45+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.45,
@@ -5294,6 +5328,13 @@
    "source": "ForexFactory (registre macro)",
    "detail": "CNY — Ventes au détail",
    "date": "2026-10-19",
+   "url": null
+  },
+  {
+   "id": "src_243",
+   "source": "ForexFactory (registre macro)",
+   "detail": "GBP — Taux directeur",
+   "date": "2026-11-05",
    "url": null
   }
  ],
@@ -8111,10 +8152,10 @@
     "n": 12
    },
    "GBP": {
-    "indice": 0.56,
+    "indice": 0.48,
     "precedent": 0.36,
-    "tendance": "hausse",
-    "n": 10
+    "tendance": "stable",
+    "n": 11
    },
    "JPY": {
     "indice": -0.1,
@@ -8169,7 +8210,7 @@
   },
   "GBP": {
    "etat": "Soutenue",
-   "raison": "Signaux favorables : surprises macro 30 j +0,6 ; force +1,9 % sur 20 séances.",
+   "raison": "Signaux favorables : surprises macro 30 j +0,5 ; force +1,9 % sur 20 séances.",
    "moteur": null,
    "r60": null
   },
