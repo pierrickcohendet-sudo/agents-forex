@@ -13,6 +13,8 @@ const SQUELETTE = `
   <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="note-ex" id="jDemoTxt" hidden>Trades d'exemple (démonstration)</span>
     <button class="switch" id="jDemo" type="button" aria-pressed="false"><i></i><span>Voir avec des exemples</span></button>
     <button class="btn pri" id="newBtn" type="button">+ Nouvelle entrée</button></div></div>
+<div class="card j-accueil" id="jAccueil" hidden></div>
+<div id="jStats" class="j-stats">
 <div class="grid jk" id="jk"></div>
 <div class="cols2" style="grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)">
   <div class="card pad" style="display:flex;flex-direction:column;gap:8px"><div class="sec-head"><h3>Courbe de résultat cumulé</h3><span class="small">en R (1 R = le risque prévu du trade)</span></div><div class="eq" id="eq"></div></div>
@@ -26,6 +28,7 @@ const SQUELETTE = `
 <div class="cols2" style="grid-template-columns:minmax(0,1fr) minmax(0,1.3fr)">
   <div class="card pad" style="display:flex;flex-direction:column;gap:10px"><div class="sec-head"><h3 id="calT"></h3><div class="seg" id="calSel" role="group" aria-label="Mois"></div></div><div class="cal" id="cal"></div></div>
   <div class="card" style="overflow:hidden"><div class="pad" style="padding-bottom:4px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center"><h3>Tous les trades</h3><div class="seg" id="jFilt" role="group" aria-label="Filtrer par paire"></div></div><div class="scroll"><table class="tbl" id="jTab" style="min-width:620px"></table></div></div>
+</div>
 </div>
 <div id="jV2" style="display:flex;flex-direction:column;gap:14px"></div>`;
 
@@ -84,7 +87,8 @@ export async function ecranJournal(section, parametre) {
   form?.addEventListener("jn-edition", () => ouvrir(false));
   form?.addEventListener("jn-enregistre", () => { try { localStorage.removeItem(BROUILLON); } catch (e) { /* ignoré */ } fermer(); rendre(); });
   q("#newBtn").onclick = () => ouvrir(true);
-  q("#jDemo").onclick = () => { demo = !demo; q("#jDemo").setAttribute("aria-pressed", demo); q("#jDemoTxt").hidden = !demo; rendre(); };
+  const basculerDemo = () => { demo = !demo; q("#jDemo").setAttribute("aria-pressed", demo); q("#jDemoTxt").hidden = !demo; rendre(); };
+  q("#jDemo").onclick = basculerDemo;
 
   // Mes entrées (liste V2 : modifier, supprimer, exporter, importer) et fiche d'analyse : vue complète
   const v2 = q("#jV2");
@@ -99,6 +103,22 @@ export async function ecranJournal(section, parametre) {
   async function rendre() {
     const tr = await trades(), S = statistiques(tr);
     const vide = !S.n;
+    // État d'accueil : aucun trade clôturé (hors démonstration) -> pas de page vide, deux actions bien visibles
+    const accueil = vide && !demo;
+    q("#jAccueil").hidden = !accueil; q("#jStats").hidden = accueil;
+    if (accueil) {
+      let ouvertes = 0;
+      try { ouvertes = (await m.lireNotes()).length; } catch (e) { /* stockage indisponible */ }
+      q("#jAccueil").innerHTML = `<svg class="j-acc-art" viewBox="0 0 320 120" aria-hidden="true"><path d="M8 100 L60 84 L104 92 L150 60 L196 70 L244 34 L312 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 9"/><circle cx="312" cy="20" r="7" fill="var(--up)"/></svg>
+        <span class="eyebrow">Journal de progression</span>
+        <h3>Ton premier trade apparaîtra ici</h3>
+        <p>Note une entrée, clôture-la avec son résultat : le Journal calcule seul ta courbe en R, ta réussite par séance et par paire, et ce que tes trades disent du thème du jour. Tout reste sur cet appareil.</p>
+        ${ouvertes ? `<p class="small">${ouvertes} entrée${ouvertes > 1 ? "s" : ""} enregistrée${ouvertes > 1 ? "s" : ""}, aucune clôturée avec un résultat : elles comptent dès leur clôture.</p>` : ""}
+        <div class="j-acc-actions"><button class="btn pri" id="jAccNew" type="button">+ Nouvelle entrée</button><button class="btn" id="jAccDemo" type="button">Voir avec des exemples</button></div>`;
+      q("#jAccNew").onclick = () => ouvrir(true);
+      q("#jAccDemo").onclick = basculerDemo;
+      return;
+    }
     q("#jk").innerHTML = (vide ? [["Résultat", "—", "aucun trade clôturé"], ["Trades", "0", "clôture une entrée pour la compter"], ["Réussite", "—", ""], ["R moyen", "—", ""], ["Facteur de profit", "—", ""], ["Série en cours", "—", ""]]
       : [["Résultat", `<span class="${S.total_r >= 0 ? "pos" : "neg"}">${sgn(S.total_r, 1, " R")}</span>`, S.total_eur != null ? `soit ${sgn(S.total_eur, 0, " €")}` : "montant en € n/d"],
          ["Trades", String(S.n), S.sans_r ? `${S.sans_r} sans résultat en R` : `depuis le ${ddm(tr.map(t => t.d).sort()[0])}`],

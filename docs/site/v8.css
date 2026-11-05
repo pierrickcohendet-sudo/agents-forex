@@ -164,3 +164,13 @@ dialog.palette::backdrop{background:color-mix(in srgb,var(--ink) 35%,transparent
 
 /* Huit onglets : la barre défile dans son cadre au besoin */
 @media (max-width:640px){.ctrls{flex-wrap:nowrap}.pal-liste li{grid-template-columns:minmax(0,1fr)}.pal-liste li .small{grid-column:1}.pal-type{display:none}}
+
+/* V8.1 : état d'accueil du Journal sans trade */
+.j-accueil{display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;padding:44px 24px 40px}
+.j-accueil h3{font-family:var(--f-display);font-size:28px;font-weight:500;margin:0}
+.j-accueil p{max-width:560px;margin:0;color:var(--ink-2,inherit)}
+.j-acc-art{width:min(320px,100%);height:auto;color:var(--muted);opacity:.55}
+.j-acc-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+.j-acc-actions .btn{height:44px;padding:0 22px;font-size:15px}
+.j-stats{display:flex;flex-direction:column;gap:var(--gap,16px)}
+.j-stats[hidden],.j-accueil[hidden]{display:none}

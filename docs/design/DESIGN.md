@@ -42,3 +42,8 @@ horizontal. Comparer côte à côte avec `docs/design/reference/` et lister les 
 - Point de fraîcheur sur les blocs de données : règle calculée en Python (`fraicheur.json`), infobulle « mis à jour le … ».
 - Mouvement : chiffres qui défilent (300 ms, une seule fois par valeur), courbes qui se dessinent, panneau qui glisse ;
   tout est coupé avec `prefers-reduced-motion`.
+
+### V8.1
+
+- Fraîcheur : chaque série jugée sur sa dernière observation et sa fréquence normale ; le point prend la couleur de la série la plus en retard, l'infobulle la nomme.
+- Journal sans trade : état d'accueil centré (`.j-accueil`), « Ton premier trade apparaîtra ici », boutons « + Nouvelle entrée » et « Voir avec des exemples » ; les blocs de statistiques sont masqués (`#jStats`).

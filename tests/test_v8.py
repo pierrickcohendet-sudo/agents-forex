@@ -107,14 +107,35 @@ def test_reaction_apres_publication():
 
 # ------------------------------------------------------------------ G1. fraîcheur
 def test_regle_de_fraicheur():
+    """V8.1 : chaque série jugée sur sa dernière observation et sa fréquence normale, pas sur l'heure du fichier."""
     m = datetime(2026, 11, 5, 10, tzinfo=timezone.utc)
-    ok = {"nom": "FRED", "fraicheur": {"etat": "vert"}, "derniere_donnee": "2026-11-03"}
-    retard = {"nom": "EIA", "fraicheur": {"etat": "orange", "texte": "8 jours"}, "derniere_donnee": "2026-11-01"}
-    assert fb.etat_bloc(datetime(2026, 11, 5, 9, tzinfo=timezone.utc), [retard], m)["etat"] == "vert"     # moins de 2 h
-    assert fb.etat_bloc(datetime(2026, 11, 5, 6, tzinfo=timezone.utc), [ok], m)["etat"] == "vert"        # fréquence normale
-    assert fb.etat_bloc(datetime(2026, 11, 5, 6, tzinfo=timezone.utc), [retard], m)["etat"] == "orange"
-    assert fb.etat_bloc(datetime(2026, 10, 27, 6, tzinfo=timezone.utc), [ok], m)["etat"] == "rouge"      # > 5 jours ouvrés
-    assert fb.etat_bloc(None, [], m)["etat"] == "rouge"
+    auj = m.date()
+    assert fb.etat_serie("EUR/USD", "2026-11-05", 1, auj)["etat"] == "vert"
+    assert fb.etat_serie("EUR/USD", "2026-11-02", 1, auj)["etat"] == "orange"        # 3 jours ouvrés > 1
+    assert fb.etat_serie("EUR/USD", "2026-10-20", 1, auj)["etat"] == "rouge"         # plus de 5 jours ouvrés au-delà
+    assert fb.etat_serie("FX", "2026-10-30", 1, datetime(2026, 11, 2).date())["etat"] == "vert"   # vendredi -> lundi
+    assert fb.etat_serie("X", None, 1, auj)["etat"] == "rouge"
+    # Cas du Brent : fichier régénéré à l'instant, mais dernière valeur au 27/10 -> bloc en retard, série nommée
+    rapport = {"genere_le": m.isoformat(), "point_marche": {"lignes": [
+        {"actif": "EUR/USD", "categorie": "fx", "serie_30j": [["2026-11-05", 1.12]], "source": "Twelve Data"},
+        {"actif": "US 10 ans", "categorie": "taux", "serie_30j": [["2026-11-03", 4.95]], "source": "FRED (DGS10)"},
+        {"actif": "Brent", "categorie": "petrole", "serie_30j": [["2026-10-27", 120.1]], "source": "FRED (DCOILBRENTEU)"}]}}
+    b = fb.calculer({"rapport_jour": rapport}, {}, m)["point_marche"]
+    assert b["etat"] == "orange"                                                      # 7 jours ouvrés > 5 (normal EIA)
+    assert b["texte"].startswith("Brent : dernière valeur 27/10, 7 jours ouvrés de retard"), b["texte"]
+    assert [s["etat"] for s in b["series"]] == ["vert", "vert", "orange"]
+    # Brent à jour (03/11) : tout est vert, l'infobulle nomme la série la plus ancienne
+    rapport["point_marche"]["lignes"][2]["serie_30j"] = [["2026-11-03", 107.0]]
+    b = fb.calculer({"rapport_jour": rapport}, {}, m)["point_marche"]
+    assert b["etat"] == "vert" and "3 séries dans leur fréquence normale" in b["texte"]
+    # Fichier ancien mais séries à jour : vert (l'heure de génération ne compte pas) ; fichier absent : rouge
+    rapport["genere_le"] = "2026-10-20T06:00:00+00:00"
+    assert fb.calculer({"rapport_jour": rapport}, {}, m)["point_marche"]["etat"] == "vert"
+    assert fb.calculer({}, {}, m)["point_marche"]["etat"] == "rouge"
+    # Source sans série lisible : état de sources.json, repris tel quel
+    src = {"cftc": {"nom": "CFTC", "derniere_donnee": "2026-10-20", "fraicheur": {"etat": "orange", "texte": "16 jours (normal : 10 au plus)"}}}
+    e = fb.calculer({"dossiers": {"genere_le": m.isoformat()}, "rapport_jour": rapport}, src, m)["engrenages"]
+    assert e["etat"] == "orange" and e["texte"].startswith("CFTC : dernière donnée 20/10, 16 jours")
 
 
 # ------------------------------------------------------------------ H. alertes ntfy (aucun envoi réel)
