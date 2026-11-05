@@ -110,6 +110,7 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}   # lot V8 : canal ntfy des alertes téléphone (secret, jamais affiché)
           GITHUB_TOKEN: ${{ github.token }}   # issue d'alerte automatique (issues: write), jamais publié
         run: |
           case "${{ steps.decision.outputs.mode }}" in

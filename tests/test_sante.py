@@ -96,5 +96,5 @@ def test_accueil_leger_24h_et_au_bord():
     assert [e["evenement"] for e in a["evenements"]] == ["PIB T/T", "discours gardé"]
     assert a["banques"][0]["court"] == "Fed" and a["fraicheur"] == {"sources": 1, "vertes": 1, "alertes": [], "calcule_le": None}
     app = (RACINE / "docs/site/app.js").read_text(encoding="utf-8")
-    assert 'accueil: "synthese"' in app   # lot V6 : l'Accueil est fusionné dans la Synthèse (ancienne adresse redirigée)
+    assert 'accueil: "briefing"' in app   # lot V8 : l'ancienne adresse Accueil ouvre le Briefing (page d'accueil)
     assert "dossiers.json" not in (RACINE / "docs/site/accueil.js").read_text(encoding="utf-8")   # page légère

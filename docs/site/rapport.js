@@ -34,7 +34,7 @@ const RENDUS = {
     const s = r.synthese || {}, b = [texteSection(s)];
     if ((s.catalyseurs || []).length) {
       b.push(el("h4", null, "Catalyseurs majeurs de la semaine"));
-      b.push(liste(s.catalyseurs.map(c => `${jj(c.date_paris)} ${c.heure_paris || ""} · ${DRAPEAUX[c.devise] || ""} ${c.devise} · ${c.evenement}${c.badge && c.badge.sens !== "statu_quo" ? ` (${c.badge.texte})` : ""}`)));
+      b.push(liste(s.catalyseurs.map(c => `${jj(c.date_paris)} ${c.heure_paris || ""} · ${DRAPEAUX[c.devise] || ""} ${c.devise} · ${c.evenement}${c.badge && c.badge.sens !== "statu_quo" ? ` (${c.badge.texte})` : c.votes ? ` (${c.votes})` : ""}`)));
     }
     b.push(el("h4", null, "Biais de travail conditionnel par devise"));
     b.push(tableau(["Devise", "Biais", "Condition", "Bilan matrice", "Évènements forts", "Statut"],

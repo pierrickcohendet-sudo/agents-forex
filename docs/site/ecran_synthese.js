@@ -4,7 +4,7 @@ import { $, h, nf, sgn, esc, dfr, ddm, jourSem, store, frTxt, nd, UNI, classeEta
 const SQUELETTE = `
 <div class="card hero">
   <div class="hero-main">
-    <div class="eyebrow" id="heroDate"></div>
+    <div class="eyebrow" id="heroDate" data-fraicheur="rapport"></div>
     <h1 id="heroTitre"></h1>
     <div style="display:flex;gap:8px;flex-wrap:wrap" id="heroChips"></div>
     <p id="heroTxt"></p>
@@ -24,7 +24,7 @@ const SQUELETTE = `
 </div>
 <div class="ess" id="ess"></div>
 <div class="card pad full" id="redige" hidden></div>
-<div class="sec-head"><h2>Banques centrales de la semaine</h2><p>Décisions à venir et ce qui est attendu</p></div>
+<div class="sec-head" data-fraicheur="agenda"><h2>Banques centrales de la semaine</h2><p>Décisions à venir et ce qui est attendu</p></div>
 <div id="bcw" style="display:flex;flex-direction:column;gap:14px"></div>
 <div class="two">
   <div class="card">
@@ -120,7 +120,8 @@ export async function ecranSynthese(section) {
     if (!tx.synthese && !tx.bilan) return;
     const r = q("#redige"); r.hidden = false;
     r.innerHTML = `<div class="sec-head"><h3>Synthèse rédigée</h3><span class="src">${esc(tx.redige_par?.libelle ? "Rédigé par " + tx.redige_par.libelle + " à partir des chiffres Python" : "")}</span></div>
-      ${tx.synthese ? `<p style="margin:8px 0 0">${esc(tx.synthese)}</p>` : ""}${tx.bilan ? `<p class="muted" style="margin:8px 0 0">${esc(tx.bilan)}</p>` : ""}`;
+      ${tx.synthese_blocs?.length ? `<div class="redige">${tx.synthese_blocs.map(x => `${x.titre ? `<h4>${esc(x.titre)}</h4>` : ""}<p>${esc(x.texte)}</p>`).join("")}</div>`
+        : tx.synthese ? `<p style="margin:8px 0 0">${esc(tx.synthese)}</p>` : ""}${tx.bilan ? `<p class="muted" style="margin:8px 0 0">${esc(tx.bilan)}</p>` : ""}`;
   });
 
   bloc(q("#bcw"), () => {

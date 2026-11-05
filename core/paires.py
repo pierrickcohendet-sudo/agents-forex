@@ -142,6 +142,17 @@ def fiche(paire: str, dossiers_donnees: dict, rapport: dict | None, registre: di
             "date_rapport": theme.get("date_rapport")}
 
 
+def moyenne_mobile(bougies: list[list], n: int) -> list[list]:
+    """Moyenne mobile simple des clôtures sur n bougies : [[horodatage, valeur ou None]] (None tant que n bougies manquent)."""
+    sortie, somme, clotures = [], 0.0, [b[4] for b in bougies]
+    for i, (b, c) in enumerate(zip(bougies, clotures)):
+        somme += c
+        if i >= n:
+            somme -= clotures[i - n]
+        sortie.append([b[0], round(somme / n, 6) if i >= n - 1 else None])
+    return sortie
+
+
 def reperes_intraday(bougies: list[list], source: str, paire: str) -> list[dict]:
     """Plus haut, plus bas (mèches) et dernière clôture, horodatés (UTC) : mêmes types que les repères du palier 10."""
     if len(bougies) < 2:
@@ -178,6 +189,9 @@ def calculer(config: dict, dossiers_donnees: dict, rapport: dict | None, registr
             if ch:   # repères du palier 10 sur les clôtures de chaque unité de temps (plus haut, plus bas, dernière)
                 ch = {u: {**v, "annotations": reperes_intraday(v.get("bougies") or [], v.get("source") or "Twelve Data", p)}
                       for u, v in ch.items()}
+                if isinstance(ch.get("1j"), dict):   # lot V8 : MM20 et MM50 calculées ici, jamais dans le navigateur
+                    for n in (20, 50):
+                        ch["1j"][f"mm{n}"] = moyenne_mobile(ch["1j"].get("bougies") or [], n)
             fiches[p]["chandeliers"] = ch or {
                 "raison": (intraday or {}).get("raison") or "chandeliers non collectés (collecte au run complet, Twelve Data)"}
             try:   # Rapport du jour, étape 9 : niveaux affichés sur les chandeliers (repères, pas des signaux)

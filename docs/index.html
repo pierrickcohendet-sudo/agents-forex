@@ -6,6 +6,23 @@
   <title>Trading baby</title>
   <meta name="description" content="Aide à la décision macro et technique sur 9 devises (yuan inclus) — aucun signal d'achat ou de vente.">
   <meta name="color-scheme" content="light dark">
+  <!-- Lot V8 : application installable (manifeste, icônes) et aperçu de partage -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icones/logo.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icones/apple-touch-icon.png">
+  <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0D1119" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Trading baby">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta property="og:title" content="Trading baby">
+  <meta property="og:description" content="Desk FX : aide à la décision macro et technique sur 9 devises. Aucun ordre d'achat ou de vente.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://pierrickcohendet-sudo.github.io/agents-forex/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
   <script>
     /* Thème et vue appliqués AVANT le rendu (pas de flash) ; repli silencieux si localStorage est indisponible.
        ?theme=light|dark et ?vue=complete|essentielle : forçage ponctuel (contrôles), non mémorisé. */
@@ -22,11 +39,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
   <!-- version-site:debut -->
-  <meta name="fxdesk-version" content="acaf224">
-  <script type="importmap">{"imports": {"./site/accueil.js": "./site/accueil.js?v=acaf224", "./site/agenda.js": "./site/agenda.js?v=acaf224", "./site/app.js": "./site/app.js?v=acaf224", "./site/archives.js": "./site/archives.js?v=acaf224", "./site/briefing.js": "./site/briefing.js?v=acaf224", "./site/cockpit.js": "./site/cockpit.js?v=acaf224", "./site/commun.js": "./site/commun.js?v=acaf224", "./site/consequences_synthese.js": "./site/consequences_synthese.js?v=acaf224", "./site/devises.js": "./site/devises.js?v=acaf224", "./site/dossier_detail.js": "./site/dossier_detail.js?v=acaf224", "./site/dossiers.js": "./site/dossiers.js?v=acaf224", "./site/ecran_agenda.js": "./site/ecran_agenda.js?v=acaf224", "./site/ecran_devises.js": "./site/ecran_devises.js?v=acaf224", "./site/ecran_engrenages.js": "./site/ecran_engrenages.js?v=acaf224", "./site/ecran_journal.js": "./site/ecran_journal.js?v=acaf224", "./site/ecran_synthese.js": "./site/ecran_synthese.js?v=acaf224", "./site/ecran_tableau.js": "./site/ecran_tableau.js?v=acaf224", "./site/engrenages.js": "./site/engrenages.js?v=acaf224", "./site/hebdo.js": "./site/hebdo.js?v=acaf224", "./site/impression.js": "./site/impression.js?v=acaf224", "./site/journal.js": "./site/journal.js?v=acaf224", "./site/journal_logique.js": "./site/journal_logique.js?v=acaf224", "./site/outils.js": "./site/outils.js?v=acaf224", "./site/rapport.js": "./site/rapport.js?v=acaf224", "./site/sante.js": "./site/sante.js?v=acaf224", "./site/scenarios.js": "./site/scenarios.js?v=acaf224", "./site/synthese.js": "./site/synthese.js?v=acaf224", "./site/synthese_longue.js": "./site/synthese_longue.js?v=acaf224", "./site/synthese_suite.js": "./site/synthese_suite.js?v=acaf224", "./site/tableau.js": "./site/tableau.js?v=acaf224", "./site/v7_commun.js": "./site/v7_commun.js?v=acaf224", "./site/vue_ensemble.js": "./site/vue_ensemble.js?v=acaf224"}}</script>
-  <link rel="stylesheet" href="site/cabinet.css?v=acaf224">
-  <link rel="stylesheet" href="site/tokens.css?v=acaf224">
-  <link rel="stylesheet" href="site/v7.css?v=acaf224">
+  <meta name="fxdesk-version" content="8c61f8a">
+  <script type="importmap">{"imports": {"./site/accueil.js": "./site/accueil.js?v=8c61f8a", "./site/agenda.js": "./site/agenda.js?v=8c61f8a", "./site/app.js": "./site/app.js?v=8c61f8a", "./site/archives.js": "./site/archives.js?v=8c61f8a", "./site/briefing.js": "./site/briefing.js?v=8c61f8a", "./site/cockpit.js": "./site/cockpit.js?v=8c61f8a", "./site/commun.js": "./site/commun.js?v=8c61f8a", "./site/consequences_synthese.js": "./site/consequences_synthese.js?v=8c61f8a", "./site/devises.js": "./site/devises.js?v=8c61f8a", "./site/dossier_detail.js": "./site/dossier_detail.js?v=8c61f8a", "./site/dossiers.js": "./site/dossiers.js?v=8c61f8a", "./site/ecran_agenda.js": "./site/ecran_agenda.js?v=8c61f8a", "./site/ecran_briefing.js": "./site/ecran_briefing.js?v=8c61f8a", "./site/ecran_devises.js": "./site/ecran_devises.js?v=8c61f8a", "./site/ecran_engrenages.js": "./site/ecran_engrenages.js?v=8c61f8a", "./site/ecran_journal.js": "./site/ecran_journal.js?v=8c61f8a", "./site/ecran_paire.js": "./site/ecran_paire.js?v=8c61f8a", "./site/ecran_synthese.js": "./site/ecran_synthese.js?v=8c61f8a", "./site/ecran_tableau.js": "./site/ecran_tableau.js?v=8c61f8a", "./site/engrenages.js": "./site/engrenages.js?v=8c61f8a", "./site/hebdo.js": "./site/hebdo.js?v=8c61f8a", "./site/impression.js": "./site/impression.js?v=8c61f8a", "./site/journal.js": "./site/journal.js?v=8c61f8a", "./site/journal_logique.js": "./site/journal_logique.js?v=8c61f8a", "./site/journal_stats.js": "./site/journal_stats.js?v=8c61f8a", "./site/outils.js": "./site/outils.js?v=8c61f8a", "./site/rapport.js": "./site/rapport.js?v=8c61f8a", "./site/recherche.js": "./site/recherche.js?v=8c61f8a", "./site/sante.js": "./site/sante.js?v=8c61f8a", "./site/scenarios.js": "./site/scenarios.js?v=8c61f8a", "./site/synthese.js": "./site/synthese.js?v=8c61f8a", "./site/synthese_longue.js": "./site/synthese_longue.js?v=8c61f8a", "./site/synthese_suite.js": "./site/synthese_suite.js?v=8c61f8a", "./site/tableau.js": "./site/tableau.js?v=8c61f8a", "./site/v7_commun.js": "./site/v7_commun.js?v=8c61f8a", "./site/vue_ensemble.js": "./site/vue_ensemble.js?v=8c61f8a"}}</script>
+  <link rel="stylesheet" href="site/cabinet.css?v=8c61f8a">
+  <link rel="stylesheet" href="site/tokens.css?v=8c61f8a">
+  <link rel="stylesheet" href="site/v7.css?v=8c61f8a">
+  <link rel="stylesheet" href="site/v8.css?v=8c61f8a">
   <!-- version-site:fin -->
 </head>
 <body>
@@ -39,13 +57,16 @@
           <div class="sess-cap"><span id="sessTxt"></span><span id="clock"></span></div>
         </div>
         <div class="ctrls">
+          <button class="iconbtn" id="searchBtn" type="button" aria-label="Recherche rapide (Ctrl+K)" title="Recherche rapide (Ctrl+K)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
           <button class="switch" id="vueBtn" type="button" aria-pressed="true" title="Vue complète ou essentielle"><i></i><span><span class="lab-long">Vue </span>complète</span></button>
           <button class="iconbtn" id="themeBtn" type="button" aria-label="Changer de thème (clair ou sombre)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg></button>
         </div>
       </div>
       <nav class="tabs" id="tabs" aria-label="Sections">
+        <a class="tab" href="#briefing" data-t="briefing">Briefing</a>
         <a class="tab" href="#synthese" data-t="synthese">Synthèse</a>
         <a class="tab" href="#tableau" data-t="tableau">Tableau de bord</a>
+        <a class="tab" href="#paire" data-t="paire">Paires</a>
         <a class="tab" href="#devises" data-t="devises">Devises</a>
         <a class="tab" href="#agenda" data-t="agenda">Agenda</a>
         <a class="tab" href="#engrenages" data-t="engrenages">8 engrenages</a>
@@ -66,6 +87,7 @@
     </div>
   </header>
 
+  <p class="hors-ligne wrap" id="horsLigne" role="status" hidden></p>
   <main class="wrap" id="contenu" tabindex="-1"></main>
 
   <dialog id="detail" class="detail" aria-labelledby="detail-titre">
@@ -78,6 +100,12 @@
 
   <footer class="wrap pied-v7"><span id="pied-meta"></span><span>Aide à la décision. Aucun ordre d'achat ou de vente. Chiffres sourcés et datés ; une donnée absente est affichée « n/d » avec sa raison au survol.</span></footer>
 
-  <script type="module" src="site/app.js?v=acaf224"></script>
+  <script>
+    /* Service worker (lot V8) : code en cache, données réseau d'abord ; aucun effet si le navigateur ne le gère pas. */
+    if ("serviceWorker" in navigator && location.protocol !== "file:") {
+      addEventListener("load", function () { navigator.serviceWorker.register("sw.js").catch(function () { /* hors service worker */ }); });
+    }
+  </script>
+  <script type="module" src="site/app.js?v=8c61f8a"></script>
 </body>
 </html>

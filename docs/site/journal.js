@@ -4,6 +4,7 @@
 import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, ouvrirDetail, certifier, pluriel } from "./commun.js";
 import { UNITES_V2, STATUTS, migrer, compter, performance, bilanMensuel, grilleMois, peutToucher, ics, suggestions, finDeSemaine, nombreFr } from "./journal_logique.js";
 import { graphiqueSerie, dessinerReperes } from "./dossiers.js";
+import { seanceDe, avecLeTheme, resultatR } from "./journal_stats.js";
 
 const SVG = "http://www.w3.org/2000/svg";
 const UNITES = [["30min", "30 min"], ["4h", "4 h"], ["1j", "1 j"]];
@@ -45,7 +46,7 @@ async function tx(store, mode, action) {
     t.onabort = () => ko(t.error || new Error("transaction annulée"));
   });
 }
-const lireNotes = () => tx("notes", "readonly", st => st.getAll());
+export const lireNotes = () => tx("notes", "readonly", st => st.getAll());
 const ecrireNote = n => tx("notes", "readwrite", st => st.put(n));
 const supprimerNote = id => tx("notes", "readwrite", st => st.delete(id));
 const lireMeta = cle => tx("meta", "readonly", st => st.get(cle));
@@ -394,7 +395,10 @@ export async function pageJournal() {
   champPaire.hidden = true;
   autre.addEventListener("click", () => { champPaire.hidden = false; champPaire.focus(); autre.setAttribute("aria-pressed", "true"); pucesP.forEach(b => b.setAttribute("aria-pressed", "false")); });
   champPaire.addEventListener("change", () => choisirPaire(champPaire.value, true));
-  e1.append(pucesForm, champPaire);
+  const lSens = el("label", "jn-champ"); const champSens = el("select"); champSens.setAttribute("aria-label", "Sens envisagé");
+  for (const v of ["Pas encore décidé", "Achat", "Vente"]) champSens.appendChild(new Option(v, v));
+  lSens.append(el("span", null, "Sens envisagé"), champSens);
+  e1.append(pucesForm, champPaire, lSens);
 
   // 2. Date et heure
   const e2 = etape(2, "Date et heure");
@@ -497,8 +501,16 @@ export async function pageJournal() {
     etatNotif.textContent = `${pluriel(n, "rappel programmé", "rappels programmés")}, tant que cette page reste ouverte.`;
   });
 
+  // Plan et risque (lot V8)
+  const ePlan = etape(7, "Plan et risque", "Le risque prévu (€) permet de convertir un résultat en € en R quand R n'est pas saisi.");
+  const champP = (lib, ph) => { const l = el("label", "jn-champ"); const i = el("input"); i.type = "text"; i.inputMode = "decimal"; i.placeholder = ph; l.append(el("span", null, lib), i); return [l, i]; };
+  const [lEntree, champEntree] = champP("Entrée", "niveau d'entrée");
+  const [lInval, champInval] = champP("Invalidation", "niveau qui annule le scénario");
+  const [lRisque, champRisque] = champP("Risque prévu (€)", "ex. 100");
+  const grilleP = el("div", "jn-resultat"); grilleP.append(lEntree, lInval, lRisque); ePlan.appendChild(grilleP);
+
   // 7. Résultat
-  const e7 = etape(7, "Résultat (à compléter à la clôture)");
+  const e7 = etape(8, "Résultat (à compléter à la clôture)");
   const grilleR = el("div", "jn-resultat");
   const statut = el("select"); statut.setAttribute("aria-label", "Statut");
   for (const [v, lib] of Object.entries(STATUTS)) statut.appendChild(new Option(lib, v));
@@ -513,7 +525,10 @@ export async function pageJournal() {
   const enregistrer = el("button", "bouton jn-principal", "Enregistrer l'entrée"); enregistrer.type = "submit";
   const annuler = el("button", "bouton", "Annuler la modification"); annuler.type = "button"; annuler.hidden = true;
   const actions = el("div", "jn-actions"); actions.append(enregistrer, annuler);
-  form.append(erreur, e1, e2, e3, e4, e5, e6, e7, actions, el("p", "note", "L'entrée garde un instantané des données du jour (fiche de la paire, états des devises)."));
+  // Lot V8 : étapes du panneau latéral (paire et date, contexte, captures, confluences, événements, plan et risque, bilan)
+  [[e1, 1], [e2, 1], [e4, 2], [e3, 3], [e5, 4], [e6, 5], [ePlan, 6], [e7, 7]].forEach(([f, k]) => { f.dataset.pas = k; });
+  form.addEventListener("jn-paire", ev => { if (ev.detail) { champPaire.value = ev.detail; choisirPaire(ev.detail, true); } });
+  form.append(erreur, e1, e2, e4, e3, e5, e6, ePlan, e7, actions, el("p", "note", "L'entrée garde un instantané des données du jour (fiche de la paire, états des devises)."));
 
   let captures = [];       // {id, unites[], blob, largeur, hauteur}
   let enEdition = null;
@@ -570,17 +585,22 @@ export async function pageJournal() {
     elements = (n.elements || []).map(x => ({ ...x }));
     captures = (n.captures || []).map(x => ({ ...x, unites: [...(x.unites || [])] }));
     statut.value = n.resultat?.statut || "analyse"; pnl.value = n.resultat?.pnl_eur ?? ""; pips.value = n.resultat?.pips ?? ""; r.value = n.resultat?.r ?? "";
+    champSens.value = n.sens || n.stats?.sens || "Pas encore décidé";
+    champEntree.value = n.plan?.entree ?? ""; champInval.value = n.plan?.invalidation ?? ""; champRisque.value = n.plan?.risque_eur ?? "";
     rendreApercus(); rendreElements(); rendreAgenda();
     annuler.hidden = false; enregistrer.textContent = "Enregistrer les modifications";
-    form.scrollIntoView({ block: "start" });
+    form.dispatchEvent(new CustomEvent("jn-edition", { detail: n }));   // Journal V3 : ouvre le panneau latéral
+    if (!form.closest(".drawer")) form.scrollIntoView({ block: "start" });
   }
   function vider() {
     enEdition = null; texte.value = ""; captures = []; rendreApercus(); champDate.value = maintenantLocal();
     statut.value = "analyse"; pnl.value = ""; pips.value = ""; r.value = "";
+    champSens.value = "Pas encore décidé"; champEntree.value = ""; champInval.value = ""; champRisque.value = "";
     choisirPaire(champPaire.value || mes[0], !mes.includes(champPaire.value));
     annuler.hidden = true; enregistrer.textContent = "Enregistrer l'entrée";
   }
   annuler.addEventListener("click", vider);
+  form.addEventListener("jn-vider", vider);   // Journal V3 : nouvelle entrée depuis le panneau
   form.addEventListener("submit", async e => {
     e.preventDefault();
     const maintenant = new Date().toISOString();
@@ -594,12 +614,24 @@ export async function pageJournal() {
       evenements_suivis: evenementsTouchent.map(({ id, iso_utc, devise, evenement, raison }) => ({ id, iso_utc, devise, evenement, raison })),
       horizon: champHorizon.value,
       resultat: { statut: statut.value, pnl_eur: pnl.value.trim() || null, pips: pips.value.trim() || null, r: r.value.trim() || null },
+      sens: champSens.value,
+      plan: { entree: champEntree.value.trim() || null, invalidation: champInval.value.trim() || null, risque_eur: champRisque.value.trim() || null },
       instantane: enEdition?.instantane || { ...instantane(paires.fiches[champPaire.value] || {}),
         etats: donneesJour.profil ? Object.fromEntries(donneesJour.profil.devises.map(p => [p.devise, p.etat.valeur])) : null },
     };
     n.performance = performance(n);   // onglet Performance (préparé, pas encore affiché)
+    // Lot V8 : enregistré seul pour les statistiques (thème et direction du jour, solde des engrenages de la paire,
+    // confluences cochées, séance déduite de l'heure, résultat en R) ; repris tel quel lors d'une modification.
+    const th = donneesJour.rapport?.theme || {}, fi = paires.fiches[champPaire.value] || {};
+    n.stats = {
+      ...(enEdition?.stats || { theme: th.titre || null, direction: th.direction?.libelle || null, date_theme: donneesJour.rapport?.date || null,
+                                 solde_engrenages: fi.macro?.decomposition?.solde ?? null }),
+      sens: champSens.value, seance: seanceDe(n.date_heure), confluences: n.compteur.pour,
+      avec_theme: avecLeTheme(n.paire, champSens.value, (enEdition?.stats || {}).direction ?? th.direction?.libelle),
+      risque_eur: n.plan.risque_eur, r: resultatR(n),
+    };
     if (!n.contexte && !n.captures.length && !n.elements.length) { afficherErreur("entrée vide (contexte, capture ou élément attendu)"); return; }
-    try { await ecrireNote(n); afficherErreur(""); vider(); await rendreListe(); }
+    try { await ecrireNote(n); afficherErreur(""); vider(); await rendreListe(); form.dispatchEvent(new CustomEvent("jn-enregistre", { detail: n })); }
     catch (err) { afficherErreur(messageErreur(err)); }
   });
 

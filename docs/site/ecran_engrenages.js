@@ -6,7 +6,7 @@ import { tableEngrenage } from "./ecran_tableau.js";
 const COURTS = ["Thème", "Monétaire", "Données", "Fiscale", "Marchés", "Géopolitique", "Flux", "Offre/demande"];
 const SQUELETTE = `
 <div class="card pad" style="display:flex;flex-direction:column;gap:12px">
-  <span class="eyebrow">Cockpit</span>
+  <span class="eyebrow" data-fraicheur="engrenages">Cockpit</span>
   <div style="display:flex;gap:14px;align-items:baseline;flex-wrap:wrap"><h2 id="ckT"></h2><span id="ckChip"></span></div>
   <p style="margin:0;color:var(--ink-2);max-width:80ch" id="ckTxt"></p>
   <div style="display:flex;gap:6px;flex-wrap:wrap" id="suivi"></div>

@@ -286,6 +286,7 @@ class RegistreQuotas:
                         "categories": jour_brut("categories"), "etiquettes": jour_brut("etiquettes"),
                         "echecs": jour_brut("echecs"), "faits": list(brut.get("faits") or []) if meme_jour else [],
                         "pannes": int(brut.get("pannes", 0)) if meme_jour else 0,
+                        "pannes_avant_correctif": int(brut.get("pannes_avant_correctif", 0)) if meme_jour else 0,
                         "dernier_run": brut.get("dernier_run") if isinstance(brut.get("dernier_run"), dict) else None}
         dr = self.donnees["dernier_run"] or {}
         # Panne en cours : plus de la moitié des requêtes du run précédent en 503 (V6.1-bis, point 2)
@@ -498,6 +499,7 @@ class RegistreQuotas:
                 "total_jour": self.total_jour(), "plafond_run": self.plafond_par_run(), "recues_run": self.run_recues,
                 "pannes_jour": self.donnees.get("pannes", 0), "pannes_run": self.run_pannes,
                 "plafond_pannes": PLAFOND_PANNES_JOUR, "mode_panne": self.mode_panne,
+                "pannes_avant_correctif": self.donnees.get("pannes_avant_correctif", 0),
                 "echecs_jour": dict(self.donnees.get("echecs", {})),
                 "echecs_run": dict(self.run_echecs),
                 "abandonnees": sorted(k for k, v in self.donnees.get("etiquettes", {}).items()

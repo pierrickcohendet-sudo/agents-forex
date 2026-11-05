@@ -158,8 +158,26 @@ def nombre(v) -> tuple[float | None, str | None]:
     return tableau_macro.lire_taux(v)
 
 
+_RE_VOTES = re.compile(r"^\s*\d+\s*-\s*\d+(?:\s*-\s*\d+)*\s*$")
+
+
+def est_taux(valeur) -> bool:
+    """Valeur exprimée en % (« 4.00% », « <1.25% ») ; une répartition de votes « 7-0-2 » n'en est pas une."""
+    t = str(valeur or "")
+    return "%" in t and not _RE_VOTES.match(t.replace("%", ""))
+
+
+def texte_votes(consensus, precedent) -> str | None:
+    """« votes attendus 7-0-2, précédent 3-0-6 » : affiché tel quel, jamais converti en badge de taux."""
+    if not consensus or not _RE_VOTES.match(str(consensus)):
+        return None
+    return f"votes attendus {consensus}" + (f", précédent {precedent}" if precedent and _RE_VOTES.match(str(precedent)) else "")
+
+
 def badge_decision(consensus, reference) -> dict | None:
     """Décision de banque centrale : « hausse / baisse / statu quo attendu » si le consensus diffère du taux actuel."""
+    if not est_taux(consensus) or not est_taux(reference):   # lot V7.1 : seules des valeurs en % donnent un badge de taux
+        return None
     c, bc = nombre(consensus)
     r, br = nombre(reference)
     if c is None or r is None:
@@ -603,6 +621,9 @@ def badges(ag: Agenda, refs: dict[str, dict]) -> None:
             continue
         ref = e.get("precedent") or (refs.get(e["devise"]) or {}).get("valeur")
         b = badge_decision(e.get("consensus"), ref)
+        votes = texte_votes(e.get("consensus"), e.get("precedent"))
+        if votes:
+            e["votes"] = votes
         if b:
             b["reference"] = ref
             b["source_reference"] = "précédent publié" if e.get("precedent") else (refs.get(e["devise"]) or {}).get("source")

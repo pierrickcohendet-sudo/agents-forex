@@ -1,11 +1,13 @@
 /* Trading baby — site V7 (refonte selon docs/design/maquette_v7.html). Lit uniquement docs/data/*.json (produits par le
    pipeline Python), aucune clé, aucun appel à un modèle. Chaque onglet se construit à sa première ouverture, une seule fois. */
 import { chargerJson, enErreur, initialiserDetail, initialiserCertificats, appliquerGlossaire, VERSION, CLE_VUE } from "./commun.js";
-import { $, h, esc, store, squelette, rethemer, recadrer } from "./v7_commun.js";
+import { $, h, esc, store, squelette, rethemer, recadrer, animerChiffres, pointFraicheur } from "./v7_commun.js";
 
 const ONGLETS = {
+  briefing: { titre: "Briefing", module: "./ecran_briefing.js", fonction: "ecranBriefing" },   // lot V8 : page d'accueil
   synthese: { titre: "Synthèse", module: "./ecran_synthese.js", fonction: "ecranSynthese" },
   tableau: { titre: "Tableau de bord", module: "./ecran_tableau.js", fonction: "ecranTableau" },
+  paire: { titre: "Paires", module: "./ecran_paire.js", fonction: "ecranPaire" },
   devises: { titre: "Devises", module: "./ecran_devises.js", fonction: "ecranDevises" },
   agenda: { titre: "Agenda", module: "./ecran_agenda.js", fonction: "ecranAgenda" },
   engrenages: { titre: "8 engrenages", module: "./ecran_engrenages.js", fonction: "ecranEngrenages" },
@@ -17,7 +19,7 @@ const ONGLETS = {
 };
 const PLUS = ["scenarios", "sante", "archives"];
 /* Anciennes adresses (#…) : redirigées vers le bon onglet. */
-const REDIRECTIONS = { rapport: "synthese", accueil: "synthese", hebdo: "synthese", mensuel: "synthese", apprendre: "synthese",
+const REDIRECTIONS = { rapport: "synthese", accueil: "briefing", paires: "paire", hebdo: "synthese", mensuel: "synthese", apprendre: "synthese",
                        institutions: "engrenages", outils: "engrenages", "tableau-macro": "tableau" };
 const construits = new Map();   // onglet -> section (construite une seule fois)
 
@@ -64,7 +66,7 @@ function deplacerSoulignement() {
   ink.style.left = b.offsetLeft + 14 + "px"; ink.style.width = Math.max(0, b.offsetWidth - 28) + "px";
 }
 function lireAdresse() {
-  let hash = (location.hash || "#synthese").slice(1);
+  let hash = (location.hash || "#briefing").slice(1);
   const [base, ...reste] = hash.split("/");
   if (REDIRECTIONS[base]) {   // ancienne adresse : remplacée sans nouvelle entrée d'historique
     hash = [REDIRECTIONS[base], ...(base === "hebdo" ? [] : reste)].join("/");
@@ -72,7 +74,7 @@ function lireAdresse() {
   }
   if (/^g=[1-8]$/.test(hash)) hash = `engrenages/${hash}`;   // lien direct vers un dossier d'engrenage
   const [id, parametre] = hash.split("/");
-  return [ONGLETS[id] ? id : "synthese", parametre];
+  return [ONGLETS[id] ? id : "briefing", parametre];
 }
 async function construire(id, parametre) {
   const conf = ONGLETS[id];
@@ -90,6 +92,8 @@ async function construire(id, parametre) {
     } else {
       const m = await import(conf.module);
       await m[conf.fonction](s, parametre);
+      // Points de fraîcheur (règle calculée en Python : fraicheur.json) sur les blocs marqués data-fraicheur
+      s.querySelectorAll("[data-fraicheur]").forEach(e => pointFraicheur(e, e.dataset.fraicheur));
     }
   } catch (e) {
     console.error(e);
@@ -114,7 +118,14 @@ async function afficher() {
   for (const [k, x] of construits) x.classList.toggle("on", k === id);
   if (!s) { s = await construire(id, parametre); }
   for (const [k, x] of construits) x.classList.toggle("on", k === id);
-  requestAnimationFrame(() => recadrer(s));
+  requestAnimationFrame(() => { recadrer(s); animerChiffres(s); });
+  // Écran déjà construit : paramètre d'adresse transmis (recherche rapide, liens entre onglets)
+  if (parametre && s.dataset.construit === "1") {
+    if (id === "paire" && s.choisirPaire) s.choisirPaire(parametre.replace("-", "/").toUpperCase());
+    if (id === "journal" && s.ouvrirNouvelle && /^nouvelle=/.test(parametre)) { history.replaceState(null, "", "#journal"); s.ouvrirNouvelle(parametre.slice(9).replace("-", "/")); }
+    if (id === "agenda" && s.choisirJour && /^jour=/.test(parametre)) s.choisirJour(parametre.slice(5));
+  }
+  s.dataset.construit = "1";
   if (id === "engrenages" && parametre) { const b = s.querySelector(`#engSel button[data-n="${parametre.slice(2)}"]`); if (b && b.getAttribute("aria-pressed") !== "true") b.click(); }
   window.scrollTo(0, 0);
 }
@@ -136,6 +147,16 @@ async function initialiser() {
     try { (await import("./impression.js")).ouvrirApercu(imprimer); } catch (e) { console.error(e); window.print(); }
   });
   window.addEventListener("hashchange", afficher);
+  // Recherche rapide : Ctrl+K (ou ⌘K), loupe de l'en-tête sur téléphone
+  const rechercher = () => import("./recherche.js").then(m => m.ouvrirRecherche());
+  document.addEventListener("keydown", e => { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") { e.preventDefault(); rechercher(); } });
+  $("#searchBtn")?.addEventListener("click", rechercher);
+  // Données servies par le cache du service worker (hors connexion) : bandeau daté
+  navigator.serviceWorker?.addEventListener("message", e => {
+    if (e.data?.type !== "hors-connexion") return;
+    const b = $("#horsLigne"); if (!b) return;
+    b.hidden = false; b.textContent = `Hors connexion : données du ${e.data.date || "dernier passage"}.`;
+  });
   window.addEventListener("resize", deplacerSoulignement);
   if (document.fonts) document.fonts.ready.then(deplacerSoulignement);
   const site = await chargerJson("data/site.json");

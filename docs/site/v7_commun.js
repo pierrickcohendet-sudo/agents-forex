@@ -150,3 +150,70 @@ export function blocDetaille(titre, sousTitre, charger) {
   });
   return d;
 }
+
+/* ------------------------------------------------------------ Lot V8 : bougies (Paris), temps relatif, fraîcheur, mouvement */
+export const tsBougie = s => Math.floor(Date.parse(String(s).replace(" ", "T") + (String(s).length <= 10 ? "T00:00:00Z" : "Z")) / 1000);
+export const heureParis = (ts, avecJour = false) => new Date(ts * 1000).toLocaleString("fr-FR", { timeZone: "Europe/Paris", ...(avecJour ? { day: "2-digit", month: "2-digit" } : {}), hour: "2-digit", minute: "2-digit" });
+/* bougies : [[horodatage UTC, o, h, b, c]] ; options : marqueurs [{ts, texte, couleur, position, forme}], lignes de prix
+   [{prix, couleur, titre, style}], courbes [{points:[[horodatage, v]], couleur, titre}] (MM calculées en Python). */
+export async function graphiqueBougies(boite, bougies, dec, { marqueurs = [], lignesPrix = [], courbes = [] } = {}) {
+  const L = await chargerLWC();
+  boite.innerHTML = "";
+  if (!L || !boite.isConnected || !bougies?.length) {
+    boite.innerHTML = bougies?.length ? spark(bougies.map(b => b[4]), 800, 300, "var(--accent)", true).replace("<svg", '<svg style="width:100%;height:100%"') : '<div class="empty">Bougies indisponibles.</div>';
+    return null;
+  }
+  const fmt = t => typeof t === "number" ? heureParis(t, true) : t;
+  const c = L.createChart(boite, { autoSize: true, ...optionsTheme(),
+    localization: { locale: "fr-FR", timeFormatter: fmt, priceFormatter: v => v.toLocaleString("fr-FR", { minimumFractionDigits: dec, maximumFractionDigits: dec }) },
+    timeScale: { borderVisible: false, timeVisible: true, tickMarkFormatter: t => typeof t === "number" ? new Date(t * 1000).toLocaleString("fr-FR", { timeZone: "Europe/Paris", day: "2-digit", hour: "2-digit", minute: "2-digit" }).replace(" ", " · ") : t } });
+  const s = c.addCandlestickSeries({ upColor: css("--up"), downColor: css("--down"), borderVisible: false, wickUpColor: css("--up"), wickDownColor: css("--down"),
+    priceFormat: { type: "price", precision: dec, minMove: Math.pow(10, -dec) } });
+  const data = bougies.map(b => ({ time: tsBougie(b[0]), open: b[1], high: b[2], low: b[3], close: b[4] }));
+  s.setData(data);
+  for (const l of lignesPrix) if (l.prix != null) s.createPriceLine({ price: l.prix, color: css(l.couleur), lineWidth: 1, lineStyle: l.style ?? 2, axisLabelVisible: true, title: l.titre || "" });
+  const t0 = data[0].time, tN = data[data.length - 1].time;
+  const caler = ts => { let m = null; for (const d of data) { if (d.time <= ts) m = d.time; else break; } return m; };
+  const mk = marqueurs.filter(m => m.ts >= t0 && m.ts <= tN + 3600).map(m => ({ time: caler(m.ts), position: m.position || "aboveBar", color: css(m.couleur || "--warn"), shape: m.forme || "circle", text: m.texte || "" }))
+    .filter(m => m.time != null).sort((a, b) => a.time - b.time);
+  s.setMarkers(mk);
+  for (const k of courbes) {
+    const ls = c.addLineSeries({ color: css(k.couleur), lineWidth: 2, title: k.titre || "", priceLineVisible: false, lastValueVisible: false });
+    ls.setData(k.points.map(p => p[1] == null ? { time: tsBougie(p[0]) } : { time: tsBougie(p[0]), value: p[1] }));
+  }
+  c.timeScale().fitContent();
+  const g = { c, objets: [], boite, bougies: s };
+  graphiques.add(g);
+  return g;
+}
+export function tempsRelatif(sec) {
+  const a = Math.abs(sec), hh = Math.floor(a / 3600), m = Math.round(a % 3600 / 60);
+  const t = hh ? `${hh} h ${String(m).padStart(2, "0")}` : `${m} min`;
+  return sec >= 0 ? "dans " + t : "il y a " + t;
+}
+/* Point de fraîcheur d'un bloc (règle calculée en Python : docs/data/fraicheur.json). */
+export async function pointFraicheur(cible, bloc) {
+  const f = (await donnees("fraicheur"))?.blocs?.[bloc];
+  if (!f || !cible) return;
+  const p = h("span", `fr-dot ${f.etat}`);
+  p.tabIndex = 0; p.setAttribute("role", "img");
+  p.setAttribute("aria-label", `Fraîcheur ${f.etat} : ${f.texte}`); p.title = f.texte;
+  (cible.querySelector("h2,h3") || cible).appendChild(p);
+}
+/* Chiffres qui défilent jusqu'à leur valeur (300 ms) à l'ouverture d'un onglet ; coupé avec prefers-reduced-motion. */
+export function animerChiffres(racine) {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  for (const e of racine.querySelectorAll(".anim-num")) {
+    if (e.dataset.anime) continue;   // une seule fois par valeur affichée : jamais une cible intermédiaire
+    e.dataset.anime = "1";
+    const txt = e.textContent, m = txt.match(/^([^\d−-]*)([−-]?)([\d\s ]+(?:,\d+)?)(.*)$/);
+    if (!m) continue;
+    const cible = Number(m[3].replace(/[\s ]/g, "").replace(",", ".")), dec = (m[3].split(",")[1] || "").length;
+    if (!isFinite(cible)) continue;
+    const t0 = performance.now();
+    const pas = t => { const k = Math.min(1, (t - t0) / 300), v = cible * (1 - Math.pow(1 - k, 3));
+      e.textContent = m[1] + m[2] + v.toLocaleString("fr-FR", { minimumFractionDigits: dec, maximumFractionDigits: dec }) + m[4];
+      if (k < 1) requestAnimationFrame(pas); else e.textContent = txt; };
+    requestAnimationFrame(pas);
+  }
+}

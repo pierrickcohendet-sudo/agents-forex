@@ -223,6 +223,7 @@ function ligneEvenement(e) {
   t.append(el("span", `ag-type ${CLASSE_TYPE[e.type] || "chiffre"}`, e.type), el("b", null, e.evenement),
            el("span", `ag-points ${e.impact}`, e.points || ""));
   t.lastChild.setAttribute("aria-label", `impact ${e.impact}`);
+  if (!e.badge && e.votes) t.appendChild(el("span", "note", ` · ${e.votes}`));   // lot V7.1 : votes tels quels, sans badge
   if (e.badge && e.badge.sens) {
     const b = el("span", `ag-badge ${e.badge.sens}`, `${e.badge.texte}${e.badge.pb ? ` (${e.badge.pb > 0 ? "+" : ""}${e.badge.pb} pb)` : ""}`);
     b.title = `Consensus ${virgule(e.consensus)} contre ${virgule(e.badge.reference)} (${e.badge.source_reference})`;

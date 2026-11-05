@@ -14,7 +14,7 @@ from pathlib import Path
 
 DEBUT, FIN = "<!-- version-site:debut -->", "<!-- version-site:fin -->"
 # Lot V7 : anciens composants (cabinet.css, restylés par les tokens), tokens de la maquette, composants V7 — dans cet ordre.
-FEUILLES = ("cabinet.css", "tokens.css", "v7.css")
+FEUILLES = ("cabinet.css", "tokens.css", "v7.css", "v8.css")
 
 
 def empreinte(dossier_site: Path) -> str:
@@ -50,6 +50,12 @@ def appliquer(racine: str | Path) -> dict:
                      f'<script type="module" src="site/app.js?v={version}"></script>', nouveau)
     if nouveau != html:
         index.write_text(nouveau, encoding="utf-8")
+    sw = racine / "docs" / "sw.js"   # lot V8 : le cache du code est vidé à chaque nouvelle version
+    if sw.exists():
+        t = sw.read_text(encoding="utf-8")
+        t2 = re.sub(r'const VERSION = "[^"]*";', f'const VERSION = "{version}";', t, count=1)
+        if t2 != t:
+            sw.write_text(t2, encoding="utf-8")
     return {"version": version, "modifie": nouveau != html}
 
 

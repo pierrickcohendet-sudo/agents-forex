@@ -29,6 +29,7 @@ import argparse
 import json
 import logging
 import os
+import re
 import sys
 from datetime import date, datetime, timezone
 from pathlib import Path
@@ -39,7 +40,7 @@ from dotenv import load_dotenv
 from agents import (agent_consequences, agent_critique, agent_paires, agent_rapport, collecte_intraday, agent_dossier_hebdo, agent_engrenages, agent_redacteur, agent_strategiste, agent_synthese,
                     collecte_calendrier, collecte_flux, collecte_historiques, collecte_macro, collecte_news,
                     collecte_technique)
-from core import (accueil, alertes, profil_devises, collecte_cache, controle_qualite, quota_twelve, seance, sources, indicateurs, cours, dossiers, evaluation, hebdo, historique_5ans, impact, marche_taux, overrides, precedents,
+from core import (accueil, alertes_telephone, briefing, fraicheur_blocs, alertes, profil_devises, collecte_cache, controle_qualite, quota_twelve, seance, sources, indicateurs, cours, dossiers, evaluation, hebdo, historique_5ans, impact, marche_taux, overrides, precedents,
                   publication_web,
                   registre_macro, saisies_manuelles, site_donnees, tableau_macro)
 from core.llm import creer_fournisseur, journal_appels, reinitialiser_journal
@@ -272,6 +273,9 @@ def main() -> int:
             if (not a_completer and not etat_manquant and not collectes_a_refaire
                     and not synthese_manquantes and not engrenages_manquants and not rapport_manquant):
                 log.info("--completer : rien à compléter aujourd'hui (rapport déjà complet) — analyses inchangées")
+                etape("briefing du jour (briefing.json)", briefing.ecrire, RACINE, config, defaut=None)
+                etape("alertes sur le téléphone (ntfy)", _alertes_telephone, RACINE, config, defaut=None)
+                etape("fraîcheur des blocs (fraicheur.json)", fraicheur_blocs.ecrire, RACINE, config, defaut=None)
                 etape("alertes de fin de run", _alertes_fin_run, RACINE, config, rapport_existant)
                 etape("résumé du run : agenda et fraîcheur des données", _ecrire_resume_donnees, RACINE, config)
                 if not arguments.sans_web:
@@ -502,15 +506,20 @@ def main() -> int:
     # par jour, après les engrenages et la réserve de quota), repli 100 % Python ; copie Notion au run complet.
     rapport_jour_donnees = etape("rapport du jour", agent_rapport.executer, RACINE, config, llm,
                                  complet=not arguments.completer, defaut=None)
+    # Lot V8 : Briefing (page d'accueil), alertes sur le téléphone, fraîcheur des blocs — chacun isolé
+    etape("briefing du jour (briefing.json)", briefing.ecrire, RACINE, config, defaut=None)
+    etape("alertes sur le téléphone (ntfy)", _alertes_telephone, RACINE, config, defaut=None)
+    etape("fraîcheur des blocs (fraicheur.json)", fraicheur_blocs.ecrire, RACINE, config, defaut=None)
     if rapport_jour_donnees and not arguments.completer and not arguments.sans_notion:
         # Lot V6.1 : une copie Notion en échec ne rend pas le run rouge ; l'erreur exacte va dans le récapitulatif.
         try:
-            agent_redacteur.publier_rapport_jour(config, rapport_jour_donnees, RACINE / "config.yaml")
+            url = agent_redacteur.publier_rapport_jour(config, rapport_jour_donnees, RACINE / "config.yaml")
             log.info("Étape « rapport du jour dans Notion » : OK")
+            _ecrire_resume_run(ligne_notion(url), titre="Copie Notion")
         except Exception as exc:  # noqa: BLE001
             message = agent_redacteur.erreur_notion(exc)
             log.warning("Rapport du jour dans Notion : copie en échec (%s)", message)
-            _ecrire_resume_run(f"Notion, rapport du jour : copie en échec — {message}", titre="Copie Notion")
+            _ecrire_resume_run(ligne_notion(None, message), titre="Copie Notion")
 
     # Journal léger des appels LLM (taille estimée + modèle utilisé) : en
     # --completer, s'ajoute à ceux du matin (plafonné) ; puis alerte qualité
@@ -601,6 +610,30 @@ def ligne_quota(quota: dict | None, engrenages: dict | None) -> str:
 NOMS_CATEGORIES = {"engrenages": "engrenages", "rapport": "rapport du jour", "devises": "devises", "reste": "reste"}
 
 
+def _alertes_telephone(racine: Path, config: dict) -> dict:
+    """Notifications ntfy (lot V8) : jamais d'échec bloquant ; le nom du canal (secret) n'apparaît jamais."""
+    resultat = alertes_telephone.executer(racine, config)
+    if resultat.get("ligne"):
+        _ecrire_resume_run(resultat["ligne"], titre="Alertes téléphone")
+    return resultat
+
+
+def ligne_notion(url: str | None, erreur: str | None = None) -> str:
+    """Récapitulatif de chaque run complet (lot V7.1) : « Notion : copié (id) » ou « Notion : échec (erreur exacte) »."""
+    if erreur:
+        return f"Notion : échec ({erreur})"
+    m = re.search(r"([0-9a-f]{32})", str(url or "").replace("-", ""))
+    return f"Notion : copié ({m.group(1)})" if m else "Notion : échec (aucune page renvoyée : configuration Notion absente ?)"
+
+
+def texte_pannes(b: dict) -> str:
+    """« 12/20 » ; au-delà du plafond : « 32 (dont 32 avant le correctif) » (compteur repris d'avant le lot V7)."""
+    n, plafond, avant = b.get("pannes_jour", 0), b.get("plafond_pannes", 20), b.get("pannes_avant_correctif") or 0
+    if n <= plafond:
+        return f"{n}/{plafond}"
+    return f"{n} (dont {avant} avant le correctif)" if avant else f"{n} (au-delà du plafond de {plafond})"
+
+
 def ligne_budget(b: dict) -> str:
     """« Budget (run complet, plafond 45) : prévu engrenages 1 analyse (≤ 2 requêtes)… ; consommé… ; échecs… »."""
     prevu = "; ".join(f"{NOMS_CATEGORIES.get(c, c)} {n} {'analyse' if n < 2 else 'analyses'} (≤ {b['prevu_appels_max'][c]} "
@@ -615,8 +648,7 @@ def ligne_budget(b: dict) -> str:
              f"{b.get('plafond') if b.get('plafond') is not None else 'n/d'}) : prévu {prevu} ; consommé ce run : {conso} "
              f"(jour : {jour}/{b.get('plafond') if b.get('plafond') is not None else 'n/d'}) ; échecs ce run : {echecs}")
     if b.get("pannes_jour") is not None:   # V6.1-bis : 503, 429, délais hors budget, comptés à part
-        ligne += (f" ; tentatives en panne (hors budget) : {b.get('pannes_run', 0)} ce run, {b['pannes_jour']}/"
-                  f"{b.get('plafond_pannes', 20)} aujourd'hui")
+        ligne += f" ; tentatives en panne (hors budget) : {b.get('pannes_run', 0)} ce run, {texte_pannes(b)} aujourd'hui"
     if b.get("plafond_run") is not None:
         ligne += f" ; réponses reçues ce run : {b.get('recues_run', 0)}/{b['plafond_run']}"
     if b.get("mode_panne"):

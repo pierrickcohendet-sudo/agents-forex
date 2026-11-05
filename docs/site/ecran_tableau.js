@@ -4,7 +4,7 @@ import { $, h, nf, sgn, num, esc, dfr, ddm, frTxt, nd, fv, classeSigne, spark, h
 
 const SQUELETTE = `
 <div class="alerts" id="alerts"></div>
-<div class="sec-head"><h2>Point de marché</h2><p id="pmMeta"></p></div>
+<div class="sec-head" data-fraicheur="point_marche"><h2>Point de marché</h2><p id="pmMeta"></p></div>
 <div id="pm" style="display:flex;flex-direction:column;gap:12px"></div>
 <div class="card pad" style="display:flex;flex-direction:column;gap:12px">
   <div class="sec-head"><h2 id="bgT"></h2>
@@ -14,7 +14,7 @@ const SQUELETTE = `
 </div>
 <div class="cols2">
   <div class="card pad" style="display:flex;flex-direction:column;gap:8px">
-    <div class="sec-head"><h2>Force des devises</h2><div class="seg" id="foPer" role="group" aria-label="Période de la force"></div></div>
+    <div class="sec-head" data-fraicheur="force"><h2>Force des devises</h2><div class="seg" id="foPer" role="group" aria-label="Période de la force"></div></div>
     <div class="legend"><span>Barre : variation sur la période</span><span><i style="background:var(--ink);opacity:.55;width:2px"></i>écart à la MM200</span></div>
     <div id="force"></div>
     <div class="src" id="foSrc"></div>
@@ -27,11 +27,11 @@ const SQUELETTE = `
   </div>
 </div>
 <div class="card pad" style="display:flex;flex-direction:column;gap:12px">
-  <div class="sec-head"><h2>Corrélations sur 60 séances</h2><p>Devise contre marchés · survol : valeur précédente et percentile 5 ans</p></div>
+  <div class="sec-head" data-fraicheur="engrenages"><h2>Corrélations sur 60 séances</h2><p>Devise contre marchés · survol : valeur précédente et percentile 5 ans</p></div>
   <div class="scroll"><table class="heat" id="heat"></table></div>
   <div class="src" id="heatSrc"></div>
 </div>
-<div class="sec-head"><h2>Macro par devise</h2><p>▲ ▼ = : publié face au consensus · vue complète : précédent et prévision</p></div>
+<div class="sec-head" data-fraicheur="tableau_macro"><h2>Macro par devise</h2><p>▲ ▼ = : publié face au consensus · vue complète : précédent et prévision</p></div>
 <div class="card scroll"><table class="mx" id="mx"></table></div>
 <div class="card full">
   <div class="pad" style="padding-bottom:4px"><div class="sec-head"><h2>Taux et écarts</h2><p>Percentile 5 ans entre parenthèses · survol : source, ou raison d'un n/d</p></div></div>

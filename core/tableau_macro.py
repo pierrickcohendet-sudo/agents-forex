@@ -273,6 +273,12 @@ def harmoniser_taux_reference(cellules: dict, lignes: list[dict], registre: dict
             cell.update({"valeur": valeur, "texte": valeur + (f" ({date_[8:10]}/{date_[5:7]})" if date_ else ""),
                          "source": tp.get("source"), "date": date_ or cell.get("date"), "reference": tp["type"],
                          "secondaire": secondaire})
+            # Lot V7.1 : flèche de surprise seulement si le consensus porte sur le taux affiché (dépôt contre dépôt) ;
+            # ForexFactory publie le consensus du refinancement (BCE) et de la borne haute (Fed) : pas de flèche.
+            if cell.get("surprise"):
+                cell["surprise_raison"] = (f"consensus publié pour le {'taux de refinancement' if devise == 'EUR' else 'haut de la fourchette'}"
+                                           f" : non comparable au taux affiché ({tp['type']})")
+            cell["surprise"] = None
         for ligne in lignes:
             if ligne.get("indicateur") == "taux_directeur" and ligne.get("devise") == devise:
                 ligne["Actuel"] = valeur

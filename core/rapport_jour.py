@@ -351,7 +351,7 @@ def synthese(agenda_donnees, dossiers_donnees, scen: dict, aujourd: date) -> dic
     debut, fin = aujourd.isoformat(), (aujourd + timedelta(days=7)).isoformat()
     forts = _evts(agenda_donnees, debut, fin)
     forts.sort(key=lambda e: (e.get("type") != "Réunion BC", e.get("iso_utc", "")))
-    catalyseurs = [{k: e.get(k) for k in ("date_paris", "heure_paris", "devise", "evenement", "type", "consensus", "badge")} for e in forts[:8]]
+    catalyseurs = [{k: e.get(k) for k in ("date_paris", "heure_paris", "devise", "evenement", "type", "consensus", "precedent", "badge", "votes")} for e in forts[:8]]
     bilans = bilans_matrice(dossiers_donnees)
     meilleur = next((s for s in scen["liste"] if s["mieux_confirme"]), None)
     biais = []
@@ -393,7 +393,7 @@ def calendrier_commente(agenda_donnees, aujourd: date) -> dict:
         lecture = (f"Devises exposées : {', '.join(devises)} ; risque dominant : {', '.join(risques) or 'données secondaires'}." if evts
                    else "Pas d'évènement notable : liquidité normale attendue.")
         jours.append({"date": j["date"], "titre": titre, "n_forts": n_forts, "lecture": lecture,
-                      "evenements": [{k: e.get(k) for k in ("heure_paris", "devise", "evenement", "impact", "type", "consensus", "badge")} for e in evts],
+                      "evenements": [{k: e.get(k) for k in ("heure_paris", "devise", "evenement", "impact", "type", "consensus", "badge", "votes")} for e in evts],
                       "discrets": j.get("discrets") or []})
         for e in evts:
             if e.get("heure_paris") in (None, "journée"):
@@ -911,10 +911,36 @@ def ecrire(racine: str | Path, config: dict, maintenant: datetime | None = None,
         return None
 
 
+# Lot V8 (G3) : la synthèse rédigée est découpée ici en paragraphes courts avec intertitres (jamais dans le navigateur).
+INTERTITRES = [("Banques centrales", r"\b(banque|BoE|Fed|BCE|BoJ|BNS|BoC|RBA|RBNZ|PBoC|taux directeur|réunion|décision)\b"),
+               ("Scénarios", r"\b(scénario|condition)s?\b"),
+               ("Marchés", r"\b(rendement|dollar|or|pétrole|Brent|VIX|action|Nasdaq|S&P|indice|devise)s?\b"),
+               ("Agenda", r"\b(publication|agenda|aujourd'hui|demain|semaine|catalyseur|chiffre)s?\b"),
+               ("Thème", r"\b(thème|engrenage|signaux|conviction)s?\b")]
+_PHRASE = re.compile(r"(?<=[.!?…])\s+(?=[A-ZÀÂÉÈÊÎÔÛÇ«0-9])")
+
+
+def decouper_synthese(texte: str | None, max_phrases: int = 2) -> list[dict]:
+    """[{titre, texte}] : phrases regroupées par intertitre (mots-clés), 2 phrases au plus par paragraphe, ordre conservé."""
+    if not texte or not str(texte).strip():
+        return []
+    phrases = [p.strip() for p in _PHRASE.split(str(texte).strip()) if p.strip()]
+    blocs: list[dict] = []
+    for i, ph in enumerate(phrases):
+        titre = "L'essentiel" if i == 0 else next((t for t, motif in INTERTITRES if re.search(motif, ph, re.I)), "À retenir")
+        if blocs and blocs[-1]["titre"] == titre and len(blocs[-1]["phrases"]) < max_phrases:
+            blocs[-1]["phrases"].append(ph)
+        else:
+            blocs.append({"titre": titre if not blocs or blocs[-1]["titre"] != titre else "", "phrases": [ph]})
+    return [{"titre": b["titre"], "texte": " ".join(b["phrases"])} for b in blocs]
+
+
 def appliquer_textes(donnees: dict, textes: dict) -> None:
     """Place les textes validés du modèle ; chaque section garde sa phrase Python de repli."""
     donnees["textes"] = textes or {}
     t = textes or {}
+    if t.get("synthese"):
+        donnees["textes"] = {**t, "synthese_blocs": decouper_synthese(t["synthese"])}
     for cle in ("synthese", "bilan", "conclusion"):
         if t.get(cle):
             donnees[cle]["texte"] = t[cle]

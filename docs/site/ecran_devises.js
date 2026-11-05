@@ -5,7 +5,7 @@ import { $, h, nf, sgn, esc, ddm, nd, classeEtat, donnees, bloc, graphique, bloc
 const SIX_MOIS = 183;
 
 export async function ecranDevises(section) {
-  section.innerHTML = `<div class="sec-head"><h2>Qui mène, et pourquoi</h2><p>Ancrage, moteur du moment (60 séances), banque centrale</p></div>
+  section.innerHTML = `<div class="sec-head" data-fraicheur="profil"><h2>Qui mène, et pourquoi</h2><p>Ancrage, moteur du moment (60 séances), banque centrale</p></div>
     <div class="grid dvs" id="dvs"></div><p class="src" id="dvSrc"></p><div id="detaille"></div>`;
   const [profil, cours] = await Promise.all([donnees("profil_devises"), donnees("cours")]);
   const box = $("#dvs", section);

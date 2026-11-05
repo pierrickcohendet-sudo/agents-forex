@@ -31,3 +31,14 @@ node outils/captures.mjs "http://localhost:4173/" captures/<lot>
 
 Le script capture les 6 onglets en clair et en sombre, à 1280 et 390 px, page entière, et signale tout débordement
 horizontal. Comparer côte à côte avec `docs/design/reference/` et lister les écarts restants.
+
+## Lot V8
+
+- Références supplémentaires : `maquette_v8.html` et `reference/v8/` (Briefing, Paires, Journal ; clair et sombre, 1280 et 390 px).
+  Composants : `docs/site/v8.css`. Capturer les 8 onglets :
+  `node outils/captures.mjs "http://localhost:4173/" captures/<lot> briefing,synthese,tableau,paire,devises,agenda,engrenages,journal`.
+- Seules exceptions au « tout en Python » : l'heure (comptes à rebours, ligne « maintenant », temps relatifs) et les
+  statistiques du Journal, calculées sur l'appareil à partir des trades privés (`journal_stats.js`, fonctions pures testées).
+- Point de fraîcheur sur les blocs de données : règle calculée en Python (`fraicheur.json`), infobulle « mis à jour le … ».
+- Mouvement : chiffres qui défilent (300 ms, une seule fois par valeur), courbes qui se dessinent, panneau qui glisse ;
+  tout est coupé avec `prefers-reduced-motion`.
