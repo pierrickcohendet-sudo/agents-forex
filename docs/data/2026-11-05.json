@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-05T10:20:04+00:00",
+  "genere_le": "2026-11-05T11:17:44+00:00",
   "appels_llm": [
    {
     "heure": "08:25",
@@ -131,6 +131,15 @@
     "tokens_total": 18027,
     "ok": true,
     "etiquette": "analyses:AUD-NZD-CNY"
+   },
+   {
+    "heure": "11:17",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 5038,
+    "tokens_message": 13933,
+    "tokens_total": 18971,
+    "ok": true,
+    "etiquette": "analyses:JPY-CHF-CAD"
    }
   ],
   "quota_llm": {
@@ -140,31 +149,31 @@
     "gemini-3.8-flash",
     "gemini-3.5-flash-lite"
    ],
-   "appels_aujourdhui": 4,
+   "appels_aujourdhui": 5,
    "plafond_jour": 60,
    "engrenages_faits": true,
    "reserve_engrenages": 8,
    "refus_reserve_ce_run": 0,
-   "refus_budget_ce_run": 17,
+   "refus_budget_ce_run": 4,
    "budget": {
     "plafond": 60,
     "mode": "complément",
     "lundi": false,
-    "max_appels_par_analyse": 1,
+    "max_appels_par_analyse": 2,
     "prevu_analyses": {
      "engrenages": 1,
      "rapport": 2,
      "devises": 3
     },
     "prevu_appels_max": {
-     "engrenages": 1,
-     "rapport": 2,
-     "devises": 3
+     "engrenages": 2,
+     "rapport": 4,
+     "devises": 6
     },
     "consomme_jour": {
      "engrenages": 1,
      "rapport": 1,
-     "devises": 2,
+     "devises": 3,
      "reste": 0
     },
     "consomme_run": {
@@ -173,20 +182,18 @@
      "devises": 1,
      "reste": 0
     },
-    "total_jour": 4,
+    "total_jour": 5,
     "plafond_run": 45,
     "recues_run": 1,
     "pannes_jour": 18,
-    "pannes_run": 1,
+    "pannes_run": 0,
     "plafond_pannes": 20,
-    "mode_panne": true,
+    "mode_panne": false,
     "pannes_avant_correctif": 0,
     "echecs_jour": {
      "503": 21
     },
-    "echecs_run": {
-     "503": 2
-    },
+    "echecs_run": {},
     "abandonnees": [],
     "analyses": {
      "analyses:AUD-NZD-CNY": {
@@ -198,12 +205,12 @@
       "appels": 1
      },
      "analyses:JPY-CHF-CAD": {
-      "statut": "à rejouer",
-      "echec": "503",
+      "statut": "faite",
+      "echec": null,
       "types": {
        "503": 6
       },
-      "appels": 0
+      "appels": 1
      },
      "analyses:USD-EUR-GBP": {
       "statut": "faite",
@@ -271,10 +278,10 @@
    },
    "modeles": {
     "gemini-3.5-flash": {
-     "appels_aujourdhui": 4,
+     "appels_aujourdhui": 5,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-11-05T07:59:59+00:00",
-     "appels_ce_run": 2,
+     "appels_ce_run": 5,
      "reussites_ce_run": 1,
      "sauts_ce_run": 0
     },
@@ -296,10 +303,10 @@
     }
    }
   },
-  "resume_quota": "Gemini : 4/60, engrenages : fait — Budget (run complément, plafond 60) : prévu engrenages 1 analyse (≤ 1 requêtes); rapport du jour 2 analyses (≤ 2 requêtes); devises 3 analyses (≤ 3 requêtes); reste ≤ 54 ; consommé ce run : engrenages 0, rapport du jour 0, devises 1, reste 0 (jour : 4/60) ; échecs ce run : 503 × 2 ; tentatives en panne (hors budget) : 1 ce run, 18/20 aujourd'hui ; réponses reçues ce run : 1/45 ; MODE PANNE : priorités seulement, 1 essai chacune, sans repli ; analyses : analyses:AUD-NZD-CNY faite, analyses:JPY-CHF-CAD à rejouer (503), analyses:USD-EUR-GBP faite, critique à rejouer (503), engrenages faite, etat_du_monde à rejouer (503), rapport:redaction faite, synthese:EUR à rejouer (503), synthese:GBP à rejouer (503), synthese:USD à rejouer (503)",
+  "resume_quota": "Gemini : 5/60, engrenages : fait — Budget (run complément, plafond 60) : prévu engrenages 1 analyse (≤ 2 requêtes); rapport du jour 2 analyses (≤ 4 requêtes); devises 3 analyses (≤ 6 requêtes); reste ≤ 48 ; consommé ce run : engrenages 0, rapport du jour 0, devises 1, reste 0 (jour : 5/60) ; échecs ce run : aucun ; tentatives en panne (hors budget) : 0 ce run, 18/20 aujourd'hui ; réponses reçues ce run : 1/45 ; analyses : analyses:AUD-NZD-CNY faite, analyses:JPY-CHF-CAD faite, analyses:USD-EUR-GBP faite, critique à rejouer (503), engrenages faite, etat_du_monde à rejouer (503), rapport:redaction faite, synthese:EUR à rejouer (503), synthese:GBP à rejouer (503), synthese:USD à rejouer (503)",
   "appels_par_modele": {
    "gemini-3.5-flash": {
-    "appels": 10,
+    "appels": 11,
     "echecs": 6
    },
    "gemini-3.8-flash": {
@@ -409,6 +416,40 @@
       "ignores": 0
      }
     ]
+   },
+   {
+    "heure": "11:17",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 5,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
    }
   ],
   "notion_url": "https://app.notion.com/p/FX-2026-11-05-quotidien-40f65bc64661810ab6b5fcaf7046f6b3"
@@ -452,7 +493,7 @@
      ],
      "donnees_calculees": [
       {
-       "texte": "Biais global risk_off ; classement : GBP 82, USD 71, CNY 66, AUD 62, NZD 40, EUR 39",
+       "texte": "Biais global risk_off ; classement : GBP 82, USD 71, CNY 66, AUD 62, CHF 55, CAD 50, JPY 42, NZD 40, EUR 39",
        "source_id": "src_134"
       },
       {
@@ -1116,7 +1157,7 @@
     "libelle": "Flash 3.5"
    },
    "version": "quotidienne",
-   "rafraichi_le": "2026-11-05T10:18:24+00:00",
+   "rafraichi_le": "2026-11-05T11:17:44+00:00",
    "titre_theme_impose": "Signaux mixtes"
   },
   "classement_devises": [
@@ -1146,22 +1187,36 @@
    },
    {
     "rang": 5,
+    "devise": "CHF",
+    "score_confluence": 55,
+    "risk_on_off": "off"
+   },
+   {
+    "rang": 6,
+    "devise": "CAD",
+    "score_confluence": 50,
+    "risk_on_off": "on"
+   },
+   {
+    "rang": 7,
+    "devise": "JPY",
+    "score_confluence": 42,
+    "risk_on_off": "off"
+   },
+   {
+    "rang": 8,
     "devise": "NZD",
     "score_confluence": 40,
     "risk_on_off": "on"
    },
    {
-    "rang": 6,
+    "rang": 9,
     "devise": "EUR",
     "score_confluence": 39,
     "risk_on_off": "neutre"
    }
   ],
-  "devises_indisponibles": [
-   "JPY",
-   "CHF",
-   "CAD"
-  ]
+  "devises_indisponibles": []
  },
  "devises": [
   {
@@ -1385,9 +1440,10 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "synthese:USD : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python)",
+    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+    "quota_atteint": true,
     "tentatives": 2,
-    "genere_le": "2026-11-05T10:18:24+00:00"
+    "genere_le": "2026-11-05T11:17:44+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.87,
@@ -1658,9 +1714,10 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "synthese:EUR : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python)",
+    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+    "quota_atteint": true,
     "tentatives": 2,
-    "genere_le": "2026-11-05T10:18:44+00:00"
+    "genere_le": "2026-11-05T11:17:44+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.23,
@@ -1921,9 +1978,10 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "synthese:GBP : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python)",
+    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+    "quota_atteint": true,
     "tentatives": 2,
-    "genere_le": "2026-11-05T10:19:04+00:00"
+    "genere_le": "2026-11-05T11:17:44+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.56,
@@ -1961,20 +2019,103 @@
   {
    "devise": "JPY",
    "risk_on_off": "off",
-   "score_confluence": null,
-   "analyse_indisponible": true,
-   "raison_indisponibilite": "analyses:JPY-CHF-CAD : 1 appels déjà faits pendant ce run (repli Python)",
-   "biais_banque_centrale": "data_dependent",
+   "redige_par": {
+    "modele": "gemini-3.5-flash",
+    "libelle": "Flash 3.5"
+   },
+   "score_confluence": 42,
+   "detail_score": [
+    {
+     "indicateur": "taux_directeur",
+     "sens": -1,
+     "poids": 20,
+     "justification": "Taux directeur à 1,227 %, nettement en dessous de la médiane G8 à 2,75 %.",
+     "source_id": "src_016"
+    },
+    {
+     "indicateur": "cpi_surprise",
+     "sens": 0,
+     "poids": 15,
+     "justification": "Aucune publication majeure d'inflation observée aujourd'hui sur le JPY.",
+     "source_id": null
+    },
+    {
+     "indicateur": "yield_curve",
+     "sens": 0,
+     "poids": 12,
+     "justification": "Spread US 10Y-2Y à 0,34 point en aplatissement, impact neutre à court terme.",
+     "source_id": "src_015"
+    },
+    {
+     "indicateur": "vix",
+     "sens": 1,
+     "poids": 10,
+     "justification": "VIX à 20,83, un niveau supérieur à 20 qui soutient le statut de valeur refuge.",
+     "source_id": "src_010"
+    },
+    {
+     "indicateur": "dxy",
+     "sens": 1,
+     "poids": 10,
+     "justification": "Indice USD synthétique en baisse de 0,26 % sur 5 jours à 100,5871, allégeant la pression sur le yen.",
+     "source_id": "src_026"
+    },
+    {
+     "indicateur": "pmi_surprise",
+     "sens": 0,
+     "poids": 10,
+     "justification": "PMI services en hausse à 51,7 mais composite au plus bas de 5 mois, bilan mitigé.",
+     "source_id": "src_123"
+    },
+    {
+     "indicateur": "differentiel_taux",
+     "sens": -1,
+     "poids": 8,
+     "justification": "Spread souverain 2 ans JPY vs USD très défavorable à −272 pb.",
+     "source_id": "src_017"
+    },
+    {
+     "indicateur": "rsi",
+     "sens": -1,
+     "poids": 8,
+     "justification": "RSI 14 à 47,6 sur USD/JPY inversé, sous le pivot de 50 traduisant un momentum baissier.",
+     "source_id": "src_020"
+    },
+    {
+     "indicateur": "trendline",
+     "sens": 0,
+     "poids": 7,
+     "justification": "Pas de ligne de tendance validée à 3 points de contact identifiée sur le graphique.",
+     "source_id": "src_020"
+    }
+   ],
+   "biais_banque_centrale": "hawkish",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (analyses:JPY-CHF-CAD : 1 appels déjà faits pendant ce run (repli Python))",
-    "source_id": null
+    "commentaire": "Structure de fond en consolidation avec pivots non alignés selon la théorie de Dow.",
+    "source_id": "src_020"
    },
-   "detail_score": [],
-   "opportunites": [],
-   "menaces": [],
-   "synthese_une_phrase": "JPY : RSI 14 à 47,6 (momentum baissier, percentile 5 ans 60) ; cours au-dessus de sa moyenne mobile 200 jours (+0,26 %) ; positions nettes des spéculateurs (COT) +101 591 contrats, percentile 52 semaines 98, extrême acheteur ; taux directeur 1,23 % (−1,52 pt face à la médiane G8) ; écart de taux 2 ans face aux États−Unis −272 pb. Score de confluence n/d : il dépend de l'analyse du modèle, indisponible aujourd'hui.",
+   "carry": {
+    "taux_directeur": 1.227,
+    "differentiel_vs_mediane_g8": -1.52,
+    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   },
+   "opportunites": [
+    {
+     "texte": "Un repli sous le support daily à 0,00630 sur USD/JPY inversé ouvrirait une accélération vers la zone de support suivante.",
+     "source_id": "src_020",
+     "non_sourcee": false
+    }
+   ],
+   "menaces": [
+    {
+     "texte": "Le fort désavantage de différentiel de taux 2 ans (−272 pb vs USD) expose le yen à des flux de vente structurels dès le tassement du VIX.",
+     "source_id": "src_017",
+     "non_sourcee": false
+    }
+   ],
+   "synthese_une_phrase": "Le yen évolue en range, tiraillé entre un soutien refuge face à un VIX au-dessus de 20 et la pression d'un différentiel de taux très défavorable.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -2078,21 +2219,23 @@
    ],
    "contexte_geopolitique": {
     "banque_centrale_pourquoi": {
-     "texte": "",
-     "source_id": null
+     "texte": "La Banque du Japon maintient une orientation restrictive et prépare les marchés à de nouvelles hausses de taux face aux pressions salariales et à l'inflation persistante.",
+     "source_id": "src_045"
     },
-    "evenements": []
+    "evenements": [
+     {
+      "texte": "L'indice PMI des services au Japon s'est établi à 51,7 en octobre tandis que l'indice composite a glissé à un plus bas de cinq mois.",
+      "source_id": "src_123",
+      "non_sourcee": false
+     }
+    ]
    },
-   "texte_automatique": true,
-   "texte_automatique_sources": [
-    "technique : série unique 5 ans (Twelve Data + Fed H.10), au 2026-11-05",
-    "COT : CFTC, au 2026-10-27",
-    "taux : Banque du Japon (STRDCLUCON, taux d'appel au jour le jour non garanti), au 2026-11-02"
-   ],
-   "carry": {
-    "taux_directeur": 1.227,
-    "differentiel_vs_mediane_g8": -1.52,
-    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   "synthese_approfondie": {
+    "statut": "indisponible",
+    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+    "quota_atteint": true,
+    "tentatives": 0,
+    "genere_le": "2026-11-05T11:17:44+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.1,
@@ -2120,26 +2263,113 @@
     {
      "date": "2026-11-04",
      "score": 38
+    },
+    {
+     "date": "2026-11-05",
+     "score": 42
     }
    ]
   },
   {
    "devise": "CHF",
    "risk_on_off": "off",
-   "score_confluence": null,
-   "analyse_indisponible": true,
-   "raison_indisponibilite": "analyses:JPY-CHF-CAD : 1 appels déjà faits pendant ce run (repli Python)",
+   "redige_par": {
+    "modele": "gemini-3.5-flash",
+    "libelle": "Flash 3.5"
+   },
+   "score_confluence": 55,
+   "detail_score": [
+    {
+     "indicateur": "taux_directeur",
+     "sens": -1,
+     "poids": 20,
+     "justification": "Taux directeur à 0,00 %, le plus bas du G8 par rapport à la médiane de 2,75 %.",
+     "source_id": "src_016"
+    },
+    {
+     "indicateur": "cpi_surprise",
+     "sens": 0,
+     "poids": 15,
+     "justification": "CPI m/m publié à 0,0 %, strictement conforme aux prévisions du marché.",
+     "source_id": "src_091"
+    },
+    {
+     "indicateur": "yield_curve",
+     "sens": 0,
+     "poids": 12,
+     "justification": "Aplatissement de la courbe des taux américaine sans impact prépondérant immédiat.",
+     "source_id": "src_015"
+    },
+    {
+     "indicateur": "vix",
+     "sens": 1,
+     "poids": 10,
+     "justification": "VIX s'établissant à 20,83, stimulant la demande de valeurs refuges dont le franc.",
+     "source_id": "src_010"
+    },
+    {
+     "indicateur": "dxy",
+     "sens": 1,
+     "poids": 10,
+     "justification": "Repli du dollar américain synthétique (−0,26 % sur 5j à 100,5871) offrant un soutien au CHF.",
+     "source_id": "src_026"
+    },
+    {
+     "indicateur": "pmi_surprise",
+     "sens": 1,
+     "poids": 10,
+     "justification": "PMI manufacturier révisé manuellement à 56,7 contre 55,3 attendu, signalant une expansion solide.",
+     "source_id": "src_021"
+    },
+    {
+     "indicateur": "differentiel_taux",
+     "sens": -1,
+     "poids": 8,
+     "justification": "Carry défavorable de −2,75 % par rapport à la médiane G8, pesant sur la détention long terme.",
+     "source_id": "src_016"
+    },
+    {
+     "indicateur": "rsi",
+     "sens": 1,
+     "poids": 8,
+     "justification": "RSI 14 à 61,9 sur USD/CHF inversé, confirmant un momentum haussier supérieur à 50.",
+     "source_id": "src_021"
+    },
+    {
+     "indicateur": "trendline",
+     "sens": 0,
+     "poids": 7,
+     "justification": "Absence de droite de tendance à 3 points de contact identifiée sur le graphique.",
+     "source_id": "src_021"
+    }
+   ],
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (analyses:JPY-CHF-CAD : 1 appels déjà faits pendant ce run (repli Python))",
-    "source_id": null
+    "commentaire": "Dow : pivots non alignés, consolidation hebdomadaire en cours.",
+    "source_id": "src_021"
    },
-   "detail_score": [],
-   "opportunites": [],
-   "menaces": [],
-   "synthese_une_phrase": "CHF : RSI 14 à 61,9 (momentum haussier, percentile 5 ans 85) ; cours en dessous de sa moyenne mobile 200 jours (−2,00 %) ; positions nettes des spéculateurs (COT) -20 049 contrats, percentile 52 semaines 96, extrême acheteur ; taux directeur 0,00 % (−2,75 pt face à la médiane G8). Score de confluence n/d : il dépend de l'analyse du modèle, indisponible aujourd'hui.",
+   "carry": {
+    "taux_directeur": 0.0,
+    "differentiel_vs_mediane_g8": -2.75,
+    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   },
+   "opportunites": [
+    {
+     "texte": "Une clôture quotidienne au-dessus de la résistance à 1,22948 validerait la reprise du momentum haussier vers 1,23465.",
+     "source_id": "src_021",
+     "non_sourcee": false
+    }
+   ],
+   "menaces": [
+    {
+     "texte": "Un portage nul (0,00 %) pénalise le franc suisse lors des phases d'apaisement du risque mondial.",
+     "source_id": "src_016",
+     "non_sourcee": false
+    }
+   ],
+   "synthese_une_phrase": "Le franc suisse est porté par un bon PMI manufacturier et son rôle refuge, mais son portage nul freine son potentiel de hausse.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -2253,21 +2483,23 @@
    ],
    "contexte_geopolitique": {
     "banque_centrale_pourquoi": {
-     "texte": "",
-     "source_id": null
+     "texte": "La Banque Nationale Suisse adopte une posture attentive aux données économiques avec un taux nul, surveillant l'inflation basse et le risque de surévaluation de la devise.",
+     "source_id": "src_064"
     },
-    "evenements": []
+    "evenements": [
+     {
+      "texte": "Prise de parole programmée du président de la BNS Martin Schlegel dans le cadre du suivi de la politique monétaire.",
+      "source_id": "src_064",
+      "non_sourcee": false
+     }
+    ]
    },
-   "texte_automatique": true,
-   "texte_automatique_sources": [
-    "technique : série unique 5 ans (Twelve Data + Fed H.10), au 2026-11-05",
-    "COT : CFTC, au 2026-10-27",
-    "taux : registre macro (ForexFactory, publication officielle), au 2026-09-24"
-   ],
-   "carry": {
-    "taux_directeur": 0.0,
-    "differentiel_vs_mediane_g8": -2.75,
-    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   "synthese_approfondie": {
+    "statut": "indisponible",
+    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+    "quota_atteint": true,
+    "tentatives": 0,
+    "genere_le": "2026-11-05T11:17:44+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.45,
@@ -2295,26 +2527,113 @@
     {
      "date": "2026-11-04",
      "score": 45
+    },
+    {
+     "date": "2026-11-05",
+     "score": 55
     }
    ]
   },
   {
    "devise": "CAD",
    "risk_on_off": "on",
-   "score_confluence": null,
-   "analyse_indisponible": true,
-   "raison_indisponibilite": "analyses:JPY-CHF-CAD : 1 appels déjà faits pendant ce run (repli Python)",
+   "redige_par": {
+    "modele": "gemini-3.5-flash",
+    "libelle": "Flash 3.5"
+   },
+   "score_confluence": 50,
+   "detail_score": [
+    {
+     "indicateur": "taux_directeur",
+     "sens": 0,
+     "poids": 20,
+     "justification": "Taux directeur à 2,50 %, proche de la médiane G8 de 2,75 %.",
+     "source_id": "src_016"
+    },
+    {
+     "indicateur": "cpi_surprise",
+     "sens": 0,
+     "poids": 15,
+     "justification": "Pas de donnée d'inflation publiée sur le CAD aujourd'hui.",
+     "source_id": null
+    },
+    {
+     "indicateur": "yield_curve",
+     "sens": 0,
+     "poids": 12,
+     "justification": "Aplatissement du spread US 10Y-2Y à 0,34 point, sans impact directionnel sur le CAD.",
+     "source_id": "src_015"
+    },
+    {
+     "indicateur": "vix",
+     "sens": -1,
+     "poids": 10,
+     "justification": "VIX à 20,83, traduisant une nervosité ambiante défavorable aux devises liées aux matières premières.",
+     "source_id": "src_010"
+    },
+    {
+     "indicateur": "dxy",
+     "sens": 1,
+     "poids": 10,
+     "justification": "Baisse de l'USD synthétique à 100,5871 (−0,26 % sur 5 jours), favorisant le contre-balancement du CAD.",
+     "source_id": "src_026"
+    },
+    {
+     "indicateur": "pmi_surprise",
+     "sens": 0,
+     "poids": 10,
+     "justification": "Aucune publication PMI manufacturier ou services au calendrier du jour.",
+     "source_id": "src_042"
+    },
+    {
+     "indicateur": "differentiel_taux",
+     "sens": -1,
+     "poids": 8,
+     "justification": "Spread des rendements 2 ans CAD vs USD défavorable de −135 pb.",
+     "source_id": "src_017"
+    },
+    {
+     "indicateur": "rsi",
+     "sens": 1,
+     "poids": 8,
+     "justification": "RSI 14 à 63,9 sur USD/CAD inversé, matérialisant un momentum haussier au-dessus du pivot 50.",
+     "source_id": "src_022"
+    },
+    {
+     "indicateur": "trendline",
+     "sens": 0,
+     "poids": 7,
+     "justification": "Aucune droite de tendance validée sur l'unité de temps d'analyse.",
+     "source_id": "src_022"
+    }
+   ],
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (analyses:JPY-CHF-CAD : 1 appels déjà faits pendant ce run (repli Python))",
-    "source_id": null
+    "commentaire": "Dow : structure neutre sans alignement clair des hauts et des bas.",
+    "source_id": "src_022"
    },
-   "detail_score": [],
-   "opportunites": [],
-   "menaces": [],
-   "synthese_une_phrase": "CAD : RSI 14 à 63,9 (momentum haussier, percentile 5 ans 91) ; cours en dessous de sa moyenne mobile 200 jours (−0,40 %) ; positions nettes des spéculateurs (COT) -66 424 contrats, percentile 52 semaines 56 ; taux directeur 2,50 % (−0,25 pt face à la médiane G8) ; écart de taux 2 ans face aux États−Unis −135 pb. Score de confluence n/d : il dépend de l'analyse du modèle, indisponible aujourd'hui.",
+   "carry": {
+    "taux_directeur": 2.5,
+    "differentiel_vs_mediane_g8": -0.25,
+    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   },
+   "opportunites": [
+    {
+     "texte": "La hausse de la balance commerciale à +5,35 Md $CAD démontre une résilience des exportations canadiennes.",
+     "source_id": "src_132",
+     "non_sourcee": false
+    }
+   ],
+   "menaces": [
+    {
+     "texte": "Le repli du pétrole WTI sous 100 $/b (99,64 $/b) risque d'affaiblir le soutien fondamental apporté aux exportations énergétiques.",
+     "source_id": "src_011",
+     "non_sourcee": false
+    }
+   ],
+   "synthese_une_phrase": "Le dollar canadien reste encadré dans un range, appuyé par un bel excédent commercial mais freiné par l'écart de taux 2 ans face aux États-Unis.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -2429,21 +2748,23 @@
    ],
    "contexte_geopolitique": {
     "banque_centrale_pourquoi": {
-     "texte": "",
-     "source_id": null
+     "texte": "La Banque du Canada observe une pause data dependent à 2,50 %, évaluant l'impact des baisses passées sur le marché du travail et la trajectoire d'inflation.",
+     "source_id": "src_070"
     },
-    "evenements": []
+    "evenements": [
+     {
+      "texte": "La balance commerciale du Canada s'est redressée à +5,35 milliards de dollars canadiens en septembre, dépassant l'estimation de +4,1 milliards.",
+      "source_id": "src_132",
+      "non_sourcee": false
+     }
+    ]
    },
-   "texte_automatique": true,
-   "texte_automatique_sources": [
-    "technique : série unique 5 ans (Twelve Data + Fed H.10), au 2026-11-05",
-    "COT : CFTC, au 2026-10-27",
-    "taux : registre macro (ForexFactory, publication officielle), au 2026-10-28"
-   ],
-   "carry": {
-    "taux_directeur": 2.5,
-    "differentiel_vs_mediane_g8": -0.25,
-    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   "synthese_approfondie": {
+    "statut": "indisponible",
+    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+    "quota_atteint": true,
+    "tentatives": 0,
+    "genere_le": "2026-11-05T11:17:44+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.59,
@@ -2467,6 +2788,10 @@
     {
      "date": "2026-11-04",
      "score": 24
+    },
+    {
+     "date": "2026-11-05",
+     "score": 50
     }
    ]
   },
@@ -2696,9 +3021,10 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "synthese:AUD : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python)",
+    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+    "quota_atteint": true,
     "tentatives": 1,
-    "genere_le": "2026-11-05T10:19:24+00:00"
+    "genere_le": "2026-11-05T11:17:44+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.04,
@@ -2954,9 +3280,10 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "synthese:NZD : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python)",
+    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+    "quota_atteint": true,
     "tentatives": 1,
-    "genere_le": "2026-11-05T10:19:44+00:00"
+    "genere_le": "2026-11-05T11:17:44+00:00"
    },
    "indice_surprise_30j": {
     "indice": -1.62,
@@ -3235,9 +3562,10 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "synthese:CNY : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python)",
+    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+    "quota_atteint": true,
     "tentatives": 1,
-    "genere_le": "2026-11-05T10:20:04+00:00"
+    "genere_le": "2026-11-05T11:17:44+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.45,
@@ -7886,19 +8214,19 @@
   "conforme": false,
   "nb_anomalies": 13,
   "anomalies": [
-   "JPY : analyse indisponible aujourd'hui (analyses:JPY-CHF-CAD : 1 appels déjà faits pendant ce run (repli Python)) — exclue du classement",
-   "CHF : analyse indisponible aujourd'hui (analyses:JPY-CHF-CAD : 1 appels déjà faits pendant ce run (repli Python)) — exclue du classement",
-   "CAD : analyse indisponible aujourd'hui (analyses:JPY-CHF-CAD : 1 appels déjà faits pendant ce run (repli Python)) — exclue du classement",
-   "USD : synthèse approfondie indisponible (synthese:USD : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
-   "EUR : synthèse approfondie indisponible (synthese:EUR : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
-   "GBP : synthèse approfondie indisponible (synthese:GBP : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
-   "AUD : synthèse approfondie indisponible (synthese:AUD : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
-   "NZD : synthèse approfondie indisponible (synthese:NZD : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
-   "CNY : synthèse approfondie indisponible (synthese:CNY : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
+   "USD : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+   "EUR : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+   "GBP : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+   "JPY : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+   "CHF : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+   "CAD : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+   "AUD : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+   "NZD : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+   "CNY : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
    "état du monde absent de la synthèse globale",
    "tableau macro : CNY/PMI manufacturier : publication manquée (prévue le 31/10, aucun « réel » reçu)",
    "tableau macro : CNY/PMI services : publication manquée (prévue le 31/10, aucun « réel » reçu)",
-   "prompt LLM volumineux : 6 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 21682 à 08:26 UTC, modèle gemini-3.5-flash) — le contexte envoyé au LLM a regrossi"
+   "prompt LLM volumineux : 7 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 21682 à 08:26 UTC, modèle gemini-3.5-flash) — le contexte envoyé au LLM a regrossi"
   ]
  },
  "critique": {
@@ -7907,6 +8235,6 @@
   "suggestions_connaissances": [],
   "validation": "non_evalue",
   "indisponible": true,
-  "note": "relecture non effectuée (critique : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python))"
+  "note": "relecture non effectuée (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit) — 20 tentatives en panne (503, 429, délai) déjà faites aujourd'hui : pla)"
  }
 }

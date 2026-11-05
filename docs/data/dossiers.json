@@ -1,6 +1,6 @@
 {
  "version_schema": 1,
- "genere_le": "2026-11-05T10:20:04+00:00",
+ "genere_le": "2026-11-05T11:17:44+00:00",
  "debut_historique": "2021-09-04",
  "erreurs_collecte": [],
  "engrenages": {
@@ -63,7 +63,7 @@
      "date": "2026-11-05",
      "biais": "risk_off",
      "score_usd": 71,
-     "ecart": -20
+     "ecart": -5.3
     }
    ],
    "graphiques": [
@@ -607,6 +607,18 @@
        "valeur": 62
       },
       {
+       "nom": "CHF",
+       "valeur": 55
+      },
+      {
+       "nom": "CAD",
+       "valeur": 50
+      },
+      {
+       "nom": "JPY",
+       "valeur": 42
+      },
+      {
        "nom": "NZD",
        "valeur": 40
       },
@@ -617,11 +629,7 @@
      ],
      "source": "calcul Python (scores de confluence)",
      "note": null,
-     "absentes": [
-      "JPY",
-      "CHF",
-      "CAD"
-     ],
+     "absentes": [],
      "raison": null
     }
    ],
@@ -785,14 +793,14 @@
     {
      "id": "score_cad",
      "libelle": "Score CAD",
-     "valeur": null,
-     "texte": null,
+     "valeur": 50,
+     "texte": "50",
      "unite": "score",
      "date": "2026-11-05",
      "frequence": null,
      "age_jours": 0,
      "source": "calcul Python (score de confluence 0-100)",
-     "raison": "donnée indisponible",
+     "raison": null,
      "variation": {
       "valeur": 2,
       "unite": "pts",
@@ -935,10 +943,10 @@
      "source": "calcul Python (score de confluence 0-100)",
      "raison": null,
      "variation": {
-      "valeur": -4,
+      "valeur": 14,
       "unite": "pts",
       "periode": "4 semaines",
-      "texte": "−4 pts sur 4 semaines"
+      "texte": "+14 pts sur 4 semaines"
      },
      "percentile_5a": null,
      "n_5a": null,
@@ -1057,6 +1065,10 @@
        [
         "2026-11-04",
         44
+       ],
+       [
+        "2026-11-05",
+        62
        ]
       ],
       "periode": "30 jours (rapports archivés)",
@@ -1428,14 +1440,14 @@
     {
      "id": "duree_theme",
      "libelle": "Régime actuel depuis",
-     "valeur": null,
-     "texte": null,
+     "valeur": 0,
+     "texte": "< 1 sem.",
      "unite": "semaines",
      "date": "2026-11-05",
      "frequence": null,
      "age_jours": 0,
      "source": "rapports archivés (biais calculé)",
-     "raison": "biais du jour indisponible",
+     "raison": null,
      "variation": null,
      "percentile_5a": null,
      "n_5a": null,
@@ -1446,7 +1458,7 @@
       "periode": "30 jours",
       "raison": "non applicable"
      },
-     "lecture": null
+     "lecture": "régime risk_off sans interruption depuis le rapport du 2026-11-02"
     },
     {
      "id": "vix",
@@ -12201,7 +12213,7 @@
      "raison": null
     }
    ],
-   "actualites_maj": "2026-11-05T10:20+00:00",
+   "actualites_maj": "2026-11-05T11:17+00:00",
    "actualites_nb_titres_lus": 34,
    "notes": [
     "Dette et solde publics : FMI (annuel, avec 1 à 3 ans de retard) ; EUR = Allemagne. Pas de série gratuite pour CHF et NZD.",
@@ -41351,7 +41363,7 @@
     "conviction": 2,
     "conviction_niveau": "moyen",
     "regle": "dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (1 accord, 0 désaccord)",
-    "raison_couleur": "Vert (Dollar haussier · Risque neutre) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (1 accord, 0 désaccord). Chiffre du jour : Biais global risk_off ; classement : GBP 82, USD 71, CNY 66, AUD 62, NZD 40, EUR 39"
+    "raison_couleur": "Vert (Dollar haussier · Risque neutre) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (1 accord, 0 désaccord). Chiffre du jour : Biais global risk_off ; classement : GBP 82, USD 71, CNY 66, AUD 62, CHF 55, CAD 50, JPY 42, NZD 40, EUR 39"
    },
    "coherence": {
     "alignes": 2,
@@ -41451,7 +41463,7 @@
      "conviction": 2,
      "conviction_niveau": "moyen",
      "regle": "dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (1 accord, 0 désaccord)",
-     "raison_couleur": "Vert (Dollar haussier · Risque neutre) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (1 accord, 0 désaccord). Chiffre du jour : Biais global risk_off ; classement : GBP 82, USD 71, CNY 66, AUD 62, NZD 40, EUR 39"
+     "raison_couleur": "Vert (Dollar haussier · Risque neutre) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (1 accord, 0 désaccord). Chiffre du jour : Biais global risk_off ; classement : GBP 82, USD 71, CNY 66, AUD 62, CHF 55, CAD 50, JPY 42, NZD 40, EUR 39"
     }
    },
    {
@@ -42214,7 +42226,7 @@
      "a_retenir": "Les engrenages ne s'accordent pas : 2 sur 7 évaluables vont dans le sens du thème calculé (Dollar haussier · Risque neutre), sous le seuil de 3 pour parler d'un thème établi.",
      "a_retenir_source": "calcul Python",
      "texte_indisponible": null,
-     "raison_couleur": "Vert (Dollar haussier · Risque neutre) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (1 accord, 0 désaccord). Chiffre du jour : Biais global risk_off ; classement : GBP 82, USD 71, CNY 66, AUD 62, NZD 40, EUR 39"
+     "raison_couleur": "Vert (Dollar haussier · Risque neutre) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (1 accord, 0 désaccord). Chiffre du jour : Biais global risk_off ; classement : GBP 82, USD 71, CNY 66, AUD 62, CHF 55, CAD 50, JPY 42, NZD 40, EUR 39"
     },
     {
      "numero": 1,
@@ -42239,7 +42251,7 @@
      "a_retenir": "Les signaux du jour sont mixtes et n'indiquent aucun thème dominant clair, avec seulement 2 engrenages alignés sur 7 évaluables.",
      "a_retenir_source": "modèle",
      "texte_indisponible": null,
-     "raison_couleur": "Vert (Dollar haussier · Risque neutre) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (1 accord, 0 désaccord). Chiffre du jour : Biais global risk_off ; classement : GBP 82, USD 71, CNY 66, AUD 62, NZD 40, EUR 39"
+     "raison_couleur": "Vert (Dollar haussier · Risque neutre) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (1 accord, 0 désaccord). Chiffre du jour : Biais global risk_off ; classement : GBP 82, USD 71, CNY 66, AUD 62, CHF 55, CAD 50, JPY 42, NZD 40, EUR 39"
     },
     {
      "numero": 2,
@@ -46857,10 +46869,10 @@
      },
      {
       "libelle": "Score CAD",
-      "texte": "n/d",
+      "texte": "50",
       "date": "2026-11-05",
       "source": "calcul Python (score de confluence 0-100)",
-      "raison": "donnée indisponible",
+      "raison": null,
       "variation": "+2 pts sur 4 semaines",
       "percentile_5a": null,
       "rang": "rang 5 ans n/d : scores archivés depuis août 2026 seulement"
@@ -46871,7 +46883,7 @@
       "date": "2026-11-05",
       "source": "calcul Python (score de confluence 0-100)",
       "raison": null,
-      "variation": "−4 pts sur 4 semaines",
+      "variation": "+14 pts sur 4 semaines",
       "percentile_5a": null,
       "rang": "rang 5 ans n/d : scores archivés depuis août 2026 seulement"
      },
