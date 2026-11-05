@@ -174,3 +174,31 @@ dialog.palette::backdrop{background:color-mix(in srgb,var(--ink) 35%,transparent
 .j-acc-actions .btn{height:44px;padding:0 22px;font-size:15px}
 .j-stats{display:flex;flex-direction:column;gap:var(--gap,16px)}
 .j-stats[hidden],.j-accueil[hidden]{display:none}
+
+/* Lot V8.2 : page Paire enrichie (sélecteur en 3 groupes, panneau RSI, écart de taux, zones) */
+.pp-sel{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.pp-menu{height:40px;min-width:min(330px,100%);padding:0 12px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);font:inherit;font-weight:600;font-size:14px}
+.pp-graph{display:flex;flex-direction:column;gap:10px;min-width:0}
+.pp-graph .layers{flex-wrap:wrap}
+.cc-rsi{height:120px;position:relative;border-top:1px solid var(--line)}
+.cc-rsi[hidden]{display:none}
+.pp-legende{display:flex;flex-wrap:wrap;gap:6px 18px}
+.pp-ecart{display:flex;flex-direction:column;gap:12px;min-width:0}
+.ec-kpi{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.ec-kpi div{display:flex;flex-direction:column;gap:2px}
+.ec-kpi div>span:first-child{font-size:11.5px;color:var(--muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.ec-kpi b{font-size:22px;font-weight:600}
+.ec-phrase{margin:0;font-size:15px;color:var(--ink-2)}
+.ec-haut{height:220px;position:relative}
+.ec-bas{height:150px;position:relative;border-top:1px solid var(--line)}
+.lv-zones{margin-top:6px;padding-top:8px;border-top:1px solid var(--line)}
+.lv-zones .lv-titre{font-weight:700;color:var(--ink)!important;font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.lv-zones span:nth-child(even){font-variant-numeric:tabular-nums}
+@media (max-width:640px){
+  .cc-rsi{height:100px}
+  .pp-graph .layers{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+  .pp-graph .layers .layer{flex:0 0 auto}
+  .ec-kpi{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ec-haut{height:180px}.ec-bas{height:120px}
+}
+.cc.vide{height:auto;min-height:110px;display:grid;place-items:center}

@@ -181,5 +181,5 @@ def calculer(chandeliers: dict | None, points_jour: list[tuple[str, float]] | No
               "fvg_h4": fvg(b4h), "fvg_m30": fvg(b30),
               "tendance_jour": tendance(closes, "1 j"), "tendance_semaine": tendance(hebdomadaires(points_jour or []), "1 sem.")}
     if not (b30 or b4h or b1j):
-        sortie["raison"] = "chandeliers non collectés pour cette paire (réservés à « Mes paires »)"
+        sortie["raison"] = "bougies non collectées pour cette paire (Twelve Data : budget ou échec)"
     return sortie

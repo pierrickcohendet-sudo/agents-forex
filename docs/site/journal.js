@@ -160,7 +160,8 @@ function graphiques(f, mes) {
     const g = f.graphique_1j || {};
     c.appendChild(graphiqueSerie({ titre: `${f.paire} · 1 jour (6 mois)`, unite: null, courbes: [{ nom: f.paire, points: g.points || [], couleur: "var(--accent)" }],
                                    source: g.source || "série unique 5 ans", annotations: g.annotations }));
-    c.appendChild(el("p", "note", mes.includes(f.paire) ? `30 min / 4 h : ${f.chandeliers?.raison || "non collectés"}.` : "30 min / 4 h : ajouter la paire à Mes paires (config.yaml, journal.mes_paires)."));
+    const a = el("a", null, `Bougies 30 min / 4 h / 1 jour, niveaux et RSI : page Paire (${f.paire})`); a.href = `#paire/${f.paire.replace("/", "-")}`;
+    const n = el("p", "note"); n.appendChild(a); c.appendChild(n);
   }
   return c;
 }

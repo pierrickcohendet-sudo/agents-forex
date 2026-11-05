@@ -118,6 +118,7 @@ export async function graphique(boite, series, dec = 2, options = {}) {
   requestAnimationFrame(() => { try { c.timeScale().fitContent(); } catch (e) { /* graphique retiré */ } });
   return g;
 }
+export function suivreGraphique(g) { graphiques.add(g); return g; }
 export function retirerGraphique(g) { if (g) { graphiques.delete(g); try { g.c.remove(); } catch (e) { /* déjà retiré */ } } }
 /* Au changement de thème : couleurs réappliquées (axes, grille, séries). */
 export function rethemer() {

@@ -220,6 +220,9 @@ def collecter(config: dict) -> dict:
     cle = os.environ.get("FRED_API_KEY", "").strip()
     resultat: dict = {"series": {}, "erreurs": [], "debut": debut.isoformat()}
     bruts: dict[str, list] = {}   # séries quotidiennes COMPLÈTES gardées en mémoire pour les corrélations 5 ans
+    from core import ecart_taux
+    noms_taux = set(ecart_taux.noms_series(config))
+    resultat["taux_quotidiens"] = {}
 
     def ajouter(nom, fonction, source, unite, frequence):
         try:
@@ -230,6 +233,10 @@ def collecter(config: dict) -> dict:
                 bruts[nom] = points
             resultat["series"][nom] = {"source": source, "unite": unite, "frequence": frequence,
                                        "points": compacter(points, frequence, aujourdhui)}
+            if nom in noms_taux:   # lot V8.2 : rendements bruts sur 400 jours pour l'écart de taux (cache 1 an)
+                limite = (aujourdhui - timedelta(days=400)).isoformat()
+                resultat["taux_quotidiens"][nom] = {"source": source, "frequence": frequence,
+                                                    "points": [[d, v] for d, v in points if d >= limite]}
         except Exception as exc:  # noqa: BLE001 — une série en échec n'affecte qu'elle
             resultat["erreurs"].append(masquer_secrets(f"{nom} ({source}) : {exc}")[:200])
 

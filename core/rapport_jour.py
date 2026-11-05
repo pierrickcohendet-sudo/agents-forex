@@ -811,7 +811,8 @@ def calculer(racine: str | Path, config: dict, maintenant: datetime | None = Non
     rapport = _lire(docs / "latest.json") or {}
     agenda_donnees = _lire(docs / "agenda.json") or {}
     dossiers_donnees = _lire(docs / "dossiers.json") or {}
-    paires_donnees = _lire(docs / "paires.json") or {}
+    from core import paires as _pm
+    paires_donnees = _pm.lire_complet(docs) or {}
     seance = _lire(docs / "seance.json") or {}
     registre = registre_macro.charger(racine / "data" / "registre_macro.json")
     archives = racine / "data" / "archives" / "rapport_jour"

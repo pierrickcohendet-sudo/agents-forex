@@ -441,10 +441,11 @@ synthese_approfondie:
 # Quotidien : UN appel LLM (directions et convictions calculées en Python quand les données le
 # permettent ; concept du jour choisi en Python dans connaissances/concepts_formation.md, rotation
 # sans répétition, état dans data/cache/concepts_rotation.json). Retentée seule par --completer.
-# Journal (lot V5) : « Mes paires » = synthèse du modèle (un appel groupé par jour, réserve de quota) et chandeliers
-# 30 min / 4 h / 1 j (Twelve Data, 3 requêtes par paire au run complet). Les autres paires : fiche Python et graphique 1 jour.
+# Journal et page Paire : « paires suivies » (10 au plus, lot V8.2) = bougies 30 min à chaque passage horaire, sessions
+# et FVG 30 min, synthèse du modèle (un appel groupé par jour, réserve de quota). Les 36 paires ont leurs bougies 4 h et
+# 1 jour (run complet, puis 13:15 Paris si le budget Twelve Data le permet : agents/collecte_intraday.py, 500 crédits/jour).
 journal:
-  mes_paires: [USD/JPY, EUR/USD, GBP/USD, AUD/USD, USD/CAD, USD/CHF]
+  mes_paires: [USD/JPY, EUR/USD, GBP/USD, AUD/USD, USD/CAD, USD/CHF, EUR/JPY, GBP/JPY, EUR/GBP, AUD/JPY]
 
 # --- Agenda macro (lot V5, complément) ------------------------------------------
 # Semaine en cours + semaine suivante, heure de Paris (changements d'heure gérés par zoneinfo). Sources, par ordre :

@@ -173,38 +173,139 @@ def reperes_intraday(bougies: list[list], source: str, paire: str) -> list[dict]
     return sorted(sortie, key=lambda r: r["date"])
 
 
+LEGERS = ("chandeliers", "niveaux", "ecart_taux")   # parties lourdes : un fichier par paire (docs/data/paires/XXX-YYY.json)
+
+
+def _jjmm(iso) -> str:
+    return f"{str(iso)[8:10]}/{str(iso)[5:7]}"
+
+
+def preparer_chandeliers(ch_brut: dict | None, paire: str, suivie: bool, aujourdhui: str, collecte_defaut: str | None = None) -> dict | None:
+    """Bougies du cache -> unités publiées : repères, MM20 / MM50, RSI 14 et analyse (zones, lignes, divergences),
+    tout en Python. Les 30 min ne sont publiées que pour les paires suivies. Mention « bougies du JJ/MM » si la
+    collecte n'est pas du jour (budget Twelve Data, échec)."""
+    from core import technique_avancee as ta
+    if not ch_brut:
+        return None
+    sortie = {}
+    for u, v in ch_brut.items():
+        if u == "30min" and not suivie:
+            continue
+        b = (v or {}).get("bougies") or []
+        if not b:
+            sortie[u] = {"bougies": [], "raison": (v or {}).get("echec") or "aucune bougie collectée"}
+            continue
+        quand = (v or {}).get("collecte_le") or collecte_defaut   # caches d'avant le lot V8.2 : date de la collecte globale
+        jour = str(quand or "")[:10]
+        e = {"bougies": b, "source": v.get("source") or "Twelve Data", "collecte_le": quand,
+             "annotations": reperes_intraday(b, v.get("source") or "Twelve Data", paire),
+             "mention": None if jour == aujourdhui else (f"bougies du {_jjmm(jour)}" if jour else "date de collecte inconnue"),
+             "echec": v.get("echec")}
+        for n in (20, 50):   # lot V8 : moyennes mobiles calculées ici, jamais dans le navigateur
+            e[f"mm{n}"] = moyenne_mobile(b, n)
+        an = ta.analyser_unite(b, u, paire)
+        e["rsi14"] = an.pop("rsi14")
+        e["analyse"] = an
+        sortie[u] = e
+    return sortie or None
+
+
+def cours_du_jour(paire: str, ch: dict | None, cotations: dict | None) -> dict:
+    """Cours et variation du jour pour le sélecteur : cotation de séance (paires face au dollar), sinon les deux
+    dernières bougies 1 jour (Twelve Data), datées."""
+    q = (cotations or {}).get(paire) or {}
+    if q.get("prix") is not None:
+        return {"cours": q["prix"], "variation_pct": None if q.get("variation_pct") is None else round(q["variation_pct"], 2),
+                "heure": q.get("heure_utc"), "source": q.get("source") or "Twelve Data (/quote)"}
+    b = ((ch or {}).get("1j") or {}).get("bougies") or []
+    if len(b) >= 2:
+        return {"cours": b[-1][4], "variation_pct": round((b[-1][4] / b[-2][4] - 1) * 100, 2), "heure": str(b[-1][0])[:16],
+                "source": "Twelve Data (bougies 1 jour : dernière contre précédente)"}
+    return {"cours": None, "variation_pct": None, "raison": "ni cotation de séance ni bougies 1 jour pour cette paire"}
+
+
 def calculer(config: dict, dossiers_donnees: dict, rapport: dict | None, registre: dict | None, agenda_donnees: dict | None,
-             h5, technique: dict | None, intraday: dict | None = None, textes: dict | None = None) -> dict:
+             h5, technique: dict | None, intraday: dict | None = None, textes: dict | None = None,
+             cotations: dict | None = None, cache_taux: dict | None = None, aujourdhui: date | None = None) -> dict:
+    from core import ecart_taux, technique_avancee as ta, technique_niveaux
     decs = outils.decomposer(dossiers_donnees.get("matrice_impact") or {})
     mes = mes_paires(config)
+    jour = (aujourdhui or date.today()).isoformat()
+    absences = ecart_taux.raisons_absence(config)
     fiches = {}
     for p in outils.paires():
+        pts = serie_paire(h5, technique, p)
         try:
-            fiches[p] = fiche(p, dossiers_donnees, rapport, registre, agenda_donnees, decs, serie_paire(h5, technique, p))
+            fiches[p] = fiche(p, dossiers_donnees, rapport, registre, agenda_donnees, decs, pts)
         except Exception as exc:  # noqa: BLE001 — une paire en échec n'affecte qu'elle
             log.exception("Fiche %s en échec", p)
             fiches[p] = {"paire": p, "raison": f"calcul en échec : {exc}"[:150]}
-        if p in mes:
-            ch = (intraday or {}).get("paires", {}).get(p)
-            if ch:   # repères du palier 10 sur les clôtures de chaque unité de temps (plus haut, plus bas, dernière)
-                ch = {u: {**v, "annotations": reperes_intraday(v.get("bougies") or [], v.get("source") or "Twelve Data", p)}
-                      for u, v in ch.items()}
-                if isinstance(ch.get("1j"), dict):   # lot V8 : MM20 et MM50 calculées ici, jamais dans le navigateur
-                    for n in (20, 50):
-                        ch["1j"][f"mm{n}"] = moyenne_mobile(ch["1j"].get("bougies") or [], n)
-            fiches[p]["chandeliers"] = ch or {
-                "raison": (intraday or {}).get("raison") or "chandeliers non collectés (collecte au run complet, Twelve Data)"}
-            try:   # Rapport du jour, étape 9 : niveaux affichés sur les chandeliers (repères, pas des signaux)
-                from core import technique_niveaux
-                fiches[p]["niveaux"] = technique_niveaux.calculer(ch, serie_paire(h5, technique, p))
-            except Exception as exc:  # noqa: BLE001
-                fiches[p]["niveaux"] = {"raison": f"niveaux non calculés : {exc}"[:150]}
+        suivie = p in mes
+        try:
+            ch = preparer_chandeliers(((intraday or {}).get("paires") or {}).get(p), p, suivie, jour, (intraday or {}).get("collecte_le"))
+        except Exception as exc:  # noqa: BLE001
+            log.exception("Bougies %s en échec", p)
+            ch = {"raison": f"analyse des bougies en échec : {exc}"[:150]}
+        utilisables = ch if ch and "raison" not in ch else None
+        fiches[p]["suivie"] = suivie
+        fiches[p]["chandeliers"] = ch or {
+            "raison": (intraday or {}).get("raison") or "bougies non collectées pour cette paire (collecte au run complet, Twelve Data)"}
+        try:   # niveaux affichés sur les bougies (repères, pas des signaux) ; sessions et FVG 30 min : paires suivies
+            fiches[p]["niveaux"] = technique_niveaux.calculer(utilisables, pts)
+        except Exception as exc:  # noqa: BLE001
+            fiches[p]["niveaux"] = {"raison": f"niveaux non calculés : {exc}"[:150]}
+        try:
+            fiches[p]["ecart_taux"] = ecart_taux.calculer_paire(p, cache_taux or {}, pts, absences, aujourdhui)
+        except Exception as exc:  # noqa: BLE001
+            log.exception("Écart de taux %s en échec", p)
+            fiches[p]["ecart_taux"] = {"raison": f"écart de taux non calculé : {exc}"[:150]}
+        fiches[p]["cours_jour"] = cours_du_jour(p, utilisables, cotations)
+        u1 = (((utilisables or {}).get("1j") or {}).get("analyse")) or {}
+        u4 = (((utilisables or {}).get("4h") or {}).get("analyse")) or {}
+        fiches[p]["rsi"] = {"4h": u4.get("rsi_actuel"), "1j": u1.get("rsi_actuel")}
         t = (textes or {}).get(p)
-        if p in mes and t and t.get("texte"):
+        if suivie and t and t.get("texte"):
             fiches[p]["synthese_modele"] = t
-    return {"genere_le": dossiers_donnees.get("genere_le"), "mes_paires": mes, "paires": outils.paires(), "fiches": fiches,
-            "intraday_collecte_le": (intraday or {}).get("collecte_le"),
-            "note": "Fiches calculées en Python à chaque run ; synthèse du modèle pour « Mes paires » seulement. Aide à la décision, jamais un ordre."}
+    g = {"suivies": mes, "majeures": [p for p in outils.paires() if p not in mes and "USD" in p.split("/")],
+         "croisees": [p for p in outils.paires() if p not in mes and "USD" not in p.split("/")]}
+    return {"genere_le": dossiers_donnees.get("genere_le"), "mes_paires": mes, "groupes": g, "paires": outils.paires(), "fiches": fiches,
+            "intraday_collecte_le": (intraday or {}).get("collecte_le"), "mention_reperes": ta.MENTION, "definitions": ta.DEFINITIONS,
+            "note": "Fiches calculées en Python à chaque run ; bougies, niveaux, RSI et écart de taux dans un fichier par paire "
+                    "(paires/XXX-YYY.json). Aide à la décision, jamais un ordre."}
+
+
+def nom_fichier(paire: str) -> str:
+    return paire.replace("/", "-") + ".json"
+
+
+def scinder(donnees: dict) -> tuple[dict, dict]:
+    """paires.json léger (sélecteur, fiches) + un détail par paire (bougies, niveaux, écart de taux)."""
+    legers, details = {}, {}
+    for p, f in (donnees.get("fiches") or {}).items():
+        details[p] = {"paire": p, "genere_le": donnees.get("genere_le"), **{k: f.get(k) for k in LEGERS}}
+        legers[p] = {k: v for k, v in f.items() if k not in LEGERS}
+        legers[p]["detail"] = "paires/" + nom_fichier(p)
+        ch = f.get("chandeliers") or {}
+        legers[p]["unites"] = [u for u in ("30min", "4h", "1j") if ((ch.get(u) or {}) if isinstance(ch.get(u), dict) else {}).get("bougies")]
+    return {**donnees, "fiches": legers}, details
+
+
+def lire_complet(docs: Path, paires_voulues: list[str] | None = None) -> dict:
+    """paires.json avec, pour les paires demandées (par défaut les suivies), le détail fusionné dans la fiche."""
+    try:
+        d = json.loads((Path(docs) / "paires.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+    for p in paires_voulues if paires_voulues is not None else d.get("mes_paires") or []:
+        f = (d.get("fiches") or {}).get(p)
+        if f is None:
+            continue
+        try:
+            detail = json.loads((Path(docs) / "paires" / nom_fichier(p)).read_text(encoding="utf-8"))
+            f.update({k: v for k, v in detail.items() if k in LEGERS})
+        except (OSError, ValueError):
+            pass
+    return d
 
 
 def textes_du_jour(racine: Path) -> dict:
@@ -233,10 +334,19 @@ def ecrire(racine: str | Path, config: dict, dossiers_donnees: dict, rapport: di
                 rapport = {**rapport, "profil_devises": pdv.compact(prof)}
             except (OSError, ValueError):
                 pass
+        from core import ecart_taux
+        docs = Path(racine) / config.get("publication_web", {}).get("dossier_docs", "docs") / "data"
+        try:
+            cotations = json.loads((docs / "seance.json").read_text(encoding="utf-8")).get("cotations") or {}
+        except (OSError, ValueError):
+            cotations = {}
         donnees = calculer(config, dossiers_donnees, rapport, registre, agenda_donnees, h5, technique,
-                           intraday_du_jour(Path(racine)), textes_du_jour(Path(racine)))
-        chemin = Path(racine) / config.get("publication_web", {}).get("dossier_docs", "docs") / "data" / "paires.json"
-        chemin.write_text(json.dumps(donnees, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+                           intraday_du_jour(Path(racine)), textes_du_jour(Path(racine)), cotations, ecart_taux.charger())
+        leger, details = scinder(donnees)
+        (docs / "paires").mkdir(parents=True, exist_ok=True)
+        for p, d in details.items():
+            (docs / "paires" / nom_fichier(p)).write_text(json.dumps(d, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+        (docs / "paires.json").write_text(json.dumps(leger, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
         return donnees
     except Exception as exc:  # noqa: BLE001
         log.error("paires.json non écrit : %s", exc)

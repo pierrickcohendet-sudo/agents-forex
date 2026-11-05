@@ -40,7 +40,7 @@ from dotenv import load_dotenv
 from agents import (agent_consequences, agent_critique, agent_paires, agent_rapport, collecte_intraday, agent_dossier_hebdo, agent_engrenages, agent_redacteur, agent_strategiste, agent_synthese,
                     collecte_calendrier, collecte_flux, collecte_historiques, collecte_macro, collecte_news,
                     collecte_technique)
-from core import (accueil, alertes_telephone, briefing, fraicheur_blocs, alertes, profil_devises, collecte_cache, controle_qualite, quota_twelve, seance, sources, indicateurs, cours, dossiers, evaluation, hebdo, historique_5ans, impact, marche_taux, overrides, precedents,
+from core import (accueil, alertes_telephone, briefing, ecart_taux, fraicheur_blocs, alertes, profil_devises, collecte_cache, controle_qualite, quota_twelve, seance, sources, indicateurs, cours, dossiers, evaluation, hebdo, historique_5ans, impact, marche_taux, overrides, precedents,
                   publication_web,
                   registre_macro, saisies_manuelles, site_donnees, tableau_macro)
 from core.llm import creer_fournisseur, journal_appels, reinitialiser_journal
@@ -247,6 +247,9 @@ def main() -> int:
     if arguments.completer:
         rapport_existant = _charger_rapport_existant(dossier_rapports)
         if rapport_existant is not None:
+            # Lot V8.2 : bougies 30 min des paires suivies à chaque passage ; 4 h et 1 j des 36 paires une seconde fois
+            # au passage de 13:15 Paris si le budget Twelve Data le permet. Avant la séance : paires.json recalculé ensuite.
+            etape("bougies Twelve Data (passage horaire)", collecte_intraday.collecter, config, RACINE, None, "heure", defaut=None)
             # Mises à jour en séance : cotations, « réel » de l'agenda, thermomètres, santé, accueil (sans LLM)
             etape("mises à jour en séance", seance.rafraichir, RACINE, config, rapport_existant, defaut={})
             # Profil des devises (lot V6) : état, moteur du moment, banque centrale (100 % Python, sans LLM)
@@ -342,14 +345,17 @@ def main() -> int:
     # source et par jour (cache) ; une source en échec n'affecte qu'elle.
     flux = etape("collecte flux (CFTC, EIA, or)", _collecter, "flux", collecte_flux.collecter, config,
                  defaut={**vide, "cot": {}, "eia": None, "or": None})
-    # Journal (lot V5) : chandeliers 30 min / 4 h / 1 j des « Mes paires », run complet seulement (18 requêtes au plus,
-    # moins de 8 par minute, cache du jour) ; un échec laisse le graphique 1 jour et la raison.
+    # Page Paire (lot V8.2) : bougies 30 min / 4 h / 1 j des paires suivies, 4 h / 1 j des 36 paires (Twelve Data,
+    # budget de 500 crédits par jour, 8 par minute au plus, priorité suivies > majeures > croisées) ; un échec
+    # laisse les bougies précédentes avec leur date.
     if not arguments.completer:
-        etape("collecte chandeliers (Mes paires)", collecte_intraday.collecter, config, RACINE, defaut=None)
+        etape("collecte bougies (36 paires)", collecte_intraday.collecter, config, RACINE, defaut=None)
     # Historiques 5 ans + dossiers chiffrés des engrenages (percentiles, variations, corrélations) :
     # calcul Python quotidien, AUCUN appel LLM ; docs/data/dossiers.json lu par le site.
     historiques = etape("collecte historiques 5 ans", _collecter, "historiques",
                         collecte_historiques.collecter, config, defaut={**vide, "series": {}})
+    # Lot V8.2 : rendements 2 / 10 ans quotidiens sur 1 an (écart de taux de la page Paire), cache complété chaque jour
+    etape("cache des rendements (écart de taux)", ecart_taux.mettre_a_jour_cache, config, historiques, defaut=None)
     # UNE valeur par indicateur sur tout le site : RSI, moyennes mobiles et volatilité de chaque devise
     # recalculés sur la série unique 5 ans (core/historique_5ans.py) AVANT scores, analyse et publication.
     harmonises = etape("indicateurs techniques (série unique 5 ans)", historique_5ans.harmoniser_technique,

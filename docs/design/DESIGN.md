@@ -47,3 +47,14 @@ horizontal. Comparer côte à côte avec `docs/design/reference/` et lister les 
 
 - Fraîcheur : chaque série jugée sur sa dernière observation et sa fréquence normale ; le point prend la couleur de la série la plus en retard, l'infobulle la nomme.
 - Journal sans trade : état d'accueil centré (`.j-accueil`), « Ton premier trade apparaîtra ici », boutons « + Nouvelle entrée » et « Voir avec des exemples » ; les blocs de statistiques sont masqués (`#jStats`).
+
+### V8.2 — page Paire enrichie
+
+- Sélecteur : menu en 3 groupes (Mes paires, Majeures, Croisées), cours et variation du jour calculés en Python.
+- Graphique : calques dans l'ordre Veille, Semaine précédente, Session Asie, Supports et résistances, Lignes de tendance,
+  Zones FVG, BOS et CHoCH, Publications, Moyennes mobiles, RSI ; choix mémorisés (`fxdesk-calques`).
+- Panneau RSI 14 de 120 px (100 px à 390 px) synchronisé (défilement, curseur), lignes 70/50/30, zones teintées.
+- Zones S/R : bandes de deux lignes, opacité et épaisseur selon la force ; étiquettes limitées à R1, R2, S1, S2.
+- Lignes de tendance : pleines si valides, pointillées et estompées si cassées depuis moins de 5 bougies.
+- Carte « Écart de taux » : deux graphiques empilés et synchronisés (paire, écart en pb), jamais deux axes sur un graphique.
+- Données : `paires.json` léger + `paires/XXX-YYY.json` chargé à l'ouverture de la paire (`paire_graphique.js` dessine).

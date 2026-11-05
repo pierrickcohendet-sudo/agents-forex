@@ -42,7 +42,7 @@ for (const largeur of [1280, 390]) {
       await cdp("Emulation.setDeviceMetricsOverride", { width: largeur, height: Math.min(haut || 900, 16000), deviceScaleFactor: 1, mobile: false });
       await pause(900);
       const img = await cdp("Page.captureScreenshot", { format: "png", captureBeyondViewport: true });
-      const nom = `${onglet}-${theme}-${largeur}.png`;
+      const nom = `${onglet.split("/").join("_")}-${theme}-${largeur}.png`;   // « paire/USD-JPY » -> paire_USD-JPY
       writeFileSync(join(sortie, nom), Buffer.from(img.result.data, "base64"));
       const debord = await evaluer("document.documentElement.scrollWidth > window.innerWidth + 1");
       console.log(nom, haut + " px", debord ? "DÉBORDEMENT HORIZONTAL" : "");

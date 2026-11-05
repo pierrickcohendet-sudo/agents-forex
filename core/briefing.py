@@ -169,6 +169,13 @@ def calculer(rj: dict, dossiers: dict | None, agenda: dict | None, paires: dict 
     }
 
 
+def _paires_completes(docs: Path) -> dict:
+    """paires.json léger + détail (bougies) des paires suivies et des paires principales des banques centrales."""
+    from core import paires as pm
+    leger = _lire(docs / "paires.json") or {}
+    return pm.lire_complet(docs, sorted(set(leger.get("mes_paires") or []) | set(PAIRE_PRINCIPALE.values())))
+
+
 def ecrire(racine: str | Path, config: dict, maintenant: datetime | None = None) -> dict | None:
     """Écrit docs/data/briefing.json à partir des JSON déjà publiés du run ; ne lève jamais."""
     try:
@@ -176,7 +183,7 @@ def ecrire(racine: str | Path, config: dict, maintenant: datetime | None = None)
         rj = _lire(docs / "rapport_jour.json")
         if not rj:
             return None
-        donnees = calculer(rj, _lire(docs / "dossiers.json"), _lire(docs / "agenda.json"), _lire(docs / "paires.json"),
+        donnees = calculer(rj, _lire(docs / "dossiers.json"), _lire(docs / "agenda.json"), _paires_completes(docs),
                            _lire(docs / "seance.json"), maintenant)
         (docs / "briefing.json").write_text(json.dumps(donnees, ensure_ascii=False, indent=1), encoding="utf-8")
         return donnees

@@ -41,7 +41,7 @@ def test_fiches_36_paires_mes_paires_et_synthese_python(monkeypatch):
     t = f["technique"]
     assert t["rsi14"] is not None and t["ecart_mm200"] is not None and t["plus_haut_20j"] >= t["plus_bas_20j"]
     assert "raison" in f["chandeliers"]                                              # pas de collecte : raison, jamais d'invention
-    assert "chandeliers" not in p["fiches"]["AUD/NZD"]                              # hors « Mes paires » : graphique 1 jour seul
+    assert "raison" in p["fiches"]["AUD/NZD"]["chandeliers"]                        # lot V8.2 : les 36 paires, raison si absentes
     assert f["graphique_1j"]["annotations"]["periodes"]["90"]
 
 
@@ -61,17 +61,24 @@ def reponse_ok():
     return mock.Mock(status_code=200, json=lambda: {"status": "ok", "values": vals}, raise_for_status=lambda: None)
 
 
-def test_collecte_intraday_18_requetes_pause_et_cache_du_jour():
+def test_collecte_intraday_matin_puis_cache_du_jour():
+    """Lot V8.2 : 30 min, 4 h et 1 j des suivies + 4 h et 1 j des autres paires ; un second run le même jour ne refait rien."""
+    from datetime import datetime, timezone
     racine = Path(tempfile.mkdtemp())
-    with mock.patch.object(collecte_intraday.requests, "get", return_value=reponse_ok()) as get, \
-         mock.patch.object(collecte_intraday.time, "sleep") as dort:
-        r = collecte_intraday.collecter(CONFIG, racine, cle="cle-test", pause_s=8.0, aujourdhui=date(2026, 10, 24))
-    assert get.call_count == 18 and dort.call_count == 17 and dort.call_args.args[0] >= 7.5   # < 8 requêtes par minute
-    assert len(r["paires"]["USD/JPY"]["30min"]["bougies"]) == 5
+    credits = {"n": 0}
+    def consommer(n, module):
+        credits["n"] += n
+    etat = lambda: {"credits": credits["n"]}   # noqa: E731
+    m = datetime(2026, 10, 24, 8, 20, tzinfo=timezone.utc)
+    with mock.patch.object(collecte_intraday.requests, "get", return_value=reponse_ok()) as get:
+        r = collecte_intraday.collecter(CONFIG, racine, cle="cle-test", maintenant=m, consommer=consommer, etat_quota=etat)
+    ns = len(collecte_intraday.groupes(CONFIG)["suivies"])
+    assert get.call_count == 72 + ns == credits["n"]
+    assert len(r["paires"]["USD/JPY"]["30min"]["bougies"]) == 5 and "30min" not in r["paires"]["AUD/NZD"]
     with mock.patch.object(collecte_intraday.requests, "get") as get2:
-        collecte_intraday.collecter(CONFIG, racine, cle="cle-test", aujourdhui=date(2026, 10, 24))
+        collecte_intraday.collecter(CONFIG, racine, cle="cle-test", maintenant=m, consommer=consommer, etat_quota=etat)
     assert get2.call_count == 0                                                      # cache du jour : aucune requête
-    sans = collecte_intraday.collecter(CONFIG, Path(tempfile.mkdtemp()), cle="", aujourdhui=date(2026, 10, 24))
+    sans = collecte_intraday.collecter(CONFIG, Path(tempfile.mkdtemp()), cle="", maintenant=m)
     assert "absente" in sans["raison"]
 
 

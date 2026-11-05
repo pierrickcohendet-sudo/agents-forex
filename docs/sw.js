@@ -4,7 +4,7 @@
    - Données (data/*.json) : « réseau d'abord, cache en secours » ; si c'est le cache qui répond, la page reçoit la date
      de ces données (« données hors connexion du JJ/MM HH:MM »).
    Aucune clé, aucune donnée personnelle : le Journal reste dans IndexedDB, hors de ce cache. */
-const VERSION = "2128d55";
+const VERSION = "dc511e1";
 const CODE = `tb-code-${VERSION}`, DONNEES = "tb-donnees";
 
 self.addEventListener("install", e => {

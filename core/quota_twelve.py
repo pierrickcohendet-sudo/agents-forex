@@ -17,6 +17,7 @@ from pathlib import Path
 log = logging.getLogger(__name__)
 
 PLAFOND_JOUR = 800
+OBJECTIF_JOUR = 500    # lot V8.2 : budget visé par jour (agents/collecte_intraday.plan_journee)
 MARGE = 40            # jamais au ras du plafond : les relances et les autres outils gardent de la place
 PAR_MINUTE = 8
 CHEMIN = Path(__file__).resolve().parents[1] / "data" / "cache" / "quota_twelve.json"
@@ -76,4 +77,5 @@ def consommer(n: int = 1, module: str = "autre", chemin: Path | None = None, hor
 def ligne_resume(chemin: Path | None = None) -> str:
     e = etat(chemin)
     detail = ", ".join(f"{m} {c}" for m, c in sorted(e["par_module"].items(), key=lambda kv: -kv[1]))
-    return f"Twelve Data : {e['credits']}/{PLAFOND_JOUR} crédits aujourd'hui (UTC){f' — {detail}' if detail else ''}"
+    return (f"Twelve Data : {e['credits']}/{PLAFOND_JOUR} crédits aujourd'hui (UTC, objectif {OBJECTIF_JOUR})"
+            f"{f' — {detail}' if detail else ''}")
