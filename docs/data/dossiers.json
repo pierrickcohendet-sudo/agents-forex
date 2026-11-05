@@ -1,6 +1,6 @@
 {
  "version_schema": 1,
- "genere_le": "2026-11-05T19:17:13+00:00",
+ "genere_le": "2026-11-05T20:17:13+00:00",
  "debut_historique": "2021-09-04",
  "erreurs_collecte": [],
  "engrenages": {
@@ -12221,7 +12221,7 @@
      "raison": null
     }
    ],
-   "actualites_maj": "2026-11-05T19:17+00:00",
+   "actualites_maj": "2026-11-05T20:17+00:00",
    "actualites_nb_titres_lus": 34,
    "notes": [
     "Dette et solde publics : FMI (annuel, avec 1 à 3 ans de retard) ; EUR = Allemagne. Pas de série gratuite pour CHF et NZD.",
@@ -13383,15 +13383,15 @@
      "libelle": "S&P 500",
      "unite_affichage": "indice",
      "cellule": {
-      "valeur": 7568.92,
+      "valeur": 7688.62,
       "unite": "niveau",
-      "date": "2026-11-03",
+      "date": "2026-11-04",
       "source": "FRED (SP500)",
       "frequence": "quotidien",
       "raison": null,
-      "var_1s": -1.99,
-      "var_4s": -3.2,
-      "percentile_5a": 94,
+      "var_1s": -0.71,
+      "var_4s": -1.45,
+      "percentile_5a": 97,
       "n_5a": 262,
       "raison_percentile": null
      }
@@ -16125,6 +16125,10 @@
         [
          "2026-11-03",
          7568.92
+        ],
+        [
+         "2026-11-04",
+         7688.62
         ]
        ]
       }
@@ -16776,21 +16780,21 @@
     {
      "id": "sp500",
      "libelle": "S&P 500",
-     "valeur": 7568.92,
-     "texte": "7 569",
+     "valeur": 7688.62,
+     "texte": "7 689",
      "unite": "niveau",
-     "date": "2026-11-03",
+     "date": "2026-11-04",
      "frequence": "quotidien",
-     "age_jours": 2,
+     "age_jours": 1,
      "source": "FRED (SP500)",
      "raison": null,
      "variation": {
-      "valeur": -3.2,
+      "valeur": -1.45,
       "unite": "%",
       "periode": "4 semaines",
-      "texte": "−3,20 % sur 4 semaines"
+      "texte": "−1,45 % sur 4 semaines"
      },
-     "percentile_5a": 94,
+     "percentile_5a": 97,
      "n_5a": 262,
      "percentile_autre": null,
      "raison_percentile": null,
@@ -16883,6 +16887,10 @@
        [
         "2026-11-03",
         7568.92
+       ],
+       [
+        "2026-11-04",
+        7688.62
        ]
       ],
       "periode": "30 jours",
@@ -42572,21 +42580,12 @@
      },
      {
       "engrenage": 5,
-      "valeur": 1,
-      "libelle": "Soutien",
-      "regles": [
-       {
-        "regle": "S&P 500, variation sur 4 semaines ≤ −2,86 % (15e percentile sur 5 ans) → +1 pour USD ; confirmé sur 5 ans : 69 % des 26 cas, borne de Wilson 53,1 %",
-        "chiffre": "−3,20 %",
-        "source": "FRED (SP500)",
-        "date": "2026-11-03",
-        "points": 1,
-        "couverture": true
-       }
-      ],
-      "raison": null,
+      "valeur": 0,
+      "libelle": "Neutre",
+      "regles": [],
+      "raison": "niveau du VIX : 16,61 pts, aucun effet sur USD; S&P 500, variation sur 4 semaines : −1,45 %, dans le couloir (seuils −2,85 % / +4,00 %)",
       "bornee": false,
-      "etat": "active"
+      "etat": "neutre"
      },
      {
       "engrenage": 6,
@@ -42624,7 +42623,7 @@
       "etat": "sans_regle"
      }
     ],
-    "bilan": 2,
+    "bilan": 1,
     "lecture": "neutre",
     "incompletes": 0
    },
@@ -42855,7 +42854,7 @@
       "valeur": 0,
       "libelle": "Neutre",
       "regles": [],
-      "raison": "niveau du VIX : 16,61 pts, aucun effet sur JPY; S&P 500, variation sur 4 semaines : −3,20 %, aucun effet sur JPY",
+      "raison": "niveau du VIX : 16,61 pts, aucun effet sur JPY; S&P 500, variation sur 4 semaines : −1,45 %, aucun effet sur JPY",
       "bornee": false,
       "etat": "neutre"
      },
@@ -43075,21 +43074,12 @@
      },
      {
       "engrenage": 5,
-      "valeur": -1,
-      "libelle": "Pression",
-      "regles": [
-       {
-        "regle": "S&P 500, variation sur 4 semaines ≤ −2,86 % (15e percentile sur 5 ans) → −1 pour CAD ; confirmé sur 5 ans : 81 % des 26 cas, borne de Wilson 65,4 %",
-        "chiffre": "−3,20 %",
-        "source": "FRED (SP500)",
-        "date": "2026-11-03",
-        "points": -1,
-        "couverture": true
-       }
-      ],
-      "raison": null,
+      "valeur": 0,
+      "libelle": "Neutre",
+      "regles": [],
+      "raison": "niveau du VIX : 16,61 pts, aucun effet sur CAD; S&P 500, variation sur 4 semaines : −1,45 %, dans le couloir (seuils −2,85 % / +4,00 %)",
       "bornee": false,
-      "etat": "active"
+      "etat": "neutre"
      },
      {
       "engrenage": 6,
@@ -43135,7 +43125,7 @@
       "etat": "active"
      }
     ],
-    "bilan": 1,
+    "bilan": 2,
     "lecture": "neutre",
     "incompletes": 0
    },
@@ -43183,7 +43173,7 @@
       "valeur": 0,
       "libelle": "Neutre",
       "regles": [],
-      "raison": "niveau du VIX : 16,61 pts, aucun effet sur AUD; S&P 500, variation sur 4 semaines : −3,20 %, aucun effet sur AUD",
+      "raison": "niveau du VIX : 16,61 pts, aucun effet sur AUD; S&P 500, variation sur 4 semaines : −1,45 %, aucun effet sur AUD",
       "bornee": false,
       "etat": "neutre"
      },
@@ -43279,7 +43269,7 @@
       "valeur": 0,
       "libelle": "Neutre",
       "regles": [],
-      "raison": "niveau du VIX : 16,61 pts, aucun effet sur NZD; S&P 500, variation sur 4 semaines : −3,20 %, aucun effet sur NZD",
+      "raison": "niveau du VIX : 16,61 pts, aucun effet sur NZD; S&P 500, variation sur 4 semaines : −1,45 %, aucun effet sur NZD",
       "bornee": false,
       "etat": "neutre"
      },
@@ -43412,15 +43402,15 @@
    }
   ],
   "comptes": {
-   "active": 18,
+   "active": 16,
    "neutralise": 1,
-   "neutre": 29,
+   "neutre": 31,
    "nd": 5,
    "sans_regle": 19
   },
-  "cases_actives": 18,
+  "cases_actives": 16,
   "cases_total": 72,
-  "compte_libelle": "18 actives, 5 n/d, 19 sans règle, 1 neutralisée",
+  "compte_libelle": "16 actives, 5 n/d, 19 sans règle, 1 neutralisée",
   "seuils_bilan": {
    "soutenue": 3,
    "pression": -3
@@ -43786,20 +43776,20 @@
       "haut": 4,
       "bas": -4
      },
-     "valeur": -3.1975,
-     "date": "2026-11-03",
+     "valeur": -1.4503,
+     "date": "2026-11-04",
      "source": "FRED (SP500)",
      "percentiles": {
-      "15": -2.8626,
-      "85": 4.0967
+      "15": -2.8492,
+      "85": 4.0929
      },
      "seuil_haut": 4,
-     "seuil_bas": -2.8626,
-     "direction": "bas",
-     "declencheur": "15e percentile sur 5 ans",
+     "seuil_bas": -2.8492,
+     "direction": null,
+     "declencheur": null,
      "neutralise": false,
      "serie_heurtee": null,
-     "n_5a": 340,
+     "n_5a": 341,
      "devises": {
       "USD": {
        "signe_classique": -1,
@@ -44364,9 +44354,9 @@
     null
    ],
    "sp500_var_4s": [
-    -3.2,
+    -1.45,
     "FRED (SP500)",
-    "2026-11-03"
+    "2026-11-04"
    ],
    "titres_refuge": [
     6,
@@ -44496,9 +44486,9 @@
     "classe": "up"
    },
    "conviction": "moyen",
-   "cases_actives": 18,
+   "cases_actives": 16,
    "cases_total": 72,
-   "compte_matrice": "18 actives, 5 n/d, 19 sans règle, 1 neutralisée",
+   "compte_matrice": "16 actives, 5 n/d, 19 sans règle, 1 neutralisée",
    "explication": "Engrenages orientés : 3. Données (Dollar haussier) ; 6. Géopolitique (Dollar haussier) ; 7. Flux (Dollar neutre · Risk off). Les autres restent dans leur couloir neutre.",
    "texte": "Les engrenages ne s'accordent pas : 2 sur 7 évaluables vont dans le sens du thème calculé (Dollar haussier · Risque neutre), sous le seuil de 3 pour parler d'un thème établi.",
    "texte_source": "calcul Python",
@@ -45090,28 +45080,6 @@
     "distance_texte": "franchi"
    },
    {
-    "id": "couverture-sp500",
-    "engrenage": 5,
-    "devise": null,
-    "libelle": "S&P 500, variation sur 4 semaines",
-    "effet_haut": "devises confirmées : CAD, NZD, USD",
-    "effet_bas": null,
-    "valeur": -3.1975,
-    "texte_valeur": "−3,20 %",
-    "unite": "%",
-    "date": "2026-11-03",
-    "source": "FRED (SP500)",
-    "seuil_bas": -2.8626,
-    "seuil_haut": 4,
-    "declencheur": "15e percentile sur 5 ans",
-    "neutralise": null,
-    "etat": "franchi",
-    "distance": 0.0,
-    "distance_pct": 0.0,
-    "cote": "bas",
-    "distance_texte": "franchi"
-   },
-   {
     "id": "couverture-brent",
     "engrenage": 8,
     "devise": null,
@@ -45334,6 +45302,28 @@
     "distance_pct": 18.8,
     "cote": "bas",
     "distance_texte": "15 pts"
+   },
+   {
+    "id": "couverture-sp500",
+    "engrenage": 5,
+    "devise": null,
+    "libelle": "S&P 500, variation sur 4 semaines",
+    "effet_haut": "devises confirmées : CAD, NZD, USD",
+    "effet_bas": null,
+    "valeur": -1.4503,
+    "texte_valeur": "−1,45 %",
+    "unite": "%",
+    "date": "2026-11-04",
+    "source": "FRED (SP500)",
+    "seuil_bas": -2.8492,
+    "seuil_haut": 4,
+    "declencheur": null,
+    "neutralise": null,
+    "etat": "non",
+    "distance": 1.3989,
+    "distance_pct": 20.4,
+    "cote": "bas",
+    "distance_texte": "1,40 %"
    },
    {
     "id": "thermometre-5",
@@ -46051,29 +46041,6 @@
     "cote": "bas",
     "distance_texte": "franchi",
     "phrase": "10 ans US, variation sur 4 semaines : −32 pb, seuil bas franchi"
-   },
-   {
-    "id": "couverture-sp500",
-    "engrenage": 5,
-    "devise": null,
-    "libelle": "S&P 500, variation sur 4 semaines",
-    "effet_haut": "devises confirmées : CAD, NZD, USD",
-    "effet_bas": null,
-    "valeur": -3.1975,
-    "texte_valeur": "−3,20 %",
-    "unite": "%",
-    "date": "2026-11-03",
-    "source": "FRED (SP500)",
-    "seuil_bas": -2.8626,
-    "seuil_haut": 4,
-    "declencheur": "15e percentile sur 5 ans",
-    "neutralise": null,
-    "etat": "franchi",
-    "distance": 0.0,
-    "distance_pct": 0.0,
-    "cote": "bas",
-    "distance_texte": "franchi",
-    "phrase": "S&P 500, variation sur 4 semaines : −3,20 %, seuil bas franchi"
    },
    {
     "id": "couverture-brent",
@@ -47683,8 +47650,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 2,
-        "apres": 5,
+        "avant": 1,
+        "apres": 4,
         "lecture_avant": "neutre",
         "lecture_apres": "soutenue"
        },
@@ -47718,8 +47685,8 @@
        },
        {
         "devise": "CAD",
-        "avant": 1,
-        "apres": 1,
+        "avant": 2,
+        "apres": 2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -47765,8 +47732,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 2,
-        "apres": 4,
+        "avant": 1,
+        "apres": 3,
         "lecture_avant": "neutre",
         "lecture_apres": "soutenue"
        },
@@ -47800,8 +47767,8 @@
        },
        {
         "devise": "CAD",
-        "avant": 1,
-        "apres": 1,
+        "avant": 2,
+        "apres": 2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -47847,8 +47814,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 2,
-        "apres": 1,
+        "avant": 1,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -47882,8 +47849,8 @@
        },
        {
         "devise": "CAD",
-        "avant": 1,
-        "apres": 1,
+        "avant": 2,
+        "apres": 2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -47929,8 +47896,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 2,
-        "apres": 2,
+        "avant": 1,
+        "apres": 1,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -47964,8 +47931,8 @@
        },
        {
         "devise": "CAD",
-        "avant": 1,
-        "apres": 1,
+        "avant": 2,
+        "apres": 2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -49051,8 +49018,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 2,
-        "apres": 1,
+        "avant": 1,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -49086,8 +49053,8 @@
        },
        {
         "devise": "CAD",
-        "avant": 1,
-        "apres": 1,
+        "avant": 2,
+        "apres": 2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -49133,8 +49100,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 2,
-        "apres": 2,
+        "avant": 1,
+        "apres": 1,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -49168,8 +49135,8 @@
        },
        {
         "devise": "CAD",
-        "avant": 1,
-        "apres": 1,
+        "avant": 2,
+        "apres": 2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -49215,8 +49182,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 2,
-        "apres": 2,
+        "avant": 1,
+        "apres": 1,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -49250,8 +49217,8 @@
        },
        {
         "devise": "CAD",
-        "avant": 1,
-        "apres": 1,
+        "avant": 2,
+        "apres": 2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -49297,8 +49264,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 2,
-        "apres": 2,
+        "avant": 1,
+        "apres": 1,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -49332,8 +49299,8 @@
        },
        {
         "devise": "CAD",
-        "avant": 1,
-        "apres": 1,
+        "avant": 2,
+        "apres": 2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -49372,8 +49339,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 2,
-        "apres": 2,
+        "avant": 1,
+        "apres": 1,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -49407,8 +49374,8 @@
        },
        {
         "devise": "CAD",
-        "avant": 1,
-        "apres": 1,
+        "avant": 2,
+        "apres": 2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -49587,13 +49554,13 @@
      },
      {
       "libelle": "S&P 500",
-      "texte": "7 569",
-      "date": "2026-11-03",
+      "texte": "7 689",
+      "date": "2026-11-04",
       "source": "FRED (SP500)",
       "raison": null,
-      "variation": "−3,20 % sur 4 semaines",
-      "percentile_5a": 94,
-      "rang": "94e percentile sur 5 ans"
+      "variation": "−1,45 % sur 4 semaines",
+      "percentile_5a": 97,
+      "rang": "97e percentile sur 5 ans"
      },
      {
       "libelle": "Rendement 10 ans US",
@@ -50255,10 +50222,10 @@
     "regles": [
      {
       "libelle": "S&P 500, variation sur 4 semaines",
-      "etat": "déclenchée",
-      "distance": "franchi",
-      "valeur": "−3,20 %",
-      "date": "2026-11-03",
+      "etat": "non",
+      "distance": "1,40 %",
+      "valeur": "−1,45 %",
+      "date": "2026-11-04",
       "source": "FRED (SP500)",
       "neutralise": null
      },
@@ -50301,10 +50268,10 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 2,
-        "apres": 3,
+        "avant": 1,
+        "apres": 2,
         "lecture_avant": "neutre",
-        "lecture_apres": "soutenue"
+        "lecture_apres": "neutre"
        },
        {
         "devise": "EUR",
@@ -50336,8 +50303,8 @@
        },
        {
         "devise": "CAD",
-        "avant": 1,
-        "apres": 0,
+        "avant": 2,
+        "apres": 1,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -50367,8 +50334,8 @@
        {
         "devise": "USD",
         "engrenage": 5,
-        "avant": 1,
-        "apres": 2
+        "avant": 0,
+        "apres": 1
        },
        {
         "devise": "JPY",
@@ -50385,8 +50352,8 @@
        {
         "devise": "CAD",
         "engrenage": 5,
-        "avant": -1,
-        "apres": -2
+        "avant": 0,
+        "apres": -1
        },
        {
         "devise": "AUD",
@@ -50413,10 +50380,10 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 2,
-        "apres": 3,
+        "avant": 1,
+        "apres": 2,
         "lecture_avant": "neutre",
-        "lecture_apres": "soutenue"
+        "lecture_apres": "neutre"
        },
        {
         "devise": "EUR",
@@ -50448,8 +50415,8 @@
        },
        {
         "devise": "CAD",
-        "avant": 1,
-        "apres": 0,
+        "avant": 2,
+        "apres": 1,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -50479,8 +50446,8 @@
        {
         "devise": "USD",
         "engrenage": 5,
-        "avant": 1,
-        "apres": 2
+        "avant": 0,
+        "apres": 1
        },
        {
         "devise": "JPY",
@@ -50497,8 +50464,8 @@
        {
         "devise": "CAD",
         "engrenage": 5,
-        "avant": -1,
-        "apres": -2
+        "avant": 0,
+        "apres": -1
        },
        {
         "devise": "AUD",
@@ -50525,8 +50492,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 2,
-        "apres": 2,
+        "avant": 1,
+        "apres": 1,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -50560,8 +50527,8 @@
        },
        {
         "devise": "CAD",
-        "avant": 1,
-        "apres": 1,
+        "avant": 2,
+        "apres": 2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -50620,13 +50587,13 @@
       "engrenage": 5,
       "libelle": "S&P 500, variation sur 4 semaines ≥ 4,00 %",
       "description": "Engrenage 5 : AUD +1, NZD +1",
-      "valeur_actuelle": -3.2,
+      "valeur_actuelle": -1.45,
       "unite": "%",
       "bilans": [
        {
         "devise": "USD",
-        "avant": 2,
-        "apres": 2,
+        "avant": 1,
+        "apres": 1,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -50660,8 +50627,8 @@
        },
        {
         "devise": "CAD",
-        "avant": 1,
-        "apres": 1,
+        "avant": 2,
+        "apres": 2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -50708,13 +50675,13 @@
       "engrenage": 5,
       "libelle": "S&P 500, variation sur 4 semaines ≤ −4,00 %",
       "description": "Engrenage 5 : AUD −1, NZD −1, JPY +1",
-      "valeur_actuelle": -3.2,
+      "valeur_actuelle": -1.45,
       "unite": "%",
       "bilans": [
        {
         "devise": "USD",
-        "avant": 2,
-        "apres": 2,
+        "avant": 1,
+        "apres": 1,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -50748,8 +50715,8 @@
        },
        {
         "devise": "CAD",
-        "avant": 1,
-        "apres": 1,
+        "avant": 2,
+        "apres": 2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -50807,8 +50774,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 2,
-        "apres": 2,
+        "avant": 1,
+        "apres": 1,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -50842,8 +50809,8 @@
        },
        {
         "devise": "CAD",
-        "avant": 1,
-        "apres": 1,
+        "avant": 2,
+        "apres": 2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -50882,8 +50849,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 2,
-        "apres": 2,
+        "avant": 1,
+        "apres": 1,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -50917,8 +50884,8 @@
        },
        {
         "devise": "CAD",
-        "avant": 1,
-        "apres": 1,
+        "avant": 2,
+        "apres": 2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -50952,12 +50919,12 @@
       "engrenage": 5,
       "libelle": "S&P 500, variation sur 4 semaines ≥ +4,00 %",
       "description": "Engrenage 5, règle par devise confirmée sur 5 ans pour : aucune devise",
-      "valeur_actuelle": -3.1975,
+      "valeur_actuelle": -1.4503,
       "unite": "%",
       "bilans": [
        {
         "devise": "USD",
-        "avant": 2,
+        "avant": 1,
         "apres": 1,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
@@ -50992,96 +50959,8 @@
        },
        {
         "devise": "CAD",
-        "avant": 1,
-        "apres": 2,
-        "lecture_avant": "neutre",
-        "lecture_apres": "neutre"
-       },
-       {
-        "devise": "AUD",
-        "avant": 1,
-        "apres": 1,
-        "lecture_avant": "neutre",
-        "lecture_apres": "neutre"
-       },
-       {
-        "devise": "NZD",
-        "avant": -2,
-        "apres": -2,
-        "lecture_avant": "neutre",
-        "lecture_apres": "neutre"
-       },
-       {
-        "devise": "CNY",
-        "avant": 0,
-        "apres": 0,
-        "lecture_avant": "neutre",
-        "lecture_apres": "neutre"
-       }
-      ],
-      "cases_changees": [
-       {
-        "devise": "USD",
-        "engrenage": 5,
-        "avant": 1,
-        "apres": 0
-       },
-       {
-        "devise": "CAD",
-        "engrenage": 5,
-        "avant": -1,
-        "apres": 0
-       }
-      ],
-      "effets": "USD −1, CAD +1"
-     },
-     {
-      "id": "couverture-sp500-bas",
-      "engrenage": 5,
-      "libelle": "S&P 500, variation sur 4 semaines ≤ −2,86 %",
-      "description": "Engrenage 5, règle par devise confirmée sur 5 ans pour : USD, CAD, NZD",
-      "valeur_actuelle": -3.1975,
-      "unite": "%",
-      "bilans": [
-       {
-        "devise": "USD",
         "avant": 2,
         "apres": 2,
-        "lecture_avant": "neutre",
-        "lecture_apres": "neutre"
-       },
-       {
-        "devise": "EUR",
-        "avant": -1,
-        "apres": -1,
-        "lecture_avant": "neutre",
-        "lecture_apres": "neutre"
-       },
-       {
-        "devise": "GBP",
-        "avant": 0,
-        "apres": 0,
-        "lecture_avant": "neutre",
-        "lecture_apres": "neutre"
-       },
-       {
-        "devise": "JPY",
-        "avant": -1,
-        "apres": -1,
-        "lecture_avant": "neutre",
-        "lecture_apres": "neutre"
-       },
-       {
-        "devise": "CHF",
-        "avant": -1,
-        "apres": -1,
-        "lecture_avant": "neutre",
-        "lecture_apres": "neutre"
-       },
-       {
-        "devise": "CAD",
-        "avant": 1,
-        "apres": 1,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -51111,6 +50990,94 @@
       "effets": "aucun effet (règle déjà déclenchée ou neutralisée)"
      },
      {
+      "id": "couverture-sp500-bas",
+      "engrenage": 5,
+      "libelle": "S&P 500, variation sur 4 semaines ≤ −2,85 %",
+      "description": "Engrenage 5, règle par devise confirmée sur 5 ans pour : USD, CAD, NZD",
+      "valeur_actuelle": -1.4503,
+      "unite": "%",
+      "bilans": [
+       {
+        "devise": "USD",
+        "avant": 1,
+        "apres": 2,
+        "lecture_avant": "neutre",
+        "lecture_apres": "neutre"
+       },
+       {
+        "devise": "EUR",
+        "avant": -1,
+        "apres": -1,
+        "lecture_avant": "neutre",
+        "lecture_apres": "neutre"
+       },
+       {
+        "devise": "GBP",
+        "avant": 0,
+        "apres": 0,
+        "lecture_avant": "neutre",
+        "lecture_apres": "neutre"
+       },
+       {
+        "devise": "JPY",
+        "avant": -1,
+        "apres": -1,
+        "lecture_avant": "neutre",
+        "lecture_apres": "neutre"
+       },
+       {
+        "devise": "CHF",
+        "avant": -1,
+        "apres": -1,
+        "lecture_avant": "neutre",
+        "lecture_apres": "neutre"
+       },
+       {
+        "devise": "CAD",
+        "avant": 2,
+        "apres": 1,
+        "lecture_avant": "neutre",
+        "lecture_apres": "neutre"
+       },
+       {
+        "devise": "AUD",
+        "avant": 1,
+        "apres": 1,
+        "lecture_avant": "neutre",
+        "lecture_apres": "neutre"
+       },
+       {
+        "devise": "NZD",
+        "avant": -2,
+        "apres": -2,
+        "lecture_avant": "neutre",
+        "lecture_apres": "neutre"
+       },
+       {
+        "devise": "CNY",
+        "avant": 0,
+        "apres": 0,
+        "lecture_avant": "neutre",
+        "lecture_apres": "neutre"
+       }
+      ],
+      "cases_changees": [
+       {
+        "devise": "USD",
+        "engrenage": 5,
+        "avant": 0,
+        "apres": 1
+       },
+       {
+        "devise": "CAD",
+        "engrenage": 5,
+        "avant": 0,
+        "apres": -1
+       }
+      ],
+      "effets": "USD +1, CAD −1"
+     },
+     {
       "id": "couverture-dollar_large-haut",
       "engrenage": 5,
       "libelle": "indice dollar large (Fed), variation sur 4 semaines ≥ +1,79 %",
@@ -51120,8 +51087,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 2,
-        "apres": 2,
+        "avant": 1,
+        "apres": 1,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -51155,8 +51122,8 @@
        },
        {
         "devise": "CAD",
-        "avant": 1,
-        "apres": 1,
+        "avant": 2,
+        "apres": 2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -51202,8 +51169,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 2,
-        "apres": 2,
+        "avant": 1,
+        "apres": 1,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -51237,8 +51204,8 @@
        },
        {
         "devise": "CAD",
-        "avant": 1,
-        "apres": 1,
+        "avant": 2,
+        "apres": 2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -51476,8 +51443,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 2,
-        "apres": 2,
+        "avant": 1,
+        "apres": 1,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -51511,8 +51478,8 @@
        },
        {
         "devise": "CAD",
-        "avant": 1,
-        "apres": 1,
+        "avant": 2,
+        "apres": 2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -51551,8 +51518,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 2,
-        "apres": 2,
+        "avant": 1,
+        "apres": 1,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -51586,8 +51553,8 @@
        },
        {
         "devise": "CAD",
-        "avant": 1,
-        "apres": 1,
+        "avant": 2,
+        "apres": 2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -51626,8 +51593,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 2,
-        "apres": 2,
+        "avant": 1,
+        "apres": 1,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -51661,8 +51628,8 @@
        },
        {
         "devise": "CAD",
-        "avant": 1,
-        "apres": 1,
+        "avant": 2,
+        "apres": 2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -51701,8 +51668,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 2,
-        "apres": 2,
+        "avant": 1,
+        "apres": 1,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -51736,8 +51703,8 @@
        },
        {
         "devise": "CAD",
-        "avant": 1,
-        "apres": 1,
+        "avant": 2,
+        "apres": 2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -53527,8 +53494,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 2,
-        "apres": 2,
+        "avant": 1,
+        "apres": 1,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -53562,10 +53529,10 @@
        },
        {
         "devise": "CAD",
-        "avant": 1,
-        "apres": 2,
+        "avant": 2,
+        "apres": 3,
         "lecture_avant": "neutre",
-        "lecture_apres": "neutre"
+        "lecture_apres": "soutenue"
        },
        {
         "devise": "AUD",
@@ -53621,8 +53588,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 2,
-        "apres": 2,
+        "avant": 1,
+        "apres": 1,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -53656,8 +53623,8 @@
        },
        {
         "devise": "CAD",
-        "avant": 1,
-        "apres": 0,
+        "avant": 2,
+        "apres": 1,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -53709,8 +53676,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 2,
-        "apres": 2,
+        "avant": 1,
+        "apres": 1,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -53744,8 +53711,8 @@
        },
        {
         "devise": "CAD",
-        "avant": 1,
-        "apres": 1,
+        "avant": 2,
+        "apres": 2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -53784,8 +53751,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 2,
-        "apres": 2,
+        "avant": 1,
+        "apres": 1,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -53819,8 +53786,8 @@
        },
        {
         "devise": "CAD",
-        "avant": 1,
-        "apres": -1,
+        "avant": 2,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -53866,8 +53833,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 2,
-        "apres": 2,
+        "avant": 1,
+        "apres": 1,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -53901,8 +53868,8 @@
        },
        {
         "devise": "CAD",
-        "avant": 1,
-        "apres": 1,
+        "avant": 2,
+        "apres": 2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -53941,8 +53908,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 2,
-        "apres": 2,
+        "avant": 1,
+        "apres": 1,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -53976,8 +53943,8 @@
        },
        {
         "devise": "CAD",
-        "avant": 1,
-        "apres": 1,
+        "avant": 2,
+        "apres": 2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
