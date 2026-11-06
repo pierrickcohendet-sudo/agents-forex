@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-06T08:46:58+00:00",
+  "genere_le": "2026-11-06T09:20:08+00:00",
   "appels_llm": [
    {
     "heure": "08:33",
@@ -186,10 +186,10 @@
    "engrenages_faits": true,
    "reserve_engrenages": 8,
    "refus_reserve_ce_run": 0,
-   "refus_budget_ce_run": 10,
+   "refus_budget_ce_run": 3,
    "budget": {
-    "plafond": 45,
-    "mode": "complet",
+    "plafond": 60,
+    "mode": "complément",
     "lundi": false,
     "max_appels_par_analyse": 2,
     "prevu_analyses": {
@@ -209,26 +209,25 @@
      "reste": 8
     },
     "consomme_run": {
-     "engrenages": 1,
-     "rapport": 1,
-     "devises": 3,
-     "reste": 8
+     "engrenages": 0,
+     "rapport": 0,
+     "devises": 0,
+     "reste": 0
     },
     "total_jour": 13,
     "plafond_run": 45,
-    "recues_run": 13,
-    "pannes_jour": 14,
-    "pannes_run": 14,
+    "recues_run": 0,
+    "pannes_jour": 15,
+    "pannes_run": 1,
     "plafond_pannes": 20,
     "mode_panne": false,
     "pannes_avant_correctif": 0,
     "echecs_jour": {
-     "503": 13,
+     "503": 14,
      "429": 1
     },
     "echecs_run": {
-     "503": 13,
-     "429": 1
+     "503": 1
     },
     "abandonnees": [],
     "analyses": {
@@ -315,7 +314,7 @@
       "statut": "à rejouer",
       "echec": "503",
       "types": {
-       "503": 2
+       "503": 3
       },
       "appels": 0
      },
@@ -366,29 +365,29 @@
      "appels_aujourdhui": 12,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-11-05T07:59:59+00:00",
-     "appels_ce_run": 14,
-     "reussites_ce_run": 12,
+     "appels_ce_run": 3,
+     "reussites_ce_run": 0,
      "sauts_ce_run": 0
     },
     "gemini-3.8-flash": {
      "appels_aujourdhui": 0,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-11-05T07:59:59+00:00",
-     "appels_ce_run": 5,
+     "appels_ce_run": 0,
      "reussites_ce_run": 0,
-     "sauts_ce_run": 1
+     "sauts_ce_run": 0
     },
     "gemini-3.5-flash-lite": {
      "appels_aujourdhui": 1,
      "plafond_jour": 20,
      "epuise_jusqu_a": null,
-     "appels_ce_run": 4,
-     "reussites_ce_run": 1,
+     "appels_ce_run": 0,
+     "reussites_ce_run": 0,
      "sauts_ce_run": 0
     }
    }
   },
-  "resume_quota": "Gemini : 13/60, engrenages : fait — Budget (run complet, plafond 45) : prévu engrenages 1 analyse (≤ 2 requêtes); rapport du jour 2 analyses (≤ 4 requêtes); devises 3 analyses (≤ 6 requêtes); reste ≤ 33 ; consommé ce run : engrenages 1, rapport du jour 1, devises 3, reste 8 (jour : 13/45) ; échecs ce run : 429 × 1, 503 × 13 ; tentatives en panne (hors budget) : 14 ce run, 14/20 aujourd'hui ; réponses reçues ce run : 13/45 ; analyses : analyses:AUD-NZD-CNY faite, analyses:JPY-CHF-CAD faite, analyses:USD-EUR-GBP faite, critique faite, engrenages faite, etat_du_monde faite, paires:synthese faite, rapport:analyse à rejouer (429), rapport:redaction faite, synthese:AUD à rejouer (503), synthese:CAD à rejouer (503), synthese:CHF à rejouer (503), synthese:CNY faite, synthese:EUR faite, synthese:GBP faite, synthese:JPY faite, synthese:NZD à rejouer (503), synthese:USD faite",
+  "resume_quota": "Gemini : 13/60, engrenages : fait — Budget (run complément, plafond 60) : prévu engrenages 1 analyse (≤ 2 requêtes); rapport du jour 2 analyses (≤ 4 requêtes); devises 3 analyses (≤ 6 requêtes); reste ≤ 48 ; consommé ce run : engrenages 0, rapport du jour 0, devises 0, reste 0 (jour : 13/60) ; échecs ce run : 503 × 1 ; tentatives en panne (hors budget) : 1 ce run, 15/20 aujourd'hui ; réponses reçues ce run : 0/45 ; analyses : analyses:AUD-NZD-CNY faite, analyses:JPY-CHF-CAD faite, analyses:USD-EUR-GBP faite, critique faite, engrenages faite, etat_du_monde faite, paires:synthese faite, rapport:analyse à rejouer (429), rapport:redaction faite, synthese:AUD à rejouer (503), synthese:CAD à rejouer (503), synthese:CHF à rejouer (503), synthese:CNY faite, synthese:EUR faite, synthese:GBP faite, synthese:JPY faite, synthese:NZD à rejouer (503), synthese:USD faite",
   "appels_par_modele": {
    "gemini-3.5-flash": {
     "appels": 14,
@@ -437,9 +436,43 @@
       "ignores": 0
      }
     ]
+   },
+   {
+    "heure": "09:20",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 3,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
    }
   ],
-  "notion_url": "https://app.notion.com/p/Rapport-du-jour-2026-11-06-courte-41065bc646618161947ffe8ac1e1a95f"
+  "notion_url": "https://app.notion.com/p/FX-2026-11-06-quotidien-41065bc646618161947ffe8ac1e1a95f"
  },
  "synthese_globale": {
   "biais_macro_global": "neutre",
@@ -605,8 +638,8 @@
      ],
      "donnees_calculees": [
       {
-       "texte": "USD taux directeur 3.88% le 2026-11-03 (baisse, précédent 4.00%)",
-       "source_id": "src_135"
+       "texte": "USD taux directeur 3.88% le 2026-11-04 (baisse, précédent 4.00%)",
+       "source_id": "src_269"
       },
       {
        "texte": "EUR taux directeur 2.65% le 2026-10-29 (statu quo, précédent 2.65%)",
@@ -1196,8 +1229,8 @@
     "libelle": "Flash 3.5"
    },
    "version": "quotidienne",
-   "titre_theme_impose": "Signaux mixtes",
-   "rafraichi_le": "2026-11-06T08:37:02+00:00"
+   "rafraichi_le": "2026-11-06T09:19:22+00:00",
+   "titre_theme_impose": "Signaux mixtes"
   },
   "classement_devises": [
    {
@@ -3304,9 +3337,10 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "synthese:CHF : 2 appels déjà faits pendant ce run (repli Python)",
+    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+    "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-06T08:41:27+00:00"
+    "genere_le": "2026-11-06T09:20:08+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.45,
@@ -3568,9 +3602,10 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "synthese:CAD : 2 appels déjà faits pendant ce run (repli Python)",
+    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+    "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-06T08:43:51+00:00"
+    "genere_le": "2026-11-06T09:20:08+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.59,
@@ -3827,9 +3862,10 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "synthese:AUD : 2 appels déjà faits pendant ce run (repli Python)",
+    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+    "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-06T08:45:36+00:00"
+    "genere_le": "2026-11-06T09:20:08+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.04,
@@ -4085,9 +4121,10 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "synthese:NZD : 2 appels déjà faits pendant ce run (repli Python)",
+    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+    "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-06T08:46:32+00:00"
+    "genere_le": "2026-11-06T09:20:08+00:00"
    },
    "indice_surprise_30j": {
     "indice": -1.62,
@@ -6464,6 +6501,13 @@
    "source": "ForexFactory (registre macro)",
    "detail": "CNY — Ventes au détail",
    "date": "2026-10-19",
+   "url": null
+  },
+  {
+   "id": "src_269",
+   "source": "FRED (DFF, taux effectif) (registre macro)",
+   "detail": "USD — Taux directeur",
+   "date": "2026-11-04",
    "url": null
   }
  ],
@@ -9384,39 +9428,21 @@
   "conforme": false,
   "nb_anomalies": 7,
   "anomalies": [
-   "CHF : synthèse approfondie indisponible (synthese:CHF : 2 appels déjà faits pendant ce run (repli Python))",
-   "CAD : synthèse approfondie indisponible (synthese:CAD : 2 appels déjà faits pendant ce run (repli Python))",
-   "AUD : synthèse approfondie indisponible (synthese:AUD : 2 appels déjà faits pendant ce run (repli Python))",
-   "NZD : synthèse approfondie indisponible (synthese:NZD : 2 appels déjà faits pendant ce run (repli Python))",
+   "CHF : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+   "CAD : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+   "AUD : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+   "NZD : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
    "tableau macro : CNY/PMI manufacturier : publication manquée (prévue le 31/10, aucun « réel » reçu)",
    "tableau macro : CNY/PMI services : publication manquée (prévue le 31/10, aucun « réel » reçu)",
    "prompt LLM volumineux : 3 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 33446 à 08:47 UTC, modèle gemini-3.5-flash) — le contexte envoyé au LLM a regrossi"
   ]
  },
  "critique": {
-  "incoherences": [
-   "Les synthèses approfondies de 4 devises (CHF, CAD, AUD, NZD) sont indisponibles suite à un dépassement du nombre d'appels LLM (repli Python), ce qui affecte gravement la complétude et la fiabilité du rapport quotidien.",
-   "L'indicateur pmi_surprise dans le détail du score de l'EUR présente une justification techniquement incohérente ('révisé à la baisse ou en hausse selon la donnée saisie à 52,7 vs 52,4 attendu'), traduisant un texte de modèle mal généré."
-  ],
-  "affirmations_non_sourcees": [
-   "Dans les opportunités du CAD, l'affirmation d'un excédent commercial canadien à 4,8B CAD contredit la donnée source enregistrée (src_168) qui indique 5,4B CAD."
-  ],
-  "suggestions_connaissances": [
-   {
-    "theme": "Gestion des quotas de requêtes LLM sur les synthèses devises",
-    "suggestion": "En cas de quota d'appels LLM atteint lors de la génération quotidienne, prévoir un gabarit de synthèse de secours calculé par règles déterministes à partir du score de confluence et de la tendance, afin de garantir la complétude du rapport.",
-    "fichier_cible": "cas_particuliers.md"
-   },
-   {
-    "theme": "Répercussions des élections de mi-mandat US sur les devises Tech/Risk",
-    "suggestion": "Définir la prise en compte des vagues de corrections sectorielles (ex. secteur IA/technologique) consécutives aux incertitudes politiques post-midterms US et leur canal de transmission vers les devises liées au risque et devises émergentes.",
-    "fichier_cible": "cas_particuliers.md"
-   }
-  ],
-  "validation": "a_revoir",
-  "redige_par": {
-   "modele": "gemini-3.5-flash",
-   "libelle": "Flash 3.5"
-  }
+  "incoherences": [],
+  "affirmations_non_sourcees": [],
+  "suggestions_connaissances": [],
+  "validation": "non_evalue",
+  "indisponible": true,
+  "note": "relecture non effectuée (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit) — 20 tentatives en panne (503, 429, délai) déjà faites aujourd'hui : pla)"
  }
 }
