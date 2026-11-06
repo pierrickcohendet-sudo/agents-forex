@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-06T09:20:08+00:00",
+  "genere_le": "2026-11-06T10:20:23+00:00",
   "appels_llm": [
    {
     "heure": "08:33",
@@ -186,21 +186,21 @@
    "engrenages_faits": true,
    "reserve_engrenages": 8,
    "refus_reserve_ce_run": 0,
-   "refus_budget_ce_run": 3,
+   "refus_budget_ce_run": 9,
    "budget": {
     "plafond": 60,
     "mode": "complément",
     "lundi": false,
-    "max_appels_par_analyse": 2,
+    "max_appels_par_analyse": 1,
     "prevu_analyses": {
      "engrenages": 1,
      "rapport": 2,
      "devises": 3
     },
     "prevu_appels_max": {
-     "engrenages": 2,
-     "rapport": 4,
-     "devises": 6
+     "engrenages": 1,
+     "rapport": 2,
+     "devises": 3
     },
     "consomme_jour": {
      "engrenages": 1,
@@ -218,17 +218,15 @@
     "plafond_run": 45,
     "recues_run": 0,
     "pannes_jour": 15,
-    "pannes_run": 1,
+    "pannes_run": 0,
     "plafond_pannes": 20,
-    "mode_panne": false,
+    "mode_panne": true,
     "pannes_avant_correctif": 0,
     "echecs_jour": {
      "503": 14,
      "429": 1
     },
-    "echecs_run": {
-     "503": 1
-    },
+    "echecs_run": {},
     "abandonnees": [],
     "analyses": {
      "analyses:AUD-NZD-CNY": {
@@ -365,7 +363,7 @@
      "appels_aujourdhui": 12,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-11-05T07:59:59+00:00",
-     "appels_ce_run": 3,
+     "appels_ce_run": 0,
      "reussites_ce_run": 0,
      "sauts_ce_run": 0
     },
@@ -387,7 +385,7 @@
     }
    }
   },
-  "resume_quota": "Gemini : 13/60, engrenages : fait — Budget (run complément, plafond 60) : prévu engrenages 1 analyse (≤ 2 requêtes); rapport du jour 2 analyses (≤ 4 requêtes); devises 3 analyses (≤ 6 requêtes); reste ≤ 48 ; consommé ce run : engrenages 0, rapport du jour 0, devises 0, reste 0 (jour : 13/60) ; échecs ce run : 503 × 1 ; tentatives en panne (hors budget) : 1 ce run, 15/20 aujourd'hui ; réponses reçues ce run : 0/45 ; analyses : analyses:AUD-NZD-CNY faite, analyses:JPY-CHF-CAD faite, analyses:USD-EUR-GBP faite, critique faite, engrenages faite, etat_du_monde faite, paires:synthese faite, rapport:analyse à rejouer (429), rapport:redaction faite, synthese:AUD à rejouer (503), synthese:CAD à rejouer (503), synthese:CHF à rejouer (503), synthese:CNY faite, synthese:EUR faite, synthese:GBP faite, synthese:JPY faite, synthese:NZD à rejouer (503), synthese:USD faite",
+  "resume_quota": "Gemini : 13/60, engrenages : fait — Budget (run complément, plafond 60) : prévu engrenages 1 analyse (≤ 1 requêtes); rapport du jour 2 analyses (≤ 2 requêtes); devises 3 analyses (≤ 3 requêtes); reste ≤ 54 ; consommé ce run : engrenages 0, rapport du jour 0, devises 0, reste 0 (jour : 13/60) ; échecs ce run : aucun ; tentatives en panne (hors budget) : 0 ce run, 15/20 aujourd'hui ; réponses reçues ce run : 0/45 ; MODE PANNE : priorités seulement, 1 essai chacune, sans repli ; analyses : analyses:AUD-NZD-CNY faite, analyses:JPY-CHF-CAD faite, analyses:USD-EUR-GBP faite, critique faite, engrenages faite, etat_du_monde faite, paires:synthese faite, rapport:analyse à rejouer (429), rapport:redaction faite, synthese:AUD à rejouer (503), synthese:CAD à rejouer (503), synthese:CHF à rejouer (503), synthese:CNY faite, synthese:EUR faite, synthese:GBP faite, synthese:JPY faite, synthese:NZD à rejouer (503), synthese:USD faite",
   "appels_par_modele": {
    "gemini-3.5-flash": {
     "appels": 14,
@@ -443,6 +441,40 @@
     "seuil_echecs": 3,
     "ouvert": false,
     "appels_total": 3,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
+   },
+   {
+    "heure": "10:20",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 0,
     "replis_json_modele_suivant": 0,
     "modeles": [
      {
@@ -1228,7 +1260,7 @@
     "libelle": "Flash 3.5"
    },
    "version": "quotidienne",
-   "rafraichi_le": "2026-11-06T09:19:22+00:00",
+   "rafraichi_le": "2026-11-06T10:19:23+00:00",
    "titre_theme_impose": "Signaux mixtes"
   },
   "classement_devises": [
@@ -3336,10 +3368,9 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
-    "quota_atteint": true,
-    "tentatives": 0,
-    "genere_le": "2026-11-06T09:20:08+00:00"
+    "raison": "synthese:CHF : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python)",
+    "tentatives": 1,
+    "genere_le": "2026-11-06T10:19:23+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.45,
@@ -3601,10 +3632,9 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
-    "quota_atteint": true,
-    "tentatives": 0,
-    "genere_le": "2026-11-06T09:20:08+00:00"
+    "raison": "synthese:CAD : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python)",
+    "tentatives": 1,
+    "genere_le": "2026-11-06T10:19:43+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.59,
@@ -3861,10 +3891,9 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
-    "quota_atteint": true,
-    "tentatives": 0,
-    "genere_le": "2026-11-06T09:20:08+00:00"
+    "raison": "synthese:AUD : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python)",
+    "tentatives": 1,
+    "genere_le": "2026-11-06T10:20:03+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.04,
@@ -4120,10 +4149,9 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
-    "quota_atteint": true,
-    "tentatives": 0,
-    "genere_le": "2026-11-06T09:20:08+00:00"
+    "raison": "synthese:NZD : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python)",
+    "tentatives": 1,
+    "genere_le": "2026-11-06T10:20:23+00:00"
    },
    "indice_surprise_30j": {
     "indice": -1.62,
@@ -9427,10 +9455,10 @@
   "conforme": false,
   "nb_anomalies": 7,
   "anomalies": [
-   "CHF : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
-   "CAD : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
-   "AUD : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
-   "NZD : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+   "CHF : synthèse approfondie indisponible (synthese:CHF : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
+   "CAD : synthèse approfondie indisponible (synthese:CAD : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
+   "AUD : synthèse approfondie indisponible (synthese:AUD : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
+   "NZD : synthèse approfondie indisponible (synthese:NZD : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
    "tableau macro : CNY/PMI manufacturier : publication manquée (prévue le 31/10, aucun « réel » reçu)",
    "tableau macro : CNY/PMI services : publication manquée (prévue le 31/10, aucun « réel » reçu)",
    "prompt LLM volumineux : 3 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 33446 à 08:47 UTC, modèle gemini-3.5-flash) — le contexte envoyé au LLM a regrossi"
@@ -9442,6 +9470,6 @@
   "suggestions_connaissances": [],
   "validation": "non_evalue",
   "indisponible": true,
-  "note": "relecture non effectuée (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit) — 20 tentatives en panne (503, 429, délai) déjà faites aujourd'hui : pla)"
+  "note": "relecture non effectuée (critique : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python))"
  }
 }
