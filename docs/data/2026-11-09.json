@@ -4,7 +4,7 @@
   "type_rapport": "hebdomadaire",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-09T10:21:45+00:00",
+  "genere_le": "2026-11-09T11:19:15+00:00",
   "appels_llm": [
    {
     "heure": "09:32",
@@ -161,7 +161,7 @@
    "engrenages_faits": true,
    "reserve_engrenages": 8,
    "refus_reserve_ce_run": 0,
-   "refus_budget_ce_run": 14,
+   "refus_budget_ce_run": 13,
    "budget": {
     "plafond": 60,
     "mode": "complément",
@@ -185,13 +185,13 @@
     },
     "consomme_run": {
      "engrenages": 0,
-     "rapport": 1,
-     "devises": 3,
+     "rapport": 0,
+     "devises": 0,
      "reste": 0
     },
     "total_jour": 8,
     "plafond_run": 45,
-    "recues_run": 4,
+    "recues_run": 0,
     "pannes_jour": 15,
     "pannes_run": 0,
     "plafond_pannes": 20,
@@ -300,7 +300,7 @@
      "epuise_jusqu_a": "2026-11-10T07:59:59+00:00",
      "appels_ce_run": 0,
      "reussites_ce_run": 0,
-     "sauts_ce_run": 18
+     "sauts_ce_run": 13
     },
     "gemini-3.8-flash": {
      "appels_aujourdhui": 0,
@@ -308,19 +308,19 @@
      "epuise_jusqu_a": "2026-11-10T07:59:59+00:00",
      "appels_ce_run": 0,
      "reussites_ce_run": 0,
-     "sauts_ce_run": 18
+     "sauts_ce_run": 13
     },
     "gemini-3.5-flash-lite": {
      "appels_aujourdhui": 7,
      "plafond_jour": 20,
      "epuise_jusqu_a": null,
-     "appels_ce_run": 18,
-     "reussites_ce_run": 4,
+     "appels_ce_run": 13,
+     "reussites_ce_run": 0,
      "sauts_ce_run": 0
     }
    }
   },
-  "resume_quota": "Gemini : 8/60, engrenages : fait — Budget (run complément, lundi, plafond 60) : prévu engrenages 1 analyse (≤ 2 requêtes); rapport du jour 4 analyses (≤ 8 requêtes); devises 3 analyses (≤ 6 requêtes); reste ≤ 44 ; consommé ce run : engrenages 0, rapport du jour 1, devises 3, reste 0 (jour : 8/60) ; échecs ce run : aucun ; tentatives en panne (hors budget) : 0 ce run, 15/20 aujourd'hui ; réponses reçues ce run : 4/45 ; analyses : analyses:AUD-NZD-CNY faite, analyses:JPY-CHF-CAD faite, analyses:USD-EUR-GBP faite, auto_evaluation faite, critique faite, engrenages faite, etat_du_monde à rejouer (503), paires:synthese faite, rapport:analyse à rejouer (429), rapport:long1 à rejouer (503), rapport:redaction faite",
+  "resume_quota": "Gemini : 8/60, engrenages : fait — Budget (run complément, lundi, plafond 60) : prévu engrenages 1 analyse (≤ 2 requêtes); rapport du jour 4 analyses (≤ 8 requêtes); devises 3 analyses (≤ 6 requêtes); reste ≤ 44 ; consommé ce run : engrenages 0, rapport du jour 0, devises 0, reste 0 (jour : 8/60) ; échecs ce run : aucun ; tentatives en panne (hors budget) : 0 ce run, 15/20 aujourd'hui ; réponses reçues ce run : 0/45 ; analyses : analyses:AUD-NZD-CNY faite, analyses:JPY-CHF-CAD faite, analyses:USD-EUR-GBP faite, auto_evaluation faite, critique faite, engrenages faite, etat_du_monde à rejouer (503), paires:synthese faite, rapport:analyse à rejouer (429), rapport:long1 à rejouer (503), rapport:redaction faite",
   "appels_par_modele": {
    "gemini-3.5-flash": {
     "appels": 2,
@@ -393,6 +393,40 @@
       "ouvert_a_l_appel": null,
       "echecs_consecutifs": 0,
       "ignores": 18
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
+   },
+   {
+    "heure": "11:19",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 13,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 13
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 13
      },
      {
       "modele": "gemini-3.5-flash-lite",
@@ -1130,7 +1164,7 @@
     "libelle": "Flash 3.5"
    },
    "version": "quotidienne",
-   "rafraichi_le": "2026-11-09T10:21:45+00:00"
+   "rafraichi_le": "2026-11-09T11:19:15+00:00"
   },
   "classement_devises": [
    {
@@ -1410,7 +1444,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-09T10:21:45+00:00"
+    "genere_le": "2026-11-09T11:19:15+00:00"
    },
    "indice_surprise_30j": {
     "indice": 1.02,
@@ -1670,7 +1704,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-09T10:21:45+00:00"
+    "genere_le": "2026-11-09T11:19:15+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.33,
@@ -1920,7 +1954,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-09T10:21:45+00:00"
+    "genere_le": "2026-11-09T11:19:15+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.48,
@@ -2170,7 +2204,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-09T10:21:45+00:00"
+    "genere_le": "2026-11-09T11:19:15+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.1,
@@ -2430,7 +2464,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-09T10:21:45+00:00"
+    "genere_le": "2026-11-09T11:19:15+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.45,
@@ -2691,7 +2725,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-09T10:21:45+00:00"
+    "genere_le": "2026-11-09T11:19:15+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.56,
@@ -2935,7 +2969,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-09T10:21:45+00:00"
+    "genere_le": "2026-11-09T11:19:15+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.04,
@@ -3179,7 +3213,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-09T10:21:45+00:00"
+    "genere_le": "2026-11-09T11:19:15+00:00"
    },
    "indice_surprise_30j": {
     "indice": -1.62,
@@ -3447,7 +3481,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-09T10:21:45+00:00"
+    "genere_le": "2026-11-09T11:19:15+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.17,
