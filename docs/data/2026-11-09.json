@@ -4,7 +4,7 @@
   "type_rapport": "hebdomadaire",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-09T20:19:17+00:00",
+  "genere_le": "2026-11-09T21:19:11+00:00",
   "appels_llm": [
    {
     "heure": "09:32",
@@ -336,40 +336,6 @@
    }
   },
   "disjoncteur": [
-   {
-    "heure": "09:50",
-    "actif": true,
-    "seuil_echecs": 3,
-    "ouvert": true,
-    "appels_total": 12,
-    "replis_json_modele_suivant": 6,
-    "modeles": [
-     {
-      "modele": "gemini-3.5-flash",
-      "ouvert": true,
-      "cause": "quota journalier épuisé — quota gratuit journalier épuisé pour gemini-3.5-flash (HTTP 429, requêtes/jour)",
-      "ouvert_a_l_appel": 2,
-      "echecs_consecutifs": 1,
-      "ignores": 10
-     },
-     {
-      "modele": "gemini-3.8-flash",
-      "ouvert": true,
-      "cause": "3 échecs consécutifs — 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:",
-      "ouvert_a_l_appel": 5,
-      "echecs_consecutifs": 6,
-      "ignores": 4
-     },
-     {
-      "modele": "gemini-3.5-flash-lite",
-      "ouvert": false,
-      "cause": null,
-      "ouvert_a_l_appel": null,
-      "echecs_consecutifs": 0,
-      "ignores": 0
-     }
-    ]
-   },
    {
     "heure": "10:21",
     "actif": true,
@@ -743,6 +709,40 @@
       "ignores": 0
      }
     ]
+   },
+   {
+    "heure": "21:19",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 13,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 13
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 13
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
    }
   ],
   "notion_url": "https://app.notion.com/p/FX-2026-11-09-hebdomadaire-41365bc64661817caac6fd738dee0223"
@@ -983,8 +983,8 @@
      ],
      "donnees_calculees": [
       {
-       "texte": "USD : 10 ans 4.84 % (-38 pb sur 4 semaines), prime de terme 10 ans 0.91 %, dette / PIB 121.2 % (2026-04)",
-       "source_id": "src_138"
+       "texte": "USD : 10 ans 4.86 % (-38 pb sur 4 semaines), prime de terme 10 ans 0.91 %, dette / PIB 121.2 % (2026-04)",
+       "source_id": "src_187"
       },
       {
        "texte": "EUR : 10 ans 3.29 % (-24 pb sur 4 semaines), dette / PIB 63.9 % (2024)",
@@ -1062,11 +1062,11 @@
      ],
      "donnees_calculees": [
       {
-       "texte": "VIX 28.18 le 2026-11-05 (+63.8 % sur 7 j)",
-       "source_id": "src_010",
+       "texte": "VIX 25.64 le 2026-11-06 (+32.0 % sur 7 j)",
+       "source_id": "src_186",
        "indicateur": "vix",
-       "valeur": 28.18,
-       "date": "2026-11-05"
+       "valeur": 25.64,
+       "date": "2026-11-06"
       },
       {
        "texte": "Indice dollar large (Fed) 121.6656 le 2026-10-30 (+0.28 % sur 7 j)",
@@ -1094,11 +1094,11 @@
      "sources_indisponibles": [],
      "mesure": {
       "libelle": "VIX",
-      "valeur": 28.18,
+      "valeur": 25.64,
       "unite": "pts",
       "seuil_bas": 14,
       "seuil_haut": 25,
-      "date": "2026-11-05",
+      "date": "2026-11-06",
       "source": "FRED (VIXCLS)",
       "si_haut": "Risk off",
       "si_bas": "Risk on",
@@ -1470,7 +1470,7 @@
     "libelle": "Flash 3.5"
    },
    "version": "quotidienne",
-   "rafraichi_le": "2026-11-09T20:19:17+00:00"
+   "rafraichi_le": "2026-11-09T21:19:11+00:00"
   },
   "classement_devises": [
    {
@@ -1750,7 +1750,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-09T20:19:17+00:00"
+    "genere_le": "2026-11-09T21:19:11+00:00"
    },
    "indice_surprise_30j": {
     "indice": 1.02,
@@ -2010,7 +2010,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-09T20:19:17+00:00"
+    "genere_le": "2026-11-09T21:19:11+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.33,
@@ -2260,7 +2260,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-09T20:19:17+00:00"
+    "genere_le": "2026-11-09T21:19:11+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.48,
@@ -2510,7 +2510,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-09T20:19:17+00:00"
+    "genere_le": "2026-11-09T21:19:11+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.1,
@@ -2770,7 +2770,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-09T20:19:17+00:00"
+    "genere_le": "2026-11-09T21:19:11+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.45,
@@ -3031,7 +3031,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-09T20:19:17+00:00"
+    "genere_le": "2026-11-09T21:19:11+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.56,
@@ -3275,7 +3275,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-09T20:19:17+00:00"
+    "genere_le": "2026-11-09T21:19:11+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.04,
@@ -3519,7 +3519,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-09T20:19:17+00:00"
+    "genere_le": "2026-11-09T21:19:11+00:00"
    },
    "indice_surprise_30j": {
     "indice": -1.62,
@@ -3787,7 +3787,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-09T20:19:17+00:00"
+    "genere_le": "2026-11-09T21:19:11+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.17,
@@ -5092,6 +5092,41 @@
    "source": "ForexFactory (registre macro)",
    "detail": "USD — Ventes au détail",
    "date": "2026-10-15",
+   "url": null
+  },
+  {
+   "id": "src_183",
+   "source": "FRED",
+   "detail": "taux_fed (DFF)",
+   "date": "2026-11-06",
+   "url": "https://fred.stlouisfed.org/series/DFF"
+  },
+  {
+   "id": "src_184",
+   "source": "FRED",
+   "detail": "rendement_10y (DGS10)",
+   "date": "2026-11-06",
+   "url": "https://fred.stlouisfed.org/series/DGS10"
+  },
+  {
+   "id": "src_185",
+   "source": "FRED",
+   "detail": "rendement_2y (DGS2)",
+   "date": "2026-11-06",
+   "url": "https://fred.stlouisfed.org/series/DGS2"
+  },
+  {
+   "id": "src_186",
+   "source": "FRED",
+   "detail": "vix (VIXCLS)",
+   "date": "2026-11-06",
+   "url": "https://fred.stlouisfed.org/series/VIXCLS"
+  },
+  {
+   "id": "src_187",
+   "source": "FRED (DGS10)",
+   "detail": "USD — politique fiscale",
+   "date": "2026-11-06",
    "url": null
   }
  ],
@@ -7318,7 +7353,6 @@
   },
   "vix": {
    "dates": [
-    "2025-12-05",
     "2025-12-12",
     "2025-12-19",
     "2025-12-26",
@@ -7447,10 +7481,10 @@
     "2026-11-02",
     "2026-11-03",
     "2026-11-04",
-    "2026-11-05"
+    "2026-11-05",
+    "2026-11-06"
    ],
    "valeurs": [
-    15.41,
     15.74,
     14.91,
     13.6,
@@ -7579,7 +7613,8 @@
     21.15,
     20.83,
     16.61,
-    28.18
+    28.18,
+    25.64
    ],
    "source_canonique": "vix"
   },
