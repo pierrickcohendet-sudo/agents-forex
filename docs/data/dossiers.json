@@ -1,10 +1,8 @@
 {
  "version_schema": 1,
- "genere_le": "2026-11-10T02:59:44+00:00",
+ "genere_le": "2026-11-10T08:35:06+00:00",
  "debut_historique": "2021-09-09",
- "erreurs_collecte": [
-  "EUR_10a (Bundesbank (Allemagne 10 ans)) : Response ended prematurely"
- ],
+ "erreurs_collecte": [],
  "engrenages": {
   "1": {
    "numero": 1,
@@ -25,7 +23,7 @@
     },
     {
      "libelle": "Indice de surprise global (moyenne 9 devises)",
-     "texte": "-0,05",
+     "texte": "-0,07",
      "detail": "9 devises avec un indice",
      "source": "calcul Python (registre macro, 30 j)"
     },
@@ -1346,8 +1344,8 @@
     {
      "id": "surprise_globale",
      "libelle": "Surprise globale (moyenne 9 devises)",
-     "valeur": -0.05,
-     "texte": "−0,05",
+     "valeur": -0.07,
+     "texte": "−0,07",
      "unite": "écarts",
      "date": "2026-11-10",
      "frequence": null,
@@ -1459,7 +1457,7 @@
        ],
        [
         "2026-11-10",
-        -0.05
+        -0.07
        ]
       ],
       "periode": "depuis le début de l'archive quotidienne",
@@ -1915,12 +1913,17 @@
        "raison_percentile": "historique de l'inflation core trop court dans le registre"
       },
       "pente_2_10": {
-       "valeur": null,
-       "raison": "10 ans quotidien et 2 ans nécessaires",
-       "source": null,
-       "percentile_5a": null,
-       "var_1s": null,
-       "var_4s": null
+       "valeur": 33.0,
+       "unite": "pb",
+       "date": "2026-11-09",
+       "source": "calcul : 10 ans − 2 ans",
+       "frequence": "quotidien",
+       "raison": null,
+       "var_1s": -1.0,
+       "var_4s": -11.0,
+       "percentile_5a": 44,
+       "n_5a": 262,
+       "raison_percentile": null
       },
       "ecart_2a_us": {
        "valeur": -151.0,
@@ -7933,7 +7936,7 @@
      "devise": "CNY",
      "cellules": {
       "indice_surprise": {
-       "valeur": 0.17,
+       "valeur": -0.02,
        "raison": null,
        "source": "calcul Python (registre macro, 30 j)",
        "percentile_5a": null,
@@ -7942,18 +7945,18 @@
        "unite": "écarts",
        "date": "2026-11-10",
        "tendance": "hausse",
-       "n": 7,
+       "n": 8,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
       },
       "dispersion": {
-       "valeur": 1.39,
+       "valeur": 1.76,
        "raison": null,
        "source": "calcul Python (écart-type des surprises 30 j)",
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "n": 7,
+       "n": 8,
        "raison_percentile": "historique trop court"
       },
       "publications": {
@@ -7961,10 +7964,10 @@
        "liste": [
         {
          "indicateur": "Balance commerciale",
-         "date": "2026-10-14",
-         "surprise": 3.0,
-         "reel": "906B",
-         "consensus": "790B"
+         "date": "2026-11-10",
+         "surprise": -3.0,
+         "reel": "713B",
+         "consensus": "855B"
         },
         {
          "indicateur": "Ventes au détail",
@@ -8371,7 +8374,7 @@
       },
       {
        "nom": "CNY",
-       "valeur": 0.17
+       "valeur": -0.02
       }
      ],
      "source": "calcul Python (registre macro)",
@@ -8918,7 +8921,7 @@
      "date": "2026-11-10",
      "frequence": null,
      "age_jours": 0,
-     "source": "calcul Python (registre macro, 72 publications avec consensus sur 30 jours)",
+     "source": "calcul Python (registre macro, 73 publications avec consensus sur 30 jours)",
      "raison": null,
      "variation": null,
      "percentile_5a": null,
@@ -9048,12 +9051,17 @@
        "alerte": "dernière année disponible : 2024"
       },
       "taux_10a": {
-       "valeur": null,
-       "raison": "pas de rendement 10 ans gratuit",
-       "source": null,
-       "percentile_5a": null,
-       "var_1s": null,
-       "var_4s": null
+       "valeur": 3.33,
+       "unite": "%",
+       "date": "2026-11-09",
+       "source": "Bundesbank (Allemagne 10 ans)",
+       "frequence": "quotidien",
+       "raison": null,
+       "var_1s": -4.0,
+       "var_4s": -20.0,
+       "percentile_5a": 97,
+       "n_5a": 262,
+       "raison_percentile": null
       },
       "prime_terme": {
        "valeur": null,
@@ -9947,6 +9955,543 @@
         [
          "2026-11-06",
          4.86
+        ]
+       ]
+      },
+      {
+       "nom": "EUR",
+       "points": [
+        [
+         "2025-11-14",
+         2.79
+        ],
+        [
+         "2025-11-21",
+         2.76
+        ],
+        [
+         "2025-11-28",
+         2.77
+        ],
+        [
+         "2025-12-05",
+         2.86
+        ],
+        [
+         "2025-12-12",
+         2.94
+        ],
+        [
+         "2025-12-19",
+         2.98
+        ],
+        [
+         "2025-12-23",
+         2.96
+        ],
+        [
+         "2026-01-02",
+         2.96
+        ],
+        [
+         "2026-01-09",
+         2.92
+        ],
+        [
+         "2026-01-16",
+         2.89
+        ],
+        [
+         "2026-01-23",
+         2.96
+        ],
+        [
+         "2026-01-30",
+         2.92
+        ],
+        [
+         "2026-02-06",
+         2.9
+        ],
+        [
+         "2026-02-13",
+         2.85
+        ],
+        [
+         "2026-02-20",
+         2.81
+        ],
+        [
+         "2026-02-27",
+         2.76
+        ],
+        [
+         "2026-03-06",
+         2.91
+        ],
+        [
+         "2026-03-13",
+         3.01
+        ],
+        [
+         "2026-03-20",
+         3.06
+        ],
+        [
+         "2026-03-27",
+         3.18
+        ],
+        [
+         "2026-04-02",
+         3.1
+        ],
+        [
+         "2026-04-10",
+         3.11
+        ],
+        [
+         "2026-04-17",
+         3.11
+        ],
+        [
+         "2026-04-24",
+         3.11
+        ],
+        [
+         "2026-04-30",
+         3.18
+        ],
+        [
+         "2026-05-08",
+         3.08
+        ],
+        [
+         "2026-05-15",
+         3.19
+        ],
+        [
+         "2026-05-22",
+         3.14
+        ],
+        [
+         "2026-05-29",
+         3.04
+        ],
+        [
+         "2026-06-05",
+         3.11
+        ],
+        [
+         "2026-06-12",
+         3.07
+        ],
+        [
+         "2026-06-19",
+         3.05
+        ],
+        [
+         "2026-06-22",
+         3.05
+        ],
+        [
+         "2026-06-23",
+         3.01
+        ],
+        [
+         "2026-06-24",
+         2.99
+        ],
+        [
+         "2026-06-25",
+         2.95
+        ],
+        [
+         "2026-06-26",
+         2.94
+        ],
+        [
+         "2026-06-29",
+         2.94
+        ],
+        [
+         "2026-06-30",
+         2.93
+        ],
+        [
+         "2026-07-01",
+         2.97
+        ],
+        [
+         "2026-07-02",
+         3.0
+        ],
+        [
+         "2026-07-03",
+         3.02
+        ],
+        [
+         "2026-07-06",
+         3.02
+        ],
+        [
+         "2026-07-07",
+         3.07
+        ],
+        [
+         "2026-07-08",
+         3.16
+        ],
+        [
+         "2026-07-09",
+         3.17
+        ],
+        [
+         "2026-07-10",
+         3.13
+        ],
+        [
+         "2026-07-13",
+         3.14
+        ],
+        [
+         "2026-07-14",
+         3.18
+        ],
+        [
+         "2026-07-15",
+         3.18
+        ],
+        [
+         "2026-07-16",
+         3.2
+        ],
+        [
+         "2026-07-17",
+         3.19
+        ],
+        [
+         "2026-07-20",
+         3.2
+        ],
+        [
+         "2026-07-21",
+         3.21
+        ],
+        [
+         "2026-07-22",
+         3.23
+        ],
+        [
+         "2026-07-23",
+         3.25
+        ],
+        [
+         "2026-07-24",
+         3.24
+        ],
+        [
+         "2026-07-27",
+         3.19
+        ],
+        [
+         "2026-07-28",
+         3.17
+        ],
+        [
+         "2026-07-29",
+         3.18
+        ],
+        [
+         "2026-07-30",
+         3.24
+        ],
+        [
+         "2026-07-31",
+         3.21
+        ],
+        [
+         "2026-08-03",
+         3.21
+        ],
+        [
+         "2026-08-04",
+         3.22
+        ],
+        [
+         "2026-08-05",
+         3.16
+        ],
+        [
+         "2026-08-06",
+         3.17
+        ],
+        [
+         "2026-08-07",
+         3.2
+        ],
+        [
+         "2026-08-10",
+         3.19
+        ],
+        [
+         "2026-08-11",
+         3.26
+        ],
+        [
+         "2026-08-12",
+         3.21
+        ],
+        [
+         "2026-08-13",
+         3.21
+        ],
+        [
+         "2026-08-14",
+         3.22
+        ],
+        [
+         "2026-08-17",
+         3.26
+        ],
+        [
+         "2026-08-18",
+         3.32
+        ],
+        [
+         "2026-08-19",
+         3.33
+        ],
+        [
+         "2026-08-20",
+         3.32
+        ],
+        [
+         "2026-08-21",
+         3.31
+        ],
+        [
+         "2026-08-24",
+         3.3
+        ],
+        [
+         "2026-08-25",
+         3.31
+        ],
+        [
+         "2026-08-26",
+         3.26
+        ],
+        [
+         "2026-08-27",
+         3.22
+        ],
+        [
+         "2026-08-28",
+         3.24
+        ],
+        [
+         "2026-08-31",
+         3.37
+        ],
+        [
+         "2026-09-01",
+         3.32
+        ],
+        [
+         "2026-09-02",
+         3.45
+        ],
+        [
+         "2026-09-03",
+         3.42
+        ],
+        [
+         "2026-09-04",
+         3.4
+        ],
+        [
+         "2026-09-07",
+         3.41
+        ],
+        [
+         "2026-09-08",
+         3.45
+        ],
+        [
+         "2026-09-09",
+         3.45
+        ],
+        [
+         "2026-09-10",
+         3.51
+        ],
+        [
+         "2026-09-11",
+         3.56
+        ],
+        [
+         "2026-09-14",
+         3.59
+        ],
+        [
+         "2026-09-15",
+         3.61
+        ],
+        [
+         "2026-09-16",
+         3.61
+        ],
+        [
+         "2026-09-17",
+         3.58
+        ],
+        [
+         "2026-09-18",
+         3.55
+        ],
+        [
+         "2026-09-21",
+         3.52
+        ],
+        [
+         "2026-09-22",
+         3.5
+        ],
+        [
+         "2026-09-23",
+         3.52
+        ],
+        [
+         "2026-09-24",
+         3.62
+        ],
+        [
+         "2026-09-25",
+         3.63
+        ],
+        [
+         "2026-09-28",
+         3.69
+        ],
+        [
+         "2026-09-29",
+         3.68
+        ],
+        [
+         "2026-09-30",
+         3.64
+        ],
+        [
+         "2026-10-01",
+         3.66
+        ],
+        [
+         "2026-10-02",
+         3.49
+        ],
+        [
+         "2026-10-05",
+         3.51
+        ],
+        [
+         "2026-10-06",
+         3.52
+        ],
+        [
+         "2026-10-07",
+         3.55
+        ],
+        [
+         "2026-10-08",
+         3.57
+        ],
+        [
+         "2026-10-09",
+         3.53
+        ],
+        [
+         "2026-10-12",
+         3.53
+        ],
+        [
+         "2026-10-13",
+         3.49
+        ],
+        [
+         "2026-10-14",
+         3.51
+        ],
+        [
+         "2026-10-15",
+         3.45
+        ],
+        [
+         "2026-10-16",
+         3.48
+        ],
+        [
+         "2026-10-19",
+         3.49
+        ],
+        [
+         "2026-10-20",
+         3.48
+        ],
+        [
+         "2026-10-21",
+         3.47
+        ],
+        [
+         "2026-10-22",
+         3.44
+        ],
+        [
+         "2026-10-23",
+         3.39
+        ],
+        [
+         "2026-10-26",
+         3.43
+        ],
+        [
+         "2026-10-27",
+         3.42
+        ],
+        [
+         "2026-10-28",
+         3.43
+        ],
+        [
+         "2026-10-29",
+         3.42
+        ],
+        [
+         "2026-10-30",
+         3.4
+        ],
+        [
+         "2026-11-02",
+         3.37
+        ],
+        [
+         "2026-11-03",
+         3.38
+        ],
+        [
+         "2026-11-04",
+         3.38
+        ],
+        [
+         "2026-11-05",
+         3.33
+        ],
+        [
+         "2026-11-06",
+         3.29
+        ],
+        [
+         "2026-11-09",
+         3.33
         ]
        ]
       },
@@ -11710,7 +12255,7 @@
      "raison": null
     }
    ],
-   "actualites_maj": "2026-11-10T02:59+00:00",
+   "actualites_maj": "2026-11-10T08:35+00:00",
    "actualites_nb_titres_lus": 31,
    "notes": [
     "Dette et solde publics : FMI (annuel, avec 1 à 3 ans de retard) ; EUR = Allemagne. Pas de série gratuite pour CHF et NZD.",
@@ -12220,23 +12765,113 @@
     {
      "id": "dix_eur",
      "libelle": "10 ans Allemagne",
-     "valeur": null,
-     "texte": null,
-     "unite": null,
-     "date": null,
-     "frequence": null,
-     "age_jours": null,
-     "source": null,
-     "raison": "pas de rendement 10 ans gratuit",
-     "variation": null,
-     "percentile_5a": null,
-     "n_5a": null,
+     "valeur": 3.33,
+     "texte": "3,33 %",
+     "unite": "%",
+     "date": "2026-11-09",
+     "frequence": "quotidien",
+     "age_jours": 1,
+     "source": "Bundesbank (Allemagne 10 ans)",
+     "raison": null,
+     "variation": {
+      "valeur": -20.0,
+      "unite": "pb",
+      "periode": "4 semaines",
+      "texte": "−20 pb sur 4 semaines"
+     },
+     "percentile_5a": 97,
+     "n_5a": 262,
      "percentile_autre": null,
      "raison_percentile": null,
      "courbe": {
-      "points": [],
+      "points": [
+       [
+        "2026-10-12",
+        3.53
+       ],
+       [
+        "2026-10-13",
+        3.49
+       ],
+       [
+        "2026-10-14",
+        3.51
+       ],
+       [
+        "2026-10-15",
+        3.45
+       ],
+       [
+        "2026-10-16",
+        3.48
+       ],
+       [
+        "2026-10-19",
+        3.49
+       ],
+       [
+        "2026-10-20",
+        3.48
+       ],
+       [
+        "2026-10-21",
+        3.47
+       ],
+       [
+        "2026-10-22",
+        3.44
+       ],
+       [
+        "2026-10-23",
+        3.39
+       ],
+       [
+        "2026-10-26",
+        3.43
+       ],
+       [
+        "2026-10-27",
+        3.42
+       ],
+       [
+        "2026-10-28",
+        3.43
+       ],
+       [
+        "2026-10-29",
+        3.42
+       ],
+       [
+        "2026-10-30",
+        3.4
+       ],
+       [
+        "2026-11-02",
+        3.37
+       ],
+       [
+        "2026-11-03",
+        3.38
+       ],
+       [
+        "2026-11-04",
+        3.38
+       ],
+       [
+        "2026-11-05",
+        3.33
+       ],
+       [
+        "2026-11-06",
+        3.29
+       ],
+       [
+        "2026-11-09",
+        3.33
+       ]
+      ],
       "periode": "30 jours",
-      "raison": "pas d'historique pour une mini-courbe"
+      "raison": null
      },
      "lecture": null
     },
@@ -12738,16 +13373,16 @@
      "libelle": "Indice or (proxy)",
      "unite_affichage": "indice",
      "cellule": {
-      "valeur": 2485.82,
+      "valeur": 2527.05,
       "unite": "niveau",
-      "date": "2026-11-06",
+      "date": "2026-11-09",
       "source": "FRED (NASDAQQGLDI) — indice or (proxy)",
       "frequence": "quotidien",
       "raison": null,
-      "var_1s": 4.37,
-      "var_4s": -2.69,
-      "percentile_5a": 7,
-      "n_5a": 261,
+      "var_1s": 4.46,
+      "var_4s": 0.67,
+      "percentile_5a": 15,
+      "n_5a": 262,
       "raison_percentile": null
      }
     },
@@ -12874,7 +13509,7 @@
       "CNY": -0.44,
       "VIX": 0.02,
       "Indice dollar large (Fed)": 0.72,
-      "Indice or (proxy)": -0.24,
+      "Indice or (proxy)": -0.31,
       "Pétrole WTI": -0.1,
       "Pétrole Brent": 0.03,
       "S&P 500": -0.13,
@@ -12891,7 +13526,7 @@
       "CNY": 0.3,
       "VIX": 0.02,
       "Indice dollar large (Fed)": -0.75,
-      "Indice or (proxy)": 0.31,
+      "Indice or (proxy)": 0.38,
       "Pétrole WTI": 0.08,
       "Pétrole Brent": -0.09,
       "S&P 500": 0.05,
@@ -12908,7 +13543,7 @@
       "CNY": 0.33,
       "VIX": -0.04,
       "Indice dollar large (Fed)": -0.76,
-      "Indice or (proxy)": 0.17,
+      "Indice or (proxy)": 0.27,
       "Pétrole WTI": 0.13,
       "Pétrole Brent": -0.01,
       "S&P 500": 0.14,
@@ -12925,7 +13560,7 @@
       "CNY": 0.39,
       "VIX": 0.41,
       "Indice dollar large (Fed)": -0.38,
-      "Indice or (proxy)": -0.18,
+      "Indice or (proxy)": -0.12,
       "Pétrole WTI": -0.13,
       "Pétrole Brent": 0.13,
       "S&P 500": -0.33,
@@ -12942,7 +13577,7 @@
       "CNY": 0.32,
       "VIX": 0.07,
       "Indice dollar large (Fed)": -0.4,
-      "Indice or (proxy)": 0.38,
+      "Indice or (proxy)": 0.33,
       "Pétrole WTI": 0.04,
       "Pétrole Brent": -0.1,
       "S&P 500": -0.02,
@@ -12959,7 +13594,7 @@
       "CNY": 0.2,
       "VIX": -0.02,
       "Indice dollar large (Fed)": -0.4,
-      "Indice or (proxy)": 0.17,
+      "Indice or (proxy)": 0.12,
       "Pétrole WTI": 0.18,
       "Pétrole Brent": -0.15,
       "S&P 500": 0.11,
@@ -12976,7 +13611,7 @@
       "CNY": 0.27,
       "VIX": -0.37,
       "Indice dollar large (Fed)": -0.32,
-      "Indice or (proxy)": 0.16,
+      "Indice or (proxy)": 0.24,
       "Pétrole WTI": 0.0,
       "Pétrole Brent": 0.0,
       "S&P 500": 0.5,
@@ -12993,7 +13628,7 @@
       "CNY": 0.31,
       "VIX": -0.06,
       "Indice dollar large (Fed)": -0.6,
-      "Indice or (proxy)": 0.16,
+      "Indice or (proxy)": 0.3,
       "Pétrole WTI": 0.19,
       "Pétrole Brent": 0.03,
       "S&P 500": 0.17,
@@ -13010,7 +13645,7 @@
       "NZD": 0.31,
       "VIX": 0.32,
       "Indice dollar large (Fed)": -0.32,
-      "Indice or (proxy)": -0.02,
+      "Indice or (proxy)": 0.12,
       "Pétrole WTI": 0.26,
       "Pétrole Brent": -0.02,
       "S&P 500": -0.3,
@@ -13051,15 +13686,15 @@
       "Rendement 10 ans US": 0.22
      },
      "Indice or (proxy)": {
-      "USD": -0.24,
-      "EUR": 0.31,
-      "GBP": 0.17,
-      "JPY": -0.18,
-      "CHF": 0.38,
-      "CAD": 0.17,
-      "AUD": 0.16,
-      "NZD": 0.16,
-      "CNY": -0.02,
+      "USD": -0.31,
+      "EUR": 0.38,
+      "GBP": 0.27,
+      "JPY": -0.12,
+      "CHF": 0.33,
+      "CAD": 0.12,
+      "AUD": 0.24,
+      "NZD": 0.3,
+      "CNY": 0.12,
       "VIX": -0.27,
       "Indice dollar large (Fed)": -0.26,
       "Pétrole WTI": -0.36,
@@ -13148,7 +13783,7 @@
       "CNY": -0.65,
       "VIX": 0.53,
       "Indice dollar large (Fed)": 0.77,
-      "Indice or (proxy)": -0.72,
+      "Indice or (proxy)": -0.62,
       "Pétrole WTI": 0.04,
       "Pétrole Brent": 0.22,
       "S&P 500": -0.47,
@@ -13165,7 +13800,7 @@
       "CNY": 0.67,
       "VIX": -0.35,
       "Indice dollar large (Fed)": -0.71,
-      "Indice or (proxy)": 0.67,
+      "Indice or (proxy)": 0.6,
       "Pétrole WTI": 0.16,
       "Pétrole Brent": -0.13,
       "S&P 500": 0.28,
@@ -13182,7 +13817,7 @@
       "CNY": 0.64,
       "VIX": -0.3,
       "Indice dollar large (Fed)": -0.68,
-      "Indice or (proxy)": 0.55,
+      "Indice or (proxy)": 0.41,
       "Pétrole WTI": 0.07,
       "Pétrole Brent": -0.1,
       "S&P 500": 0.25,
@@ -13199,7 +13834,7 @@
       "CNY": 0.26,
       "VIX": -0.48,
       "Indice dollar large (Fed)": -0.59,
-      "Indice or (proxy)": 0.59,
+      "Indice or (proxy)": 0.51,
       "Pétrole WTI": -0.04,
       "Pétrole Brent": -0.1,
       "S&P 500": 0.5,
@@ -13216,7 +13851,7 @@
       "CNY": 0.54,
       "VIX": -0.34,
       "Indice dollar large (Fed)": -0.65,
-      "Indice or (proxy)": 0.54,
+      "Indice or (proxy)": 0.52,
       "Pétrole WTI": 0.02,
       "Pétrole Brent": -0.21,
       "S&P 500": 0.35,
@@ -13233,7 +13868,7 @@
       "CNY": 0.5,
       "VIX": -0.33,
       "Indice dollar large (Fed)": -0.72,
-      "Indice or (proxy)": 0.51,
+      "Indice or (proxy)": 0.48,
       "Pétrole WTI": 0.19,
       "Pétrole Brent": 0.04,
       "S&P 500": 0.22,
@@ -13250,7 +13885,7 @@
       "CNY": 0.62,
       "VIX": -0.66,
       "Indice dollar large (Fed)": -0.66,
-      "Indice or (proxy)": 0.7,
+      "Indice or (proxy)": 0.61,
       "Pétrole WTI": -0.27,
       "Pétrole Brent": -0.29,
       "S&P 500": 0.55,
@@ -13267,7 +13902,7 @@
       "CNY": 0.66,
       "VIX": -0.54,
       "Indice dollar large (Fed)": -0.64,
-      "Indice or (proxy)": 0.67,
+      "Indice or (proxy)": 0.54,
       "Pétrole WTI": -0.17,
       "Pétrole Brent": -0.32,
       "S&P 500": 0.46,
@@ -13284,7 +13919,7 @@
       "NZD": 0.66,
       "VIX": -0.42,
       "Indice dollar large (Fed)": -0.52,
-      "Indice or (proxy)": 0.58,
+      "Indice or (proxy)": 0.38,
       "Pétrole WTI": -0.12,
       "Pétrole Brent": -0.38,
       "S&P 500": 0.39,
@@ -13325,15 +13960,15 @@
       "Rendement 10 ans US": 0.35
      },
      "Indice or (proxy)": {
-      "USD": -0.72,
-      "EUR": 0.67,
-      "GBP": 0.55,
-      "JPY": 0.59,
-      "CHF": 0.54,
-      "CAD": 0.51,
-      "AUD": 0.7,
-      "NZD": 0.67,
-      "CNY": 0.58,
+      "USD": -0.62,
+      "EUR": 0.6,
+      "GBP": 0.41,
+      "JPY": 0.51,
+      "CHF": 0.52,
+      "CAD": 0.48,
+      "AUD": 0.61,
+      "NZD": 0.54,
+      "CNY": 0.38,
       "VIX": -0.74,
       "Indice dollar large (Fed)": -0.51,
       "Pétrole WTI": -0.24,
@@ -13988,10 +14623,6 @@
        "nom": "Indice or (proxy)",
        "points": [
         [
-         "2025-11-07",
-         3037.34
-        ],
-        [
          "2025-11-14",
          3076.74
         ],
@@ -14510,6 +15141,10 @@
         [
          "2026-11-06",
          2485.82
+        ],
+        [
+         "2026-11-09",
+         2527.05
         ]
        ]
       },
@@ -16457,38 +17092,26 @@
     {
      "id": "indice_or",
      "libelle": "Indice or (proxy)",
-     "valeur": 2485.82,
-     "texte": "2 486",
+     "valeur": 2527.05,
+     "texte": "2 527",
      "unite": "niveau",
-     "date": "2026-11-06",
+     "date": "2026-11-09",
      "frequence": "quotidien",
-     "age_jours": 4,
+     "age_jours": 1,
      "source": "FRED (NASDAQQGLDI) — indice or (proxy)",
      "raison": null,
      "variation": {
-      "valeur": -2.69,
+      "valeur": 0.67,
       "unite": "%",
       "periode": "4 semaines",
-      "texte": "−2,69 % sur 4 semaines"
+      "texte": "+0,67 % sur 4 semaines"
      },
-     "percentile_5a": 7,
-     "n_5a": 261,
+     "percentile_5a": 15,
+     "n_5a": 262,
      "percentile_autre": null,
      "raison_percentile": null,
      "courbe": {
       "points": [
-       [
-        "2026-10-07",
-        2508.06
-       ],
-       [
-        "2026-10-08",
-        2524.7
-       ],
-       [
-        "2026-10-09",
-        2554.51
-       ],
        [
         "2026-10-12",
         2510.16
@@ -16568,6 +17191,10 @@
        [
         "2026-11-06",
         2485.82
+       ],
+       [
+        "2026-11-09",
+        2527.05
        ]
       ],
       "periode": "30 jours",
@@ -17575,21 +18202,21 @@
        0.02,
        -0.13,
        0.03,
-       -0.24,
+       -0.31,
        0.36
       ],
       "precedentes": [
        0.53,
        -0.47,
        0.21,
-       -0.72,
+       -0.62,
        0.49
       ],
       "percentiles": [
        22,
        70,
        55,
-       80,
+       68,
        48
       ],
       "raison": null
@@ -17600,21 +18227,21 @@
        0.02,
        0.05,
        -0.09,
-       0.31,
+       0.38,
        -0.27
       ],
       "precedentes": [
        -0.35,
        0.28,
        -0.13,
-       0.67,
+       0.6,
        -0.4
       ],
       "percentiles": [
        80,
        25,
        44,
-       45,
+       57,
        59
       ],
       "raison": null
@@ -17625,21 +18252,21 @@
        -0.04,
        0.14,
        -0.01,
-       0.17,
+       0.27,
        -0.27
       ],
       "precedentes": [
        -0.3,
        0.25,
        -0.1,
-       0.55,
+       0.41,
        -0.34
       ],
       "percentiles": [
        81,
        28,
        43,
-       21,
+       37,
        53
       ],
       "raison": null
@@ -17650,21 +18277,21 @@
        0.41,
        -0.33,
        0.13,
-       -0.18,
+       -0.12,
        -0.49
       ],
       "precedentes": [
        -0.48,
        0.5,
        -0.1,
-       0.59,
+       0.51,
        -0.44
       ],
       "percentiles": [
        89,
        12,
        84,
-       1,
+       3,
        40
       ],
       "raison": null
@@ -17675,21 +18302,21 @@
        0.07,
        -0.03,
        -0.1,
-       0.38,
+       0.33,
        -0.67
       ],
       "precedentes": [
        -0.34,
        0.35,
        -0.21,
-       0.54,
+       0.52,
        -0.46
       ],
       "percentiles": [
        71,
        29,
        45,
-       54,
+       44,
        3
       ],
       "raison": null
@@ -17700,21 +18327,21 @@
        -0.02,
        0.11,
        -0.15,
-       0.17,
+       0.12,
        -0.37
       ],
       "precedentes": [
        -0.33,
        0.22,
        0.04,
-       0.51,
+       0.48,
        -0.17
       ],
       "percentiles": [
        80,
        22,
        11,
-       23,
+       17,
        18
       ],
       "raison": null
@@ -17725,21 +18352,21 @@
        -0.37,
        0.5,
        0.0,
-       0.16,
+       0.24,
        0.2
       ],
       "precedentes": [
        -0.66,
        0.55,
        -0.29,
-       0.7,
+       0.61,
        -0.49
       ],
       "percentiles": [
        43,
        69,
        37,
-       13,
+       22,
        94
       ],
       "raison": null
@@ -17750,21 +18377,21 @@
        -0.07,
        0.17,
        0.03,
-       0.16,
+       0.3,
        -0.15
       ],
       "precedentes": [
        -0.54,
        0.46,
        -0.32,
-       0.67,
+       0.54,
        -0.44
       ],
       "percentiles": [
        79,
        31,
        52,
-       17,
+       37,
        71
       ],
       "raison": null
@@ -17775,28 +18402,28 @@
        0.32,
        -0.3,
        -0.01,
-       -0.02,
+       0.12,
        -0.03
       ],
       "precedentes": [
        -0.42,
        0.39,
        -0.38,
-       0.58,
+       0.38,
        -0.54
       ],
       "percentiles": [
        97,
        5,
        42,
-       9,
+       22,
        68
       ],
       "raison": null
      }
     ],
     "seances": 30,
-    "derniere_seance": "2026-11-06",
+    "derniere_seance": "2026-11-09",
     "source": "calcul Python : corrélation glissante sur 30 séances communes des rendements quotidiens, 5 ans de prix (FRED : Fed H.10 pour les devises, DTWEXBGS pour l'USD, VIXCLS, SP500, DCOILBRENTEU, NASDAQQGLDI, DGS10)",
     "percentile_5a": true,
     "lecture": "corrélation des rendements quotidiens de la force de chaque devise avec l'actif, sur 30 séances (+1 : bougent ensemble, −1 : en sens inverse). Corrélation n'est pas causalité. Percentile : rang de la corrélation du jour parmi toutes les fenêtres de 30 séances des 5 ans."
@@ -18491,10 +19118,6 @@
        "nom": "Or (proxy)",
        "points": [
         [
-         "2025-11-07",
-         3037.34
-        ],
-        [
          "2025-11-14",
          3076.74
         ],
@@ -19013,6 +19636,10 @@
         [
          "2026-11-06",
          2485.82
+        ],
+        [
+         "2026-11-09",
+         2527.05
         ]
        ]
       }
@@ -20139,38 +20766,26 @@
     {
      "id": "reaction_indice_or",
      "libelle": "Réaction de l'or (proxy)",
-     "valeur": 2485.82,
-     "texte": "2 486",
+     "valeur": 2527.05,
+     "texte": "2 527",
      "unite": "niveau",
-     "date": "2026-11-06",
+     "date": "2026-11-09",
      "frequence": "quotidien",
-     "age_jours": 4,
+     "age_jours": 1,
      "source": "FRED (NASDAQQGLDI) — indice or (proxy)",
      "raison": null,
      "variation": {
-      "valeur": -0.63,
+      "valeur": 1.66,
       "unite": "%",
       "periode": "dernière séance",
-      "texte": "−0,63 % sur la dernière séance (2026-11-05 → 2026-11-06)"
+      "texte": "+1,66 % sur la dernière séance (2026-11-06 → 2026-11-09)"
      },
-     "percentile_5a": 7,
-     "n_5a": 261,
+     "percentile_5a": 15,
+     "n_5a": 262,
      "percentile_autre": null,
      "raison_percentile": null,
      "courbe": {
       "points": [
-       [
-        "2026-10-07",
-        2508.06
-       ],
-       [
-        "2026-10-08",
-        2524.7
-       ],
-       [
-        "2026-10-09",
-        2554.51
-       ],
        [
         "2026-10-12",
         2510.16
@@ -20250,6 +20865,10 @@
        [
         "2026-11-06",
         2485.82
+       ],
+       [
+        "2026-11-09",
+        2527.05
        ]
       ],
       "periode": "30 jours",
@@ -39214,16 +39833,16 @@
      "id": "indice_or",
      "libelle": "Indice or (proxy)",
      "cellule": {
-      "valeur": 2485.82,
+      "valeur": 2527.05,
       "unite": "niveau",
-      "date": "2026-11-06",
+      "date": "2026-11-09",
       "source": "FRED (NASDAQQGLDI) — indice or (proxy)",
       "frequence": "quotidien",
       "raison": null,
-      "var_1s": 4.37,
-      "var_4s": -2.69,
-      "percentile_5a": 7,
-      "n_5a": 261,
+      "var_1s": 4.46,
+      "var_4s": 0.67,
+      "percentile_5a": 15,
+      "n_5a": 262,
       "raison_percentile": null
      }
     }
@@ -39295,9 +39914,9 @@
     },
     {
      "devise": "CNY",
-     "valeur": "906B",
-     "consensus": "790B",
-     "date": "2026-10-14",
+     "valeur": "713B",
+     "consensus": "855B",
+     "date": "2026-11-10",
      "source": "ForexFactory",
      "raison": null
     }
@@ -40605,38 +41224,26 @@
     {
      "id": "indice_or",
      "libelle": "Indice or (proxy)",
-     "valeur": 2485.82,
-     "texte": "2 486",
+     "valeur": 2527.05,
+     "texte": "2 527",
      "unite": "niveau",
-     "date": "2026-11-06",
+     "date": "2026-11-09",
      "frequence": "quotidien",
-     "age_jours": 4,
+     "age_jours": 1,
      "source": "FRED (NASDAQQGLDI) — indice or (proxy)",
      "raison": null,
      "variation": {
-      "valeur": -2.69,
+      "valeur": 0.67,
       "unite": "%",
       "periode": "4 semaines",
-      "texte": "−2,69 % sur 4 semaines"
+      "texte": "+0,67 % sur 4 semaines"
      },
-     "percentile_5a": 7,
-     "n_5a": 261,
+     "percentile_5a": 15,
+     "n_5a": 262,
      "percentile_autre": null,
      "raison_percentile": null,
      "courbe": {
       "points": [
-       [
-        "2026-10-07",
-        2508.06
-       ],
-       [
-        "2026-10-08",
-        2524.7
-       ],
-       [
-        "2026-10-09",
-        2554.51
-       ],
        [
         "2026-10-12",
         2510.16
@@ -40716,6 +41323,10 @@
        [
         "2026-11-06",
         2485.82
+       ],
+       [
+        "2026-11-09",
+        2527.05
        ]
       ],
       "periode": "30 jours",
@@ -41103,7 +41714,7 @@
      "conviction": 1,
      "conviction_niveau": "faible",
      "regle": "dollar : variation hebdomadaire du 2 ans US (≥ +10 pb haussier, ≤ -10 pb baissier)",
-     "raison_couleur": "Gris (Dollar neutre) : dollar : variation hebdomadaire du 2 ans US (≥ +10 pb haussier, ≤ -10 pb baissier). Chiffre du jour : USD taux directeur 3.88% le 2026-11-05 (baisse, précédent 4.00%)"
+     "raison_couleur": "Gris (Dollar neutre) : dollar : variation hebdomadaire du 2 ans US (≥ +10 pb haussier, ≤ -10 pb baissier). Chiffre du jour : USD taux directeur 3.88% le 2026-11-06 (baisse, précédent 4.00%)"
     }
    },
    {
@@ -41155,7 +41766,7 @@
      "conviction": 1,
      "conviction_niveau": "faible",
      "regle": "dollar : indice de surprise 30 j de l'USD (≥ +0,3 haussier, ≤ -0,3 baissier)",
-     "raison_couleur": "Vert (Dollar haussier) : dollar : indice de surprise 30 j de l'USD (≥ +0,3 haussier, ≤ -0,3 baissier). Chiffre du jour : Indice de surprise 30 j : USD +1.02, EUR -0.33, GBP +0.48, JPY -0.10, CHF +0.45, CAD -0.56, AUD +0.04, NZD -1.62, CNY +0.17"
+     "raison_couleur": "Vert (Dollar haussier) : dollar : indice de surprise 30 j de l'USD (≥ +0,3 haussier, ≤ -0,3 baissier). Chiffre du jour : Indice de surprise 30 j : USD +1.02, EUR -0.33, GBP +0.48, JPY -0.10, CHF +0.45, CAD -0.56, AUD +0.04, NZD -1.62, CNY -0.02"
     }
    },
    {
@@ -41800,7 +42411,7 @@
      "a_retenir": "Le taux directeur USD s'établit à 3,88% le 2026-11-05 en baisse par rapport aux 4,00% précédents, tandis que le rendement US à 2 ans recule à 4,51% (−5 pb sur une semaine).",
      "a_retenir_source": "modèle",
      "texte_indisponible": null,
-     "raison_couleur": "Gris (Dollar neutre) : dollar : variation hebdomadaire du 2 ans US (≥ +10 pb haussier, ≤ -10 pb baissier). Chiffre du jour : USD taux directeur 3.88% le 2026-11-05 (baisse, précédent 4.00%)"
+     "raison_couleur": "Gris (Dollar neutre) : dollar : variation hebdomadaire du 2 ans US (≥ +10 pb haussier, ≤ -10 pb baissier). Chiffre du jour : USD taux directeur 3.88% le 2026-11-06 (baisse, précédent 4.00%)"
     },
     {
      "numero": 3,
@@ -41825,7 +42436,7 @@
      "a_retenir": "L'indice de surprise macroéconomique à 30 jours atteint +1,02 pour l'USD, reflétant des publications globalement supérieures aux attentes, à l'inverse de l'EUR à −0,33.",
      "a_retenir_source": "modèle",
      "texte_indisponible": null,
-     "raison_couleur": "Vert (Dollar haussier) : dollar : indice de surprise 30 j de l'USD (≥ +0,3 haussier, ≤ -0,3 baissier). Chiffre du jour : Indice de surprise 30 j : USD +1.02, EUR -0.33, GBP +0.48, JPY -0.10, CHF +0.45, CAD -0.56, AUD +0.04, NZD -1.62, CNY +0.17"
+     "raison_couleur": "Vert (Dollar haussier) : dollar : indice de surprise 30 j de l'USD (≥ +0,3 haussier, ≤ -0,3 baissier). Chiffre du jour : Indice de surprise 30 j : USD +1.02, EUR -0.33, GBP +0.48, JPY -0.10, CHF +0.45, CAD -0.56, AUD +0.04, NZD -1.62, CNY -0.02"
     },
     {
      "numero": 4,
@@ -42886,7 +43497,7 @@
       "valeur": 0,
       "libelle": "Neutre",
       "regles": [],
-      "raison": "indice de surprise macro 30 jours : +0,17, sous les seuils",
+      "raison": "indice de surprise macro 30 jours : −0,02, sous les seuils",
       "bornee": false,
       "etat": "neutre"
      },
@@ -43646,20 +44257,20 @@
       "haut": 5,
       "bas": -5
      },
-     "valeur": -2.689,
-     "date": "2026-11-06",
+     "valeur": 0.6729,
+     "date": "2026-11-09",
      "source": "FRED (NASDAQQGLDI) — indice or (proxy)",
      "percentiles": {
-      "15": -4.5243,
-      "85": 2.7517
+      "15": -4.5217,
+      "85": 2.7508
      },
-     "seuil_haut": 2.7517,
-     "seuil_bas": -4.5243,
+     "seuil_haut": 2.7508,
+     "seuil_bas": -4.5217,
      "direction": null,
      "declencheur": null,
      "neutralise": false,
      "serie_heurtee": null,
-     "n_5a": 339,
+     "n_5a": 340,
      "devises": {
       "USD": {
        "signe_classique": -1,
@@ -43872,7 +44483,7 @@
      "2026-11-10"
     ],
     "CNY": [
-     0.17,
+     -0.02,
      "calcul Python (registre macro, 30 j)",
      "2026-11-10"
     ]
@@ -44934,20 +45545,20 @@
     "libelle": "indice or (proxy), variation sur 4 semaines",
     "effet_haut": "devises confirmées : aucune",
     "effet_bas": null,
-    "valeur": -2.689,
-    "texte_valeur": "−2,69 %",
+    "valeur": 0.6729,
+    "texte_valeur": "+0,67 %",
     "unite": "%",
-    "date": "2026-11-06",
+    "date": "2026-11-09",
     "source": "FRED (NASDAQQGLDI) — indice or (proxy)",
-    "seuil_bas": -4.5243,
-    "seuil_haut": 2.7517,
+    "seuil_bas": -4.5217,
+    "seuil_haut": 2.7508,
     "declencheur": null,
     "neutralise": null,
     "etat": "non",
-    "distance": 1.8353,
-    "distance_pct": 25.2,
-    "cote": "bas",
-    "distance_texte": "1,84 %"
+    "distance": 2.0779,
+    "distance_pct": 28.6,
+    "cote": "haut",
+    "distance_texte": "2,08 %"
    },
    {
     "id": "cot_percentile_52s-CAD",
@@ -44968,26 +45579,6 @@
     "distance_pct": 28.8,
     "cote": "haut",
     "distance_texte": "23 pts"
-   },
-   {
-    "id": "surprise_30j-CNY",
-    "engrenage": 3,
-    "devise": "CNY",
-    "libelle": "indice de surprise macro 30 jours — CNY",
-    "effet_haut": "CNY +1 (règle 3)",
-    "effet_bas": "CNY −1 (règle 3)",
-    "valeur": 0.17,
-    "texte_valeur": "+0,17",
-    "unite": "écarts",
-    "date": "2026-11-10",
-    "source": "calcul Python (registre macro, 30 j)",
-    "seuil_bas": -0.5,
-    "seuil_haut": 0.5,
-    "etat": "non",
-    "distance": 0.33,
-    "distance_pct": 33.0,
-    "cote": "haut",
-    "distance_texte": "0,33"
    },
    {
     "id": "thermometre-6",
@@ -45089,6 +45680,26 @@
     "distance_pct": 46.0,
     "cote": "haut",
     "distance_texte": "0,46"
+   },
+   {
+    "id": "surprise_30j-CNY",
+    "engrenage": 3,
+    "devise": "CNY",
+    "libelle": "indice de surprise macro 30 jours — CNY",
+    "effet_haut": "CNY +1 (règle 3)",
+    "effet_bas": "CNY −1 (règle 3)",
+    "valeur": -0.02,
+    "texte_valeur": "−0,02",
+    "unite": "écarts",
+    "date": "2026-11-10",
+    "source": "calcul Python (registre macro, 30 j)",
+    "seuil_bas": -0.5,
+    "seuil_haut": 0.5,
+    "etat": "non",
+    "distance": 0.48,
+    "distance_pct": 48.0,
+    "cote": "bas",
+    "distance_texte": "0,48"
    },
    {
     "id": "couverture-dollar_large",
@@ -45718,7 +46329,7 @@
     "precedent": "ForexFactory, page « mois » (extraction de page, déjà lue pour le tableau macro)",
     "consensus": "ForexFactory, page « mois » (extraction de page, déjà lue pour le tableau macro)"
    },
-   "verifie_le": "2026-11-09T19:45",
+   "verifie_le": "2026-11-10T08:16",
    "engrenage": 3,
    "simulateur": "cpi_core_us",
    "confirme_par": [
@@ -45845,8 +46456,8 @@
       },
       {
        "date": "2026-11-10",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "dn",
+       "libelle": "Dollar haussier · Risk off"
       }
      ]
     },
@@ -45926,8 +46537,8 @@
       },
       {
        "date": "2026-11-10",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "nd",
+       "libelle": "Dollar neutre"
       }
      ]
     },
@@ -46007,8 +46618,8 @@
       },
       {
        "date": "2026-11-10",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "up",
+       "libelle": "Dollar haussier"
       }
      ]
     },
@@ -46088,8 +46699,8 @@
       },
       {
        "date": "2026-11-10",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "nd",
+       "libelle": "Dollar neutre"
       }
      ]
     },
@@ -46169,8 +46780,8 @@
       },
       {
        "date": "2026-11-10",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "dn",
+       "libelle": "Dollar neutre · Risk off"
       }
      ]
     },
@@ -46250,8 +46861,8 @@
       },
       {
        "date": "2026-11-10",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "up",
+       "libelle": "Dollar neutre · Risk on"
       }
      ]
     },
@@ -46331,8 +46942,8 @@
       },
       {
        "date": "2026-11-10",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "nd",
+       "libelle": "Dollar neutre · Risque neutre"
       }
      ]
     },
@@ -46412,8 +47023,8 @@
       },
       {
        "date": "2026-11-10",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "nd",
+       "libelle": "Dollar neutre"
       }
      ]
     }
@@ -47827,15 +48438,6 @@
       "neutralise": null
      },
      {
-      "libelle": "indice de surprise macro 30 jours — CNY",
-      "etat": "non",
-      "distance": "0,33",
-      "valeur": "+0,17",
-      "date": "2026-11-10",
-      "source": "calcul Python (registre macro, 30 j)",
-      "neutralise": null
-     },
-     {
       "libelle": "indice de surprise macro 30 jours — JPY",
       "etat": "non",
       "distance": "0,40",
@@ -47849,6 +48451,15 @@
       "etat": "non",
       "distance": "0,46",
       "valeur": "+0,04",
+      "date": "2026-11-10",
+      "source": "calcul Python (registre macro, 30 j)",
+      "neutralise": null
+     },
+     {
+      "libelle": "indice de surprise macro 30 jours — CNY",
+      "etat": "non",
+      "distance": "0,48",
+      "valeur": "−0,02",
       "date": "2026-11-10",
       "source": "calcul Python (registre macro, 30 j)",
       "neutralise": null
@@ -48014,13 +48625,13 @@
      },
      {
       "libelle": "10 ans Allemagne",
-      "texte": "n/d",
-      "date": null,
-      "source": null,
-      "raison": "pas de rendement 10 ans gratuit",
-      "variation": null,
-      "percentile_5a": null,
-      "rang": "rang 5 ans n/d : pas d’historique de 5 ans"
+      "texte": "3,33 %",
+      "date": "2026-11-09",
+      "source": "Bundesbank (Allemagne 10 ans)",
+      "raison": null,
+      "variation": "−20 pb sur 4 semaines",
+      "percentile_5a": 97,
+      "rang": "97e percentile sur 5 ans"
      }
     ],
     "courbe": {
@@ -51033,9 +51644,9 @@
      {
       "libelle": "indice or (proxy), variation sur 4 semaines",
       "etat": "non",
-      "distance": "1,84 %",
-      "valeur": "−2,69 %",
-      "date": "2026-11-06",
+      "distance": "2,08 %",
+      "valeur": "+0,67 %",
+      "date": "2026-11-09",
       "source": "FRED (NASDAQQGLDI) — indice or (proxy)",
       "neutralise": null
      },
@@ -51224,7 +51835,7 @@
       "engrenage": 6,
       "libelle": "indice or (proxy), variation sur 4 semaines ≥ +2,75 %",
       "description": "Engrenage 6, règle par devise confirmée sur 5 ans pour : aucune devise",
-      "valeur_actuelle": -2.689,
+      "valeur_actuelle": 0.6729,
       "unite": "%",
       "bilans": [
        {
@@ -51299,7 +51910,7 @@
       "engrenage": 6,
       "libelle": "indice or (proxy), variation sur 4 semaines ≤ −4,52 %",
       "description": "Engrenage 6, règle par devise confirmée sur 5 ans pour : aucune devise",
-      "valeur_actuelle": -2.689,
+      "valeur_actuelle": 0.6729,
       "unite": "%",
       "bilans": [
        {
