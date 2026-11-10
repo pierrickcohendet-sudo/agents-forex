@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-10T08:35:06+00:00",
+  "genere_le": "2026-11-10T09:20:25+00:00",
   "appels_llm": [
    {
     "heure": "02:58",
@@ -173,16 +173,16 @@
     "plafond": 60,
     "mode": "complément",
     "lundi": false,
-    "max_appels_par_analyse": 2,
+    "max_appels_par_analyse": 1,
     "prevu_analyses": {
      "engrenages": 1,
      "rapport": 2,
      "devises": 3
     },
     "prevu_appels_max": {
-     "engrenages": 2,
-     "rapport": 4,
-     "devises": 6
+     "engrenages": 1,
+     "rapport": 2,
+     "devises": 3
     },
     "consomme_jour": {
      "engrenages": 0,
@@ -192,26 +192,23 @@
     },
     "consomme_run": {
      "engrenages": 0,
-     "rapport": 1,
+     "rapport": 0,
      "devises": 0,
-     "reste": 6
+     "reste": 0
     },
     "total_jour": 7,
     "plafond_run": 45,
-    "recues_run": 7,
+    "recues_run": 0,
     "pannes_jour": 15,
-    "pannes_run": 15,
+    "pannes_run": 0,
     "plafond_pannes": 20,
-    "mode_panne": false,
+    "mode_panne": true,
     "pannes_avant_correctif": 0,
     "echecs_jour": {
      "503": 14,
      "delai": 1
     },
-    "echecs_run": {
-     "503": 14,
-     "delai": 1
-    },
+    "echecs_run": {},
     "abandonnees": [],
     "analyses": {
      "critique": {
@@ -324,29 +321,29 @@
      "appels_aujourdhui": 6,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-11-10T07:59:59+00:00",
-     "appels_ce_run": 9,
-     "reussites_ce_run": 6,
+     "appels_ce_run": 0,
+     "reussites_ce_run": 0,
      "sauts_ce_run": 0
     },
     "gemini-3.8-flash": {
      "appels_aujourdhui": 0,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-11-10T07:59:59+00:00",
-     "appels_ce_run": 6,
+     "appels_ce_run": 0,
      "reussites_ce_run": 0,
-     "sauts_ce_run": 1
+     "sauts_ce_run": 0
     },
     "gemini-3.5-flash-lite": {
      "appels_aujourdhui": 1,
      "plafond_jour": 20,
      "epuise_jusqu_a": null,
-     "appels_ce_run": 4,
-     "reussites_ce_run": 1,
+     "appels_ce_run": 0,
+     "reussites_ce_run": 0,
      "sauts_ce_run": 0
     }
    }
   },
-  "resume_quota": "Gemini : 7/60, engrenages : fait — Budget (run complément, plafond 60) : prévu engrenages 1 analyse (≤ 2 requêtes); rapport du jour 2 analyses (≤ 4 requêtes); devises 3 analyses (≤ 6 requêtes); reste ≤ 48 ; consommé ce run : engrenages 0, rapport du jour 1, devises 0, reste 6 (jour : 7/60) ; échecs ce run : 503 × 14, delai × 1 ; tentatives en panne (hors budget) : 15 ce run, 15/20 aujourd'hui ; réponses reçues ce run : 7/45 ; analyses : critique faite, etat_du_monde à rejouer (503), paires:synthese faite, rapport:analyse à rejouer (503), rapport:redaction faite, synthese:AUD à rejouer (503), synthese:CAD à rejouer (503), synthese:CHF à rejouer (503), synthese:CNY à rejouer (503), synthese:EUR faite, synthese:GBP faite, synthese:JPY faite, synthese:NZD à rejouer (503), synthese:USD faite",
+  "resume_quota": "Gemini : 7/60, engrenages : fait — Budget (run complément, plafond 60) : prévu engrenages 1 analyse (≤ 1 requêtes); rapport du jour 2 analyses (≤ 2 requêtes); devises 3 analyses (≤ 3 requêtes); reste ≤ 54 ; consommé ce run : engrenages 0, rapport du jour 0, devises 0, reste 0 (jour : 7/60) ; échecs ce run : aucun ; tentatives en panne (hors budget) : 0 ce run, 15/20 aujourd'hui ; réponses reçues ce run : 0/45 ; MODE PANNE : priorités seulement, 1 essai chacune, sans repli ; analyses : critique faite, etat_du_monde à rejouer (503), paires:synthese faite, rapport:analyse à rejouer (503), rapport:redaction faite, synthese:AUD à rejouer (503), synthese:CAD à rejouer (503), synthese:CHF à rejouer (503), synthese:CNY à rejouer (503), synthese:EUR faite, synthese:GBP faite, synthese:JPY faite, synthese:NZD à rejouer (503), synthese:USD faite",
   "appels_par_modele": {
    "gemini-3.5-flash-lite": {
     "appels": 5,
@@ -419,6 +416,40 @@
       "ouvert_a_l_appel": 10,
       "echecs_consecutifs": 3,
       "ignores": 1
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
+   },
+   {
+    "heure": "09:20",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 0,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
      },
      {
       "modele": "gemini-3.5-flash-lite",
@@ -1135,7 +1166,7 @@
     "libelle": "Flash-Lite 3.5"
    },
    "version": "quotidienne",
-   "rafraichi_le": "2026-11-10T08:20:54+00:00",
+   "rafraichi_le": "2026-11-10T09:19:05+00:00",
    "titre_theme_impose": "Signaux mixtes"
   },
   "classement_devises": [
@@ -3217,9 +3248,9 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "synthese:CHF : 2 appels déjà faits pendant ce run (repli Python)",
-    "tentatives": 0,
-    "genere_le": "2026-11-10T08:26:15+00:00"
+    "raison": "synthese:CHF : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python)",
+    "tentatives": 1,
+    "genere_le": "2026-11-10T09:19:05+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.45,
@@ -3477,9 +3508,9 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "synthese:CAD : 2 appels déjà faits pendant ce run (repli Python)",
-    "tentatives": 0,
-    "genere_le": "2026-11-10T08:27:30+00:00"
+    "raison": "synthese:CAD : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python)",
+    "tentatives": 1,
+    "genere_le": "2026-11-10T09:19:25+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.56,
@@ -3726,9 +3757,9 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "synthese:AUD : 2 appels déjà faits pendant ce run (repli Python)",
-    "tentatives": 0,
-    "genere_le": "2026-11-10T08:28:51+00:00"
+    "raison": "synthese:AUD : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python)",
+    "tentatives": 1,
+    "genere_le": "2026-11-10T09:19:45+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.04,
@@ -3969,9 +4000,9 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "synthese:NZD : 2 appels déjà faits pendant ce run (repli Python)",
-    "tentatives": 0,
-    "genere_le": "2026-11-10T08:34:14+00:00"
+    "raison": "synthese:NZD : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python)",
+    "tentatives": 1,
+    "genere_le": "2026-11-10T09:20:05+00:00"
    },
    "indice_surprise_30j": {
     "indice": -1.62,
@@ -4236,9 +4267,9 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "synthese:CNY : 2 appels déjà faits pendant ce run (repli Python)",
-    "tentatives": 0,
-    "genere_le": "2026-11-10T08:35:06+00:00"
+    "raison": "synthese:CNY : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python)",
+    "tentatives": 1,
+    "genere_le": "2026-11-10T09:20:25+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.02,
@@ -9108,11 +9139,11 @@
   "conforme": false,
   "nb_anomalies": 11,
   "anomalies": [
-   "CHF : synthèse approfondie indisponible (synthese:CHF : 2 appels déjà faits pendant ce run (repli Python))",
-   "CAD : synthèse approfondie indisponible (synthese:CAD : 2 appels déjà faits pendant ce run (repli Python))",
-   "AUD : synthèse approfondie indisponible (synthese:AUD : 2 appels déjà faits pendant ce run (repli Python))",
-   "NZD : synthèse approfondie indisponible (synthese:NZD : 2 appels déjà faits pendant ce run (repli Python))",
-   "CNY : synthèse approfondie indisponible (synthese:CNY : 2 appels déjà faits pendant ce run (repli Python))",
+   "CHF : synthèse approfondie indisponible (synthese:CHF : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
+   "CAD : synthèse approfondie indisponible (synthese:CAD : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
+   "AUD : synthèse approfondie indisponible (synthese:AUD : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
+   "NZD : synthèse approfondie indisponible (synthese:NZD : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
+   "CNY : synthèse approfondie indisponible (synthese:CNY : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
    "8 engrenages : 2 mots « record » / « s'envole » remplacés : non justifiés par les percentiles ou les variations",
    "état du monde absent de la synthèse globale",
    "tableau macro : CNY/PMI manufacturier : publication manquée (prévue le 31/10, aucun « réel » reçu)",
@@ -9122,22 +9153,11 @@
   ]
  },
  "critique": {
-  "incoherences": [
-   "Synthèse globale : le champ « etat_du_monde » est explicitement nul (null), ce qui constitue une anomalie de complétude non triviale relevée par le contrôle qualité.",
-   "Synthèses approfondies manquantes : les synthèses pour le CHF, le CAD, l'AUD, le NZD et le CNY sont indisponibles suite à des limites d'appels (repli Python), ce qui altère la fiabilité et la complétude du rapport."
-  ],
+  "incoherences": [],
   "affirmations_non_sourcees": [],
-  "suggestions_connaissances": [
-   {
-    "theme": "Gestion des limites d'appels pour les synthèses approfondies par devise",
-    "suggestion": "En cas d'atteinte de la limite d'appels LLM lors de la génération des synthèses approfondies par devise, le système doit appliquer un modèle de secours standardisé ou reporter les données de profil pour éviter les statuts d'indisponibilité en cascade.",
-    "fichier_cible": "cas_particuliers.md"
-   }
-  ],
-  "validation": "a_revoir",
-  "redige_par": {
-   "modele": "gemini-3.5-flash-lite",
-   "libelle": "Flash-Lite 3.5"
-  }
+  "suggestions_connaissances": [],
+  "validation": "non_evalue",
+  "indisponible": true,
+  "note": "relecture non effectuée (critique : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python))"
  }
 }
