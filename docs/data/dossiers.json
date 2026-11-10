@@ -1,6 +1,6 @@
 {
  "version_schema": 1,
- "genere_le": "2026-11-10T13:19:19+00:00",
+ "genere_le": "2026-11-10T14:19:24+00:00",
  "debut_historique": "2021-09-09",
  "erreurs_collecte": [],
  "engrenages": {
@@ -12255,7 +12255,7 @@
      "raison": null
     }
    ],
-   "actualites_maj": "2026-11-10T13:19+00:00",
+   "actualites_maj": "2026-11-10T14:19+00:00",
    "actualites_nb_titres_lus": 31,
    "notes": [
     "Dette et solde publics : FMI (annuel, avec 1 à 3 ans de retard) ; EUR = Allemagne. Pas de série gratuite pour CHF et NZD.",
@@ -46306,19 +46306,19 @@
    }
   ],
   "rendez_vous": {
-   "iso_utc": "2026-11-10T13:30+00:00",
-   "date_paris": "2026-11-10",
-   "heure_paris": "14:30",
+   "iso_utc": "2026-11-12T07:00+00:00",
+   "date_paris": "2026-11-12",
+   "heure_paris": "08:00",
    "heure_connue": true,
-   "devise": "USD",
-   "evenement": "IPC sous-jacent M/M",
-   "evenement_en": "Core CPI m/m",
+   "devise": "GBP",
+   "evenement": "PIB M/M",
+   "evenement_en": "GDP m/m",
    "traduit": true,
    "type": "Chiffre",
    "impact": "fort",
    "points": "●●●",
-   "precedent": "0.3%",
-   "consensus": "0.2%",
+   "precedent": "0.1%",
+   "consensus": "0.0%",
    "publie": null,
    "source": "ForexFactory, page « mois » (extraction de page, déjà lue pour le tableau macro)",
    "sources": [
@@ -46329,37 +46329,34 @@
     "precedent": "ForexFactory, page « mois » (extraction de page, déjà lue pour le tableau macro)",
     "consensus": "ForexFactory, page « mois » (extraction de page, déjà lue pour le tableau macro)"
    },
-   "verifie_le": "2026-11-10T08:16",
+   "verifie_le": "2026-11-10T14:16",
    "engrenage": 3,
-   "simulateur": "cpi_core_us",
-   "confirme_par": [
-    "FRED releases/dates : Consumer Price Index"
-   ],
+   "simulateur": null,
    "reaction": {
-    "mesure": "force de l'USD (panier), séance suivante, en %",
+    "mesure": "force de la devise lue sur GBP/USD, séance suivante, en %",
     "cote": {
      "au_dessus": {
-      "n": 39,
-      "mediane": 0.041,
-      "wilson": 43.4,
-      "faible": false
+      "n": 1,
+      "mediane": 0.405,
+      "wilson": 27.0,
+      "faible": true
      },
      "au_dessous": {
-      "n": 41,
-      "mediane": -0.184,
-      "wilson": 58.1,
-      "faible": false
+      "n": 0,
+      "mediane": null,
+      "wilson": null,
+      "faible": true
      }
     },
-    "source": "simulateur d'impact : publications ALFRED sur 15-20 ans et cours sur 5 ans",
-    "lien": "#scenarios/i=cpi_core_us",
-    "lecture": "au-dessus / au-dessous de la publication précédente (variation de la publication)"
+    "source": "archive des publications du site (depuis le 24/10/2026) et cours sur 5 ans",
+    "lien": "#scenarios",
+    "lecture": "réel au-dessus / au-dessous du consensus (ou du précédent sans consensus)"
    },
    "statuts": {
     "consensus": "estimation",
     "precedent": "confirmé"
    },
-   "pourquoi": "Pourquoi c'est important : USD et par ricochet EUR, GBP, JPY, CHF · engrenage 3 (données économiques) · scénario « Inflation persistante, banques centrales restrictives »."
+   "pourquoi": "Pourquoi c'est important : GBP · engrenage 3 (données économiques)."
   },
   "fil": {
    "jours": [
