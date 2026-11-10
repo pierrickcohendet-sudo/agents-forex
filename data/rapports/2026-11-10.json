@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-10T20:19:16+00:00",
+  "genere_le": "2026-11-10T21:19:18+00:00",
   "appels_llm": [
    {
     "heure": "02:58",
@@ -359,40 +359,6 @@
    }
   },
   "disjoncteur": [
-   {
-    "heure": "09:20",
-    "actif": true,
-    "seuil_echecs": 3,
-    "ouvert": false,
-    "appels_total": 0,
-    "replis_json_modele_suivant": 0,
-    "modeles": [
-     {
-      "modele": "gemini-3.5-flash",
-      "ouvert": false,
-      "cause": null,
-      "ouvert_a_l_appel": null,
-      "echecs_consecutifs": 0,
-      "ignores": 0
-     },
-     {
-      "modele": "gemini-3.8-flash",
-      "ouvert": false,
-      "cause": null,
-      "ouvert_a_l_appel": null,
-      "echecs_consecutifs": 0,
-      "ignores": 0
-     },
-     {
-      "modele": "gemini-3.5-flash-lite",
-      "ouvert": false,
-      "cause": null,
-      "ouvert_a_l_appel": null,
-      "echecs_consecutifs": 0,
-      "ignores": 0
-     }
-    ]
-   },
    {
     "heure": "10:20",
     "actif": true,
@@ -766,6 +732,40 @@
       "ignores": 0
      }
     ]
+   },
+   {
+    "heure": "21:19",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 0,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
    }
   ]
  },
@@ -1006,8 +1006,8 @@
      ],
      "donnees_calculees": [
       {
-       "texte": "USD : 10 ans 4.86 % (-38 pb sur 4 semaines), prime de terme 10 ans 0.91 %, dette / PIB 121.2 % (2026-04)",
-       "source_id": "src_148"
+       "texte": "USD : 10 ans 4.88 % (-36 pb sur 4 semaines), prime de terme 10 ans 0.91 %, dette / PIB 121.2 % (2026-04)",
+       "source_id": "src_280"
       },
       {
        "texte": "EUR : 10 ans 3.33 % (-20 pb sur 4 semaines), dette / PIB 63.9 % (2024)",
@@ -1475,7 +1475,7 @@
     "libelle": "Flash-Lite 3.5"
    },
    "version": "quotidienne",
-   "rafraichi_le": "2026-11-10T20:19:16+00:00",
+   "rafraichi_le": "2026-11-10T21:19:18+00:00",
    "titre_theme_impose": "Signaux mixtes"
   },
   "classement_devises": [
@@ -6542,6 +6542,34 @@
    "detail": "sp500 (SP500)",
    "date": "2026-11-09",
    "url": "https://fred.stlouisfed.org/series/SP500"
+  },
+  {
+   "id": "src_277",
+   "source": "FRED",
+   "detail": "taux_fed (DFF)",
+   "date": "2026-11-09",
+   "url": "https://fred.stlouisfed.org/series/DFF"
+  },
+  {
+   "id": "src_278",
+   "source": "FRED",
+   "detail": "rendement_10y (DGS10)",
+   "date": "2026-11-09",
+   "url": "https://fred.stlouisfed.org/series/DGS10"
+  },
+  {
+   "id": "src_279",
+   "source": "FRED",
+   "detail": "rendement_2y (DGS2)",
+   "date": "2026-11-09",
+   "url": "https://fred.stlouisfed.org/series/DGS2"
+  },
+  {
+   "id": "src_280",
+   "source": "FRED (DGS10)",
+   "detail": "USD — politique fiscale",
+   "date": "2026-11-09",
+   "url": null
   }
  ],
  "donnees_non_rafraichies": [],
