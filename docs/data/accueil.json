@@ -1,20 +1,20 @@
 {
- "genere_le": "2026-11-09T21:19:17+00:00",
- "date_rapport": "2026-11-09",
+ "genere_le": "2026-11-10T02:59:54+00:00",
+ "date_rapport": "2026-11-10",
  "theme": {
-  "titre": "Aversion au risque, dollar soutenu",
-  "titre_impose": false,
+  "titre": "Signaux mixtes",
+  "titre_impose": true,
   "direction": {
    "libelle": "Dollar haussier · Risk off",
    "classe": "dn"
   },
   "conviction": "moyen",
-  "alignes": 3,
+  "alignes": 1,
   "evaluables": 7,
-  "compte_matrice": "26 actives, 5 n/d, 22 sans règle, 2 neutralisées",
-  "explication": "Engrenages orientés : 2. Monétaire (Dollar baissier) ; 3. Données (Dollar haussier) ; 5. Marchés (Dollar neutre · Risk off) ; 6. Géopolitique (Dollar haussier · Risk off) ; 7. Flux (Dollar haussier · Risk off). Les autres restent dans leur couloir neutre.",
-  "texte": "Les signaux sont mixtes et aucun thème dominant fort ne ressort aujourd'hui. Les directions des engrenages 2 à 8 affichent 2 signaux haussiers, 1 baissier et 4 neutres pour le dollar, dans un contexte risk-off.",
-  "texte_source": "modèle"
+  "compte_matrice": "21 actives, 5 n/d, 19 sans règle, 2 neutralisées",
+  "explication": "Engrenages orientés : 3. Données (Dollar haussier) ; 5. Marchés (Dollar neutre · Risk off) ; 6. Géopolitique (Dollar neutre · Risk on). Les autres restent dans leur couloir neutre.",
+  "texte": "Les engrenages ne s'accordent pas : 1 sur 7 évaluables vont dans le sens du thème calculé (Dollar haussier · Risk off), sous le seuil de 3 pour parler d'un thème établi.",
+  "texte_source": "calcul Python"
  },
  "au_bord": [
   {
@@ -26,8 +26,20 @@
    "distance_texte": "0,02",
    "phrase": "indice de surprise macro 30 jours — GBP à +0,48 : 0,02 du seuil haut (+0,50), soit 2,0 % du couloir neutre",
    "etat": "proche",
-   "date": "2026-11-09",
+   "date": "2026-11-10",
    "source": "calcul Python (registre macro, 30 j)"
+  },
+  {
+   "id": "ecart_mm200-AUD",
+   "engrenage": 7,
+   "devise": "AUD",
+   "libelle": "écart du cours à sa moyenne mobile 200 jours (tendance) — AUD",
+   "texte_valeur": "−1,83 %",
+   "distance_texte": "0,17 %",
+   "phrase": "écart du cours à sa moyenne mobile 200 jours (tendance) — AUD à −1,83 % : 0,17 % du seuil bas (−2,00 %), soit 4,2 % du couloir neutre",
+   "etat": "proche",
+   "date": "2026-11-10",
+   "source": "calcul Python (écart à la MM200) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période"
   },
   {
    "id": "surprise_30j-CHF",
@@ -38,23 +50,11 @@
    "distance_texte": "0,05",
    "phrase": "indice de surprise macro 30 jours — CHF à +0,45 : 0,05 du seuil haut (+0,50), soit 5,0 % du couloir neutre",
    "etat": "proche",
-   "date": "2026-11-09",
+   "date": "2026-11-10",
    "source": "calcul Python (registre macro, 30 j)"
-  },
-  {
-   "id": "ecart_mm200-CNY",
-   "engrenage": 7,
-   "devise": "CNY",
-   "libelle": "écart du cours à sa moyenne mobile 200 jours (tendance) — CNY",
-   "texte_valeur": "+1,73 %",
-   "distance_texte": "0,27 %",
-   "phrase": "écart du cours à sa moyenne mobile 200 jours (tendance) — CNY à +1,73 % : 0,27 % du seuil haut (+2,00 %), soit 6,8 % du couloir neutre",
-   "etat": "proche",
-   "date": "2026-11-09",
-   "source": "calcul Python (écart à la MM200) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période"
   }
  ],
- "franchis": 25,
+ "franchis": 21,
  "evenements": [
   {
    "iso_utc": "2026-11-10T08:30+00:00",
@@ -412,7 +412,7 @@
   "sources": 16,
   "vertes": 16,
   "alertes": [],
-  "calcule_le": "2026-11-09T21:19:17+00:00"
+  "calcule_le": "2026-11-10T02:59:54+00:00"
  },
  "note": "Tableau de bord du jour : faits datés et lectures historiques, jamais un ordre d'achat ou de vente."
 }
