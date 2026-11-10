@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-10T14:19:23+00:00",
+  "genere_le": "2026-11-10T15:19:06+00:00",
   "appels_llm": [
    {
     "heure": "02:58",
@@ -630,6 +630,40 @@
       "ignores": 0
      }
     ]
+   },
+   {
+    "heure": "15:19",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 0,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
    }
   ]
  },
@@ -647,11 +681,11 @@
      "donnees_insuffisantes": false,
      "direction": {
       "dollar": "haussier",
-      "risque": "risk_off",
+      "risque": "neutre",
       "calculee": {
        "dollar": "haussier",
-       "risque": "risk_off",
-       "regle": "dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (2 accords, 0 désaccord)"
+       "risque": "neutre",
+       "regle": "dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (1 accord, 0 désaccord)"
       },
       "origine": {
        "dollar": "calcul Python",
@@ -678,13 +712,14 @@
        "source_id": "src_136"
       },
       {
-       "texte": "Directions dollar des engrenages 2 à 8 : 1 haussière, 0 baissière, 6 neutres ; risque de l'engrenage 5 : risk_off",
+       "texte": "Directions dollar des engrenages 2 à 8 : 1 haussière, 0 baissière, 6 neutres ; risque de l'engrenage 5 : neutre",
        "source_id": "src_174"
       }
      ],
      "sources_indisponibles": [],
      "mesure": null,
-     "non_source": false
+     "non_source": false,
+     "texte_redige_avant_recalcul": true
     },
     {
      "numero": 2,
@@ -917,10 +952,10 @@
      "donnees_insuffisantes": false,
      "direction": {
       "dollar": "neutre",
-      "risque": "risk_off",
+      "risque": "neutre",
       "calculee": {
        "dollar": "neutre",
-       "risque": "risk_off",
+       "risque": "neutre",
        "regle": "risque : VIX (≥ 25 ou +25 % sur 7 j : risk off ; ≤ 14 sans hausse : risk on) ; dollar : indice dollar large Fed sur 7 j (±0,5 %)"
       },
       "origine": {
@@ -947,11 +982,11 @@
      ],
      "donnees_calculees": [
       {
-       "texte": "VIX 25.64 le 2026-11-06 (+32.0 % sur 7 j)",
-       "source_id": "src_010",
+       "texte": "VIX 19.92 le 2026-11-09 (-5.8 % sur 7 j)",
+       "source_id": "src_275",
        "indicateur": "vix",
-       "valeur": 25.64,
-       "date": "2026-11-06"
+       "valeur": 19.92,
+       "date": "2026-11-09"
       },
       {
        "texte": "Indice dollar large (Fed) 121.8803 le 2026-11-06 (+0.18 % sur 7 j)",
@@ -979,17 +1014,18 @@
      "sources_indisponibles": [],
      "mesure": {
       "libelle": "VIX",
-      "valeur": 25.64,
+      "valeur": 19.92,
       "unite": "pts",
       "seuil_bas": 14,
       "seuil_haut": 25,
-      "date": "2026-11-06",
+      "date": "2026-11-09",
       "source": "FRED (VIXCLS)",
       "si_haut": "Risk off",
       "si_bas": "Risk on",
       "raison": null
      },
-     "non_source": false
+     "non_source": false,
+     "texte_redige_avant_recalcul": true
     },
     {
      "numero": 6,
@@ -1305,7 +1341,8 @@
     "pertinence": 50
    },
    "controles": [
-    "2 mots « record » / « s'envole » remplacés : non justifiés par les percentiles ou les variations"
+    "2 mots « record » / « s'envole » remplacés : non justifiés par les percentiles ou les variations",
+    "direction recalculée après le texte du modèle pour l'engrenage 1, 5 : le texte décrit les chiffres du moment de sa rédaction"
    ],
    "coherence": {
     "alignes": 1,
@@ -1336,7 +1373,7 @@
     "libelle": "Flash-Lite 3.5"
    },
    "version": "quotidienne",
-   "rafraichi_le": "2026-11-10T14:19:23+00:00",
+   "rafraichi_le": "2026-11-10T15:19:06+00:00",
    "titre_theme_impose": "Signaux mixtes"
   },
   "classement_devises": [
@@ -6389,6 +6426,13 @@
    "detail": "CNY — Ventes au détail",
    "date": "2026-10-19",
    "url": null
+  },
+  {
+   "id": "src_275",
+   "source": "FRED",
+   "detail": "vix (VIXCLS)",
+   "date": "2026-11-09",
+   "url": "https://fred.stlouisfed.org/series/VIXCLS"
   }
  ],
  "donnees_non_rafraichies": [],
@@ -8614,7 +8658,6 @@
   },
   "vix": {
    "dates": [
-    "2025-12-05",
     "2025-12-12",
     "2025-12-19",
     "2025-12-26",
@@ -8743,10 +8786,10 @@
     "2026-11-03",
     "2026-11-04",
     "2026-11-05",
-    "2026-11-06"
+    "2026-11-06",
+    "2026-11-09"
    ],
    "valeurs": [
-    15.41,
     15.74,
     14.91,
     13.6,
@@ -8875,7 +8918,8 @@
     20.83,
     16.61,
     28.18,
-    25.64
+    25.64,
+    19.92
    ],
    "source_canonique": "vix"
   },
@@ -9307,7 +9351,7 @@
  },
  "controle_qualite": {
   "conforme": false,
-  "nb_anomalies": 11,
+  "nb_anomalies": 12,
   "anomalies": [
    "CHF : synthèse approfondie abandonnee (synthese:CHF : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
    "CAD : synthèse approfondie abandonnee (synthese:CAD : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
@@ -9315,6 +9359,7 @@
    "NZD : synthèse approfondie abandonnee (synthese:NZD : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
    "CNY : synthèse approfondie abandonnee (synthese:CNY : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
    "8 engrenages : 2 mots « record » / « s'envole » remplacés : non justifiés par les percentiles ou les variations",
+   "8 engrenages : direction recalculée après le texte du modèle pour l'engrenage 1, 5 : le texte décrit les chiffres du moment de sa rédaction",
    "état du monde absent de la synthèse globale",
    "tableau macro : CNY/PMI manufacturier : publication manquée (prévue le 31/10, aucun « réel » reçu)",
    "tableau macro : CNY/PMI services : publication manquée (prévue le 31/10, aucun « réel » reçu)",
