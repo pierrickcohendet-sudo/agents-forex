@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-11T12:29:43+00:00",
+  "genere_le": "2026-11-11T13:19:03+00:00",
   "appels_llm": [
    {
     "heure": "08:31",
@@ -154,7 +154,7 @@
    "engrenages_faits": true,
    "reserve_engrenages": 8,
    "refus_reserve_ce_run": 0,
-   "refus_budget_ce_run": 15,
+   "refus_budget_ce_run": 5,
    "budget": {
     "plafond": 60,
     "mode": "complément",
@@ -186,7 +186,7 @@
     "plafond_run": 45,
     "recues_run": 0,
     "pannes_jour": 20,
-    "pannes_run": 1,
+    "pannes_run": 0,
     "plafond_pannes": 20,
     "mode_panne": true,
     "pannes_avant_correctif": 0,
@@ -194,9 +194,7 @@
      "503": 19,
      "delai": 5
     },
-    "echecs_run": {
-     "503": 2
-    },
+    "echecs_run": {},
     "abandonnees": [],
     "analyses": {
      "analyses:AUD-NZD-CNY": {
@@ -322,7 +320,7 @@
     }
    }
   },
-  "resume_quota": "Gemini : 5/60, engrenages : fait — Budget (run complément, plafond 60) : prévu engrenages 1 analyse (≤ 1 requêtes); rapport du jour 2 analyses (≤ 2 requêtes); devises 3 analyses (≤ 3 requêtes); reste ≤ 54 ; consommé ce run : engrenages 0, rapport du jour 0, devises 0, reste 0 (jour : 5/60) ; échecs ce run : 503 × 2 ; tentatives en panne (hors budget) : 1 ce run, 20/20 aujourd'hui ; réponses reçues ce run : 0/45 ; MODE PANNE : priorités seulement, 1 essai chacune, sans repli ; analyses : analyses:AUD-NZD-CNY à rejouer (503), analyses:JPY-CHF-CAD faite, analyses:USD-EUR-GBP faite, engrenages faite, etat_du_monde à rejouer (503), rapport:redaction faite, synthese:CAD à rejouer (delai), synthese:CHF à rejouer (503), synthese:EUR à rejouer (503), synthese:GBP à rejouer (delai), synthese:JPY à rejouer (delai), synthese:USD faite",
+  "resume_quota": "Gemini : 5/60, engrenages : fait — Budget (run complément, plafond 60) : prévu engrenages 1 analyse (≤ 1 requêtes); rapport du jour 2 analyses (≤ 2 requêtes); devises 3 analyses (≤ 3 requêtes); reste ≤ 54 ; consommé ce run : engrenages 0, rapport du jour 0, devises 0, reste 0 (jour : 5/60) ; échecs ce run : aucun ; tentatives en panne (hors budget) : 0 ce run, 20/20 aujourd'hui ; réponses reçues ce run : 0/45 ; MODE PANNE : priorités seulement, 1 essai chacune, sans repli ; analyses : analyses:AUD-NZD-CNY à rejouer (503), analyses:JPY-CHF-CAD faite, analyses:USD-EUR-GBP faite, engrenages faite, etat_du_monde à rejouer (503), rapport:redaction faite, synthese:CAD à rejouer (delai), synthese:CHF à rejouer (503), synthese:EUR à rejouer (503), synthese:GBP à rejouer (delai), synthese:JPY à rejouer (delai), synthese:USD faite",
   "appels_par_modele": {
    "gemini-3.5-flash": {
     "appels": 12,
@@ -484,6 +482,40 @@
       "cause": null,
       "ouvert_a_l_appel": null,
       "echecs_consecutifs": 1,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
+   },
+   {
+    "heure": "13:19",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 1,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
       "ignores": 0
      },
      {
@@ -1207,7 +1239,7 @@
     "libelle": "Flash 3.5"
    },
    "version": "quotidienne",
-   "rafraichi_le": "2026-11-11T12:28:23+00:00",
+   "rafraichi_le": "2026-11-11T13:19:03+00:00",
    "titre_theme_impose": "Signaux mixtes"
   },
   "classement_devises": [
@@ -3010,12 +3042,12 @@
    "risk_on_off": "on",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "analyses:AUD-NZD-CNY : 1 appels déjà faits pendant ce run (repli Python)",
+   "raison_indisponibilite": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (analyses:AUD-NZD-CNY : 1 appels déjà faits pendant ce run (repli Python))",
+    "commentaire": "analyse indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
     "source_id": null
    },
    "detail_score": [],
@@ -3171,12 +3203,12 @@
    "risk_on_off": "on",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "analyses:AUD-NZD-CNY : 1 appels déjà faits pendant ce run (repli Python)",
+   "raison_indisponibilite": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (analyses:AUD-NZD-CNY : 1 appels déjà faits pendant ce run (repli Python))",
+    "commentaire": "analyse indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
     "source_id": null
    },
    "detail_score": [],
@@ -3332,12 +3364,12 @@
    "risk_on_off": "neutre",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "analyses:AUD-NZD-CNY : 1 appels déjà faits pendant ce run (repli Python)",
+   "raison_indisponibilite": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (analyses:AUD-NZD-CNY : 1 appels déjà faits pendant ce run (repli Python))",
+    "commentaire": "analyse indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
     "source_id": null
    },
    "detail_score": [],
@@ -8113,9 +8145,9 @@
   "conforme": false,
   "nb_anomalies": 13,
   "anomalies": [
-   "AUD : analyse indisponible aujourd'hui (analyses:AUD-NZD-CNY : 1 appels déjà faits pendant ce run (repli Python)) — exclue du classement",
-   "NZD : analyse indisponible aujourd'hui (analyses:AUD-NZD-CNY : 1 appels déjà faits pendant ce run (repli Python)) — exclue du classement",
-   "CNY : analyse indisponible aujourd'hui (analyses:AUD-NZD-CNY : 1 appels déjà faits pendant ce run (repli Python)) — exclue du classement",
+   "AUD : analyse indisponible aujourd'hui (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)) — exclue du classement",
+   "NZD : analyse indisponible aujourd'hui (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)) — exclue du classement",
+   "CNY : analyse indisponible aujourd'hui (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)) — exclue du classement",
    "EUR : synthèse approfondie abandonnee (synthese:EUR : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
    "GBP : synthèse approfondie abandonnee (synthese:GBP : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
    "JPY : synthèse approfondie abandonnee (synthese:JPY : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
