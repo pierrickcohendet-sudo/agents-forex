@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-11T09:20:38+00:00",
+  "genere_le": "2026-11-11T10:20:31+00:00",
   "appels_llm": [
    {
     "heure": "08:31",
@@ -110,6 +110,16 @@
     "ok": false,
     "etiquette": "analyses:AUD-NZD-CNY",
     "echec": "503"
+   },
+   {
+    "heure": "10:19",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 5038,
+    "tokens_message": 12160,
+    "tokens_total": 17198,
+    "ok": false,
+    "etiquette": "analyses:AUD-NZD-CNY",
+    "echec": "503"
    }
   ],
   "quota_llm": {
@@ -155,13 +165,13 @@
     "total_jour": 5,
     "plafond_run": 45,
     "recues_run": 0,
-    "pannes_jour": 17,
+    "pannes_jour": 18,
     "pannes_run": 1,
     "plafond_pannes": 20,
     "mode_panne": true,
     "pannes_avant_correctif": 0,
     "echecs_jour": {
-     "503": 13,
+     "503": 15,
      "delai": 5
     },
     "echecs_run": {
@@ -173,7 +183,7 @@
       "statut": "à rejouer",
       "echec": "503",
       "types": {
-       "503": 4
+       "503": 6
       },
       "appels": 0
      },
@@ -292,11 +302,11 @@
     }
    }
   },
-  "resume_quota": "Gemini : 5/60, engrenages : fait — Budget (run complément, plafond 60) : prévu engrenages 1 analyse (≤ 1 requêtes); rapport du jour 2 analyses (≤ 2 requêtes); devises 3 analyses (≤ 3 requêtes); reste ≤ 54 ; consommé ce run : engrenages 0, rapport du jour 0, devises 0, reste 0 (jour : 5/60) ; échecs ce run : 503 × 2 ; tentatives en panne (hors budget) : 1 ce run, 17/20 aujourd'hui ; réponses reçues ce run : 0/45 ; MODE PANNE : priorités seulement, 1 essai chacune, sans repli ; analyses : analyses:AUD-NZD-CNY à rejouer (503), analyses:JPY-CHF-CAD faite, analyses:USD-EUR-GBP faite, engrenages faite, etat_du_monde à rejouer (503), rapport:redaction faite, synthese:CAD à rejouer (delai), synthese:CHF à rejouer (503), synthese:EUR à rejouer (503), synthese:GBP à rejouer (delai), synthese:JPY à rejouer (delai), synthese:USD faite",
+  "resume_quota": "Gemini : 5/60, engrenages : fait — Budget (run complément, plafond 60) : prévu engrenages 1 analyse (≤ 1 requêtes); rapport du jour 2 analyses (≤ 2 requêtes); devises 3 analyses (≤ 3 requêtes); reste ≤ 54 ; consommé ce run : engrenages 0, rapport du jour 0, devises 0, reste 0 (jour : 5/60) ; échecs ce run : 503 × 2 ; tentatives en panne (hors budget) : 1 ce run, 18/20 aujourd'hui ; réponses reçues ce run : 0/45 ; MODE PANNE : priorités seulement, 1 essai chacune, sans repli ; analyses : analyses:AUD-NZD-CNY à rejouer (503), analyses:JPY-CHF-CAD faite, analyses:USD-EUR-GBP faite, engrenages faite, etat_du_monde à rejouer (503), rapport:redaction faite, synthese:CAD à rejouer (delai), synthese:CHF à rejouer (503), synthese:EUR à rejouer (503), synthese:GBP à rejouer (delai), synthese:JPY à rejouer (delai), synthese:USD faite",
   "appels_par_modele": {
    "gemini-3.5-flash": {
-    "appels": 9,
-    "echecs": 4
+    "appels": 10,
+    "echecs": 5
    },
    "gemini-3.8-flash": {
     "appels": 2,
@@ -340,6 +350,40 @@
    },
    {
     "heure": "09:20",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 1,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 1,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
+   },
+   {
+    "heure": "10:20",
     "actif": true,
     "seuil_echecs": 3,
     "ouvert": false,
@@ -1075,7 +1119,7 @@
     "libelle": "Flash 3.5"
    },
    "version": "quotidienne",
-   "rafraichi_le": "2026-11-11T09:19:18+00:00",
+   "rafraichi_le": "2026-11-11T10:19:11+00:00",
    "titre_theme_impose": "Signaux mixtes"
   },
   "classement_devises": [
@@ -1805,8 +1849,8 @@
    "synthese_approfondie": {
     "statut": "indisponible",
     "raison": "synthese:EUR : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python)",
-    "tentatives": 1,
-    "genere_le": "2026-11-11T09:19:18+00:00"
+    "tentatives": 2,
+    "genere_le": "2026-11-11T10:19:11+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.33,
@@ -2064,8 +2108,8 @@
    "synthese_approfondie": {
     "statut": "indisponible",
     "raison": "synthese:GBP : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python)",
-    "tentatives": 1,
-    "genere_le": "2026-11-11T09:19:38+00:00"
+    "tentatives": 2,
+    "genere_le": "2026-11-11T10:19:31+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.48,
@@ -2318,8 +2362,8 @@
    "synthese_approfondie": {
     "statut": "indisponible",
     "raison": "synthese:JPY : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python)",
-    "tentatives": 1,
-    "genere_le": "2026-11-11T09:19:58+00:00"
+    "tentatives": 2,
+    "genere_le": "2026-11-11T10:19:51+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.1,
@@ -2576,8 +2620,8 @@
    "synthese_approfondie": {
     "statut": "indisponible",
     "raison": "synthese:CHF : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python)",
-    "tentatives": 1,
-    "genere_le": "2026-11-11T09:20:18+00:00"
+    "tentatives": 2,
+    "genere_le": "2026-11-11T10:20:11+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.45,
@@ -2841,8 +2885,8 @@
    "synthese_approfondie": {
     "statut": "indisponible",
     "raison": "synthese:CAD : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python)",
-    "tentatives": 1,
-    "genere_le": "2026-11-11T09:20:38+00:00"
+    "tentatives": 2,
+    "genere_le": "2026-11-11T10:20:31+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.56,
