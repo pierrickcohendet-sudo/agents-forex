@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-11T14:19:08+00:00",
+  "genere_le": "2026-11-11T15:19:14+00:00",
   "appels_llm": [
    {
     "heure": "08:31",
@@ -569,6 +569,40 @@
       "ignores": 0
      }
     ]
+   },
+   {
+    "heure": "15:19",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 1,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
    }
   ],
   "notion_url": "https://app.notion.com/p/FX-2026-11-11-quotidien-41565bc64661810a982df120ddcfb6d7"
@@ -885,11 +919,11 @@
      ],
      "donnees_calculees": [
       {
-       "texte": "VIX 19.92 le 2026-11-09 (-5.8 % sur 7 j)",
-       "source_id": "src_010",
+       "texte": "VIX 19.46 le 2026-11-10 (-6.6 % sur 7 j)",
+       "source_id": "src_243",
        "indicateur": "vix",
-       "valeur": 19.92,
-       "date": "2026-11-09"
+       "valeur": 19.46,
+       "date": "2026-11-10"
       },
       {
        "texte": "Indice dollar large (Fed) 121.8803 le 2026-11-06 (+0.18 % sur 7 j)",
@@ -917,11 +951,11 @@
      "sources_indisponibles": [],
      "mesure": {
       "libelle": "VIX",
-      "valeur": 19.92,
+      "valeur": 19.46,
       "unite": "pts",
       "seuil_bas": 14,
       "seuil_haut": 25,
-      "date": "2026-11-09",
+      "date": "2026-11-10",
       "source": "FRED (VIXCLS)",
       "si_haut": "Risk off",
       "si_bas": "Risk on",
@@ -1273,7 +1307,7 @@
     "libelle": "Flash 3.5"
    },
    "version": "quotidienne",
-   "rafraichi_le": "2026-11-11T14:19:08+00:00",
+   "rafraichi_le": "2026-11-11T15:19:14+00:00",
    "titre_theme_impose": "Signaux mixtes"
   },
   "classement_devises": [
@@ -3125,12 +3159,12 @@
     {
      "indicateur": "vix",
      "nom": "VIX",
-     "valeur": 19.92,
+     "valeur": 19.46,
      "prevision": null,
      "precedent": 25.64,
      "source": "FRED (VIXCLS)",
-     "date": "2026-11-09",
-     "anciennete_jours": 2,
+     "date": "2026-11-10",
+     "anciennete_jours": 1,
      "note": ""
     },
     {
@@ -3286,12 +3320,12 @@
     {
      "indicateur": "vix",
      "nom": "VIX",
-     "valeur": 19.92,
+     "valeur": 19.46,
      "prevision": null,
      "precedent": 25.64,
      "source": "FRED (VIXCLS)",
-     "date": "2026-11-09",
-     "anciennete_jours": 2,
+     "date": "2026-11-10",
+     "anciennete_jours": 1,
      "note": ""
     },
     {
@@ -3491,12 +3525,12 @@
     {
      "indicateur": "vix",
      "nom": "VIX",
-     "valeur": 19.92,
+     "valeur": 19.46,
      "prevision": null,
      "precedent": 25.64,
      "source": "FRED (VIXCLS)",
-     "date": "2026-11-09",
-     "anciennete_jours": 2,
+     "date": "2026-11-10",
+     "anciennete_jours": 1,
      "note": ""
     },
     {
@@ -5259,6 +5293,13 @@
    "detail": "USD — Taux directeur",
    "date": "2026-11-09",
    "url": null
+  },
+  {
+   "id": "src_243",
+   "source": "FRED",
+   "detail": "vix (VIXCLS)",
+   "date": "2026-11-10",
+   "url": "https://fred.stlouisfed.org/series/VIXCLS"
   }
  ],
  "donnees_non_rafraichies": [],
@@ -7484,7 +7525,6 @@
   },
   "vix": {
    "dates": [
-    "2025-12-05",
     "2025-12-12",
     "2025-12-19",
     "2025-12-26",
@@ -7613,10 +7653,10 @@
     "2026-11-04",
     "2026-11-05",
     "2026-11-06",
-    "2026-11-09"
+    "2026-11-09",
+    "2026-11-10"
    ],
    "valeurs": [
-    15.41,
     15.74,
     14.91,
     13.6,
@@ -7745,7 +7785,8 @@
     16.61,
     28.18,
     25.64,
-    19.92
+    19.92,
+    19.46
    ],
    "source_canonique": "vix"
   },
@@ -8060,7 +8101,8 @@
   "anomalies": [
    "tableau macro : CNY/PMI manufacturier : publication manquée (prévue le 31/10, aucun « réel » reçu)",
    "tableau macro : CNY/PMI services : publication manquée (prévue le 31/10, aucun « réel » reçu)",
-   "tableau macro : CAD/Taux de chômage : divergence de sources — ForexFactory 6.7% vs FRED 6.4% (pér. 2026-08, LRHUTTTTCAM156S)"
+   "tableau macro : CAD/Taux de chômage : divergence de sources — ForexFactory 6.7% vs FRED 6.4% (pér. 2026-08, LRHUTTTTCAM156S)",
+   "tableau macro : CNY/Balance commerciale : publication manquée (prévue le 10/11, aucun « réel » reçu)"
   ],
   "indice_surprise_30j": {
    "USD": {
@@ -8177,7 +8219,7 @@
  },
  "controle_qualite": {
   "conforme": false,
-  "nb_anomalies": 13,
+  "nb_anomalies": 14,
   "anomalies": [
    "AUD : analyse indisponible aujourd'hui (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)) — exclue du classement",
    "NZD : analyse indisponible aujourd'hui (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)) — exclue du classement",
@@ -8191,6 +8233,7 @@
    "tableau macro : CNY/PMI manufacturier : publication manquée (prévue le 31/10, aucun « réel » reçu)",
    "tableau macro : CNY/PMI services : publication manquée (prévue le 31/10, aucun « réel » reçu)",
    "tableau macro : CAD/Taux de chômage : divergence de sources — ForexFactory 6.7% vs FRED 6.4% (pér. 2026-08, LRHUTTTTCAM156S)",
+   "tableau macro : CNY/Balance commerciale : publication manquée (prévue le 10/11, aucun « réel » reçu)",
    "prompt LLM volumineux : 1 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 21311 à 08:32 UTC, modèle gemini-3.5-flash) — le contexte envoyé au LLM a regrossi"
   ]
  },
