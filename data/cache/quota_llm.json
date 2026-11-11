@@ -1,27 +1,57 @@
 {
- "date": "2026-11-10",
+ "date": "2026-11-11",
  "modeles": {
   "gemini-3.5-flash": {
-   "appels": 6,
+   "appels": 5,
    "epuise_jusqu_a": "2026-11-10T07:59:59+00:00",
-   "pannes": 7
+   "pannes": 9
   },
   "gemini-3.8-flash": {
    "appels": 0,
    "epuise_jusqu_a": "2026-11-10T07:59:59+00:00",
-   "pannes": 8
+   "pannes": 7
   },
   "gemini-3.5-flash-lite": {
-   "appels": 1,
+   "appels": 0,
    "epuise_jusqu_a": null
   }
  },
- "engrenages_faits": false,
+ "engrenages_faits": true,
  "categories": {
-  "reste": 6,
+  "engrenages": 1,
+  "devises": 2,
+  "reste": 1,
   "rapport": 1
  },
  "etiquettes": {
+  "engrenages": {
+   "appels": 1,
+   "echecs": 0,
+   "ok": true
+  },
+  "analyses:USD-EUR-GBP": {
+   "appels": 1,
+   "echecs": 0,
+   "ok": true
+  },
+  "analyses:JPY-CHF-CAD": {
+   "appels": 1,
+   "echecs": 1,
+   "ok": true,
+   "types": {
+    "503": 1
+   },
+   "dernier_echec": "503"
+  },
+  "analyses:AUD-NZD-CNY": {
+   "appels": 0,
+   "echecs": 2,
+   "ok": false,
+   "types": {
+    "503": 2
+   },
+   "dernier_echec": "503"
+  },
   "etat_du_monde": {
    "appels": 0,
    "echecs": 2,
@@ -33,11 +63,6 @@
   },
   "synthese:USD": {
    "appels": 1,
-   "echecs": 0,
-   "ok": true
-  },
-  "synthese:EUR": {
-   "appels": 1,
    "echecs": 1,
    "ok": true,
    "types": {
@@ -45,44 +70,35 @@
    },
    "dernier_echec": "503"
   },
+  "synthese:EUR": {
+   "appels": 0,
+   "echecs": 2,
+   "ok": false,
+   "types": {
+    "503": 2
+   },
+   "dernier_echec": "503"
+  },
   "synthese:GBP": {
-   "appels": 1,
-   "echecs": 0,
-   "ok": true
+   "appels": 0,
+   "echecs": 2,
+   "ok": false,
+   "types": {
+    "503": 1,
+    "delai": 1
+   },
+   "dernier_echec": "delai"
   },
   "synthese:JPY": {
-   "appels": 1,
-   "echecs": 0,
-   "ok": true
+   "appels": 0,
+   "echecs": 2,
+   "ok": false,
+   "types": {
+    "delai": 2
+   },
+   "dernier_echec": "delai"
   },
   "synthese:CHF": {
-   "appels": 0,
-   "echecs": 2,
-   "ok": false,
-   "types": {
-    "503": 2
-   },
-   "dernier_echec": "503"
-  },
-  "synthese:CAD": {
-   "appels": 0,
-   "echecs": 2,
-   "ok": false,
-   "types": {
-    "503": 2
-   },
-   "dernier_echec": "503"
-  },
-  "synthese:AUD": {
-   "appels": 0,
-   "echecs": 2,
-   "ok": false,
-   "types": {
-    "503": 2
-   },
-   "dernier_echec": "503"
-  },
-  "synthese:NZD": {
    "appels": 0,
    "echecs": 2,
    "ok": false,
@@ -92,24 +108,14 @@
    },
    "dernier_echec": "503"
   },
-  "synthese:CNY": {
+  "synthese:CAD": {
    "appels": 0,
-   "echecs": 2,
+   "echecs": 1,
    "ok": false,
    "types": {
-    "503": 2
+    "delai": 1
    },
-   "dernier_echec": "503"
-  },
-  "critique": {
-   "appels": 1,
-   "echecs": 0,
-   "ok": true
-  },
-  "paires:synthese": {
-   "appels": 1,
-   "echecs": 0,
-   "ok": true
+   "dernier_echec": "delai"
   },
   "rapport:redaction": {
    "appels": 1,
@@ -119,31 +125,20 @@
     "503": 1
    },
    "dernier_echec": "503"
-  },
-  "rapport:analyse": {
-   "appels": 0,
-   "echecs": 1,
-   "ok": false,
-   "types": {
-    "503": 1
-   },
-   "dernier_echec": "503"
   }
  },
  "echecs": {
-  "503": 14,
-  "delai": 1
+  "503": 11,
+  "delai": 5
  },
- "faits": [
-  "devises"
- ],
- "pannes": 15,
+ "faits": [],
+ "pannes": 16,
  "pannes_avant_correctif": 0,
  "dernier_run": {
-  "id": "2026-11-10T08:20:23.084217+00:00",
-  "envois": 22,
-  "503": 14,
-  "recues": 7,
-  "mode": "complément"
+  "id": "2026-11-11T08:31:26.648307+00:00",
+  "envois": 21,
+  "503": 11,
+  "recues": 5,
+  "mode": "complet"
  }
 }
