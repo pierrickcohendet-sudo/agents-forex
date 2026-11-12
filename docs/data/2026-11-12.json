@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-12T13:19:03+00:00",
+  "genere_le": "2026-11-12T14:19:17+00:00",
   "appels_llm": [
    {
     "heure": "08:32",
@@ -202,7 +202,7 @@
    "engrenages_faits": true,
    "reserve_engrenages": 8,
    "refus_reserve_ce_run": 0,
-   "refus_budget_ce_run": 6,
+   "refus_budget_ce_run": 3,
    "budget": {
     "plafond": 60,
     "mode": "complément",
@@ -382,13 +382,13 @@
      "epuise_jusqu_a": "2026-11-13T07:59:59+00:00",
      "appels_ce_run": 0,
      "reussites_ce_run": 0,
-     "sauts_ce_run": 6
+     "sauts_ce_run": 3
     },
     "gemini-3.8-flash": {
      "appels_aujourdhui": 1,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-11-10T07:59:59+00:00",
-     "appels_ce_run": 6,
+     "appels_ce_run": 3,
      "reussites_ce_run": 0,
      "sauts_ce_run": 0
     },
@@ -599,6 +599,40 @@
       "ouvert_a_l_appel": null,
       "echecs_consecutifs": 0,
       "ignores": 6
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
+   },
+   {
+    "heure": "14:19",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 3,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 3
      },
      {
       "modele": "gemini-3.8-flash",
@@ -1009,11 +1043,11 @@
        "date": "2026-11-06"
       },
       {
-       "texte": "S&P 500 7520.93 le 2026-11-10 (-0.38 % sur la séance)",
-       "source_id": "src_013",
+       "texte": "S&P 500 7619.38 le 2026-11-11 (+1.31 % sur la séance)",
+       "source_id": "src_271",
        "indicateur": "sp500",
-       "valeur": 7520.93,
-       "date": "2026-11-10"
+       "valeur": 7619.38,
+       "date": "2026-11-11"
       },
       {
        "texte": "Indice or (proxy) — NASDAQ QGLDI, pas le cours spot : 2445.86 le 2026-11-11 (-1.60 % sur 7 j)",
@@ -1377,7 +1411,7 @@
     "libelle": "Flash 3.5"
    },
    "version": "quotidienne",
-   "rafraichi_le": "2026-11-12T13:19:03+00:00",
+   "rafraichi_le": "2026-11-12T14:19:17+00:00",
    "titre_theme_impose": "Signaux mixtes"
   },
   "classement_devises": [
@@ -2557,7 +2591,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 1,
-    "genere_le": "2026-11-12T13:19:03+00:00"
+    "genere_le": "2026-11-12T14:19:17+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.38,
@@ -5031,7 +5065,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 1,
-    "genere_le": "2026-11-12T13:19:03+00:00"
+    "genere_le": "2026-11-12T14:19:17+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.02,
@@ -6949,6 +6983,13 @@
    "detail": "CNY — Ventes au détail",
    "date": "2026-10-19",
    "url": null
+  },
+  {
+   "id": "src_271",
+   "source": "FRED",
+   "detail": "sp500 (SP500)",
+   "date": "2026-11-11",
+   "url": "https://fred.stlouisfed.org/series/SP500"
   }
  ],
  "donnees_non_rafraichies": [],
