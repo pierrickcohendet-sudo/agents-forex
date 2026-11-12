@@ -1,15 +1,15 @@
 {
- "date": "2026-11-11",
+ "date": "2026-11-12",
  "modeles": {
   "gemini-3.5-flash": {
-   "appels": 5,
+   "appels": 16,
    "epuise_jusqu_a": "2026-11-10T07:59:59+00:00",
-   "pannes": 13
+   "pannes": 2
   },
   "gemini-3.8-flash": {
-   "appels": 0,
+   "appels": 1,
    "epuise_jusqu_a": "2026-11-10T07:59:59+00:00",
-   "pannes": 7
+   "pannes": 5
   },
   "gemini-3.5-flash-lite": {
    "appels": 0,
@@ -19,22 +19,12 @@
  "engrenages_faits": true,
  "categories": {
   "engrenages": 1,
-  "devises": 2,
-  "reste": 1,
-  "rapport": 1
+  "devises": 3,
+  "reste": 11,
+  "rapport": 2
  },
  "etiquettes": {
   "engrenages": {
-   "appels": 1,
-   "echecs": 0,
-   "ok": true
-  },
-  "analyses:USD-EUR-GBP": {
-   "appels": 1,
-   "echecs": 0,
-   "ok": true
-  },
-  "analyses:JPY-CHF-CAD": {
    "appels": 1,
    "echecs": 1,
    "ok": true,
@@ -43,23 +33,25 @@
    },
    "dernier_echec": "503"
   },
+  "analyses:USD-EUR-GBP": {
+   "appels": 1,
+   "echecs": 0,
+   "ok": true
+  },
+  "analyses:JPY-CHF-CAD": {
+   "appels": 1,
+   "echecs": 0,
+   "ok": true
+  },
   "analyses:AUD-NZD-CNY": {
-   "appels": 0,
-   "echecs": 10,
-   "ok": false,
-   "types": {
-    "503": 10
-   },
-   "dernier_echec": "503"
+   "appels": 1,
+   "echecs": 0,
+   "ok": true
   },
   "etat_du_monde": {
-   "appels": 0,
-   "echecs": 2,
-   "ok": false,
-   "types": {
-    "503": 2
-   },
-   "dernier_echec": "503"
+   "appels": 1,
+   "echecs": 0,
+   "ok": true
   },
   "synthese:USD": {
    "appels": 1,
@@ -71,6 +63,64 @@
    "dernier_echec": "503"
   },
   "synthese:EUR": {
+   "appels": 1,
+   "echecs": 0,
+   "ok": true
+  },
+  "synthese:GBP": {
+   "appels": 1,
+   "echecs": 2,
+   "ok": false,
+   "types": {
+    "json_invalide": 1,
+    "503": 1
+   },
+   "dernier_echec": "503",
+   "run_echec": "2026-11-12T08:31:22.284214+00:00",
+   "echecs_runs": 1
+  },
+  "synthese:JPY": {
+   "appels": 1,
+   "echecs": 1,
+   "ok": true,
+   "types": {
+    "503": 1
+   },
+   "dernier_echec": "503"
+  },
+  "synthese:CHF": {
+   "appels": 1,
+   "echecs": 0,
+   "ok": true
+  },
+  "synthese:CAD": {
+   "appels": 1,
+   "echecs": 0,
+   "ok": true
+  },
+  "synthese:AUD": {
+   "appels": 1,
+   "echecs": 0,
+   "ok": true
+  },
+  "synthese:NZD": {
+   "appels": 1,
+   "echecs": 0,
+   "ok": true
+  },
+  "synthese:CNY": {
+   "appels": 1,
+   "echecs": 2,
+   "ok": false,
+   "types": {
+    "json_invalide": 1,
+    "delai": 1
+   },
+   "dernier_echec": "delai",
+   "run_echec": "2026-11-12T08:31:22.284214+00:00",
+   "echecs_runs": 1
+  },
+  "critique": {
    "appels": 0,
    "echecs": 2,
    "ok": false,
@@ -79,66 +129,38 @@
    },
    "dernier_echec": "503"
   },
-  "synthese:GBP": {
-   "appels": 0,
-   "echecs": 2,
-   "ok": false,
-   "types": {
-    "503": 1,
-    "delai": 1
-   },
-   "dernier_echec": "delai"
-  },
-  "synthese:JPY": {
-   "appels": 0,
-   "echecs": 2,
-   "ok": false,
-   "types": {
-    "delai": 2
-   },
-   "dernier_echec": "delai"
-  },
-  "synthese:CHF": {
-   "appels": 0,
-   "echecs": 2,
-   "ok": false,
-   "types": {
-    "delai": 1,
-    "503": 1
-   },
-   "dernier_echec": "503"
-  },
-  "synthese:CAD": {
-   "appels": 0,
-   "echecs": 1,
-   "ok": false,
-   "types": {
-    "delai": 1
-   },
-   "dernier_echec": "delai"
+  "paires:synthese": {
+   "appels": 1,
+   "echecs": 0,
+   "ok": true
   },
   "rapport:redaction": {
    "appels": 1,
-   "echecs": 1,
-   "ok": true,
-   "types": {
-    "503": 1
-   },
-   "dernier_echec": "503"
+   "echecs": 0,
+   "ok": true
+  },
+  "rapport:analyse": {
+   "appels": 1,
+   "echecs": 0,
+   "ok": true
   }
  },
  "echecs": {
-  "503": 19,
-  "delai": 5
+  "503": 6,
+  "json_invalide": 2,
+  "delai": 1
  },
- "faits": [],
- "pannes": 20,
+ "faits": [
+  "devises",
+  "rapport"
+ ],
+ "pannes": 7,
  "pannes_avant_correctif": 0,
  "dernier_run": {
-  "id": "2026-11-11T12:28:21.508276+00:00",
-  "envois": 1,
-  "503": 1,
-  "recues": 0,
-  "mode": "complément"
+  "id": "2026-11-12T08:31:22.284214+00:00",
+  "envois": 24,
+  "503": 6,
+  "recues": 17,
+  "mode": "complet"
  }
 }
