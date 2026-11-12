@@ -10,17 +10,28 @@ const EPAISSEUR = { 1: 1, 2: 1, 3: 2 };
 const ETIQUETEES = new Set(["R1", "R2", "S1", "S2"]);   // étiquettes limitées aux 2 zones les plus proches de chaque côté
 
 /* Synchronise deux graphiques : même défilement (plage logique) et même curseur. */
+/* -> couper() : désabonne tout avant de détruire les graphiques (sinon un graphique détruit est rappelé). */
 function synchroniser(a, b, sa, sb, valeurs) {
-  let verrou = false;
-  const relier = (x, y) => x.timeScale().subscribeVisibleLogicalRangeChange(r => {
-    if (!r || verrou) return; verrou = true; try { y.timeScale().setVisibleLogicalRange(r); } finally { verrou = false; } });
+  let verrou = false, mort = false;
+  const desab = [];
+  const relier = (x, y) => {
+    const f = r => { if (mort || !r || verrou) return; verrou = true; try { y.timeScale().setVisibleLogicalRange(r); } catch (e) { /* retiré */ } finally { verrou = false; } };
+    x.timeScale().subscribeVisibleLogicalRangeChange(f); desab.push(() => x.timeScale().unsubscribeVisibleLogicalRangeChange(f));
+  };
   relier(a, b); relier(b, a);
-  const curseur = (x, y, sy, carte) => x.subscribeCrosshairMove(p => {
-    if (!p || p.time == null || !p.point) { y.clearCrosshairPosition(); return; }
-    const v = carte.get(p.time);
-    if (v == null) y.clearCrosshairPosition(); else y.setCrosshairPosition(v, p.time, sy);
-  });
+  const curseur = (x, y, sy, carte) => {
+    const f = p => {
+      if (mort) return;
+      try {
+        if (!p || p.time == null || !p.point) { y.clearCrosshairPosition(); return; }
+        const v = carte.get(p.time);
+        if (v == null) y.clearCrosshairPosition(); else y.setCrosshairPosition(v, p.time, sy);
+      } catch (e) { /* retiré */ }
+    };
+    x.subscribeCrosshairMove(f); desab.push(() => x.unsubscribeCrosshairMove(f));
+  };
   curseur(a, b, sb, valeurs.b); curseur(b, a, sa, valeurs.a);
+  return () => { mort = true; for (const d of desab) { try { d(); } catch (e) { /* déjà retiré */ } } };
 }
 
 const fmtTemps = t => typeof t === "number" ? heureParis(t, true) : t;
@@ -81,7 +92,7 @@ export async function graphiquePaire(boite, boiteRsi, bougies, opts) {
   c.timeScale().fitContent();
   const g = { c, objets: [], boite };
   suivreGraphique(g);
-  let r = null;
+  let r = null, gr = null, couper = null;
   if (avecRsi) {
     r = L.createChart(boiteRsi, { autoSize: true, ...optionsTheme(), localization: { locale: "fr-FR", timeFormatter: fmtTemps, priceFormatter: v => nf(v, 0) },
       rightPriceScale: { borderVisible: false, minimumWidth: LARGEUR_AXE, scaleMargins: { top: 0.08, bottom: 0.08 } },
@@ -98,11 +109,11 @@ export async function graphiquePaire(boite, boiteRsi, bougies, opts) {
     sr.setMarkers(mkRsi.filter(m => m.time != null).sort((a, b) => a.time - b.time));
     r.timeScale().fitContent();
     const vRsi = new Map(pts.filter(p => p.value != null).map(p => [p.time, p.value])), vPrix = new Map(data.map(d => [d.time, d.close]));
-    synchroniser(c, r, s, sr, { a: vPrix, b: vRsi });
-    requestAnimationFrame(() => { try { r.timeScale().setVisibleLogicalRange(c.timeScale().getVisibleLogicalRange()); } catch (e) { /* retiré */ } });
-    suivreGraphique({ c: r, objets: [], boite: boiteRsi });
+    couper = synchroniser(c, r, s, sr, { a: vPrix, b: vRsi });
+    requestAnimationFrame(() => { if (g.mort) return; try { r.timeScale().setVisibleLogicalRange(c.timeScale().getVisibleLogicalRange()); } catch (e) { /* retiré */ } });
+    gr = suivreGraphique({ c: r, objets: [], boite: boiteRsi });
   }
-  return { retirer() { retirerGraphique(g); if (r) retirerGraphique({ c: r, boite: boiteRsi }); } };
+  return { retirer() { couper?.(); if (gr) retirerGraphique(gr); retirerGraphique(g); } };
 }
 
 /* Carte « Écart de taux » : paire en haut, écart (pb) en bas, synchronisés par dates. */
@@ -122,15 +133,21 @@ export async function graphiqueEcart(haut, bas, cloture, ecart, dec, mensuel) {
   const pb = ecart.map(([d, v]) => ({ time: d.slice(0, 10), value: v }));
   sb.setData(pb);
   sb.createPriceLine({ price: 0, color: css("--muted"), lineWidth: 1, lineStyle: 2, axisLabelVisible: false, title: "" });
-  let verrou = false;
-  const relier = (x, y) => x.timeScale().subscribeVisibleTimeRangeChange(r => {
-    if (!r || verrou) return; verrou = true; try { y.timeScale().setVisibleRange(r); } catch (e) { /* hors plage */ } finally { verrou = false; } });
+  let verrou = false, mort = false;
+  const desab = [];
+  const relier = (x, y) => {
+    const f = r => { if (mort || !r || verrou) return; verrou = true; try { y.timeScale().setVisibleRange(r); } catch (e) { /* hors plage */ } finally { verrou = false; } };
+    x.timeScale().subscribeVisibleTimeRangeChange(f); desab.push(() => x.timeScale().unsubscribeVisibleTimeRangeChange(f));
+  };
   relier(a, b); relier(b, a);
   const va = new Map(pa.map(p => [p.time, p.value])), vb = new Map(pb.map(p => [p.time, p.value]));
-  a.subscribeCrosshairMove(p => { const v = p?.time && vb.get(p.time); if (v == null) b.clearCrosshairPosition(); else b.setCrosshairPosition(v, p.time, sb); });
-  b.subscribeCrosshairMove(p => { const v = p?.time && va.get(p.time); if (v == null) a.clearCrosshairPosition(); else a.setCrosshairPosition(v, p.time, sa); });
+  const curseur = (x, y, sy, carte) => {
+    const f = p => { if (mort) return; try { const v = p?.time && carte.get(p.time); if (v == null) y.clearCrosshairPosition(); else y.setCrosshairPosition(v, p.time, sy); } catch (e) { /* retiré */ } };
+    x.subscribeCrosshairMove(f); desab.push(() => x.unsubscribeCrosshairMove(f));
+  };
+  curseur(a, b, sb, vb); curseur(b, a, sa, va);
   a.timeScale().fitContent(); b.timeScale().fitContent();
   const ga = { c: a, objets: [], boite: haut }, gb = { c: b, objets: [], boite: bas };
   suivreGraphique(ga); suivreGraphique(gb);
-  return { retirer() { retirerGraphique(ga); retirerGraphique(gb); } };
+  return { retirer() { mort = true; for (const d of desab) { try { d(); } catch (e) { /* déjà retiré */ } } retirerGraphique(ga); retirerGraphique(gb); } };
 }

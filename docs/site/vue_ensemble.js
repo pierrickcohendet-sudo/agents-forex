@@ -49,7 +49,7 @@ export function selecteurPeriode(active) {
   const nav = el("nav", "eg-seg");
   nav.setAttribute("aria-label", "Période");
   for (const [id, lib] of [["", "Quotidien"], ["hebdo", "Hebdo"], ["mensuel", "Mensuel"]]) {
-    const a = el("a", null, lib); a.href = `#engrenages${id ? "/" + id : ""}`;
+    const a = el("a", null, lib); a.href = `#engrenages/${id || "quotidien"}`;
     a.setAttribute("aria-pressed", String(active === id));
     if (active === id) a.setAttribute("aria-current", "page");
     nav.appendChild(a);

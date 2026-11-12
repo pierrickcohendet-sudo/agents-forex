@@ -26,6 +26,15 @@ def empreinte(dossier_site: Path) -> str:
     return h.hexdigest()[:7]
 
 
+def fichiers_code(docs: Path, version: str) -> list[str]:
+    """Adresses du code d'une version, exactement comme la page les demande (importmap, feuilles, bibliothèque)."""
+    site = Path(docs) / "site"
+    code = [f"site/{f.name}?v={version}" for f in sorted(site.glob("*")) if f.suffix in (".js", ".css")]
+    vendor = [f"site/vendor/{f.name}?v={version}" for f in sorted((site / "vendor").glob("*.js"))]
+    autres = ["manifest.webmanifest", "icones/logo.svg", "icones/icone-192.png"]
+    return code + vendor + [a for a in autres if (Path(docs) / a).exists()]
+
+
 def bloc_tete(version: str, modules: list[str]) -> str:
     carte = {"imports": {f"./site/{m}": f"./site/{m}?v={version}" for m in modules}}
     return (f"{DEBUT}\n  <meta name=\"fxdesk-version\" content=\"{version}\">\n"
@@ -54,6 +63,8 @@ def appliquer(racine: str | Path) -> dict:
     if sw.exists():
         t = sw.read_text(encoding="utf-8")
         t2 = re.sub(r'const VERSION = "[^"]*";', f'const VERSION = "{version}";', t, count=1)
+        # Correctif du 11/11 : le service worker met en cache TOUT le code de sa version à l'installation
+        t2 = re.sub(r'const FICHIERS = \[[^\]]*\];', lambda _: f"const FICHIERS = {json.dumps(fichiers_code(racine / 'docs', version))};", t2, count=1)
         if t2 != t:
             sw.write_text(t2, encoding="utf-8")
     return {"version": version, "modifie": nouveau != html}

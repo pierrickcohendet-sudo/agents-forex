@@ -94,7 +94,7 @@ export function selecteurVue(active) {
   const c = el("section", "carte vue-selecteur");
   const nav = el("div", "selecteur-engrenages");
   for (const [id, lib] of [["", "Quotidien"], ["hebdo", "Hebdo (dossier d'économiste)"]]) {
-    const a = el("a", "bouton", lib); a.href = `#engrenages${id ? "/" + id : ""}`;
+    const a = el("a", "bouton", lib); a.href = `#engrenages/${id || "quotidien"}`;
     a.setAttribute("aria-pressed", String(active === id));
     nav.appendChild(a);
   }

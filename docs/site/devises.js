@@ -262,7 +262,7 @@ export function carteDevise(d, dos, coursDev, cles, rapportDev, etat) {
       `${m.valeur > 0 ? "▲" : "▼"} ${m.engrenage}. ${COURT_ENG[m.engrenage]} : ${r ? `${r.regle.split(" ≥")[0].split(" ≤")[0]} (${r.chiffre})` : m.libelle}`));
   }
   c.appendChild(bloc);
-  const ouvrir = el("a", "dc-ouvrir", "Ouvrir l'analyse et les points de vigilance");
+  const ouvrir = el("a", "dc-ouvrir", "Ouvrir la fiche détaillée (analyse et points de vigilance)");
   ouvrir.href = `#devises/${d}`;
   c.appendChild(ouvrir);
   return c;
@@ -373,6 +373,6 @@ export async function pageDevises(parametre) {
     { ...d, indicateurs_tableau: lignesTechniques(techniqueUnique(dos, d.devise), d.indicateurs_tableau || []) },
     cles.get(d.devise), sources, d.devise === parametre, etats.has(d.devise) ? { etat: etats.get(d.devise) } : null)));
   sortie.push(detail);
-  if (parametre) setTimeout(() => document.getElementById(`fiche-${parametre}`)?.scrollIntoView({ block: "start" }), 50);
+
   return sortie;
 }

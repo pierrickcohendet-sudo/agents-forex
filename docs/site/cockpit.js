@@ -68,7 +68,7 @@ function entete(c, vue) {
     liste.appendChild(li);
   }
   aside.appendChild(liste);
-  const lien = el("a", "ck-lien", "Ouvrir le radar des déclencheurs →"); lien.href = "#outils";
+  const lien = el("a", "ck-lien", "Ouvrir le radar des déclencheurs →"); lien.href = "#engrenages/outils";
   const lien2 = el("a", "ck-lien", "Voir l'agenda des 7 prochains jours →"); lien2.href = "#agenda";
   aside.append(lien, lien2);
   sec.append(g, aside);

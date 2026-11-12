@@ -202,3 +202,17 @@ dialog.palette::backdrop{background:color-mix(in srgb,var(--ink) 35%,transparent
   .ec-haut{height:180px}.ec-bas{height:120px}
 }
 .cc.vide{height:auto;min-height:110px;display:grid;place-items:center}
+
+/* Correctif du 11/11 : nouvelle version, erreurs d'affichage, adresse de détail */
+.maj-dispo,.erreur-globale{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;display:flex;align-items:center;gap:10px;flex-wrap:wrap;max-width:calc(100% - 32px);padding:10px 12px 10px 16px;border-radius:14px;background:var(--ink);color:var(--surface);box-shadow:var(--shadow);font-size:14px;font-weight:600}
+.maj-dispo[hidden],.erreur-globale[hidden]{display:none}
+.maj-dispo .btn,.erreur-globale .btn{background:var(--surface);color:var(--ink);border-color:transparent}
+.erreur-globale{background:var(--down-soft);color:var(--ink);border:1px solid var(--down);bottom:auto;top:calc(12px + env(safe-area-inset-top,0px));width:min(620px,calc(100% - 32px))}
+.erreur-globale span{flex:1 1 220px}
+.maj-dispo span{white-space:nowrap}
+.erreur-globale span{min-width:0;overflow-wrap:anywhere}
+.erreur-globale .btn{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+.erreur-globale .btn.ghost{width:32px;padding:0;justify-content:center}
+.erreur-ecran{display:flex;flex-direction:column;gap:10px;border-color:var(--down)}
+.erreur-ecran code{overflow-wrap:anywhere;font-size:13px}
+.dv.cible{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent),var(--shadow)}

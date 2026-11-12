@@ -15,7 +15,7 @@ export async function construireIndex() {
   const idx = [];
   for (const [id, t] of ONGLETS) idx.push({ type: "Onglet", titre: t, detail: "", lien: `#${id}` });
   for (const p of paires?.paires || []) idx.push({ type: "Paire", titre: p, detail: (paires.mes_paires || []).includes(p) ? "Mes paires" : "", lien: `#paire/${p.replace("/", "-")}`, extra: p.replace("/", "") });
-  for (const [c, n] of Object.entries(NOMS)) idx.push({ type: "Devise", titre: c, detail: n, lien: `#devises` });
+  for (const [c, n] of Object.entries(NOMS)) idx.push({ type: "Devise", titre: c, detail: n, lien: `#devises/${c}` });
   for (const i of tm?.indicateurs || []) idx.push({ type: "Indicateur", titre: i.libelle, detail: "Macro par devise", lien: "#tableau" });
   const auj = agenda?.aujourdhui || new Date().toISOString().slice(0, 10), fin = new Date(Date.parse(auj) + 7 * 864e5).toISOString().slice(0, 10);
   for (const j of agenda?.jours || []) if (j.date >= auj && j.date <= fin) for (const e of j.evenements || [])

@@ -69,7 +69,7 @@ function lireAdresse() {
   let hash = (location.hash || "#briefing").slice(1);
   const [base, ...reste] = hash.split("/");
   if (REDIRECTIONS[base]) {   // ancienne adresse : remplacée sans nouvelle entrée d'historique
-    hash = [REDIRECTIONS[base], ...(base === "hebdo" ? [] : reste)].join("/");
+    hash = [REDIRECTIONS[base], ...(base === "hebdo" ? [] : base === "outils" ? ["outils"] : reste)].join("/");
     history.replaceState(null, "", `#${hash}`);
   }
   if (/^g=[1-8]$/.test(hash)) hash = `engrenages/${hash}`;   // lien direct vers un dossier d'engrenage
@@ -97,9 +97,35 @@ async function construire(id, parametre) {
     }
   } catch (e) {
     console.error(e);
-    s.innerHTML = `<div class="card pad"><h2>${esc(conf.titre)}</h2><p class="muted">Affichage indisponible : ${esc(e.message)}</p></div>`;
+    s.replaceChildren(carteErreur(conf.titre, e));
+    s.dataset.erreur = "1";
   }
   return s;
+}
+
+/* Erreur d'affichage : message exact, bouton « Recharger » ; le reste du site (en-tête, autres onglets) reste utilisable.
+   Une erreur d'import de module signale presque toujours une version du site en train de changer : on le dit. */
+function messageErreur(e) {
+  const m = String(e?.message || e || "erreur inconnue");
+  const module = /module|import|export named|Failed to fetch dynamically/i.test(m);
+  return { m, module };
+}
+function carteErreur(titre, e) {
+  const { m, module } = messageErreur(e);
+  const c = h("div", "card pad erreur-ecran");
+  c.innerHTML = `<h2>${esc(titre)} : affichage impossible</h2>
+    <p>Message exact : <code>${esc(m)}</code></p>
+    <p class="muted">${module ? "Le site vient sans doute d'être mis à jour pendant que cette page était ouverte : recharger prend la nouvelle version complète." : "Les autres onglets restent utilisables."}</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn pri" data-recharger>Recharger</button><a class="btn" href="#briefing">Aller au Briefing</a></div>`;
+  c.querySelector("[data-recharger]").onclick = () => location.reload();
+  window.__fxdeskSw?.update?.().catch(() => {});
+  return c;
+}
+function erreurGlobale(e) {
+  const b = $("#erreurGlobale"); if (!b) return;
+  const { m, module } = messageErreur(e);
+  b.querySelector("span").textContent = `Erreur d'affichage : ${m}${module ? " (nouvelle version en cours de publication)" : ""}`;
+  b.hidden = false;
 }
 async function afficher() {
   const [id, parametre] = lireAdresse();
@@ -115,19 +141,23 @@ async function afficher() {
   deplacerSoulignement();
   let s = construits.get(id);
   if (s && PLUS.includes(id) && parametre) { s.remove(); construits.delete(id); s = null; }   // archives/<date> : nouvelle page
+  if (s && s.dataset.erreur === "1") { s.remove(); construits.delete(id); s = null; }        // écran en erreur : nouvel essai
   for (const [k, x] of construits) x.classList.toggle("on", k === id);
   if (!s) { s = await construire(id, parametre); }
   for (const [k, x] of construits) x.classList.toggle("on", k === id);
   requestAnimationFrame(() => { recadrer(s); animerChiffres(s); });
   // Écran déjà construit : paramètre d'adresse transmis (recherche rapide, liens entre onglets)
-  if (parametre && s.dataset.construit === "1") {
-    if (id === "paire" && s.choisirPaire) s.choisirPaire(parametre.replace("-", "/").toUpperCase());
-    if (id === "journal" && s.ouvrirNouvelle && /^nouvelle=/.test(parametre)) { history.replaceState(null, "", "#journal"); s.ouvrirNouvelle(parametre.slice(9).replace("-", "/")); }
-    if (id === "agenda" && s.choisirJour && /^jour=/.test(parametre)) s.choisirJour(parametre.slice(5));
-  }
+  let defile = false;
+  try {
+    if (parametre && s.dataset.construit === "1") {
+      if (id === "paire" && s.choisirPaire) s.choisirPaire(parametre.replace("-", "/").toUpperCase());
+      if (id === "journal" && s.ouvrirNouvelle && /^nouvelle=/.test(parametre)) { history.replaceState(null, "", "#journal"); s.ouvrirNouvelle(parametre.slice(9).replace("-", "/")); }
+      if (id === "agenda" && s.choisirJour && /^jour=/.test(parametre)) s.choisirJour(parametre.slice(5));
+      if (s.allerA) defile = !!(await s.allerA(parametre));   // devises/EUR, engrenages/g=3, engrenages/hebdo
+    } else if (parametre && s.cible) defile = true;           // première construction : l'écran a déjà défilé vers sa cible
+  } catch (e) { console.error(e); erreurGlobale(e); }
   s.dataset.construit = "1";
-  if (id === "engrenages" && parametre) { const b = s.querySelector(`#engSel button[data-n="${parametre.slice(2)}"]`); if (b && b.getAttribute("aria-pressed") !== "true") b.click(); }
-  window.scrollTo(0, 0);
+  if (!defile) window.scrollTo(0, 0);
 }
 
 async function initialiser() {
@@ -147,6 +177,11 @@ async function initialiser() {
     try { (await import("./impression.js")).ouvrirApercu(imprimer); } catch (e) { console.error(e); window.print(); }
   });
   window.addEventListener("hashchange", afficher);
+  // Erreurs non rattrapées : bandeau avec le message exact et « Recharger » ; la page reste utilisable
+  window.addEventListener("error", ev => { if (ev.error || ev.message) erreurGlobale(ev.error || ev.message); });
+  window.addEventListener("unhandledrejection", ev => erreurGlobale(ev.reason));
+  $("#erreurGlobale")?.querySelector("[data-recharger]")?.addEventListener("click", () => location.reload());
+  $("#erreurGlobale")?.querySelector("[data-fermer-erreur]")?.addEventListener("click", () => { $("#erreurGlobale").hidden = true; });
   // Recherche rapide : Ctrl+K (ou ⌘K), loupe de l'en-tête sur téléphone
   const rechercher = () => import("./recherche.js").then(m => m.ouvrirRecherche());
   document.addEventListener("keydown", e => { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") { e.preventDefault(); rechercher(); } });

@@ -98,14 +98,30 @@ export async function ecranEngrenages(section, parametre) {
   };
   rendreSel();
 
-  q("#detaille").append(
-    blocDetaille("Simulateur et 4 outils", "radar, scénarios « et si », paires, situations similaires", async () => {
-      const m = await import("./outils.js"); const lien = h("p", "small", 'Simulateur complet des scénarios : menu <a href="#scenarios">Plus › Scénarios et simulateur</a>.');
-      return [lien, ...(await m.pageOutils())];
-    }),
-    blocDetaille("Dossiers détaillés", "graphiques annotés, vue d'ensemble, chaînes de transmission", async () => {
-      const m = await import("./engrenages.js"); return m.pageEngrenages();
-    }));
+  const outils = blocDetaille("Simulateur et 4 outils", "radar, scénarios « et si », paires, situations similaires", async () => {
+    const m = await import("./outils.js"); const lien = h("p", "small", 'Simulateur complet des scénarios : menu <a href="#scenarios">Plus › Scénarios et simulateur</a>.');
+    return [lien, ...(await m.pageOutils())];
+  });
+  const detailles = blocDetaille("Dossiers détaillés", "graphiques annotés, vue d'ensemble, chaînes de transmission", async arg => {
+    const m = await import("./engrenages.js"); return m.pageEngrenages(arg);
+  });
+  q("#detaille").append(outils, detailles);
+
+  // Adresses de détail : #engrenages/g=N (dossier N), #engrenages/hebdo et /mensuel (dossiers détaillés), #engrenages/outils
+  section.allerA = async parametre => {
+    const g = (parametre || "").match(/^g=([1-8])$/);
+    if (g) {
+      const b = q(`#engSel button[data-n="${g[1]}"]`);
+      if (b && b.getAttribute("aria-pressed") !== "true") b.click();
+      q("#engSel")?.scrollIntoView({ block: "start" });
+      return true;
+    }
+    if (["hebdo", "mensuel", "quotidien"].includes(parametre)) { document.documentElement.dataset.vue = "complete"; await detailles.ouvrirAvec(parametre === "quotidien" ? undefined : parametre); detailles.scrollIntoView({ block: "start" }); return true; }
+    if (parametre === "outils") { document.documentElement.dataset.vue = "complete"; await outils.ouvrirAvec(); outils.scrollIntoView({ block: "start" }); return true; }
+    return false;
+  };
+  if (parametre && !/^g=/.test(parametre)) { section.cible = await section.allerA(parametre); }
+  else if (parametre) { section.cible = true; requestAnimationFrame(() => q("#engSel")?.scrollIntoView({ block: "start" })); }
 }
 
 function dossier(e, t) {

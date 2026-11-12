@@ -119,21 +119,33 @@ export async function graphique(boite, series, dec = 2, options = {}) {
   return g;
 }
 export function suivreGraphique(g) { graphiques.add(g); return g; }
-export function retirerGraphique(g) { if (g) { graphiques.delete(g); try { g.c.remove(); } catch (e) { /* déjà retiré */ } } }
+/* Retire un graphique : toutes les entrées du registre qui pointent vers ce graphique (jamais un graphique détruit rappelé
+   ensuite par recadrer() ou rethemer() : erreur « Object is disposed » corrigée le 11/11). */
+export function retirerGraphique(g) {
+  if (!g || g.mort) return;
+  g.mort = true;
+  for (const x of [...graphiques]) if (x === g || x.c === g.c) { x.mort = true; graphiques.delete(x); }
+  try { g.c.remove(); } catch (e) { /* déjà retiré */ }
+}
 /* Au changement de thème : couleurs réappliquées (axes, grille, séries). */
 export function rethemer() {
   for (const g of [...graphiques]) {
-    if (!g.boite.isConnected) { graphiques.delete(g); continue; }
-    g.c.applyOptions(optionsTheme());
-    for (const [ser, v, aire] of g.objets) {
-      const col = css(v);
-      ser.applyOptions(aire ? { lineColor: col, topColor: col + "44", bottomColor: col + "00" } : { color: col });
-    }
+    if (g.mort || !g.boite.isConnected) { graphiques.delete(g); continue; }
+    try {
+      g.c.applyOptions(optionsTheme());
+      for (const [ser, v, aire] of g.objets) {
+        const col = css(v);
+        ser.applyOptions(aire ? { lineColor: col, topColor: col + "44", bottomColor: col + "00" } : { color: col });
+      }
+    } catch (e) { console.warn("graphique non rethémé", e); graphiques.delete(g); }
   }
 }
 /* Écran devenu visible : recadrage (sinon graphique écrasé à droite, bug constaté dans la maquette). */
 export function recadrer(racine) {
-  for (const g of graphiques) if (racine.contains(g.boite)) { try { g.c.timeScale().fitContent(); } catch (e) { /* ignoré */ } }
+  for (const g of [...graphiques]) {
+    if (g.mort || !g.boite.isConnected) { graphiques.delete(g); continue; }
+    if (racine.contains(g.boite)) { try { g.c.timeScale().fitContent(); } catch (e) { /* ignoré */ } }
+  }
 }
 
 /* Bloc « version détaillée » : rend un ancien module (fonctionnalités conservées) à la première ouverture. */
@@ -142,13 +154,18 @@ export function blocDetaille(titre, sousTitre, charger) {
   d.innerHTML = `<summary><span><b>${esc(titre)}</b><span class="small"> · ${esc(sousTitre)}</span></span></summary>`;
   const corps = h("div", "legacy"); d.appendChild(corps);
   let fait = false;
+  const remplir = async arg => {
+    corps.innerHTML = squelette(2, 90);
+    try { corps.replaceChildren(...(await charger(arg))); }
+    catch (e) { console.error(e); corps.innerHTML = `<p class="muted">Indisponible : <code>${esc(e.message)}</code> <button type="button" class="btn" onclick="location.reload()">Recharger</button></p>`; }
+  };
   d.addEventListener("toggle", async () => {
     if (!d.open || fait) return;
     fait = true;
-    corps.innerHTML = squelette(2, 90);
-    try { corps.replaceChildren(...(await charger())); }
-    catch (e) { console.error(e); corps.innerHTML = `<p class="muted">Indisponible : ${esc(e.message)}</p>`; }
+    await remplir();
   });
+  // Adresse de détail (#devises/EUR, #engrenages/hebdo) : ouvre le bloc et le remplit avec ce paramètre
+  d.ouvrirAvec = async arg => { fait = true; d.open = true; await remplir(arg); };
   return d;
 }
 

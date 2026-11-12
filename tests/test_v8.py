@@ -209,7 +209,7 @@ def test_manifeste_et_service_worker():
     html = (RACINE / "docs" / "index.html").read_text(encoding="utf-8")
     version = html.split('name="fxdesk-version" content="')[1].split('"')[0]
     assert f'const VERSION = "{version}";' in sw                                      # cache vidé à chaque version
-    assert 'rel="manifest"' in html and 'serviceWorker.register("sw.js")' in html and "og-image.png" in html
+    assert 'rel="manifest"' in html and 'register("sw.js")' in html and "og-image.png" in html
     assert 'data-t="briefing"' in html and 'data-t="paire"' in html and 'id="searchBtn"' in html
 
 

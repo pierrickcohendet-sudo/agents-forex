@@ -69,7 +69,7 @@ const SQUELETTE = `
   <div class="card" style="overflow:hidden"><div class="pad" style="padding-bottom:6px;display:flex;justify-content:space-between;align-items:baseline;gap:8px"><h3>Mes trades sur cette paire</h3><a class="small" href="#journal">Journal →</a></div><div id="ppJ"></div></div>
 </div>`;
 
-let unite = "4h", graphe = null, grEcart = null, maturite = null, periode = "6m";
+let unite = "4h", graphe = null, grEcart = null, tourGraphe = 0, tourEcart = 0, maturite = null, periode = "6m";
 
 export async function ecranPaire(section, parametre) {
   section.innerHTML = SQUELETTE;
@@ -194,7 +194,7 @@ export async function ecranPaire(section, parametre) {
     q("#tfSel").querySelectorAll("button:not([disabled])").forEach(b => b.onclick = () => { unite = b.dataset.t; dessinerGraphique(f); });
     q("#layers").innerHTML = Object.entries(CALQUES).map(([k, v]) => `<button type="button" class="layer" data-k="${k}" aria-pressed="${v[0]}"><i style="background:var(${v[2]})"></i>${v[1]}</button>`).join("");
     q("#layers").querySelectorAll(".layer").forEach(b => b.onclick = () => { CALQUES[b.dataset.k][0] = !CALQUES[b.dataset.k][0]; memoriserCalques(); dessinerGraphique(f); });
-    graphe?.retirer(); graphe = null;
+    graphe?.retirer(); graphe = null; tourGraphe++;
     const u = ch[unite], bg = u?.bougies;
     q("#ccRsi").hidden = true; q("#ccLeg").innerHTML = ""; q("#cc").classList.toggle("vide", !bg?.length);
     if (!bg?.length) { q("#cc").innerHTML = `<div class="empty">${esc(ch.raison || f.raison_detail || "Bougies non collectées pour cette paire.")}</div>`; q("#ccSrc").textContent = ""; q("#ccMention").textContent = ""; return; }
@@ -223,15 +223,19 @@ export async function ecranPaire(section, parametre) {
       if (!(an.divergences || []).length) leg.push('<span class="muted">aucune divergence confirmée</span>');
     }
     q("#ccLeg").innerHTML = leg.join("");
+    const jeton = ++tourGraphe;   // deux rendus rapprochés (changement de paire) : seul le dernier garde son graphique
     requestAnimationFrame(async () => {
-      graphe = await graphiquePaire(q("#cc"), q("#ccRsi"), bg, { dec: p, lignesPrix: lignes, marqueurs, courbes, zones, lignes: tendances, rsi, divergences: L.rsi[0] ? an.divergences : [] });
+      if (jeton !== tourGraphe) return;
+      const g = await graphiquePaire(q("#cc"), q("#ccRsi"), bg, { dec: p, lignesPrix: lignes, marqueurs, courbes, zones, lignes: tendances, rsi, divergences: L.rsi[0] ? an.divergences : [] });
+      if (jeton !== tourGraphe) { g?.retirer(); return; }
+      graphe = g;
     });
     q("#ccSrc").textContent = `${u.source || "Bougies Twelve Data"}, heures de Paris · ${P.mention_reperes || "repères calculés en Python, pas des signaux"}`;
   }
 
   function dessinerEcart(f) {
     const e = f.ecart_taux || {}, M = e.maturites || {};
-    grEcart?.retirer(); grEcart = null;
+    grEcart?.retirer(); grEcart = null; tourEcart++;
     if (!maturite || !M[maturite]?.disponible) maturite = e.defaut;
     q("#ecSous").textContent = `${f.base} − ${f.cotation}, rendements d'État · ${e.note_defaut || "calcul Python, sources officielles"}`;
     q("#ecMat").innerHTML = [["2a", "2 ans"], ["10a", "10 ans"]].map(([k, lib]) => `<button type="button" data-m="${k}" aria-pressed="${k === maturite}" ${M[k]?.disponible ? "" : `disabled title="${esc(M[k]?.raison || "indisponible")}"`}>${lib}</button>`).join("");
@@ -251,7 +255,13 @@ export async function ecranPaire(section, parametre) {
     const jours = PERIODES.find(z => z[0] === periode)[2], depuis = new Date(Date.parse(x.date) - jours * 864e5).toISOString().slice(0, 10);
     const cl = (e.cloture_paire || []).filter(z => z[0] >= depuis), ec = (x.ecart || []).filter(z => z[0] >= depuis);
     const pp = dec((cl[cl.length - 1] || [0, 1])[1]);
-    requestAnimationFrame(async () => { grEcart = await graphiqueEcart(q("#ecHaut"), q("#ecBas"), cl, ec, pp, x.mensuel); });
+    const jeton = ++tourEcart;
+    requestAnimationFrame(async () => {
+      if (jeton !== tourEcart) return;
+      const g = await graphiqueEcart(q("#ecHaut"), q("#ecBas"), cl, ec, pp, x.mensuel);
+      if (jeton !== tourEcart) { g?.retirer(); return; }
+      grEcart = g;
+    });
     q("#ecSrc").textContent = `Paire : ${e.source_paire || "série unique 5 ans"} · ${f.base} : ${x.sources?.[f.base] || "n/d"} · ${f.cotation} : ${x.sources?.[f.cotation] || "n/d"}` +
       (M["2a"] && !M["2a"].disponible && maturite !== "2a" ? ` · 2 ans : ${M["2a"].raison}` : "");
   }

@@ -58,3 +58,14 @@ horizontal. Comparer côte à côte avec `docs/design/reference/` et lister les 
 - Lignes de tendance : pleines si valides, pointillées et estompées si cassées depuis moins de 5 bougies.
 - Carte « Écart de taux » : deux graphiques empilés et synchronisés (paire, écart en pb), jamais deux axes sur un graphique.
 - Données : `paires.json` léger + `paires/XXX-YYY.json` chargé à l'ouverture de la paire (`paire_graphique.js` dessine).
+
+### Correctif du 11/11 — versions, adresses, erreurs
+
+- Service worker : une version = un jeu complet de fichiers pré-chargé à l'installation (`FICHIERS`, écrit par
+  `core/version_site.py`). Pas d'activation en pleine session : bandeau « Nouvelle version disponible : Recharger »,
+  activation automatique seulement juste après un chargement. Jamais d'ancien et de nouveau code mélangés.
+- Toute adresse de détail ouvre quelque chose : `#devises/EUR` (carte mise en avant, fiche détaillée ouverte),
+  `#paire/USD-JPY`, `#engrenages/g=3`, `#engrenages/hebdo|mensuel|quotidien|outils`. Un écran expose `section.allerA(param)`.
+- Erreur d'affichage : message exact, bouton « Recharger », le reste du site reste utilisable (écran reconstruit à la visite suivante).
+- Un graphique retiré sort du registre (`retirerGraphique`) et ses abonnements de synchronisation sont coupés.
+- Vérification : `node outils/verifier_adresses.mjs <url> [--mobile]` (onglets, 9 devises, 36 paires, 8 engrenages ; en local et en ligne).
