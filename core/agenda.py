@@ -825,7 +825,8 @@ def archiver_publications(evenements: list[dict], chemin: Path) -> None:
         jour = datetime.fromtimestamp(int(e["dateline"]), tz=timezone.utc).date().isoformat()
         pubs[f"{e.get('devise')}|{e.get('nom')}|{jour}"] = {"devise": e.get("devise"), "nom": e.get("nom"), "date": jour,
                                                            "reel": e.get("reel"), "prevision": e.get("prevision"),
-                                                           "precedent": e.get("precedent")}
+                                                           "precedent": e.get("precedent"), "impact": str(e.get("impact", "")).lower(),
+                                                           "revision": e.get("revision")}
     chemin.parent.mkdir(parents=True, exist_ok=True)
     chemin.write_text(json.dumps({"debut": archive.get("debut") or date.today().isoformat(), "publications": pubs},
                                  ensure_ascii=False, indent=0), encoding="utf-8")
@@ -946,6 +947,8 @@ def ecrire(racine: str | Path, registre: dict | None, config: dict, h5=None, tec
                            verifs={"mois": (mois.get("maj") or "")[:16] or None, "semaine": semaine.get("date")},
                            tresor=tresor, revisions=revisions)
         (docs / "agenda.json").write_text(json.dumps(donnees, ensure_ascii=False, indent=1), encoding="utf-8")
+        from core import publications_archive   # lot V9 : chaque « publié » archivé dès sa sortie
+        publications_archive.mettre_a_jour(donnees, racine)
         return donnees
     except Exception as exc:  # noqa: BLE001
         log.error("agenda.json non écrit : %s", exc)

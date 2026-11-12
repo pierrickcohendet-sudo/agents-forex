@@ -82,6 +82,9 @@ SERIES_TWELVE = {
     # Lot V6 (vérifié le 03/11/2026 sur le plan gratuit) : S&P 500 du jour (FRED SP500 a 2 jours de retard) et USD/SEK pour
     # l'indice dollar calculé selon la formule du DXY. Brent : réservé aux plans payants (XBR/USD, BRENT) -> FRED/EIA.
     "sp500_spy": ("SPY", "Twelve Data (ETF SPY, réplique le S&P 500 — pas l'indice lui-même)", "$"),
+    # Lot V9 : relais quotidien du pétrole (XBR/USD et WTI/USD réservés aux offres payantes, vérifié le 12/11/2026)
+    "brent_bno": ("BNO", "Twelve Data (ETF BNO, contrats à terme sur le Brent — pas le prix au comptant)", "$"),
+    "wti_uso": ("USO", "Twelve Data (ETF USO, contrats à terme sur le WTI — pas le prix au comptant)", "$"),
     "usdsek": ("USD/SEK", "Twelve Data (USD/SEK)", "niveau"),
 }
 # Taux de change quotidiens (Fed H.10) pour les précédents historiques : « ce qu'a fait la devise ensuite ».
@@ -240,13 +243,25 @@ def collecter(config: dict) -> dict:
         except Exception as exc:  # noqa: BLE001 — une série en échec n'affecte qu'elle
             resultat["erreurs"].append(masquer_secrets(f"{nom} ({source}) : {exc}")[:200])
 
+    # Lot V9 : courbe du Trésor américain (publiée le soir même) ; FRED, qui la reprend un jour plus tard, en secours
+    from core import tresor
+    courbe = tresor.collecter(aujourdhui)
+    resultat["tresor"] = {"dernier": courbe.get("dernier"), "erreur": courbe.get("erreur"), "source": courbe.get("source")}
+    if courbe.get("erreur"):
+        resultat["erreurs"].append(f"Trésor américain (courbe quotidienne) : {courbe['erreur']} — FRED seul")
     if cle:
         for nom, (serie, source, unite, freq) in SERIES_FRED.items():
             # séries de l'historique quotidien 5 ans : 300 jours d'amorçage en plus (MM200 calculable sur 5 ans pleins)
             debut_serie = aujourdhui - timedelta(days=historique_5ans.FENETRE_JOURS) if nom in historique_5ans.SERIES else debut
-            ajouter(nom, lambda s=serie, f=freq, d=debut_serie: _fred(s, cle, debut_mensuel if f in ("mensuel", "trimestriel") else
-                                                                    aujourdhui - timedelta(days=12 * 366) if f == "annuel" else d),
-                    source, unite, freq)
+            charger = (lambda s=serie, f=freq, d=debut_serie: _fred(s, cle, debut_mensuel if f in ("mensuel", "trimestriel") else
+                                                                     aujourdhui - timedelta(days=12 * 366) if f == "annuel" else d))
+            if (courbe.get("points") or {}).get(nom):
+                charger = (lambda c=charger, n=nom: tresor.fusionner(c(), courbe["points"][n]))
+                source = f"{tresor.SOURCE} ; {source} en secours"
+            ajouter(nom, charger, source, unite, freq)
+    elif (courbe.get("points") or {}):
+        for nom, pts in courbe["points"].items():
+            ajouter(nom, lambda p=pts: [tuple(x) for x in p], tresor.SOURCE, "%", "quotidien")
     else:
         resultat["erreurs"].append("FRED_API_KEY absente : séries FRED non collectées")
 

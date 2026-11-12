@@ -34,8 +34,11 @@ function synchroniser(a, b, sa, sb, valeurs) {
   return () => { mort = true; for (const d of desab) { try { d(); } catch (e) { /* déjà retiré */ } } };
 }
 
-const fmtTemps = t => typeof t === "number" ? heureParis(t, true) : t;
-const repere = t => typeof t === "number" ? new Date(t * 1000).toLocaleString("fr-FR", { timeZone: "Europe/Paris", day: "2-digit", hour: "2-digit", minute: "2-digit" }).replace(" ", " · ") : t;
+// Bougie quotidienne (horodatage à minuit UTC) : la date seule ; bougie intrajournalière : jour et heure de Paris
+const jourSeul = t => t % 86400 === 0;
+const dateJour = t => new Date(t * 1000).toLocaleDateString("fr-FR", { timeZone: "UTC", day: "2-digit", month: "2-digit" });
+const fmtTemps = t => typeof t === "number" ? (jourSeul(t) ? dateJour(t) : heureParis(t, true)) : t;
+const repere = t => typeof t === "number" ? (jourSeul(t) ? dateJour(t) : new Date(t * 1000).toLocaleString("fr-FR", { timeZone: "Europe/Paris", day: "2-digit", hour: "2-digit", minute: "2-digit" }).replace(" ", " · ")) : t;
 
 /* opts : {unite, dec, lignesPrix, marqueurs, courbes, zones:[{haut, bas, force, etiquette, cote}], lignes:[{p1, fin, etat}],
    rsi:[[t, v]] ou null, divergences:[{sens, p1, p2, texte}], hauteurRsi} -> {retirer()} */

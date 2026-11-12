@@ -69,3 +69,17 @@ horizontal. Comparer côte à côte avec `docs/design/reference/` et lister les 
 - Erreur d'affichage : message exact, bouton « Recharger », le reste du site reste utilisable (écran reconstruit à la visite suivante).
 - Un graphique retiré sort du registre (`retirerGraphique`) et ses abonnements de synchronisation sont coupés.
 - Vérification : `node outils/verifier_adresses.mjs <url> [--mobile]` (onglets, 9 devises, 36 paires, 8 engrenages ; en local et en ligne).
+
+## Lot V9 — la Synthèse en rapport quotidien (livraison 1)
+
+- Référence : `maquette_v9_synthese.html` et ses captures `reference/v9/` (clair et sombre, 1280 et 390 px). Composants :
+  `docs/site/v9.css` (règles de la maquette préfixées par `.v9`, générées depuis la maquette), écran `synthese_v9.js`.
+- Données : `synthese.json` (13 sections, `core/synthese_v9.py`). En semaine, la Synthèse affiche la V9 ; le week-end, ou si
+  `synthese.json` a plus de 4 jours, la version précédente reste. Le rapport détaillé V8 reste dans « Rapport détaillé ».
+- Sommaire collant avec barre de progression ; sur téléphone (< 1100 px), barre horizontale qui défile et suit la lecture.
+- Bouton « Sources » (ancien « Origine des données ») : chiffres soulignés, source et date au survol ; choix mémorisé.
+- Chaque section indique sa rédaction : point vert « texte du modèle » (nombres vérifiés en Python) ou point orange
+  « rédaction automatique » (texte Python). Une section en erreur affiche sa raison, les autres restent.
+- Graphiques : Brent 6 mois (prix EIA en trait plein, estimation par l'ETF BNO en orange), bougies quotidiennes de la paire
+  n° 1 avec zones et lignes du V8.2, écart de taux en dessous ; micro-graphiques SVG pour les marchés et les paires.
+- Captures : `node outils/captures.mjs "http://localhost:4173/" captures/<lot> synthese`, comparées à `reference/v9/`.

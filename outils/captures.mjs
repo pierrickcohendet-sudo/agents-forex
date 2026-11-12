@@ -25,7 +25,9 @@ const ws = new WebSocket(cible.webSocketDebuggerUrl);
 await new Promise(r => ws.addEventListener("open", r));
 let n = 0; const attente = new Map();
 ws.addEventListener("message", ev => { const m = JSON.parse(ev.data); if (m.id && attente.has(m.id)) { attente.get(m.id)(m); attente.delete(m.id); } });
-const cdp = (method, params = {}) => new Promise(r => { const id = ++n; attente.set(id, r); ws.send(JSON.stringify({ id, method, params })); });
+// Délai maximal de 30 s par commande : une page rechargée pendant une évaluation ne bloque pas les captures.
+const cdp = (method, params = {}) => new Promise(r => { const id = ++n; const t = setTimeout(() => { attente.delete(id); r({ delai: true }); }, 30000);
+  attente.set(id, m => { clearTimeout(t); r(m); }); ws.send(JSON.stringify({ id, method, params })); });
 const evaluer = async expr => (await cdp("Runtime.evaluate", { expression: expr, awaitPromise: true, returnByValue: true })).result?.result?.value;
 
 await cdp("Page.enable"); await cdp("Runtime.enable");

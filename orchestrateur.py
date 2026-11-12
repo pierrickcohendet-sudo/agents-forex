@@ -37,10 +37,10 @@ from pathlib import Path
 import yaml
 from dotenv import load_dotenv
 
-from agents import (agent_consequences, agent_critique, agent_paires, agent_rapport, collecte_intraday, agent_dossier_hebdo, agent_engrenages, agent_redacteur, agent_strategiste, agent_synthese,
+from agents import (agent_synthese_v9, agent_consequences, agent_critique, agent_paires, agent_rapport, collecte_intraday, agent_dossier_hebdo, agent_engrenages, agent_redacteur, agent_strategiste, agent_synthese,
                     collecte_calendrier, collecte_flux, collecte_historiques, collecte_macro, collecte_news,
                     collecte_technique)
-from core import (accueil, alertes_telephone, briefing, ecart_taux, fraicheur_blocs, alertes, profil_devises, collecte_cache, controle_qualite, quota_twelve, seance, sources, indicateurs, cours, dossiers, evaluation, hebdo, historique_5ans, impact, marche_taux, overrides, precedents,
+from core import (bls, accueil, alertes_telephone, briefing, ecart_taux, fraicheur_blocs, alertes, profil_devises, collecte_cache, controle_qualite, quota_twelve, seance, sources, indicateurs, cours, dossiers, evaluation, hebdo, historique_5ans, impact, marche_taux, overrides, precedents,
                   publication_web,
                   registre_macro, saisies_manuelles, site_donnees, tableau_macro)
 from core.llm import creer_fournisseur, journal_appels, reinitialiser_journal
@@ -276,6 +276,8 @@ def main() -> int:
             if (not a_completer and not etat_manquant and not collectes_a_refaire
                     and not synthese_manquantes and not engrenages_manquants and not rapport_manquant):
                 log.info("--completer : rien à compléter aujourd'hui (rapport déjà complet) — analyses inchangées")
+                etape("emploi américain (BLS)", bls.collecter, RACINE, defaut=None)
+                etape("synthèse V9 (synthese.json)", _synthese_v9, config, None, True, defaut=None)
                 etape("briefing du jour (briefing.json)", briefing.ecrire, RACINE, config, defaut=None)
                 etape("alertes sur le téléphone (ntfy)", _alertes_telephone, RACINE, config, defaut=None)
                 etape("fraîcheur des blocs (fraicheur.json)", fraicheur_blocs.ecrire, RACINE, config, defaut=None)
@@ -356,6 +358,8 @@ def main() -> int:
                         collecte_historiques.collecter, config, defaut={**vide, "series": {}})
     # Lot V8.2 : rendements 2 / 10 ans quotidiens sur 1 an (écart de taux de la page Paire), cache complété chaque jour
     etape("cache des rendements (écart de taux)", ecart_taux.mettre_a_jour_cache, config, historiques, defaut=None)
+    # Lot V9 : rapport sur l'emploi américain détaillé (API publique du BLS, une requête ; une seconde le jour du NFP)
+    etape("emploi américain (BLS)", bls.collecter, RACINE, defaut=None)
     # UNE valeur par indicateur sur tout le site : RSI, moyennes mobiles et volatilité de chaque devise
     # recalculés sur la série unique 5 ans (core/historique_5ans.py) AVANT scores, analyse et publication.
     harmonises = etape("indicateurs techniques (série unique 5 ans)", historique_5ans.harmoniser_technique,
@@ -512,6 +516,8 @@ def main() -> int:
     # par jour, après les engrenages et la réserve de quota), repli 100 % Python ; copie Notion au run complet.
     rapport_jour_donnees = etape("rapport du jour", agent_rapport.executer, RACINE, config, llm,
                                  complet=not arguments.completer, defaut=None)
+    # Lot V9 : Synthèse en 13 sections (faits Python, 4 appels groupés, secours Groq, repli Python contrôlé)
+    etape("synthèse V9 (synthese.json)", _synthese_v9, config, llm, False, defaut=None)
     # Lot V8 : Briefing (page d'accueil), alertes sur le téléphone, fraîcheur des blocs — chacun isolé
     etape("briefing du jour (briefing.json)", briefing.ecrire, RACINE, config, defaut=None)
     etape("alertes sur le téléphone (ntfy)", _alertes_telephone, RACINE, config, defaut=None)
@@ -585,6 +591,30 @@ def main() -> int:
              rapport["synthese_globale"]["biais_macro_global"],
              critique.get("validation", "?"), len(rapport.get("donnees_non_rafraichies", [])))
     return 0
+
+
+def _synthese_v9(config: dict, llm, complement: bool) -> dict | None:
+    """Synthèse V9. En complément horaire sans autre travail : le modèle n'est sollicité que si des sections du jour
+    sont encore en rédaction automatique (503 du matin par exemple) ; sinon, faits rafraîchis et textes repris."""
+    if llm is None and complement:
+        try:
+            ancien = json.loads((RACINE / config["publication_web"]["dossier_docs"] / "data" / "synthese.json").read_text(encoding="utf-8"))
+        except (OSError, ValueError, KeyError):
+            ancien = {}
+        if ancien.get("date") != date.today().isoformat() or ancien.get("redaction_automatique"):
+            try:
+                llm = creer_fournisseur(config)
+                if hasattr(llm, "configurer_budget") and config["llm"].get("budget"):
+                    llm.configurer_budget(config["llm"]["budget"], complet=False, lundi=date.today().weekday() == 0)
+            except Exception as exc:  # noqa: BLE001
+                log.warning("Synthèse V9 : modèle non initialisé (%s) — secours puis rédaction automatique", exc)
+                llm = None
+    s = agent_synthese_v9.executer(RACINE, config, llm)
+    if s:
+        log.info("Synthèse V9 : %d section(s) rédigée(s) par %s, %d en rédaction automatique",
+                 13 - len(s.get("redaction_automatique") or []), ", ".join(s.get("redige_par") or []) or "—",
+                 len(s.get("redaction_automatique") or []))
+    return s
 
 
 def rapport_jour_textes(racine: Path, config: dict) -> dict | None:

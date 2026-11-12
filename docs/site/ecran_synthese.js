@@ -79,7 +79,18 @@ const VARIABLES = { us2a_5j: "US 2 ans", us10a_5j: "US 10 ans", us30a_5j: "US 30
 const symbole = r => r === true ? "✓" : r === false ? "×" : "–";
 const classeCond = r => r === true ? "pos" : r === false ? "neg" : "muted";
 
+/* Lot V9 : en semaine, la Synthèse est le rapport en 13 sections (synthese.json, synthese_v9.js) ; le week-end, ou si
+   synthese.json manque ou date de plus de 4 jours, la version hebdomadaire existante (ci-dessous) reste affichée. */
+function v9Valable(s) {
+  if (!s || s.version !== "quotidienne" || !Array.isArray(s.sections)) return false;
+  const paris = new Date(new Date().toLocaleString("en-US", { timeZone: "Europe/Paris" }));
+  if (paris.getDay() === 0 || paris.getDay() === 6) return false;
+  return (Date.now() - Date.parse(s.date + "T12:00:00Z")) / 864e5 < 4.5;
+}
+
 export async function ecranSynthese(section) {
+  const s9 = await donnees("synthese");
+  if (v9Valable(s9)) { const m = await import("./synthese_v9.js"); return m.ecranSyntheseV9(section, s9); }
   section.innerHTML = SQUELETTE;
   const [rj, dos, profil, tm] = await Promise.all([donnees("rapport_jour"), donnees("dossiers"), donnees("profil_devises"), donnees("tableau_macro")]);
   if (!rj) { $("#heroTitre", section).textContent = "Rapport du jour indisponible"; $("#heroTxt", section).textContent = "rapport_jour.json absent : il sera publié au prochain run."; return; }

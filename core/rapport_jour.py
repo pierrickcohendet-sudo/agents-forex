@@ -222,7 +222,7 @@ def format_actif(cat: str, cle: str) -> dict:
     return {"decimales": 2, "suffixe": ""}
 
 
-SEUIL_RETARD_BRENT = 5   # jours ouvrés
+SEUIL_RETARD_BRENT = 3   # jours ouvrés (lot V9 : jamais 4 jours de retard sans alerte)
 
 
 def jours_ouvres_entre(debut: date, fin: date) -> int:
@@ -246,7 +246,7 @@ def alerte_fraicheur_brent(date_valeur: str, aujourd: date) -> dict | None:
     return {"jours_ouvres": retard, "seuil": SEUIL_RETARD_BRENT,
             "texte": f"Dernière valeur au {str(date_valeur)[8:10]}/{str(date_valeur)[5:7]} : {retard} jours ouvrés de retard "
                      f"(au-delà de {SEUIL_RETARD_BRENT}). L'EIA publie ses prix spot une fois par semaine ; FRED les reprend "
-                     "ensuite. Valeur à confirmer.",
+                     "ensuite. Relais quotidien : ETF BNO (contrats Brent, Twelve Data) dans la Synthèse. Valeur à confirmer.",
             "cause": "EIA : publication hebdomadaire des prix spot quotidiens, reprise par FRED (DCOILBRENTEU)"}
 
 
@@ -707,9 +707,18 @@ def publications_veille(agenda_donnees, h5, technique, aujourd: date) -> dict:
     """Publications à fort impact du dernier jour ouvré : réel contre consensus (écart, en σ si l'échelle de l'indicateur
     est connue) et réaction de la devise sur la séance qui suit ; surprises de banques centrales en tête."""
     from core import impact as impact_mod
+    from core import publications_archive as pa
     veille = jour_ouvre_precedent(aujourd).isoformat()
     evts = [e for j in (agenda_donnees or {}).get("jours") or [] for e in j.get("evenements") or []
             if e.get("date_paris") == veille and e.get("impact") == "fort" and e.get("publie") and e.get("type") in ("Chiffre", "Réunion BC")]
+    # Lot V9 : l'Agenda repart du lundi (flux hebdomadaire) ; l'archive des publications garde le vendredi
+    vus = {(e.get("devise"), str(e.get("evenement_en") or e.get("evenement")).lower()) for e in evts}
+    for p in pa.publications_du(pa.charger(), veille, ("fort",)):
+        if (p.get("devise"), str(p.get("evenement_en")).lower()) not in vus and p.get("type") in ("Chiffre", "Réunion BC"):
+            evts.append({"date_paris": p["date"], "heure_paris": p.get("heure_paris"), "devise": p["devise"], "evenement": p.get("evenement"),
+                         "evenement_en": p.get("evenement_en"), "type": p.get("type"), "impact": "fort", "publie": p.get("reel"),
+                         "consensus": p.get("consensus"), "precedent": p.get("precedent"), "ecart": p.get("ecart"),
+                         "statuts": {"publie": p.get("statut")}})
     lignes = []
     for e in evts:
         ec = e.get("ecart") or {}

@@ -14,7 +14,7 @@ from pathlib import Path
 
 DEBUT, FIN = "<!-- version-site:debut -->", "<!-- version-site:fin -->"
 # Lot V7 : anciens composants (cabinet.css, restylés par les tokens), tokens de la maquette, composants V7 — dans cet ordre.
-FEUILLES = ("cabinet.css", "tokens.css", "v7.css", "v8.css")
+FEUILLES = ("cabinet.css", "tokens.css", "v7.css", "v8.css", "v9.css")
 
 
 def empreinte(dossier_site: Path) -> str:

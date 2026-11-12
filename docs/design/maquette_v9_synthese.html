@@ -1,0 +1,835 @@
+<title>Trading baby Synthèse V9</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+
+/* Layout : en-tête collant (marque, sessions, onglets), puis un écran par onglet, cartes posées sur un fond légèrement teinté d'encre bleue. */
+:root{
+  --bg:#EEF1F5; --surface:#FFFFFF; --surface-2:#F6F8FB; --ink:#0D1626; --ink-2:#364153; --muted:#677286; --line:#DDE2EA; --line-2:#C9D0DB;
+  --accent:#2F55D4; --accent-soft:#E6ECFD; --up:#0E8A5A; --up-soft:#DDF3E9; --down:#C23B32; --down-soft:#FBE4E1; --warn:#A86A00; --warn-soft:#FBF0D9;
+  --c1:#3B5BDB; --c2:#1098AD; --c3:#E67700; --c4:#9C36B5;
+  --shadow:0 1px 2px rgba(13,22,38,.05),0 8px 24px -12px rgba(13,22,38,.12);
+  --f-display:"Newsreader",Georgia,"Times New Roman",serif;
+  --f-body:"Instrument Sans",-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --r:14px; --ease:cubic-bezier(.2,.7,.2,1);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#06080C; --surface:#0D1119; --surface-2:#121825; --ink:#E8ECF4; --ink-2:#BCC4D2; --muted:#848FA3; --line:#1C2330; --line-2:#2A3343;
+  --accent:#8AA4FF; --accent-soft:#18223F; --up:#43D39E; --up-soft:#0F2A20; --down:#FF7F73; --down-soft:#2D1513; --warn:#F2BE5C; --warn-soft:#2B2210;
+  --c1:#5C7CFA; --c2:#1CA3B8; --c3:#D17A0A; --c4:#B65BD6; --shadow:0 1px 0 rgba(255,255,255,.03),0 12px 32px -16px rgba(0,0,0,.8); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#06080C; --surface:#0D1119; --surface-2:#121825; --ink:#E8ECF4; --ink-2:#BCC4D2; --muted:#848FA3; --line:#1C2330; --line-2:#2A3343;
+  --accent:#8AA4FF; --accent-soft:#18223F; --up:#43D39E; --up-soft:#0F2A20; --down:#FF7F73; --down-soft:#2D1513; --warn:#F2BE5C; --warn-soft:#2B2210;
+  --c1:#5C7CFA; --c2:#1CA3B8; --c3:#D17A0A; --c4:#B65BD6; --shadow:0 1px 0 rgba(255,255,255,.03),0 12px 32px -16px rgba(0,0,0,.8); color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1320px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* En-tête */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid var(--line)}
+.top-row{display:flex;align-items:center;gap:20px;padding-block:12px;flex-wrap:wrap}
+.brand{display:flex;flex-direction:column;line-height:1.1;margin-right:auto}
+.brand b{font-family:var(--f-display);font-weight:600;font-size:23px;letter-spacing:-.01em}
+.brand span{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.sessions{display:flex;flex-direction:column;gap:4px;min-width:230px;flex:0 1 300px}
+.sess-bar{position:relative;height:22px;border-radius:6px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
+.sess{position:absolute;top:3px;bottom:3px;border-radius:4px;font-size:10px;font-weight:600;display:flex;align-items:center;padding-left:6px;color:var(--ink-2);white-space:nowrap;overflow:hidden}
+.sess.on{color:var(--ink)}
+.sess-now{position:absolute;top:0;bottom:0;width:2px;background:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 25%,transparent)}
+.sess-cap{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}
+.ctrls{display:flex;gap:8px;align-items:center}
+.switch{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 12px 0 6px;border-radius:999px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-size:13px;font-weight:600;color:var(--ink-2)}
+.switch i{width:30px;height:18px;border-radius:999px;background:var(--line-2);position:relative;transition:background .2s}
+.switch i::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:var(--surface);box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .25s var(--ease)}
+.switch[aria-pressed="true"] i{background:var(--accent)}
+.switch[aria-pressed="true"] i::after{transform:translateX(12px)}
+.iconbtn{width:36px;height:36px;border-radius:999px;border:1px solid var(--line);background:var(--surface);cursor:pointer;display:grid;place-items:center}
+.iconbtn svg{width:17px;height:17px}
+nav.tabs{display:flex;gap:2px;position:relative;overflow-x:auto;scrollbar-width:none;padding-bottom:0}
+nav.tabs::-webkit-scrollbar{display:none}
+.tab{position:relative;border:0;background:none;padding:12px 14px 14px;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;transition:color .2s}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink)}
+.tab-ink{position:absolute;bottom:0;height:2px;background:var(--ink);border-radius:2px;transition:left .35s var(--ease),width .35s var(--ease)}
+
+/* Écrans */
+main{padding-block:28px 64px}
+.screen{display:none;flex-direction:column;gap:22px}
+.screen.on{display:flex;animation:in .38s var(--ease)}
+@keyframes in{from{opacity:.0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.screen.on{animation:none}.tab-ink,.switch i::after{transition:none}}
+[data-vue="essentielle"] .full{display:none!important}
+.eyebrow{font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);font-weight:600}
+h1,h2,h3{margin:0;text-wrap:balance}
+h2{font-family:var(--f-display);font-weight:500;font-size:26px;letter-spacing:-.01em}
+h3{font-size:15px;font-weight:600}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.sec-head p{margin:0;color:var(--muted);font-size:13.5px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.pad{padding:20px}
+.grid{display:grid;gap:14px}
+.muted{color:var(--muted)}
+.src{font-size:11.5px;color:var(--muted)}
+.chip{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:999px;font-size:12.5px;font-weight:600;background:var(--surface-2);color:var(--ink-2);border:1px solid var(--line);white-space:nowrap}
+.chip.up{background:var(--up-soft);color:var(--up);border-color:transparent}
+.chip.dn{background:var(--down-soft);color:var(--down);border-color:transparent}
+.chip.warn{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.chip.acc{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex:none}
+.pos{color:var(--up)} .neg{color:var(--down)}
+.note-ex{font-size:12px;color:var(--warn);font-weight:600}
+
+/* Synthèse */
+.hero{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:0;overflow:hidden}
+.hero-main{padding:30px 32px;display:flex;flex-direction:column;gap:14px}
+.hero-main h1{font-family:var(--f-display);font-weight:500;font-size:clamp(38px,5.2vw,60px);line-height:1.02;letter-spacing:-.02em}
+.hero-main p{margin:0;font-size:17px;color:var(--ink-2);max-width:62ch}
+.hero-side{background:var(--surface-2);border-left:1px solid var(--line);padding:26px;display:flex;flex-direction:column;gap:18px;justify-content:center}
+.ring{display:flex;align-items:center;gap:18px}
+.ring svg{width:116px;height:116px;flex:none}
+.ring b{font-family:var(--f-display);font-size:30px;font-weight:500}
+.meter{display:flex;gap:4px}.meter i{width:26px;height:6px;border-radius:3px;background:var(--line-2)}.meter i.on{background:var(--accent)}
+.ess{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--line);border-radius:var(--r);overflow:hidden;border:1px solid var(--line)}
+.ess div{background:var(--surface);padding:16px 18px;display:flex;flex-direction:column;gap:6px}
+.ess span{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.ess p{margin:0;font-size:14.5px;line-height:1.45}
+.two{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:14px;align-items:start}
+.scen{display:flex;flex-direction:column;gap:10px;padding:16px 18px;border-top:1px solid var(--line)}
+.scen:first-of-type{border-top:0}
+.scen-top{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.scen-top b{font-weight:600;font-size:15px}
+.scen-top span{font-family:var(--f-display);font-size:22px}
+.segs{display:flex;gap:3px}
+.segs i{flex:1;height:8px;border-radius:3px;background:var(--line)}
+.segs i.ok{background:var(--accent)}
+.segs i.nd{background:repeating-linear-gradient(135deg,var(--line-2) 0 2px,transparent 2px 5px)}
+.conds{display:none;margin:0;padding:0;list-style:none;font-size:13px;color:var(--ink-2);gap:4px;flex-direction:column}
+.scen.open .conds{display:flex}
+.conds li{display:flex;gap:8px}
+.conds em{font-style:normal;font-weight:700;width:14px;flex:none}
+.scen button.more{align-self:flex-start;border:0;background:none;color:var(--accent);font-size:13px;font-weight:600;cursor:pointer;padding:0}
+.wl-row{display:grid;grid-template-columns:28px 92px minmax(0,1fr) 54px;gap:12px;align-items:center;padding:12px 18px;border-top:1px solid var(--line);cursor:pointer;transition:background .15s}
+.wl-row:hover{background:var(--surface-2)}
+.wl-row .rk{font-family:var(--f-display);font-size:20px;color:var(--muted)}
+.wl-row b{font-size:15px}
+.stack{display:flex;gap:2px;height:10px}
+.stack i{height:100%;border-radius:3px}
+.wl-detail{display:none;padding:0 18px 14px 58px;font-size:13.5px;color:var(--ink-2);gap:8px;flex-direction:column}
+.wl-detail.open{display:flex}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:10px;height:10px;border-radius:3px}
+.meca{display:flex;flex-wrap:wrap;gap:8px}
+.conclu{font-family:var(--f-display);font-size:20px;line-height:1.45;margin:0;max-width:70ch}
+
+/* Tableau de bord */
+.tiles{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
+.tile{padding:16px 16px 10px;display:flex;flex-direction:column;gap:4px;transition:transform .2s var(--ease),border-color .2s}
+.tile:hover{transform:translateY(-2px);border-color:var(--line-2)}
+.tile .lbl{font-size:12.5px;color:var(--muted);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile .val{font-size:26px;font-weight:600;letter-spacing:-.01em}
+.tile .chg{display:flex;gap:10px;font-size:13px;font-weight:600}
+.tile .chg span:last-child{color:var(--muted);font-weight:500}
+.tile svg{width:100%;height:46px;display:block;margin-top:6px}
+.tile .meta{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}
+.grp{font-size:12px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-top:6px}
+.scroll{overflow-x:auto}
+table.mx{border-collapse:separate;border-spacing:0;width:100%;min-width:860px;font-size:14px}
+.mx th,.mx td{padding:11px 12px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+.mx thead th{font-size:12px;letter-spacing:.08em;color:var(--muted);font-weight:700;background:var(--surface);position:sticky;top:0}
+.mx th:first-child,.mx td:first-child{text-align:left;position:sticky;left:0;background:var(--surface);font-weight:600;z-index:1}
+.mx tbody tr:hover td{background:var(--surface-2)}
+.mx td small{display:block;font-size:11.5px;color:var(--muted);font-weight:400}
+.mx .s{font-size:11px;margin-left:4px}
+.bcs{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
+.bc{padding:14px 16px;display:flex;flex-direction:column;gap:2px}
+.bc b{font-size:22px;font-weight:600}
+.bc .who{display:flex;justify-content:space-between;font-size:12.5px;font-weight:600;color:var(--muted)}
+
+/* Devises */
+.dvs{grid-template-columns:repeat(auto-fill,minmax(360px,1fr))}
+.dv{display:flex;flex-direction:column}
+.dv-head{display:flex;justify-content:space-between;align-items:center;padding:18px 20px 6px;gap:10px}
+.dv-head .code{font-family:var(--f-display);font-size:30px;font-weight:500;line-height:1}
+.dv-head .nm{font-size:13px;color:var(--muted)}
+.dv-px{padding:0 20px;display:flex;gap:10px;align-items:baseline}
+.dv-px b{font-size:20px;font-weight:600}
+.chart{height:170px;margin:8px 8px 0;position:relative}
+.dv-body{padding:14px 20px 18px;display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line);margin-top:8px;font-size:13.5px}
+.kv{display:grid;grid-template-columns:118px minmax(0,1fr);gap:4px 12px}
+.kv span:nth-child(odd){color:var(--muted)}
+.corr{position:relative;height:6px;border-radius:3px;background:var(--surface-2);border:1px solid var(--line);margin-top:6px}
+.corr::before{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--line-2)}
+.corr i{position:absolute;top:0;bottom:0;border-radius:3px}
+.ancs{display:flex;flex-wrap:wrap;gap:6px}
+
+/* Agenda */
+.days{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.day{flex:0 0 auto;min-width:96px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--surface);cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:6px;transition:border-color .2s,background .2s}
+.day:hover{border-color:var(--line-2)}
+.day[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.day .dn{font-size:12px;color:var(--muted);font-weight:600;text-transform:capitalize}
+.day .dd{font-family:var(--f-display);font-size:24px;line-height:1}
+.day .bars{display:flex;gap:2px;align-items:flex-end;height:14px}
+.day .bars i{width:4px;border-radius:1px;background:var(--line-2)}
+.day .bars i.f{background:var(--down)}
+.day.today .dn::after{content:" · aujourd'hui";color:var(--accent)}
+.ag{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:14px;align-items:start}
+.ev{display:grid;grid-template-columns:52px 50px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 18px;border-top:1px solid var(--line)}
+.ev:first-child{border-top:0}
+.ev .h{font-weight:600}
+.cur{display:inline-grid;place-items:center;height:24px;border-radius:6px;font-size:12px;font-weight:700;background:var(--surface-2);border:1px solid var(--line)}
+.ev .t{display:flex;flex-direction:column;min-width:0}
+.ev .t b{font-weight:600;font-size:14.5px}
+.ev .t small{color:var(--muted);font-size:12.5px}
+.imp{display:flex;gap:3px}.imp i{width:6px;height:14px;border-radius:2px;background:var(--line-2)}
+.imp.fort i{background:var(--down)}.imp.moyen i.on{background:var(--warn)}.imp.faible i.on{background:var(--muted)}
+.empty{padding:28px 18px;color:var(--muted);text-align:center}
+.filt{display:flex;gap:8px;flex-wrap:wrap}
+
+/* Engrenages */
+.th-list{display:flex;flex-direction:column}
+.th{display:grid;grid-template-columns:150px minmax(0,1fr) 120px;gap:16px;align-items:center;padding:13px 20px;border-top:1px solid var(--line)}
+.th:first-child{border-top:0}
+.th .nm b{display:block;font-size:14.5px}
+.th .nm small{color:var(--muted);font-size:12px}
+.track{position:relative;height:30px}
+.track .rail{position:absolute;left:0;right:0;top:13px;height:4px;border-radius:2px;background:var(--surface-2);border:1px solid var(--line)}
+.track .zone{position:absolute;top:10px;height:10px;border-radius:5px;background:var(--accent-soft);border:1px dashed color-mix(in srgb,var(--accent) 45%,transparent)}
+.track .mk{position:absolute;top:6px;width:18px;height:18px;margin-left:-9px;border-radius:50%;background:var(--surface);border:3px solid var(--ink);box-shadow:var(--shadow);transition:left .6s var(--ease)}
+.track .v{position:absolute;top:-6px;transform:translateX(-50%);font-size:11.5px;font-weight:700;white-space:nowrap}
+.th .st{justify-self:end}
+.fil{display:grid;gap:3px;min-width:640px}
+.fil .lab{font-size:12.5px;font-weight:600;color:var(--ink-2);padding-right:8px;white-space:nowrap;align-self:center}
+.fil i{height:22px;border-radius:4px;background:var(--surface-2)}
+.fil i.up{background:var(--up)} .fil i.dn{background:var(--down)} .fil i.nd{background:var(--line-2)}
+.fil i.x{background:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 5px)}
+.fil .d{font-size:10.5px;color:var(--muted);text-align:center}
+.engs{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.eng{padding:18px 18px 12px;display:flex;flex-direction:column;gap:10px}
+.eng-h{display:flex;gap:10px;align-items:baseline}
+.eng-h span{font-family:var(--f-display);font-size:26px;color:var(--muted);line-height:1}
+.mini{display:grid;grid-template-columns:minmax(0,1fr) 84px;gap:10px;align-items:center;padding-top:10px;border-top:1px solid var(--line)}
+.mini .l{font-size:12.5px;color:var(--muted);line-height:1.3}
+.mini .v{font-size:16px;font-weight:600}
+.mini .v small{font-size:12px;font-weight:500;color:var(--muted);margin-left:6px}
+.mini svg{width:84px;height:30px}
+
+/* Journal */
+.jr{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:14px;align-items:start}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.cal .hd{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;padding:4px 6px}
+.cell{min-height:86px;border-radius:10px;border:1px solid var(--line);background:var(--surface);padding:8px;display:flex;flex-direction:column;gap:3px;text-align:left;cursor:pointer;transition:border-color .2s}
+.cell:hover{border-color:var(--line-2)}
+.cell.blank{background:transparent;border:0;cursor:default}
+.cell.w{background:var(--up-soft)} .cell.l{background:var(--down-soft)}
+.cell[aria-pressed="true"]{box-shadow:inset 0 0 0 2px var(--accent)}
+.cell .n{font-size:12.5px;font-weight:700;color:var(--ink-2)}
+.cell .p{font-size:11.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cell .r{margin-top:auto;font-size:13px;font-weight:700}
+.kpis{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+.kpi{padding:14px 16px}
+.kpi span{font-size:12px;color:var(--muted);font-weight:600}
+.kpi b{display:block;font-size:24px;font-weight:600}
+.steps{display:flex;flex-direction:column;gap:2px;counter-reset:s}
+.step{display:grid;grid-template-columns:28px minmax(0,1fr);gap:12px;padding:10px 0;align-items:start;cursor:pointer;border:0;background:none;text-align:left}
+.step i{counter-increment:s;width:26px;height:26px;border-radius:50%;border:1.5px solid var(--line-2);display:grid;place-items:center;font-style:normal;font-size:12px;font-weight:700;color:var(--muted)}
+.step i::before{content:counter(s)}
+.step b{font-size:14px;font-weight:600;display:block}
+.step small{color:var(--muted);font-size:12.5px}
+.step[aria-current="step"] i{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.step.done i{background:var(--accent-soft);border-color:transparent;color:var(--accent)}
+
+/* Ajouts V7.2 : sections riches */
+.kicker{display:flex;align-items:center;gap:10px}
+.kicker .num{font-family:var(--f-display);font-size:15px;color:var(--muted)}
+.cols3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.cols2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start}
+.bcw{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:0;overflow:hidden}
+.bcw-main{padding:24px;display:flex;flex-direction:column;gap:14px}
+.bcw-side{background:var(--surface-2);border-left:1px solid var(--line);padding:20px 24px;display:flex;flex-direction:column;gap:10px}
+.big-rate{display:flex;gap:28px;align-items:flex-end;flex-wrap:wrap}
+.big-rate div{display:flex;flex-direction:column}
+.big-rate b{font-family:var(--f-display);font-size:42px;font-weight:500;line-height:1}
+.big-rate span{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.arrow{font-size:28px;color:var(--muted);padding-bottom:6px}
+.cible{position:relative;height:8px;border-radius:4px;background:var(--surface-2);border:1px solid var(--line)}
+.cible i{position:absolute;top:-1px;bottom:-1px;border-radius:4px;background:var(--warn)}
+.cible em{position:absolute;top:-5px;bottom:-5px;width:2px;background:var(--ink)}
+.watch{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:13.5px;color:var(--ink-2)}
+.itp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.itp div{background:var(--surface);padding:12px 14px;font-size:13px;display:flex;flex-direction:column;gap:4px}
+.itp b{font-size:13px}
+.itp span{color:var(--ink-2)}
+.mc{padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.mc.on{border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+.mc ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px;font-size:13px;color:var(--ink-2)}
+.mc li{display:grid;grid-template-columns:16px minmax(0,1fr);gap:6px}
+.tbl{border-collapse:collapse;width:100%;font-size:13.5px}
+.tbl th{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:0}
+.tbl td.n,.tbl th.n{text-align:right;white-space:nowrap}
+.tbl tbody tr:hover td{background:var(--surface-2)}
+.zbar{position:relative;height:8px;width:120px;background:var(--surface-2);border-radius:4px;border:1px solid var(--line)}
+.zbar::before{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--line-2)}
+.zbar i{position:absolute;top:-1px;bottom:-1px;border-radius:4px}
+.hbar{display:grid;grid-template-columns:120px minmax(0,1fr) 64px;gap:12px;align-items:center;padding:8px 0;font-size:13.5px}
+.hbar .tr{position:relative;height:14px}
+.hbar .tr::before{content:"";position:absolute;left:50%;top:-4px;bottom:-4px;width:1px;background:var(--line-2)}
+.hbar .tr i{position:absolute;top:0;bottom:0;border-radius:4px}
+.hbar .tr em{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink);opacity:.55}
+.vars{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.var{padding:12px 14px;display:flex;flex-direction:column;gap:2px}
+.var span{font-size:12px;color:var(--muted);font-weight:600;line-height:1.3}
+.var b{font-size:19px;font-weight:600}
+.var small{font-size:11px;color:var(--muted)}
+.plan{display:flex;flex-direction:column;gap:8px}
+.plan label{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--ink-2);cursor:pointer}
+.plan input{margin-top:3px;accent-color:var(--accent);width:16px;height:16px;flex:none}
+.calj{display:grid;grid-template-columns:92px minmax(0,1fr) auto;gap:12px;padding:12px 0;border-top:1px solid var(--line);align-items:baseline;font-size:13.5px}
+.calj:first-child{border-top:0}
+.alerts{display:flex;flex-wrap:wrap;gap:8px}
+.alert{display:flex;gap:10px;align-items:flex-start;padding:10px 14px;border-radius:12px;font-size:13px;max-width:520px}
+.alert.f{background:var(--accent-soft);color:var(--ink)}
+.alert.p{background:var(--warn-soft);color:var(--ink)}
+.alert b{font-size:11px;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.alert.f b{color:var(--accent)} .alert.p b{color:var(--warn)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--surface-2);gap:2px;flex-wrap:wrap}
+.seg button{border:0;background:none;padding:6px 12px;border-radius:999px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.bigchart{height:320px}
+.heat td.h{text-align:center;font-weight:600;font-size:13px;border-radius:6px;padding:9px 6px}
+.heat{border-collapse:separate;border-spacing:3px;width:100%;min-width:520px}
+.heat th{font-size:11.5px;color:var(--muted);font-weight:700;padding:4px 6px;text-align:center}
+.heat th:first-child{text-align:left}
+.mi td.c{text-align:center;font-weight:700;border-radius:6px;padding:8px 4px;font-size:13px;cursor:help}
+.mi td.c.p1{background:var(--up-soft);color:var(--up)} .mi td.c.m1{background:var(--down-soft);color:var(--down)}
+.mi td.c.z{background:var(--surface-2);color:var(--muted)} .mi td.c.nd{background:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 5px);color:var(--muted)}
+.pct{position:relative;height:4px;border-radius:2px;background:var(--surface-2);margin-top:6px}
+.pct i{position:absolute;top:-3px;width:9px;height:9px;border-radius:50%;background:var(--accent);margin-left:-4px;border:2px solid var(--surface)}
+.engsel{display:flex;gap:6px;flex-wrap:wrap}
+.engsel button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 14px;font-size:13px;font-weight:600;color:var(--ink-2);cursor:pointer;display:flex;gap:8px;align-items:center}
+.engsel button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.engsel .dot{width:8px;height:8px}
+.tu{padding:16px;display:flex;flex-direction:column;gap:4px}
+.tu .l{font-size:12.5px;color:var(--muted);font-weight:600}
+.tu .v{font-size:22px;font-weight:600}
+.tu .x{font-size:12.5px;color:var(--ink-2)}
+.tu svg{width:100%;height:44px;margin-top:4px}
+.tus{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.small{font-size:12px;color:var(--muted)}
+.news{display:flex;flex-direction:column}
+.news a{display:flex;flex-direction:column;gap:3px;padding:12px 0;border-top:1px solid var(--line);color:var(--ink);text-decoration:none}
+.news a:first-child{border-top:0}
+.news a:hover b{color:var(--accent)}
+.news b{font-weight:600;font-size:14px}
+.calc{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;align-items:end}
+.calc label{display:flex;flex-direction:column;gap:5px;font-size:12.5px;color:var(--muted);font-weight:600}
+.calc input,.calc select{height:40px;border-radius:10px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);padding:0 12px;font:inherit;font-size:15px}
+.calc .out{padding:10px 14px;border-radius:12px;background:var(--accent-soft)}
+.calc .out b{display:block;font-size:22px;color:var(--ink)}
+@media (max-width:960px){.cols3,.cols2,.bcw{grid-template-columns:minmax(0,1fr)}.bcw-side{border-left:0;border-top:1px solid var(--line)}.itp{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:640px){.hbar{grid-template-columns:70px minmax(0,1fr) 56px}.calj{grid-template-columns:minmax(0,1fr)}.big-rate b{font-size:34px}}
+
+footer{padding-block:24px 40px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+@media (max-width:960px){.hero,.two,.ag,.jr{grid-template-columns:minmax(0,1fr)}.hero-side{border-left:0;border-top:1px solid var(--line)}}
+@media (max-width:640px){
+  .sessions{order:3;flex-basis:100%}
+  .hero-main{padding:22px 20px}.hero-side{padding:20px}
+  .dvs{grid-template-columns:minmax(0,1fr)}
+  .th{grid-template-columns:minmax(0,1fr);gap:6px}.th .st{justify-self:start}
+  .ev{grid-template-columns:46px 46px minmax(0,1fr)}.ev .imp{display:none}
+  .wl-row{grid-template-columns:22px 78px minmax(0,1fr) 44px;padding:12px 14px}
+  .cell{min-height:64px;padding:5px}.cell .p{display:none}
+  .switch .lab-long{display:none}
+}
+
+/* ===== V9 : la Synthèse en rapport éditorial ===== */
+.rep{display:grid;grid-template-columns:210px minmax(0,1fr);gap:40px;align-items:start}
+.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 76px);display:flex;flex-direction:column;gap:2px;font-size:13px}
+.toc a{display:grid;grid-template-columns:22px minmax(0,1fr);gap:6px;padding:6px 8px;border-radius:8px;color:var(--muted);text-decoration:none;font-weight:600;line-height:1.3}
+.toc a span:first-child{font-family:var(--f-display);font-weight:500}
+.toc a:hover{color:var(--ink);background:var(--surface)}
+.toc a.on{color:var(--ink);background:var(--surface);box-shadow:var(--shadow)}
+.toc .prog{height:3px;border-radius:2px;background:var(--line);margin:10px 8px 0;overflow:hidden}
+.toc .prog i{display:block;height:100%;background:var(--accent);width:0}
+article.r{display:flex;flex-direction:column;gap:56px;min-width:0}
+.rs{display:flex;flex-direction:column;gap:18px;scroll-margin-top:90px}
+.rs-h{display:flex;gap:16px;align-items:baseline;border-top:1px solid var(--line-2);padding-top:18px}
+.rs-h .no{font-family:var(--f-display);font-size:44px;line-height:.9;color:var(--accent);font-weight:500;min-width:44px}
+.rs-h h2{font-size:30px}
+.rs-h p{margin:4px 0 0;color:var(--muted);font-size:14px}
+.prose{font-size:16.5px;line-height:1.62;color:var(--ink-2);max-width:70ch;display:flex;flex-direction:column;gap:12px}
+.prose p{margin:0}
+.prose b{color:var(--ink)}
+.lede{font-family:var(--f-display);font-size:22px;line-height:1.45;color:var(--ink);max-width:62ch;margin:0}
+.src-tag{display:none;font-size:10.5px;font-weight:700;letter-spacing:.02em;padding:1px 6px;border-radius:999px;margin-left:5px;vertical-align:2px;white-space:nowrap}
+.src-tag.ok{background:var(--up-soft);color:var(--up)} .src-tag.new{background:var(--warn-soft);color:var(--warn)}
+[data-origine="on"] .src-tag{display:inline-block}
+.cite{font-size:12px;color:var(--muted)}
+.cite a{color:var(--muted)}
+.hero9{padding:34px 36px;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:30px;overflow:hidden;position:relative}
+.hero9 h1{font-family:var(--f-display);font-weight:500;font-size:clamp(36px,5vw,62px);line-height:1;letter-spacing:-.02em}
+.hero9 .meta{display:flex;gap:8px;flex-wrap:wrap}
+.diag{border-radius:14px;background:var(--ink);color:var(--surface);padding:22px;display:flex;flex-direction:column;gap:10px}
+.diag .eyebrow{color:color-mix(in srgb,var(--surface) 60%,transparent)}
+.diag b.big{font-family:var(--f-display);font-size:38px;font-weight:500;line-height:1}
+.diag p{margin:0;font-size:14px;opacity:.85;line-height:1.5}
+.diag hr{border:0;border-top:1px solid color-mix(in srgb,var(--surface) 18%,transparent);margin:4px 0}
+.themes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.themes div{padding:18px;display:flex;flex-direction:column;gap:8px}
+.themes span.k{font-family:var(--f-display);font-size:30px;color:var(--accent);line-height:1}
+.themes b{font-size:15px}
+.themes p{margin:0;font-size:13.5px;color:var(--ink-2)}
+.gauge{display:flex;flex-direction:column;gap:8px}
+.gauge .tr{position:relative;height:14px;border-radius:7px;background:var(--surface-2);border:1px solid var(--line)}
+.gauge .tr i{position:absolute;left:0;top:0;bottom:0;border-radius:7px;background:var(--accent)}
+.gauge .tr em{position:absolute;top:-5px;bottom:-5px;width:2px;background:var(--ink);opacity:.5}
+.gauge .lab{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted)}
+.mech{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.mech div{padding:14px;border-radius:12px;border:1px solid var(--line);background:var(--surface);display:flex;flex-direction:column;gap:6px;font-size:13.5px}
+.mech div.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.mech b{font-size:13px}
+.nfp{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:0;overflow:hidden}
+.nfp-l{padding:24px;display:flex;flex-direction:column;gap:14px}
+.nfp-r{padding:20px 22px;border-left:1px solid var(--line);background:var(--surface-2);display:flex;flex-direction:column;gap:10px}
+.kn{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.kn div{display:flex;flex-direction:column}
+.kn span{font-size:12px;color:var(--muted);font-weight:600}
+.kn b{font-family:var(--f-display);font-size:36px;font-weight:500;line-height:1.05}
+.kn small{font-size:12.5px;color:var(--muted)}
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.chain span{padding:9px 12px;border-radius:10px;background:var(--surface);border:1px solid var(--line);font-size:13.5px;font-weight:600}
+.chain span.end{background:var(--up-soft);color:var(--up);border-color:transparent}
+.chain i{font-style:normal;color:var(--muted)}
+.grid4{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.grid4 div{padding:14px 16px;border-radius:12px;display:flex;flex-direction:column;gap:4px;font-size:13.5px}
+.grid4 b{font-size:13.5px}
+.speak{display:flex;flex-wrap:wrap;gap:6px}
+.bcbar{display:grid;grid-template-columns:70px minmax(0,1fr) 92px;gap:12px;align-items:center;padding:7px 0;font-size:13.5px}
+.bcbar .tr{height:16px;border-radius:4px;background:var(--surface-2);position:relative}
+.bcbar .tr i{position:absolute;left:0;top:0;bottom:0;border-radius:4px;background:var(--accent);opacity:.85}
+.bcbar .mv{font-size:12px;font-weight:700}
+.cc9{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.cc9 > div{padding:18px;display:flex;flex-direction:column;gap:8px}
+.cc9 h3{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.cc9 p{margin:0;font-size:13.5px;color:var(--ink-2);line-height:1.5}
+.week{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.wd{border-radius:12px;border:1px solid var(--line);background:var(--surface);display:flex;flex-direction:column;overflow:hidden}
+.wd header{padding:10px 12px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:baseline}
+.wd header b{font-family:var(--f-display);font-size:20px;font-weight:500}
+.wd .e{padding:9px 12px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:2px;font-size:12.5px}
+.wd .e:first-of-type{border-top:0}
+.wd .e b{font-size:13px;font-weight:600;line-height:1.3}
+.wd .e.fort{box-shadow:inset 3px 0 0 var(--down)}
+.wd.key{border-color:var(--down)}
+.rank{display:flex;flex-direction:column}
+.rank .rw{display:grid;grid-template-columns:34px 64px 120px minmax(0,1fr) 120px;gap:12px;align-items:center;padding:11px 0;border-top:1px solid var(--line);font-size:14px}
+.rank .rw:first-child{border-top:0}
+.rank .rw .n{font-family:var(--f-display);font-size:24px;color:var(--muted)}
+.rank .rw b.c{font-size:17px}
+.rank .bar{position:relative;height:8px;border-radius:4px;background:var(--surface-2)}
+.rank .bar::before{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--line-2)}
+.rank .bar i{position:absolute;top:0;bottom:0;border-radius:4px}
+.pairs9{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.p9{padding:18px;display:flex;flex-direction:column;gap:10px}
+.p9 .top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.p9 h3{font-family:var(--f-display);font-size:26px;font-weight:500}
+.p9 svg{width:100%;height:52px}
+.p9 ul{margin:0;padding-left:18px;font-size:13.5px;color:var(--ink-2);display:flex;flex-direction:column;gap:3px}
+.p9 .sc{display:grid;grid-template-columns:minmax(0,1fr);gap:6px;font-size:13px}
+.p9 .sc div{padding:8px 10px;border-radius:8px}
+.tech{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:14px;align-items:start}
+.lvl{display:flex;flex-direction:column}
+.lvl div{display:grid;grid-template-columns:76px minmax(0,1fr) auto;gap:10px;padding:9px 0;border-top:1px solid var(--line);font-size:13.5px;align-items:center}
+.lvl div:first-child{border-top:0}
+.lvl i{font-style:normal;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;text-align:center}
+.chk{display:flex;flex-direction:column;gap:6px;font-size:13.5px;margin:0;padding:0;list-style:none}
+.chk li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:6px;color:var(--ink-2)}
+.chk li::before{content:"○";color:var(--muted);font-weight:700}
+.scen3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.scen3 > div{padding:20px;display:flex;flex-direction:column;gap:12px;border-top:4px solid var(--line-2)}
+.scen3 > div.a{border-top-color:var(--up)} .scen3 > div.b{border-top-color:var(--down)} .scen3 > div.c{border-top-color:var(--warn)}
+.scen3 h3{font-family:var(--f-display);font-size:22px;font-weight:500}
+.scen3 .lab{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.scen3 ul{margin:0;padding-left:18px;font-size:13.5px;color:var(--ink-2);display:flex;flex-direction:column;gap:3px}
+.method{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;counter-reset:m}
+.method div{padding:14px;border-radius:12px;background:var(--surface);border:1px solid var(--line);display:flex;flex-direction:column;gap:6px;font-size:13px;position:relative}
+.method div::before{counter-increment:m;content:counter(m);font-family:var(--f-display);font-size:26px;color:var(--accent);line-height:1}
+.method b{font-size:13.5px}
+.concl{padding:30px;display:flex;flex-direction:column;gap:16px;background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.concl .eyebrow{color:color-mix(in srgb,var(--surface) 60%,transparent)}
+.concl h2{font-size:34px}
+.concl ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:15px;line-height:1.5}
+.concl .adv{padding:14px 16px;border-radius:12px;background:color-mix(in srgb,var(--surface) 10%,transparent);font-size:14.5px;line-height:1.55}
+.srcs{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px}
+.srcs a{padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);text-decoration:none;display:flex;flex-direction:column;gap:2px;font-size:13.5px}
+.srcs a:hover{border-color:var(--accent)}
+.srcs a small{color:var(--muted)}
+.legend9{display:none;gap:12px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);padding:10px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--line)}
+[data-origine="on"] .legend9{display:flex}
+.ch{height:300px}
+@media (max-width:1100px){.rep{grid-template-columns:minmax(0,1fr)}.toc{position:sticky;flex-direction:row;overflow-x:auto;z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(10px);padding:8px 0;margin:0;min-width:0;max-width:100%;scrollbar-width:none}.toc a{white-space:nowrap;grid-template-columns:auto auto}.toc .prog{display:none}.method{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:860px){.hero9,.nfp,.tech{grid-template-columns:minmax(0,1fr)}.nfp-r{border-left:0;border-top:1px solid var(--line)}.themes,.mech,.scen3{grid-template-columns:minmax(0,1fr)}.week{grid-template-columns:minmax(0,1fr)}.grid4{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:860px){.cols2{grid-template-columns:minmax(0,1fr)!important}}
+@media (max-width:640px){.hero9{padding:24px 20px}.rank .rw{grid-template-columns:28px 52px minmax(0,1fr) 90px}.rank .rw .bar{display:none}.method{grid-template-columns:repeat(2,minmax(0,1fr))}.rs-h .no{font-size:34px;min-width:34px}.rs-h h2{font-size:24px}.prose{font-size:15.5px}.lede{font-size:19px}}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="top-row">
+      <div class="brand"><span>Desk FX · aide à la décision</span><b>Trading baby</b></div>
+      <div class="ctrls">
+        <button class="switch" id="oriBtn" aria-pressed="false" title="Montre d'où vient chaque chiffre"><i></i><span>Origine des données</span></button>
+        <button class="iconbtn" id="themeBtn" aria-label="Changer de thème"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg></button>
+      </div>
+    </div>
+    <nav class="tabs" role="tablist"><button class="tab" style="color:var(--muted)">Briefing</button><button class="tab" aria-selected="true" style="color:var(--ink)">Synthèse<span class="tab-ink" style="left:14px;right:14px;bottom:0"></span></button><button class="tab" style="color:var(--muted)">Tableau de bord</button><button class="tab" style="color:var(--muted)">Paires</button><button class="tab" style="color:var(--muted)">Devises</button><button class="tab" style="color:var(--muted)">Agenda</button><button class="tab" style="color:var(--muted)">8 engrenages</button><button class="tab" style="color:var(--muted)">Journal</button></nav>
+  </div>
+</header>
+
+<main class="wrap" style="padding-block:28px 64px;display:flex;flex-direction:column;gap:28px">
+  <div class="card hero9">
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="meta"><span class="chip">Analyse globale</span><span class="chip">Forex · macro · taux</span><span class="chip acc">Semaine du 9 au 13 novembre</span></div>
+      <h1>Rapport macroéconomique et Forex</h1>
+      <p class="lede">Lundi 9 novembre 2026. Le dollar démarre la semaine soutenu par un rapport sur l'emploi très solide ; le CPI américain de mardi décidera de la suite.</p>
+      <span class="cite">Heure de référence : 07:50 à Paris · lecture 12 min · rédigé à partir des données du pipeline, chaque chiffre est daté et sourcé</span>
+    </div>
+    <div class="diag">
+      <span class="eyebrow">Diagnostic macro du jour</span>
+      <b class="big">USD soutenu</b>
+      <p><b>Régime :</b> reprise de l'appétit pour le risque, avec un dollar toujours fort grâce aux anticipations de taux américains.</p>
+      <hr>
+      <p><b>Point déterminant :</b> le CPI américain de mardi 14:30 peut confirmer ou remettre en question la réévaluation restrictive de la Fed.</p>
+      <hr>
+      <p style="font-size:12.5px">Aide à la décision : biais conditionnels, jamais des ordres.</p>
+    </div>
+  </div>
+  <div class="legend9"><span><span class="src-tag ok" style="display:inline-block">collecté</span> chiffre déjà fourni par le pipeline</span><span><span class="src-tag new" style="display:inline-block">V9</span> nouvelle donnée à collecter pour atteindre cette finesse</span></div>
+
+  <div class="rep">
+    <nav class="toc" id="toc"></nav>
+    <article class="r">
+
+      <section class="rs" id="s1" data-t="Synthèse exécutive">
+        <div class="rs-h"><span class="no">1</span><div><h2>Synthèse exécutive</h2><p>Ce qu'il faut retenir en une minute</p></div></div>
+        <div class="prose">
+          <p>Le marché démarre la semaine avec un élément majeur : <b>le rapport américain sur l'emploi publié vendredi a renforcé les anticipations de resserrement de la Fed.</b> Les créations d'emplois ont accéléré en octobre et le chômage a reculé. Les marchés à terme évaluent désormais à <b>environ 79 %</b><span class="src-tag new">V9 · Reuters</span> la probabilité d'une hausse le 9 décembre, contre 71 % une semaine plus tôt.</p>
+        </div>
+        <div class="card pad gauge" style="max-width:640px">
+          <div class="sec-head"><h3>Probabilité d'une hausse de la Fed le 9 décembre</h3><span class="cite">Reuters, 09/11</span></div>
+          <div class="tr"><i style="width:79%"></i><em style="left:71%"></em></div>
+          <div class="lab"><span>0 %</span><span><b style="color:var(--ink)">79 %</b> aujourd'hui · repère : 71 % il y a une semaine</span><span>100 %</span></div>
+        </div>
+        <div class="themes">
+          <div class="card"><span class="k">1</span><b>États-Unis</b><p>Emploi solide, inflation à surveiller mardi, Fed potentiellement plus restrictive.</p></div>
+          <div class="card"><span class="k">2</span><b>Énergie et géopolitique</b><p>Détente du pétrole après les déclarations sur l'Iran, mais le risque d'approvisionnement demeure.</p></div>
+          <div class="card"><span class="k">3</span><b>Actions et IA</b><p>Rebond technique en Asie après une semaine de ventes ; doutes sur la rentabilité des investissements en IA.</p></div>
+        </div>
+      </section>
+
+      <section class="rs" id="s2" data-t="État des marchés">
+        <div class="rs-h"><span class="no">2</span><div><h2>État des marchés internationaux</h2><p>Dernières observations, avec leur date</p></div></div>
+        <div class="card scroll"><table class="tbl" id="mk" style="min-width:640px"></table></div>
+        <div class="prose"><p>Le dollar reste proche de ses plus hauts récents tandis que les marchés asiatiques rebondissent : Nikkei <b>+3,5 %</b>, Taïwan <b>plus de +6 %</b><span class="src-tag new">V9</span>, contrats sur le S&amp;P 500 <b>+0,6 %</b>.</p></div>
+        <div class="card pad" style="display:flex;flex-direction:column;gap:12px">
+          <div class="sec-head"><h3>Lecture cross-asset : d'où vient la force du dollar ?</h3><span class="cite">mécanisme actif encadré</span></div>
+          <div class="mech">
+            <div><b>Dollar fort + actions en baisse + volatilité en hausse</b><span class="muted">Demande de refuge.</span></div>
+            <div class="on"><b>Dollar fort + taux courts US en hausse</b><span>Soutien monétaire.</span></div>
+            <div class="on"><b>Dollar fort + actions en hausse</b><span>Avantage de rendement et confiance dans l'économie américaine.</span></div>
+          </div>
+          <p style="margin:0;font-size:14px;color:var(--ink-2)">Les actions rebondissent alors que le dollar reste ferme : sa force ne vient pas seulement d'une recherche de protection, mais aussi de la révision des anticipations de taux américains.</p>
+        </div>
+      </section>
+
+      <section class="rs" id="s3" data-t="États-Unis">
+        <div class="rs-h"><span class="no">3</span><div><h2>États-Unis : le dollar reprend l'avantage</h2><p>Emploi, Fed et CPI de mardi</p></div></div>
+        <div class="card nfp">
+          <div class="nfp-l">
+            <div class="sec-head"><h3>Rapport sur l'emploi d'octobre</h3><span class="chip up">Surprise nettement positive</span></div>
+            <div class="kn">
+              <div><span>Créations d'emplois</span><b class="pos">+165 000</b><small>consensus +65 000<span class="src-tag ok">collecté</span></small></div>
+              <div><span>Chômage</span><b>4,1 %</b><small>précédent 4,2 %</small></div>
+              <div><span>Septembre révisé</span><b>+60 000</b><small>au lieu de +29 000<span class="src-tag new">V9 · BLS</span></small></div>
+              <div><span>Sous-emploi U-6</span><b class="neg">7,9 %</b><small>en hausse<span class="src-tag new">V9 · BLS</span></small></div>
+            </div>
+            <span class="cite">Source : Bureau of Labor Statistics, 6 novembre 2026</span>
+          </div>
+          <div class="nfp-r">
+            <h3>Publié contre attendu</h3>
+            <div id="nfpBars"></div>
+            <p style="margin:0;font-size:13.5px;color:var(--ink-2)">Le marché du travail est résilient, mais pas sans fragilités : le sous-emploi et le temps partiel subi progressent.</p>
+          </div>
+        </div>
+        <div class="card pad" style="display:flex;flex-direction:column;gap:10px">
+          <h3>La chaîne de causalité</h3>
+          <div class="chain"><span>NFP +165k contre +65k</span><i>→</i><span>Marché du travail plus solide</span><i>→</i><span>Moins de raisons de baisser les taux</span><i>→</i><span>Hausse en décembre : 79 %</span><i>→</i><span class="end">Soutien au dollar</span></div>
+          <p style="margin:0;font-size:13.5px;color:var(--muted)">Une probabilité de marché n'est pas une décision : elle peut changer fortement après le CPI et les discours du FOMC.</p>
+        </div>
+        <div class="cols2" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+          <div class="card"><div class="pad" style="padding-bottom:4px"><div class="sec-head"><h3>CPI d'octobre · mardi 14:30</h3><span class="cite">consensus du calendrier</span></div></div>
+            <table class="tbl"><thead><tr><th>Indicateur</th><th class="n">Consensus</th><th class="n">Précédent</th></tr></thead><tbody>
+            <tr><td>CPI mensuel</td><td class="n"><b>+0,3 %</b></td><td class="n">+0,6 %</td></tr>
+            <tr><td>Core CPI mensuel</td><td class="n"><b>+0,2 %</b></td><td class="n">+0,3 %</td></tr>
+            <tr><td>CPI annuel</td><td class="n"><b>≈ 3,9 %</b><span class="src-tag new">V9</span></td><td class="n">3,7 %</td></tr></tbody></table></div>
+          <div class="card pad" style="display:flex;flex-direction:column;gap:10px"><h3>Lire le chiffre clé : le Core CPI mensuel</h3>
+            <div class="grid4">
+              <div style="background:var(--up-soft)"><b>Supérieur à 0,2 %</b><span>Scénario restrictif renforcé</span></div>
+              <div style="background:var(--surface-2)"><b>Conforme à 0,2 %</b><span>Réaction selon les détails et l'annuel</span></div>
+              <div style="background:var(--down-soft)"><b>Inférieur à 0,2 %</b><span>Anticipations de hausse en recul</span></div>
+              <div style="background:var(--warn-soft)"><b>Global fort, core faible</b><span>Signal mitigé : effet énergie</span></div>
+            </div></div>
+        </div>
+        <div class="card pad" style="display:flex;flex-direction:column;gap:10px">
+          <div class="sec-head"><h3>Discours de la Fed cette semaine</h3><span class="cite">votants 2026 en gras<span class="src-tag new">V9</span></span></div>
+          <div class="speak"><span class="chip">Bowman · lun. 14:40</span><span class="chip">Goolsbee · lun. 16:00</span><span class="chip acc">Waller · mar. 10:00</span><span class="chip">Barkin</span><span class="chip">Logan</span><span class="chip">Schmid</span></div>
+          <p style="margin:0;font-size:13.5px;color:var(--ink-2)">À écouter : l'inflation jugée trop persistante, l'emploi jugé trop solide, une hausse en décembre évoquée explicitement, ou au contraire les signes de ralentissement et de sous-emploi.</p>
+          <p style="margin:0;font-size:14px"><b>Biais USD :</b> positif jusqu'au CPI, mais vulnérable à une inflation plus faible que prévu.</p>
+        </div>
+      </section>
+
+      <section class="rs" id="s4" data-t="Banques centrales">
+        <div class="rs-h"><span class="no">4</span><div><h2>Banques centrales : comparaison internationale</h2><p>Plusieurs banques resserrent, pour des raisons différentes</p></div></div>
+        <div class="cols2" style="grid-template-columns:minmax(0,1fr) minmax(0,1.1fr)">
+          <div class="card pad" style="display:flex;flex-direction:column;gap:4px"><div class="sec-head"><h3>Taux directeurs</h3><span class="cite">dernier mouvement</span></div><div id="bcb"></div></div>
+          <div class="card scroll"><table class="tbl"><thead><tr><th>Banque</th><th>Dernière décision</th><th>Lecture</th></tr></thead><tbody>
+            <tr><td><b>Fed</b></td><td>3,75–4,00 %, statu quo</td><td>Marché très restrictif sur décembre</td></tr>
+            <tr><td><b>BoE</b></td><td>4,00 %, +25 pb le 05/11</td><td>Inflation énergétique persistante</td></tr>
+            <tr><td><b>RBA</b></td><td>4,85 %, +25 pb le 03/11</td><td>Inflation révisée en hausse</td></tr>
+            <tr><td><b>BoJ</b></td><td>1,25 %</td><td>Normalisation progressive</td></tr>
+            <tr><td><b>BCE</b></td><td>inchangé le 29/10</td><td>Prudence face au choc énergétique</td></tr>
+            <tr><td><b>BNS</b></td><td>0,00 %</td><td>Franc défensif</td></tr></tbody></table></div>
+        </div>
+        <div class="cc9">
+          <div class="card"><h3>GBP <span class="chip up">Biais restrictif</span></h3><p>Hausse à 4,00 % le 5 novembre, vote <b>8 contre 1</b><span class="src-tag new">V9 · communiqué BoE</span>, un membre voulait 50 pb. L'énergie pourrait porter l'inflation vers 5 % mi-2027 ; trajectoire non prédéterminée.</p><span class="cite">Conséquence : GBP soutenue par les taux, croissance faible en limite.</span></div>
+          <div class="card"><h3>AUD <span class="chip">Hausse intégrée</span></h3><p>La RBA voit l'inflation sous-jacente au-dessus de 3 % jusqu'à fin 2027. Pourtant l'AUD a baissé après la hausse : le marché paie la surprise, pas la décision.</p></div>
+          <div class="card"><h3>JPY <span class="chip dn">Yen vulnérable</span></h3><p>Taux autour de 1,25 %, réunion les 17 et 18 décembre. Pénalisé par l'écart de rendement, mais exposé à un rebond brutal (intervention, débouclage du carry trade).</p></div>
+          <div class="card"><h3>EUR <span class="chip warn">Inconfortable</span></h3><p>La BCE voit des risques haussiers pour l'inflation et baissiers pour la croissance : réunion par réunion.</p></div>
+          <div class="card"><h3>CHF <span class="chip">Défensif</span></h3><p>Profite du stress ; perd de l'attrait quand les rendements US montent et que les actions rebondissent.</p></div>
+        </div>
+      </section>
+
+      <section class="rs" id="s5" data-t="Énergie">
+        <div class="rs-h"><span class="no">5</span><div><h2>Énergie, géopolitique et inflation</h2><p>Le Brent après sa plus forte baisse hebdomadaire depuis 2020</p></div></div>
+        <div class="card pad" style="display:flex;flex-direction:column;gap:8px">
+          <div class="sec-head"><h3>Brent, 6 mois ($/baril)</h3><span class="cite" id="brentNote"></span></div>
+          <div class="ch" id="brentCh"></div>
+          <p style="margin:0;font-size:13.5px;color:var(--ink-2)">Le Brent a perdu environ <b>16 % sur la semaine</b> et se stabilise vers <b>98,35 $</b><span class="src-tag new">V9 · cours quotidien</span>, après les déclarations sur l'Iran. Les risques sur le détroit d'Ormuz demeurent.</p>
+        </div>
+        <div class="cols2">
+          <div class="card scroll"><table class="tbl"><thead><tr><th>Pétrole</th><th>Conséquence</th></tr></thead><tbody>
+            <tr><td><b>Hausse durable</b></td><td>Inflation énergétique, banques centrales plus restrictives</td></tr>
+            <tr><td><b>Baisse durable</b></td><td>Soulagement pour les importateurs d'énergie</td></tr>
+            <tr><td><b>Choc d'offre</b></td><td>Risque de stagflation</td></tr>
+            <tr><td><b>Détente géopolitique</b></td><td>Prime de risque énergétique en recul</td></tr></tbody></table></div>
+          <div class="card pad" style="display:flex;flex-direction:column;gap:8px"><h3>Devises sensibles</h3>
+            <ul class="chk" style="gap:8px"><li><span><b>CAD</b> : pétrole, mais aussi croissance</span></li><li><span><b>JPY, EUR</b> : facture énergétique des importateurs</span></li><li><span><b>USD</b> : taux d'abord, géopolitique ensuite</span></li></ul>
+            <p style="margin:0;font-size:13px;color:var(--muted)">Pas de lecture mécanique : un pétrole qui s'effondre sur une demande mondiale en berne pèse aussi sur les devises cycliques.</p></div>
+        </div>
+      </section>
+
+      <section class="rs" id="s6" data-t="Chine et Asie">
+        <div class="rs-h"><span class="no">6</span><div><h2>Chine et environnement asiatique</h2><p>Signal contrasté</p></div></div>
+        <div class="cc9">
+          <div class="card"><h3>Prix chinois</h3><p>Les prix à la production accélèrent, l'inflation à la consommation ralentit : mieux pour l'industrie, sans preuve d'une reprise de la demande des ménages.</p></div>
+          <div class="card"><h3>Technologie</h3><p>Résultats de CoreWeave, Applied Materials et Cisco<span class="src-tag new">V9 · actualités</span> : l'IA devient-elle rentable ?</p></div>
+          <div class="card"><h3>Conséquences Forex</h3><p><b>AUD, NZD</b> : croissance chinoise. <b>JPY</b> : flux régionaux et risque. <b>USD</b> : avantage de rendement.</p></div>
+        </div>
+      </section>
+
+      <section class="rs" id="s7" data-t="Calendrier">
+        <div class="rs-h"><span class="no">7</span><div><h2>Calendrier de la semaine</h2><p>Deux rendez-vous prioritaires : CPI mardi, PPI vendredi · heures de Paris</p></div></div>
+        <div class="week" id="week"></div>
+        <div class="cc9">
+          <div class="card"><h3>Mardi · CPI US <span class="chip dn">Clé</span></h3><p>Core au-dessus de 0,2 % : soutien au dollar. En dessous : détente des anticipations. Global élevé mais core modéré : vérifier l'énergie.</p></div>
+          <div class="card"><h3>Jeudi · PIB britannique</h3><p>Consensus mensuel 0,0 %. Négatif : livre fragilisée après la hausse de la BoE. Meilleur : l'économie supporte la politique restrictive.</p></div>
+          <div class="card"><h3>Vendredi · PPI US</h3><p>Pressions sur les prix à la production, surtout le core. Effet sur le CPI non mécanique.</p></div>
+        </div>
+        <p class="cite">À ne pas surinterpréter : un discours d'un membre non votant, ou quelques milliers d'inscriptions au chômage de plus ou de moins. Il faut une tendance sur plusieurs semaines.</p>
+      </section>
+
+      <section class="rs" id="s8" data-t="Force des devises">
+        <div class="rs-h"><span class="no">8</span><div><h2>Classement des devises</h2><p>Rang calculé en Python (biais de travail, taux, surprises, force) · la barre montre la force sur 5 séances</p></div></div>
+        <div class="card pad"><div class="rank" id="rank"></div></div>
+        <p class="cite">Pas un signal de trading. Le NZD a rebondi de 0,4 % lundi après un plus bas de 7 mois, malgré sa fragilité (élections : près de 15 % des voix encore à compter).</p>
+      </section>
+
+      <section class="rs" id="s9" data-t="Paires à surveiller">
+        <div class="rs-h"><span class="no">9</span><div><h2>Paires à surveiller</h2><p>Là où les facteurs des deux devises divergent le plus · 30 dernières séances</p></div></div>
+        <div class="pairs9" id="pairs"></div>
+      </section>
+
+      <section class="rs" id="s10" data-t="USD/JPY technique">
+        <div class="rs-h"><span class="no">10</span><div><h2>USD/JPY : la technique au service du scénario</h2><p>Quotidien, zones et écart de taux calculés par le pipeline</p></div></div>
+        <div class="tech">
+          <div class="card pad" style="display:flex;flex-direction:column;gap:8px;min-width:0"><div class="sec-head"><h3>USD/JPY, 1 jour</h3><span class="cite">bougies Twelve Data · zones : repères, pas des signaux</span></div><div class="ch" id="ujCh" style="height:340px"></div>
+            <div class="sec-head"><h3>Écart de taux 2 ans US − Japon (pb)</h3><span class="cite" id="ujSp"></span></div><div class="ch" id="ujEc" style="height:130px"></div></div>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div class="card pad"><h3 style="margin-bottom:6px">Niveaux</h3><div class="lvl">
+              <div><i style="background:var(--surface-2)">Extension</i><span>Zone d'extension</span><b>164,01</b></div>
+              <div><i style="background:var(--down-soft);color:var(--down)">R2</i><span>Résistance, moyenne mobile</span><b>159,18</b></div>
+              <div><i style="background:var(--down-soft);color:var(--down)">R1</i><span>Résistance intermédiaire</span><b>158,54</b></div>
+              <div><i style="background:var(--up-soft);color:var(--up)">S1</i><span>Support court terme</span><b>157,39</b></div>
+              <div><i style="background:var(--up-soft);color:var(--up)">S2</i><span>Zone de structure</span><b>155,67</b></div>
+              <div><i style="background:var(--up-soft);color:var(--up)">S3</i><span>Bas du rebond</span><b>152,97</b></div></div></div>
+            <div class="card pad" style="display:flex;flex-direction:column;gap:8px"><h3>Scénario haussier conditionnel</h3><span class="eyebrow">Macro</span><ul class="chk"><li>Core CPI au-dessus des attentes</li><li>Anticipations Fed en hausse</li><li>Écart 2 ans US − Japon qui s'élargit</li></ul><span class="eyebrow">Technique</span><ul class="chk"><li>Reprise de 158,00–158,54 en clôture H1</li><li>Retest confirmé, puis BOS et FVG en M30</li></ul></div>
+            <div class="card pad" style="display:flex;flex-direction:column;gap:8px"><h3>Scénario baissier alternatif</h3><ul class="chk"><li>Core CPI plus faible que prévu</li><li>Rendement 2 ans US en recul</li><li>Yen qui s'apprécie à dollar stable</li><li>Cassure de S1 puis 156,50–155,67</li></ul></div>
+          </div>
+        </div>
+        <div class="card pad" style="background:var(--warn-soft);border-color:transparent"><b>Point de vigilance.</b> Une Fed restrictive ne garantit pas une hausse d'USD/JPY : si le marché anticipe aussi une BoJ plus ferme, ou si le carry trade se débouche, la paire peut baisser.</div>
+      </section>
+
+      <section class="rs" id="s11" data-t="Scénarios">
+        <div class="rs-h"><span class="no">11</span><div><h2>Scénarios de la semaine</h2><p>Conditions vérifiées en Python à chaque run</p></div></div>
+        <div class="scen3">
+          <div class="card a"><span class="chip up" style="align-self:flex-start">USD haussier</span><h3>A · Inflation américaine persistante</h3><span class="lab">Conditions</span><ul><li>Core CPI au-dessus des attentes</li><li>2 ans US en hausse</li><li>Fed toujours restrictive</li></ul><span class="lab">Conséquences</span><ul><li>Hausse de décembre renforcée</li><li>Pression sur EUR/USD et AUD/USD</li><li>USD/JPY haussier si le yen reste faible</li></ul></div>
+          <div class="card b"><span class="chip dn" style="align-self:flex-start">USD baissier</span><h3>B · Désinflation américaine</h3><span class="lab">Conditions</span><ul><li>Core CPI sous les attentes</li><li>Taux courts US en recul</li><li>Discours Fed moins restrictifs</li></ul><span class="lab">Conséquences</span><ul><li>EUR/USD et GBP/USD en rebond</li><li>USD/JPY en correction</li><li>Devises cycliques soutenues</li></ul></div>
+          <div class="card c"><span class="chip warn" style="align-self:flex-start">Volatilité</span><h3>C · Dégradation géopolitique ou financière</h3><span class="lab">Conditions</span><ul><li>Tensions avec l'Iran</li><li>Nouvelle chute des actions</li><li>Volatilité et débouclage du carry</li></ul><span class="lab">Conséquences</span><ul><li>Demande de CHF et JPY</li><li>Pression sur AUD et NZD</li><li>Pétrole en hausse</li></ul></div>
+        </div>
+      </section>
+
+      <section class="rs" id="s12" data-t="Plan">
+        <div class="rs-h"><span class="no">12</span><div><h2>Plan : les priorités</h2><p>Peu de positions, là où macro et technique convergent</p></div></div>
+        <div class="card scroll"><table class="tbl"><thead><tr><th>Priorité</th><th>Paire</th><th>Biais de départ</th><th>Catalyseur</th></tr></thead><tbody id="prio"></tbody></table></div>
+        <div class="method">
+          <div><b>Weekly · Daily</b><span class="muted">Régime et zones de liquidité</span></div>
+          <div><b>Macro</b><span class="muted">La devise au meilleur avantage relatif</span></div>
+          <div><b>Obligations</b><span class="muted">Taux 2 ans et écart entre les pays</span></div>
+          <div><b>H4</b><span class="muted">Structure cohérente avec le biais</span></div>
+          <div><b>M30</b><span class="muted">Sweep, displacement, BOS, FVG</span></div>
+          <div><b>Gestion</b><span class="muted">Risque calculé avant, rien pendant les publications</span></div>
+        </div>
+      </section>
+
+      <section class="rs" id="s13" data-t="Conclusion">
+        <div class="card concl">
+          <span class="eyebrow">13 · Conclusion</span>
+          <h2>Biais central : USD positif</h2>
+          <ol><li><b>USD/JPY</b> : haussier seulement si le CPI, les rendements US et la structure confirment.</li><li><b>EUR/USD</b> : continuation baissière si le dollar garde son avantage de taux.</li><li><b>GBP/USD</b> : attendre le PIB britannique de jeudi.</li></ol>
+          <div class="adv">Le rendez-vous déterminant : <b>mardi 14:30, CPI américain</b>. Le marché a déjà intégré une bonne partie du scénario restrictif : il faudra une nouvelle surprise pour une nouvelle jambe du dollar, et une confirmation technique avant d'envisager quoi que ce soit.</div>
+        </div>
+        <div class="sec-head"><h3>Sources</h3><span class="cite">liens vers les publications officielles et les articles cités</span></div>
+        <div class="srcs">
+          <a href="https://www.bls.gov/news.release/empsit.nr0.htm" target="_blank" rel="noopener"><b>Bureau of Labor Statistics</b><small>Rapport sur l'emploi, 06/11</small></a>
+          <a href="https://www.federalreserve.gov/newsevents/pressreleases.htm" target="_blank" rel="noopener"><b>Réserve fédérale</b><small>Décision du 28/10</small></a>
+          <a href="https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes" target="_blank" rel="noopener"><b>Banque d'Angleterre</b><small>Décision et procès-verbal du 05/11</small></a>
+          <a href="https://www.ecb.europa.eu/press/pr/html/index.en.html" target="_blank" rel="noopener"><b>BCE</b><small>Décision du 29/10</small></a>
+          <a href="https://www.boj.or.jp/en/mopo/index.htm" target="_blank" rel="noopener"><b>Banque du Japon</b><small>Politique monétaire</small></a>
+          <a href="https://www.reuters.com/markets/currencies/" target="_blank" rel="noopener"><b>Reuters</b><small>Dollar et Fed, marchés mondiaux, 09/11</small></a>
+        </div>
+      </section>
+    </article>
+  </div>
+  <footer><span>Maquette V9 de la Synthèse · texte : rapport modèle du 09/11 · graphiques : données réelles du pipeline</span><span>Aide à la décision. Aucun ordre d'achat ou de vente.</span></footer>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
+<script>
+const D = {"pm":{"Indice dollar (formule du DXY, non officiel)":{"n":101.8796,"j1":-0.42,"u":"%","d":2,"s":[102.5949,102.2079,102.521,102.0259,101.7831,101.9939,101.7241,101.6997,101.6343,101.7999,101.9962,102.3014,102.1363,102.0379,101.9049,101.7474,101.8687,101.5641,101.5542,102.3048,101.8796],"h":"2026-11-09","src":"calcul Python, formule publique du DXY (ICE) : Twelve Data (EUR, JPY, GBP, CAD, CHF, SEK contre USD)"},"Indice dollar large (Fed, publication hebdomadaire)":{"n":121.6656,"j1":-0.06,"u":"%","d":2,"s":[120.9693,121.7882,121.3848,121.2708,120.8976,121.2558,121.4469,121.6023,121.4433,122.0037,121.5693,121.4048,121.3248,121.116,121.3422,121.3531,121.3202,121.6042,121.6622,121.8491,121.7361,121.6656],"h":"2026-10-30","src":"FRED (DTWEXBGS, indice dollar large de la Fed)"},"EUR/USD":{"n":1.12235,"j1":-0.01,"u":"%","d":4,"s":[1.11543,1.11981,1.11571,1.12149,1.1239,1.12113,1.12351,1.12332,1.12165,1.11949,1.1178,1.11362,1.1156,1.11621,1.11674,1.11948,1.119,1.12235,1.12239,1.11396,1.11874],"h":"2026-11-09","src":"Twelve Data (/quote) ; série unique 5 ans (Twelve Data raccordé à la Fed H.10)"},"GBP/USD":{"n":1.34417,"j1":0.01,"u":"%","d":4,"s":[1.3206,1.32529,1.31929,1.3275,1.33287,1.33039,1.33798,1.33936,1.33996,1.33724,1.33458,1.33167,1.33263,1.33651,1.3395,1.34111,1.34149,1.34677,1.34574,1.33488,1.34088],"h":"2026-11-09","src":"Twelve Data (/quote) ; série unique 5 ans (Twelve Data raccordé à la Fed H.10)"},"USD/JPY":{"n":157.93561,"j1":0.13,"u":"%","d":2,"s":[158.654609,158.353127,158.302992,158.102767,158.002844,158.553988,158.277936,158.202816,156.862745,156.838143,157.505119,157.927985,157.977883,157.977883,157.55475,157.927985,158.730159,158.478605,157.853197,158.503725,158.002844],"h":"2026-11-09","src":"Twelve Data (/quote) ; série unique 5 ans (Twelve Data raccordé à la Fed H.10)"},"AUD/USD":{"n":0.69258,"j1":0.01,"u":"%","d":4,"s":[0.6957,0.69827,0.69719,0.69189,0.69458,0.69792,0.70013,0.70314,0.70188,0.70369,0.70191,0.70292,0.70561,0.7033,0.70331,0.70011,0.6964,0.70088,0.6945,0.68652,0.68983],"h":"2026-11-09","src":"Twelve Data (/quote) ; série unique 5 ans (Twelve Data raccordé à la Fed H.10)"},"USD/CAD":{"n":1.41173,"j1":-0.03,"u":"%","d":4,"s":[1.428449,1.421769,1.423619,1.418601,1.414049,1.41113,1.405829,1.4047,1.40111,1.400819,1.40195,1.405029,1.39932,1.399181,1.3968,1.39859,1.400409,1.3972,1.39985,1.41337,1.40878],"h":"2026-11-09","src":"Twelve Data (/quote) ; série unique 5 ans (Twelve Data raccordé à la Fed H.10)"},"USD/CHF":{"n":0.81949,"j1":0.05,"u":"%","d":4,"s":[0.83476,0.83277,0.83487,0.82719,0.82406,0.82672,0.82469,0.82446,0.82071,0.82519,0.82761,0.82857,0.82841,0.82627,0.82432,0.81834,0.82096,0.81727,0.81662,0.82069,0.81854],"h":"2026-11-09","src":"Twelve Data (/quote) ; série unique 5 ans (Twelve Data raccordé à la Fed H.10)"},"NZD/USD":{"n":0.56327,"j1":0.04,"u":"%","d":4,"s":[0.55857,0.56126,0.55911,0.56152,0.5652,0.5661,0.5681,0.5702,0.5684,0.57001,0.56834,0.56854,0.56272,0.56295,0.56319,0.56221,0.56095,0.56218,0.56027,0.55418,0.56024],"h":"2026-11-09","src":"Twelve Data (/quote) ; série unique 5 ans (Twelve Data raccordé à la Fed H.10)"},"US 2 ans":{"n":4.51,"j1":5.0,"u":"pb","d":2,"s":[4.77,4.75,4.8,4.79,4.82,4.77,4.74,4.77,4.79,4.81,4.65,4.69,4.68,4.7,4.67,4.61,4.56,4.59,4.61,4.58,4.46,4.51],"h":"2026-11-06","src":"FRED (DGS2)"},"US 10 ans":{"n":4.86,"j1":2.0,"u":"pb","d":2,"s":[5.28,5.22,5.24,5.21,5.19,5.1,5.09,5.15,5.12,5.13,4.96,5.0,5.0,4.99,5.05,4.98,4.94,4.91,4.95,4.9,4.84,4.86],"h":"2026-11-06","src":"FRED (DGS10)"},"US 30 ans":{"n":5.26,"j1":1.0,"u":"pb","d":2,"s":[5.67,5.6,5.6,5.56,5.52,5.43,5.43,5.48,5.42,5.42,5.29,5.33,5.31,5.3,5.37,5.32,5.31,5.28,5.32,5.28,5.25,5.26],"h":"2026-11-06","src":"FRED (DGS30)"},"Taux réel US 10 ans":{"n":2.63,"j1":3.0,"u":"pb","d":2,"s":[2.92,2.87,2.91,2.88,2.84,2.78,2.74,2.8,2.77,2.76,2.64,2.66,2.66,2.64,2.67,2.63,2.6,2.62,2.65,2.64,2.6,2.63],"h":"2026-11-06","src":"FRED (DFII10, taux réel 10 ans, TIPS)"},"Brent":{"n":107.03,"j1":-0.34,"u":"%","d":2,"s":[125.51,125.44,126.0,130.18,130.03,129.95,125.78,126.55,126.35,119.33,118.82,115.22,117.37,125.39,128.3,128.12,123.1,119.2,115.28,120.15,107.39,107.03],"h":"2026-11-03","src":"FRED (DCOILBRENTEU) — clôture EIA du 03/11 (publication EIA différée)"},"Or (XAU/USD)":{"n":4097.84142,"j1":0.78,"u":"%","d":2,"s":[4171.68994,4157.9502,4105.7002,4156.10986,4168.16566,4164.71787,4165.4771,4141.53484,4120.79556,4134.54213,4026.14257,4000.88263,3993.70459,3993.80662,4013.43706,4062.2879,4070.20751,4022.11919,3883.58851,3875.43884,3875.43043,3944.31429,3919.19994,4058.01809,4114.39555,4063.32727,4066.03658,4066.02968,4097.84142],"h":"2026-11-09","src":"Twelve Data (XAU/USD, or au comptant)"},"VIX":{"n":25.64,"j1":-2.54,"u":"pts","d":2,"s":[15.08,15.41,14.84,15.21,15.27,16.87,16.46,19.99,18.44,17.31,16.68,19.03,19.45,18.39,17.52,16.91,17.2,19.42,21.15,20.83,16.61,28.18,25.64],"h":"2026-11-06","src":"FRED (VIXCLS)"},"S&P 500 (ETF SPY)":{"n":735.28998,"j1":0.31,"u":"%","d":2,"s":[777.21997,773.92999,778.57001,778.099976,778.01001,769.59998,771.78998,763.25,766.47998,769.049988,773.090027,763.96002,759.96997,765.37,769.65997,772.31,769.35999,755.71997,752.099976,754.34998,766.81,733.0,735.28998],"h":"2026-11-06","src":"Twelve Data (ETF SPY, réplique le S&P 500 — pas l'indice lui-même)"},"Nasdaq 100 (ETF QQQ)":{"n":656.099976,"j1":1.4,"u":"%","d":2,"s":[757.72998,747.58002,751.27002,746.039978,743.57001,728.95001,728.0,709.79999,718.35999,717.63,725.20001,704.46997,704.40002,712.20001,721.25,725.60999,715.34003,690.48999,681.090027,685.28003,691.95001,647.049988,656.099976],"h":"2026-11-06","src":"Twelve Data (ETF QQQ, réplique le Nasdaq 100 — pas l'indice lui-même)"},"Japon (ETF EWJ)":{"n":88.26,"j1":0.0,"u":"%","d":2,"s":[98.32,97.32,97.86,97.32,97.32,95.84,95.43,94.88,94.99,95.43,95.72,94.6,94.099998,94.28,95.25,94.99,94.94,92.91,92.84,92.59,93.86,88.26,88.26],"h":"2026-11-06","src":"Twelve Data (ETF EWJ, actions japonaises — indicateur du Nikkei, pas l'indice)"}},"brent":[["2026-05-01",118.26],["2026-05-05",114.51],["2026-05-06",103.7],["2026-05-07",101.82],["2026-05-08",103.48],["2026-05-11",106.11],["2026-05-12",111.37],["2026-05-13",110.28],["2026-05-14",110.91],["2026-05-15",113.96],["2026-05-18",116.73],["2026-05-19",114.64],["2026-05-20",108.93],["2026-05-21",105.84],["2026-05-22",106.9],["2026-05-26",102.75],["2026-05-27",97.11],["2026-05-28",95.47],["2026-05-29",92.88],["2026-06-01",98.29],["2026-06-02",98.49],["2026-06-03",101.69],["2026-06-04",98.98],["2026-06-05",97.29],["2026-06-08",97.46],["2026-06-09",94.15],["2026-06-10",95.73],["2026-06-11",92.84],["2026-06-12",88.64],["2026-06-15",84.36],["2026-06-16",80.5],["2026-06-17",80.33],["2026-06-18",79.35],["2026-06-19",80.46],["2026-06-22",76.49],["2026-06-23",75.69],["2026-06-24",72.09],["2026-06-25",73.74],["2026-06-26",70.16],["2026-06-29",71.59],["2026-06-30",70.46],["2026-07-01",69.24],["2026-07-02",68.53],["2026-07-03",68.68],["2026-07-06",69.56],["2026-07-07",71.78],["2026-07-08",76.5],["2026-07-09",74.46],["2026-07-10",74.34],["2026-07-13",81.62],["2026-07-14",83.69],["2026-07-15",83.08],["2026-07-16",81.23],["2026-07-17",85.01],["2026-07-20",86.99],["2026-07-21",93.85],["2026-07-22",94.12],["2026-07-23",105.32],["2026-07-24",100.31],["2026-07-27",91.82],["2026-07-28",85.51],["2026-07-29",91.95],["2026-07-30",91.91],["2026-07-31",96.95],["2026-08-03",88.9],["2026-08-04",86.47],["2026-08-05",86.65],["2026-08-06",89.65],["2026-08-07",87.62],["2026-08-10",92.74],["2026-08-11",93.26],["2026-08-12",92.52],["2026-08-13",92.03],["2026-08-14",92.02],["2026-08-17",92.43],["2026-08-18",95.29],["2026-08-19",92.37],["2026-08-20",94.0],["2026-08-21",96.92],["2026-08-24",92.71],["2026-08-25",88.24],["2026-08-26",87.77],["2026-08-27",90.18],["2026-08-28",89.75],["2026-09-01",96.02],["2026-09-02",97.59],["2026-09-03",100.52],["2026-09-04",102.24],["2026-09-07",104.47],["2026-09-08",106.12],["2026-09-09",109.51],["2026-09-10",120.98],["2026-09-11",118.06],["2026-09-14",121.25],["2026-09-15",130.8],["2026-09-16",127.84],["2026-09-17",121.18],["2026-09-18",119.66],["2026-09-21",116.15],["2026-09-22",114.89],["2026-09-23",117.45],["2026-09-24",120.92],["2026-09-25",116.01],["2026-09-28",119.97],["2026-09-29",113.96],["2026-09-30",115.91],["2026-10-01",114.82],["2026-10-02",135.51],["2026-10-05",125.51],["2026-10-06",125.44],["2026-10-07",126.0],["2026-10-08",130.18],["2026-10-09",130.03],["2026-10-12",129.95],["2026-10-13",125.78],["2026-10-14",126.55],["2026-10-15",126.35],["2026-10-16",119.33],["2026-10-19",118.82],["2026-10-20",115.22],["2026-10-21",117.37],["2026-10-22",125.39],["2026-10-23",128.3],["2026-10-26",128.12],["2026-10-27",123.1],["2026-10-28",119.2],["2026-10-29",115.28],["2026-10-30",120.15],["2026-11-02",107.39],["2026-11-03",107.03]],"bc":[{"devise":"USD","court":"Fed","taux_texte":"3.75–4.00%","prochaine":"2026-12-09","variation_pb":null,"date_variation":null},{"devise":"EUR","court":"BCE","taux_texte":"2.50%","prochaine":"2026-12-17","variation_pb":0,"date_variation":"2026-10-29"},{"devise":"GBP","court":"BoE","taux_texte":"4.00%","prochaine":"2026-12-17","variation_pb":25,"date_variation":"2026-11-05"},{"devise":"JPY","court":"BoJ","taux_texte":"<1.25%","prochaine":"2026-12-18","variation_pb":0,"date_variation":"2026-10-30"},{"devise":"CHF","court":"BNS","taux_texte":"0.00%","prochaine":"2026-12-10","variation_pb":0,"date_variation":"2026-09-24"},{"devise":"CAD","court":"BoC","taux_texte":"2.50%","prochaine":"2026-12-09","variation_pb":25,"date_variation":"2026-10-28"},{"devise":"AUD","court":"RBA","taux_texte":"4.85%","prochaine":"2026-12-08","variation_pb":25,"date_variation":"2026-11-03"},{"devise":"NZD","court":"RBNZ","taux_texte":"2.75%","prochaine":"2026-12-09","variation_pb":0,"date_variation":"2026-10-28"},{"devise":"CNY","court":"PBoC","taux_texte":"3.00%","prochaine":"2026-11-20","variation_pb":0,"date_variation":"2026-10-20"}],"week":[{"d":"2026-11-09","ev":[{"heure_paris":"18:25","devise":"GBP","evenement":"Discours de Bailey, gouverneur de la BoE","impact":"moyen","consensus":null,"precedent":null}]},{"d":"2026-11-10","ev":[{"heure_paris":"10:00","devise":"USD","evenement":"Discours de Waller, membre du FOMC","impact":"moyen","consensus":null,"precedent":null},{"heure_paris":"14:30","devise":"USD","evenement":"IPC sous-jacent M/M","impact":"fort","consensus":"0.2%","precedent":"0.3%"},{"heure_paris":"14:30","devise":"USD","evenement":"IPC sous-jacent A/A","impact":"fort","consensus":null,"precedent":"2.6%"},{"heure_paris":"14:30","devise":"USD","evenement":"IPC M/M","impact":"fort","consensus":"0.3%","precedent":"0.6%"},{"heure_paris":"14:30","devise":"USD","evenement":"IPC A/A","impact":"fort","consensus":null,"precedent":"3.7%"},{"heure_paris":"19:00","devise":"USD","evenement":"Adjudication du Trésor US : note 10 ans","impact":"moyen","consensus":null,"precedent":null}]},{"d":"2026-11-11","ev":[{"heure_paris":"10:45","devise":"EUR","evenement":"Discours de Lagarde, présidente de la BCE","impact":"moyen","consensus":null,"precedent":null}]},{"d":"2026-11-12","ev":[{"heure_paris":"08:00","devise":"GBP","evenement":"PIB M/M","impact":"fort","consensus":"0.0%","precedent":"0.1%"},{"heure_paris":"08:00","devise":"GBP","evenement":"PIB T/T, prélim.","impact":"moyen","consensus":"0.7%","precedent":"0.5%"},{"heure_paris":"14:30","devise":"USD","evenement":"Inscriptions hebdomadaires au chômage","impact":"moyen","consensus":"194K","precedent":"189K"},{"heure_paris":"19:00","devise":"USD","evenement":"Adjudication du Trésor US : obligation 30 ans","impact":"moyen","consensus":null,"precedent":null},{"heure_paris":"20:30","devise":"EUR","evenement":"Discours de Lagarde, présidente de la BCE","impact":"moyen","consensus":null,"precedent":null}]},{"d":"2026-11-13","ev":[{"heure_paris":"14:30","devise":"USD","evenement":"IPP sous-jacent M/M","impact":"fort","consensus":"0.3%","precedent":"0.7%"},{"heure_paris":"14:30","devise":"USD","evenement":"IPP M/M","impact":"fort","consensus":"0.4%","precedent":"1.3%"}]}],"uj":[["2026-06-23",161.61113,161.73966,161.32181,161.58459],["2026-06-24",161.58135,161.84583,161.49775,161.81499],["2026-06-25",161.8119,161.9891,161.58859,161.80653],["2026-06-26",161.80706,161.85427,161.53792,161.75395],["2026-06-27",161.75381,161.77044,161.6835,161.75055],["2026-06-28",161.7511,162.09366,161.56258,161.75157],["2026-06-29",161.73738,161.97982,161.71748,161.94455],["2026-06-30",161.94729,162.67306,161.84716,162.5857],["2026-07-01",162.58723,162.8446,162.30689,162.6076],["2026-07-02",162.60795,162.61215,160.68874,161.12277],["2026-07-03",161.12324,161.49972,160.60117,161.37136],["2026-07-04",161.37352,161.50409,161.1917,161.38096],["2026-07-05",161.38212,161.73362,160.64436,161.33928],["2026-07-06",161.33359,162.42872,161.29918,162.09849],["2026-07-07",162.09629,162.19954,161.69447,162.11907],["2026-07-08",162.12009,162.71291,161.99043,162.64135],["2026-07-09",162.6393,162.65599,162.25252,162.39925],["2026-07-10",162.39699,162.43045,161.30183,161.69838],["2026-07-11",161.70332,161.84718,161.6008,161.68319],["2026-07-12",161.68416,162.33901,161.46613,161.7181],["2026-07-13",161.71571,162.48761,161.66109,162.45909],["2026-07-14",162.46078,162.48638,161.64103,162.27224],["2026-07-15",162.26797,162.42334,161.89685,162.19604],["2026-07-16",162.19713,162.54807,162.00506,162.37882],["2026-07-17",162.37441,162.52465,162.16633,162.41068],["2026-07-18",162.411,162.46649,162.36334,162.42568],["2026-07-19",162.4268,162.74514,162.33032,162.44271],["2026-07-20",162.43392,162.61312,162.26786,162.50821],["2026-07-21",162.50647,163.24554,162.45251,163.20868],["2026-07-22",163.20844,163.31261,162.83745,163.16135],["2026-07-23",163.16343,163.98013,163.00538,163.87039],["2026-07-24",163.8666,163.94069,163.65129,163.85393],["2026-07-25",163.85468,163.88329,163.787,163.8532],["2026-07-26",163.85403,164.08805,163.48807,163.64056],["2026-07-27",163.67026,163.7978,163.32908,163.74729],["2026-07-28",163.7486,163.95369,163.65255,163.86954],["2026-07-29",163.86113,163.91096,163.2246,163.43712],["2026-07-30",163.43786,163.74131,157.94708,159.54396],["2026-07-31",159.57659,160.89204,157.42088,157.46124],["2026-08-01",157.51272,158.33771,156.94215,157.62017],["2026-08-02",157.62134,158.15371,157.02617,157.22446],["2026-08-03",157.22112,157.87141,155.25118,157.20071],["2026-08-04",157.19512,157.96897,157.14772,157.73525],["2026-08-05",157.74145,157.8688,157.31747,157.77151],["2026-08-06",157.77244,158.54377,157.55979,158.47131],["2026-08-07",158.4738,158.57867,156.75879,157.79433],["2026-08-08",157.79916,157.98248,157.70482,157.8219],["2026-08-09",157.82301,157.94834,157.55408,157.7481],["2026-08-10",157.74836,159.3653,157.67157,159.31691],["2026-08-11",159.31153,159.39136,158.96128,159.30255],["2026-08-12",159.30271,159.54195,158.73433,159.43154],["2026-08-13",159.43219,159.56954,159.03591,159.52336],["2026-08-14",159.51949,159.54679,158.63325,159.3206],["2026-08-15",159.32164,159.37599,159.2245,159.32258],["2026-08-16",159.31783,159.39575,159.1872,159.31991],["2026-08-17",159.31442,159.59935,158.85226,159.4692],["2026-08-18",159.4717,159.78217,159.30593,159.62429],["2026-08-19",159.6287,159.65469,158.05538,158.15784],["2026-08-20",158.15919,159.17568,158.03631,159.07472],["2026-08-21",159.07528,159.14371,158.3743,158.97932],["2026-08-22",158.98351,159.02022,158.92369,158.96065],["2026-08-23",158.96173,159.12455,158.6436,159.01237],["2026-08-24",159.01255,159.28622,158.54563,159.09768],["2026-08-25",159.09948,159.49191,159.05529,159.21233],["2026-08-26",159.20786,159.44751,158.89027,159.31576],["2026-08-27",159.31659,159.51455,159.11766,159.41185],["2026-08-28",159.40995,160.20556,159.30459,160.11541],["2026-08-29",160.10921,160.21306,159.86169,160.10152],["2026-08-30",160.1027,160.23685,159.90367,160.06593],["2026-08-31",160.07273,160.20195,159.48706,159.74629],["2026-09-01",159.74676,160.27118,159.6411,160.19861],["2026-09-02",160.19916,160.40466,158.27877,158.72699],["2026-09-03",158.72599,158.96743,155.30841,155.8121],["2026-09-04",155.81038,156.84624,155.2976,156.25071],["2026-09-05",156.24812,156.34519,156.14789,156.23697],["2026-09-06",156.23459,156.38212,155.86375,155.99882],["2026-09-07",155.99884,156.28476,154.06047,154.3609],["2026-09-08",154.36303,154.5002,152.90794,153.99706],["2026-09-09",153.99968,154.01176,152.95714,153.5536],["2026-09-10",153.5543,154.65897,153.31138,154.49485],["2026-09-11",154.48598,154.61701,153.27802,153.52682],["2026-09-12",153.51533,153.76726,153.47945,153.5706],["2026-09-13",153.56871,154.12917,152.37945,153.58473],["2026-09-14",153.5839,155.00251,153.21967,154.34368],["2026-09-15",154.34416,155.21756,154.22061,155.11384],["2026-09-16",155.11458,156.41302,154.89701,156.31617],["2026-09-17",156.31259,156.33751,155.31595,155.97944],["2026-09-18",155.97628,158.02403,155.886,156.89522],["2026-09-19",156.893,157.07041,156.79809,156.89982],["2026-09-20",156.89711,156.95226,156.78076,156.87493],["2026-09-21",156.86896,157.53444,156.54745,157.3948],["2026-09-22",157.39295,157.7778,156.81834,157.3996],["2026-09-23",157.39128,158.42027,157.35249,158.34676],["2026-09-24",158.34375,159.02924,157.8089,158.85957],["2026-09-25",158.85532,158.95726,156.99598,157.29533],["2026-09-26",157.29755,157.52013,157.19504,157.29795],["2026-09-27",157.29486,157.34494,157.13555,157.24001],["2026-09-28",157.22999,157.85153,156.47901,157.38131],["2026-09-29",157.38459,157.72081,157.00778,157.28428],["2026-09-30",157.28527,157.53112,156.38346,157.42028],["2026-10-01",157.41818,158.46674,157.33369,158.09256],["2026-10-02",158.09109,158.21963,156.95835,157.86515],["2026-10-03",157.86399,158.07941,156.38974,157.8605],["2026-10-04",157.85797,158.11766,157.56422,157.82562],["2026-10-05",157.81951,158.29775,157.43435,157.97139],["2026-10-06",157.97001,158.248,157.78307,158.17334],["2026-10-07",158.16821,158.50333,157.86493,158.07016],["2026-10-08",158.06457,158.36545,157.53207,157.87402],["2026-10-09",157.87516,158.43708,157.76859,158.24862],["2026-10-10",158.25135,158.35011,157.79119,158.31116],["2026-10-11",158.30831,158.57573,158.18433,158.33168],["2026-10-12",158.29851,158.75688,158.07367,158.65373],["2026-10-13",158.64448,158.69471,157.81744,158.36506],["2026-10-14",158.36114,158.96242,158.06645,158.31177],["2026-10-15",158.2976,158.38562,157.5012,158.10307],["2026-10-16",158.10542,158.33769,157.69325,157.99996],["2026-10-17",158.00039,158.0531,157.96029,158.02672],["2026-10-18",158.02723,158.26344,157.63972,158.0293],["2026-10-19",158.01945,158.55653,157.67827,158.54888],["2026-10-20",158.54082,158.60213,157.87084,158.26892],["2026-10-21",158.26304,158.39021,157.82229,158.20545],["2026-10-22",158.20394,158.24979,156.67369,156.86895],["2026-10-23",156.86502,157.16428,156.06874,156.84735],["2026-10-24",156.8521,156.86981,156.78123,156.83781],["2026-10-25",156.83793,157.063,156.72548,156.9018],["2026-10-26",156.88081,157.64944,156.66118,157.49909],["2026-10-27",157.49143,157.96474,157.42818,157.93178],["2026-10-28",157.92854,158.33594,157.65688,157.97369],["2026-10-29",157.97825,158.11773,157.61952,157.97734],["2026-10-30",157.97382,157.97696,156.9716,157.55809],["2026-10-31",157.56426,157.98618,157.02378,157.59404],["2026-11-01",157.5945,158.10913,157.39477,157.54928],["2026-11-02",157.55424,158.00845,157.44351,157.91717],["2026-11-03",157.91314,158.76356,157.75012,158.74058],["2026-11-04",158.7366,158.755,157.42053,158.48698],["2026-11-05",158.49159,158.5255,157.52854,157.85067],["2026-11-06",157.84644,158.61354,157.2705,158.50027],["2026-11-07",158.49355,158.57347,158.24787,158.48164],["2026-11-08",158.48255,158.59819,158.26762,158.45239],["2026-11-09",158.46104,158.52947,157.86024,157.94496]],"uj_ecart":[["2026-05-01",249.5],["2026-05-07",254.8],["2026-05-08",252.2],["2026-05-11",255.5],["2026-05-12",259.9],["2026-05-13",257.9],["2026-05-14",259.3],["2026-05-15",267.7],["2026-05-18",263.9],["2026-05-19",267.8],["2026-05-20",257.6],["2026-05-21",262.7],["2026-05-22",268.7],["2026-05-26",258.9],["2026-05-27",260.1],["2026-05-28",262.4],["2026-05-29",258.7],["2026-06-01",265.0],["2026-06-02",267.0],["2026-06-03",267.9],["2026-06-04",263.3],["2026-06-05",275.8],["2026-06-08",273.0],["2026-06-09",271.0],["2026-06-10",270.4],["2026-06-11",262.3],["2026-06-12",267.3],["2026-06-15",266.1],["2026-06-16",263.6],["2026-06-17",280.2],["2026-06-18",279.0],["2026-06-22",282.5],["2026-06-23",273.4],["2026-06-24",267.8],["2026-06-25",266.9],["2026-06-26",266.1],["2026-06-29",268.9],["2026-06-30",275.8],["2026-07-01",277.0],["2026-07-02",274.5],["2026-07-06",273.4],["2026-07-07",278.8],["2026-07-08",277.7],["2026-07-09",271.6],["2026-07-10",277.6],["2026-07-13",280.9],["2026-07-14",274.5],["2026-07-15",269.4],["2026-07-16",272.0],["2026-07-17",274.4],["2026-07-21",281.9],["2026-07-22",286.0],["2026-07-23",287.1],["2026-07-24",279.9],["2026-07-27",279.7],["2026-07-28",275.6],["2026-07-29",273.2],["2026-07-30",273.3],["2026-07-31",277.3],["2026-08-03",268.8],["2026-08-04",263.2],["2026-08-05",261.1],["2026-08-06",268.5],["2026-08-07",257.9],["2026-08-10",263.2],["2026-08-12",255.4],["2026-08-13",249.9],["2026-08-14",251.3],["2026-08-17",249.4],["2026-08-18",249.9],["2026-08-19",250.9],["2026-08-20",250.8],["2026-08-21",255.8],["2026-08-24",255.5],["2026-08-25",248.6],["2026-08-26",249.3],["2026-08-27",250.4],["2026-08-28",262.1],["2026-08-31",259.7],["2026-09-01",258.8],["2026-09-02",253.6],["2026-09-03",249.0],["2026-09-04",254.0],["2026-09-08",254.2],["2026-09-09",259.7],["2026-09-10",273.7],["2026-09-11",278.6],["2026-09-14",280.9],["2026-09-15",280.9],["2026-09-16",288.8],["2026-09-17",280.2],["2026-09-18",291.1],["2026-09-24",295.8],["2026-09-25",286.2],["2026-09-28",293.9],["2026-09-29",291.4],["2026-09-30",292.8],["2026-10-01",284.1],["2026-10-02",291.1],["2026-10-05",293.1],["2026-10-06",286.0],["2026-10-07",281.9],["2026-10-08",281.4],["2026-10-09",288.9],["2026-10-13",286.2],["2026-10-14",289.1],["2026-10-15",285.7],["2026-10-16",282.2],["2026-10-19",286.6],["2026-10-20",288.1],["2026-10-21",289.6],["2026-10-22",273.6],["2026-10-23",281.8],["2026-10-26",279.2],["2026-10-27",281.2],["2026-10-28",275.5],["2026-10-29",270.9],["2026-10-30",268.5],["2026-11-02",271.0],["2026-11-04",268.9],["2026-11-05",260.0]],"uj_et":{"paire":"USD/JPY","defaut":"2a","cloture_paire":[["2025-11-10",154.270155],["2025-11-12",154.921337],["2025-11-13",154.680901],["2025-11-14",154.921337],["2025-11-17",155.482356],["2025-11-18",155.722793],["2025-11-19",156.914958],["2025-11-20",157.696377],["2025-11-21",156.864867],["2025-11-24",157.225522],["2025-11-25",156.584357],["2025-11-26",156.664503],["2025-11-28",156.454121],["2025-12-01",155.562502],["2025-12-02",156.203666],["2025-12-03",155.452301],["2025-12-04",155.18181],["2025-12-05",155.582538],["2025-12-08",156.173611],["2025-12-09",157.135358],["2025-12-10",156.614412],["2025-12-11",155.432265],["2025-12-12",156.093466],["2025-12-15",155.57252],["2025-12-16",155.081628],["2025-12-17",155.883084],["2025-12-18",155.812956],["2025-12-19",157.716413],["2025-12-22",157.215503],["2025-12-23",156.614412],["2025-12-24",156.113502],["2025-12-26",156.914958],["2025-12-29",156.383993],["2025-12-30",156.544284],["2025-12-31",157.085267],["2026-01-02",157.005121],["2026-01-05",156.604394],["2026-01-06",156.985085],["2026-01-07",157.015139],["2026-01-08",157.185449],["2026-01-09",158.357577],["2026-01-12",158.437723],["2026-01-13",159.349378],["2026-01-14",158.417687],["2026-01-15",158.78836],["2026-01-16",158.307486],["2026-01-20",158.17725],["2026-01-21",158.447741],["2026-01-22",158.648105],["2026-01-23",157.856668],["2026-01-26",154.159954],["2026-01-27",153.308408],["2026-01-28",153.879445],["2026-01-29",153.158135],["2026-01-30",154.620791],["2026-02-02",155.782902],["2026-02-03",155.983266],["2026-02-04",156.894921],["2026-02-05",157.195467],["2026-02-06",157.385813],["2026-02-09",156.363957],["2026-02-10",154.560682],["2026-02-11",153.208226],["2026-02-12",152.917699],["2026-02-13",153.047935],["2026-02-17",153.84939],["2026-02-18",154.730991],["2026-02-19",155.241919],["2026-02-20",155.271974],["2026-02-23",154.580719],["2026-02-24",155.943193],["2026-02-25",156.584357],["2026-02-26",156.414048],["2026-02-27",156.333902],["2026-03-02",157.766504],["2026-03-03",157.976886],["2026-03-04",157.215503],["2026-03-05",157.866686],["2026-03-06",157.926795],["2026-03-09",158.367596],["2026-03-10",157.886722],["2026-03-11",159.11896],["2026-03-12",159.499651],["2026-03-13",159.830252],["2026-03-16",159.589815],["2026-03-17",159.319324],["2026-03-18",159.770143],["2026-03-19",158.477796],["2026-03-20",159.549742],["2026-03-23",158.988724],["2026-03-24",159.189087],["2026-03-25",159.489633],["2026-03-26",159.821],["2026-03-27",160.153748],["2026-03-30",159.693389],["2026-03-31",158.704967],["2026-04-01",158.906722],["2026-04-02",159.667891],["2026-04-03",159.642401],["2026-04-06",159.693389],["2026-04-07",159.616919],["2026-04-08",158.579131],["2026-04-09",159.007791],["2026-04-10",159.311773],["2026-04-13",159.4642],["2026-04-14",158.805781],["2026-04-15",158.982512],["2026-04-16",159.159637],["2026-04-17",158.629442],["2026-04-20",158.831004],["2026-04-21",159.38795],["2026-04-22",159.489633],["2026-04-23",159.744409],["2026-04-24",159.36255],["2026-04-27",159.438776],["2026-04-28",159.616919],["2026-04-29",160.436387],["2026-04-30",156.617071],["2026-05-01",157.05984],["2026-05-04",157.25743],["2026-05-05",157.878118],["2026-05-06",156.396622],["2026-05-07",156.936598],["2026-05-08",156.690693],["2026-05-11",157.232704],["2026-05-12",157.629256],["2026-05-13",157.878118],["2026-05-14",158.403295],["2026-05-15",158.780565],["2026-05-18",158.856235],["2026-05-19",159.083678],["2026-05-20",158.931977],["2026-05-21",159.007791],["2026-05-22",159.210317],["2026-05-25",158.931977],["2026-05-26",159.311773],["2026-05-27",159.515074],["2026-05-28",159.261029],["2026-05-29",159.261029],["2026-06-01",159.667891],["2026-06-02",159.948816],["2026-06-03",160.102466],["2026-06-04",160.025604],["2026-06-05",160.333494],["2026-06-08",160.179401],["2026-06-09",160.359205],["2026-06-10",160.565189],["2026-06-11",159.974404],["2026-06-12",160.230732],["2026-06-15",160.359205],["2026-06-16",160.462131],["2026-06-17",160.66838],["2026-06-18",161.394448],["2026-06-19",161.316341],["2026-06-22",161.603103],["2026-06-23",161.576991],["2026-06-24",161.812298],["2026-06-25",161.812298],["2026-06-26",161.759948],["2026-06-29",161.94332],["2026-06-30",162.575191],["2026-07-01",162.601626],["2026-07-02",161.134386],["2026-07-03",161.368404],["2026-07-06",162.100827],["2026-07-07",162.127108],["2026-07-08",162.654522],["2026-07-09",162.390386],["2026-07-10",161.707633],["2026-07-13",162.469537],["2026-07-14",162.284972],["2026-07-15",162.206002],["2026-07-16",162.390386],["2026-07-17",162.416761],["2026-07-20",162.495938],["2026-07-21",163.212012],["2026-07-22",163.158753],["2026-07-23",163.880695],["2026-07-24",163.853842],["2026-07-27",163.74652],["2026-07-28",163.880695],["2026-07-29",163.425396],["2026-07-30",159.540523],["2026-07-31",157.455519],["2026-08-03",157.207986],["2026-08-04",157.728707],["2026-08-05",157.778479],["2026-08-06",158.478605],["2026-08-07",157.803377],["2026-08-10",159.311773],["2026-08-11",159.311773],["2026-08-12",159.438776],["2026-08-13",159.515074],["2026-08-14",159.311773],["2026-08-17",159.4642],["2026-08-18",159.616919],["2026-08-19",158.152776],["2026-08-20",159.083678],["2026-08-21",158.982512],["2026-08-24",159.10899],["2026-08-25",159.210317],["2026-08-26",159.311773],["2026-08-27",159.413359],["2026-08-28",160.128102],["2026-08-31",159.744409],["2026-09-01",160.205062],["2026-09-02",158.730159],["2026-09-03",155.811779],["2026-09-04",156.25],["2026-09-07",154.368632],["2026-09-08",153.988297],["2026-09-09",153.562654],["2026-09-10",154.487873],["2026-09-11",153.515505],["2026-09-14",154.344806],["2026-09-15",155.110904],["2026-09-16",156.323277],["2026-09-17",155.981906],["2026-09-18",156.887355],["2026-09-21",157.40595],["2026-09-22",157.40595],["2026-09-23",158.353127],["2026-09-24",158.856235],["2026-09-25",157.306906],["2026-09-28",157.381177],["2026-09-29",157.282164],["2026-09-30",157.43073],["2026-10-01",158.102767],["2026-10-02",157.853197],["2026-10-05",157.977883],["2026-10-06",158.177792],["2026-10-07",158.077774],["2026-10-08",157.878118],["2026-10-09",158.252888],["2026-10-12",158.654609],["2026-10-13",158.353127],["2026-10-14",158.302992],["2026-10-15",158.102767],["2026-10-16",158.002844],["2026-10-19",158.553988],["2026-10-20",158.277936],["2026-10-21",158.202816],["2026-10-22",156.862745],["2026-10-23",156.838143],["2026-10-26",157.505119],["2026-10-27",157.927985],["2026-10-28",157.977883],["2026-10-29",157.977883],["2026-10-30",157.55475],["2026-11-02",157.927985],["2026-11-03",158.730159],["2026-11-04",158.478605],["2026-11-05",157.853197],["2026-11-06",158.503725],["2026-11-09",158.002844]],"source_paire":"croisé des séries uniques 5 ans (Twelve Data raccordé à la Fed H.10)"},"cl":{"EUR/USD":[1.11951,1.11543,1.11981,1.11571,1.12149,1.1239,1.12389,1.1176,1.12113,1.12351,1.12332,1.12165,1.11949,1.12024,1.12182,1.1178,1.11362,1.1156,1.11621,1.11674,1.11616,1.11602,1.11948,1.119,1.12235,1.12239,1.11396,1.11407,1.11384,1.11876],"GBP/USD":[1.32298,1.3206,1.32529,1.31929,1.3275,1.33287,1.33289,1.33191,1.33039,1.33798,1.33936,1.33996,1.33724,1.33745,1.33813,1.33458,1.33167,1.33263,1.33651,1.3395,1.33888,1.33895,1.34111,1.34149,1.34677,1.34574,1.33488,1.33522,1.33463,1.34132],"AUD/USD":[0.69815,0.6957,0.69827,0.69719,0.69189,0.69458,0.69478,0.69703,0.69792,0.70013,0.70314,0.70188,0.70369,0.70328,0.70371,0.70191,0.70292,0.70561,0.7033,0.70331,0.70317,0.70297,0.70011,0.6964,0.70088,0.6945,0.68652,0.68667,0.68678,0.68971],"NZD/USD":[0.56127,0.55857,0.56126,0.55911,0.56152,0.5652,0.56517,0.56625,0.5661,0.5681,0.5702,0.5684,0.57001,0.57001,0.5696,0.56834,0.56854,0.56272,0.56295,0.56319,0.56307,0.56327,0.56221,0.56095,0.56218,0.56027,0.55418,0.55439,0.55648,0.5612],"USD/JPY":[158.33168,158.65373,158.36506,158.31177,158.10307,157.99996,158.02672,158.0293,158.54888,158.26892,158.20545,156.86895,156.84735,156.83781,156.9018,157.49909,157.93178,157.97369,157.97734,157.55809,157.59404,157.54928,157.91717,158.74058,158.48698,157.85067,158.50027,158.48164,158.45239,157.94496],"EUR/CHF":[0.92896,0.93106,0.93256,0.9315,0.92768,0.92612,0.92663,0.92362,0.92688,0.92651,0.92616,0.92056,0.92379,0.92421,0.92462,0.92511,0.92275,0.92413,0.9223,0.92064,0.9208,0.92011,0.91614,0.91859,0.91721,0.9166,0.91418,0.91329,0.91398,0.91618]},"force":{"genere_le":"2026-11-09T21:19:11+00:00","source":"calcul Python sur la série unique 5 ans (Twelve Data raccordé à la Fed H.10) ; USD : indice synthétique","methode":"Variation de la valeur de la devise en dollars (USD : indice face aux 8 autres) sur 1, 5 et 20 séances ; écart à la MM200 = dernière valeur / moyenne mobile 200 séances − 1.","devises":[{"devise":"USD","j1":-0.42,"j5":0.38,"j20":-0.69,"dernier":100.825806,"date":"2026-11-09","mm200":99.670763,"ecart_mm200":1.16,"libelle":"indice USD synthétique (face aux 8 autres devises)","raison":null,"rangs":{"j1":9,"j5":1,"j20":8}},{"devise":"EUR","j1":0.43,"j5":-0.07,"j20":0.3,"dernier":1.11874,"date":"2026-11-09","mm200":1.153606,"ecart_mm200":-3.02,"libelle":"dollars US pour 1 EUR","raison":null,"rangs":{"j1":4,"j5":5,"j20":6}},{"devise":"GBP","j1":0.45,"j5":-0.02,"j20":1.54,"dernier":1.34088,"date":"2026-11-09","mm200":1.341797,"ecart_mm200":-0.07,"libelle":"dollars US pour 1 GBP","raison":null,"rangs":{"j1":3,"j5":2,"j20":2}},{"devise":"JPY","j1":0.32,"j5":-0.05,"j20":0.41,"dernier":0.006329,"date":"2026-11-09","mm200":0.006301,"ecart_mm200":0.44,"libelle":"dollars US pour 1 JPY","raison":null,"rangs":{"j1":6,"j5":4,"j20":4}},{"devise":"CHF","j1":0.26,"j5":-0.02,"j20":1.98,"dernier":1.221687,"date":"2026-11-09","mm200":1.249307,"ecart_mm200":-2.21,"libelle":"dollars US pour 1 CHF","raison":null,"rangs":{"j1":7,"j5":3,"j20":1}},{"devise":"CAD","j1":0.33,"j5":-0.72,"j20":1.4,"dernier":0.709834,"date":"2026-11-09","mm200":0.719362,"ecart_mm200":-1.32,"libelle":"dollars US pour 1 CAD","raison":null,"rangs":{"j1":5,"j5":8,"j20":3}},{"devise":"AUD","j1":0.48,"j5":-1.47,"j20":-0.84,"dernier":0.68983,"date":"2026-11-09","mm200":0.705348,"ecart_mm200":-2.2,"libelle":"dollars US pour 1 AUD","raison":null,"rangs":{"j1":2,"j5":9,"j20":9}},{"devise":"NZD","j1":1.09,"j5":-0.35,"j20":0.3,"dernier":0.56024,"date":"2026-11-09","mm200":0.581732,"ecart_mm200":-3.69,"libelle":"dollars US pour 1 NZD","raison":null,"rangs":{"j1":1,"j5":6,"j20":7}},{"devise":"CNY","j1":0.02,"j5":-0.37,"j20":0.35,"dernier":0.149885,"date":"2026-11-09","mm200":0.147343,"ecart_mm200":1.73,"libelle":"dollars US pour 1 CNY","raison":null,"rangs":{"j1":8,"j5":7,"j20":5}}]}};
+const $ = s => document.querySelector(s);
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const nf = (v, d) => Math.abs(v).toLocaleString('fr-FR', { minimumFractionDigits: d, maximumFractionDigits: d });
+const sgn = (v, d, u) => v == null ? 'n/d' : (v > 0 ? '+' : v < 0 ? '−' : '') + nf(v, d) + (u || '');
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const ddm = iso => iso ? iso.slice(8, 10) + '/' + iso.slice(5, 7) : '';
+const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+function spark(vals, w, h, col, area) {
+  if (!vals || vals.length < 2) return `<svg viewBox="0 0 ${w} ${h}"></svg>`;
+  const mn = Math.min(...vals), mx = Math.max(...vals), r = (mx - mn) || 1, p = 3;
+  const pts = vals.map((v, i) => [p + i * (w - 2*p) / (vals.length - 1), p + (h - 2*p) * (1 - (v - mn) / r)]);
+  const d = pts.map((q, i) => (i ? 'L' : 'M') + q[0].toFixed(1) + ' ' + q[1].toFixed(1)).join('');
+  const last = pts[pts.length - 1], id = 'g' + Math.random().toString(36).slice(2, 8);
+  return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">
+    ${area ? `<defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${col}" stop-opacity=".22"/><stop offset="1" stop-color="${col}" stop-opacity="0"/></linearGradient></defs><path d="${d}L${last[0]} ${h}L${p} ${h}Z" fill="url(#${id})"/>` : ''}
+    <path d="${d}" fill="none" stroke="${col}" stroke-width="1.8" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>
+    <circle cx="${last[0]}" cy="${last[1]}" r="2.6" fill="${col}"/></svg>`;
+}
+
+
+const S = [...document.querySelectorAll('.rs')];
+$('#toc').innerHTML = S.map((s, i) => `<a href="#${s.id}" data-i="${i}"><span>${i + 1}</span><span>${s.dataset.t}</span></a>`).join('') + '<div class="prog"><i id="tocP"></i></div>';
+function spy() {
+  let cur = 0; S.forEach((s, i) => { if (s.getBoundingClientRect().top < 140) cur = i; });
+  document.querySelectorAll('#toc a').forEach((a, i) => a.classList.toggle('on', i === cur));
+  const h = document.documentElement, p = h.scrollTop / Math.max(1, h.scrollHeight - innerHeight); const pi = $('#tocP'); if (pi) pi.style.width = Math.round(p * 100) + '%';
+}
+addEventListener('scroll', spy, { passive: true });
+
+function render() {
+  // Marchés
+  const rows = [['Indice dollar (formule du DXY, non officiel)', 'DXY', 'Dollar ferme', 2], ['Brent', 'Brent', 'Forte correction récente', 2], ['US 2 ans', 'US 2 ans', 'À lire avec le 10 ans', 2], ['US 10 ans', 'US 10 ans', 'À surveiller avec le 2 ans', 2], ['USD/JPY', 'USD/JPY', 'Yen sous pression', 2], ['EUR/USD', 'EUR/USD', 'Pression baissière', 4], ['Japon (ETF EWJ)', 'Japon (ETF EWJ)', 'Rebond en Asie', 2], ['VIX', 'VIX', 'Volatilité encore élevée', 2]];
+  const today = '2026-11-09';
+  $('#mk').innerHTML = `<thead><tr><th>Marché</th><th class="n">Dernière observation</th><th>Date</th><th>30 séances</th><th>Lecture</th></tr></thead><tbody>` + rows.map(([k, l, lec, d]) => {
+    const p = D.pm[k]; if (!p) return '';
+    const late = p.h && p.h < '2026-11-06';
+    const col = p.j1 > 0 ? css('--up') : p.j1 < 0 ? css('--down') : css('--muted');
+    return `<tr><td><b>${esc(l)}</b></td><td class="n"><b>${nf(p.n, d)}${p.u === '%' && /ans/.test(l) ? ' %' : ''}</b></td><td><span class="${late ? 'chip warn' : 'small'}" style="${late ? 'height:22px' : ''}">${ddm(p.h)}${late ? ' · en retard' : ''}</span>${p.h === today ? '<span class="src-tag ok">collecté</span>' : '<span class="src-tag new">V9 · plus frais</span>'}</td><td style="width:120px">${spark(p.s, 120, 30, col, true).replace('<svg', '<svg style="width:120px;height:30px"')}</td><td class="small" style="color:var(--ink-2)">${lec}</td></tr>`;
+  }).join('') + '</tbody>';
+  // NFP
+  const nf3 = [['Consensus', 65, 'var(--line-2)'], ['Publié', 165, 'var(--up)'], ['Septembre révisé', 60, 'var(--c1)']];
+  $('#nfpBars').innerHTML = nf3.map(([l, v, c]) => `<div style="display:grid;grid-template-columns:120px minmax(0,1fr) 70px;gap:10px;align-items:center;padding:6px 0;font-size:13.5px"><span>${l}</span><div style="height:16px;border-radius:4px;background:var(--surface)"><i style="display:block;height:100%;width:${v / 180 * 100}%;background:${c};border-radius:4px"></i></div><b style="text-align:right">+${v} k</b></div>`).join('');
+  // Banques centrales
+  const bc = D.bc.map(b => ({ ...b, v: parseFloat(String(b.taux_texte).replace('<', '').split('–').pop()) })).sort((a, b) => b.v - a.v);
+  $('#bcb').innerHTML = bc.map(b => `<div class="bcbar"><b>${b.court}</b><div class="tr"><i style="width:${b.v / 5 * 100}%"></i></div><span style="text-align:right"><b>${esc(b.taux_texte.replace(/\./g, ','))}</b> <span class="mv ${b.variation_pb > 0 ? 'pos' : b.variation_pb < 0 ? 'neg' : 'muted'}">${b.variation_pb > 0 ? '▲' + b.variation_pb : b.variation_pb < 0 ? '▼' + Math.abs(b.variation_pb) : '='}</span></span></div>`).join('') + '<span class="cite">▲ dernier mouvement en pb · Fed : borne haute de la fourchette · BoJ : borne</span>';
+  // Semaine
+  const J = ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'];
+  $('#week').innerHTML = D.week.map(j => { const d = new Date(j.d + 'T12:00:00Z'), key = j.ev.some(e => e.impact === 'fort');
+    return `<div class="wd ${key ? 'key' : ''}"><header><span class="eyebrow">${J[d.getUTCDay()]}</span><b>${d.getUTCDate()}</b></header>${j.ev.length ? j.ev.map(e => `<div class="e ${e.impact}"><span class="small">${esc(e.heure_paris)} · ${esc(e.devise)}</span><b>${esc(e.evenement)}</b>${e.consensus || e.precedent ? `<span class="small">${e.consensus ? 'attendu ' + esc(e.consensus.replace('.', ',')) : ''}${e.consensus && e.precedent ? ' · ' : ''}${e.precedent ? 'préc. ' + esc(e.precedent.replace('.', ',')) : ''}</span>` : ''}</div>`).join('') : '<div class="e"><span class="muted">Rien de moyen ou fort</span></div>'}</div>`; }).join('');
+  // Classement
+  const R = [['USD', 'Fort', 'up', 'NFP, Fed, anticipations de hausse'], ['GBP', 'Positif', 'up', 'BoE à 4 %, inflation persistante'], ['AUD', 'Neutre', '', 'RBA restrictive, réaction négative'], ['CHF', 'Neutre', '', 'Demande défensive'], ['CNY', 'Neutre', '', 'Change piloté par la PBoC'], ['EUR', 'Fragile', 'warn', 'BCE prudente, énergie et croissance'], ['CAD', 'Neutre / fragile', 'warn', 'Pétrole et croissance'], ['NZD', 'Fragile', 'warn', 'Rebond technique, incertitude politique'], ['JPY', 'Faible', 'dn', 'Écart de taux défavorable']];
+  const F = {}; D.force.devises.forEach(x => F[x.devise] = x); const mx = Math.max(...D.force.devises.map(x => Math.abs(x.j5 || 0)), .5) * 1.1;
+  $('#rank').innerHTML = R.map(([c, b, cl, m], i) => { const v = (F[c] || {}).j5; const w = v == null ? 0 : Math.abs(v) / mx * 50;
+    return `<div class="rw"><span class="n">${i + 1}</span><b class="c">${c}</b><span class="chip ${cl}" style="justify-self:start">${b}</span><span style="color:var(--ink-2);font-size:13.5px">${m}</span><div style="display:flex;flex-direction:column;gap:3px"><div class="bar"><i style="${v >= 0 ? 'left:50%' : 'right:50%'};width:${w}%;background:${v >= 0 ? 'var(--up)' : 'var(--down)'}"></i></div><span class="small" style="text-align:right">${v == null ? 'n/d' : sgn(v, 2, ' %')} sur 5 j</span></div></div>`; }).join('');
+  // Paires
+  const P = [['USD/JPY', 'Priorité élevée', 'Haussier conditionnel', 'up', ['Fed restrictive et NFP très solide', 'Écart de taux favorable au dollar', 'Risque d\'intervention et de débouclage du carry'], 'CPI ferme, 2 ans US en hausse, cassure technique confirmée', 'CPI faible, rendements US en baisse ou yen soudainement fort'],
+    ['EUR/USD', 'Priorité élevée', 'Baissier conditionnel', 'dn', ['Dollar soutenu par la Fed', 'BCE plus prudente', 'Divergence monétaire'], 'Désinflation US marquée et reprise de l\'euro', 'Le dollar garde son avantage de taux'],
+    ['GBP/USD', 'Moyenne à élevée', 'À confirmer', '', ['BoE à 4 %', 'Inflation britannique persistante', 'PIB britannique jeudi'], 'Divergence des anticipations en faveur de la BoE', 'PIB faible face à une Fed restrictive'],
+    ['AUD/USD', 'Moyenne', 'Baissier conditionnel', 'dn', ['Dollar fort', 'Hausse australienne déjà intégrée', 'Sensibilité à la Chine'], 'Retour de l\'appétit pour le risque, données chinoises solides', 'Dollar fort et risque en baisse'],
+    ['NZD/USD', 'À surveiller', 'Fragile', 'warn', ['NZD fragilisé depuis plusieurs semaines', 'Rebond après le résultat électoral provisoire', 'Très sensible au risque'], 'Confirmation technique du rebond', 'Reprise de la baisse sous le plus bas de 7 mois'],
+    ['EUR/CHF', 'En cas de stress', 'Baissier conditionnel', 'dn', ['CHF demandé en protection', 'Euro exposé à l\'énergie'], 'Rebond durable des actions', 'Nouvelle aversion au risque']];
+  $('#pairs').innerHTML = P.map(([p, pr, bi, cl, bl, h, b]) => { const s = D.cl[p] || [], ch = s.length > 1 ? (s[s.length - 1] / s[0] - 1) * 100 : null;
+    return `<div class="card p9"><div class="top"><div><span class="eyebrow">${pr}</span><h3>${p}</h3></div><span class="chip ${cl}">${bi}</span></div>
+    ${spark(s, 300, 52, ch >= 0 ? css('--up') : css('--down'), true)}<span class="small">${s.length ? nf(s[s.length - 1], s[s.length - 1] > 20 ? 2 : 4) + ' · ' + sgn(ch, 2, ' %') + ' sur 30 séances' : ''}</span>
+    <ul>${bl.map(x => `<li>${esc(x)}</li>`).join('')}</ul>
+    <div class="sc"><div style="background:var(--up-soft)"><b class="pos">Hausse si</b> ${esc(h)}</div><div style="background:var(--down-soft)"><b class="neg">Baisse si</b> ${esc(b)}</div></div></div>`; }).join('');
+  $('#prio').innerHTML = [['USD/JPY', 'Haussier conditionnel', 'CPI US et écart de taux'], ['EUR/USD', 'Baissier conditionnel', 'Force du dollar'], ['GBP/USD', 'À confirmer', 'PIB britannique'], ['AUD/USD', 'Baissier conditionnel', 'Dollar et risque'], ['NZD/USD', 'Fragile', 'Sentiment de risque'], ['EUR/CHF', 'Baissier conditionnel', 'Aversion au risque']].map((r, i) => `<tr><td><span style="font-family:var(--f-display);font-size:20px">${i + 1}</span></td><td><b>${r[0]}</b></td><td>${r[1]}</td><td class="muted">${r[2]}</td></tr>`).join('');
+  $('#brentNote').textContent = 'série EIA arrêtée au ' + ddm(D.brent[D.brent.length - 1][0]) + ' : à remplacer par un cours quotidien (V9)';
+  charts();
+}
+let C = [];
+function charts() {
+  C.forEach(c => c.remove()); C = [];
+  const L = window.LightweightCharts;
+  const base = (el, prec, h) => L.createChart(el, { autoSize: true, localization: { locale: 'fr-FR', dateFormat: 'dd/MM/yy', priceFormatter: v => v.toLocaleString('fr-FR', { minimumFractionDigits: prec, maximumFractionDigits: prec }) },
+    layout: { background: { color: 'transparent' }, textColor: css('--muted'), fontFamily: '"Instrument Sans", -apple-system, Segoe UI, sans-serif', fontSize: 11 },
+    grid: { vertLines: { visible: false }, horzLines: { color: css('--line') } }, rightPriceScale: { borderVisible: false }, timeScale: { borderVisible: false },
+    crosshair: { vertLine: { labelBackgroundColor: css('--ink') }, horzLine: { labelBackgroundColor: css('--ink') } }, handleScroll: false, handleScale: false });
+  if (!L) { $('#brentCh').innerHTML = spark(D.brent.map(p => p[1]), 800, 300, css('--c3'), true).replace('<svg', '<svg style="width:100%;height:100%"'); $('#ujCh').innerHTML = spark(D.uj.map(b => b[4]), 800, 340, css('--accent'), true).replace('<svg', '<svg style="width:100%;height:100%"'); $('#ujEc').innerHTML = spark(D.uj_ecart.map(p => p[1]), 800, 130, css('--c2'), true).replace('<svg', '<svg style="width:100%;height:100%"'); return; }
+  const b = base($('#brentCh'), 2); C.push(b);
+  const bs = b.addAreaSeries({ lineColor: css('--c3'), topColor: css('--c3') + '40', bottomColor: css('--c3') + '00', lineWidth: 2 });
+  bs.setData(D.brent.map(p => ({ time: p[0], value: p[1] }))); b.timeScale().fitContent();
+  const u = base($('#ujCh'), 2); C.push(u);
+  const cs = u.addCandlestickSeries({ upColor: css('--up'), downColor: css('--down'), borderVisible: false, wickUpColor: css('--up'), wickDownColor: css('--down') });
+  cs.setData(D.uj.map(x => ({ time: x[0], open: x[1], high: x[2], low: x[3], close: x[4] })));
+  [[159.175, 'R2', '--down'], [158.543, 'R1', '--down'], [157.394, 'S1', '--up'], [155.665, 'S2', '--up'], [152.965, 'S3', '--up']].forEach(([p, t, c]) => cs.createPriceLine({ price: p, color: css(c), lineWidth: 1, lineStyle: 2, axisLabelVisible: true, title: t }));
+  u.timeScale().fitContent();
+  const e = base($('#ujEc'), 0); C.push(e);
+  const es = e.addLineSeries({ color: css('--c2'), lineWidth: 2, priceLineVisible: false });
+  es.setData(D.uj_ecart.map(p => ({ time: p[0], value: p[1] }))); e.timeScale().fitContent();
+  const last = D.uj_ecart[D.uj_ecart.length - 1]; $('#ujSp').textContent = 'dernier ' + nf(last[1], 0) + ' pb au ' + ddm(last[0]) + ' · FRED et MoF';
+}
+$('#themeBtn').onclick = () => { const dark = document.documentElement.dataset.theme ? document.documentElement.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches; document.documentElement.dataset.theme = dark ? 'light' : 'dark'; store.set('tb-theme', document.documentElement.dataset.theme); render(); };
+$('#oriBtn').onclick = () => { const on = document.documentElement.dataset.origine !== 'on'; document.documentElement.dataset.origine = on ? 'on' : 'off'; $('#oriBtn').setAttribute('aria-pressed', on); };
+const t0 = store.get('tb-theme'); if (t0) document.documentElement.dataset.theme = t0;
+render(); spy();
+</script>

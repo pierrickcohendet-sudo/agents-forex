@@ -42,9 +42,10 @@ export async function ecranDevises(section, parametre) {
   $("#detaille", section).appendChild(fiches);
 
   // Adresse de détail #devises/EUR : carte EUR mise en avant, fiche détaillée EUR ouverte (analyse, indicateurs, points de vigilance)
-  let charge = false;
+  let charge = false, minuteries = [];
   section.allerA = async code => {
     code = String(code || "").toUpperCase();
+    minuteries.forEach(clearTimeout); minuteries = [];   // une nouvelle adresse annule l'ancrage de la précédente
     const carte = box.querySelector(`[data-devise="${code}"]`);
     if (!carte) return false;
     box.querySelectorAll(".dv.cible").forEach(c => c.classList.remove("cible"));
@@ -61,7 +62,7 @@ export async function ecranDevises(section, parametre) {
       f.scrollIntoView({ block: "start" });
       let libre = false; const stop = () => { libre = true; };
       for (const ev of ["wheel", "touchstart", "keydown", "mousedown"]) addEventListener(ev, stop, { once: true, passive: true });
-      for (const ms of [300, 800, 1500, 2500]) setTimeout(() => { if (!libre && f.isConnected) f.scrollIntoView({ block: "start" }); }, ms);
+      minuteries = [300, 800, 1500, 2500].map(ms => setTimeout(() => { if (!libre && f.isConnected && location.hash === `#devises/${code}`) f.scrollIntoView({ block: "start" }); }, ms));
     } else carte.scrollIntoView({ block: "start" });
     return true;
   };
