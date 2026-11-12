@@ -56,8 +56,12 @@ export async function ecranDevises(section, parametre) {
     if (f) {
       f.open = true;
       const voir = f.closest("details.voir-detail"); if (voir) voir.open = true;
-      // défilement immédiat, puis une seconde fois quand les graphiques du dessus ont pris leur hauteur
-      f.scrollIntoView({ block: "start" }); setTimeout(() => f.scrollIntoView({ block: "start" }), 600);
+      // Défilement immédiat, puis maintenu pendant 2,5 s (graphiques et données qui arrivent au-dessus), sauf si
+      // l'utilisateur fait défiler lui-même.
+      f.scrollIntoView({ block: "start" });
+      let libre = false; const stop = () => { libre = true; };
+      for (const ev of ["wheel", "touchstart", "keydown", "mousedown"]) addEventListener(ev, stop, { once: true, passive: true });
+      for (const ms of [300, 800, 1500, 2500]) setTimeout(() => { if (!libre && f.isConnected) f.scrollIntoView({ block: "start" }); }, ms);
     } else carte.scrollIntoView({ block: "start" });
     return true;
   };
