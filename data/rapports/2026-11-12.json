@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-12T21:19:15+00:00",
+  "genere_le": "2026-11-12T23:36:29+00:00",
   "appels_llm": [
    {
     "heure": "08:32",
@@ -202,7 +202,7 @@
    "engrenages_faits": true,
    "reserve_engrenages": 8,
    "refus_reserve_ce_run": 0,
-   "refus_budget_ce_run": 4,
+   "refus_budget_ce_run": 6,
    "budget": {
     "plafond": 60,
     "mode": "complément",
@@ -382,13 +382,13 @@
      "epuise_jusqu_a": "2026-11-13T07:59:59+00:00",
      "appels_ce_run": 0,
      "reussites_ce_run": 0,
-     "sauts_ce_run": 4
+     "sauts_ce_run": 6
     },
     "gemini-3.8-flash": {
      "appels_aujourdhui": 1,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-11-10T07:59:59+00:00",
-     "appels_ce_run": 4,
+     "appels_ce_run": 6,
      "reussites_ce_run": 0,
      "sauts_ce_run": 0
     },
@@ -414,40 +414,6 @@
    }
   },
   "disjoncteur": [
-   {
-    "heure": "10:23",
-    "actif": true,
-    "seuil_echecs": 3,
-    "ouvert": false,
-    "appels_total": 3,
-    "replis_json_modele_suivant": 0,
-    "modeles": [
-     {
-      "modele": "gemini-3.5-flash",
-      "ouvert": false,
-      "cause": null,
-      "ouvert_a_l_appel": null,
-      "echecs_consecutifs": 0,
-      "ignores": 3
-     },
-     {
-      "modele": "gemini-3.8-flash",
-      "ouvert": false,
-      "cause": null,
-      "ouvert_a_l_appel": null,
-      "echecs_consecutifs": 0,
-      "ignores": 0
-     },
-     {
-      "modele": "gemini-3.5-flash-lite",
-      "ouvert": false,
-      "cause": null,
-      "ouvert_a_l_appel": null,
-      "echecs_consecutifs": 0,
-      "ignores": 0
-     }
-    ]
-   },
    {
     "heure": "11:19",
     "actif": true,
@@ -803,6 +769,40 @@
       "ouvert_a_l_appel": null,
       "echecs_consecutifs": 0,
       "ignores": 4
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
+   },
+   {
+    "heure": "23:36",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 6,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 6
      },
      {
       "modele": "gemini-3.8-flash",
@@ -1580,7 +1580,7 @@
     "libelle": "Flash 3.5"
    },
    "version": "quotidienne",
-   "rafraichi_le": "2026-11-12T21:19:15+00:00",
+   "rafraichi_le": "2026-11-12T23:36:28+00:00",
    "titre_theme_impose": "Signaux mixtes"
   },
   "classement_devises": [
@@ -2760,7 +2760,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 1,
-    "genere_le": "2026-11-12T21:19:15+00:00"
+    "genere_le": "2026-11-12T23:36:29+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.38,
@@ -5234,7 +5234,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 1,
-    "genere_le": "2026-11-12T21:19:15+00:00"
+    "genere_le": "2026-11-12T23:36:29+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.02,
