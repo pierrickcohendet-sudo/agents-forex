@@ -56,7 +56,8 @@ export async function ecranDevises(section, parametre) {
     if (f) {
       f.open = true;
       const voir = f.closest("details.voir-detail"); if (voir) voir.open = true;
-      requestAnimationFrame(() => f.scrollIntoView({ block: "start" }));
+      // défilement immédiat, puis une seconde fois quand les graphiques du dessus ont pris leur hauteur
+      f.scrollIntoView({ block: "start" }); setTimeout(() => f.scrollIntoView({ block: "start" }), 600);
     } else carte.scrollIntoView({ block: "start" });
     return true;
   };

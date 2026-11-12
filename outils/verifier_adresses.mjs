@@ -1,5 +1,5 @@
 // Vérifie que chaque onglet et chaque adresse de détail s'ouvre sans erreur (correctif du 11/11/2026).
-// Usage : node outils/verifier_adresses.mjs <url de base> [--mobile]
+// Usage : node outils/verifier_adresses.mjs <url de base> [--mobile] [--filtre=devises]
 //   ex. node outils/verifier_adresses.mjs "http://localhost:4173/"
 //       node outils/verifier_adresses.mjs "https://pierrickcohendet-sudo.github.io/agents-forex/"
 // Edge sans interface piloté par le protocole DevTools, sans dépendance. Deux passes :
@@ -13,6 +13,7 @@ import { tmpdir } from "node:os";
 
 const base = process.argv[2] || "http://localhost:4173/";
 const mobile = process.argv.includes("--mobile");
+const filtre = (process.argv.find(a => a.startsWith("--filtre=")) || "").slice(9);   // ex. --filtre=devises (vérification ciblée)
 const EDGE = ["C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe", "C:/Program Files/Microsoft/Edge/Application/msedge.exe"].find(existsSync);
 const PORT = 9800 + Math.floor(Math.random() * 150);
 const profil = join(tmpdir(), "verif-adresses-" + PORT);
@@ -48,11 +49,13 @@ const DEVISES = ["USD", "EUR", "GBP", "JPY", "CHF", "CAD", "AUD", "NZD", "CNY"];
 const ONGLETS = ["briefing", "synthese", "tableau", "paire", "devises", "agenda", "engrenages", "journal", "scenarios", "sante", "archives"];
 const adresses = [
   ...ONGLETS.map(o => [o, `typeof document.querySelector("#s-${o}") === "object" && !!document.querySelector("#s-${o}.on")`]),
-  ...DEVISES.map(d => [`devises/${d}`, `!!document.querySelector('#s-devises.on .dv.cible[data-devise="${d}"]') && !!document.querySelector("#fiche-${d}")?.open`]),
+  ...DEVISES.map(d => [`devises/${d}`, `!!document.querySelector('#s-devises.on .dv.cible[data-devise="${d}"]') && !!document.querySelector("#fiche-${d}")?.open && Math.abs(document.querySelector("#fiche-${d}").getBoundingClientRect().top) < innerHeight`]),
   ...PAIRES.map(p => [`paire/${p.replace("/", "-")}`, `document.querySelector("#s-paire.on #ppSel")?.value === "${p}"`]),
   ...Array.from({ length: 8 }, (_, i) => [`engrenages/g=${i + 1}`, `document.querySelector('#s-engrenages.on #engSel button[data-n="${i + 1}"]')?.getAttribute("aria-pressed") === "true"`]),
   ["engrenages/hebdo", `!!document.querySelector("#s-engrenages.on details.detaille[open]")`],
 ];
+
+if (filtre) adresses.splice(0, adresses.length, ...adresses.filter(([a]) => a.includes(filtre)));
 
 // Attend la fin de construction de l'écran (plus de squelette de chargement), au plus 12 s.
 const pret = `(async () => { for (let i = 0; i < 60; i++) { await new Promise(r => setTimeout(r, 200));
