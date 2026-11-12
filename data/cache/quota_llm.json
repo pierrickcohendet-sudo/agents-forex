@@ -3,13 +3,13 @@
  "modeles": {
   "gemini-3.5-flash": {
    "appels": 16,
-   "epuise_jusqu_a": "2026-11-10T07:59:59+00:00",
-   "pannes": 2
+   "epuise_jusqu_a": "2026-11-13T07:59:59+00:00",
+   "pannes": 3
   },
   "gemini-3.8-flash": {
    "appels": 1,
    "epuise_jusqu_a": "2026-11-10T07:59:59+00:00",
-   "pannes": 5
+   "pannes": 10
   },
   "gemini-3.5-flash-lite": {
    "appels": 0,
@@ -69,11 +69,12 @@
   },
   "synthese:GBP": {
    "appels": 1,
-   "echecs": 2,
+   "echecs": 4,
    "ok": false,
    "types": {
     "json_invalide": 1,
-    "503": 1
+    "503": 2,
+    "429": 1
    },
    "dernier_echec": "503",
    "run_echec": "2026-11-12T08:31:22.284214+00:00",
@@ -110,24 +111,26 @@
   },
   "synthese:CNY": {
    "appels": 1,
-   "echecs": 2,
+   "echecs": 4,
    "ok": false,
    "types": {
     "json_invalide": 1,
-    "delai": 1
+    "delai": 2,
+    "503": 1
    },
-   "dernier_echec": "delai",
+   "dernier_echec": "503",
    "run_echec": "2026-11-12T08:31:22.284214+00:00",
    "echecs_runs": 1
   },
   "critique": {
    "appels": 0,
-   "echecs": 2,
+   "echecs": 4,
    "ok": false,
    "types": {
-    "503": 2
+    "503": 3,
+    "delai": 1
    },
-   "dernier_echec": "503"
+   "dernier_echec": "delai"
   },
   "paires:synthese": {
    "appels": 1,
@@ -146,21 +149,22 @@
   }
  },
  "echecs": {
-  "503": 6,
+  "503": 9,
   "json_invalide": 2,
-  "delai": 1
+  "delai": 3,
+  "429": 1
  },
  "faits": [
   "devises",
   "rapport"
  ],
- "pannes": 7,
+ "pannes": 13,
  "pannes_avant_correctif": 0,
  "dernier_run": {
-  "id": "2026-11-12T08:31:22.284214+00:00",
-  "envois": 24,
-  "503": 6,
-  "recues": 17,
-  "mode": "complet"
+  "id": "2026-11-12T09:19:16.720724+00:00",
+  "envois": 6,
+  "503": 3,
+  "recues": 0,
+  "mode": "complément"
  }
 }

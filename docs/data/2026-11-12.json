@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-12T08:51:44+00:00",
+  "genere_le": "2026-11-12T09:24:24+00:00",
   "appels_llm": [
    {
     "heure": "08:32",
@@ -168,6 +168,26 @@
     "tokens_total": 996,
     "ok": true,
     "etiquette": "rapport:analyse"
+   },
+   {
+    "heure": "09:19",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 1560,
+    "tokens_message": 7611,
+    "tokens_total": 9171,
+    "ok": false,
+    "etiquette": "synthese:GBP",
+    "echec": "429"
+   },
+   {
+    "heure": "09:28",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 0,
+    "tokens_message": 34627,
+    "tokens_total": 34627,
+    "ok": false,
+    "etiquette": "critique",
+    "echec": "delai"
    }
   ],
   "quota_llm": {
@@ -182,10 +202,10 @@
    "engrenages_faits": true,
    "reserve_engrenages": 8,
    "refus_reserve_ce_run": 0,
-   "refus_budget_ce_run": 3,
+   "refus_budget_ce_run": 5,
    "budget": {
-    "plafond": 45,
-    "mode": "complet",
+    "plafond": 60,
+    "mode": "complément",
     "lundi": false,
     "max_appels_par_analyse": 2,
     "prevu_analyses": {
@@ -205,28 +225,29 @@
      "reste": 11
     },
     "consomme_run": {
-     "engrenages": 1,
-     "rapport": 2,
-     "devises": 3,
-     "reste": 11
+     "engrenages": 0,
+     "rapport": 0,
+     "devises": 0,
+     "reste": 0
     },
     "total_jour": 17,
     "plafond_run": 45,
-    "recues_run": 17,
-    "pannes_jour": 7,
-    "pannes_run": 7,
+    "recues_run": 0,
+    "pannes_jour": 13,
+    "pannes_run": 6,
     "plafond_pannes": 20,
     "mode_panne": false,
     "pannes_avant_correctif": 0,
     "echecs_jour": {
-     "503": 6,
+     "503": 9,
      "json_invalide": 2,
-     "delai": 1
+     "delai": 3,
+     "429": 1
     },
     "echecs_run": {
-     "503": 6,
-     "json_invalide": 2,
-     "delai": 1
+     "429": 1,
+     "503": 3,
+     "delai": 2
     },
     "abandonnees": [],
     "analyses": {
@@ -250,9 +271,10 @@
      },
      "critique": {
       "statut": "à rejouer",
-      "echec": "503",
+      "echec": "delai",
       "types": {
-       "503": 2
+       "503": 3,
+       "delai": 1
       },
       "appels": 0
      },
@@ -308,10 +330,11 @@
      },
      "synthese:CNY": {
       "statut": "à rejouer",
-      "echec": "delai",
+      "echec": "503",
       "types": {
        "json_invalide": 1,
-       "delai": 1
+       "delai": 2,
+       "503": 1
       },
       "appels": 1
      },
@@ -326,7 +349,8 @@
       "echec": "503",
       "types": {
        "json_invalide": 1,
-       "503": 1
+       "503": 2,
+       "429": 1
       },
       "appels": 1
      },
@@ -358,17 +382,17 @@
     "gemini-3.5-flash": {
      "appels_aujourdhui": 16,
      "plafond_jour": 20,
-     "epuise_jusqu_a": "2026-11-10T07:59:59+00:00",
-     "appels_ce_run": 16,
-     "reussites_ce_run": 16,
-     "sauts_ce_run": 0
+     "epuise_jusqu_a": "2026-11-13T07:59:59+00:00",
+     "appels_ce_run": 1,
+     "reussites_ce_run": 0,
+     "sauts_ce_run": 2
     },
     "gemini-3.8-flash": {
      "appels_aujourdhui": 1,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-11-10T07:59:59+00:00",
-     "appels_ce_run": 4,
-     "reussites_ce_run": 1,
+     "appels_ce_run": 3,
+     "reussites_ce_run": 0,
      "sauts_ce_run": 0
     },
     "gemini-3.5-flash-lite": {
@@ -381,15 +405,15 @@
     }
    }
   },
-  "resume_quota": "Gemini : 17/60, engrenages : fait — Budget (run complet, plafond 45) : prévu engrenages 1 analyse (≤ 2 requêtes); rapport du jour 2 analyses (≤ 4 requêtes); devises 3 analyses (≤ 6 requêtes); reste ≤ 33 ; consommé ce run : engrenages 1, rapport du jour 2, devises 3, reste 11 (jour : 17/45) ; échecs ce run : 503 × 6, delai × 1, json_invalide × 2 ; tentatives en panne (hors budget) : 7 ce run, 7/20 aujourd'hui ; réponses reçues ce run : 17/45 ; analyses : analyses:AUD-NZD-CNY faite, analyses:JPY-CHF-CAD faite, analyses:USD-EUR-GBP faite, critique à rejouer (503), engrenages faite, etat_du_monde faite, paires:synthese faite, rapport:analyse faite, rapport:redaction faite, synthese:AUD faite, synthese:CAD faite, synthese:CHF faite, synthese:CNY à rejouer (delai), synthese:EUR faite, synthese:GBP à rejouer (503), synthese:JPY faite, synthese:NZD faite, synthese:USD faite",
+  "resume_quota": "Gemini : 17/60, engrenages : fait — Budget (run complément, plafond 60) : prévu engrenages 1 analyse (≤ 2 requêtes); rapport du jour 2 analyses (≤ 4 requêtes); devises 3 analyses (≤ 6 requêtes); reste ≤ 48 ; consommé ce run : engrenages 0, rapport du jour 0, devises 0, reste 0 (jour : 17/60) ; échecs ce run : 429 × 1, 503 × 3, delai × 2 ; tentatives en panne (hors budget) : 6 ce run, 13/20 aujourd'hui ; réponses reçues ce run : 0/45 ; analyses : analyses:AUD-NZD-CNY faite, analyses:JPY-CHF-CAD faite, analyses:USD-EUR-GBP faite, critique à rejouer (delai), engrenages faite, etat_du_monde faite, paires:synthese faite, rapport:analyse faite, rapport:redaction faite, synthese:AUD faite, synthese:CAD faite, synthese:CHF faite, synthese:CNY à rejouer (503), synthese:EUR faite, synthese:GBP à rejouer (503), synthese:JPY faite, synthese:NZD faite, synthese:USD faite",
   "appels_par_modele": {
    "gemini-3.5-flash": {
-    "appels": 16,
-    "echecs": 0
+    "appels": 17,
+    "echecs": 1
    },
    "gemini-3.8-flash": {
-    "appels": 2,
-    "echecs": 1
+    "appels": 3,
+    "echecs": 2
    }
   },
   "disjoncteur": [
@@ -426,9 +450,43 @@
       "ignores": 0
      }
     ]
+   },
+   {
+    "heure": "09:28",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": true,
+    "appels_total": 3,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": true,
+      "cause": "quota journalier épuisé — quota gratuit journalier épuisé pour gemini-3.5-flash (HTTP 429, requêtes/jour)",
+      "ouvert_a_l_appel": 1,
+      "echecs_consecutifs": 1,
+      "ignores": 2
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 1,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
    }
   ],
-  "notion_url": "https://app.notion.com/p/Rapport-du-jour-2026-11-12-courte-41665bc6466181eb98fef6dbd650d0e2"
+  "notion_url": "https://app.notion.com/p/FX-2026-11-12-quotidien-41665bc6466181eb98fef6dbd650d0e2"
  },
  "synthese_globale": {
   "biais_macro_global": "risk_off",
@@ -1186,8 +1244,8 @@
     "libelle": "Flash 3.5"
    },
    "version": "quotidienne",
-   "titre_theme_impose": "Signaux mixtes",
-   "rafraichi_le": "2026-11-12T08:36:43+00:00"
+   "rafraichi_le": "2026-11-12T09:19:16+00:00",
+   "titre_theme_impose": "Signaux mixtes"
   },
   "classement_devises": [
    {
@@ -2363,9 +2421,9 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "synthese:GBP : 2 appels déjà faits pendant ce run (repli Python) — après : réponse précédente inexploitable : gemini-3.5-flash passé en dernier",
+    "raison": "synthese:GBP : 2 appels déjà faits pendant ce run (repli Python)",
     "tentatives": 1,
-    "genere_le": "2026-11-12T08:40:20+00:00"
+    "genere_le": "2026-11-12T09:19:54+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.38,
@@ -4836,9 +4894,9 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "synthese:CNY : 2 appels déjà faits pendant ce run (repli Python) — après : réponse précédente inexploitable : gemini-3.5-flash passé en dernier",
+    "raison": "synthese:CNY : 2 appels déjà faits pendant ce run (repli Python)",
     "tentatives": 1,
-    "genere_le": "2026-11-12T08:51:44+00:00"
+    "genere_le": "2026-11-12T09:24:24+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.02,
@@ -9679,15 +9737,15 @@
   "conforme": false,
   "nb_anomalies": 9,
   "anomalies": [
-   "GBP : synthèse approfondie indisponible (synthese:GBP : 2 appels déjà faits pendant ce run (repli Python) — après : réponse précédente inexpl)",
-   "CNY : synthèse approfondie indisponible (synthese:CNY : 2 appels déjà faits pendant ce run (repli Python) — après : réponse précédente inexpl)",
+   "GBP : synthèse approfondie indisponible (synthese:GBP : 2 appels déjà faits pendant ce run (repli Python))",
+   "CNY : synthèse approfondie indisponible (synthese:CNY : 2 appels déjà faits pendant ce run (repli Python))",
    "tableau macro : USD/CPI annuel : publication manquée (prévue le 10/11, aucun « réel » reçu)",
    "tableau macro : USD/CPI core annuel : publication manquée (prévue le 10/11, aucun « réel » reçu)",
    "tableau macro : CNY/PMI manufacturier : publication manquée (prévue le 31/10, aucun « réel » reçu)",
    "tableau macro : CNY/PMI services : publication manquée (prévue le 31/10, aucun « réel » reçu)",
    "tableau macro : CAD/Taux de chômage : divergence de sources — ForexFactory 6.7% vs FRED 6.4% (pér. 2026-08, LRHUTTTTCAM156S)",
    "tableau macro : CNY/Balance commerciale : publication manquée (prévue le 10/11, aucun « réel » reçu)",
-   "prompt LLM volumineux : 2 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 34684 à 08:52 UTC, modèle gemini-3.8-flash) — le contexte envoyé au LLM a regrossi"
+   "prompt LLM volumineux : 3 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 34684 à 08:52 UTC, modèle gemini-3.8-flash) — le contexte envoyé au LLM a regrossi"
   ]
  },
  "critique": {
@@ -9696,6 +9754,6 @@
   "suggestions_connaissances": [],
   "validation": "non_evalue",
   "indisponible": true,
-  "note": "relecture non effectuée (critique : 2 appels déjà faits pendant ce run (repli Python) — après : réponse précédente inexploitable : gemini-3.5-flash passé en dernier | gemini-3)"
+  "note": "relecture non effectuée (critique : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : HTTPSConnectionPoo)"
  }
 }
