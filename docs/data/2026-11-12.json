@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-12T20:19:12+00:00",
+  "genere_le": "2026-11-12T21:19:15+00:00",
   "appels_llm": [
    {
     "heure": "08:32",
@@ -202,7 +202,7 @@
    "engrenages_faits": true,
    "reserve_engrenages": 8,
    "refus_reserve_ce_run": 0,
-   "refus_budget_ce_run": 2,
+   "refus_budget_ce_run": 4,
    "budget": {
     "plafond": 60,
     "mode": "complément",
@@ -382,13 +382,13 @@
      "epuise_jusqu_a": "2026-11-13T07:59:59+00:00",
      "appels_ce_run": 0,
      "reussites_ce_run": 0,
-     "sauts_ce_run": 2
+     "sauts_ce_run": 4
     },
     "gemini-3.8-flash": {
      "appels_aujourdhui": 1,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-11-10T07:59:59+00:00",
-     "appels_ce_run": 2,
+     "appels_ce_run": 4,
      "reussites_ce_run": 0,
      "sauts_ce_run": 0
     },
@@ -414,40 +414,6 @@
    }
   },
   "disjoncteur": [
-   {
-    "heure": "09:28",
-    "actif": true,
-    "seuil_echecs": 3,
-    "ouvert": true,
-    "appels_total": 3,
-    "replis_json_modele_suivant": 0,
-    "modeles": [
-     {
-      "modele": "gemini-3.5-flash",
-      "ouvert": true,
-      "cause": "quota journalier épuisé — quota gratuit journalier épuisé pour gemini-3.5-flash (HTTP 429, requêtes/jour)",
-      "ouvert_a_l_appel": 1,
-      "echecs_consecutifs": 1,
-      "ignores": 2
-     },
-     {
-      "modele": "gemini-3.8-flash",
-      "ouvert": false,
-      "cause": null,
-      "ouvert_a_l_appel": null,
-      "echecs_consecutifs": 1,
-      "ignores": 0
-     },
-     {
-      "modele": "gemini-3.5-flash-lite",
-      "ouvert": false,
-      "cause": null,
-      "ouvert_a_l_appel": null,
-      "echecs_consecutifs": 0,
-      "ignores": 0
-     }
-    ]
-   },
    {
     "heure": "10:23",
     "actif": true,
@@ -821,6 +787,40 @@
       "ignores": 0
      }
     ]
+   },
+   {
+    "heure": "21:20",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 4,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 4
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
    }
   ],
   "notion_url": "https://app.notion.com/p/FX-2026-11-12-quotidien-41665bc6466181eb98fef6dbd650d0e2"
@@ -1123,8 +1123,8 @@
      ],
      "donnees_calculees": [
       {
-       "texte": "USD : 10 ans 4.88 % (-36 pb sur 4 semaines), prime de terme 10 ans 0.87 %, dette / PIB 121.2 % (2026-04)",
-       "source_id": "src_148"
+       "texte": "USD : 10 ans 4.98 % (-23 pb sur 4 semaines), prime de terme 10 ans 0.87 %, dette / PIB 121.2 % (2026-04)",
+       "source_id": "src_276"
       },
       {
        "texte": "EUR : 10 ans 3.37 % (-14 pb sur 4 semaines), dette / PIB 63.9 % (2024)",
@@ -1581,7 +1581,7 @@
     "libelle": "Flash 3.5"
    },
    "version": "quotidienne",
-   "rafraichi_le": "2026-11-12T20:19:12+00:00",
+   "rafraichi_le": "2026-11-12T21:19:15+00:00",
    "titre_theme_impose": "Signaux mixtes"
   },
   "classement_devises": [
@@ -2761,7 +2761,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 1,
-    "genere_le": "2026-11-12T20:19:12+00:00"
+    "genere_le": "2026-11-12T21:19:15+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.38,
@@ -5235,7 +5235,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 1,
-    "genere_le": "2026-11-12T20:19:12+00:00"
+    "genere_le": "2026-11-12T21:19:15+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.02,
@@ -7167,6 +7167,34 @@
    "detail": "vix (VIXCLS)",
    "date": "2026-11-11",
    "url": "https://fred.stlouisfed.org/series/VIXCLS"
+  },
+  {
+   "id": "src_273",
+   "source": "FRED",
+   "detail": "taux_fed (DFF)",
+   "date": "2026-11-11",
+   "url": "https://fred.stlouisfed.org/series/DFF"
+  },
+  {
+   "id": "src_274",
+   "source": "FRED",
+   "detail": "rendement_10y (DGS10)",
+   "date": "2026-11-10",
+   "url": "https://fred.stlouisfed.org/series/DGS10"
+  },
+  {
+   "id": "src_275",
+   "source": "FRED",
+   "detail": "rendement_2y (DGS2)",
+   "date": "2026-11-10",
+   "url": "https://fred.stlouisfed.org/series/DGS2"
+  },
+  {
+   "id": "src_276",
+   "source": "FRED (DGS10)",
+   "detail": "USD — politique fiscale",
+   "date": "2026-11-10",
+   "url": null
   }
  ],
  "donnees_non_rafraichies": [],
