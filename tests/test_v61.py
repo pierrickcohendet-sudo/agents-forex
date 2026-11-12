@@ -106,7 +106,7 @@ class CopieNotion(unittest.TestCase):
         client.data_sources.query.return_value = {"results": []}
         blocs = [nb.paragraphe([nb.rt(f"bloc {i}")]) for i in range(230)]
         with mock.patch.object(red, "_obtenir_database", return_value="db"), mock.patch.object(red, "_obtenir_data_source", return_value="ds"), \
-                mock.patch.object(red, "blocs_rapport_jour", return_value=blocs):
+                mock.patch.object(red, "blocs_rapport_jour", return_value=blocs),                 mock.patch.object(red, "blocs_synthese_v9_du_jour", return_value=[]):   # lot V9 : testé à part
             self.assertEqual(red.publier_rapport_jour(CONFIG, r, client=client), "u")
         tailles = [len(c.kwargs["children"]) for c in client.blocks.children.append.call_args_list]
         self.assertEqual(tailles, [100, 100, 30])
@@ -118,7 +118,7 @@ class CopieNotion(unittest.TestCase):
             status, code = 400, "validation_error"
         client.blocks.children.append.side_effect = ErreurApi("body.children[3].paragraph.rich_text[0].text.content.length should be ≤ 2000")
         with mock.patch.object(red, "_obtenir_database", return_value="db"), mock.patch.object(red, "_obtenir_data_source", return_value="ds"), \
-                mock.patch.object(red, "blocs_rapport_jour", return_value=blocs), self.assertRaises(RuntimeError) as ctx:
+                mock.patch.object(red, "blocs_rapport_jour", return_value=blocs),                 mock.patch.object(red, "blocs_synthese_v9_du_jour", return_value=[]), self.assertRaises(RuntimeError) as ctx:
             red.publier_rapport_jour(CONFIG, r, client=client)
         self.assertIn("lot 1/3 (100 blocs, premier : paragraph) : 400 · validation_error : body.children[3]", str(ctx.exception))
 

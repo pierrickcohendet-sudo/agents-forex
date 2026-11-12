@@ -147,6 +147,23 @@ class Entrees:
         self.hist = ((h.get("donnees") or h).get("series") or {}) if h else {}
         self.taux = (_lire(self.cache / "historique_taux.json") or {}).get("series") or {}
         self.lignes = {l.get("actif"): l for l in ((self.rj.get("point_marche") or {}).get("lignes") or [])}
+        # Lot V9, livraison 2 : actualités du jour, probabilité citée de la Fed, communiqués officiels (Python)
+        racine = self.cache.parent.parent
+        try:
+            from core import actualites
+            arts = actualites.articles(_lire(self.cache / "collecte_news.json"))
+            self.actualites = actualites.du_jour(arts)
+            hist = _lire(self.cache / "proba_fed.json")
+            self.proba = actualites.lecture_proba(hist if isinstance(hist, list) else [], aujourd)
+        except Exception as exc:  # noqa: BLE001
+            log.warning("actualités V9 : %s", exc)
+            self.actualites, self.proba = [], {"valeur": None, "raison": f"actualités illisibles : {exc}"}
+        try:
+            from core import communiques_v9
+            self.communiques = communiques_v9.analyser(racine)
+        except Exception as exc:  # noqa: BLE001
+            log.warning("communiqués V9 : %s", exc)
+            self.communiques = {}
 
     def serie(self, cle: str) -> list[tuple[str, float]]:
         return [(str(p[0])[:10], float(p[1])) for p in ((self.hist.get(cle) or {}).get("points") or []) if p and p[1] is not None]
@@ -417,9 +434,14 @@ def section_focus(e: Entrees) -> dict:
                    "date": dj, "raison": None if dv is not None else "rendement 2 ans quotidien absent pour cette devise"})
     bc = next((d for d in (e.profil.get("devises") or []) if d.get("devise") == dev), {}).get("banque_centrale") or {}
     pro = bc.get("prochaine") or {}
-    chaine.append({"texte": (f"{BANQUES.get(dev, 'Banque centrale')} : prochaine décision le {ddm(pro.get('date'))}" if pro.get("date")
-                             else f"{BANQUES.get(dev, 'Banque centrale')} : prochaine décision n/d"), "date": pro.get("date"),
-                   "note": "probabilité de marché : " + NON_DISPONIBLE_L2})
+    pf = e.proba or {}
+    if dev == "USD" and pf.get("valeur") is not None:
+        chaine.append({"texte": f"Probabilité {SENS_FED.get(pf['sens'], '')} le {ddm(pro.get('date'))} : {fr(pf['valeur'], 0)} %",
+                       "date": pf.get("date"), "note": f"cité par {pf.get('source')} le {ddm(pf.get('date'))} : {pf.get('citation')}"})
+    else:
+        chaine.append({"texte": (f"{BANQUES.get(dev, 'Banque centrale')} : prochaine décision le {ddm(pro.get('date'))}" if pro.get("date")
+                                 else f"{BANQUES.get(dev, 'Banque centrale')} : prochaine décision n/d"), "date": pro.get("date"),
+                       "note": "probabilité de marché : " + (pf.get("raison") or "n/d") if dev == "USD" else None})
     ligne_dev = _ligne_devise(e, dev)
     if ligne_dev:
         dv2, dj2 = _variation_jour([(a, b) for a, b in ligne_dev["points"]], jour, "%")
@@ -485,11 +507,16 @@ def discours_semaine(e: Entrees, lundi: date) -> list[dict]:
         m = re.match(r"^(?:Discours|Audition)(?: de| :)?\s*(.+?)(?:,\s*(.+))?$", x.get("evenement") or "")
         qui = (m.group(1) if m else x.get("evenement") or "").strip()
         role = (m.group(2) if m and m.group(2) else "").strip()
+        from core import fomc_2026
+        st = fomc_2026.statut(qui, x["devise"])
+        prio = (st["statut"] if x["devise"] == "USD" else
+                "président" if re.search(r"gouverneur|président|governor|president", role, re.I) else "membre")
         d = par.setdefault(f"{x['devise']}|{qui}", {"devise": x["devise"], "intervenant": qui, "role": role, "passages": [],
-                                                    "priorite": "président" if re.search(r"président|gouverneur|chair", role + qui, re.I) else "membre"})
+                                                    "statut": st.get("libelle"), "priorite": prio, "rang": st["priorite"] if x["devise"] == "USD" else (0 if prio == "président" else 2),
+                                                    "source_statut": st.get("source")})
         d["passages"].append(f"{jour_court(x['date_paris'])} {x.get('heure_paris') or ''}".strip())
-    l = sorted(par.values(), key=lambda d: (d["devise"] != "USD", d["priorite"] != "président", d["intervenant"]))
-    return l[:12]
+    l = sorted(par.values(), key=lambda d: (d["devise"] != "USD", d["rang"], d["intervenant"]))
+    return l[:14]
 
 
 # ------------------------------------------------------------------ section 4 : banques centrales
@@ -512,7 +539,10 @@ def section_banques(e: Entrees) -> dict:
         infl = ((d.get("macro") or {}).get("inflation") or {})
         lecture = (f"Inflation {fr(infl.get('valeur'), 1)} % au {ddm(infl.get('date'))} pour une cible de {fr(infl.get('cible'), 1)} %"
                    if infl.get("valeur") is not None and infl.get("cible") is not None else "Inflation : n/d")
+        com = (e.communiques or {}).get(dev) or {}
         lignes.append({"devise": dev, "banque": BANQUES.get(dev, dev), "taux_texte": valeur_fr(t) if t else "n/d", "taux": taux_haut(t),
+                       "vocabulaire": ((com.get("vocabulaire") or {}).get("lecture") if com.get("disponible") else None),
+                       "communique_lien": com.get("lien") if com.get("disponible") else None,
                        "derniere_date": der.get("date"), "decision": der.get("decision"), "variation_pb": pb,
                        "derniere_texte": ((f"{der.get('decision', 'décision')} de {abs(pb)} pb le {ddm(der.get('date'))}" if pb else
                                            f"{der.get('decision', 'décision')} le {ddm(der.get('date'))}") if der.get("date") else "n/d"),
@@ -533,17 +563,26 @@ def section_banques(e: Entrees) -> dict:
         classe = "up" if (l["variation_pb"] or 0) > 0 else "dn" if (l["variation_pb"] or 0) < 0 else ""
         phrases = [f"{l['banque']} : {l['derniere_texte']}, taux à {l['taux_texte']}." if l["derniere_texte"] != "n/d"
                    else f"{l['banque']} : taux à {l['taux_texte']} (dernière décision non archivée)."]
+        com = (e.communiques or {}).get(l["devise"]) or {}
+        vo = (com.get("votes") or {}) if com.get("disponible") else {}
         v = votes.get(l["devise"])
-        if v:
-            phrases.append(f"Votes du {ddm(v['date'])} : {v['reel']} (format {v['source_court']} hausse-maintien-baisse ; répartition à vérifier sur le communiqué officiel).")
+        if vo.get("texte"):
+            phrases.append(f"Vote du communiqué officiel du {ddm(com['date'])} : {vo['texte']}.")
+        elif v:
+            phrases.append(f"Votes du {ddm(v['date'])} : {v['reel']} (format {v['source_court']} hausse-maintien-baisse ; communiqué officiel non lu).")
         if l["inflation"] is not None:
             phrases.append(f"{l['lecture']}.")
         if l["prochaine"]:
             phrases.append(f"Prochaine décision le {ddm(l['prochaine'])}.")
-        cartes.append({"devise": l["devise"], "etat": etat, "classe": classe, "texte": " ".join(phrases)})
+        voc = com.get("vocabulaire") or {}
+        cartes.append({"devise": l["devise"], "etat": etat, "classe": classe, "texte": " ".join(phrases),
+                       "communique": {"date": com.get("date"), "lien": com.get("lien"), "titre": com.get("titre"),
+                                      "votes": vo or None, "minorite": vo.get("minorite"), "projections": com.get("projections") or [],
+                                      "vocabulaire": voc, "raison": None if com.get("disponible") else com.get("raison")} if com else None})
     return {"banques": lignes, "cartes": cartes[:6],
-            "note": "Taux : registre macro et calendriers officiels ; dernier mouvement : archive des publications. Votes : format ForexFactory "
-                    "« hausse-maintien-baisse » ; répartition détaillée des communiqués officiels : livraison 2."}
+            "communiques_nd": {d: c.get("raison") for d, c in (e.communiques or {}).items() if not c.get("disponible")},
+            "note": "Taux : registre macro et calendriers officiels ; dernier mouvement : archive des publications. Votes, projections et "
+                    "changements de vocabulaire : communiqués officiels archivés (data/communiques_v9), lus en Python ; un 403 n'est jamais contourné."}
 
 
 def _votes_recents(e: Entrees) -> dict:
@@ -581,13 +620,17 @@ def section_asie(e: Entrees) -> dict:
         else:
             prix.append({"libelle": lib, "reel": None, "raison": "publication chinoise non archivée (calendrier)"})
     marches = [_ligne(e, "Japon (ETF EWJ)", "Japon (ETF EWJ)")]
-    marches += [{"libelle": "Taïwan (ETF EWT)", "valeur": None, "texte": "n/d", "raison": NON_DISPONIBLE_L2.replace("extraction des actualités, vérifiée en Python", "ETF Twelve Data")},
-                {"libelle": "Chine (ETF FXI)", "valeur": None, "texte": "n/d", "raison": NON_DISPONIBLE_L2.replace("extraction des actualités, vérifiée en Python", "ETF Twelve Data")}]
+    for cle, lib in (("taiwan_ewt", "Taïwan (ETF EWT)"), ("chine_fxi", "Chine (ETF FXI)")):
+        pts = e.serie(cle)
+        marches.append({"libelle": lib, "valeur": pts[-1][1], "texte": fr(pts[-1][1], 2), "date": pts[-1][0], "variation_1": variation(pts, 1, "%"),
+                        "variation_5": variation(pts, 5, "%"), "source": e.source(cle), "serie_30": [v for _, v in pts[-30:]]} if pts else
+                       {"libelle": lib, "valeur": None, "texte": "n/d", "raison": f"ETF {lib[-4:-1]} pas encore collecté (Twelve Data, run complet suivant)"})
     forces = {f["devise"]: f for f in e.force.get("devises") or []}
     devs = [{"devise": d, "j5": (forces.get(d) or {}).get("j5"), "date": (forces.get(d) or {}).get("date"),
              "lien": {"AUD": "croissance chinoise et matières premières", "NZD": "croissance chinoise et appétit pour le risque",
                       "JPY": "flux régionaux et aversion au risque"}[d]} for d in ("AUD", "NZD", "JPY")]
-    return {"prix": prix, "marches": marches, "devises": devs, "source_force": e.force.get("source")}
+    tech = [a for a in e.actualites if a["theme"] in ("actions", "asie")][:3]
+    return {"prix": prix, "marches": marches, "devises": devs, "source_force": e.force.get("source"), "actualites": tech}
 
 
 # ------------------------------------------------------------------ section 7 : calendrier
@@ -861,6 +904,15 @@ def sources(e: Entrees) -> list[dict]:
             continue
         quand = (e.bls.get("publie_le") if cond == "bls" else e.serie("USD_2a")[-1][0] if cond == "tresor" and e.serie("USD_2a") else None)
         sortie.append({"nom": nom, "quoi": quoi + (f", {ddm(quand)}" if quand else ""), "url": url})
+    for dev, c in (e.communiques or {}).items():
+        if c.get("disponible") and c.get("lien"):
+            sortie.append({"nom": f"Communiqué {c['banque']}", "quoi": f"{(c.get('titre') or '')[:70]}, {ddm(c.get('date'))}", "url": c["lien"]})
+    p = e.proba or {}
+    if p.get("lien"):
+        sortie.append({"nom": p.get("source") or "Actualité", "quoi": f"Probabilité de la Fed citée, {ddm(p.get('date'))}", "url": p["lien"]})
+    for a in e.actualites[:6]:
+        if a.get("lien"):
+            sortie.append({"nom": a.get("source") or "Actualité", "quoi": f"{a['titre'][:80]}, {ddm(a.get('date'))}", "url": a["lien"]})
     return sortie
 
 
@@ -890,7 +942,26 @@ def section_executive(e: Entrees, cl: dict, focus: dict, marches: dict, brent: d
     return {"biais": biais, "biais_classe": tete["classe"], "regime": regime, "point_determinant": point,
             "themes": themes[:3], "tete": {k: tete[k] for k in ("devise", "score", "biais", "moteur")},
             "queue": {k: queue[k] for k in ("devise", "score", "biais", "moteur")},
-            "fed": {"valeur": None, "texte": "n/d", "raison": NON_DISPONIBLE_L2, "titre": "Probabilité de la prochaine décision de la Fed"}}
+            "fed": jauge_fed(e), "actualites": e.actualites}
+
+
+SENS_FED = {"hausse": "d'une hausse", "baisse": "d'une baisse", "maintien": "d'un maintien"}
+
+
+def jauge_fed(e: Entrees) -> dict:
+    """Probabilité citée dans une actualité (nombre vérifié dans le texte source), avec le repère d'une semaine plus tôt."""
+    p = e.proba or {}
+    pro = next((d for d in (e.profil.get("devises") or []) if d.get("devise") == "USD"), {}).get("banque_centrale", {}).get("prochaine") or {}
+    titre = f"Probabilité de la prochaine décision de la Fed{(' (' + ddm(pro.get('date')) + ')') if pro.get('date') else ''}"
+    if p.get("valeur") is None:
+        return {"valeur": None, "texte": "n/d", "raison": p.get("raison") or "aucune probabilité citée", "titre": titre}
+    ref = p.get("reference") or {}
+    return {"valeur": p["valeur"], "texte": fr(p["valeur"], 0) + " %", "sens": p["sens"],
+            "titre": f"Probabilité {SENS_FED.get(p['sens'], '')} de la Fed{(' le ' + ddm(pro.get('date'))) if pro.get('date') else ''}",
+            "precedent": ref.get("valeur"), "precedent_date": ref.get("date"), "raison_precedent": p.get("raison_reference"),
+            "citation": p.get("citation"), "lien": p.get("lien"), "source": f"{p.get('source')}, {ddm(p.get('date'))}", "date": p.get("date"),
+            "methode": "chiffre cité dans une actualité collectée (titre ou résumé du flux RSS), retrouvé mot pour mot en Python ; "
+                       "pas de données de futures gratuites et licites"}
 
 
 # ------------------------------------------------------------------ textes de secours (Python, phrases complètes)
@@ -903,6 +974,10 @@ def textes_python(s: dict) -> dict[str, list[str]]:
     t["s1"] = [f"Le classement du jour place le {NOMS_DEVISES.get(tete['devise'], tete['devise'])} en tête avec un score de {fr(tete['score'], 2, True)}, "
                f"porté par {tete['moteur']}. Le {NOMS_DEVISES.get(ex['queue']['devise'], ex['queue']['devise'])} ferme la marche ({fr(ex['queue']['score'], 2, True)}) : "
                f"{ex['queue']['moteur']}. Le rendez-vous déterminant est {ex['point_determinant']}."]
+    fed = ex.get("fed") or {}
+    if fed.get("valeur") is not None:
+        t["s1"].append(f"{fed['source'].split(',')[0]} cite le {ddm(fed['date'])} une probabilité {SENS_FED.get(fed['sens'], '')} de la Fed de {fed['texte']}"
+                       + (f", contre {fr(fed['precedent'], 0)} % le {ddm(fed['precedent_date'])}." if fed.get("precedent") is not None else "."))
     m = f["s2"]["mecanisme"]
     lig = {l["libelle"]: l for l in f["s2"]["marches"]}
     dxy = lig.get("Indice dollar (DXY, formule)") or {}
@@ -972,8 +1047,10 @@ def textes_python(s: dict) -> dict[str, list[str]]:
     if te.get("disponible"):
         nv = {n["court"]: n for n in te["niveaux"]}
         t["s10"] = [f"{te['paire']} clôture à {fr(te['cours'], te['decimales'])} au {ddm(te['date'])}, avec un RSI 14 quotidien de {fr(te['rsi_1j'], 1)}"
-                    + (f", entre la résistance R1 ({nv['R1']['texte']})" if nv.get("R1") else "") + (f" et le support S1 ({nv['S1']['texte']})." if nv.get("S1") else ".")
-                    + (f" {te['ecart']['phrase']}" if te['ecart'].get("phrase") and re.search(r"\d", te['ecart']['phrase']) else "")]
+                    + (f", entre la résistance R1 ({nv['R1']['texte']}) et le support S1 ({nv['S1']['texte']})." if nv.get("R1") and nv.get("S1") else
+                       f", sous la résistance R1 ({nv['R1']['texte']})." if nv.get("R1") else
+                       f", au-dessus du support S1 ({nv['S1']['texte']})." if nv.get("S1") else ".")
+                    + (f" {te['ecart']['phrase']}" if te['ecart'].get("phrase") and "corrélation" in te['ecart']['phrase'] else "")]
     else:
         t["s10"] = [f"Technique indisponible au {ddm(f['date'])} : {te.get('raison')}."]
     sc = f["s11"]["scenarios"]
@@ -1047,6 +1124,17 @@ def calculer(docs: Path, cache: Path, aujourd: date | None = None, maintenant: d
         log.exception("textes Python de la synthèse V9")
         s["textes"] = {}
         erreurs["textes"] = str(exc)[:200]
+    # Le texte Python passe le même contrôle que celui du modèle : une phrase qui échoue est retirée (jamais de phrase
+    # sans fait chiffré ni de nombre absent des faits, même en rédaction automatique)
+    from core import controle_texte as ct
+    autorises = ct.nombres_autorises(faits)
+    for sid, paras in list(s["textes"].items()):
+        propres = []
+        for para in paras:
+            gardees = [ph for ph in ct.phrases(para) if not ct.verifier(ph, autorises)]
+            if gardees:
+                propres.append(" ".join(gardees))
+        s["textes"][sid] = propres
     for sid, *_ in TITRES:   # jamais de texte vide : phrase datée de repli
         if not s["textes"].get(sid):
             s["textes"][sid] = [f"Section indisponible au {ddm(aujourd.isoformat())} : {erreurs.get(sid, 'données absentes')}."]

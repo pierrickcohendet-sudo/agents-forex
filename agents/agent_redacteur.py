@@ -20,6 +20,8 @@ ancienne version du pipeline.
 """
 from __future__ import annotations
 
+import json
+
 import logging
 import os
 import re
@@ -1110,6 +1112,20 @@ def erreur_notion(exc: Exception) -> str:
     return masquer_secrets(f"{entete} : {exc}" if entete else str(exc))[:400]
 
 
+def blocs_synthese_v9_du_jour(jour: str) -> list[dict]:
+    """Lot V9 : la Synthèse en 13 sections en tête de la page Notion (même structure que le site), puis l'annexe."""
+    try:
+        racine = Path(__file__).resolve().parents[1]
+        s = json.loads((racine / "docs" / "data" / "synthese.json").read_text(encoding="utf-8"))
+        if s.get("date") != jour:
+            return []
+        from core import notion_synthese
+        return notion_synthese.blocs_synthese(s) + [nb.titre(1, "Annexe : rapport détaillé (version précédente)")]
+    except Exception as exc:  # noqa: BLE001 — la copie Notion garde au moins le rapport détaillé
+        log.warning("Synthèse V9 absente de la copie Notion : %s", exc)
+        return []
+
+
 def publier_rapport_jour(config: dict, r: dict, chemin_config: str | Path | None = None, client: Client | None = None) -> str | None:
     """Écrit le Rapport du jour dans la base Notion existante (nouvelle entrée), puis, l'écriture réussie, met à la
     corbeille les versions précédentes du même jour (récupérables dans Notion). Retourne l'URL."""
@@ -1136,7 +1152,7 @@ def publier_rapport_jour(config: dict, r: dict, chemin_config: str | Path | None
         properties={"Nom": {"title": [{"type": "text", "text": {"content": titre}}]},
                     "Date": {"date": {"start": r["date"]}}, "Type": {"select": {"name": TYPE_RAPPORT_JOUR}},
                     "Semaine": {"rich_text": [{"type": "text", "text": {"content": semaine}}]}})
-    blocs = blocs_rapport_jour(r)
+    blocs = blocs_synthese_v9_du_jour(r["date"]) + blocs_rapport_jour(r)
     paquets = nb.lots(blocs)   # limite de l'API : 100 blocs par ajout
     for k, lot in enumerate(paquets):
         try:

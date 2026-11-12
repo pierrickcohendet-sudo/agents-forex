@@ -93,18 +93,25 @@ def _ts(iso: str | None) -> float | None:
 
 
 def reaction(paire: str, iso_decision: str, fiche: dict | None, cotations: dict) -> dict | None:
-    """Variation de la paire depuis la dernière bougie 30 min close avant la décision, au cours de séance (Twelve Data)."""
+    """Variation de la paire depuis la CLÔTURE de la bougie 30 min qui précède l'heure de publication (bougie de 12:30
+    pour une décision à 13:00, close à 13:00), au cours de séance (Twelve Data). Correctif V9 (0.6) : jamais depuis une
+    bougie plus ancienne (08:00 le jour de la BoE) ; si la bougie n'est pas encore collectée : n/d avec la raison."""
     t0 = _ts(iso_decision)
     q = (cotations or {}).get(paire) or {}
     bougies = (((fiche or {}).get("chandeliers") or {}).get("30min") or {}).get("bougies") or []
-    if t0 is None or q.get("prix") is None or not bougies:
+    if t0 is None:
         return None
-    avant = [b for b in bougies if (_ts(str(b[0]).replace(" ", "T") + "+00:00") or 0) < t0]
-    if not avant or _ts(q.get("heure_utc")) is None or _ts(q.get("heure_utc")) <= t0:
-        return None
-    ref = avant[-1][4]
-    return {"paire": paire, "variation_pct": round((q["prix"] / ref - 1) * 100, 2), "depuis": avant[-1][0],
-            "cours": q["prix"], "heure_utc": q.get("heure_utc"), "source": "Twelve Data (bougie 30 min avant la décision, cours de séance)"}
+    attendue = datetime.fromtimestamp(t0 - 1800, tz=timezone.utc)
+    lib = attendue.astimezone(_zone("Europe/Paris")).strftime("%H:%M")
+    if q.get("prix") is None or _ts(q.get("heure_utc")) is None or _ts(q.get("heure_utc")) <= t0:
+        return {"paire": paire, "variation_pct": None, "raison": "cours de séance postérieur à la publication pas encore relevé"}
+    ref = next((b for b in bougies if abs((_ts(str(b[0]).replace(" ", "T") + "+00:00") or 0) - (t0 - 1800)) < 60), None)
+    if ref is None:
+        return {"paire": paire, "variation_pct": None,
+                "raison": f"bougie 30 min de {lib} (Paris) pas encore collectée : réaction mesurée au passage horaire suivant"}
+    return {"paire": paire, "variation_pct": round((q["prix"] / ref[4] - 1) * 100, 2), "depuis": ref[0], "depuis_paris": lib,
+            "cours": q["prix"], "heure_utc": q.get("heure_utc"),
+            "source": f"Twelve Data (clôture de la bougie 30 min de {lib}, cours de séance)"}
 
 
 def jour_de_decision(bq: dict, evenements: list[dict], rj: dict, paires: dict | None, cotations: dict) -> dict:
@@ -117,7 +124,9 @@ def jour_de_decision(bq: dict, evenements: list[dict], rj: dict, paires: dict | 
     ligne = lambda lib, e, prec, att: {"libelle": lib, "precedent": prec, "attendu": att,   # noqa: E731
                                        "publie": (e or {}).get("publie"), "heure": (e or {}).get("heure_paris") or bq.get("heure"),
                                        "iso_utc": (e or {}).get("iso_utc")}
-    lignes = [ligne("Taux directeur", taux, bq.get("taux"), bq.get("consensus"))]
+    # Correctif V9 (0.5) : le précédent est celui publié avant la décision (ForexFactory), figé ; le taux du registre
+    # passe au nouveau niveau dès la publication (BoE du 05/11 : 4,00 % affiché au lieu de 3,75 %)
+    lignes = [ligne("Taux directeur", taux, (taux or {}).get("precedent") or bq.get("taux_precedent") or bq.get("taux"), bq.get("consensus"))]
     if votes:
         lignes.append(ligne("Votes du comité", votes, votes.get("precedent"), votes.get("consensus")))
     lignes.append(ligne("Discours du gouverneur", discours, None, None) if discours else

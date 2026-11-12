@@ -36,6 +36,22 @@ function listeSourcee(titre, items, sources) {
   return bloc;
 }
 
+/* Lot V9 (0.7) : codes du modèle traduits, décimales françaises fixes. L'état affiché vient du profil Python. */
+const CODES = { data_dependent: "dépendante des données", hawkish: "restrictive", dovish: "accommodante", neutral: "neutre", neutre: "neutre",
+  restrictive: "restrictive", accommodative: "accommodante", tightening: "en resserrement", easing: "en assouplissement",
+  on_hold: "en pause", hold: "en pause", gradual: "graduelle", cautious: "prudente", hawkish_bias: "biais restrictif",
+  dovish_bias: "biais accommodant", haussier: "haussier", baissier: "baissier", mixed: "mitigée", mixte: "mitigée" };
+const traduireCode = c => c == null ? "" : CODES[String(c).toLowerCase()] || String(c).replace(/_/g, " ");
+const fr2d = (v, d = 2) => Number(v).toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d }).replace("-", "−");
+function valeurFr(v, nom) {
+  const t = String(v ?? "").trim();
+  const m = t.match(/^([<>]?)(-?\d+(?:[.,]\d+)?)\s*(%?)(.*)$/);
+  if (!m) return t.replace(/(\d)\.(\d)/g, "$1,$2");
+  const n = parseFloat(m[2].replace(",", "."));
+  const dec = /taux|rate/i.test(nom || "") ? 2 : Math.max(1, (m[2].split(/[.,]/)[1] || "").length);
+  return `${m[1]}${fr2d(n, dec)}${m[3] ? " %" : ""}${m[4] || ""}`;
+}
+
 function tableauIndicateurs(lignes) {
   const defile = el("div", "defile");
   const t = el("table", "dense compact");
@@ -47,11 +63,11 @@ function tableauIndicateurs(lignes) {
     const tr = el("tr");
     tr.appendChild(el("td", null, l.nom));
     const v = l.valeur !== null && l.valeur !== undefined && l.valeur !== "";
-    const tdv = el("td"); if (v) tdv.textContent = l.valeur; else { tdv.appendChild(el("span", "nd", "n/d")); tdv.title = l.note || ""; }
+    const tdv = el("td", "n"); if (v) { tdv.textContent = valeurFr(l.valeur, l.nom); tdv.title = l.source || ""; } else { tdv.appendChild(el("span", "nd", "n/d")); tdv.title = l.note || ""; }
     tr.appendChild(tdv);
-    tr.appendChild(el("td", null, l.prevision ?? "—"));
-    tr.appendChild(el("td", null, l.precedent ?? "—"));
-    tr.appendChild(el("td", null, l.date ? `${dateCourte(l.date)}${l.anciennete_jours > 7 ? ` (J-${l.anciennete_jours})` : ""}` : "—"));
+    tr.appendChild(el("td", `n prev${l.prevision != null ? "" : " vide"}`, l.prevision != null ? valeurFr(l.prevision, l.nom) : "—"));
+    tr.appendChild(el("td", `n prec${l.precedent != null ? "" : " vide"}`, l.precedent != null ? valeurFr(l.precedent, l.nom) : "—"));
+    tr.appendChild(el("td", "quand", l.date ? `${dateCourte(l.date)}${l.anciennete_jours > 7 ? ` (J-${l.anciennete_jours})` : ""}` : "—"));
     const tds = el("td", "source-cellule", l.source || (v ? "—" : l.note || "—"));
     if (v && l.note) {   // choix de la source expliqué (ex. série unique 5 ans pour le RSI)
       const pourquoi = el("details", "pourquoi-source");
@@ -158,8 +174,8 @@ function fiche(d, cles, sources, ouverte, etat) {
   const meta = el("p", "note");
   meta.textContent = [
     d.redige_par?.libelle ? `Analyse rédigée par ${d.redige_par.libelle}` : null,
-    d.biais_banque_centrale ? `Banque centrale : ${d.biais_banque_centrale}` : null,
-    d.carry?.taux_directeur !== undefined ? `Taux directeur ${String(d.carry.taux_directeur).replace(".", ",")} % (écart médiane G8 ${d.carry.differentiel_vs_mediane_g8 > 0 ? "+" : ""}${String(d.carry.differentiel_vs_mediane_g8).replace(".", ",")})` : null,
+    d.biais_banque_centrale ? `Banque centrale : ${traduireCode(d.biais_banque_centrale)}` : null,
+    d.carry?.taux_directeur != null ? `Taux directeur ${fr2d(d.carry.taux_directeur)} % (écart à la médiane G8 ${d.carry.differentiel_vs_mediane_g8 > 0 ? "+" : ""}${fr2d(d.carry.differentiel_vs_mediane_g8)} point)` : null,
   ].filter(Boolean).join(" · ");
   corps.appendChild(meta);
   const pourquoi = d.contexte_geopolitique?.banque_centrale_pourquoi;

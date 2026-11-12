@@ -83,3 +83,15 @@ horizontal. Comparer côte à côte avec `docs/design/reference/` et lister les 
 - Graphiques : Brent 6 mois (prix EIA en trait plein, estimation par l'ETF BNO en orange), bougies quotidiennes de la paire
   n° 1 avec zones et lignes du V8.2, écart de taux en dessous ; micro-graphiques SVG pour les marchés et les paires.
 - Captures : `node outils/captures.mjs "http://localhost:4173/" captures/<lot> synthese`, comparées à `reference/v9/`.
+
+### V9, livraison 2
+
+- Section 1 : jauge de la Fed alimentée par une probabilité citée dans une actualité (citation et lien au survol, repère
+  d'une semaine plus tôt), bloc « À la une » (5 à 8 titres d'origine, classés par thème en Python, source et heure).
+- Section 3 : discours avec le statut FOMC 2026 (votants en gras, table sourcée `core/fomc_2026.py`).
+- Section 4 : cartes enrichies du communiqué officiel (vote, minorité citée, projection citée, vocabulaire comparé au
+  communiqué précédent, lien) ; une banque refusée (403) affiche « n/d » avec la raison, jamais de contournement.
+- Section 6 : ETF EWJ, EWT, FXI ; titres « Actions, IA et Asie ».
+- Archives : chaque Synthèse publiée dans `data/synthese/AAAA-MM-JJ.json`, lisible à `#archives/synthese=AAAA-MM-JJ`.
+- Fiche devise : sur téléphone, une ligne d'indicateur = un bloc (nom, puis valeur, prévision, précédent, date ; cellules
+  vides masquées) ; codes du modèle traduits ; décimales françaises fixes.

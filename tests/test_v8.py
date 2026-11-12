@@ -102,7 +102,8 @@ def test_reaction_apres_publication():
     fiche = {"chandeliers": {"30min": {"bougies": [["2026-11-05 11:30:00", 1, 1, 1, 1.3400], ["2026-11-05 12:00:00", 1, 1, 1, 1.3500]]}}}
     r = briefing.reaction("GBP/USD", "2026-11-05T12:00+00:00", fiche, {"GBP/USD": {"prix": 1.3467, "heure_utc": "2026-11-05T12:15+00:00"}})
     assert r["variation_pct"] == 0.5 and r["depuis"] == "2026-11-05 11:30:00"
-    assert briefing.reaction("GBP/USD", "2026-11-05T12:00+00:00", fiche, {"GBP/USD": {"prix": 1.35, "heure_utc": "2026-11-05T11:45+00:00"}}) is None
+    avant = briefing.reaction("GBP/USD", "2026-11-05T12:00+00:00", fiche, {"GBP/USD": {"prix": 1.35, "heure_utc": "2026-11-05T11:45+00:00"}})
+    assert avant["variation_pct"] is None and avant["raison"]                       # lot V9 : n/d avec la raison
 
 
 # ------------------------------------------------------------------ G1. fraîcheur

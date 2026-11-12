@@ -214,6 +214,12 @@ def executer(racine: str | Path, config: dict, llm=None, maintenant: datetime | 
             arch = racine / "data" / "archives" / "synthese"
             arch.mkdir(parents=True, exist_ok=True)
             (arch / f"{s['date']}.json").write_text(json.dumps(s, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+            # Onglet Archives (lot V9, D4) : copie publiée et index des jours
+            pub = docs / "synthese"
+            pub.mkdir(parents=True, exist_ok=True)
+            (pub / f"{s['date']}.json").write_text(json.dumps(s, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+            jours = sorted({f.stem for f in pub.glob("20??-??-??.json")}, reverse=True)
+            (pub / "index.json").write_text(json.dumps({"jours": jours}, ensure_ascii=False), encoding="utf-8")
         if s["redige_par"] and hasattr(llm, "marquer_fait") and not s["redaction_automatique"]:
             llm.marquer_fait("rapport")
         return s

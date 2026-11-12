@@ -78,6 +78,9 @@ SERIES_TWELVE = {
     "or_xau": ("XAU/USD", "Twelve Data (XAU/USD, or au comptant)", "$/once"),
     "nasdaq_qqq": ("QQQ", "Twelve Data (ETF QQQ, réplique le Nasdaq 100 — pas l'indice lui-même)", "$"),
     "japon_ewj": ("EWJ", "Twelve Data (ETF EWJ, actions japonaises — indicateur du Nikkei, pas l'indice)", "$"),
+    # Lot V9 : marchés asiatiques de la Synthèse (Taïwan, Chine)
+    "taiwan_ewt": ("EWT", "Twelve Data (ETF EWT, actions taïwanaises — pas l'indice TAIEX)", "$"),
+    "chine_fxi": ("FXI", "Twelve Data (ETF FXI, grandes capitalisations chinoises — pas un indice local)", "$"),
     "allemagne_ewg": ("EWG", "Twelve Data (ETF EWG, actions allemandes — indicateur du DAX, pas l'indice)", "$"),
     # Lot V6 (vérifié le 03/11/2026 sur le plan gratuit) : S&P 500 du jour (FRED SP500 a 2 jours de retard) et USD/SEK pour
     # l'indice dollar calculé selon la formule du DXY. Brent : réservé aux plans payants (XBR/USD, BRENT) -> FRED/EIA.

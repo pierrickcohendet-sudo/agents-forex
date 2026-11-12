@@ -105,7 +105,8 @@ export async function ecranBriefing(section) {
       <table class="dtab"><thead><tr><th></th><th>Précédent</th><th>Attendu</th><th>Publié</th></tr></thead><tbody>
       ${d.lignes.map(l => `<tr><td>${esc(l.libelle)}</td><td>${l.precedent ? esc(frTxt(l.precedent)) : "—"}</td><td>${l.attendu ? `<b>${esc(frTxt(l.attendu))}</b>` : "—"}</td><td>${cellPub(l)}</td></tr>`).join("")}
       </tbody></table>
-      ${reac ? `<div class="auto"><b>Réaction de ${esc(reac.paire)}</b><span class="${reac.variation_pct > 0 ? "pos" : reac.variation_pct < 0 ? "neg" : ""}" style="font-weight:600">${sgn(reac.variation_pct, 2, " %")} depuis la bougie de ${heureParis(Date.parse(reac.depuis.replace(" ", "T") + "Z") / 1000)}</span><span class="src">${esc(reac.source)}</span></div>` : ""}
+      ${reac && reac.variation_pct == null ? `<div class="auto"><b>Réaction de ${esc(reac.paire)}</b><span>${nd(reac.raison)}</span></div>` : ""}
+      ${reac && reac.variation_pct != null ? `<div class="auto"><b>Réaction de ${esc(reac.paire)}</b><span class="${reac.variation_pct > 0 ? "pos" : reac.variation_pct < 0 ? "neg" : ""}" style="font-weight:600">${sgn(reac.variation_pct, 2, " %")} depuis la clôture de la bougie de ${heureParis(Date.parse(reac.depuis.replace(" ", "T") + "Z") / 1000)}</span><span class="src">${esc(reac.source)}</span></div>` : ""}
       <div class="cols2" style="gap:10px">${(d.cas || []).map((c, i) => `<div class="auto" style="background:var(${i ? "--down-soft" : "--up-soft"})"><b>${esc(c.titre)}</b><span>${esc(c.lecture)}</span></div>`).join("")}</div>
       <span class="small">Lecture complète des 6 cas dans la <a href="#synthese">Synthèse</a>. ${esc(d.note)}</span>
     </div>

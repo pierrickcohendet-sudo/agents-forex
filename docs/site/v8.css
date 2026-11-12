@@ -216,3 +216,19 @@ dialog.palette::backdrop{background:color-mix(in srgb,var(--ink) 35%,transparent
 .erreur-ecran{display:flex;flex-direction:column;gap:10px;border-color:var(--down)}
 .erreur-ecran code{overflow-wrap:anywhere;font-size:13px}
 .dv.cible{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent),var(--shadow)}
+
+/* Lot V9 (0.7) : fiche devise, tableau « Indicateurs du jour » compact à 390 px (source au survol de la valeur) */
+.fiche table.compact td.n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+@media (max-width:640px){
+  /* une ligne = un bloc : le nom de l'indicateur, puis valeur · prévision · précédent · date sur une ligne */
+  .fiche table.compact,.fiche table.compact tbody{display:block;min-width:0!important;width:100%}
+  .fiche table.compact thead,.fiche table.compact td.source-cellule{display:none}
+  .fiche table.compact tr{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 12px;padding:8px 2px;border-bottom:1px solid var(--line)}
+  .fiche table.compact td{padding:0;border:0;line-height:1.35;white-space:normal;text-align:left;min-width:0!important;width:auto!important;flex:0 1 auto}
+  .fiche table.compact td:first-child{flex:1 1 100%;font-weight:600;color:var(--ink)}
+  .fiche table.compact td:nth-child(2){font-weight:600}
+  .fiche table.compact td.prev::before{content:"prév. ";color:var(--muted);font-size:11.5px}
+  .fiche table.compact td.prec::before{content:"préc. ";color:var(--muted);font-size:11.5px}
+  .fiche table.compact td.quand{color:var(--muted);font-size:12px}
+  .fiche table.compact td.vide{display:none}
+}

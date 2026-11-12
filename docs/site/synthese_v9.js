@@ -21,14 +21,24 @@ function entete(S, sec) {
 const erreur = (sec) => sec.erreur ? `<div class="sec-err">Section indisponible : ${esc(sec.erreur)}</div>` : "";
 
 /* ------------------------------------------------------------------ sections */
+const THEMES_ACTU = { fed: "Fed et taux", energie: "Énergie et géopolitique", asie: "Chine et Asie", actions: "Actions et IA" };
+const heureActu = iso => iso ? new Date(iso).toLocaleString("fr-FR", { timeZone: "Europe/Paris", day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : "";
+function actualites(liste) {
+  if (!liste?.length) return "";
+  return `<div class="card pad" style="display:flex;flex-direction:column;gap:6px"><div class="sec-head"><h3>À la une</h3><span class="cite">flux RSS officiels et de presse · titres d'origine, classés par thème en Python</span></div>
+    <div class="news">${liste.map(a => `<a href="${esc(a.lien || "#")}" target="_blank" rel="noopener"><span class="eyebrow">${esc(THEMES_ACTU[a.theme] || a.theme)}</span><b>${esc(a.titre)}</b><span class="small">${esc(a.source || "")} · ${heureActu(a.date)}</span></a>`).join("")}</div></div>`;
+}
 function s1(S, F) {
   const x = F.s1 || {}, fed = x.fed || {};
+  const ref = fed.precedent != null ? ` · repère : ${nf(fed.precedent, 0)} % le ${ddm(fed.precedent_date)}` : (fed.valeur != null && fed.raison_precedent ? ` · repère ${nd(fed.raison_precedent)}` : "");
   return `<div class="card pad gauge" style="max-width:640px">
-      <div class="sec-head"><h3>${esc(fed.titre || "Probabilité de la prochaine décision de la Fed")}</h3><span class="cite">${fed.valeur == null ? nd(fed.raison) : esc(fed.source || "")}</span></div>
+      <div class="sec-head"><h3>${esc(fed.titre || "Probabilité de la prochaine décision de la Fed")}</h3><span class="cite">${fed.valeur == null ? nd(fed.raison) : `<a href="${esc(fed.lien || "#")}" target="_blank" rel="noopener" title="${esc(fed.citation || "")}">${esc(fed.source || "")}</a>`}</span></div>
       <div class="tr">${fed.valeur == null ? "" : `<i style="width:${fed.valeur}%"></i>${fed.precedent != null ? `<em style="left:${fed.precedent}%"></em>` : ""}`}</div>
-      <div class="lab"><span>0 %</span><span>${fed.valeur == null ? "n/d : extraite des actualités à la livraison 2" : `<b style="color:var(--ink)">${nf(fed.valeur, 0)} %</b>`}</span><span>100 %</span></div>
+      <div class="lab"><span>0 %</span><span>${fed.valeur == null ? "n/d : aucune probabilité chiffrée citée récemment" : `<b style="color:var(--ink)"${at(fed.source, fed.date)}>${nf(fed.valeur, 0)} %</b> aujourd'hui${ref}`}</span><span>100 %</span></div>
+      ${fed.valeur != null ? `<span class="cite" title="${esc(fed.methode || "")}">« ${esc(fed.citation || "")} »</span>` : ""}
     </div>
-    <div class="themes">${(x.themes || []).map((t, i) => `<div class="card"><span class="k">${i + 1}</span><b>${esc(t.titre)}</b><p>${esc(t.texte)}</p></div>`).join("")}</div>`;
+    <div class="themes">${(x.themes || []).map((t, i) => `<div class="card"><span class="k">${i + 1}</span><b>${esc(t.titre)}</b><p>${esc(t.texte)}</p></div>`).join("")}</div>
+    ${actualites(x.actualites)}`;
 }
 
 function s2(S, F) {
@@ -99,8 +109,8 @@ function s3(S, F) {
         <div class="grid4">${(pro.lire?.cas || []).map(c => `<div style="background:var(--${c.classe === "up" ? "up-soft" : c.classe === "dn" ? "down-soft" : c.classe === "warn" ? "warn-soft" : "surface-2"})"><b>${esc(c.si)}</b><span>${esc(c.lecture)}</span></div>`).join("")}</div></div></div>`;
   }
   const disc = F.discours || [];
-  html += `<div class="card pad" style="display:flex;flex-direction:column;gap:10px"><div class="sec-head"><h3>Discours de la semaine</h3><span class="cite">regroupés par intervenant · statut de votant : livraison 2</span></div>
-    <div class="speak">${disc.length ? disc.map(d => `<span class="chip ${d.priorite === "président" ? "acc" : ""}" title="${esc(d.role || d.devise)}">${esc(d.devise)} · ${esc(d.intervenant)} · ${esc(d.passages.join(", "))}</span>`).join("") : '<span class="muted">Aucun discours à l\'Agenda cette semaine.</span>'}</div></div>`;
+  html += `<div class="card pad" style="display:flex;flex-direction:column;gap:10px"><div class="sec-head"><h3>Discours de la semaine</h3><span class="cite">regroupés par intervenant · votants FOMC 2026 en gras (federalreserve.gov)</span></div>
+    <div class="speak">${disc.length ? disc.map(d => `<span class="chip ${d.priorite === "président" ? "acc" : ""}" title="${esc([d.role, d.statut, d.source_statut].filter(Boolean).join(" · "))}">${esc(d.devise)} · ${d.priorite === "votant" || d.priorite === "président" ? `<b>${esc(d.intervenant)}</b>` : esc(d.intervenant)}${d.statut ? ` (${esc(d.statut)})` : ""} · ${esc(d.passages.join(", "))}</span>`).join("") : '<span class="muted">Aucun discours à l\'Agenda cette semaine.</span>'}</div></div>`;
   return html;
 }
 
@@ -112,9 +122,19 @@ function s4(S, F) {
         ${b.map(l => `<div class="bcbar"><b>${esc(l.banque)}</b><div class="tr"><i style="width:${(l.taux || 0) / max * 100}%"></i></div><span style="text-align:right"><b${at(l.source, l.derniere_date)}>${esc(l.taux_texte)}</b> <span class="mv ${l.variation_pb > 0 ? "pos" : l.variation_pb < 0 ? "neg" : "muted"}">${l.variation_pb > 0 ? "▲" + l.variation_pb : l.variation_pb < 0 ? "▼" + Math.abs(l.variation_pb) : "="}</span></span></div>`).join("")}
         <span class="cite">▲ ▼ dernier mouvement en pb · Fed : borne haute de la fourchette</span></div>
       <div class="card scroll"><table class="tbl" style="min-width:560px"><thead><tr><th>Banque</th><th>Dernière décision</th><th>Prochaine</th><th>Lecture</th></tr></thead><tbody>
-        ${b.map(l => `<tr><td><b>${esc(l.banque)}</b></td><td>${esc(l.taux_texte)}${l.derniere_texte && l.derniere_texte !== "n/d" ? ", " + esc(l.derniere_texte) : ` ${nd("dernière décision non archivée")}`}</td><td>${l.prochaine ? ddm(l.prochaine) : "n/d"}</td><td class="small" style="color:var(--ink-2)">${esc(l.lecture)}</td></tr>`).join("")}</tbody></table></div></div>
-    <div class="cc9">${(x.cartes || []).map(c => `<div class="card"><h3>${esc(c.devise)} <span class="chip ${c.classe}">${esc(c.etat)}</span></h3><p>${esc(c.texte)}</p></div>`).join("")}</div>
-    ${prose(S, "s4")}<p class="cite">${esc(x.note || "")}</p>`;
+        ${b.map(l => `<tr><td><b>${esc(l.banque)}</b></td><td>${esc(l.taux_texte)}${l.derniere_texte && l.derniere_texte !== "n/d" ? ", " + esc(l.derniere_texte) : ` ${nd("dernière décision non archivée")}`}</td><td>${l.prochaine ? ddm(l.prochaine) : "n/d"}</td><td class="small" style="color:var(--ink-2)">${esc(l.lecture)}${l.vocabulaire ? ` · ${l.communique_lien ? `<a href="${esc(l.communique_lien)}" target="_blank" rel="noopener">${esc(l.vocabulaire)}</a>` : esc(l.vocabulaire)}` : ""}</td></tr>`).join("")}</tbody></table></div></div>
+    <div class="cc9">${(x.cartes || []).map(c => `<div class="card"><h3>${esc(c.devise)} <span class="chip ${c.classe}">${esc(c.etat)}</span></h3><p>${esc(c.texte)}</p>${communique(c.communique)}</div>`).join("")}</div>
+    ${prose(S, "s4")}<p class="cite">${esc(x.note || "")}${Object.keys(x.communiques_nd || {}).length ? " · Communiqués non lus : " + Object.entries(x.communiques_nd).map(([d, r]) => `${esc(d)} ${nd(r)}`).join(", ") : ""}</p>`;
+}
+function communique(c) {
+  if (!c) return "";
+  if (c.raison) return `<span class="cite">Communiqué ${nd(c.raison)}</span>`;
+  const v = c.vocabulaire || {};
+  return `<div style="display:flex;flex-direction:column;gap:6px;font-size:12.5px;color:var(--ink-2)">
+    ${c.minorite ? `<span class="cite">Minorité : « ${esc(c.minorite)} »</span>` : ""}
+    ${(c.projections || []).slice(0, 2).map(p => `<span class="cite">Projection citée : « ${esc(p)} »</span>`).join("")}
+    ${v.lecture ? `<span title="${esc(v.methode || "")}"><b>Vocabulaire :</b> ${esc(v.lecture)} (${v.n_ajouts} phrase${v.n_ajouts > 1 ? "s" : ""} nouvelle${v.n_ajouts > 1 ? "s" : ""}, ${v.n_retraits} retirée${v.n_retraits > 1 ? "s" : ""})${v.ajouts?.[0] ? ` · nouveau : « ${esc(v.ajouts[0])} »` : ""}</span>` : `<span class="cite">Vocabulaire ${nd(v.raison)}</span>`}
+    <a class="cite" href="${esc(c.lien)}" target="_blank" rel="noopener">Communiqué officiel du ${ddm(c.date)}</a></div>`;
 }
 
 function s5(S, F) {
@@ -138,7 +158,8 @@ function s6(S, F) {
   const x = F.s6 || {};
   return `<div class="cc9">
       <div class="card"><h3>Prix chinois</h3>${(x.prix || []).map(p => `<p>${esc(p.libelle)} : ${p.reel ? `<b class="${p.sens > 0 ? "pos" : p.sens < 0 ? "neg" : ""}"${at(p.source, p.date)}>${esc(p.reel)}</b> au ${ddm(p.date)}${p.consensus ? ` (attendu ${esc(p.consensus)})` : ""}` : nd(p.raison)}</p>`).join("")}</div>
-      <div class="card"><h3>Marchés asiatiques</h3>${(x.marches || []).map(m => `<p>${esc(m.libelle)} : ${m.valeur == null ? nd(m.raison) : `<b${at(m.source, m.date)}>${esc(m.texte)}</b> au ${ddm(m.date)}, ${sgn(m.variation_5, 2, " %")} sur 5 séances <span class="chip" style="height:20px">ETF</span>`}</p>`).join("")}</div>
+      <div class="card"><h3>Marchés asiatiques</h3>${(x.marches || []).map(m => `<p>${esc(m.libelle)} : ${m.valeur == null ? nd(m.raison) : `<b${at(m.source, m.date)}>${esc(m.texte)}</b> au ${ddm(m.date)}${m.variation_1 != null ? ", " + sgn(m.variation_1, 2, " %") + " sur la séance" : ""}, ${sgn(m.variation_5, 2, " %")} sur 5 séances <span class="chip" style="height:20px">ETF</span>`}</p>`).join("")}</div>
+      <div class="card"><h3>Actions, IA et Asie</h3>${(x.actualites || []).length ? (x.actualites || []).map(a => `<p><a href="${esc(a.lien || "#")}" target="_blank" rel="noopener">${esc(a.titre)}</a> <span class="small">${esc(a.source || "")}, ${heureActu(a.date)}</span></p>`).join("") : `<p>${nd("aucun titre de ces thèmes dans les flux collectés")}</p>`}</div>
       <div class="card"><h3>Conséquences Forex</h3>${(x.devises || []).map(d => `<p><b>${esc(d.devise)}</b> ${d.j5 == null ? nd("force n/d") : `<span class="${d.j5 > 0 ? "pos" : d.j5 < 0 ? "neg" : ""}"${at(x.source_force, d.date)}>${sgn(d.j5, 2, " %")}</span> sur 5 séances`} : ${esc(d.lien)}.</p>`).join("")}</div></div>
     ${prose(S, "s6")}`;
 }

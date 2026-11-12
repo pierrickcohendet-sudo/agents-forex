@@ -28,6 +28,12 @@ def _date_entree(entree) -> datetime | None:
     return None
 
 
+def _texte(html: str) -> str:
+    import html as html_mod
+    import re
+    return re.sub(r"\s+", " ", html_mod.unescape(re.sub(r"<[^>]+>", " ", html or ""))).strip()
+
+
 def collecter(config: dict, user_agent: str) -> dict:
     resultat: dict = {"articles": [], "flux": {}, "erreurs": []}
     limite = datetime.now(timezone.utc) - timedelta(hours=FENETRE_HEURES)
@@ -54,6 +60,9 @@ def collecter(config: dict, user_agent: str) -> dict:
                 "titre": getattr(entree, "title", "(sans titre)").strip()[:300],
                 "lien": getattr(entree, "link", None),
                 "date": date_pub.isoformat() if date_pub else None,
+                # Lot V9 : résumé du flux (texte du flux RSS lui-même, balises retirées) pour les actualités du jour et
+                # la probabilité de la Fed citée (vérifiée mot pour mot dans ce texte)
+                "resume": _texte(getattr(entree, "summary", "") or getattr(entree, "description", ""))[:700] or None,
             })
             retenus += 1
             if retenus >= MAX_PAR_FLUX:

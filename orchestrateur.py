@@ -609,6 +609,13 @@ def _synthese_v9(config: dict, llm, complement: bool) -> dict | None:
             except Exception as exc:  # noqa: BLE001
                 log.warning("Synthèse V9 : modèle non initialisé (%s) — secours puis rédaction automatique", exc)
                 llm = None
+    # Lot V9, livraison 2 : communiqués officiels (votes, vocabulaire, projections) et probabilité de la Fed citée
+    from core import actualites, communiques_v9
+    communiques_v9.mettre_a_jour(RACINE, config)
+    try:
+        actualites.calculer(RACINE)
+    except Exception as exc:  # noqa: BLE001
+        log.warning("actualités du jour non calculées : %s", exc)
     s = agent_synthese_v9.executer(RACINE, config, llm)
     if s:
         log.info("Synthèse V9 : %d section(s) rédigée(s) par %s, %d en rédaction automatique",

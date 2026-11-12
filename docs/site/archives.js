@@ -37,8 +37,23 @@ async function jour(date) {
 const MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
 const CLASSE_REGIME = { risk_on: "pos", risk_off: "neg", neutre: "neutre" };
 
+/* Lot V9 : la Synthèse en 13 sections de chaque jour ouvré (#archives/synthese=AAAA-MM-JJ). */
+async function syntheseDuJour(date) {
+  const S = await chargerJson(`data/synthese/${date}.json`);
+  if (enErreur(S)) return [indisponible(`Synthèse du ${dateCourte(date)}`, S?.__erreur || "pas de synthèse archivée ce jour-là")];
+  const retour = el("p"); const a = el("a", null, "← Toutes les archives"); a.href = "#archives"; retour.appendChild(a);
+  const hote = el("div");
+  const { ecranSyntheseV9 } = await import("./synthese_v9.js");
+  await ecranSyntheseV9(hote, S);
+  return [retour, hote];
+}
+
 export async function pageArchives(parametre) {
+  const v9 = /^synthese=(\d{4}-\d{2}-\d{2})$/.exec(parametre || "");
+  if (v9) return syntheseDuJour(v9[1]);
   if (parametre && /^\d{4}-\d{2}-\d{2}$/.test(parametre)) return jour(parametre);
+  const syntheses = await chargerJson("data/synthese/index.json");
+  const avecV9 = new Set(enErreur(syntheses) ? [] : syntheses.jours || []);
   const index = await chargerJson("data/index.json");
   if (enErreur(index) || !Array.isArray(index)) return [indisponible("Archives", index?.__erreur || "index.json illisible")];
   const entrees = index.map(e => (typeof e === "string" ? { date: e } : e)).sort((a, b) => b.date.localeCompare(a.date));
@@ -75,7 +90,9 @@ export async function pageArchives(parametre) {
         a.appendChild(el("span", "tabulaire", dateCourte(e.date)));
         if (e.biais) a.appendChild(el("span", `pastille-regime ${CLASSE_REGIME[e.biais] || "neutre"}`, REGIME[e.biais] || e.biais));
         a.appendChild(el("span", "note", [TYPES[e.type] || e.type, RELECTURE[e.relecture]].filter(Boolean).join(" · ")));
-        li.appendChild(a); ul.appendChild(li);
+        li.appendChild(a);
+        if (avecV9.has(e.date)) { const s9 = el("a", "note", "Synthèse en 13 sections"); s9.href = `#archives/synthese=${e.date}`; li.appendChild(s9); }
+        ul.appendChild(li);
       }
       d.appendChild(ul); zone.appendChild(d);
     }
