@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-12T14:19:17+00:00",
+  "genere_le": "2026-11-12T15:19:10+00:00",
   "appels_llm": [
    {
     "heure": "08:32",
@@ -202,7 +202,7 @@
    "engrenages_faits": true,
    "reserve_engrenages": 8,
    "refus_reserve_ce_run": 0,
-   "refus_budget_ce_run": 3,
+   "refus_budget_ce_run": 2,
    "budget": {
     "plafond": 60,
     "mode": "complément",
@@ -382,13 +382,13 @@
      "epuise_jusqu_a": "2026-11-13T07:59:59+00:00",
      "appels_ce_run": 0,
      "reussites_ce_run": 0,
-     "sauts_ce_run": 3
+     "sauts_ce_run": 2
     },
     "gemini-3.8-flash": {
      "appels_aujourdhui": 1,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-11-10T07:59:59+00:00",
-     "appels_ce_run": 3,
+     "appels_ce_run": 2,
      "reussites_ce_run": 0,
      "sauts_ce_run": 0
     },
@@ -633,6 +633,40 @@
       "ouvert_a_l_appel": null,
       "echecs_consecutifs": 0,
       "ignores": 3
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
+   },
+   {
+    "heure": "15:19",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 2,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 2
      },
      {
       "modele": "gemini-3.8-flash",
@@ -1028,11 +1062,11 @@
      ],
      "donnees_calculees": [
       {
-       "texte": "VIX 19.46 le 2026-11-10 (-6.6 % sur 7 j)",
-       "source_id": "src_010",
+       "texte": "VIX 17.49 le 2026-11-11 (+5.3 % sur 7 j)",
+       "source_id": "src_272",
        "indicateur": "vix",
-       "valeur": 19.46,
-       "date": "2026-11-10"
+       "valeur": 17.49,
+       "date": "2026-11-11"
       },
       {
        "texte": "Indice dollar large (Fed) 121.8803 le 2026-11-06 (+0.18 % sur 7 j)",
@@ -1060,11 +1094,11 @@
      "sources_indisponibles": [],
      "mesure": {
       "libelle": "VIX",
-      "valeur": 19.46,
+      "valeur": 17.49,
       "unite": "pts",
       "seuil_bas": 14,
       "seuil_haut": 25,
-      "date": "2026-11-10",
+      "date": "2026-11-11",
       "source": "FRED (VIXCLS)",
       "si_haut": "Risk off",
       "si_bas": "Risk on",
@@ -1410,7 +1444,7 @@
     "libelle": "Flash 3.5"
    },
    "version": "quotidienne",
-   "rafraichi_le": "2026-11-12T14:19:17+00:00",
+   "rafraichi_le": "2026-11-12T15:19:10+00:00",
    "titre_theme_impose": "Signaux mixtes"
   },
   "classement_devises": [
@@ -2590,7 +2624,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 1,
-    "genere_le": "2026-11-12T14:19:17+00:00"
+    "genere_le": "2026-11-12T15:19:10+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.38,
@@ -5064,7 +5098,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 1,
-    "genere_le": "2026-11-12T14:19:17+00:00"
+    "genere_le": "2026-11-12T15:19:10+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.02,
@@ -6989,6 +7023,13 @@
    "detail": "sp500 (SP500)",
    "date": "2026-11-11",
    "url": "https://fred.stlouisfed.org/series/SP500"
+  },
+  {
+   "id": "src_272",
+   "source": "FRED",
+   "detail": "vix (VIXCLS)",
+   "date": "2026-11-11",
+   "url": "https://fred.stlouisfed.org/series/VIXCLS"
   }
  ],
  "donnees_non_rafraichies": [],
@@ -9214,7 +9255,6 @@
   },
   "vix": {
    "dates": [
-    "2025-12-12",
     "2025-12-19",
     "2025-12-26",
     "2026-01-02",
@@ -9343,10 +9383,10 @@
     "2026-11-05",
     "2026-11-06",
     "2026-11-09",
-    "2026-11-10"
+    "2026-11-10",
+    "2026-11-11"
    ],
    "valeurs": [
-    15.74,
     14.91,
     13.6,
     14.51,
@@ -9475,7 +9515,8 @@
     28.18,
     25.64,
     19.92,
-    19.46
+    19.46,
+    17.49
    ],
    "source_canonique": "vix"
   },
