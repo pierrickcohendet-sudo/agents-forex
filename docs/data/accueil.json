@@ -1,22 +1,34 @@
 {
- "genere_le": "2026-11-12T23:36:49+00:00",
- "date_rapport": "2026-11-12",
+ "genere_le": "2026-11-13T08:57:31+00:00",
+ "date_rapport": "2026-11-13",
  "theme": {
-  "titre": "Signaux mixtes",
-  "titre_impose": true,
+  "titre": "Pas de régime de risque net, dollar soutenu",
+  "titre_impose": false,
   "direction": {
    "libelle": "Dollar haussier · Risque neutre",
    "classe": "up"
   },
-  "conviction": "moyen",
-  "alignes": 2,
+  "conviction": "eleve",
+  "alignes": 3,
   "evaluables": 7,
-  "compte_matrice": "12 actives, 5 n/d, 19 sans règle, 1 neutralisée",
-  "explication": "Engrenages orientés : 3. Données (Dollar haussier) ; 7. Flux (Dollar haussier · Risk on). Les autres restent dans leur couloir neutre.",
-  "texte": "Le dollar conserve un biais haussier modéré guidé par l'addition des signaux techniques et économiques.",
-  "texte_source": "modèle"
+  "compte_matrice": "11 actives, 5 n/d, 22 sans règle, 2 neutralisées",
+  "explication": "Engrenages orientés : 2. Monétaire (Dollar haussier) ; 3. Données (Dollar haussier) ; 7. Flux (Dollar haussier · Risk on). Les autres restent dans leur couloir neutre.",
+  "texte": null,
+  "texte_source": "calcul Python"
  },
  "au_bord": [
+  {
+   "id": "ecart_2a_us_var_4s-JPY",
+   "engrenage": 2,
+   "devise": "JPY",
+   "libelle": "écart de taux 2 ans face aux États-Unis, variation sur 4 semaines — JPY",
+   "texte_valeur": "−15 pb",
+   "distance_texte": "0 pb",
+   "phrase": "écart de taux 2 ans face aux États-Unis, variation sur 4 semaines — JPY à −15 pb : 0 pb du seuil bas (−15 pb), soit 1,3 % du couloir neutre",
+   "etat": "proche",
+   "date": "2026-11-12",
+   "source": "calcul : 2 ans local − 2 ans US (DGS2)"
+  },
   {
    "id": "surprise_30j-CHF",
    "engrenage": 3,
@@ -26,20 +38,8 @@
    "distance_texte": "0,05",
    "phrase": "indice de surprise macro 30 jours — CHF à +0,45 : 0,05 du seuil haut (+0,50), soit 5,0 % du couloir neutre",
    "etat": "proche",
-   "date": "2026-11-12",
+   "date": "2026-11-13",
    "source": "calcul Python (registre macro, 30 j)"
-  },
-  {
-   "id": "ecart_mm200-CNY",
-   "engrenage": 7,
-   "devise": "CNY",
-   "libelle": "écart du cours à sa moyenne mobile 200 jours (tendance) — CNY",
-   "texte_valeur": "+1,71 %",
-   "distance_texte": "0,29 %",
-   "phrase": "écart du cours à sa moyenne mobile 200 jours (tendance) — CNY à +1,71 % : 0,29 % du seuil haut (+2,00 %), soit 7,3 % du couloir neutre",
-   "etat": "proche",
-   "date": "2026-11-12",
-   "source": "calcul Python (écart à la MM200) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période"
   },
   {
    "id": "cot_percentile_52s-USD",
@@ -54,23 +54,8 @@
    "source": "CFTC (COT legacy, positions nettes non commerciales)"
   }
  ],
- "franchis": 20,
+ "franchis": 21,
  "evenements": [
-  {
-   "iso_utc": "2026-11-12T23:30+00:00",
-   "date_paris": "2026-11-13",
-   "heure_paris": "00:30",
-   "devise": "USD",
-   "evenement": "Discours de Williams, membre du FOMC",
-   "type": "Discours",
-   "impact": "faible",
-   "points": "●○○",
-   "precedent": null,
-   "consensus": null,
-   "publie": null,
-   "badge": null,
-   "engrenage": 2
-  },
   {
    "iso_utc": "2026-11-13T13:30+00:00",
    "date_paris": "2026-11-13",
@@ -321,19 +306,8 @@
  "fraicheur": {
   "sources": 16,
   "vertes": 16,
-  "alertes": [
-   {
-    "id": "wti",
-    "libelle": "Pétrole WTI",
-    "texte": "7 jours ouvrés (normal : 3 au plus) — plus de deux fois la normale"
-   },
-   {
-    "id": "brent",
-    "libelle": "Pétrole Brent",
-    "texte": "7 jours ouvrés (normal : 3 au plus) — plus de deux fois la normale"
-   }
-  ],
-  "calcule_le": "2026-11-12T23:36:49+00:00"
+  "alertes": [],
+  "calcule_le": "2026-11-13T08:57:31+00:00"
  },
  "note": "Tableau de bord du jour : faits datés et lectures historiques, jamais un ordre d'achat ou de vente."
 }

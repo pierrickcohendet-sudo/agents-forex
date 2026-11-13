@@ -1,35 +1,34 @@
 {
- "date": "2026-11-12",
+ "date": "2026-11-13",
  "modeles": {
   "gemini-3.5-flash": {
-   "appels": 16,
-   "epuise_jusqu_a": "2026-11-13T07:59:59+00:00",
-   "pannes": 3
+   "appels": 13,
+   "epuise_jusqu_a": "2026-11-14T07:59:59+00:00",
+   "pannes": 7
   },
   "gemini-3.8-flash": {
-   "appels": 1,
+   "appels": 0,
    "epuise_jusqu_a": "2026-11-10T07:59:59+00:00",
-   "pannes": 12
+   "pannes": 8
   },
   "gemini-3.5-flash-lite": {
-   "appels": 0,
+   "appels": 1,
    "epuise_jusqu_a": null
   }
  },
- "engrenages_faits": true,
+ "engrenages_faits": false,
  "categories": {
-  "engrenages": 1,
   "devises": 3,
-  "reste": 11,
-  "rapport": 2
+  "reste": 8,
+  "rapport": 3
  },
  "etiquettes": {
   "engrenages": {
-   "appels": 1,
-   "echecs": 1,
-   "ok": true,
+   "appels": 0,
+   "echecs": 2,
+   "ok": false,
    "types": {
-    "503": 1
+    "503": 2
    },
    "dernier_echec": "503"
   },
@@ -69,17 +68,8 @@
   },
   "synthese:GBP": {
    "appels": 1,
-   "echecs": 6,
-   "ok": false,
-   "types": {
-    "json_invalide": 1,
-    "503": 3,
-    "429": 1,
-    "delai": 1
-   },
-   "dernier_echec": "503",
-   "run_echec": "2026-11-12T08:31:22.284214+00:00",
-   "echecs_runs": 1
+   "echecs": 0,
+   "ok": true
   },
   "synthese:JPY": {
    "appels": 1,
@@ -91,47 +81,51 @@
    "dernier_echec": "503"
   },
   "synthese:CHF": {
-   "appels": 1,
-   "echecs": 0,
-   "ok": true
+   "appels": 0,
+   "echecs": 2,
+   "ok": false,
+   "types": {
+    "503": 2
+   },
+   "dernier_echec": "503"
   },
   "synthese:CAD": {
-   "appels": 1,
-   "echecs": 0,
-   "ok": true
+   "appels": 0,
+   "echecs": 2,
+   "ok": false,
+   "types": {
+    "503": 2
+   },
+   "dernier_echec": "503"
   },
   "synthese:AUD": {
-   "appels": 1,
-   "echecs": 0,
-   "ok": true
-  },
-  "synthese:NZD": {
-   "appels": 1,
-   "echecs": 0,
-   "ok": true
-  },
-  "synthese:CNY": {
-   "appels": 1,
-   "echecs": 4,
-   "ok": false,
-   "types": {
-    "json_invalide": 1,
-    "delai": 2,
-    "503": 1
-   },
-   "dernier_echec": "503",
-   "run_echec": "2026-11-12T08:31:22.284214+00:00",
-   "echecs_runs": 1
-  },
-  "critique": {
    "appels": 0,
-   "echecs": 4,
+   "echecs": 2,
    "ok": false,
    "types": {
-    "503": 3,
+    "503": 1,
     "delai": 1
    },
    "dernier_echec": "delai"
+  },
+  "synthese:NZD": {
+   "appels": 0,
+   "echecs": 2,
+   "ok": false,
+   "types": {
+    "503": 2
+   },
+   "dernier_echec": "503"
+  },
+  "synthese:CNY": {
+   "appels": 1,
+   "echecs": 0,
+   "ok": true
+  },
+  "critique": {
+   "appels": 1,
+   "echecs": 0,
+   "ok": true
   },
   "paires:synthese": {
    "appels": 1,
@@ -147,12 +141,35 @@
    "appels": 1,
    "echecs": 0,
    "ok": true
+  },
+  "rapport:synthese_1": {
+   "appels": 1,
+   "echecs": 0,
+   "ok": true
+  },
+  "rapport:synthese_2": {
+   "appels": 0,
+   "echecs": 2,
+   "ok": false,
+   "types": {
+    "429": 1,
+    "503": 1
+   },
+   "dernier_echec": "503"
+  },
+  "rapport:synthese_3": {
+   "appels": 0,
+   "echecs": 1,
+   "ok": false,
+   "types": {
+    "503": 1
+   },
+   "dernier_echec": "503"
   }
  },
  "echecs": {
-  "503": 10,
-  "json_invalide": 2,
-  "delai": 4,
+  "503": 13,
+  "delai": 1,
   "429": 1
  },
  "faits": [
@@ -162,10 +179,10 @@
  "pannes": 15,
  "pannes_avant_correctif": 0,
  "dernier_run": {
-  "id": "2026-11-12T10:19:03.063457+00:00",
-  "envois": 2,
-  "503": 1,
-  "recues": 0,
-  "mode": "complément"
+  "id": "2026-11-13T08:32:08.257179+00:00",
+  "envois": 29,
+  "503": 13,
+  "recues": 14,
+  "mode": "complet"
  }
 }
