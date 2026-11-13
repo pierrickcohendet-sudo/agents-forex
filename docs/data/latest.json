@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-13T14:19:14+00:00",
+  "genere_le": "2026-11-13T15:19:22+00:00",
   "appels_llm": [
    {
     "heure": "08:32",
@@ -686,6 +686,40 @@
       "ignores": 0
      }
     ]
+   },
+   {
+    "heure": "15:19",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 9,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 9
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
    }
   ],
   "notion_url": "https://app.notion.com/p/FX-2026-11-13-quotidien-41765bc6466181239cc4e3a5b5e08812"
@@ -1085,11 +1119,11 @@
      ],
      "donnees_calculees": [
       {
-       "texte": "VIX 17.49 le 2026-11-11 (+5.3 % sur 7 j)",
-       "source_id": "src_010",
+       "texte": "VIX 18.7 le 2026-11-12 (-33.6 % sur 7 j)",
+       "source_id": "src_275",
        "indicateur": "vix",
-       "valeur": 17.49,
-       "date": "2026-11-11"
+       "valeur": 18.7,
+       "date": "2026-11-12"
       },
       {
        "texte": "Indice dollar large (Fed) 121.8803 le 2026-11-06 (+0.18 % sur 7 j)",
@@ -1099,11 +1133,11 @@
        "date": "2026-11-06"
       },
       {
-       "texte": "S&P 500 7619.38 le 2026-11-11 (+1.31 % sur la séance)",
-       "source_id": "src_013",
+       "texte": "S&P 500 7592.4 le 2026-11-12 (-0.35 % sur la séance)",
+       "source_id": "src_276",
        "indicateur": "sp500",
-       "valeur": 7619.38,
-       "date": "2026-11-11"
+       "valeur": 7592.4,
+       "date": "2026-11-12"
       },
       {
        "texte": "Indice or (proxy) — NASDAQ QGLDI, pas le cours spot : 2381.34 le 2026-11-12 (-4.81 % sur 7 j)",
@@ -1117,11 +1151,11 @@
      "sources_indisponibles": [],
      "mesure": {
       "libelle": "VIX",
-      "valeur": 17.49,
+      "valeur": 18.7,
       "unite": "pts",
       "seuil_bas": 14,
       "seuil_haut": 25,
-      "date": "2026-11-11",
+      "date": "2026-11-12",
       "source": "FRED (VIXCLS)",
       "si_haut": "Risk off",
       "si_bas": "Risk on",
@@ -1470,7 +1504,7 @@
     "libelle": "Flash 3.8"
    },
    "version": "quotidienne",
-   "rafraichi_le": "2026-11-13T14:19:14+00:00"
+   "rafraichi_le": "2026-11-13T15:19:22+00:00"
   },
   "classement_devises": [
    {
@@ -3570,7 +3604,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-13T14:19:14+00:00"
+    "genere_le": "2026-11-13T15:19:22+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.45,
@@ -3831,7 +3865,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-13T14:19:14+00:00"
+    "genere_le": "2026-11-13T15:19:22+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.56,
@@ -4081,7 +4115,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-13T14:19:14+00:00"
+    "genere_le": "2026-11-13T15:19:22+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.04,
@@ -4327,7 +4361,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-13T14:19:14+00:00"
+    "genere_le": "2026-11-13T15:19:22+00:00"
    },
    "indice_surprise_30j": {
     "indice": -1.62,
@@ -6713,6 +6747,20 @@
    "detail": "USD — Taux directeur",
    "date": "2026-11-11",
    "url": null
+  },
+  {
+   "id": "src_275",
+   "source": "FRED",
+   "detail": "vix (VIXCLS)",
+   "date": "2026-11-12",
+   "url": "https://fred.stlouisfed.org/series/VIXCLS"
+  },
+  {
+   "id": "src_276",
+   "source": "FRED",
+   "detail": "sp500 (SP500)",
+   "date": "2026-11-12",
+   "url": "https://fred.stlouisfed.org/series/SP500"
   }
  ],
  "donnees_non_rafraichies": [],
@@ -8938,7 +8986,6 @@
   },
   "vix": {
    "dates": [
-    "2025-12-12",
     "2025-12-19",
     "2025-12-26",
     "2026-01-02",
@@ -9067,10 +9114,10 @@
     "2026-11-06",
     "2026-11-09",
     "2026-11-10",
-    "2026-11-11"
+    "2026-11-11",
+    "2026-11-12"
    ],
    "valeurs": [
-    15.74,
     14.91,
     13.6,
     14.51,
@@ -9199,7 +9246,8 @@
     25.64,
     19.92,
     19.46,
-    17.49
+    17.49,
+    18.7
    ],
    "source_canonique": "vix"
   },
