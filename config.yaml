@@ -46,7 +46,7 @@ llm:
     max_echecs_jour_par_analyse: 2
     priorites:
       - { categorie: engrenages, analyses: 1 }
-      - { categorie: rapport, analyses: 6, lundi: 8 }     # lot V9 : + 4 appels groupés de la Synthèse
+      - { categorie: rapport, analyses: 8, lundi: 10 }    # lot V9.4 : + 5 à 6 appels groupés de la Synthèse
       - { categorie: devises, analyses: 3 }     # 9 devises en 3 appels groupés de 3
     taille_groupe_devises: 3
 
@@ -139,10 +139,10 @@ synthese_v9:
     actif: true
     fournisseur: groq
     modele: openai/gpt-oss-120b     # offre gratuite Groq (console.groq.com/docs/models) ; secret GitHub GROQ_API_KEY
-    quota_jour: 8                   # appels par jour UTC (data/cache/quota_secours_texte.json), séparés du quota Gemini
+    quota_jour: 16                  # appels par jour UTC (data/cache/quota_secours_texte.json), séparés du quota Gemini (V9.4 : 5 à 6 groupes par run)
     pause_entre_appels_s: 45        # 8 000 jetons par minute en offre gratuite : un appel par fenêtre
-    budget_tokens_message: 5000
-    budget_tokens_total_max: 6500
+    budget_tokens_message: 4500
+    budget_tokens_total_max: 6000
 
 # --- Tableau macro (base Notion + dashboard web) ------------------------------
 # Indicateurs en lignes, devises en colonnes, 3 types de valeur (Actuel /

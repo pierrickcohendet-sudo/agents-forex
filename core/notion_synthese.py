@@ -15,7 +15,49 @@ def _texte(s: dict, sid: str) -> list[dict]:
     return blocs
 
 
+def blocs_v94(s: dict) -> list[dict]:
+    """Structure V9.4 : mêmes sections que le site (tronc, pays du jour, énergie, actions, calendrier, classement, paires,
+    scénarios, méthode, conclusion), textes et tableaux principaux."""
+    f = s.get("faits") or {}
+    x = f.get("exec") or {}
+    blocs = [nb.callout([nb.rt("Biais du jour : ", gras=True), nb.rt(f"{x.get('biais', 'n/d')}. "), nb.rt("Facteur dominant : ", gras=True),
+                         nb.rt(f"{x.get('facteur_dominant', 'n/d')}. "), nb.rt("Risque majeur : ", gras=True),
+                         nb.rt(f"{(x.get('risque_majeur') or {}).get('texte', 'n/d')}.")], "🧭", "gray_background"),
+             nb.paragraphe_gris(f"{s.get('jour', '')} · {s.get('semaine', '')} · {s.get('mention', '')}")]
+    for sec in s.get("sections") or []:
+        sid, t = sec["id"], sec["type"]
+        blocs.append(nb.titre(2, f"{sec['numero']}. {sec['titre']}"))
+        blocs += _texte(s, sid)
+        try:
+            if t == "marches":
+                blocs.append(nb.tableau(["Actif", "Situation", "Interprétation"],
+                                        [[c["actif"], f"{c['situation']} ({c['texte']})", c["interpretation"]] for c in (f[sid].get("classes") or [])]))
+            elif t in ("pays", "etats_unis"):
+                p = f[sid]
+                blocs += [nb.puce([nb.rt(x)]) for x in p.get("faits") or []]
+                blocs.append(nb.paragraphe([nb.rt("Mon biais : ", gras=True), nb.rt(p.get("mon_biais", ""))]))
+                for c in (p.get("usd") or {}).get("ce_que_je_veux_voir") or []:
+                    blocs.append(nb.puce([nb.rt(("✓ " if c.get("remplie") else "○ ") + c["texte"])]))
+            elif t == "calendrier":
+                blocs.append(nb.tableau(["Heure", "Devise", "Publication", "Prévision", "Précédent"],
+                                        [[e.get("heure") or "", e["devise"], e.get("evenement") or "", e.get("consensus") or "—", e.get("precedent") or "—"]
+                                         for e in f[sid].get("aujourdhui") or []][:60] or [["—", "—", "Aucune publication", "—", "—"]]))
+            elif t == "classement":
+                blocs.append(nb.tableau(["Rang", "Devise", "Biais", "Score", "Moteur principal"],
+                                        [[l["rang"], l["devise"], l["biais"], fr(l["score"], 2, True), l["moteur"]] for l in f[sid].get("devises") or []]))
+            elif t == "conclusion":
+                blocs.append(nb.tableau(["Indicateur", "Valeur", "Ce que je veux observer"],
+                                        [[i["indicateur"], f"{i['valeur']} ({ddm(i.get('date'))})", i["observer"]] for i in f[sid].get("indicateurs") or []]))
+                blocs += [nb.puce([nb.rt(f"{src['nom']} : ", gras=True), {"type": "text", "text": {"content": src["quoi"][:1900], "link": {"url": src["url"]}}}])
+                          for src in f[sid].get("sources") or [] if src.get("url")]
+        except Exception as exc:  # noqa: BLE001
+            blocs.append(nb.paragraphe_gris(f"Détail indisponible : {exc}"))
+    return blocs
+
+
 def blocs_synthese(s: dict) -> list[dict]:
+    if s.get("structure") == "v9.4":
+        return blocs_v94(s)
     f = s.get("faits") or {}
     x1 = f.get("s1") or {}
     blocs = [nb.callout([nb.rt("Diagnostic du jour : ", gras=True), nb.rt(f"{x1.get('biais', 'n/d')}. "),

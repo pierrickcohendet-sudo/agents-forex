@@ -217,27 +217,24 @@ def test_fournisseur_de_secours_simule_quand_le_principal_est_en_panne(tmp_path)
 
 
 def test_rejeu_du_09_11(tmp_path):
-    """Section 3 : NFP +165K contre +65K attendu, chômage 4,1 %, U-6 7,9 % ; sections 1 à 13 toutes remplies."""
+    """Structure V9.4 : section États-Unis avec le NFP +165K contre +65K attendu, chômage 4,1 %, U-6 7,9 % ; toutes les
+    sections remplies."""
     docs, cache = rejeu(tmp_path)
     s = agent.executer(tmp_path, {"publication_web": {"dossier_docs": "docs"}}, None, MATIN_0911, docs=docs, cache=cache,
                        secours=agent.Secours({"actif": False}, tmp_path))
-    assert s and s["date"] == "2026-11-09"
-    f3 = s["faits"]["s3"]
-    assert f3["jour"] == "2026-11-06" and f3["principale"]["reel"] == "165 K" and f3["principale"]["consensus"] == "65 K"
-    em = f3["emploi"]
-    assert em["creations"]["valeur"] == 165000 and em["consensus"]["valeur"] == 65000
-    assert em["chomage"]["texte"] == "4,1 %" and em["u6"]["texte"] == "7,9 %"
-    assert any("révisé à +60" in r["texte"] for r in em["revisions"])
-    texte3 = " ".join(s["textes"]["s3"])
-    assert "165 K" in texte3 and "65 K" in texte3 and "4,1 %" in texte3 and "7,9 %" in texte3
-    assert f3["chaine"][0]["texte"].startswith("NFP 165 K contre 65 K")
-    assert [sec["id"] for sec in s["sections"]] == [f"s{i}" for i in range(1, 14)]
+    assert s and s["date"] == "2026-11-09" and s["structure"] == "v9.4"
+    ids = [sec["id"] for sec in s["sections"]]
+    assert ids[:2] == ["exec", "marches"] and "pays_USD" in ids and ids[-1] == "conclusion"
+    us = s["faits"]["pays_USD"]
+    assert any("165 K contre 65 K" in f for f in us["faits"])
+    em = us["usd"]["emploi"]
+    assert em["creations_k"] == 165 and em["chomage"]["valeur"] == 4.1 and em["u6"]["valeur"] == 7.9
+    texte = " ".join(s["textes"]["pays_USD"])
+    assert "165 K" in texte and "65 K" in texte
     for sid in s["textes"]:
         assert s["textes"][sid] and all(p for p in s["textes"][sid])
     assert (docs / "synthese.json").exists() and (tmp_path / "data" / "archives" / "synthese" / "2026-11-09.json").exists()
-    assert s["faits"]["s7"]["lundi"] == "2026-11-09" and len(s["faits"]["s7"]["jours"]) == 5
-    assert len(s["faits"]["s8"]["devises"]) == 9 and s["faits"]["s9"]["paires"]
-    assert s["faits"]["s1"]["fed"]["valeur"] is None and s["faits"]["s1"]["fed"]["raison"]   # livraison 2 : n/d avec raison
+    assert s["faits"]["exec"]["fed"]["valeur"] is None and s["faits"]["exec"]["fed"]["raison"]
 
 
 def test_synthese_publiee_du_jour_valide():
@@ -245,5 +242,5 @@ def test_synthese_publiee_du_jour_valide():
     if not chemin.exists():
         pytest.skip("synthese.json pas encore publié")
     s = json.loads(chemin.read_text(encoding="utf-8"))
-    assert len(s["sections"]) == 13 and all(s["textes"].get(f"s{i}") for i in range(1, 14))
+    assert len(s["sections"]) >= 12 and all(s["textes"].get(sec["id"]) for sec in s["sections"])
     assert ct.verifier_textes(s["textes"], {**s["faits"], "textes_python": {}}) == {} or s.get("redige_par")

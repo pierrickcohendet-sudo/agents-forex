@@ -225,7 +225,7 @@ class Budget(unittest.TestCase):
     def test_reserves_prioritaires_et_plafond_du_matin(self):
         llm, _ = chaine_reelle(self.tmp, lundi=True)
         reg = llm.registre
-        self.assertEqual(reg.prevu(), {"engrenages": 1, "rapport": 8, "devises": 3})   # lot V9 : + 4 appels de la Synthèse
+        self.assertEqual(reg.prevu(), {"engrenages": 1, "rapport": 10, "devises": 3})  # lot V9.4 : appels groupés de la Synthèse
         self.assertEqual(reg.plafond_run(), 45)
         L.definir_etiquette("synthese:EUR")
         sim = Simulateur(lambda n: False)
@@ -236,7 +236,7 @@ class Budget(unittest.TestCase):
                     llm.appeler_llm("x")
                 except L.BudgetEpuise:
                     break
-        self.assertEqual(sim.n, 45 - 2 - 16 - 6)                        # le reste s'arrête avant les réserves
+        self.assertEqual(sim.n, 45 - 2 - 20 - 6)                        # le reste s'arrête avant les réserves
         L.definir_etiquette("rapport:redaction")
         with mock.patch.object(L.requests, "post", sim), mock.patch("time.sleep"):
             llm.appeler_llm("x")                                       # le rapport passe : sa réserve est intacte
@@ -273,7 +273,7 @@ class Budget(unittest.TestCase):
             essayer(llm, "engrenages")
         ligne = orchestrateur.ligne_quota(llm.etat_quota(), {"statut": "ok"})
         self.assertIn("Budget (run complet, lundi, plafond 45)", ligne)
-        self.assertIn("prévu engrenages 1 analyse (≤ 2 requêtes); rapport du jour 8 analyses (≤ 16 requêtes)", ligne)
+        self.assertIn("prévu engrenages 1 analyse (≤ 2 requêtes); rapport du jour 10 analyses (≤ 20 requêtes)", ligne)
         self.assertIn("consommé ce run : engrenages 1, rapport du jour 0, devises 0, reste 0", ligne)   # le 503 : hors budget
         self.assertIn("tentatives en panne (hors budget) : 1 ce run, 1/20 aujourd'hui", ligne)
         self.assertIn("échecs ce run : 503 × 1", ligne)

@@ -135,7 +135,7 @@ def test_copie_notion_dans_les_limites():
     s = json.loads(chemin.read_text(encoding="utf-8"))
     blocs = notion_synthese.blocs_synthese(s)
     titres = [b for b in blocs if b["type"] == "heading_2"]
-    assert len(titres) == 13 and titres[0]["heading_2"]["rich_text"][0]["text"]["content"].startswith("1. ")
+    assert len(titres) == len(s["sections"]) and titres[0]["heading_2"]["rich_text"][0]["text"]["content"].startswith("1. ")
     for b in blocs:
         for cle in ("paragraph", "bulleted_list_item", "callout", "heading_2", "heading_3"):
             for f in (b.get(cle) or {}).get("rich_text") or []:

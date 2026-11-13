@@ -18,7 +18,11 @@ from pathlib import Path
 RACINE = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RACINE))
 DOCS = ["rapport_jour.json", "agenda.json", "profil_devises.json", "force_devises.json", "accueil.json", "paires.json"]
-SERIES = ["brent", "brent_bno", "wti", "wti_uso", "USD_2a", "USD_10a", "USD_30a", "vix", "sp500_spy", "japon_ewj"]
+SERIES = ["brent", "brent_bno", "wti", "wti_uso", "USD_2a", "USD_10a", "USD_30a", "vix", "sp500_spy", "japon_ewj", "or_xau", "nasdaq_qqq",
+          "cuivre_cper", "taiwan_ewt", "chine_fxi"]
+# Lot V9.4 : sources simulées (copiées telles qu'elles sont au moment de la construction : BLS avec composantes des prix,
+# ONS et Eurostat, communiqués et procès-verbaux archivés, probabilités citées)
+CACHES_SIMULES = ["bls_emploi.json", "officiels_v94.json", "proba_fed.json"]
 
 
 def git_json(commit: str, chemin: str):
@@ -49,6 +53,18 @@ def main(commit: str, jour: str) -> None:
     ecrire(sortie / "cache", "collecte_historiques.json",
            {"date": h.get("date"), "donnees": {"series": {k: v for k, v in (don.get("series") or {}).items() if k in SERIES}}})
     ecrire(sortie / "cache", "historique_taux.json", git_json(commit, "data/cache/historique_taux.json"))
+    news = git_json(commit, "data/cache/collecte_news.json")
+    if news:
+        ecrire(sortie / "cache", "collecte_news.json", news)
+    for n in CACHES_SIMULES:
+        f = RACINE / "data" / "cache" / n
+        if f.exists():
+            ecrire(sortie / "cache", n, json.loads(f.read_text(encoding="utf-8")))
+    com = RACINE / "data" / "communiques_v9"
+    if com.exists():
+        (sortie / "communiques_v9").mkdir(exist_ok=True)
+        for f in com.glob("*.json"):
+            ecrire(sortie / "communiques_v9", f.name, json.loads(f.read_text(encoding="utf-8")))
     # Archive des publications telle que le pipeline l'aurait construite ce jour-là (Agenda + page « mois »)
     from core import publications_archive as pa
     import tempfile

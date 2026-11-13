@@ -95,3 +95,18 @@ horizontal. Comparer côte à côte avec `docs/design/reference/` et lister les 
 - Archives : chaque Synthèse publiée dans `data/synthese/AAAA-MM-JJ.json`, lisible à `#archives/synthese=AAAA-MM-JJ`.
 - Fiche devise : sur téléphone, une ligne d'indicateur = un bloc (nom, puis valeur, prévision, précédent, date ; cellules
   vides masquées) ; codes du modèle traduits ; décimales françaises fixes.
+
+## Lot V9.4 — la Synthèse calquée sur les rapports modèles (09/11 et 13/11)
+
+- Structure : tronc fixe (synthèse exécutive, vue d'ensemble des marchés), puis 2 à 5 sections pays choisies chaque jour par
+  un score d'actualité calculé en Python (`core/synthese_v94.py`), une section commune pour les autres devises, puis énergie,
+  actions et sentiment, calendrier, classement, paires, scénarios, méthode d'exécution, conclusion et sources. Le sommaire
+  suit le nombre réel de sections ; l'écran choisit son rendu par type de section (`RENDUS94` dans `synthese_v9.js`).
+- Composants ajoutés : tuiles avec qualificatif calculé (« plus haut d'un mois », « 3e semaine de baisse ») ; carte de section
+  pays (faits, « Pourquoi », chaîne, risque de retournement, encadré « Mon biais ») ; listes « Ce que je veux voir » et
+  confirmations cochées en Python (✓ remplie, ○ non remplie, « à vérifier » pour la structure du graphique) ; tableaux
+  « Aujourd'hui » et « Semaine prochaine » ; tableau des 5 indicateurs à suivre dans la conclusion.
+- Vocabulaire : jamais « entrée », « stop », « objectif », « LONG » ni « SHORT » dans le texte (contrôle Python) ; « long »
+  reste permis en français (« à long terme »).
+- Le Brent affiché est le prix spot de l'EIA, daté ; les fonds cotés (BNO, USO) n'apparaissent qu'en variation, jamais comme
+  un prix au baril.

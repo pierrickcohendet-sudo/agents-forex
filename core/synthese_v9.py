@@ -245,15 +245,15 @@ def section_marches(e: Entrees, brent: dict) -> dict:
     lignes = [_ligne(e, "Indice dollar (formule du DXY, non officiel)", "Indice dollar (DXY, formule)")]
     b = {"libelle": "Brent ($/baril)", "valeur": None, "texte": "n/d", "raison": brent.get("raison")}
     if brent.get("disponible"):
-        est, off = brent.get("estimation"), brent["officiel"]
-        src = est or off
-        b = {"libelle": "Brent ($/baril)", "valeur": src["valeur"], "decimales": 2, "unite": "%", "texte": fr(src["valeur"]),
-             "date": src["date"], "retard": not est and (brent.get("retard_jours_ouvres") or 0) > 1,
-             "retard_jours_ouvres": 0 if est else brent.get("retard_jours_ouvres"),
-             "variation_1": None, "variation_5": brent.get("semaine_pct"),
-             "serie_30": [p[1] for p in (brent["serie_6m"][-22:] + ((est or {}).get("points") or []))][-30:],
-             "source": (f"{est['methode']} ; {est['source']}" if est else off["source"]), "statut": "estimation" if est else "confirmé",
-             "lecture": f"Officiel EIA {fr(off['valeur'])} $ au {ddm(off['date'])}" + (f", estimation ETF BNO au {ddm(est['date'])}" if est else "")}
+        # Lot V9.4 (C2) : seul le prix spot officiel (EIA) est un prix au baril ; un fonds coté (BNO) ne l'est jamais
+        off = brent["officiel"]
+        b = {"libelle": "Brent ($/baril, spot EIA)", "valeur": off["valeur"], "decimales": 2, "unite": "%", "texte": fr(off["valeur"]),
+             "date": off["date"], "retard": (brent.get("retard_jours_ouvres") or 0) > 1, "retard_jours_ouvres": brent.get("retard_jours_ouvres"),
+             "variation_1": None, "variation_5": variation(e.serie("brent"), 5, "%"),
+             "serie_30": [p[1] for p in brent["serie_6m"][-30:]], "source": off["source"], "statut": "confirmé",
+             "lecture": f"Prix spot EIA au {ddm(off['date'])}" + (f" ; fonds BNO {fr(brent.get('semaine_pct'), 1, True)} % sur 5 séances au "
+                                                                 f"{ddm(brent.get('semaine_date'))} (fonds coté, pas un prix au baril)"
+                                                                 if brent.get("estimation") else "")}
     lignes.append(b)
     lignes += [_ligne(e, "US 2 ans", "Rendement US 2 ans"), _ligne(e, "US 10 ans", "Rendement US 10 ans"),
                _ligne(e, "USD/JPY", "USD/JPY"), _ligne(e, "EUR/USD", "EUR/USD"),

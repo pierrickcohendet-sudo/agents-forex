@@ -103,6 +103,9 @@ def verifier(texte: str, autorises: set[float]) -> list[str]:
         for motif in ORDRES:
             if re.search(motif, bas):
                 raisons.append(f"ordre ou niveau de trading « {re.search(motif, bas).group()} » : {ph[:90]}")
+        m = re.search(r"\b(entrées?|objectifs?|short)\b", bas) or re.search(r"\b(LONG|SHORT)\b", ph)
+        if m:   # lot V9.4 : vocabulaire de passage d'ordre interdit (« long » reste permis en français)
+            raisons.append(f"vocabulaire interdit « {m.group()} » : {ph[:90]}")
         ns = nombres_texte(ph)
         faits = [n for n in ns if n[1] not in STRUCTURELS or n[2] > 0]
         if not faits and not RE_DATE.search(ph):

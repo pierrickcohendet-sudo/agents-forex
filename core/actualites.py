@@ -98,6 +98,37 @@ def extraire_proba(article: dict) -> dict | None:
     return None
 
 
+INSTITUTIONS = {"fed": ("USD", "la Fed"), "ecb": ("EUR", "la BCE"), "boe": ("GBP", "la BoE"), "boj": ("JPY", "la BoJ"),
+                "boc": ("CAD", "la Banque du Canada"), "rba": ("AUD", "la RBA"), "rbnz": ("NZD", "la RBNZ"), "snb": ("CHF", "la BNS"),
+                "pboc": ("CNY", "la PBoC")}
+RE_DECL = re.compile(r"\b(Fed|ECB|BoE|BOE|BOJ|BoJ|BoC|BOC|RBA|RBNZ|SNB|PBOC|PBoC)(?:'s|’s)\s+([A-Z][a-z]+(?:[- ][A-Z][a-z]+)?)")
+
+
+def declarations(arts: list[dict], maximum: int = 6) -> list[dict]:
+    """Déclarations de banquiers centraux dans les titres : personne, institution, citation courte, lien ; le nom doit
+    figurer tel quel dans le texte source. Une déclaration individuelle est une opinion personnelle, pas une décision."""
+    from core import fomc_2026
+    sortie, vus = [], set()
+    for a in sorted(arts, key=lambda x: x.get("date") or "", reverse=True):
+        t = a.get("titre") or ""
+        m = RE_DECL.search(t)
+        if not m:
+            continue
+        inst, nom = m.group(1).lower(), m.group(2)
+        if nom not in t or (inst, nom) in vus or nom.lower() in ("chair", "governor", "president", "minutes"):
+            continue
+        vus.add((inst, nom))
+        dev, lib = INSTITUTIONS.get(inst, ("", inst.upper()))
+        st = fomc_2026.statut(nom, dev) if dev == "USD" else {}
+        sortie.append({"personne": st.get("nom") or nom, "devise": dev, "fonction": st.get("role") or f"membre de {lib}",
+                       "statut": st.get("libelle"), "citation": t[:180], "lien": a.get("lien"), "date": (a.get("date") or "")[:10],
+                       "source": SOURCES.get(a.get("source"), a.get("source")),
+                       "avertissement": "opinion personnelle, pas une décision du comité"})
+        if len(sortie) >= maximum:
+            break
+    return sortie
+
+
 def mettre_a_jour_proba(arts: list[dict], chemin: Path | None = None, aujourd: date | None = None) -> dict:
     """Ajoute à l'historique les probabilités citées des actualités ; renvoie {dernier, reference, historique}."""
     chemin = Path(chemin or RACINE / "data" / "cache" / "proba_fed.json")
@@ -136,5 +167,6 @@ def lecture_proba(hist: list[dict], aujourd: date) -> dict:
 def calculer(racine: Path | None = None, aujourd: date | None = None) -> dict:
     racine = Path(racine or RACINE)
     arts = articles(_lire(racine / "data" / "cache" / "collecte_news.json"))
-    return {"actualites": du_jour(arts), "proba_fed": mettre_a_jour_proba(arts, racine / "data" / "cache" / "proba_fed.json", aujourd),
+    return {"actualites": du_jour(arts), "declarations": declarations(arts),
+            "proba_fed": mettre_a_jour_proba(arts, racine / "data" / "cache" / "proba_fed.json", aujourd),
             "n_articles": len(arts)}

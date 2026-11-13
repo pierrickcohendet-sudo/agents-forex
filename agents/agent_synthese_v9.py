@@ -36,9 +36,55 @@ def _lire(chemin: Path) -> dict:
         return {}
 
 
-def faits_groupe(s: dict, g: str) -> dict:
+LIMITE_GROUPE = 9000   # caractères de faits par appel (offre gratuite de Groq : 8 000 jetons par minute, réponse comprise)
+CLES_ALLEGEES = {"serie", "serie_30", "serie_6m", "points", "bougies", "zones", "lignes", "composantes", "raisons", "source_force",
+                 "seuils", "detail_bls", "millesimes", "libelles", "lien", "lien_cpi", "lien_ppi", "methode", "mention", "note"}
+
+
+def _allege(x, prof: int = 0):
+    if isinstance(x, dict):
+        return {k: _allege(v, prof + 1) for k, v in x.items() if k not in CLES_ALLEGEES and v not in (None, [], {}, "")}
+    if isinstance(x, list):
+        if x and all(isinstance(v, (int, float)) for v in x):
+            return None
+        return [_allege(v, prof + 1) for v in x[:6]]
+    if isinstance(x, str):
+        return x[:220]
+    return x
+
+
+def groupes_du_jour(s: dict) -> list[tuple[str, list[str]]]:
+    """V9.4 : sections du jour dans l'ordre du sommaire, regroupées tant que leurs faits tiennent dans LIMITE_GROUPE ;
+    V9 : les 4 groupes fixes."""
+    if s.get("structure") != "v9.4":
+        return GROUPES
+    groupes, courant, taille = [], [], 0
+    for sec in s["sections"]:
+        t = ct.taille(_allege(s["faits"].get(sec["id"])))
+        if courant and (taille + t > LIMITE_GROUPE or len(courant) == 3):
+            groupes.append(courant)
+            courant, taille = [], 0
+        courant.append(sec["id"])
+        taille += t
+    if courant:
+        groupes.append(courant)
+    return [(str(i + 1), g) for i, g in enumerate(groupes)]
+
+
+def faits_groupe(s: dict, g: str, ids: list[str] | None = None) -> dict:
     f = s["faits"]
     sortie = {"date": s["date"]}
+    if s.get("structure") == "v9.4":
+        ids = ids or dict(groupes_du_jour(s)).get(g) or []
+        for sid in ids:
+            x = f.get(sid)
+            if sid == "paires" and isinstance(x, dict):
+                x = {k: v for k, v in x.items() if k != "technique"}
+            sortie[sid] = _allege(x)
+        if "exec" in ids or "conclusion" in ids:
+            sortie["classement"] = [{k: d.get(k) for k in ("rang", "devise", "score", "biais", "moteur")}
+                                    for d in (f.get("classement") or {}).get("devises") or []]
+        return sortie
     for cle in FAITS_GROUPE[g]:
         x = f.get(cle)
         if cle == "s8" and isinstance(x, dict):
@@ -49,15 +95,26 @@ def faits_groupe(s: dict, g: str) -> dict:
     return sortie
 
 
+CONSIGNES_V94 = (
+    "Longueur : 3 à 6 paragraphes par section (au moins 150 mots ; jamais une seule phrase), dans le ton des rapports "
+    "modèles : phrases complètes, la cause puis la conséquence, des nuances. Pour une section pays : les faits du jour, "
+    "« Pourquoi » (le mécanisme), la chaîne de causalité, le risque de retournement, puis un paragraphe qui commence par "
+    "« Mon biais : » (biais CONDITIONNEL). Pour la synthèse exécutive : un dernier paragraphe qui commence par « Ma lecture : ». "
+    "Pour la conclusion : un dernier paragraphe qui commence par « Mon analyse finale : ». Une déclaration d'un membre d'une "
+    "banque centrale se présente comme son opinion personnelle, pas une décision du comité. Jamais les mots « entrée », "
+    "« stop », « objectif », « LONG » ni « SHORT » : parler de scénario haussier ou baissier, de conditions et de zones de repère.")
+
+
 def prompt(s: dict, g: str, ids: list[str]) -> str:
-    faits = faits_groupe(s, g)
+    faits = faits_groupe(s, g, ids)
     ref = {sid: s["textes"].get(sid) for sid in ids}
     titres = {sec["id"]: sec["titre"] for sec in s["sections"]}
     return ("Tu rédiges en français une partie du rapport FX du jour, à partir des FAITS ci-dessous (calculés en Python). "
             f"{TON}\nRéponds STRICTEMENT en JSON : {{" + ", ".join(f'"{sid}": ["paragraphe", "paragraphe facultatif"]' for sid in ids) + "}.\n"
             "Sections : " + " ; ".join(f"{sid} = {titres.get(sid)}" for sid in ids) + ".\n"
             "Règles impératives (un texte qui les enfreint est rejeté par un contrôle automatique) :\n"
-            "- 2 à 4 phrases par section ; CHAQUE phrase cite au moins un chiffre ou une date tirés des FAITS ;\n"
+            + ("- " + CONSIGNES_V94 + "\n" if s.get("structure") == "v9.4" else "- 2 à 4 phrases par section ;\n")
+            + "- CHAQUE phrase cite au moins un chiffre ou une date tirés des FAITS ;\n"
             "- AUCUN nombre absent des FAITS (pas de calcul nouveau, pas d'arrondi inventé, pas de probabilité) ;\n"
             "- aucune formule creuse (« addition des signaux », « dans un contexte incertain », « divers facteurs ») ;\n"
             "- jamais d'ordre d'achat ou de vente, de niveau d'entrée, de stop ni d'objectif : des conditions et des zones de repère ;\n"
@@ -124,7 +181,7 @@ def _json(texte: str) -> dict:
 def _paragraphes(v) -> list[str]:
     if isinstance(v, str):
         v = [v]
-    return [str(p).strip() for p in (v or []) if str(p).strip()][:3]
+    return [str(p).strip() for p in (v or []) if str(p).strip()][:7]
 
 
 def rediger(s: dict, llm=None, secours: Secours | None = None, groupes=GROUPES, pause_s: float = 0.0) -> dict:
@@ -151,7 +208,7 @@ def rediger(s: dict, llm=None, secours: Secours | None = None, groupes=GROUPES, 
             try:
                 d = _json(reponse)
                 textes = {sid: _paragraphes(d.get(sid)) for sid in ids}
-                rejets = ct.verifier_textes(textes, faits_groupe(s, g) | {"textes_python": {sid: s["textes"].get(sid) for sid in ids}})
+                rejets = ct.verifier_textes(textes, faits_groupe(s, g, ids) | {"textes_python": {sid: s["textes"].get(sid) for sid in ids}})
                 for sid in ids:
                     if sid in rejets:
                         entree["rejetees"][sid] = rejets[sid][:4]
@@ -175,9 +232,11 @@ def _textes_du_jour(ancien: dict, s: dict) -> int:
     for sid, r in (ancien.get("redaction") or {}).items():
         if r.get("par") != "modele" or sid not in s["textes"]:
             continue
-        g = next(k for k, ids in GROUPES if sid in ids)
+        grp = next(((k, ids) for k, ids in groupes_du_jour(s) if sid in ids), None)
+        if grp is None:
+            continue
         textes = (ancien.get("textes") or {}).get(sid)
-        if textes and not ct.verifier_textes({sid: textes}, faits_groupe(s, g) | {"textes_python": {sid: s["textes"].get(sid)}}):
+        if textes and not ct.verifier_textes({sid: textes}, faits_groupe(s, grp[0], grp[1]) | {"textes_python": {sid: s["textes"].get(sid)}}):
             s["textes"][sid], s["redaction"][sid] = textes, r
             n += 1
     return n
@@ -193,15 +252,17 @@ def executer(racine: str | Path, config: dict, llm=None, maintenant: datetime | 
     try:
         from zoneinfo import ZoneInfo
         aujourd = maintenant.astimezone(ZoneInfo("Europe/Paris")).date()
-        s = sv.calculer(docs, cache, aujourd, maintenant)
+        from core import synthese_v94
+        s = synthese_v94.calculer(docs, cache, aujourd, maintenant)   # lot V9.4 : structure des rapports modèles
         repris = _textes_du_jour(_lire(docs / "synthese.json"), s)
-        manquantes = [g for g, ids in GROUPES if any(s["redaction"][sid]["par"] != "modele" for sid in ids)]
+        groupes = groupes_du_jour(s)
+        manquantes = [g for g, ids in groupes if any(s["redaction"][sid]["par"] != "modele" for sid in ids)]
         cfg = config.get("synthese_v9") or {}
         if secours is None:
             secours = Secours(cfg.get("secours") or {}, racine)
         journal = {"groupes": {}, "repris": repris}
         if manquantes and (llm is not None or secours is not None):
-            journal.update(rediger(s, llm, secours, [(g, ids) for g, ids in GROUPES if g in manquantes],
+            journal.update(rediger(s, llm, secours, [(g, ids) for g, ids in groupes if g in manquantes],
                                    pause_s=float(cfg.get("pause_entre_groupes_s", 0))))
             journal["repris"] = repris
         s["journal_redaction"] = journal

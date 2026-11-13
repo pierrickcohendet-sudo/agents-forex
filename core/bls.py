@@ -111,6 +111,64 @@ def calculer(series: dict, archive: dict | None, millesimes: dict | None = None)
             "source": SOURCE, "lien": LIEN}
 
 
+# Lot V9.4 : composantes des prix (CVS pour les variations mensuelles, brut pour le glissement annuel)
+SERIES_PRIX = {"cpi": "CUSR0000SA0", "core": "CUSR0000SA0L1E", "logement": "CUSR0000SAH1", "energie": "CUSR0000SA0E",
+               "alimentation": "CUSR0000SAF1", "cpi_brut": "CUUR0000SA0", "core_brut": "CUUR0000SA0L1E",
+               "ppi": "WPSFD4", "ppi_core": "WPSFD49104"}
+LIBELLES_PRIX = {"cpi": "CPI mensuel", "core": "Core CPI mensuel", "logement": "Logement", "energie": "Énergie",
+                 "alimentation": "Alimentation", "ppi": "PPI demande finale", "ppi_core": "PPI hors alimentation et énergie"}
+SOURCE_PRIX = "Bureau of Labor Statistics, API publique (CPI : CUSR0000SA0, CUSR0000SA0L1E, CUSR0000SAH1, CUSR0000SA0E, CUSR0000SAF1 ; PPI : WPSFD4, WPSFD49104)"
+
+
+def _brut(rep: dict) -> dict[str, list[tuple[str, float | None, list[str]]]]:
+    """Réponse BLS -> {série: [(AAAA-MM, valeur ou None si « - », notes)]} ; une valeur « - » est gardée (donnée non publiée)."""
+    sortie = {}
+    for s in (rep.get("Results") or {}).get("series") or []:
+        pts = []
+        for x in s.get("data") or []:
+            m = _mois(x)
+            if not m:
+                continue
+            try:
+                v = float(x["value"])
+            except (TypeError, ValueError):
+                v = None
+            pts.append((m, v, [f.get("text") for f in x.get("footnotes") or [] if f and f.get("text")]))
+        sortie[s.get("seriesID")] = sorted(pts)
+    return sortie
+
+
+def calculer_prix(rep: dict) -> dict:
+    """Variations mensuelles des composantes (arrondies au dixième, comme le BLS) et glissement annuel quand la valeur
+    d'il y a un an existe ; sinon la raison (ex. octobre 2025 non collecté : variation annuelle non publiée)."""
+    brut = _brut(rep)
+    inverse = {v: k for k, v in SERIES_PRIX.items()}
+    par = {inverse[k]: v for k, v in brut.items() if k in inverse}
+
+    def mm(nom):
+        pts = [x for x in par.get(nom) or [] if x[1] is not None]
+        if len(pts) < 2:
+            return None, None
+        return round((pts[-1][1] / pts[-2][1] - 1) * 100, 1), pts[-1][0]
+
+    def aa(nom):
+        pts = par.get(nom) or []
+        if not pts or pts[-1][1] is None:
+            return {"valeur": None, "raison": "série absente"}
+        m = pts[-1][0]
+        an = f"{int(m[:4]) - 1}{m[4:]}"
+        ref = next((x for x in pts if x[0] == an), None)
+        if ref is None or ref[1] is None:
+            return {"valeur": None, "raison": f"variation annuelle non calculable : valeur de {an} non publiée par le BLS (interruption de collecte)"}
+        return {"valeur": round((pts[-1][1] / ref[1] - 1) * 100, 1), "mois": m}
+    cpi = {"mois": mm("cpi")[1], "composantes": {k: mm(k)[0] for k in ("cpi", "core", "logement", "energie", "alimentation")},
+           "annuel": aa("cpi_brut"), "core_annuel": aa("core_brut")}
+    ppi = {"mois": mm("ppi")[1], "composantes": {k: mm(k)[0] for k in ("ppi", "ppi_core")},
+           "notes": sorted({n for x in par.get("ppi") or [] for n in x[2]})[:1]}
+    return {"cpi": cpi, "ppi": ppi, "libelles": LIBELLES_PRIX, "source": SOURCE_PRIX,
+            "lien_cpi": "https://www.bls.gov/news.release/cpi.nr0.htm", "lien_ppi": "https://www.bls.gov/news.release/ppi.nr0.htm"}
+
+
 def doit_collecter(cache: dict, maintenant: datetime, archive: dict | None = None) -> bool:
     """Une fois par jour, et une seconde fois le jour d'un NFP après sa publication (14:30 Paris, + 5 min)."""
     dernier = cache.get("collecte_le")
@@ -118,7 +176,8 @@ def doit_collecter(cache: dict, maintenant: datetime, archive: dict | None = Non
         return True
     jour = maintenant.date().isoformat()
     nfp = next((p for p in ((archive or {}).get("publications") or {}).values()
-                if p.get("date") == jour and str(p.get("evenement_en", "")).lower() == "non-farm employment change"), None)
+                if p.get("date") == jour and p.get("devise") == "USD"
+                and re.search(r"non-farm employment change|\bcpi\b|\bppi\b", str(p.get("evenement_en", "")), re.I)), None)
     vendredi = maintenant.weekday() == 4
     apres = maintenant.astimezone(timezone.utc).strftime("%H:%M") >= "13:35"
     return (vendredi or nfp is not None) and apres and dernier[11:16] < "13:35"
@@ -141,11 +200,17 @@ def collecter(racine: Path | None = None, maintenant: datetime | None = None, se
         series = series_depuis_reponse(rep.json())
         millesimes = cache.get("millesimes") or {}
         faits = calculer(series, archive, millesimes)
+        try:   # deuxième requête : composantes des prix (CPI, PPI)
+            rp = (session or requests).post(URL, json={"seriesid": list(SERIES_PRIX.values())}, headers=UA, timeout=40)
+            rp.raise_for_status()
+            prix = calculer_prix(rp.json())
+        except Exception as exc:  # noqa: BLE001
+            prix = (cache.get("prix") or {}) | {"erreur": str(exc)[:160]}
         # chaque mois vu pour la première fois : son chiffre devient le « premier chiffre » de référence
         prem = dict(millesimes.get("premiers") or {})
         if faits.get("disponible") and faits["mois"] not in prem:
             prem[faits["mois"]] = faits["creations_k"]
-        cache = {"collecte_le": maintenant.isoformat(timespec="minutes"), "faits": faits, "millesimes": {"premiers": prem},
+        cache = {"collecte_le": maintenant.isoformat(timespec="minutes"), "faits": faits, "prix": prix, "millesimes": {"premiers": prem},
                  "series": {k: v[-14:] for k, v in series.items()}}
     except Exception as exc:  # noqa: BLE001
         log.warning("BLS non collecté : %s", exc)

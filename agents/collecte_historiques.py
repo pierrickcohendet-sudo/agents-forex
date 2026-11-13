@@ -81,6 +81,8 @@ SERIES_TWELVE = {
     # Lot V9 : marchés asiatiques de la Synthèse (Taïwan, Chine)
     "taiwan_ewt": ("EWT", "Twelve Data (ETF EWT, actions taïwanaises — pas l'indice TAIEX)", "$"),
     "chine_fxi": ("FXI", "Twelve Data (ETF FXI, grandes capitalisations chinoises — pas un indice local)", "$"),
+    # Lot V9.4 : cuivre (demande industrielle)
+    "cuivre_cper": ("CPER", "Twelve Data (ETF CPER, contrats à terme sur le cuivre — pas le prix au comptant)", "$"),
     "allemagne_ewg": ("EWG", "Twelve Data (ETF EWG, actions allemandes — indicateur du DAX, pas l'indice)", "$"),
     # Lot V6 (vérifié le 03/11/2026 sur le plan gratuit) : S&P 500 du jour (FRED SP500 a 2 jours de retard) et USD/SEK pour
     # l'indice dollar calculé selon la formule du DXY. Brent : réservé aux plans payants (XBR/USD, BRENT) -> FRED/EIA.

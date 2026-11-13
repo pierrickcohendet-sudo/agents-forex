@@ -36,6 +36,12 @@ BANQUES = {
     "NZD": {"banque": "RBNZ", "flux": "https://www.rbnz.govt.nz/feeds/news", "titre": r"(Official Cash Rate|\bOCR\b|Monetary Policy (Statement|Review))",
             "votes": "generique"},
 }
+# Lot V9.4 : procès-verbaux et délibérations (options débattues, indication sur la suite, projections citées)
+PV = {"USD": {"flux": "https://www.federalreserve.gov/feeds/press_monetary.xml", "titre": r"^Minutes of the Federal Open Market Committee"},
+      "CAD": {"page": "https://www.bankofcanada.ca/publications/summary-governing-council-deliberations/",
+              "lien": r"/\d{4}/\d{2}/summary-of-governing-council-deliberations"},
+      "GBP": {"meme_document": "le procès-verbal de la BoE est publié avec le résumé de la décision (même document)"},
+      "EUR": {"raison": "comptes rendus de la BCE : page de liste chargée en JavaScript, sans flux officiel : non lus"}}
 RESTRICTIF = r"\b(restrictive|tighten\w*|upside risks?|elevated|persistent|higher for longer|further increases?|hawkish)\b"
 ACCOMMODANT = r"\b(accommodative|eas(e|ing)|downside risks?|slack|weak\w*|cuts?|lower(ing)?|dovish|support)\b"
 
@@ -221,6 +227,97 @@ def archiver(racine: Path | None = None, config: dict | None = None, session=Non
     return index
 
 
+def options_debattues(texte: str, maximum: int = 3) -> list[str]:
+    sortie = []
+    for p in phrases(texte):
+        if (re.search(r"\b(consider\w*|discuss\w*|debat\w*|weigh\w*|options?|case for|views? (?:differed|were))\b", p, re.I)
+                and re.search(r"\b(hold\w*|maintain\w*|increas\w*|rais\w*|cut\w*|lower\w*|reduc\w*|unchanged|hike\w*)\b", p, re.I)):
+            sortie.append(p)
+        if len(sortie) >= maximum:
+            break
+    return sortie
+
+
+def indication_suite(texte: str, maximum: int = 2) -> list[str]:
+    sortie = []
+    for p in phrases(texte):
+        if re.search(r"\b(further|additional|next|future|coming (?:months|meetings)|again)\b", p, re.I) and re.search(
+                r"\b(increase|hike|tighten\w*|cut|reduc\w*|adjust\w*|needed|necessary|appropriate)\b", p, re.I):
+            sortie.append(p)
+        if len(sortie) >= maximum:
+            break
+    return sortie
+
+
+def archiver_pv(racine: Path, config: dict | None, session=None, aujourd: date | None = None) -> dict:
+    """Procès-verbaux : flux de la Fed, page de liste de la Banque du Canada ; une requête par document nouveau."""
+    import feedparser
+    import requests
+    dossier = Path(racine) / "data" / "communiques_v9"
+    dossier.mkdir(parents=True, exist_ok=True)
+    index = _lire(dossier / "index.json") or {"banques": {}}
+    pvs = index.setdefault("pv", {})
+    aujourd = aujourd or datetime.now(timezone.utc).date()
+    ua = {"User-Agent": ((config or {}).get("scraping") or {}).get("user_agent") or "agents-forex/1.0"}
+    s = session or requests
+    for dev, cfg in PV.items():
+        etat = pvs.setdefault(dev, {"documents": []})
+        if "flux" not in cfg and "page" not in cfg:
+            etat["raison"] = cfg.get("raison") or cfg.get("meme_document")
+            continue
+        if etat.get("lu_le") == aujourd.isoformat():
+            continue
+        etat["lu_le"] = aujourd.isoformat()
+        try:
+            if "flux" in cfg:
+                rep = s.get(cfg["flux"], headers=ua, timeout=30)
+                rep.raise_for_status()
+                cands = [(e.title, e.link, _date_entree(e)) for e in feedparser.parse(rep.content).entries if re.search(cfg["titre"], e.title)][:1]
+            else:
+                from bs4 import BeautifulSoup
+                rep = s.get(cfg["page"], headers=ua, timeout=30)
+                rep.raise_for_status()
+                soup = BeautifulSoup(rep.content, "lxml")
+                a = next((a for a in soup.find_all("a", href=True) if re.search(cfg["lien"], a["href"])), None)
+                m = re.search(r"/(\d{4})/(\d{2})/", a["href"]) if a else None
+                cands = [(a.get_text(" ", strip=True), a["href"], f"{m.group(1)}-{m.group(2)}-01" if m else None)] if a else []
+            connus = {d["lien"] for d in etat["documents"]}
+            for titre, lien, jour in cands:
+                if lien in connus:
+                    continue
+                r = s.get(lien, headers=ua, timeout=40)
+                if r.status_code == 403:
+                    etat["raison"] = "document refusé (403) : jamais contourné"
+                    continue
+                r.raise_for_status()
+                fichier = f"PV_{dev}_{(jour or aujourd.isoformat())}.json"
+                (dossier / fichier).write_text(json.dumps({"devise": dev, "titre": titre, "lien": lien, "date": jour,
+                                                          "texte": extraire_texte(r.content, lien)}, ensure_ascii=False), encoding="utf-8")
+                etat["documents"] = (etat["documents"] + [{"date": jour, "titre": titre, "lien": lien, "fichier": fichier}])[-4:]
+            etat["raison"] = None if etat["documents"] else "aucun procès-verbal trouvé"
+        except Exception as exc:  # noqa: BLE001
+            etat["raison"] = f"{type(exc).__name__} : {str(exc)[:140]}"
+    (dossier / "index.json").write_text(json.dumps(index, ensure_ascii=False, indent=1), encoding="utf-8")
+    return index
+
+
+def analyser_pv(racine: Path | None = None) -> dict:
+    dossier = Path(racine or RACINE) / "data" / "communiques_v9"
+    pvs = (_lire(dossier / "index.json") or {}).get("pv") or {}
+    sortie = {}
+    for dev, cfg in PV.items():
+        etat = pvs.get(dev) or {}
+        docs = etat.get("documents") or []
+        if not docs:
+            sortie[dev] = {"disponible": False, "raison": etat.get("raison") or cfg.get("raison") or cfg.get("meme_document") or "non lu"}
+            continue
+        d = _lire(dossier / docs[-1]["fichier"])
+        t = d.get("texte", "")
+        sortie[dev] = {"disponible": True, "titre": d.get("titre"), "lien": d.get("lien"), "date": d.get("date"),
+                       "options": options_debattues(t), "suite": indication_suite(t), "projections": projections(t)}
+    return sortie
+
+
 def analyser(racine: Path | None = None) -> dict:
     """Faits par devise : dernier communiqué, votes, projections, vocabulaire (Python)."""
     racine = Path(racine or RACINE)
@@ -275,6 +372,10 @@ def mettre_a_jour(racine: Path | None = None, config: dict | None = None) -> dic
         docs = racine / ((config or {}).get("publication_web") or {}).get("dossier_docs", "docs") / "data"
         aujourd = datetime.now(timezone.utc).date()
         archiver(racine, config, aujourd=aujourd, decisions=decisions_du_jour(_lire(docs / "agenda.json"), aujourd))
+        try:
+            archiver_pv(racine, config, aujourd=aujourd)
+        except Exception as exc:  # noqa: BLE001
+            log.warning("procès-verbaux : %s", exc)
         a = analyser(racine)
         corriger_archive(a, racine)
         return a

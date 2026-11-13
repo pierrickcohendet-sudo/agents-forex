@@ -69,6 +69,20 @@ complement = """
 .v9 .sec-err{padding:14px 16px;border-radius:12px;border:1px dashed var(--line-2);color:var(--muted);font-size:13.5px}
 .v9 .bascule{display:inline-flex}
 .v9 .wd .e .pub{font-weight:600}
+/* V9.4 : tuiles avec qualificatif, carte de section pays, liste cochée, « Mon biais » */
+.v9 .tuiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.v9 .tuile{padding:16px 16px 10px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.v9 .tuile b{font-family:var(--f-display);font-size:30px;font-weight:500;line-height:1.05}
+.v9 .tuile .q{font-size:12.5px;font-weight:700;color:var(--accent)}
+.v9 .tuile svg{width:100%;height:34px;margin-top:4px}
+.v9 .pays9{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:0;overflow:hidden}
+.v9 .pays9-l{padding:20px;display:flex;flex-direction:column;gap:12px}
+.v9 .pays9-r{padding:20px;border-left:1px solid var(--line);background:var(--surface-2);display:flex;flex-direction:column;gap:8px}
+.v9 .pays9-r p{margin:0;font-size:13.5px;color:var(--ink-2)}
+.v9 .monbiais{margin-top:6px;padding:12px 14px;border-radius:12px;background:var(--accent-soft);font-size:14px}
+.v9 .chk li.ok::before{content:"✓";color:var(--up)}
+@media (max-width:860px){.v9 .tuiles{grid-template-columns:repeat(2,minmax(0,1fr))}.v9 .pays9{grid-template-columns:minmax(0,1fr)}.v9 .pays9-r{border-left:0;border-top:1px solid var(--line)}}
+@media (max-width:420px){.v9 .tuile b{font-size:24px}}
 .v9 .speak .chip{white-space:normal;height:auto;min-height:26px;padding:4px 10px;line-height:1.35;max-width:100%}
 .v9 .scroll .tbl td.small{min-width:160px}
 @media (max-width:1100px){.v9 .toc{top:var(--haut-entete,124px)}.v9 .rs{scroll-margin-top:calc(var(--haut-entete,124px) + 64px)}}

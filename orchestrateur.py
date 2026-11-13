@@ -610,8 +610,9 @@ def _synthese_v9(config: dict, llm, complement: bool) -> dict | None:
                 log.warning("Synthèse V9 : modèle non initialisé (%s) — secours puis rédaction automatique", exc)
                 llm = None
     # Lot V9, livraison 2 : communiqués officiels (votes, vocabulaire, projections) et probabilité de la Fed citée
-    from core import actualites, communiques_v9
+    from core import actualites, communiques_v9, officiels_v94
     communiques_v9.mettre_a_jour(RACINE, config)
+    officiels_v94.collecter(RACINE)   # lot V9.4 : ONS et Eurostat (ne lève jamais)
     try:
         actualites.calculer(RACINE)
     except Exception as exc:  # noqa: BLE001
