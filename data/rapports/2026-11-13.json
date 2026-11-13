@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-13T09:20:29+00:00",
+  "genere_le": "2026-11-13T10:19:18+00:00",
   "appels_llm": [
    {
     "heure": "08:32",
@@ -214,7 +214,7 @@
    "engrenages_faits": true,
    "reserve_engrenages": 8,
    "refus_reserve_ce_run": 0,
-   "refus_budget_ce_run": 5,
+   "refus_budget_ce_run": 3,
    "budget": {
     "plafond": 60,
     "mode": "complément",
@@ -237,14 +237,14 @@
      "reste": 8
     },
     "consomme_run": {
-     "engrenages": 1,
+     "engrenages": 0,
      "rapport": 0,
      "devises": 0,
      "reste": 0
     },
     "total_jour": 15,
     "plafond_run": 45,
-    "recues_run": 1,
+    "recues_run": 0,
     "pannes_jour": 15,
     "pannes_run": 0,
     "plafond_pannes": 20,
@@ -413,14 +413,14 @@
      "epuise_jusqu_a": "2026-11-14T07:59:59+00:00",
      "appels_ce_run": 0,
      "reussites_ce_run": 0,
-     "sauts_ce_run": 6
+     "sauts_ce_run": 3
     },
     "gemini-3.8-flash": {
      "appels_aujourdhui": 1,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-11-10T07:59:59+00:00",
-     "appels_ce_run": 6,
-     "reussites_ce_run": 1,
+     "appels_ce_run": 3,
+     "reussites_ce_run": 0,
      "sauts_ce_run": 0
     },
     "gemini-3.5-flash-lite": {
@@ -433,7 +433,7 @@
     }
    }
   },
-  "resume_quota": "Gemini : 15/60, engrenages : fait — Budget (run complément, plafond 60) : prévu engrenages 1 analyse (≤ 2 requêtes); rapport du jour 6 analyses (≤ 12 requêtes); devises 3 analyses (≤ 6 requêtes); reste ≤ 40 ; consommé ce run : engrenages 1, rapport du jour 0, devises 0, reste 0 (jour : 15/60) ; échecs ce run : aucun ; tentatives en panne (hors budget) : 0 ce run, 15/20 aujourd'hui ; réponses reçues ce run : 1/45 ; analyses : analyses:AUD-NZD-CNY faite, analyses:JPY-CHF-CAD faite, analyses:USD-EUR-GBP faite, critique faite, engrenages faite, etat_du_monde faite, paires:synthese faite, rapport:analyse faite, rapport:redaction faite, rapport:synthese_1 faite, rapport:synthese_2 à rejouer (503), rapport:synthese_3 à rejouer (503), synthese:AUD à rejouer (delai), synthese:CAD à rejouer (503), synthese:CHF à rejouer (503), synthese:CNY faite, synthese:EUR faite, synthese:GBP faite, synthese:JPY faite, synthese:NZD à rejouer (503), synthese:USD faite",
+  "resume_quota": "Gemini : 15/60, engrenages : fait — Budget (run complément, plafond 60) : prévu engrenages 1 analyse (≤ 2 requêtes); rapport du jour 6 analyses (≤ 12 requêtes); devises 3 analyses (≤ 6 requêtes); reste ≤ 40 ; consommé ce run : engrenages 0, rapport du jour 0, devises 0, reste 0 (jour : 15/60) ; échecs ce run : aucun ; tentatives en panne (hors budget) : 0 ce run, 15/20 aujourd'hui ; réponses reçues ce run : 0/45 ; analyses : analyses:AUD-NZD-CNY faite, analyses:JPY-CHF-CAD faite, analyses:USD-EUR-GBP faite, critique faite, engrenages faite, etat_du_monde faite, paires:synthese faite, rapport:analyse faite, rapport:redaction faite, rapport:synthese_1 faite, rapport:synthese_2 à rejouer (503), rapport:synthese_3 à rejouer (503), synthese:AUD à rejouer (delai), synthese:CAD à rejouer (503), synthese:CHF à rejouer (503), synthese:CNY faite, synthese:EUR faite, synthese:GBP faite, synthese:JPY faite, synthese:NZD à rejouer (503), synthese:USD faite",
   "appels_par_modele": {
    "gemini-3.5-flash": {
     "appels": 16,
@@ -498,6 +498,40 @@
       "ouvert_a_l_appel": null,
       "echecs_consecutifs": 0,
       "ignores": 6
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
+   },
+   {
+    "heure": "10:19",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 3,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 3
      },
      {
       "modele": "gemini-3.8-flash",
@@ -1299,7 +1333,7 @@
     "libelle": "Flash 3.8"
    },
    "version": "quotidienne",
-   "rafraichi_le": "2026-11-13T09:20:29+00:00"
+   "rafraichi_le": "2026-11-13T10:19:18+00:00"
   },
   "classement_devises": [
    {
@@ -3399,7 +3433,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-13T09:20:29+00:00"
+    "genere_le": "2026-11-13T10:19:18+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.45,
@@ -3660,7 +3694,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-13T09:20:29+00:00"
+    "genere_le": "2026-11-13T10:19:18+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.56,
@@ -3910,7 +3944,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-13T09:20:29+00:00"
+    "genere_le": "2026-11-13T10:19:18+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.04,
@@ -4156,7 +4190,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-13T09:20:29+00:00"
+    "genere_le": "2026-11-13T10:19:18+00:00"
    },
    "indice_surprise_30j": {
     "indice": -1.62,
