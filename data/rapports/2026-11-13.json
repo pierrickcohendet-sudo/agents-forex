@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-13T18:19:14+00:00",
+  "genere_le": "2026-11-13T19:19:33+00:00",
   "appels_llm": [
    {
     "heure": "08:32",
@@ -822,6 +822,40 @@
       "ignores": 0
      }
     ]
+   },
+   {
+    "heure": "19:19",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 9,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 9
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
    }
   ]
  },
@@ -1090,7 +1124,7 @@
      ],
      "donnees_calculees": [
       {
-       "texte": "Indice de surprise 30 j : USD +1.03, EUR -0.33, GBP +0.38, JPY -0.10, CHF +0.45, CAD -0.56, AUD +0.04, NZD -1.62, CNY -0.03",
+       "texte": "Indice de surprise 30 j : USD +1.03, EUR -0.37, GBP +0.38, JPY -0.10, CHF +0.45, CAD -0.56, AUD +0.04, NZD -1.62, CNY -0.03",
        "source_id": "src_147"
       }
      ],
@@ -1452,8 +1486,8 @@
        "source_id": "src_165"
       },
       {
-       "texte": "EUR balance commerciale -6.8B (2026-10-16)",
-       "source_id": "src_166"
+       "texte": "EUR balance commerciale -8.7B (2026-11-13)",
+       "source_id": "src_277"
       },
       {
        "texte": "GBP balance commerciale -22.3B (2026-11-12)",
@@ -1605,7 +1639,7 @@
     "libelle": "Flash 3.8"
    },
    "version": "quotidienne",
-   "rafraichi_le": "2026-11-13T18:19:14+00:00"
+   "rafraichi_le": "2026-11-13T19:19:33+00:00"
   },
   "classement_devises": [
    {
@@ -2569,10 +2603,10 @@
     "genere_le": "2026-11-13T08:40:42+00:00"
    },
    "indice_surprise_30j": {
-    "indice": -0.33,
+    "indice": -0.37,
     "precedent": 0.14,
     "tendance": "baisse",
-    "n": 13
+    "n": 14
    },
    "historique_score_7j": [
     {
@@ -3705,7 +3739,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-13T18:19:14+00:00"
+    "genere_le": "2026-11-13T19:19:33+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.45,
@@ -3966,7 +4000,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-13T18:19:14+00:00"
+    "genere_le": "2026-11-13T19:19:33+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.56,
@@ -4216,7 +4250,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-13T18:19:14+00:00"
+    "genere_le": "2026-11-13T19:19:33+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.04,
@@ -4462,7 +4496,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-13T18:19:14+00:00"
+    "genere_le": "2026-11-13T19:19:33+00:00"
    },
    "indice_surprise_30j": {
     "indice": -1.62,
@@ -6862,6 +6896,13 @@
    "detail": "sp500 (SP500)",
    "date": "2026-11-12",
    "url": "https://fred.stlouisfed.org/series/SP500"
+  },
+  {
+   "id": "src_277",
+   "source": "ForexFactory (registre macro)",
+   "detail": "EUR — Balance commerciale",
+   "date": "2026-11-13",
+   "url": null
   }
  ],
  "donnees_non_rafraichies": [],
@@ -9653,8 +9694,8 @@
     "taux_pct": 100.0
    },
    "Prévision": {
-    "valeur": 12,
-    "explique": 105,
+    "valeur": 26,
+    "explique": 91,
     "vide": 0,
     "total": 117,
     "taux_pct": 100.0
@@ -9676,10 +9717,10 @@
     "n": 7
    },
    "EUR": {
-    "indice": -0.33,
+    "indice": -0.37,
     "precedent": 0.14,
     "tendance": "baisse",
-    "n": 13
+    "n": 14
    },
    "GBP": {
     "indice": 0.38,
@@ -9734,7 +9775,7 @@
   },
   "EUR": {
    "etat": "Sous pression",
-   "raison": "Signaux défavorables : surprises macro 30 j −0,3 ; force −1,5 % sur 20 séances.",
+   "raison": "Signaux défavorables : surprises macro 30 j −0,4 ; force −1,5 % sur 20 séances.",
    "moteur": "Or (XAU/USD)",
    "r60": 0.47
   },
