@@ -1,6 +1,6 @@
 {
- "genere_le": "2026-11-13T22:38:11+00:00",
- "date": "2026-11-13",
+ "genere_le": "2026-11-16T09:55:32+00:00",
+ "date": "2026-11-16",
  "devises": [
   {
    "devise": "USD",
@@ -12,8 +12,8 @@
      "moteur": "vix",
      "sens": 1,
      "verdict": "faible",
-     "mesure": "corrélation +0,20 avec VIX (volatilité des actions US) sur 60 séances : peu marquée",
-     "r60": 0.2
+     "mesure": "corrélation +0,21 avec VIX (volatilité des actions US) sur 60 séances : peu marquée",
+     "r60": 0.21
     },
     {
      "libelle": "Différentiel de taux",
@@ -21,50 +21,50 @@
      "moteur": "us2a",
      "sens": 1,
      "verdict": "confirmé",
-     "mesure": "corrélation +0,43 avec Rendement US 2 ans (écart de taux 2 ans, côté US) sur 60 séances, dans le sens attendu",
-     "r60": 0.43
+     "mesure": "corrélation +0,44 avec Rendement US 2 ans (écart de taux 2 ans, côté US) sur 60 séances, dans le sens attendu",
+     "r60": 0.44
     }
    ],
    "moteur": {
     "dominant": {
-     "moteur": "or",
-     "libelle": "Or (XAU/USD)",
-     "nom": "l'or",
-     "source": "Twelve Data (XAU/USD, or au comptant)",
-     "derniere_observation": "2026-11-12",
-     "r60": -0.49,
-     "r20": -0.4,
+     "moteur": "us10a",
+     "libelle": "Rendement US 10 ans",
+     "nom": "le rendement US à 10 ans",
+     "source": "FRED (DGS10)",
+     "derniere_observation": "2026-11-13",
+     "r60": 0.49,
+     "r20": 0.42,
      "n60": 60,
-     "du": "2026-08-21",
-     "au": "2026-11-12",
+     "du": "2026-08-19",
+     "au": "2026-11-13",
      "stable": true
     },
-    "texte": "Or (XAU/USD) : corrélation −0,49 sur 60 séances (21/08 → 12/11), −0,40 sur 20 séances ; dernière observation commune : 12/11",
+    "texte": "Rendement US 10 ans : corrélation +0,49 sur 60 séances (19/08 → 13/11), +0,42 sur 20 séances ; dernière observation commune : 13/11",
     "mesures": [
-     {
-      "moteur": "or",
-      "libelle": "Or (XAU/USD)",
-      "nom": "l'or",
-      "source": "Twelve Data (XAU/USD, or au comptant)",
-      "derniere_observation": "2026-11-12",
-      "r60": -0.49,
-      "r20": -0.4,
-      "n60": 60,
-      "du": "2026-08-21",
-      "au": "2026-11-12",
-      "stable": true
-     },
      {
       "moteur": "us10a",
       "libelle": "Rendement US 10 ans",
       "nom": "le rendement US à 10 ans",
       "source": "FRED (DGS10)",
-      "derniere_observation": "2026-11-12",
-      "r60": 0.48,
-      "r20": 0.45,
+      "derniere_observation": "2026-11-13",
+      "r60": 0.49,
+      "r20": 0.42,
       "n60": 60,
-      "du": "2026-08-18",
-      "au": "2026-11-12",
+      "du": "2026-08-19",
+      "au": "2026-11-13",
+      "stable": true
+     },
+     {
+      "moteur": "or",
+      "libelle": "Or (XAU/USD)",
+      "nom": "l'or",
+      "source": "Twelve Data (XAU/USD, or au comptant)",
+      "derniere_observation": "2026-11-15",
+      "r60": -0.48,
+      "r20": -0.39,
+      "n60": 60,
+      "du": "2026-08-24",
+      "au": "2026-11-13",
       "stable": true
      },
      {
@@ -72,12 +72,12 @@
       "libelle": "Rendement US 2 ans (écart de taux 2 ans, côté US)",
       "nom": "le rendement US à 2 ans",
       "source": "FRED (DGS2)",
-      "derniere_observation": "2026-11-12",
-      "r60": 0.43,
-      "r20": 0.41,
+      "derniere_observation": "2026-11-13",
+      "r60": 0.44,
+      "r20": 0.39,
       "n60": 60,
-      "du": "2026-08-18",
-      "au": "2026-11-12",
+      "du": "2026-08-19",
+      "au": "2026-11-13",
       "stable": true
      },
      {
@@ -85,12 +85,12 @@
       "libelle": "Indice actions (S&P 500, ETF SPY)",
       "nom": "le S&P 500",
       "source": "Twelve Data (ETF SPY, réplique le S&P 500 — pas l'indice lui-même)",
-      "derniere_observation": "2026-11-12",
+      "derniere_observation": "2026-11-13",
       "r60": -0.26,
-      "r20": -0.09,
+      "r20": -0.15,
       "n60": 60,
-      "du": "2026-08-20",
-      "au": "2026-11-12",
+      "du": "2026-08-21",
+      "au": "2026-11-13",
       "stable": true
      },
      {
@@ -98,12 +98,12 @@
       "libelle": "VIX (volatilité des actions US)",
       "nom": "le VIX",
       "source": "FRED (VIXCLS)",
-      "derniere_observation": "2026-11-11",
-      "r60": 0.2,
+      "derniere_observation": "2026-11-12",
+      "r60": 0.21,
       "r20": 0.05,
       "n60": 60,
-      "du": "2026-08-20",
-      "au": "2026-11-11",
+      "du": "2026-08-21",
+      "au": "2026-11-12",
       "stable": true
      }
     ],
@@ -119,7 +119,7 @@
      60,
      20
     ],
-    "jusqu_au": "2026-11-12",
+    "jusqu_au": "2026-11-15",
     "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python) ; moteurs : Twelve Data pour l'or (XAU/USD) et les actions (SPY), sinon FRED",
     "avertissement": "Corrélation des variations quotidiennes : elle décrit ce qui bouge ensemble, pas une cause."
    },
@@ -157,75 +157,62 @@
      "raison": null
     },
     "surprise_30j": {
-     "indice": 1.03,
-     "n": 7,
+     "indice": 0.94,
+     "n": 6,
      "tendance": "hausse",
      "source": "indice de surprise 30 jours (tableau macro, calcul Python)",
      "raison": null
     },
-    "marquante": {
-     "z": 60.0,
-     "date": "2026-11-12",
-     "evenement": "Inscriptions hebdomadaires au chômage",
-     "texte": "au-dessus du consensus (+6K, +60,0 σ)"
-    },
-    "texte": "inflation 3,7 % (cible 2,0 %) · surprises 30 j +1,0 · Inscriptions hebdomadaires au chômage au-dessus du consensus (+6K, +60,0 σ)"
+    "marquante": null,
+    "texte": "inflation 3,7 % (cible 2,0 %) · surprises 30 j +0,9"
    },
    "semaine": {
     "score": 3,
-    "texte": "6 publications fortes",
+    "texte": "4 publications fortes",
     "banque_centrale": null,
     "forts": [
      {
-      "date": "2026-11-10",
-      "evenement": "IPC sous-jacent M/M"
+      "date": "2026-11-16",
+      "evenement": "Discours de Warsh, président de la Fed"
      },
      {
-      "date": "2026-11-10",
-      "evenement": "IPC sous-jacent A/A"
+      "date": "2026-11-17",
+      "evenement": "Ventes au détail hors automobiles M/M"
      },
      {
-      "date": "2026-11-10",
-      "evenement": "IPC M/M"
+      "date": "2026-11-17",
+      "evenement": "Ventes au détail M/M"
      },
      {
-      "date": "2026-11-10",
-      "evenement": "IPC A/A"
-     },
-     {
-      "date": "2026-11-13",
-      "evenement": "IPP sous-jacent M/M"
-     },
-     {
-      "date": "2026-11-13",
-      "evenement": "IPP M/M"
+      "date": "2026-11-18",
+      "evenement": "Compte rendu du FOMC"
      }
     ],
     "rendez_vous": [],
     "source": "Agenda de la semaine"
    },
    "tendance_20s": {
-    "pct": 1.18,
-    "du": "2026-10-16",
-    "au": "2026-11-13",
+    "pct": 1.38,
+    "du": "2026-10-19",
+    "au": "2026-11-16",
     "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python)"
    },
    "etat": {
     "valeur": "Soutenue",
-    "raison": "Signaux favorables : surprises macro 30 j +1,0 ; force +1,2 % sur 20 séances.",
+    "raison": "Signaux favorables : surprises macro 30 j +0,9 ; force +1,4 % sur 20 séances.",
     "signaux": [
      {
       "sens": 1,
-      "texte": "surprises macro 30 j +1,0"
+      "texte": "surprises macro 30 j +0,9"
      },
      {
       "sens": 1,
-      "texte": "force +1,2 % sur 20 séances"
+      "texte": "force +1,4 % sur 20 séances"
      }
     ],
     "total": 2
    },
-   "lecture": "L'or est en ce moment le moteur le plus corrélé à la devise (−0,49 sur 60 séances). Signaux favorables : surprises macro 30 j +1,0 ; force +1,2 % sur 20 séances. Cette semaine : 6 publications fortes."
+   "lecture": "Le rendement US à 10 ans est en ce moment le moteur le plus corrélé à la devise (+0,49 sur 60 séances). Signaux favorables : surprises macro 30 j +0,9 ; force +1,4 % sur 20 séances. Cette semaine : 4 publications fortes."
   },
   {
    "devise": "EUR",
@@ -265,27 +252,27 @@
      "libelle": "Or (XAU/USD)",
      "nom": "l'or",
      "source": "Twelve Data (XAU/USD, or au comptant)",
-     "derniere_observation": "2026-11-12",
+     "derniere_observation": "2026-11-15",
      "r60": 0.47,
-     "r20": 0.51,
+     "r20": 0.5,
      "n60": 60,
-     "du": "2026-08-21",
-     "au": "2026-11-12",
+     "du": "2026-08-24",
+     "au": "2026-11-13",
      "stable": true
     },
-    "texte": "Or (XAU/USD) : corrélation +0,47 sur 60 séances (21/08 → 12/11), +0,51 sur 20 séances ; dernière observation commune : 12/11",
+    "texte": "Or (XAU/USD) : corrélation +0,47 sur 60 séances (24/08 → 13/11), +0,50 sur 20 séances ; dernière observation commune : 13/11",
     "mesures": [
      {
       "moteur": "or",
       "libelle": "Or (XAU/USD)",
       "nom": "l'or",
       "source": "Twelve Data (XAU/USD, or au comptant)",
-      "derniere_observation": "2026-11-12",
+      "derniere_observation": "2026-11-15",
       "r60": 0.47,
-      "r20": 0.51,
+      "r20": 0.5,
       "n60": 60,
-      "du": "2026-08-21",
-      "au": "2026-11-12",
+      "du": "2026-08-24",
+      "au": "2026-11-13",
       "stable": true
      },
      {
@@ -293,12 +280,12 @@
       "libelle": "Rendement US 2 ans (écart de taux 2 ans, côté US)",
       "nom": "le rendement US à 2 ans",
       "source": "FRED (DGS2)",
-      "derniere_observation": "2026-11-12",
+      "derniere_observation": "2026-11-13",
       "r60": -0.32,
-      "r20": -0.34,
+      "r20": -0.31,
       "n60": 60,
-      "du": "2026-08-18",
-      "au": "2026-11-12",
+      "du": "2026-08-19",
+      "au": "2026-11-13",
       "stable": true
      },
      {
@@ -319,12 +306,12 @@
       "libelle": "Indice actions (S&P 500, ETF SPY)",
       "nom": "le S&P 500",
       "source": "Twelve Data (ETF SPY, réplique le S&P 500 — pas l'indice lui-même)",
-      "derniere_observation": "2026-11-12",
-      "r60": 0.16,
-      "r20": 0.08,
+      "derniere_observation": "2026-11-13",
+      "r60": 0.17,
+      "r20": 0.12,
       "n60": 60,
-      "du": "2026-08-20",
-      "au": "2026-11-12",
+      "du": "2026-08-21",
+      "au": "2026-11-13",
       "stable": true
      },
      {
@@ -332,12 +319,12 @@
       "libelle": "VIX (volatilité des actions US)",
       "nom": "le VIX",
       "source": "FRED (VIXCLS)",
-      "derniere_observation": "2026-11-11",
-      "r60": -0.12,
-      "r20": -0.03,
+      "derniere_observation": "2026-11-12",
+      "r60": -0.14,
+      "r20": -0.04,
       "n60": 60,
-      "du": "2026-08-20",
-      "au": "2026-11-11",
+      "du": "2026-08-21",
+      "au": "2026-11-12",
       "stable": true
      }
     ],
@@ -358,7 +345,7 @@
      60,
      20
     ],
-    "jusqu_au": "2026-11-12",
+    "jusqu_au": "2026-11-15",
     "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python) ; moteurs : Twelve Data pour l'or (XAU/USD) et les actions (SPY), sinon FRED",
     "avertissement": "Corrélation des variations quotidiennes : elle décrit ce qui bouge ensemble, pas une cause."
    },
@@ -396,19 +383,14 @@
      "raison": null
     },
     "surprise_30j": {
-     "indice": -0.37,
-     "n": 14,
+     "indice": -0.33,
+     "n": 11,
      "tendance": "baisse",
      "source": "indice de surprise 30 jours (tableau macro, calcul Python)",
      "raison": null
     },
-    "marquante": {
-     "z": -2.0,
-     "date": "2026-11-13",
-     "evenement": "Variation de l'emploi T/T, flash",
-     "texte": "en dessous du consensus (−0,2 pt, −2,0 σ)"
-    },
-    "texte": "inflation 4,0 % (cible 2,0 %) · surprises 30 j −0,4 · Variation de l'emploi T/T, flash en dessous du consensus (−0,2 pt, −2,0 σ)"
+    "marquante": null,
+    "texte": "inflation 4,0 % (cible 2,0 %) · surprises 30 j −0,3"
    },
    "semaine": {
     "score": 1,
@@ -419,27 +401,27 @@
     "source": "Agenda de la semaine"
    },
    "tendance_20s": {
-    "pct": -1.54,
-    "du": "2026-10-16",
-    "au": "2026-11-13",
+    "pct": -1.67,
+    "du": "2026-10-19",
+    "au": "2026-11-16",
     "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python)"
    },
    "etat": {
     "valeur": "Sous pression",
-    "raison": "Signaux défavorables : surprises macro 30 j −0,4 ; force −1,5 % sur 20 séances.",
+    "raison": "Signaux défavorables : surprises macro 30 j −0,3 ; force −1,7 % sur 20 séances.",
     "signaux": [
      {
       "sens": -1,
-      "texte": "surprises macro 30 j −0,4"
+      "texte": "surprises macro 30 j −0,3"
      },
      {
       "sens": -1,
-      "texte": "force −1,5 % sur 20 séances"
+      "texte": "force −1,7 % sur 20 séances"
      }
     ],
     "total": -2
    },
-   "lecture": "L'or est en ce moment le moteur le plus corrélé à la devise (+0,47 sur 60 séances). Signaux défavorables : surprises macro 30 j −0,4 ; force −1,5 % sur 20 séances. Cette semaine : pas de catalyseur majeur dans l'Agenda."
+   "lecture": "L'or est en ce moment le moteur le plus corrélé à la devise (+0,47 sur 60 séances). Signaux défavorables : surprises macro 30 j −0,3 ; force −1,7 % sur 20 séances. Cette semaine : pas de catalyseur majeur dans l'Agenda."
   },
   {
    "devise": "GBP",
@@ -460,8 +442,8 @@
      "moteur": "actions",
      "sens": 1,
      "verdict": "faible",
-     "mesure": "corrélation +0,17 avec Indice actions (S&P 500, ETF SPY) sur 60 séances : peu marquée",
-     "r60": 0.17
+     "mesure": "corrélation +0,19 avec Indice actions (S&P 500, ETF SPY) sur 60 séances : peu marquée",
+     "r60": 0.19
     }
    ],
    "moteur": {
@@ -470,27 +452,27 @@
      "libelle": "Rendement US 2 ans (écart de taux 2 ans, côté US)",
      "nom": "le rendement US à 2 ans",
      "source": "FRED (DGS2)",
-     "derniere_observation": "2026-11-12",
+     "derniere_observation": "2026-11-13",
      "r60": -0.35,
-     "r20": -0.44,
+     "r20": -0.41,
      "n60": 60,
-     "du": "2026-08-18",
-     "au": "2026-11-12",
+     "du": "2026-08-19",
+     "au": "2026-11-13",
      "stable": true
     },
-    "texte": "Rendement US 2 ans (écart de taux 2 ans, côté US) : corrélation −0,35 sur 60 séances (18/08 → 12/11), −0,44 sur 20 séances ; dernière observation commune : 12/11",
+    "texte": "Rendement US 2 ans (écart de taux 2 ans, côté US) : corrélation −0,35 sur 60 séances (19/08 → 13/11), −0,41 sur 20 séances ; dernière observation commune : 13/11",
     "mesures": [
      {
       "moteur": "us2a",
       "libelle": "Rendement US 2 ans (écart de taux 2 ans, côté US)",
       "nom": "le rendement US à 2 ans",
       "source": "FRED (DGS2)",
-      "derniere_observation": "2026-11-12",
+      "derniere_observation": "2026-11-13",
       "r60": -0.35,
-      "r20": -0.44,
+      "r20": -0.41,
       "n60": 60,
-      "du": "2026-08-18",
-      "au": "2026-11-12",
+      "du": "2026-08-19",
+      "au": "2026-11-13",
       "stable": true
      },
      {
@@ -498,12 +480,12 @@
       "libelle": "Indice actions (S&P 500, ETF SPY)",
       "nom": "le S&P 500",
       "source": "Twelve Data (ETF SPY, réplique le S&P 500 — pas l'indice lui-même)",
-      "derniere_observation": "2026-11-12",
-      "r60": 0.17,
-      "r20": 0.09,
+      "derniere_observation": "2026-11-13",
+      "r60": 0.19,
+      "r20": 0.14,
       "n60": 60,
-      "du": "2026-08-20",
-      "au": "2026-11-12",
+      "du": "2026-08-21",
+      "au": "2026-11-13",
       "stable": true
      },
      {
@@ -511,12 +493,12 @@
       "libelle": "VIX (volatilité des actions US)",
       "nom": "le VIX",
       "source": "FRED (VIXCLS)",
-      "derniere_observation": "2026-11-11",
-      "r60": -0.12,
-      "r20": -0.04,
+      "derniere_observation": "2026-11-12",
+      "r60": -0.14,
+      "r20": -0.05,
       "n60": 60,
-      "du": "2026-08-20",
-      "au": "2026-11-11",
+      "du": "2026-08-21",
+      "au": "2026-11-12",
       "stable": true
      }
     ],
@@ -537,7 +519,7 @@
      60,
      20
     ],
-    "jusqu_au": "2026-11-12",
+    "jusqu_au": "2026-11-15",
     "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python) ; moteurs : Twelve Data pour l'or (XAU/USD) et les actions (SPY), sinon FRED",
     "avertissement": "Corrélation des variations quotidiennes : elle décrit ce qui bouge ensemble, pas une cause."
    },
@@ -575,19 +557,14 @@
      "raison": null
     },
     "surprise_30j": {
-     "indice": 0.38,
-     "n": 13,
-     "tendance": "stable",
+     "indice": 0.34,
+     "n": 12,
+     "tendance": "baisse",
      "source": "indice de surprise 30 jours (tableau macro, calcul Python)",
      "raison": null
     },
-    "marquante": {
-     "z": -1.03,
-     "date": "2026-11-12",
-     "evenement": "Balance commerciale des biens",
-     "texte": "en dessous du consensus (−3,1B, −1,0 σ)"
-    },
-    "texte": "inflation 3,5 % (cible 2,0 %) · surprises 30 j +0,4 · Balance commerciale des biens en dessous du consensus (−3,1B, −1,0 σ)"
+    "marquante": null,
+    "texte": "inflation 3,5 % (cible 2,0 %) · surprises 30 j +0,3"
    },
    "semaine": {
     "score": 2,
@@ -595,31 +572,31 @@
     "banque_centrale": null,
     "forts": [
      {
-      "date": "2026-11-12",
-      "evenement": "PIB M/M"
+      "date": "2026-11-18",
+      "evenement": "IPC A/A"
      }
     ],
     "rendez_vous": [],
     "source": "Agenda de la semaine"
    },
    "tendance_20s": {
-    "pct": -0.66,
-    "du": "2026-10-16",
-    "au": "2026-11-13",
+    "pct": -0.67,
+    "du": "2026-10-19",
+    "au": "2026-11-16",
     "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python)"
    },
    "etat": {
     "valeur": "Sans direction",
-    "raison": "Signaux favorables : surprises macro 30 j +0,4. Total +1 : il faut 2 signaux concordants.",
+    "raison": "Signaux favorables : surprises macro 30 j +0,3. Total +1 : il faut 2 signaux concordants.",
     "signaux": [
      {
       "sens": 1,
-      "texte": "surprises macro 30 j +0,4"
+      "texte": "surprises macro 30 j +0,3"
      }
     ],
     "total": 1
    },
-   "lecture": "Le rendement US à 2 ans est en ce moment le moteur le plus corrélé à la devise (−0,35 sur 60 séances). Signaux favorables : surprises macro 30 j +0,4. Total +1 : il faut 2 signaux concordants. Cette semaine : 1 publication forte."
+   "lecture": "Le rendement US à 2 ans est en ce moment le moteur le plus corrélé à la devise (−0,35 sur 60 séances). Signaux favorables : surprises macro 30 j +0,3. Total +1 : il faut 2 signaux concordants. Cette semaine : 1 publication forte."
   },
   {
    "devise": "JPY",
@@ -631,8 +608,8 @@
      "moteur": "vix",
      "sens": 1,
      "verdict": "faible",
-     "mesure": "corrélation −0,03 avec VIX (volatilité des actions US) sur 60 séances : peu marquée",
-     "r60": -0.03
+     "mesure": "corrélation −0,02 avec VIX (volatilité des actions US) sur 60 séances : peu marquée",
+     "r60": -0.02
     },
     {
      "libelle": "Devise de financement du carry",
@@ -640,50 +617,50 @@
      "moteur": "us10a",
      "sens": -1,
      "verdict": "confirmé",
-     "mesure": "corrélation −0,45 avec Rendement US 10 ans sur 60 séances, dans le sens attendu",
-     "r60": -0.45
+     "mesure": "corrélation −0,44 avec Rendement US 10 ans sur 60 séances, dans le sens attendu",
+     "r60": -0.44
     }
    ],
    "moteur": {
     "dominant": {
-     "moteur": "us10a",
-     "libelle": "Rendement US 10 ans",
-     "nom": "le rendement US à 10 ans",
-     "source": "FRED (DGS10)",
-     "derniere_observation": "2026-11-12",
+     "moteur": "us2a",
+     "libelle": "Rendement US 2 ans (écart de taux 2 ans, côté US)",
+     "nom": "le rendement US à 2 ans",
+     "source": "FRED (DGS2)",
+     "derniere_observation": "2026-11-13",
      "r60": -0.45,
      "r20": -0.64,
      "n60": 60,
-     "du": "2026-08-18",
-     "au": "2026-11-12",
+     "du": "2026-08-19",
+     "au": "2026-11-13",
      "stable": true
     },
-    "texte": "Rendement US 10 ans : corrélation −0,45 sur 60 séances (18/08 → 12/11), −0,64 sur 20 séances ; dernière observation commune : 12/11",
+    "texte": "Rendement US 2 ans (écart de taux 2 ans, côté US) : corrélation −0,45 sur 60 séances (19/08 → 13/11), −0,64 sur 20 séances ; dernière observation commune : 13/11",
     "mesures": [
-     {
-      "moteur": "us10a",
-      "libelle": "Rendement US 10 ans",
-      "nom": "le rendement US à 10 ans",
-      "source": "FRED (DGS10)",
-      "derniere_observation": "2026-11-12",
-      "r60": -0.45,
-      "r20": -0.64,
-      "n60": 60,
-      "du": "2026-08-18",
-      "au": "2026-11-12",
-      "stable": true
-     },
      {
       "moteur": "us2a",
       "libelle": "Rendement US 2 ans (écart de taux 2 ans, côté US)",
       "nom": "le rendement US à 2 ans",
       "source": "FRED (DGS2)",
-      "derniere_observation": "2026-11-12",
+      "derniere_observation": "2026-11-13",
       "r60": -0.45,
-      "r20": -0.65,
+      "r20": -0.64,
       "n60": 60,
-      "du": "2026-08-18",
-      "au": "2026-11-12",
+      "du": "2026-08-19",
+      "au": "2026-11-13",
+      "stable": true
+     },
+     {
+      "moteur": "us10a",
+      "libelle": "Rendement US 10 ans",
+      "nom": "le rendement US à 10 ans",
+      "source": "FRED (DGS10)",
+      "derniere_observation": "2026-11-13",
+      "r60": -0.44,
+      "r20": -0.63,
+      "n60": 60,
+      "du": "2026-08-19",
+      "au": "2026-11-13",
       "stable": true
      },
      {
@@ -691,12 +668,12 @@
       "libelle": "Or (XAU/USD)",
       "nom": "l'or",
       "source": "Twelve Data (XAU/USD, or au comptant)",
-      "derniere_observation": "2026-11-12",
+      "derniere_observation": "2026-11-15",
       "r60": 0.28,
       "r20": 0.06,
       "n60": 60,
-      "du": "2026-08-21",
-      "au": "2026-11-12",
+      "du": "2026-08-24",
+      "au": "2026-11-13",
       "stable": true
      },
      {
@@ -704,12 +681,12 @@
       "libelle": "Indice actions (S&P 500, ETF SPY)",
       "nom": "le S&P 500",
       "source": "Twelve Data (ETF SPY, réplique le S&P 500 — pas l'indice lui-même)",
-      "derniere_observation": "2026-11-12",
-      "r60": 0.07,
-      "r20": -0.32,
+      "derniere_observation": "2026-11-13",
+      "r60": 0.05,
+      "r20": -0.31,
       "n60": 60,
-      "du": "2026-08-20",
-      "au": "2026-11-12",
+      "du": "2026-08-21",
+      "au": "2026-11-13",
       "stable": false
      },
      {
@@ -717,12 +694,12 @@
       "libelle": "VIX (volatilité des actions US)",
       "nom": "le VIX",
       "source": "FRED (VIXCLS)",
-      "derniere_observation": "2026-11-11",
-      "r60": -0.03,
-      "r20": 0.3,
+      "derniere_observation": "2026-11-12",
+      "r60": -0.02,
+      "r20": 0.31,
       "n60": 60,
-      "du": "2026-08-20",
-      "au": "2026-11-11",
+      "du": "2026-08-21",
+      "au": "2026-11-12",
       "stable": false
      }
     ],
@@ -738,7 +715,7 @@
      60,
      20
     ],
-    "jusqu_au": "2026-11-12",
+    "jusqu_au": "2026-11-15",
     "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python) ; moteurs : Twelve Data pour l'or (XAU/USD) et les actions (SPY), sinon FRED",
     "avertissement": "Corrélation des variations quotidiennes : elle décrit ce qui bouge ensemble, pas une cause."
    },
@@ -776,19 +753,19 @@
      "raison": null
     },
     "surprise_30j": {
-     "indice": -0.1,
-     "n": 7,
+     "indice": -0.14,
+     "n": 8,
      "tendance": "stable",
      "source": "indice de surprise 30 jours (tableau macro, calcul Python)",
      "raison": null
     },
     "marquante": {
-     "z": -12.33,
-     "date": "2026-11-10",
-     "evenement": "Dépenses des ménages A/A",
-     "texte": "en dessous du consensus (−3,7 pt, −12,3 σ)"
+     "z": -0.67,
+     "date": "2026-11-16",
+     "evenement": "Déflateur du PIB A/A, prélim.",
+     "texte": "en dessous du consensus (−0,2 pt, −0,7 σ)"
     },
-    "texte": "inflation 2,1 % (cible 2,0 %) · surprises 30 j −0,1 · Dépenses des ménages A/A en dessous du consensus (−3,7 pt, −12,3 σ)"
+    "texte": "inflation 2,1 % (cible 2,0 %) · surprises 30 j −0,1 · Déflateur du PIB A/A, prélim. en dessous du consensus (−0,2 pt, −0,7 σ)"
    },
    "semaine": {
     "score": 1,
@@ -799,23 +776,18 @@
     "source": "Agenda de la semaine"
    },
    "tendance_20s": {
-    "pct": -1.19,
-    "du": "2026-10-16",
-    "au": "2026-11-13",
+    "pct": -0.59,
+    "du": "2026-10-19",
+    "au": "2026-11-16",
     "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python)"
    },
    "etat": {
     "valeur": "Sans direction",
-    "raison": "Signaux défavorables : force −1,2 % sur 20 séances. Total −1 : il faut 2 signaux concordants.",
-    "signaux": [
-     {
-      "sens": -1,
-      "texte": "force −1,2 % sur 20 séances"
-     }
-    ],
-    "total": -1
+    "raison": "Aucun signal net : ni surprise de la banque centrale, ni surprises macro marquées, ni tendance sur 20 séances.",
+    "signaux": [],
+    "total": 0
    },
-   "lecture": "Le rendement US à 10 ans est en ce moment le moteur le plus corrélé à la devise (−0,45 sur 60 séances). Signaux défavorables : force −1,2 % sur 20 séances. Total −1 : il faut 2 signaux concordants. Cette semaine : pas de catalyseur majeur dans l'Agenda."
+   "lecture": "Le rendement US à 2 ans est en ce moment le moteur le plus corrélé à la devise (−0,45 sur 60 séances). Aucun signal net : ni surprise de la banque centrale, ni surprises macro marquées, ni tendance sur 20 séances. Cette semaine : pas de catalyseur majeur dans l'Agenda."
   },
   {
    "devise": "CHF",
@@ -837,27 +809,27 @@
      "libelle": "Rendement US 10 ans",
      "nom": "le rendement US à 10 ans",
      "source": "FRED (DGS10)",
-     "derniere_observation": "2026-11-12",
+     "derniere_observation": "2026-11-13",
      "r60": -0.6,
-     "r20": -0.73,
+     "r20": -0.71,
      "n60": 60,
-     "du": "2026-08-18",
-     "au": "2026-11-12",
+     "du": "2026-08-19",
+     "au": "2026-11-13",
      "stable": true
     },
-    "texte": "Rendement US 10 ans : corrélation −0,60 sur 60 séances (18/08 → 12/11), −0,73 sur 20 séances ; dernière observation commune : 12/11",
+    "texte": "Rendement US 10 ans : corrélation −0,60 sur 60 séances (19/08 → 13/11), −0,71 sur 20 séances ; dernière observation commune : 13/11",
     "mesures": [
      {
       "moteur": "us10a",
       "libelle": "Rendement US 10 ans",
       "nom": "le rendement US à 10 ans",
       "source": "FRED (DGS10)",
-      "derniere_observation": "2026-11-12",
+      "derniere_observation": "2026-11-13",
       "r60": -0.6,
-      "r20": -0.73,
+      "r20": -0.71,
       "n60": 60,
-      "du": "2026-08-18",
-      "au": "2026-11-12",
+      "du": "2026-08-19",
+      "au": "2026-11-13",
       "stable": true
      },
      {
@@ -865,12 +837,12 @@
       "libelle": "Or (XAU/USD)",
       "nom": "l'or",
       "source": "Twelve Data (XAU/USD, or au comptant)",
-      "derniere_observation": "2026-11-12",
+      "derniere_observation": "2026-11-15",
       "r60": 0.47,
-      "r20": 0.37,
+      "r20": 0.35,
       "n60": 60,
-      "du": "2026-08-21",
-      "au": "2026-11-12",
+      "du": "2026-08-24",
+      "au": "2026-11-13",
       "stable": true
      },
      {
@@ -878,12 +850,12 @@
       "libelle": "Indice actions (S&P 500, ETF SPY)",
       "nom": "le S&P 500",
       "source": "Twelve Data (ETF SPY, réplique le S&P 500 — pas l'indice lui-même)",
-      "derniere_observation": "2026-11-12",
-      "r60": 0.07,
-      "r20": -0.19,
+      "derniere_observation": "2026-11-13",
+      "r60": 0.06,
+      "r20": -0.14,
       "n60": 60,
-      "du": "2026-08-20",
-      "au": "2026-11-12",
+      "du": "2026-08-21",
+      "au": "2026-11-13",
       "stable": false
      },
      {
@@ -891,12 +863,12 @@
       "libelle": "VIX (volatilité des actions US)",
       "nom": "le VIX",
       "source": "FRED (VIXCLS)",
-      "derniere_observation": "2026-11-11",
+      "derniere_observation": "2026-11-12",
       "r60": 0.01,
-      "r20": 0.19,
+      "r20": 0.22,
       "n60": 60,
-      "du": "2026-08-20",
-      "au": "2026-11-11",
+      "du": "2026-08-21",
+      "au": "2026-11-12",
       "stable": true
      }
     ],
@@ -912,7 +884,7 @@
      60,
      20
     ],
-    "jusqu_au": "2026-11-12",
+    "jusqu_au": "2026-11-15",
     "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python) ; moteurs : Twelve Data pour l'or (XAU/USD) et les actions (SPY), sinon FRED",
     "avertissement": "Corrélation des variations quotidiennes : elle décrit ce qui bouge ensemble, pas une cause."
    },
@@ -959,14 +931,14 @@
     "source": "Agenda de la semaine"
    },
    "tendance_20s": {
-    "pct": -1.37,
-    "du": "2026-10-16",
-    "au": "2026-11-13",
+    "pct": -1.5,
+    "du": "2026-10-19",
+    "au": "2026-11-16",
     "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python)"
    },
    "etat": {
     "valeur": "Sans direction",
-    "raison": "Signaux partagés : surprises macro 30 j +0,5 ; force −1,4 % sur 20 séances. Total 0 : il faut 2 signaux concordants.",
+    "raison": "Signaux partagés : surprises macro 30 j +0,5 ; force −1,5 % sur 20 séances. Total 0 : il faut 2 signaux concordants.",
     "signaux": [
      {
       "sens": 1,
@@ -974,12 +946,12 @@
      },
      {
       "sens": -1,
-      "texte": "force −1,4 % sur 20 séances"
+      "texte": "force −1,5 % sur 20 séances"
      }
     ],
     "total": 0
    },
-   "lecture": "Le rendement US à 10 ans est en ce moment le moteur le plus corrélé à la devise (−0,60 sur 60 séances). Signaux partagés : surprises macro 30 j +0,5 ; force −1,4 % sur 20 séances. Total 0 : il faut 2 signaux concordants. Cette semaine : pas de catalyseur majeur dans l'Agenda."
+   "lecture": "Le rendement US à 10 ans est en ce moment le moteur le plus corrélé à la devise (−0,60 sur 60 séances). Signaux partagés : surprises macro 30 j +0,5 ; force −1,5 % sur 20 séances. Total 0 : il faut 2 signaux concordants. Cette semaine : pas de catalyseur majeur dans l'Agenda."
   },
   {
    "devise": "CAD",
@@ -1000,8 +972,8 @@
      "moteur": "actions",
      "sens": 1,
      "verdict": "faible",
-     "mesure": "corrélation +0,07 avec Indice actions (S&P 500, ETF SPY) sur 60 séances : peu marquée",
-     "r60": 0.07
+     "mesure": "corrélation +0,08 avec Indice actions (S&P 500, ETF SPY) sur 60 séances : peu marquée",
+     "r60": 0.08
     }
    ],
    "moteur": {
@@ -1010,27 +982,27 @@
      "libelle": "Rendement US 2 ans (écart de taux 2 ans, côté US)",
      "nom": "le rendement US à 2 ans",
      "source": "FRED (DGS2)",
-     "derniere_observation": "2026-11-12",
+     "derniere_observation": "2026-11-13",
      "r60": -0.41,
-     "r20": -0.42,
+     "r20": -0.4,
      "n60": 60,
-     "du": "2026-08-18",
-     "au": "2026-11-12",
+     "du": "2026-08-19",
+     "au": "2026-11-13",
      "stable": true
     },
-    "texte": "Rendement US 2 ans (écart de taux 2 ans, côté US) : corrélation −0,41 sur 60 séances (18/08 → 12/11), −0,42 sur 20 séances ; dernière observation commune : 12/11",
+    "texte": "Rendement US 2 ans (écart de taux 2 ans, côté US) : corrélation −0,41 sur 60 séances (19/08 → 13/11), −0,40 sur 20 séances ; dernière observation commune : 13/11",
     "mesures": [
      {
       "moteur": "us2a",
       "libelle": "Rendement US 2 ans (écart de taux 2 ans, côté US)",
       "nom": "le rendement US à 2 ans",
       "source": "FRED (DGS2)",
-      "derniere_observation": "2026-11-12",
+      "derniere_observation": "2026-11-13",
       "r60": -0.41,
-      "r20": -0.42,
+      "r20": -0.4,
       "n60": 60,
-      "du": "2026-08-18",
-      "au": "2026-11-12",
+      "du": "2026-08-19",
+      "au": "2026-11-13",
       "stable": true
      },
      {
@@ -1051,25 +1023,25 @@
       "libelle": "Indice actions (S&P 500, ETF SPY)",
       "nom": "le S&P 500",
       "source": "Twelve Data (ETF SPY, réplique le S&P 500 — pas l'indice lui-même)",
-      "derniere_observation": "2026-11-12",
-      "r60": 0.07,
-      "r20": -0.01,
+      "derniere_observation": "2026-11-13",
+      "r60": 0.08,
+      "r20": 0.03,
       "n60": 60,
-      "du": "2026-08-20",
-      "au": "2026-11-12",
-      "stable": false
+      "du": "2026-08-21",
+      "au": "2026-11-13",
+      "stable": true
      },
      {
       "moteur": "vix",
       "libelle": "VIX (volatilité des actions US)",
       "nom": "le VIX",
       "source": "FRED (VIXCLS)",
-      "derniere_observation": "2026-11-11",
-      "r60": -0.05,
-      "r20": 0.03,
+      "derniere_observation": "2026-11-12",
+      "r60": -0.06,
+      "r20": 0.04,
       "n60": 60,
-      "du": "2026-08-20",
-      "au": "2026-11-11",
+      "du": "2026-08-21",
+      "au": "2026-11-12",
       "stable": false
      }
     ],
@@ -1085,7 +1057,7 @@
      60,
      20
     ],
-    "jusqu_au": "2026-11-12",
+    "jusqu_au": "2026-11-15",
     "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python) ; moteurs : Twelve Data pour l'or (XAU/USD) et les actions (SPY), sinon FRED",
     "avertissement": "Corrélation des variations quotidiennes : elle décrit ce qui bouge ensemble, pas une cause."
    },
@@ -1133,31 +1105,48 @@
     "texte": "surprises 30 j −0,6"
    },
    "semaine": {
-    "score": 1,
-    "texte": "pas de catalyseur majeur dans l'Agenda",
+    "score": 3,
+    "texte": "3 publications fortes",
     "banque_centrale": null,
-    "forts": [],
+    "forts": [
+     {
+      "date": "2026-11-16",
+      "evenement": "IPC M/M"
+     },
+     {
+      "date": "2026-11-16",
+      "evenement": "IPC médian A/A"
+     },
+     {
+      "date": "2026-11-16",
+      "evenement": "IPC tronqué A/A"
+     }
+    ],
     "rendez_vous": [],
     "source": "Agenda de la semaine"
    },
    "tendance_20s": {
-    "pct": -0.79,
-    "du": "2026-10-16",
-    "au": "2026-11-13",
+    "pct": -1.18,
+    "du": "2026-10-19",
+    "au": "2026-11-16",
     "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python)"
    },
    "etat": {
-    "valeur": "Sans direction",
-    "raison": "Signaux défavorables : surprises macro 30 j −0,6. Total −1 : il faut 2 signaux concordants.",
+    "valeur": "Sous pression",
+    "raison": "Signaux défavorables : surprises macro 30 j −0,6 ; force −1,2 % sur 20 séances.",
     "signaux": [
      {
       "sens": -1,
       "texte": "surprises macro 30 j −0,6"
+     },
+     {
+      "sens": -1,
+      "texte": "force −1,2 % sur 20 séances"
      }
     ],
-    "total": -1
+    "total": -2
    },
-   "lecture": "Le rendement US à 2 ans est en ce moment le moteur le plus corrélé à la devise (−0,41 sur 60 séances). Signaux défavorables : surprises macro 30 j −0,6. Total −1 : il faut 2 signaux concordants. Cette semaine : pas de catalyseur majeur dans l'Agenda."
+   "lecture": "Le rendement US à 2 ans est en ce moment le moteur le plus corrélé à la devise (−0,41 sur 60 séances). Signaux défavorables : surprises macro 30 j −0,6 ; force −1,2 % sur 20 séances. Cette semaine : 3 publications fortes."
   },
   {
    "devise": "AUD",
@@ -1188,27 +1177,27 @@
      "libelle": "Indice actions (S&P 500, ETF SPY)",
      "nom": "le S&P 500",
      "source": "Twelve Data (ETF SPY, réplique le S&P 500 — pas l'indice lui-même)",
-     "derniere_observation": "2026-11-12",
+     "derniere_observation": "2026-11-13",
      "r60": 0.49,
-     "r20": 0.48,
+     "r20": 0.53,
      "n60": 60,
-     "du": "2026-08-20",
-     "au": "2026-11-12",
+     "du": "2026-08-21",
+     "au": "2026-11-13",
      "stable": true
     },
-    "texte": "Indice actions (S&P 500, ETF SPY) : corrélation +0,49 sur 60 séances (20/08 → 12/11), +0,48 sur 20 séances ; dernière observation commune : 12/11",
+    "texte": "Indice actions (S&P 500, ETF SPY) : corrélation +0,49 sur 60 séances (21/08 → 13/11), +0,53 sur 20 séances ; dernière observation commune : 13/11",
     "mesures": [
      {
       "moteur": "actions",
       "libelle": "Indice actions (S&P 500, ETF SPY)",
       "nom": "le S&P 500",
       "source": "Twelve Data (ETF SPY, réplique le S&P 500 — pas l'indice lui-même)",
-      "derniere_observation": "2026-11-12",
+      "derniere_observation": "2026-11-13",
       "r60": 0.49,
-      "r20": 0.48,
+      "r20": 0.53,
       "n60": 60,
-      "du": "2026-08-20",
-      "au": "2026-11-12",
+      "du": "2026-08-21",
+      "au": "2026-11-13",
       "stable": true
      },
      {
@@ -1216,12 +1205,12 @@
       "libelle": "VIX (volatilité des actions US)",
       "nom": "le VIX",
       "source": "FRED (VIXCLS)",
-      "derniere_observation": "2026-11-11",
+      "derniere_observation": "2026-11-12",
       "r60": -0.46,
-      "r20": -0.41,
+      "r20": -0.45,
       "n60": 60,
-      "du": "2026-08-20",
-      "au": "2026-11-11",
+      "du": "2026-08-21",
+      "au": "2026-11-12",
       "stable": true
      },
      {
@@ -1229,12 +1218,12 @@
       "libelle": "Or (XAU/USD)",
       "nom": "l'or",
       "source": "Twelve Data (XAU/USD, or au comptant)",
-      "derniere_observation": "2026-11-12",
-      "r60": 0.43,
-      "r20": 0.41,
+      "derniere_observation": "2026-11-15",
+      "r60": 0.4,
+      "r20": 0.4,
       "n60": 60,
-      "du": "2026-08-21",
-      "au": "2026-11-12",
+      "du": "2026-08-24",
+      "au": "2026-11-13",
       "stable": true
      },
      {
@@ -1242,12 +1231,12 @@
       "libelle": "Rendement US 2 ans (écart de taux 2 ans, côté US)",
       "nom": "le rendement US à 2 ans",
       "source": "FRED (DGS2)",
-      "derniere_observation": "2026-11-12",
+      "derniere_observation": "2026-11-13",
       "r60": -0.21,
-      "r20": -0.08,
+      "r20": -0.14,
       "n60": 60,
-      "du": "2026-08-18",
-      "au": "2026-11-12",
+      "du": "2026-08-19",
+      "au": "2026-11-13",
       "stable": true
      }
     ],
@@ -1268,7 +1257,7 @@
      60,
      20
     ],
-    "jusqu_au": "2026-11-12",
+    "jusqu_au": "2026-11-15",
     "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python) ; moteurs : Twelve Data pour l'or (XAU/USD) et les actions (SPY), sinon FRED",
     "avertissement": "Corrélation des variations quotidiennes : elle décrit ce qui bouge ensemble, pas une cause."
    },
@@ -1306,41 +1295,58 @@
      "raison": null
     },
     "surprise_30j": {
-     "indice": 0.04,
-     "n": 7,
+     "indice": 0.54,
+     "n": 5,
      "tendance": "hausse",
      "source": "indice de surprise 30 jours (tableau macro, calcul Python)",
      "raison": null
     },
     "marquante": null,
-    "texte": "inflation 4,3 % (cible 2,5 %) · surprises 30 j +0,0"
+    "texte": "inflation 4,3 % (cible 2,5 %) · surprises 30 j +0,5"
    },
    "semaine": {
-    "score": 1,
-    "texte": "pas de catalyseur majeur dans l'Agenda",
+    "score": 3,
+    "texte": "3 publications fortes",
     "banque_centrale": null,
-    "forts": [],
+    "forts": [
+     {
+      "date": "2026-11-16",
+      "evenement": "Discours de Bullock, gouverneure de la RBA"
+     },
+     {
+      "date": "2026-11-19",
+      "evenement": "Variation de l'emploi"
+     },
+     {
+      "date": "2026-11-19",
+      "evenement": "Taux de chômage"
+     }
+    ],
     "rendez_vous": [],
     "source": "Agenda de la semaine"
    },
    "tendance_20s": {
-    "pct": -2.18,
-    "du": "2026-10-16",
-    "au": "2026-11-13",
+    "pct": -3.16,
+    "du": "2026-10-19",
+    "au": "2026-11-16",
     "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python)"
    },
    "etat": {
     "valeur": "Sans direction",
-    "raison": "Signaux défavorables : force −2,2 % sur 20 séances. Total −1 : il faut 2 signaux concordants.",
+    "raison": "Signaux partagés : surprises macro 30 j +0,5 ; force −3,2 % sur 20 séances. Total 0 : il faut 2 signaux concordants.",
     "signaux": [
      {
+      "sens": 1,
+      "texte": "surprises macro 30 j +0,5"
+     },
+     {
       "sens": -1,
-      "texte": "force −2,2 % sur 20 séances"
+      "texte": "force −3,2 % sur 20 séances"
      }
     ],
-    "total": -1
+    "total": 0
    },
-   "lecture": "Le S&P 500 est en ce moment le moteur le plus corrélé à la devise (+0,49 sur 60 séances). Signaux défavorables : force −2,2 % sur 20 séances. Total −1 : il faut 2 signaux concordants. Cette semaine : pas de catalyseur majeur dans l'Agenda."
+   "lecture": "Le S&P 500 est en ce moment le moteur le plus corrélé à la devise (+0,49 sur 60 séances). Signaux partagés : surprises macro 30 j +0,5 ; force −3,2 % sur 20 séances. Total 0 : il faut 2 signaux concordants. Cette semaine : 3 publications fortes."
   },
   {
    "devise": "NZD",
@@ -1352,8 +1358,8 @@
      "moteur": "actions",
      "sens": 1,
      "verdict": "confirmé",
-     "mesure": "corrélation +0,32 avec Indice actions (S&P 500, ETF SPY) sur 60 séances, dans le sens attendu",
-     "r60": 0.32
+     "mesure": "corrélation +0,33 avec Indice actions (S&P 500, ETF SPY) sur 60 séances, dans le sens attendu",
+     "r60": 0.33
     },
     {
      "libelle": "Produits agricoles",
@@ -1371,27 +1377,27 @@
      "libelle": "Indice actions (S&P 500, ETF SPY)",
      "nom": "le S&P 500",
      "source": "Twelve Data (ETF SPY, réplique le S&P 500 — pas l'indice lui-même)",
-     "derniere_observation": "2026-11-12",
-     "r60": 0.32,
-     "r20": 0.24,
+     "derniere_observation": "2026-11-13",
+     "r60": 0.33,
+     "r20": 0.3,
      "n60": 60,
-     "du": "2026-08-20",
-     "au": "2026-11-12",
+     "du": "2026-08-21",
+     "au": "2026-11-13",
      "stable": true
     },
-    "texte": "Indice actions (S&P 500, ETF SPY) : corrélation +0,32 sur 60 séances (20/08 → 12/11), +0,24 sur 20 séances ; dernière observation commune : 12/11",
+    "texte": "Indice actions (S&P 500, ETF SPY) : corrélation +0,33 sur 60 séances (21/08 → 13/11), +0,30 sur 20 séances ; dernière observation commune : 13/11",
     "mesures": [
      {
       "moteur": "actions",
       "libelle": "Indice actions (S&P 500, ETF SPY)",
       "nom": "le S&P 500",
       "source": "Twelve Data (ETF SPY, réplique le S&P 500 — pas l'indice lui-même)",
-      "derniere_observation": "2026-11-12",
-      "r60": 0.32,
-      "r20": 0.24,
+      "derniere_observation": "2026-11-13",
+      "r60": 0.33,
+      "r20": 0.3,
       "n60": 60,
-      "du": "2026-08-20",
-      "au": "2026-11-12",
+      "du": "2026-08-21",
+      "au": "2026-11-13",
       "stable": true
      },
      {
@@ -1399,12 +1405,12 @@
       "libelle": "VIX (volatilité des actions US)",
       "nom": "le VIX",
       "source": "FRED (VIXCLS)",
-      "derniere_observation": "2026-11-11",
-      "r60": -0.28,
-      "r20": -0.19,
+      "derniere_observation": "2026-11-12",
+      "r60": -0.29,
+      "r20": -0.2,
       "n60": 60,
-      "du": "2026-08-20",
-      "au": "2026-11-11",
+      "du": "2026-08-21",
+      "au": "2026-11-12",
       "stable": true
      },
      {
@@ -1412,13 +1418,13 @@
       "libelle": "Rendement US 2 ans (écart de taux 2 ans, côté US)",
       "nom": "le rendement US à 2 ans",
       "source": "FRED (DGS2)",
-      "derniere_observation": "2026-11-12",
+      "derniere_observation": "2026-11-13",
       "r60": -0.22,
-      "r20": -0.01,
+      "r20": 0.01,
       "n60": 60,
-      "du": "2026-08-18",
-      "au": "2026-11-12",
-      "stable": true
+      "du": "2026-08-19",
+      "au": "2026-11-13",
+      "stable": false
      }
     ],
     "non_testes": [
@@ -1433,7 +1439,7 @@
      60,
      20
     ],
-    "jusqu_au": "2026-11-12",
+    "jusqu_au": "2026-11-15",
     "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python) ; moteurs : Twelve Data pour l'or (XAU/USD) et les actions (SPY), sinon FRED",
     "avertissement": "Corrélation des variations quotidiennes : elle décrit ce qui bouge ensemble, pas une cause."
    },
@@ -1473,7 +1479,7 @@
     "surprise_30j": {
      "indice": -1.62,
      "n": 5,
-     "tendance": "baisse",
+     "tendance": "n/d",
      "source": "indice de surprise 30 jours (tableau macro, calcul Python)",
      "raison": null
     },
@@ -1481,22 +1487,27 @@
     "texte": "surprises 30 j −1,6"
    },
    "semaine": {
-    "score": 1,
-    "texte": "pas de catalyseur majeur dans l'Agenda",
+    "score": 2,
+    "texte": "1 publication forte",
     "banque_centrale": null,
-    "forts": [],
+    "forts": [
+     {
+      "date": "2026-11-17",
+      "evenement": "Inflation Expectations q/q"
+     }
+    ],
     "rendez_vous": [],
     "source": "Agenda de la semaine"
    },
    "tendance_20s": {
-    "pct": -1.98,
-    "du": "2026-10-16",
-    "au": "2026-11-13",
+    "pct": -2.5,
+    "du": "2026-10-19",
+    "au": "2026-11-16",
     "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python)"
    },
    "etat": {
     "valeur": "Sous pression",
-    "raison": "Signaux défavorables : banque centrale : maintien à 2,75 % le 28/10, 3,00 % attendu (−25 pb) ; surprises macro 30 j −1,6 ; force −2,0 % sur 20 séances.",
+    "raison": "Signaux défavorables : banque centrale : maintien à 2,75 % le 28/10, 3,00 % attendu (−25 pb) ; surprises macro 30 j −1,6 ; force −2,5 % sur 20 séances.",
     "signaux": [
      {
       "sens": -1,
@@ -1508,12 +1519,12 @@
      },
      {
       "sens": -1,
-      "texte": "force −2,0 % sur 20 séances"
+      "texte": "force −2,5 % sur 20 séances"
      }
     ],
     "total": -3
    },
-   "lecture": "Le S&P 500 est en ce moment le moteur le plus corrélé à la devise (+0,32 sur 60 séances). Signaux défavorables : banque centrale : maintien à 2,75 % le 28/10, 3,00 % attendu (−25 pb) ; surprises macro 30 j −1,6 ; force −2,0 % sur 20 séances. Cette semaine : pas de catalyseur majeur dans l'Agenda."
+   "lecture": "Le S&P 500 est en ce moment le moteur le plus corrélé à la devise (+0,33 sur 60 séances). Signaux défavorables : banque centrale : maintien à 2,75 % le 28/10, 3,00 % attendu (−25 pb) ; surprises macro 30 j −1,6 ; force −2,5 % sur 20 séances. Cette semaine : 1 publication forte."
   },
   {
    "devise": "CNY",
@@ -1531,19 +1542,19 @@
    ],
    "moteur": {
     "dominant": null,
-    "texte": "Aucun moteur dominant (le plus corrélé : Or (XAU/USD), +0,29 sur 60 séances, sous le seuil de 0,30)",
+    "texte": "Aucun moteur dominant (le plus corrélé : Or (XAU/USD), +0,28 sur 60 séances, sous le seuil de 0,30)",
     "mesures": [
      {
       "moteur": "or",
       "libelle": "Or (XAU/USD)",
       "nom": "l'or",
       "source": "Twelve Data (XAU/USD, or au comptant)",
-      "derniere_observation": "2026-11-12",
-      "r60": 0.29,
-      "r20": 0.16,
+      "derniere_observation": "2026-11-15",
+      "r60": 0.28,
+      "r20": 0.15,
       "n60": 60,
-      "du": "2026-08-21",
-      "au": "2026-11-12",
+      "du": "2026-08-24",
+      "au": "2026-11-13",
       "stable": true
      },
      {
@@ -1551,12 +1562,12 @@
       "libelle": "Rendement US 2 ans (écart de taux 2 ans, côté US)",
       "nom": "le rendement US à 2 ans",
       "source": "FRED (DGS2)",
-      "derniere_observation": "2026-11-12",
+      "derniere_observation": "2026-11-13",
       "r60": -0.25,
-      "r20": -0.34,
+      "r20": -0.33,
       "n60": 60,
-      "du": "2026-08-18",
-      "au": "2026-11-12",
+      "du": "2026-08-19",
+      "au": "2026-11-13",
       "stable": true
      },
      {
@@ -1564,12 +1575,12 @@
       "libelle": "VIX (volatilité des actions US)",
       "nom": "le VIX",
       "source": "FRED (VIXCLS)",
-      "derniere_observation": "2026-11-11",
-      "r60": 0.06,
+      "derniere_observation": "2026-11-12",
+      "r60": 0.05,
       "r20": 0.34,
       "n60": 60,
-      "du": "2026-08-20",
-      "au": "2026-11-11",
+      "du": "2026-08-21",
+      "au": "2026-11-12",
       "stable": true
      },
      {
@@ -1577,12 +1588,12 @@
       "libelle": "Indice actions (S&P 500, ETF SPY)",
       "nom": "le S&P 500",
       "source": "Twelve Data (ETF SPY, réplique le S&P 500 — pas l'indice lui-même)",
-      "derniere_observation": "2026-11-12",
-      "r60": -0.03,
-      "r20": -0.31,
+      "derniere_observation": "2026-11-13",
+      "r60": -0.02,
+      "r20": -0.29,
       "n60": 60,
-      "du": "2026-08-20",
-      "au": "2026-11-12",
+      "du": "2026-08-21",
+      "au": "2026-11-13",
       "stable": true
      }
     ],
@@ -1592,7 +1603,7 @@
      60,
      20
     ],
-    "jusqu_au": "2026-11-12",
+    "jusqu_au": "2026-11-15",
     "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python) ; moteurs : Twelve Data pour l'or (XAU/USD) et les actions (SPY), sinon FRED",
     "avertissement": "Corrélation des variations quotidiennes : elle décrit ce qui bouge ensemble, pas une cause."
    },
@@ -1621,19 +1632,19 @@
      "raison": null
     },
     "surprise_30j": {
-     "indice": -0.03,
-     "n": 6,
-     "tendance": "stable",
+     "indice": -0.02,
+     "n": 8,
+     "tendance": "baisse",
      "source": "indice de surprise 30 jours (tableau macro, calcul Python)",
      "raison": null
     },
     "marquante": {
-     "z": -47.33,
-     "date": "2026-11-10",
-     "evenement": "Balance commerciale",
-     "texte": "en dessous du consensus (−142B, −47,3 σ)"
+     "z": -1.33,
+     "date": "2026-11-16",
+     "evenement": "Ventes au détail A/A",
+     "texte": "en dessous du consensus (−0,4 pt, −1,3 σ)"
     },
-    "texte": "inflation 0,7 % (cible 3,0 %) · surprises 30 j −0,0 · Balance commerciale en dessous du consensus (−142B, −47,3 σ)"
+    "texte": "inflation 0,7 % (cible 3,0 %) · surprises 30 j −0,0 · Ventes au détail A/A en dessous du consensus (−0,4 pt, −1,3 σ)"
    },
    "semaine": {
     "score": 1,
@@ -1644,9 +1655,9 @@
     "source": "Agenda de la semaine"
    },
    "tendance_20s": {
-    "pct": 0.2,
-    "du": "2026-10-16",
-    "au": "2026-11-13",
+    "pct": 0.24,
+    "du": "2026-10-19",
+    "au": "2026-11-16",
     "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python)"
    },
    "etat": {
