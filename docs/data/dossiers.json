@@ -1,11 +1,8 @@
 {
  "version_schema": 1,
- "genere_le": "2026-11-16T09:55:27+00:00",
+ "genere_le": "2026-11-16T10:22:03+00:00",
  "debut_historique": "2021-09-15",
- "erreurs_collecte": [
-  "GBP_taux_effectif (Banque d'Angleterre (IUDSOIA, SONIA)) : 500 Server Error: Internal Server Error for url: https://www.bankofengland.co.uk/boeapps/database/_iadb-FromShowColumns.asp?csv.x=yes&SeriesC",
-  "GBP_10a (Banque d'Angleterre (par yield 10 ans, IUDMNPY)) : 500 Server Error: Internal Server Error for url: https://www.bankofengland.co.uk/boeapps/database/_iadb-FromShowColumns.asp?csv.x=yes&Series"
- ],
+ "erreurs_collecte": [],
  "engrenages": {
   "1": {
    "numero": 1,
@@ -2543,14 +2540,14 @@
        "unite": "%",
        "date": "2026-11-05",
        "source": "registre macro (ForexFactory)",
-       "frequence": "mensuel",
+       "frequence": "quotidien",
        "raison": null,
        "var_1s": 0.0,
        "var_4s": 25.0,
-       "percentile_5a": 51,
-       "n_5a": 61,
+       "percentile_5a": 53,
+       "n_5a": 262,
        "raison_percentile": null,
-       "note_percentile": "percentile du taux du registre parmi le taux au jour le jour OCDE (mensuel, proxy) sur 5 ans"
+       "note_percentile": "percentile du taux du registre parmi le SONIA quotidien (Banque d'Angleterre) sur 5 ans"
       },
       "taux_2a": {
        "valeur": null,
@@ -6947,7 +6944,7 @@
      "texte": "4,00 %",
      "unite": "%",
      "date": "2026-11-05",
-     "frequence": "mensuel",
+     "frequence": "quotidien",
      "age_jours": 11,
      "source": "registre macro (ForexFactory)",
      "raison": null,
@@ -6957,14 +6954,107 @@
       "periode": "4 semaines",
       "texte": "+25 pb sur 4 semaines"
      },
-     "percentile_5a": 51,
-     "n_5a": 61,
+     "percentile_5a": 53,
+     "n_5a": 262,
      "percentile_autre": null,
      "raison_percentile": null,
      "courbe": {
-      "points": [],
+      "points": [
+       [
+        "2026-10-13",
+        3.7319
+       ],
+       [
+        "2026-10-14",
+        3.7324
+       ],
+       [
+        "2026-10-15",
+        3.7335
+       ],
+       [
+        "2026-10-16",
+        3.7344
+       ],
+       [
+        "2026-10-19",
+        3.7337
+       ],
+       [
+        "2026-10-20",
+        3.734
+       ],
+       [
+        "2026-10-21",
+        3.734
+       ],
+       [
+        "2026-10-22",
+        3.7345
+       ],
+       [
+        "2026-10-23",
+        3.7338
+       ],
+       [
+        "2026-10-26",
+        3.7328
+       ],
+       [
+        "2026-10-27",
+        3.734
+       ],
+       [
+        "2026-10-28",
+        3.7338
+       ],
+       [
+        "2026-10-29",
+        3.7352
+       ],
+       [
+        "2026-10-30",
+        3.7348
+       ],
+       [
+        "2026-11-02",
+        3.7352
+       ],
+       [
+        "2026-11-03",
+        3.7342
+       ],
+       [
+        "2026-11-04",
+        3.7335
+       ],
+       [
+        "2026-11-05",
+        3.9824
+       ],
+       [
+        "2026-11-06",
+        3.9852
+       ],
+       [
+        "2026-11-09",
+        3.9842
+       ],
+       [
+        "2026-11-10",
+        3.9837
+       ],
+       [
+        "2026-11-11",
+        3.9845
+       ],
+       [
+        "2026-11-12",
+        3.9846
+       ]
+      ],
       "periode": "30 jours (SONIA quotidien)",
-      "raison": "pas d'historique pour une mini-courbe"
+      "raison": null
      },
      "lecture": null
     },
@@ -9158,12 +9248,17 @@
        "alerte": "dernière année disponible : 2024"
       },
       "taux_10a": {
-       "valeur": null,
-       "raison": "pas de rendement 10 ans gratuit",
-       "source": null,
-       "percentile_5a": null,
-       "var_1s": null,
-       "var_4s": null
+       "valeur": 5.2514,
+       "unite": "%",
+       "date": "2026-11-12",
+       "source": "Banque d'Angleterre (par yield 10 ans, IUDMNPY)",
+       "frequence": "quotidien",
+       "raison": null,
+       "var_1s": 11.2,
+       "var_4s": -5.8,
+       "percentile_5a": 97,
+       "n_5a": 262,
+       "raison_percentile": null
       },
       "prime_terme": {
        "valeur": null,
@@ -10537,6 +10632,543 @@
        ]
       },
       {
+       "nom": "GBP",
+       "points": [
+        [
+         "2025-11-14",
+         4.5733
+        ],
+        [
+         "2025-11-21",
+         4.5272
+        ],
+        [
+         "2025-11-28",
+         4.4703
+        ],
+        [
+         "2025-12-05",
+         4.471
+        ],
+        [
+         "2025-12-12",
+         4.498
+        ],
+        [
+         "2025-12-19",
+         4.496
+        ],
+        [
+         "2025-12-24",
+         4.4978
+        ],
+        [
+         "2026-01-02",
+         4.5168
+        ],
+        [
+         "2026-01-09",
+         4.3988
+        ],
+        [
+         "2026-01-16",
+         4.4048
+        ],
+        [
+         "2026-01-23",
+         4.4914
+        ],
+        [
+         "2026-01-30",
+         4.518
+        ],
+        [
+         "2026-02-06",
+         4.522
+        ],
+        [
+         "2026-02-13",
+         4.4169
+        ],
+        [
+         "2026-02-20",
+         4.3732
+        ],
+        [
+         "2026-02-27",
+         4.2935
+        ],
+        [
+         "2026-03-06",
+         4.6089
+        ],
+        [
+         "2026-03-13",
+         4.7601
+        ],
+        [
+         "2026-03-20",
+         4.9267
+        ],
+        [
+         "2026-03-27",
+         4.8935
+        ],
+        [
+         "2026-04-02",
+         4.778
+        ],
+        [
+         "2026-04-10",
+         4.758
+        ],
+        [
+         "2026-04-17",
+         4.6973
+        ],
+        [
+         "2026-04-24",
+         4.879
+        ],
+        [
+         "2026-05-01",
+         4.9241
+        ],
+        [
+         "2026-05-08",
+         4.8695
+        ],
+        [
+         "2026-05-15",
+         5.1263
+        ],
+        [
+         "2026-05-22",
+         4.8666
+        ],
+        [
+         "2026-05-29",
+         4.776
+        ],
+        [
+         "2026-06-05",
+         4.8773
+        ],
+        [
+         "2026-06-12",
+         4.8156
+        ],
+        [
+         "2026-06-19",
+         4.7213
+        ],
+        [
+         "2026-06-24",
+         4.6683
+        ],
+        [
+         "2026-06-25",
+         4.682
+        ],
+        [
+         "2026-06-26",
+         4.7117
+        ],
+        [
+         "2026-06-29",
+         4.6997
+        ],
+        [
+         "2026-06-30",
+         4.742
+        ],
+        [
+         "2026-07-01",
+         4.7446
+        ],
+        [
+         "2026-07-02",
+         4.749
+        ],
+        [
+         "2026-07-03",
+         4.7652
+        ],
+        [
+         "2026-07-06",
+         4.7694
+        ],
+        [
+         "2026-07-07",
+         4.8092
+        ],
+        [
+         "2026-07-08",
+         4.9545
+        ],
+        [
+         "2026-07-09",
+         4.892
+        ],
+        [
+         "2026-07-10",
+         4.8681
+        ],
+        [
+         "2026-07-13",
+         4.9503
+        ],
+        [
+         "2026-07-14",
+         4.9386
+        ],
+        [
+         "2026-07-15",
+         4.9399
+        ],
+        [
+         "2026-07-16",
+         4.9648
+        ],
+        [
+         "2026-07-17",
+         4.9436
+        ],
+        [
+         "2026-07-20",
+         5.0195
+        ],
+        [
+         "2026-07-21",
+         5.021
+        ],
+        [
+         "2026-07-22",
+         5.0424
+        ],
+        [
+         "2026-07-23",
+         5.0934
+        ],
+        [
+         "2026-07-24",
+         5.0253
+        ],
+        [
+         "2026-07-27",
+         4.9715
+        ],
+        [
+         "2026-07-28",
+         4.9409
+        ],
+        [
+         "2026-07-29",
+         5.0051
+        ],
+        [
+         "2026-07-30",
+         4.9967
+        ],
+        [
+         "2026-07-31",
+         5.0257
+        ],
+        [
+         "2026-08-03",
+         4.9382
+        ],
+        [
+         "2026-08-04",
+         4.9031
+        ],
+        [
+         "2026-08-05",
+         4.8802
+        ],
+        [
+         "2026-08-06",
+         4.9129
+        ],
+        [
+         "2026-08-07",
+         4.9118
+        ],
+        [
+         "2026-08-10",
+         4.9718
+        ],
+        [
+         "2026-08-11",
+         4.9462
+        ],
+        [
+         "2026-08-12",
+         4.9593
+        ],
+        [
+         "2026-08-13",
+         4.9437
+        ],
+        [
+         "2026-08-14",
+         5.0087
+        ],
+        [
+         "2026-08-17",
+         5.0427
+        ],
+        [
+         "2026-08-18",
+         5.0676
+        ],
+        [
+         "2026-08-19",
+         5.0401
+        ],
+        [
+         "2026-08-20",
+         5.0478
+        ],
+        [
+         "2026-08-21",
+         5.0506
+        ],
+        [
+         "2026-08-24",
+         5.0513
+        ],
+        [
+         "2026-08-25",
+         4.9959
+        ],
+        [
+         "2026-08-26",
+         5.0121
+        ],
+        [
+         "2026-08-27",
+         5.0254
+        ],
+        [
+         "2026-08-28",
+         5.0631
+        ],
+        [
+         "2026-09-01",
+         5.1333
+        ],
+        [
+         "2026-09-02",
+         5.171
+        ],
+        [
+         "2026-09-03",
+         5.0843
+        ],
+        [
+         "2026-09-04",
+         5.0737
+        ],
+        [
+         "2026-09-07",
+         5.1079
+        ],
+        [
+         "2026-09-08",
+         5.0979
+        ],
+        [
+         "2026-09-09",
+         5.1922
+        ],
+        [
+         "2026-09-10",
+         5.319
+        ],
+        [
+         "2026-09-11",
+         5.304
+        ],
+        [
+         "2026-09-14",
+         5.3699
+        ],
+        [
+         "2026-09-15",
+         5.3616
+        ],
+        [
+         "2026-09-16",
+         5.2421
+        ],
+        [
+         "2026-09-17",
+         5.1742
+        ],
+        [
+         "2026-09-18",
+         5.256
+        ],
+        [
+         "2026-09-21",
+         5.163
+        ],
+        [
+         "2026-09-22",
+         5.1907
+        ],
+        [
+         "2026-09-23",
+         5.291
+        ],
+        [
+         "2026-09-24",
+         5.3438
+        ],
+        [
+         "2026-09-25",
+         5.3321
+        ],
+        [
+         "2026-09-28",
+         5.3829
+        ],
+        [
+         "2026-09-29",
+         5.364
+        ],
+        [
+         "2026-09-30",
+         5.3714
+        ],
+        [
+         "2026-10-01",
+         5.3665
+        ],
+        [
+         "2026-10-02",
+         5.3341
+        ],
+        [
+         "2026-10-05",
+         5.3634
+        ],
+        [
+         "2026-10-06",
+         5.3368
+        ],
+        [
+         "2026-10-07",
+         5.3852
+        ],
+        [
+         "2026-10-08",
+         5.4292
+        ],
+        [
+         "2026-10-09",
+         5.3993
+        ],
+        [
+         "2026-10-12",
+         5.3868
+        ],
+        [
+         "2026-10-13",
+         5.3928
+        ],
+        [
+         "2026-10-14",
+         5.383
+        ],
+        [
+         "2026-10-15",
+         5.3092
+        ],
+        [
+         "2026-10-16",
+         5.2987
+        ],
+        [
+         "2026-10-19",
+         5.374
+        ],
+        [
+         "2026-10-20",
+         5.3516
+        ],
+        [
+         "2026-10-21",
+         5.3337
+        ],
+        [
+         "2026-10-22",
+         5.2784
+        ],
+        [
+         "2026-10-23",
+         5.3152
+        ],
+        [
+         "2026-10-26",
+         5.3048
+        ],
+        [
+         "2026-10-27",
+         5.3046
+        ],
+        [
+         "2026-10-28",
+         5.3087
+        ],
+        [
+         "2026-10-29",
+         5.2589
+        ],
+        [
+         "2026-10-30",
+         5.2497
+        ],
+        [
+         "2026-11-02",
+         5.1677
+        ],
+        [
+         "2026-11-03",
+         5.2098
+        ],
+        [
+         "2026-11-04",
+         5.1364
+        ],
+        [
+         "2026-11-05",
+         5.1392
+        ],
+        [
+         "2026-11-06",
+         5.1184
+        ],
+        [
+         "2026-11-09",
+         5.1364
+        ],
+        [
+         "2026-11-10",
+         5.1906
+        ],
+        [
+         "2026-11-11",
+         5.2044
+        ],
+        [
+         "2026-11-12",
+         5.2514
+        ]
+       ]
+      },
+      {
        "nom": "JPY",
        "points": [
         [
@@ -11759,7 +12391,7 @@
      "raison": null
     }
    ],
-   "actualites_maj": "2026-11-16T09:55+00:00",
+   "actualites_maj": "2026-11-16T10:22+00:00",
    "actualites_nb_titres_lus": 25,
    "notes": [
     "Dette et solde publics : FMI (annuel, avec 1 à 3 ans de retard) ; EUR = Allemagne. Pas de série gratuite pour CHF et NZD.",
@@ -12388,23 +13020,121 @@
     {
      "id": "dix_gbp",
      "libelle": "10 ans Royaume-Uni",
-     "valeur": null,
-     "texte": null,
-     "unite": null,
-     "date": null,
-     "frequence": null,
-     "age_jours": null,
-     "source": null,
-     "raison": "pas de rendement 10 ans gratuit",
-     "variation": null,
-     "percentile_5a": null,
-     "n_5a": null,
+     "valeur": 5.2514,
+     "texte": "5,25 %",
+     "unite": "%",
+     "date": "2026-11-12",
+     "frequence": "quotidien",
+     "age_jours": 4,
+     "source": "Banque d'Angleterre (par yield 10 ans, IUDMNPY)",
+     "raison": null,
+     "variation": {
+      "valeur": -5.8,
+      "unite": "pb",
+      "periode": "4 semaines",
+      "texte": "−6 pb sur 4 semaines"
+     },
+     "percentile_5a": 97,
+     "n_5a": 262,
      "percentile_autre": null,
      "raison_percentile": null,
      "courbe": {
-      "points": [],
+      "points": [
+       [
+        "2026-10-13",
+        5.3928
+       ],
+       [
+        "2026-10-14",
+        5.383
+       ],
+       [
+        "2026-10-15",
+        5.3092
+       ],
+       [
+        "2026-10-16",
+        5.2987
+       ],
+       [
+        "2026-10-19",
+        5.374
+       ],
+       [
+        "2026-10-20",
+        5.3516
+       ],
+       [
+        "2026-10-21",
+        5.3337
+       ],
+       [
+        "2026-10-22",
+        5.2784
+       ],
+       [
+        "2026-10-23",
+        5.3152
+       ],
+       [
+        "2026-10-26",
+        5.3048
+       ],
+       [
+        "2026-10-27",
+        5.3046
+       ],
+       [
+        "2026-10-28",
+        5.3087
+       ],
+       [
+        "2026-10-29",
+        5.2589
+       ],
+       [
+        "2026-10-30",
+        5.2497
+       ],
+       [
+        "2026-11-02",
+        5.1677
+       ],
+       [
+        "2026-11-03",
+        5.2098
+       ],
+       [
+        "2026-11-04",
+        5.1364
+       ],
+       [
+        "2026-11-05",
+        5.1392
+       ],
+       [
+        "2026-11-06",
+        5.1184
+       ],
+       [
+        "2026-11-09",
+        5.1364
+       ],
+       [
+        "2026-11-10",
+        5.1906
+       ],
+       [
+        "2026-11-11",
+        5.2044
+       ],
+       [
+        "2026-11-12",
+        5.2514
+       ]
+      ],
       "periode": "30 jours",
-      "raison": "pas d'historique pour une mini-courbe"
+      "raison": null
      },
      "lecture": null
     },
@@ -40818,10 +41548,10 @@
    "titre": "Pas de régime de risque net, dollar soutenu",
    "titre_impose": false,
    "texte_python": null,
-   "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
+   "texte_indisponible": null,
    "phrases_retirees": 0,
-   "texte": null,
-   "texte_redige_par": null,
+   "texte": "Le biais global neutre et le classement mitigé (AUD 44, NZD 35, CNY 30) montrent que les signaux de marché sont partagés sans direction dominante nette.",
+   "texte_redige_par": "Flash-Lite 3.5",
    "direction": {
     "dollar": "haussier",
     "risque": "neutre",
@@ -41053,7 +41783,7 @@
      "conviction": 3,
      "conviction_niveau": "eleve",
      "regle": "dollar : variation hebdomadaire du 2 ans US (≥ +10 pb haussier, ≤ -10 pb baissier)",
-     "raison_couleur": "Vert (Dollar haussier) : dollar : variation hebdomadaire du 2 ans US (≥ +10 pb haussier, ≤ -10 pb baissier). Chiffre du jour : USD taux directeur 3.88% le 2026-11-11 (baisse, précédent 4.00%)"
+     "raison_couleur": "Vert (Dollar haussier) : dollar : variation hebdomadaire du 2 ans US (≥ +10 pb haussier, ≤ -10 pb baissier). Chiffre du jour : USD taux directeur 3.88% le 2026-11-12 (baisse, précédent 4.00%)"
     }
    },
    {
@@ -41697,9 +42427,9 @@
       "conviction": 3,
       "conviction_niveau": "eleve"
      },
-     "a_retenir": "Direction calculée : Dollar haussier · Risque neutre.",
-     "a_retenir_source": "calcul Python",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
+     "a_retenir": "Le biais global neutre et le classement mitigé (AUD 44, NZD 35, CNY 30) montrent que les signaux de marché sont partagés sans direction dominante nette.",
+     "a_retenir_source": "modèle",
+     "texte_indisponible": null,
      "raison_couleur": "Vert (Dollar haussier · Risque neutre) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (3 accords, 0 désaccord). Chiffre du jour : Biais global neutre ; classement : AUD 44, NZD 35, CNY 30"
     },
     {
@@ -41722,9 +42452,9 @@
       "conviction": 3,
       "conviction_niveau": "eleve"
      },
-     "a_retenir": "Dollar haussier · Risque neutre. Règle Python : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (3 accords, 0 désaccord).",
-     "a_retenir_source": "calcul Python",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
+     "a_retenir": "Le biais global neutre et le classement mitigé (AUD 44, NZD 35, CNY 30) montrent que les signaux de marché sont partagés sans direction dominante nette.",
+     "a_retenir_source": "modèle",
+     "texte_indisponible": null,
      "raison_couleur": "Vert (Dollar haussier · Risque neutre) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (3 accords, 0 désaccord). Chiffre du jour : Biais global neutre ; classement : AUD 44, NZD 35, CNY 30"
     },
     {
@@ -41747,10 +42477,10 @@
       "conviction": 3,
       "conviction_niveau": "eleve"
      },
-     "a_retenir": "Dollar haussier. Règle Python : dollar : variation hebdomadaire du 2 ans US (≥ +10 pb haussier, ≤ -10 pb baissier).",
-     "a_retenir_source": "calcul Python",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
-     "raison_couleur": "Vert (Dollar haussier) : dollar : variation hebdomadaire du 2 ans US (≥ +10 pb haussier, ≤ -10 pb baissier). Chiffre du jour : USD taux directeur 3.88% le 2026-11-11 (baisse, précédent 4.00%)"
+     "a_retenir": "Le rendement US 2 ans s'établit à 4,86 %, en hausse de 40 pb sur une semaine, tandis que le taux directeur US est abaissé à 3,88 % le 2026-11-12.",
+     "a_retenir_source": "modèle",
+     "texte_indisponible": null,
+     "raison_couleur": "Vert (Dollar haussier) : dollar : variation hebdomadaire du 2 ans US (≥ +10 pb haussier, ≤ -10 pb baissier). Chiffre du jour : USD taux directeur 3.88% le 2026-11-12 (baisse, précédent 4.00%)"
     },
     {
      "numero": 3,
@@ -41772,9 +42502,9 @@
       "conviction": 1,
       "conviction_niveau": "faible"
      },
-     "a_retenir": "Dollar haussier. Règle Python : dollar : indice de surprise 30 j de l'USD (≥ +0,3 haussier, ≤ -0,3 baissier).",
-     "a_retenir_source": "calcul Python",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
+     "a_retenir": "L'indice de surprise macroéconomique à 30 jours atteint +0,94 pour l'USD, contre −1,62 pour le NZD et −0,56 pour le CAD.",
+     "a_retenir_source": "modèle",
+     "texte_indisponible": null,
      "raison_couleur": "Vert (Dollar haussier) : dollar : indice de surprise 30 j de l'USD (≥ +0,3 haussier, ≤ -0,3 baissier). Chiffre du jour : Indice de surprise 30 j : USD +0.94, EUR -0.33, GBP +0.34, JPY -0.14, CHF +0.45, CAD -0.56, AUD +0.54, NZD -1.62, CNY -0.02"
     },
     {
@@ -41797,9 +42527,9 @@
       "conviction": 1,
       "conviction_niveau": "faible"
      },
-     "a_retenir": "Dollar neutre. Règle Python : dollar : case USD de la matrice d'impact (Neutre : prime de terme 10 ans US, variation sur 4 semaines (prime de risque budgétaire) : −20 pb, aucun effet sur USD).",
-     "a_retenir_source": "calcul Python",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
+     "a_retenir": "Le rendement du 10 ans US s'établit à 5,15 % en hausse de 6 pb sur 4 semaines, avec une prime de terme à 0,87 % et une dette sur PIB de 121,2 %.",
+     "a_retenir_source": "modèle",
+     "texte_indisponible": null,
      "raison_couleur": "Gris (Dollar neutre) : dollar : case USD de la matrice d'impact (Neutre : prime de terme 10 ans US, variation sur 4 semaines (prime de risque budgétaire) : −20 pb, aucun effet sur USD). Chiffre du jour : USD : 10 ans 5.15 % (+6 pb sur 4 semaines), prime de terme 10 ans 0.87 %, dette / PIB 121.2 % (2026-04)"
     },
     {
@@ -41823,9 +42553,9 @@
       "conviction": 2,
       "conviction_niveau": "moyen"
      },
-     "a_retenir": "Dollar neutre · Risque neutre. Règle Python : risque : VIX (≥ 25 ou +25 % sur 7 j : risk off ; ≤ 14 sans hausse : risk on) ; dollar : indice dollar large Fed sur 7 j (±0,5 %).",
-     "a_retenir_source": "calcul Python",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
+     "a_retenir": "Le VIX s'établit à 18,7 le 2026-11-12, en recul de 33,6 % sur 7 jours, tandis que l'indice or (proxy) — NASDAQ QGLDI recule à 2385,34 (−4,04 % sur 7 j).",
+     "a_retenir_source": "modèle",
+     "texte_indisponible": null,
      "raison_couleur": "Gris (Dollar neutre · Risque neutre) : risque : VIX (≥ 25 ou +25 % sur 7 j : risk off ; ≤ 14 sans hausse : risk on) ; dollar : indice dollar large Fed sur 7 j (±0,5 %). Chiffre du jour : VIX 18.7 le 2026-11-12 (-33.6 % sur 7 j)"
     },
     {
@@ -41848,9 +42578,9 @@
       "conviction": 2,
       "conviction_niveau": "moyen"
      },
-     "a_retenir": "Dollar haussier · Risk off. Règle Python : dollar : case USD de la matrice d'impact (Soutien : titres du jour au canal « refuge (conflits) » ≥ 3 titres → +1 pour USD) ; risque : matrice d'impact, devises risque − refuge = -2.",
-     "a_retenir_source": "calcul Python",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
+     "a_retenir": "Le fil d'actualité enregistre 4 titres classés dans le canal refuge (conflits), signalant des tensions géopolitiques accrues au Moyen-Orient.",
+     "a_retenir_source": "modèle",
+     "texte_indisponible": null,
      "raison_couleur": "Rouge (Dollar haussier · Risk off) : dollar : case USD de la matrice d'impact (Soutien : titres du jour au canal « refuge (conflits) » ≥ 3 titres → +1 pour USD) ; risque : matrice d'impact, devises risque − refuge = -2. Chiffre du jour : Titres du jour par canal de transmission : Énergie 1, Commerce 1, Refuge (conflits) 4"
     },
     {
@@ -41873,9 +42603,9 @@
       "conviction": 2,
       "conviction_niveau": "moyen"
      },
-     "a_retenir": "Dollar haussier · Risk off. Règle Python : dollar : indice USD synthétique sur 5 j (±0,3 %) ; risque : devises risque vs refuge sur 5 j (±0,3 pt) ; COT : positionnement décrit, extrêmes signalés (pas de direction tirée du COT seul).",
-     "a_retenir_source": "calcul Python",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
+     "a_retenir": "L'indice USD synthétique progresse de +0,50 % sur 5 jours avec un RSI à 68,4, tandis que l'écart de force risque-refuge s'établit à −0,54 pt.",
+     "a_retenir_source": "modèle",
+     "texte_indisponible": null,
      "raison_couleur": "Rouge (Dollar haussier · Risk off) : dollar : indice USD synthétique sur 5 j (±0,3 %) ; risque : devises risque vs refuge sur 5 j (±0,3 pt) ; COT : positionnement décrit, extrêmes signalés (pas de direction tirée du COT seul). Chiffre du jour : Indice USD synthétique +0.50 % sur 5 j, RSI 68.4, tendance de fond haussier"
     },
     {
@@ -41898,9 +42628,9 @@
       "conviction": 2,
       "conviction_niveau": "moyen"
      },
-     "a_retenir": "Dollar neutre. Règle Python : dollar : case USD de la matrice d'impact (Sans règle : aucune règle de cet engrenage ne concerne USD).",
-     "a_retenir_source": "calcul Python",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
+     "a_retenir": "Le WTI s'établit à 89,62 $ le 2026-11-11 (−2,3 % sur 7 j) et les stocks de brut US augmentent de +4,7 M de barils sur la semaine à 414,4 M.",
+     "a_retenir_source": "modèle",
+     "texte_indisponible": null,
      "raison_couleur": "Gris (Dollar neutre) : dollar : case USD de la matrice d'impact (Sans règle : aucune règle de cet engrenage ne concerne USD). Chiffre du jour : WTI 89.62 $ le 2026-11-11 (-2.3 % sur 7 j)"
     }
    ],
@@ -41912,10 +42642,40 @@
     "Hachures : aucune direction déterminée"
    ]
   },
-  "chaines": [],
-  "conflits": [],
-  "statut_texte": "indisponible",
-  "redige_par": null
+  "chaines": [
+   {
+    "titre": "Transmission du taux court vers le dollar",
+    "maillons": [
+     {
+      "engrenage": 2,
+      "texte": "La hausse du rendement US à 2 ans (+40 pb) renforce l'attrait des placements en dollars.",
+      "non_sourcee": false
+     },
+     {
+      "engrenage": 7,
+      "texte": "L'indice USD synthétique progresse en conséquence de +0,50 % sur 5 jours avec une tendance haussière.",
+      "non_sourcee": false
+     },
+     {
+      "engrenage": 1,
+      "texte": "Ce faisceau d'indices valide un biais global neutre mais un dollar globalement orienté à la hausse.",
+      "non_sourcee": false
+     }
+    ]
+   }
+  ],
+  "conflits": [
+   {
+    "engrenages": [
+     2,
+     5
+    ],
+    "texte": "Conflit entre la tension monétaire sur le 2 ans US (favorable au dollar) et la forte baisse de la volatilité (VIX en recul de 33,6 %), ce qui traduit un optimisme de marché en décalage avec le resserrement obligataire.",
+    "origine": "modèle"
+   }
+  ],
+  "statut_texte": "ok",
+  "redige_par": "Flash-Lite 3.5"
  },
  "matrice_impact": {
   "lignes": [
@@ -43887,9 +44647,9 @@
    "cases_total": 72,
    "compte_matrice": "16 actives, 5 n/d, 21 sans règle, 2 neutralisées",
    "explication": "Engrenages orientés : 2. Monétaire (Dollar haussier) ; 3. Données (Dollar haussier) ; 6. Géopolitique (Dollar haussier · Risk off) ; 7. Flux (Dollar haussier · Risk off). Les autres restent dans leur couloir neutre.",
-   "texte": null,
-   "texte_source": "calcul Python",
-   "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
+   "texte": "Le biais global neutre et le classement mitigé (AUD 44, NZD 35, CNY 30) montrent que les signaux de marché sont partagés sans direction dominante nette.",
+   "texte_source": "modèle",
+   "texte_indisponible": null,
    "date_rapport": "2026-11-16"
   },
   "thermometres": [
@@ -45762,8 +46522,8 @@
       },
       {
        "date": "2026-11-16",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "up",
+       "libelle": "Dollar haussier · Risque neutre"
       }
      ]
     },
@@ -45843,8 +46603,8 @@
       },
       {
        "date": "2026-11-16",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "up",
+       "libelle": "Dollar haussier"
       }
      ]
     },
@@ -45924,8 +46684,8 @@
       },
       {
        "date": "2026-11-16",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "up",
+       "libelle": "Dollar haussier"
       }
      ]
     },
@@ -46005,8 +46765,8 @@
       },
       {
        "date": "2026-11-16",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "nd",
+       "libelle": "Dollar neutre"
       }
      ]
     },
@@ -46086,8 +46846,8 @@
       },
       {
        "date": "2026-11-16",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "nd",
+       "libelle": "Dollar neutre · Risque neutre"
       }
      ]
     },
@@ -46167,8 +46927,8 @@
       },
       {
        "date": "2026-11-16",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "dn",
+       "libelle": "Dollar haussier · Risk off"
       }
      ]
     },
@@ -46248,8 +47008,8 @@
       },
       {
        "date": "2026-11-16",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "dn",
+       "libelle": "Dollar haussier · Risk off"
       }
      ]
     },
@@ -46329,8 +47089,8 @@
       },
       {
        "date": "2026-11-16",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "nd",
+       "libelle": "Dollar neutre"
       }
      ]
     }
@@ -46436,12 +47196,12 @@
      "raison": "pas d'indicateur du simulateur pour cet engrenage (thème : synthèse des autres)"
     },
     "lecture": {
-     "texte": null,
-     "source": "calcul Python",
+     "texte": "Le biais global neutre et le classement mitigé (AUD 44, NZD 35, CNY 30) montrent que les signaux de marché sont partagés sans direction dominante nette.",
+     "source": "modèle",
      "phrase_python": "Dollar haussier · Risque neutre. Seuil de thème établi : 3 alignés.",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
-     "redige_par": null,
-     "redige_le": null,
+     "texte_indisponible": null,
+     "redige_par": "Flash-Lite 3.5",
+     "redige_le": "2026-11-16T10:21:35+00:00",
      "redige_avant_recalcul": false
     }
    },
@@ -47594,12 +48354,12 @@
      "source": "simulateur d'impact (docs/data/impact.json), 5 ans"
     },
     "lecture": {
-     "texte": null,
-     "source": "calcul Python",
+     "texte": "Le rendement US 2 ans s'établit à 4,86 %, en hausse de 40 pb sur une semaine, tandis que le taux directeur US est abaissé à 3,88 % le 2026-11-12.",
+     "source": "modèle",
      "phrase_python": "Dollar haussier. seuils ±10 pb. Fed à 3,88 % effectif, 2 ans +37 pb sur 7 jours.",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
-     "redige_par": null,
-     "redige_le": null,
+     "texte_indisponible": null,
+     "redige_par": "Flash-Lite 3.5",
+     "redige_le": "2026-11-16T10:21:35+00:00",
      "redige_avant_recalcul": false
     }
    },
@@ -47857,12 +48617,12 @@
      "source": "simulateur d'impact (docs/data/impact.json), 5 ans"
     },
     "lecture": {
-     "texte": null,
-     "source": "calcul Python",
+     "texte": "L'indice de surprise macroéconomique à 30 jours atteint +0,94 pour l'USD, contre −1,62 pour le NZD et −0,56 pour le CAD.",
+     "source": "modèle",
      "phrase_python": "Dollar haussier. seuils ±0,30. Plus fortes surprises ailleurs : NZD −1,62, CAD −0,56.",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
-     "redige_par": null,
-     "redige_le": null,
+     "texte_indisponible": null,
+     "redige_par": "Flash-Lite 3.5",
+     "redige_le": "2026-11-16T10:21:35+00:00",
      "redige_avant_recalcul": false
     }
    },
@@ -49069,12 +49829,12 @@
      "source": "simulateur d'impact (docs/data/impact.json), 5 ans"
     },
     "lecture": {
-     "texte": null,
-     "source": "calcul Python",
+     "texte": "Le rendement du 10 ans US s'établit à 5,15 % en hausse de 6 pb sur 4 semaines, avec une prime de terme à 0,87 % et une dette sur PIB de 121,2 %.",
+     "source": "modèle",
      "phrase_python": "Dollar neutre. seuils haut 20 pb. 10 ans US 5,15 %, dette fédérale / PIB 121,2 % (2026-04).",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
-     "redige_par": null,
-     "redige_le": null,
+     "texte_indisponible": null,
+     "redige_par": "Flash-Lite 3.5",
+     "redige_le": "2026-11-16T10:21:35+00:00",
      "redige_avant_recalcul": false
     }
    },
@@ -50912,12 +51672,12 @@
      "source": "simulateur d'impact (docs/data/impact.json), 5 ans"
     },
     "lecture": {
-     "texte": null,
-     "source": "calcul Python",
+     "texte": "Le VIX s'établit à 18,7 le 2026-11-12, en recul de 33,6 % sur 7 jours, tandis que l'indice or (proxy) — NASDAQ QGLDI recule à 2385,34 (−4,04 % sur 7 j).",
+     "source": "modèle",
      "phrase_python": "Dollar neutre · Risque neutre. seuils bas 14,00 / haut 25,00. Indice dollar +0,18 % sur 7 jours, VIX à 18,7.",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
-     "redige_par": null,
-     "redige_le": null,
+     "texte_indisponible": null,
+     "redige_par": "Flash-Lite 3.5",
+     "redige_le": "2026-11-16T10:21:35+00:00",
      "redige_avant_recalcul": false
     }
    },
@@ -51423,12 +52183,12 @@
      "source": "simulateur d'impact (docs/data/impact.json), 5 ans"
     },
     "lecture": {
-     "texte": null,
-     "source": "calcul Python",
+     "texte": "Le fil d'actualité enregistre 4 titres classés dans le canal refuge (conflits), signalant des tensions géopolitiques accrues au Moyen-Orient.",
+     "source": "modèle",
      "phrase_python": "Dollar haussier · Risk off. seuils haut 3. Canaux : refuge (conflits) 4, énergie 1, commerce 1.",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
-     "redige_par": null,
-     "redige_le": null,
+     "texte_indisponible": null,
+     "redige_par": "Flash-Lite 3.5",
+     "redige_le": "2026-11-16T10:21:35+00:00",
      "redige_avant_recalcul": false
     }
    },
@@ -52346,12 +53106,12 @@
      "source": "simulateur d'impact (docs/data/impact.json), 5 ans"
     },
     "lecture": {
-     "texte": null,
-     "source": "calcul Python",
+     "texte": "L'indice USD synthétique progresse de +0,50 % sur 5 jours avec un RSI à 68,4, tandis que l'écart de force risque-refuge s'établit à −0,54 pt.",
+     "source": "modèle",
      "phrase_python": "Dollar haussier · Risk off. seuils ±0,30 %. RSI USD 68,4, +0,50 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 2 autres.",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
-     "redige_par": null,
-     "redige_le": null,
+     "texte_indisponible": null,
+     "redige_par": "Flash-Lite 3.5",
+     "redige_le": "2026-11-16T10:21:35+00:00",
      "redige_avant_recalcul": false
     }
    },
@@ -53670,12 +54430,12 @@
      "source": "simulateur d'impact (docs/data/impact.json), 5 ans"
     },
     "lecture": {
-     "texte": null,
-     "source": "calcul Python",
+     "texte": "Le WTI s'établit à 89,62 $ le 2026-11-11 (−2,3 % sur 7 j) et les stocks de brut US augmentent de +4,7 M de barils sur la semaine à 414,4 M.",
+     "source": "modèle",
      "phrase_python": "Dollar neutre. seuils ±10,00 %. Stocks +4,7 M de barils sur la semaine, Brent à 92,14 $.",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
-     "redige_par": null,
-     "redige_le": null,
+     "texte_indisponible": null,
+     "redige_par": "Flash-Lite 3.5",
+     "redige_le": "2026-11-16T10:21:35+00:00",
      "redige_avant_recalcul": false
     }
    }
