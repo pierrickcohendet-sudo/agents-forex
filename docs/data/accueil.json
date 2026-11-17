@@ -1,6 +1,6 @@
 {
- "genere_le": "2026-11-16T21:19:54+00:00",
- "date_rapport": "2026-11-16",
+ "genere_le": "2026-11-17T03:16:56+00:00",
+ "date_rapport": "2026-11-17",
  "theme": {
   "titre": "Pas de régime de risque net, dollar soutenu",
   "titre_impose": false,
@@ -9,12 +9,12 @@
    "classe": "up"
   },
   "conviction": "eleve",
-  "alignes": 4,
+  "alignes": 5,
   "evaluables": 7,
-  "compte_matrice": "16 actives, 5 n/d, 21 sans règle, 2 neutralisées",
-  "explication": "Engrenages orientés : 2. Monétaire (Dollar haussier) ; 3. Données (Dollar haussier) ; 6. Géopolitique (Dollar haussier · Risk off) ; 7. Flux (Dollar haussier · Risk off). Les autres restent dans leur couloir neutre.",
-  "texte": "Le biais global neutre et le classement mitigé (AUD 44, NZD 35, CNY 30) montrent que les signaux de marché sont partagés sans direction dominante nette.",
-  "texte_source": "modèle"
+  "compte_matrice": "16 actives, 5 n/d, 23 sans règle, 2 neutralisées",
+  "explication": "Engrenages orientés : 2. Monétaire (Dollar haussier) ; 3. Données (Dollar haussier) ; 5. Marchés (Dollar haussier · Risque neutre) ; 6. Géopolitique (Dollar haussier · Risk off) ; 7. Flux (Dollar haussier · Risk off). Les autres restent dans leur couloir neutre.",
+  "texte": null,
+  "texte_source": "calcul Python"
  },
  "au_bord": [
   {
@@ -26,66 +26,36 @@
    "distance_texte": "0,05",
    "phrase": "indice de surprise macro 30 jours — CHF à +0,45 : 0,05 du seuil haut (+0,50), soit 5,0 % du couloir neutre",
    "etat": "proche",
-   "date": "2026-11-16",
+   "date": "2026-11-17",
    "source": "calcul Python (registre macro, 30 j)"
+  },
+  {
+   "id": "cot_percentile_52s-NZD",
+   "engrenage": 7,
+   "devise": "NZD",
+   "libelle": "positionnement spéculatif COT, lecture contrarienne (extrêmes) — NZD",
+   "texte_valeur": "15e pct",
+   "distance_texte": "5 pts",
+   "phrase": "positionnement spéculatif COT, lecture contrarienne (extrêmes) — NZD à 15e pct : 5 points du seuil bas (10e pct), soit 6,2 % du couloir neutre",
+   "etat": "proche",
+   "date": "2026-11-10",
+   "source": "CFTC (COT legacy, positions nettes non commerciales)"
   },
   {
    "id": "ecart_mm200-CNY",
    "engrenage": 7,
    "devise": "CNY",
    "libelle": "écart du cours à sa moyenne mobile 200 jours (tendance) — CNY",
-   "texte_valeur": "+1,72 %",
-   "distance_texte": "0,28 %",
-   "phrase": "écart du cours à sa moyenne mobile 200 jours (tendance) — CNY à +1,72 % : 0,28 % du seuil haut (+2,00 %), soit 7,0 % du couloir neutre",
+   "texte_valeur": "+1,71 %",
+   "distance_texte": "0,29 %",
+   "phrase": "écart du cours à sa moyenne mobile 200 jours (tendance) — CNY à +1,71 % : 0,29 % du seuil haut (+2,00 %), soit 7,3 % du couloir neutre",
    "etat": "proche",
-   "date": "2026-11-16",
+   "date": "2026-11-17",
    "source": "calcul Python (écart à la MM200) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période"
-  },
-  {
-   "id": "cot_percentile_52s-USD",
-   "engrenage": 7,
-   "devise": "USD",
-   "libelle": "positionnement spéculatif COT, lecture contrarienne (extrêmes) — USD",
-   "texte_valeur": "83e pct",
-   "distance_texte": "7 pts",
-   "phrase": "positionnement spéculatif COT, lecture contrarienne (extrêmes) — USD à 83e pct : 7 points du seuil haut (90e pct), soit 8,8 % du couloir neutre",
-   "etat": "proche",
-   "date": "2026-11-03",
-   "source": "CFTC (COT legacy, positions nettes non commerciales)"
   }
  ],
- "franchis": 24,
+ "franchis": 23,
  "evenements": [
-  {
-   "iso_utc": "2026-11-16T22:50+00:00",
-   "date_paris": "2026-11-16",
-   "heure_paris": "23:50",
-   "devise": "AUD",
-   "evenement": "Discours de Bullock, gouverneure de la RBA",
-   "type": "Discours",
-   "impact": "fort",
-   "points": "●●●",
-   "precedent": null,
-   "consensus": null,
-   "publie": null,
-   "badge": null,
-   "engrenage": 2
-  },
-  {
-   "iso_utc": "2026-11-16T23:10+00:00",
-   "date_paris": "2026-11-17",
-   "heure_paris": "00:10",
-   "devise": "USD",
-   "evenement": "Discours de Barkin, membre du FOMC",
-   "type": "Discours",
-   "impact": "faible",
-   "points": "●○○",
-   "precedent": null,
-   "consensus": null,
-   "publie": null,
-   "badge": null,
-   "engrenage": 2
-  },
   {
    "iso_utc": "2026-11-17T02:00+00:00",
    "date_paris": "2026-11-17",
@@ -297,6 +267,21 @@
    "engrenage": 2
   },
   {
+   "iso_utc": "2026-11-18T17:15+00:00",
+   "date_paris": "2026-11-18",
+   "heure_paris": "18:15",
+   "devise": "USD",
+   "evenement": "Discours de Daly, membre du FOMC",
+   "type": "Discours",
+   "impact": "faible",
+   "points": "●○○",
+   "precedent": null,
+   "consensus": null,
+   "publie": null,
+   "badge": null,
+   "engrenage": 2
+  },
+  {
    "iso_utc": "2026-11-18T17:30+00:00",
    "date_paris": "2026-11-18",
    "heure_paris": "18:30",
@@ -397,6 +382,36 @@
    "points": "●○○",
    "precedent": null,
    "consensus": null,
+   "publie": null,
+   "badge": null,
+   "engrenage": 2
+  },
+  {
+   "iso_utc": "2026-11-19T00:30+00:00",
+   "date_paris": "2026-11-19",
+   "heure_paris": "01:30",
+   "devise": "AUD",
+   "evenement": "Variation de l'emploi",
+   "type": "Chiffre",
+   "impact": "fort",
+   "points": "●●●",
+   "precedent": "-39.3K",
+   "consensus": "25.2K",
+   "publie": null,
+   "badge": null,
+   "engrenage": 3
+  },
+  {
+   "iso_utc": "2026-11-19T00:30+00:00",
+   "date_paris": "2026-11-19",
+   "heure_paris": "01:30",
+   "devise": "AUD",
+   "evenement": "Taux de chômage",
+   "type": "Chiffre",
+   "impact": "fort",
+   "points": "●●●",
+   "precedent": "4.7%",
+   "consensus": "4.7%",
    "publie": null,
    "badge": null,
    "engrenage": 2
@@ -523,7 +538,7 @@
   "sources": 16,
   "vertes": 16,
   "alertes": [],
-  "calcule_le": "2026-11-16T21:19:54+00:00"
+  "calcule_le": "2026-11-17T03:16:56+00:00"
  },
  "note": "Tableau de bord du jour : faits datés et lectures historiques, jamais un ordre d'achat ou de vente."
 }
