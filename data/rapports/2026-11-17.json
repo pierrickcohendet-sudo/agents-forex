@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-17T20:20:04+00:00",
+  "genere_le": "2026-11-17T21:19:45+00:00",
   "appels_llm": [
    {
     "heure": "08:22",
@@ -344,40 +344,6 @@
    }
   },
   "disjoncteur": [
-   {
-    "heure": "10:20",
-    "actif": true,
-    "seuil_echecs": 3,
-    "ouvert": false,
-    "appels_total": 4,
-    "replis_json_modele_suivant": 0,
-    "modeles": [
-     {
-      "modele": "gemini-3.5-flash",
-      "ouvert": false,
-      "cause": null,
-      "ouvert_a_l_appel": null,
-      "echecs_consecutifs": 0,
-      "ignores": 4
-     },
-     {
-      "modele": "gemini-3.8-flash",
-      "ouvert": false,
-      "cause": null,
-      "ouvert_a_l_appel": null,
-      "echecs_consecutifs": 1,
-      "ignores": 0
-     },
-     {
-      "modele": "gemini-3.5-flash-lite",
-      "ouvert": false,
-      "cause": null,
-      "ouvert_a_l_appel": null,
-      "echecs_consecutifs": 0,
-      "ignores": 0
-     }
-    ]
-   },
    {
     "heure": "11:20",
     "actif": true,
@@ -720,6 +686,40 @@
    },
    {
     "heure": "20:20",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 3,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 3
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
+   },
+   {
+    "heure": "21:20",
     "actif": true,
     "seuil_echecs": 3,
     "ouvert": false,
@@ -1561,7 +1561,7 @@
     "libelle": "Flash 3.5"
    },
    "version": "quotidienne",
-   "rafraichi_le": "2026-11-17T20:20:04+00:00"
+   "rafraichi_le": "2026-11-17T21:19:45+00:00"
   },
   "classement_devises": [],
   "devises_indisponibles": [
@@ -4271,6 +4271,13 @@
    "detail": "vix (VIXCLS)",
    "date": "2026-11-16",
    "url": "https://fred.stlouisfed.org/series/VIXCLS"
+  },
+  {
+   "id": "src_178",
+   "source": "FRED",
+   "detail": "taux_fed (DFF)",
+   "date": "2026-11-16",
+   "url": "https://fred.stlouisfed.org/series/DFF"
   }
  ],
  "donnees_non_rafraichies": [],
