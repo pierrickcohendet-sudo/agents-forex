@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-17T13:19:41+00:00",
+  "genere_le": "2026-11-17T14:19:56+00:00",
   "appels_llm": [
    {
     "heure": "08:22",
@@ -175,7 +175,7 @@
    "engrenages_faits": true,
    "reserve_engrenages": 8,
    "refus_reserve_ce_run": 0,
-   "refus_budget_ce_run": 11,
+   "refus_budget_ce_run": 12,
    "budget": {
     "plafond": 60,
     "mode": "complément",
@@ -581,6 +581,40 @@
       "ignores": 0
      }
     ]
+   },
+   {
+    "heure": "14:20",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 3,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 3
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
    }
   ]
  },
@@ -859,14 +893,14 @@
      ],
      "donnees_calculees": [
       {
-       "texte": "Indice de surprise 30 j : USD +0.94, EUR -0.33, GBP +0.36, JPY -0.14, CHF +0.45, CAD -0.57, AUD +0.54, NZD -1.73, CNY -0.02",
+       "texte": "Indice de surprise 30 j : USD +0.87, EUR -0.33, GBP +0.36, JPY -0.14, CHF +0.45, CAD -0.57, AUD +0.54, NZD -1.73, CNY -0.02",
        "source_id": "src_148"
       }
      ],
      "sources_indisponibles": [],
      "mesure": {
       "libelle": "surprise USD 30 j",
-      "valeur": 0.94,
+      "valeur": 0.87,
       "unite": "écarts",
       "seuil_bas": -0.3,
       "seuil_haut": 0.3,
@@ -1391,7 +1425,7 @@
     "libelle": "Flash 3.5"
    },
    "version": "quotidienne",
-   "rafraichi_le": "2026-11-17T13:19:41+00:00"
+   "rafraichi_le": "2026-11-17T14:19:56+00:00"
   },
   "classement_devises": [],
   "devises_indisponibles": [
@@ -1544,10 +1578,10 @@
     "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
    },
    "indice_surprise_30j": {
-    "indice": 0.94,
+    "indice": 0.87,
     "precedent": 0.28,
     "tendance": "hausse",
-    "n": 6
+    "n": 7
    },
    "historique_score_7j": [
     {
@@ -6897,14 +6931,15 @@
    "tableau macro : USD/CPI core annuel : publication manquée (prévue le 10/11, aucun « réel » reçu)",
    "tableau macro : CNY/PMI manufacturier : publication manquée (prévue le 31/10, aucun « réel » reçu)",
    "tableau macro : CNY/PMI services : publication manquée (prévue le 31/10, aucun « réel » reçu)",
+   "tableau macro : USD/Ventes au détail : divergence de sources — ForexFactory 0.2% vs FRED 0.8% (pér. 2026-09, RSAFS)",
    "tableau macro : CNY/Balance commerciale : publication manquée (prévue le 10/11, aucun « réel » reçu)"
   ],
   "indice_surprise_30j": {
    "USD": {
-    "indice": 0.94,
+    "indice": 0.87,
     "precedent": 0.28,
     "tendance": "hausse",
-    "n": 6
+    "n": 7
    },
    "EUR": {
     "indice": -0.33,
@@ -7014,7 +7049,7 @@
  },
  "controle_qualite": {
   "conforme": false,
-  "nb_anomalies": 15,
+  "nb_anomalies": 16,
   "anomalies": [
    "USD : analyse indisponible aujourd'hui (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)) — exclue du classement",
    "EUR : analyse indisponible aujourd'hui (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)) — exclue du classement",
@@ -7029,6 +7064,7 @@
    "tableau macro : USD/CPI core annuel : publication manquée (prévue le 10/11, aucun « réel » reçu)",
    "tableau macro : CNY/PMI manufacturier : publication manquée (prévue le 31/10, aucun « réel » reçu)",
    "tableau macro : CNY/PMI services : publication manquée (prévue le 31/10, aucun « réel » reçu)",
+   "tableau macro : USD/Ventes au détail : divergence de sources — ForexFactory 0.2% vs FRED 0.8% (pér. 2026-09, RSAFS)",
    "tableau macro : CNY/Balance commerciale : publication manquée (prévue le 10/11, aucun « réel » reçu)",
    "prompt LLM volumineux : 9 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 25602 à 08:22 UTC, modèle gemini-3.5-flash) — le contexte envoyé au LLM a regrossi"
   ]
