@@ -3,12 +3,13 @@
  "modeles": {
   "gemini-3.5-flash": {
    "appels": 1,
-   "epuise_jusqu_a": "2026-11-17T07:59:59+00:00",
-   "pannes": 15
+   "epuise_jusqu_a": "2026-11-18T07:59:59+00:00",
+   "pannes": 18
   },
   "gemini-3.8-flash": {
    "appels": 3,
-   "epuise_jusqu_a": "2026-11-17T07:59:59+00:00"
+   "epuise_jusqu_a": "2026-11-17T07:59:59+00:00",
+   "pannes": 1
   },
   "gemini-3.5-flash-lite": {
    "appels": 0,
@@ -32,31 +33,32 @@
   },
   "analyses:USD-EUR-GBP": {
    "appels": 0,
-   "echecs": 2,
+   "echecs": 4,
    "ok": false,
    "types": {
-    "503": 2
+    "503": 4
    },
    "dernier_echec": "503"
   },
   "analyses:JPY-CHF-CAD": {
    "appels": 0,
-   "echecs": 2,
+   "echecs": 4,
    "ok": false,
    "types": {
-    "503": 1,
+    "503": 3,
     "delai": 1
    },
-   "dernier_echec": "delai"
+   "dernier_echec": "503"
   },
   "analyses:AUD-NZD-CNY": {
    "appels": 0,
-   "echecs": 2,
+   "echecs": 3,
    "ok": false,
    "types": {
-    "503": 2
+    "503": 2,
+    "429": 1
    },
-   "dernier_echec": "503"
+   "dernier_echec": "429"
   },
   "etat_du_monde": {
    "appels": 1,
@@ -75,10 +77,10 @@
   },
   "rapport:redaction": {
    "appels": 0,
-   "echecs": 2,
+   "echecs": 4,
    "ok": false,
    "types": {
-    "503": 2
+    "503": 4
    },
    "dernier_echec": "503"
   },
@@ -111,17 +113,18 @@
   }
  },
  "echecs": {
-  "503": 14,
-  "delai": 1
+  "503": 20,
+  "delai": 1,
+  "429": 1
  },
  "faits": [],
- "pannes": 15,
+ "pannes": 19,
  "pannes_avant_correctif": 0,
  "dernier_run": {
-  "id": "2026-11-17T08:19:14.344851+00:00",
-  "envois": 19,
-  "503": 14,
-  "recues": 4,
+  "id": "2026-11-17T09:19:10.617816+00:00",
+  "envois": 4,
+  "503": 3,
+  "recues": 0,
   "mode": "complément"
  }
 }
