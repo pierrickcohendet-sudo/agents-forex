@@ -239,7 +239,7 @@ export async function ecranJournal(section, parametre) {
         $("#tModif", cible).onclick = () => vueSaisie(jour, note);
         $("#tSuppr", cible).onclick = () => { $("#tConf", cible).hidden = false; $("#tSuppr", cible).hidden = true; $("#tOui", cible).focus(); };
         $("#tNon", cible).onclick = () => { $("#tConf", cible).hidden = true; $("#tSuppr", cible).hidden = false; };
-        $("#tOui", cible).onclick = async () => { try { await m.supprimerNote(note.id); await charger(); rendre(); vueJour(jour); } catch (e) { cible.appendChild(h("p", "j4-erreur", `Suppression impossible : ${esc(e.message || e)}`)); } };
+        $("#tOui", cible).onclick = async () => { try { await m.supprimerNote(note.id); await charger(); rendre(); if (notes.some(x => String(x.entree_locale || "").startsWith(jour))) vueJour(jour); else fermer(); } catch (e) { cible.appendChild(h("p", "j4-erreur", `Suppression impossible : ${esc(e.message || e)}`)); } };
       }
     }
     if (!ouvert) ouvrirPanneau();
