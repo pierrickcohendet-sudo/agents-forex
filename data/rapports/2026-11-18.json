@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-18T18:02:52+00:00",
+  "genere_le": "2026-11-18T19:19:06+00:00",
   "appels_llm": [
    {
     "heure": "08:20",
@@ -375,40 +375,6 @@
    }
   },
   "disjoncteur": [
-   {
-    "heure": "01:58",
-    "actif": true,
-    "seuil_echecs": 3,
-    "ouvert": false,
-    "appels_total": 15,
-    "replis_json_modele_suivant": 0,
-    "modeles": [
-     {
-      "modele": "gemini-3.5-flash",
-      "ouvert": false,
-      "cause": null,
-      "ouvert_a_l_appel": null,
-      "echecs_consecutifs": 0,
-      "ignores": 15
-     },
-     {
-      "modele": "gemini-3.8-flash",
-      "ouvert": false,
-      "cause": null,
-      "ouvert_a_l_appel": null,
-      "echecs_consecutifs": 0,
-      "ignores": 0
-     },
-     {
-      "modele": "gemini-3.5-flash-lite",
-      "ouvert": false,
-      "cause": null,
-      "ouvert_a_l_appel": null,
-      "echecs_consecutifs": 0,
-      "ignores": 0
-     }
-    ]
-   },
    {
     "heure": "08:34",
     "actif": true,
@@ -782,6 +748,40 @@
       "ignores": 0
      }
     ]
+   },
+   {
+    "heure": "19:19",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 11,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
    }
   ]
  },
@@ -970,7 +970,7 @@
      ],
      "donnees_calculees": [
       {
-       "texte": "Indice de surprise 30 j : USD +0.87, EUR -0.33, GBP +0.31, JPY +0.07, CHF +0.45, CAD -0.46, AUD +0.54, NZD -1.73, CNY -0.57",
+       "texte": "Indice de surprise 30 j : USD +0.87, EUR -0.19, GBP +0.31, JPY +0.07, CHF +0.45, CAD -0.46, AUD +0.54, NZD -1.73, CNY -0.57",
        "source_id": "src_148"
       }
      ],
@@ -1304,20 +1304,20 @@
      ],
      "donnees_calculees": [
       {
-       "texte": "WTI 89.62 $ le 2026-11-11 (-2.3 % sur 7 j)",
-       "source_id": "src_011",
+       "texte": "WTI 89.53 $ le 2026-11-17 (-0.1 % sur 7 j)",
+       "source_id": "src_278",
        "indicateur": "wti",
-       "valeur": 89.62,
-       "date": "2026-11-11",
+       "valeur": 89.53,
+       "date": "2026-11-17",
        "neutralise": false
       },
       {
-       "texte": "Brent 92.14 $ le 2026-11-11 (+0.3 % sur 7 j) — série heurtée (-14,2 % le 04/11, -10,6 % le 02/11 en une séance, chiffres EIA/FRED officiels) : variation sur 7 j à lire avec prudence",
-       "source_id": "src_012",
+       "texte": "Brent 92.94 $ le 2026-11-17 (+3.1 % sur 7 j) — au-delà du seuil mais neutralisé : série heurtée (-14,2 % le 04/11 en une séance, chiffres EIA/FRED officiels)",
+       "source_id": "src_279",
        "indicateur": "brent",
-       "valeur": 92.14,
-       "date": "2026-11-11",
-       "neutralise": false
+       "valeur": 92.94,
+       "date": "2026-11-17",
+       "neutralise": true
       },
       {
        "texte": "Stocks de brut US hors réserve stratégique : 414.4 M barils au 2026-11-06 (+4.7 M sur la semaine, -1.2 M sur 4 semaines)",
@@ -1470,7 +1470,7 @@
     "libelle": "Flash 3.5"
    },
    "version": "quotidienne",
-   "rafraichi_le": "2026-11-18T18:02:52+00:00"
+   "rafraichi_le": "2026-11-18T19:19:06+00:00"
   },
   "classement_devises": [
    {
@@ -1750,7 +1750,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 3,
-    "genere_le": "2026-11-18T18:02:52+00:00"
+    "genere_le": "2026-11-18T19:19:06+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.87,
@@ -2002,13 +2002,13 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 3,
-    "genere_le": "2026-11-18T18:02:52+00:00"
+    "genere_le": "2026-11-18T19:19:06+00:00"
    },
    "indice_surprise_30j": {
-    "indice": -0.33,
+    "indice": -0.19,
     "precedent": 0.11,
     "tendance": "baisse",
-    "n": 11
+    "n": 13
    },
    "historique_score_7j": [
     {
@@ -2244,7 +2244,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 3,
-    "genere_le": "2026-11-18T18:02:52+00:00"
+    "genere_le": "2026-11-18T19:19:06+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.31,
@@ -2491,7 +2491,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 1,
-    "genere_le": "2026-11-18T18:02:52+00:00"
+    "genere_le": "2026-11-18T19:19:06+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.07,
@@ -2742,7 +2742,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 1,
-    "genere_le": "2026-11-18T18:02:52+00:00"
+    "genere_le": "2026-11-18T19:19:06+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.45,
@@ -2994,7 +2994,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 1,
-    "genere_le": "2026-11-18T18:02:52+00:00"
+    "genere_le": "2026-11-18T19:19:06+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.46,
@@ -3246,7 +3246,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 3,
-    "genere_le": "2026-11-18T18:02:52+00:00"
+    "genere_le": "2026-11-18T19:19:06+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.54,
@@ -6083,6 +6083,20 @@
    "detail": "sp500 (SP500)",
    "date": "2026-11-17",
    "url": "https://fred.stlouisfed.org/series/SP500"
+  },
+  {
+   "id": "src_278",
+   "source": "FRED",
+   "detail": "petrole_wti (DCOILWTICO)",
+   "date": "2026-11-17",
+   "url": "https://fred.stlouisfed.org/series/DCOILWTICO"
+  },
+  {
+   "id": "src_279",
+   "source": "FRED",
+   "detail": "petrole_brent (DCOILBRENTEU)",
+   "date": "2026-11-17",
+   "url": "https://fred.stlouisfed.org/series/DCOILBRENTEU"
   }
  ],
  "donnees_non_rafraichies": [],
@@ -7774,10 +7788,6 @@
  "graphiques_marche": {
   "wti": {
    "dates": [
-    "2025-11-28",
-    "2025-12-05",
-    "2025-12-12",
-    "2025-12-19",
     "2025-12-26",
     "2026-01-02",
     "2026-01-09",
@@ -7903,13 +7913,13 @@
     "2026-11-06",
     "2026-11-09",
     "2026-11-10",
-    "2026-11-11"
+    "2026-11-11",
+    "2026-11-12",
+    "2026-11-13",
+    "2026-11-16",
+    "2026-11-17"
    ],
    "valeurs": [
-    58.58,
-    60.23,
-    57.61,
-    56.8,
     56.6,
     57.21,
     58.96,
@@ -8035,16 +8045,16 @@
     94.37,
     90.4,
     89.62,
-    89.62
+    89.62,
+    92.3,
+    91.96,
+    89.24,
+    89.53
    ],
    "source_canonique": "wti"
   },
   "brent": {
    "dates": [
-    "2025-12-05",
-    "2025-12-12",
-    "2025-12-19",
-    "2025-12-24",
     "2026-01-02",
     "2026-01-09",
     "2026-01-16",
@@ -8170,13 +8180,13 @@
     "2026-11-06",
     "2026-11-09",
     "2026-11-10",
-    "2026-11-11"
+    "2026-11-11",
+    "2026-11-12",
+    "2026-11-13",
+    "2026-11-16",
+    "2026-11-17"
    ],
    "valeurs": [
-    64.42,
-    62.11,
-    61.35,
-    63.7,
     61.98,
     65.11,
     66.97,
@@ -8302,7 +8312,11 @@
     97.83,
     91.03,
     90.16,
-    92.14
+    92.14,
+    95.42,
+    95.17,
+    92.9,
+    92.94
    ],
    "source_canonique": "brent"
   },
@@ -8896,10 +8910,10 @@
     "n": 7
    },
    "EUR": {
-    "indice": -0.33,
+    "indice": -0.19,
     "precedent": 0.11,
     "tendance": "baisse",
-    "n": 11
+    "n": 13
    },
    "GBP": {
     "indice": 0.31,
@@ -8953,8 +8967,8 @@
    "r60": -0.49
   },
   "EUR": {
-   "etat": "Sous pression",
-   "raison": "Signaux défavorables : surprises macro 30 j −0,3 ; force −2,2 % sur 20 séances.",
+   "etat": "Sans direction",
+   "raison": "Signaux défavorables : force −2,2 % sur 20 séances. Total −1 : il faut 2 signaux concordants.",
    "moteur": "Or (XAU/USD)",
    "r60": 0.47
   },

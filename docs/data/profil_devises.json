@@ -1,5 +1,5 @@
 {
- "genere_le": "2026-11-18T18:03:01+00:00",
+ "genere_le": "2026-11-18T19:19:11+00:00",
  "date": "2026-11-18",
  "devises": [
   {
@@ -382,20 +382,25 @@
      "valeur": 4.0,
      "texte": "4.0%",
      "cible": 2.0,
-     "date": "2026-11-04",
+     "date": "2026-11-18",
      "source": "ForexFactory",
      "ecart": 2.0,
      "raison": null
     },
     "surprise_30j": {
-     "indice": -0.33,
-     "n": 11,
+     "indice": -0.19,
+     "n": 13,
      "tendance": "baisse",
      "source": "indice de surprise 30 jours (tableau macro, calcul Python)",
      "raison": null
     },
-    "marquante": null,
-    "texte": "inflation 4,0 % (cible 2,0 %) · surprises 30 j −0,3"
+    "marquante": {
+     "z": 1.0,
+     "date": "2026-11-18",
+     "evenement": "IPC sous-jacent A/A, définitif",
+     "texte": "au-dessus du consensus (+0,1 pt, +1,0 σ)"
+    },
+    "texte": "inflation 4,0 % (cible 2,0 %) · surprises 30 j −0,2 · IPC sous-jacent A/A, définitif au-dessus du consensus (+0,1 pt, +1,0 σ)"
    },
    "semaine": {
     "score": 1,
@@ -412,21 +417,17 @@
     "source": "indice de force de la devise (Twelve Data raccordé à la Fed H.10, calcul Python)"
    },
    "etat": {
-    "valeur": "Sous pression",
-    "raison": "Signaux défavorables : surprises macro 30 j −0,3 ; force −2,2 % sur 20 séances.",
+    "valeur": "Sans direction",
+    "raison": "Signaux défavorables : force −2,2 % sur 20 séances. Total −1 : il faut 2 signaux concordants.",
     "signaux": [
-     {
-      "sens": -1,
-      "texte": "surprises macro 30 j −0,3"
-     },
      {
       "sens": -1,
       "texte": "force −2,2 % sur 20 séances"
      }
     ],
-    "total": -2
+    "total": -1
    },
-   "lecture": "L'or est en ce moment le moteur le plus corrélé à la devise (+0,47 sur 60 séances). Signaux défavorables : surprises macro 30 j −0,3 ; force −2,2 % sur 20 séances. Cette semaine : pas de catalyseur majeur dans l'Agenda."
+   "lecture": "L'or est en ce moment le moteur le plus corrélé à la devise (+0,47 sur 60 séances). Signaux défavorables : force −2,2 % sur 20 séances. Total −1 : il faut 2 signaux concordants. Cette semaine : pas de catalyseur majeur dans l'Agenda."
   },
   {
    "devise": "GBP",
