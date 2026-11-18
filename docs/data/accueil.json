@@ -1,34 +1,22 @@
 {
- "genere_le": "2026-11-18T14:19:20+00:00",
+ "genere_le": "2026-11-18T15:19:24+00:00",
  "date_rapport": "2026-11-18",
  "theme": {
-  "titre": "Pas de régime de risque net, dollar soutenu",
+  "titre": "Aversion au risque, dollar soutenu",
   "titre_impose": false,
   "direction": {
-   "libelle": "Dollar haussier · Risque neutre",
-   "classe": "up"
+   "libelle": "Dollar haussier · Risk off",
+   "classe": "dn"
   },
   "conviction": "eleve",
   "alignes": 3,
   "evaluables": 7,
-  "compte_matrice": "13 actives, 5 n/d, 23 sans règle, 2 neutralisées",
-  "explication": "Moteurs orientés : Banques centrales et taux (Dollar haussier) ; Chiffres économiques (Dollar haussier) ; Liens entre marchés (Dollar haussier · Risque neutre) ; Prix et positionnement (Dollar neutre · Risk off). Les autres restent dans leur couloir neutre.",
+  "compte_matrice": "18 actives, 5 n/d, 23 sans règle, 8 neutralisées",
+  "explication": "Moteurs orientés : Banques centrales et taux (Dollar haussier) ; Chiffres économiques (Dollar haussier) ; Liens entre marchés (Dollar haussier · Risk off) ; Prix et positionnement (Dollar neutre · Risk off). Les autres restent dans leur couloir neutre.",
   "texte": "Le dollar américain est porté par des signaux haussiers alignés sur la politique monétaire et les données économiques. Le sentiment de risque global reste neutre en l'absence de panique généralisée sur les marchés.",
   "texte_source": "modèle"
  },
  "au_bord": [
-  {
-   "id": "couverture-vix",
-   "engrenage": 5,
-   "devise": null,
-   "libelle": "niveau du VIX",
-   "texte_valeur": "22,91",
-   "distance_texte": "0,10",
-   "phrase": "niveau du VIX à 22,91 : 0,10 du seuil haut (23,01), soit 1,2 % du couloir neutre",
-   "etat": "proche",
-   "date": "2026-11-16",
-   "source": "FRED (VIXCLS)"
-  },
   {
    "id": "surprise_30j-CAD",
    "engrenage": 3,
@@ -52,9 +40,21 @@
    "etat": "proche",
    "date": "2026-11-18",
    "source": "calcul Python (registre macro, 30 j)"
+  },
+  {
+   "id": "cot_percentile_52s-NZD",
+   "engrenage": 7,
+   "devise": "NZD",
+   "libelle": "positionnement spéculatif COT, lecture contrarienne (extrêmes) — NZD",
+   "texte_valeur": "15e pct",
+   "distance_texte": "5 pts",
+   "phrase": "positionnement spéculatif COT, lecture contrarienne (extrêmes) — NZD à 15e pct : 5 points du seuil bas (10e pct), soit 6,2 % du couloir neutre",
+   "etat": "proche",
+   "date": "2026-11-10",
+   "source": "CFTC (COT legacy, positions nettes non commerciales)"
   }
  ],
- "franchis": 21,
+ "franchis": 23,
  "evenements": [
   {
    "iso_utc": "2026-11-18T14:25+00:00",
@@ -487,6 +487,36 @@
    "publie": null,
    "badge": null,
    "engrenage": 2
+  },
+  {
+   "iso_utc": "2026-11-20T15:00+00:00",
+   "date_paris": "2026-11-20",
+   "heure_paris": "16:00",
+   "devise": "USD",
+   "evenement": "Moral des consommateurs (université du Michigan), révisé",
+   "type": "Chiffre",
+   "impact": "moyen",
+   "points": "●●○",
+   "precedent": "51.0",
+   "consensus": "51.7",
+   "publie": null,
+   "badge": null,
+   "engrenage": 3
+  },
+  {
+   "iso_utc": "2026-11-20T15:00+00:00",
+   "date_paris": "2026-11-20",
+   "heure_paris": "16:00",
+   "devise": "USD",
+   "evenement": "Anticipations d'inflation (université du Michigan), révisé",
+   "type": "Chiffre",
+   "impact": "moyen",
+   "points": "●●○",
+   "precedent": "4.3%",
+   "consensus": null,
+   "publie": null,
+   "badge": null,
+   "engrenage": null
   }
  ],
  "raison_evenements": null,
@@ -610,7 +640,7 @@
   "sources": 16,
   "vertes": 16,
   "alertes": [],
-  "calcule_le": "2026-11-18T14:19:20+00:00"
+  "calcule_le": "2026-11-18T15:19:24+00:00"
  },
  "note": "Tableau de bord du jour : faits datés et lectures historiques, jamais un ordre d'achat ou de vente."
 }

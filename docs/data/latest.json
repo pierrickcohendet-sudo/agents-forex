@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-18T14:19:04+00:00",
+  "genere_le": "2026-11-18T15:19:09+00:00",
   "appels_llm": [
    {
     "heure": "08:20",
@@ -646,6 +646,40 @@
       "ignores": 0
      }
     ]
+   },
+   {
+    "heure": "15:19",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 11,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
    }
   ],
   "notion_url": "https://app.notion.com/p/FX-2026-11-18-quotidien-41c65bc64661811a8e30e60bf64a95c0"
@@ -664,11 +698,11 @@
      "donnees_insuffisantes": false,
      "direction": {
       "dollar": "haussier",
-      "risque": "neutre",
+      "risque": "risk_off",
       "calculee": {
        "dollar": "haussier",
-       "risque": "neutre",
-       "regle": "dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (3 accords, 0 désaccord)"
+       "risque": "risk_off",
+       "regle": "dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (5 accords, 0 désaccord)"
       },
       "origine": {
        "dollar": "calcul Python",
@@ -693,13 +727,14 @@
        "source_id": "src_137"
       },
       {
-       "texte": "Directions dollar des engrenages 2 à 8 : 3 haussières, 0 baissière, 4 neutres ; risque de l'engrenage 5 : neutre",
+       "texte": "Directions dollar des engrenages 2 à 8 : 3 haussières, 0 baissière, 4 neutres ; risque de l'engrenage 5 : risk_off",
        "source_id": "src_175"
       }
      ],
      "sources_indisponibles": [],
      "mesure": null,
-     "non_source": false
+     "non_source": false,
+     "texte_redige_avant_recalcul": true
     },
     {
      "numero": 2,
@@ -936,10 +971,10 @@
      "donnees_insuffisantes": false,
      "direction": {
       "dollar": "haussier",
-      "risque": "neutre",
+      "risque": "risk_off",
       "calculee": {
        "dollar": "haussier",
-       "risque": "neutre",
+       "risque": "risk_off",
        "regle": "risque : VIX (≥ 25 ou +25 % sur 7 j : risk off ; ≤ 14 sans hausse : risk on) ; dollar : indice dollar large Fed sur 7 j (±0,5 %)"
       },
       "origine": {
@@ -964,11 +999,11 @@
      ],
      "donnees_calculees": [
       {
-       "texte": "VIX 22.91 le 2026-11-16 (+15.0 % sur 7 j)",
-       "source_id": "src_010",
+       "texte": "VIX 25.46 le 2026-11-17 (+30.8 % sur 7 j)",
+       "source_id": "src_276",
        "indicateur": "vix",
-       "valeur": 22.91,
-       "date": "2026-11-16"
+       "valeur": 25.46,
+       "date": "2026-11-17"
       },
       {
        "texte": "Indice dollar large (Fed) 122.6503 le 2026-11-13 (+0.63 % sur 7 j)",
@@ -996,17 +1031,18 @@
      "sources_indisponibles": [],
      "mesure": {
       "libelle": "VIX",
-      "valeur": 22.91,
+      "valeur": 25.46,
       "unite": "pts",
       "seuil_bas": 14,
       "seuil_haut": 25,
-      "date": "2026-11-16",
+      "date": "2026-11-17",
       "source": "FRED (VIXCLS)",
       "si_haut": "Risk off",
       "si_bas": "Risk on",
       "raison": null
      },
-     "non_source": false
+     "non_source": false,
+     "texte_redige_avant_recalcul": true
     },
     {
      "numero": 6,
@@ -1299,7 +1335,9 @@
     "cycle": null,
     "pertinence": null
    },
-   "controles": [],
+   "controles": [
+    "direction recalculée après le texte du modèle pour l'engrenage 1, 5 : le texte décrit les chiffres du moment de sa rédaction"
+   ],
    "coherence": {
     "alignes": 3,
     "evaluables": 7,
@@ -1331,7 +1369,7 @@
     "libelle": "Flash 3.5"
    },
    "version": "quotidienne",
-   "rafraichi_le": "2026-11-18T14:19:04+00:00"
+   "rafraichi_le": "2026-11-18T15:19:09+00:00"
   },
   "classement_devises": [
    {
@@ -1611,7 +1649,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 3,
-    "genere_le": "2026-11-18T14:19:04+00:00"
+    "genere_le": "2026-11-18T15:19:09+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.87,
@@ -1863,7 +1901,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 3,
-    "genere_le": "2026-11-18T14:19:04+00:00"
+    "genere_le": "2026-11-18T15:19:09+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.33,
@@ -2105,7 +2143,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 3,
-    "genere_le": "2026-11-18T14:19:04+00:00"
+    "genere_le": "2026-11-18T15:19:09+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.31,
@@ -2352,7 +2390,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 1,
-    "genere_le": "2026-11-18T14:19:04+00:00"
+    "genere_le": "2026-11-18T15:19:09+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.07,
@@ -2603,7 +2641,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 1,
-    "genere_le": "2026-11-18T14:19:04+00:00"
+    "genere_le": "2026-11-18T15:19:09+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.45,
@@ -2855,7 +2893,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 1,
-    "genere_le": "2026-11-18T14:19:04+00:00"
+    "genere_le": "2026-11-18T15:19:09+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.46,
@@ -3107,7 +3145,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 3,
-    "genere_le": "2026-11-18T14:19:04+00:00"
+    "genere_le": "2026-11-18T15:19:09+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.54,
@@ -5930,6 +5968,13 @@
    "detail": "CAD — Ventes au détail",
    "date": "2026-10-23",
    "url": null
+  },
+  {
+   "id": "src_276",
+   "source": "FRED",
+   "detail": "vix (VIXCLS)",
+   "date": "2026-11-17",
+   "url": "https://fred.stlouisfed.org/series/VIXCLS"
   }
  ],
  "donnees_non_rafraichies": [],
@@ -8155,7 +8200,6 @@
   },
   "vix": {
    "dates": [
-    "2025-12-12",
     "2025-12-19",
     "2025-12-26",
     "2026-01-02",
@@ -8284,10 +8328,10 @@
     "2026-11-11",
     "2026-11-12",
     "2026-11-13",
-    "2026-11-16"
+    "2026-11-16",
+    "2026-11-17"
    ],
    "valeurs": [
-    15.74,
     14.91,
     13.6,
     14.51,
@@ -8416,7 +8460,8 @@
     17.49,
     18.7,
     19.3,
-    22.91
+    22.91,
+    25.46
    ],
    "source_canonique": "vix"
   },
@@ -8850,7 +8895,7 @@
  },
  "controle_qualite": {
   "conforme": false,
-  "nb_anomalies": 14,
+  "nb_anomalies": 15,
   "anomalies": [
    "USD : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
    "EUR : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
@@ -8859,6 +8904,7 @@
    "CHF : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
    "CAD : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
    "AUD : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+   "8 moteurs du marché : direction recalculée après le texte du modèle pour thème dominant, 5 : le texte décrit les chiffres du moment de sa rédaction",
    "état du monde absent de la synthèse globale",
    "tableau macro : USD/CPI annuel : publication manquée (prévue le 10/11, aucun « réel » reçu)",
    "tableau macro : USD/CPI core annuel : publication manquée (prévue le 10/11, aucun « réel » reçu)",
