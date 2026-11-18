@@ -1,5 +1,5 @@
 {
- "genere_le": "2026-11-17T21:19:46+00:00",
+ "genere_le": "2026-11-18T01:52:22+00:00",
  "fuseau": "Europe/Paris",
  "debut": "2026-11-16",
  "fin": "2026-11-29",
@@ -7,7 +7,7 @@
   "debut": "2026-11-16",
   "fin": "2026-11-22"
  },
- "aujourdhui": "2026-11-17",
+ "aujourdhui": "2026-11-18",
  "jours": [
   {
    "date": "2026-11-16",
@@ -541,8 +541,8 @@
        },
        "au_dessous": {
         "n": 2,
-        "mediane": 0.129,
-        "wilson": 12.1,
+        "mediane": 0.203,
+        "wilson": 0.0,
         "faible": true
        }
       },
@@ -678,8 +678,8 @@
        },
        "au_dessous": {
         "n": 2,
-        "mediane": 0.129,
-        "wilson": 12.1,
+        "mediane": 0.203,
+        "wilson": 0.0,
         "faible": true
        }
       },
@@ -1190,8 +1190,26 @@
      "verifie_le": "2026-11-17T19:16",
      "engrenage": null,
      "simulateur": null,
-     "reaction": null,
-     "raison_reaction": "pas d'historique des publications passées pour cet évènement (ALFRED ne couvre que les États-Unis ; archive du site commencée le 24/10/2026)",
+     "reaction": {
+      "mesure": "force de la devise lue sur NZD/USD, séance suivante, en %",
+      "cote": {
+       "au_dessus": {
+        "n": 1,
+        "mediane": 0.065,
+        "wilson": 27.0,
+        "faible": true
+       },
+       "au_dessous": {
+        "n": 0,
+        "mediane": null,
+        "wilson": null,
+        "faible": true
+       }
+      },
+      "source": "archive des publications du site (depuis le 24/10/2026) et cours sur 5 ans",
+      "lien": "#scenarios",
+      "lecture": "réel au-dessus / au-dessous du consensus (ou du précédent sans consensus)"
+     },
      "statuts": {
       "publie": "confirmé",
       "precedent": "confirmé"
@@ -1695,16 +1713,13 @@
      "engrenage": 3,
      "simulateur": null,
      "revision": "1.1%",
-     "confirme_par": [
-      "FRED releases/dates : Advance Monthly Sales for Retail and Food Services"
-     ],
      "reaction": {
       "mesure": "force de la devise lue sur EUR/USD, séance suivante, en %",
       "cote": {
        "au_dessus": {
-        "n": 1,
-        "mediane": -0.215,
-        "wilson": 0.0,
+        "n": 2,
+        "mediane": -0.023,
+        "wilson": 12.1,
         "faible": true
        },
        "au_dessous": {
@@ -1771,9 +1786,9 @@
       "mesure": "force de la devise lue sur EUR/USD, séance suivante, en %",
       "cote": {
        "au_dessus": {
-        "n": 1,
-        "mediane": -0.215,
-        "wilson": 0.0,
+        "n": 2,
+        "mediane": -0.023,
+        "wilson": 12.1,
         "faible": true
        },
        "au_dessous": {
@@ -1955,9 +1970,6 @@
      "verifie_le": "2026-11-17T19:16",
      "engrenage": null,
      "simulateur": null,
-     "confirme_par": [
-      "FRED releases/dates : G.17 Industrial Production and Capacity Utilization"
-     ],
      "statuts": {
       "consensus": "estimation",
       "publie": "confirmé",
@@ -3033,7 +3045,7 @@
       "TreasuryDirect (adjudications à venir, API officielle)"
      ],
      "sources_champs": {},
-     "verifie_le": "2026-11-17",
+     "verifie_le": "2026-11-18",
      "engrenage": 4,
      "simulateur": null,
      "statuts": {},
@@ -3798,7 +3810,7 @@
      "impact": "faible",
      "points": "●○○",
      "precedent": "61B",
-     "consensus": null,
+     "consensus": "25B",
      "publie": null,
      "source": "ForexFactory, page « mois » (extraction de page, déjà lue pour le tableau macro)",
      "sources": [
@@ -3806,15 +3818,16 @@
       "ForexFactory, flux public JSON de la semaine"
      ],
      "sources_champs": {
-      "precedent": "ForexFactory, page « mois » (extraction de page, déjà lue pour le tableau macro)"
+      "precedent": "ForexFactory, page « mois » (extraction de page, déjà lue pour le tableau macro)",
+      "consensus": "ForexFactory, flux public JSON de la semaine"
      },
      "verifie_le": "2026-11-17T19:16",
      "engrenage": null,
      "simulateur": null,
      "statuts": {
+      "consensus": "estimation",
       "precedent": "confirmé"
-     },
-     "raison_consensus": "pas de consensus publié"
+     }
     },
     {
      "iso_utc": "2026-11-19T17:30+00:00",
@@ -3863,7 +3876,7 @@
       "TreasuryDirect (adjudications à venir, API officielle)"
      ],
      "sources_champs": {},
-     "verifie_le": "2026-11-17",
+     "verifie_le": "2026-11-18",
      "engrenage": 4,
      "simulateur": null,
      "statuts": {},
@@ -5039,7 +5052,7 @@
       "TreasuryDirect (adjudications à venir, API officielle)"
      ],
      "sources_champs": {},
-     "verifie_le": "2026-11-17",
+     "verifie_le": "2026-11-18",
      "engrenage": 4,
      "simulateur": null,
      "statuts": {},
@@ -5121,6 +5134,33 @@
       "precedent": "confirmé"
      },
      "raison_consensus": "pas de consensus publié"
+    },
+    {
+     "iso_utc": "2026-11-24T05:00+00:00",
+     "date_paris": "2026-11-24",
+     "heure_paris": "journée",
+     "heure_connue": false,
+     "devise": "USD",
+     "evenement": "Production industrielle (Fed)",
+     "evenement_en": "G.17 Industrial Production and Capacity Utilization",
+     "traduit": true,
+     "type": "Chiffre",
+     "impact": "faible",
+     "points": "●○○",
+     "precedent": null,
+     "consensus": null,
+     "publie": null,
+     "source": "FRED releases/dates (calendrier des publications)",
+     "sources": [
+      "FRED releases/dates (calendrier des publications)"
+     ],
+     "sources_champs": {},
+     "verifie_le": "2026-11-18",
+     "engrenage": null,
+     "simulateur": null,
+     "raison_heure": "FRED donne la date, pas l'heure (ForexFactory la donne la semaine de la publication)",
+     "raison_consensus": "consensus publié par ForexFactory la semaine de la publication",
+     "statuts": {}
     },
     {
      "iso_utc": "2026-11-24T09:00+00:00",
@@ -5408,7 +5448,7 @@
       "TreasuryDirect (adjudications à venir, API officielle)"
      ],
      "sources_champs": {},
-     "verifie_le": "2026-11-17",
+     "verifie_le": "2026-11-18",
      "engrenage": 4,
      "simulateur": null,
      "statuts": {},
@@ -5434,7 +5474,7 @@
       "TreasuryDirect (adjudications à venir, API officielle)"
      ],
      "sources_champs": {},
-     "verifie_le": "2026-11-17",
+     "verifie_le": "2026-11-18",
      "engrenage": 4,
      "simulateur": null,
      "statuts": {},
@@ -5716,7 +5756,7 @@
       "FRED releases/dates (calendrier des publications)"
      ],
      "sources_champs": {},
-     "verifie_le": "2026-11-17",
+     "verifie_le": "2026-11-18",
      "engrenage": null,
      "simulateur": null,
      "raison_heure": "FRED donne la date, pas l'heure (ForexFactory la donne la semaine de la publication)",
@@ -6158,7 +6198,7 @@
       "TreasuryDirect (adjudications à venir, API officielle)"
      ],
      "sources_champs": {},
-     "verifie_le": "2026-11-17",
+     "verifie_le": "2026-11-18",
      "engrenage": 4,
      "simulateur": null,
      "statuts": {},
@@ -6838,14 +6878,14 @@
    "n_forts": 1
   }
  ],
- "n_evenements": 200,
+ "n_evenements": 201,
  "comptes": {
   "Réunion BC": 2,
   "Conférence": 1,
   "Discours": 33,
   "Grand rendez-vous": 1,
   "Adjudication": 6,
-  "Chiffre": 157
+  "Chiffre": 158
  },
  "n_forts": 18,
  "banques_centrales": [
@@ -6863,12 +6903,12 @@
    "type_taux": "fourchette cible",
    "taux_secondaire": "taux effectif 3.88%",
    "raison_taux": null,
-   "date_taux": "2026-11-16",
+   "date_taux": "2026-11-17",
    "source_taux": "FRED (DFEDTARL / DFEDTARU)",
    "reference_badge": {
     "valeur": "4.00%",
     "source": "FRED (DFEDTARU, borne haute de la fourchette cible)",
-    "date": "2026-11-16"
+    "date": "2026-11-17"
    },
    "variation_pb": null,
    "date_variation": null,
@@ -6918,7 +6958,7 @@
    "type_taux": "dépôt",
    "taux_secondaire": "refinancement 2.65% (registre macro)",
    "raison_taux": null,
-   "date_taux": "2026-11-16",
+   "date_taux": "2026-11-17",
    "source_taux": "FRED (ECBDFR, taux de la facilité de dépôt de la BCE)",
    "reference_badge": {
     "valeur": "2.65%",
@@ -8330,12 +8370,12 @@
   },
   "semaine": {
    "present": true,
-   "verifie_le": "2026-11-17"
+   "verifie_le": "2026-11-18"
   },
   "fred": {
-   "dates": 459,
+   "dates": 457,
    "erreurs": [],
-   "verifie_le": "2026-11-17"
+   "verifie_le": "2026-11-18"
   },
   "officiels": {
    "USD": {
