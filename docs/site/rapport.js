@@ -4,6 +4,7 @@
    Calculateur de taille de position : calcul local dans le navigateur. Jamais un ordre d'achat ou de vente. */
 import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, certifier, pluriel, badgeEcart, essentiel, DRAPEAUX,
          vueComplete, miniCourbe } from "./commun.js";
+import { nomMoteur } from "./moteurs.js";
 import { badgeEtat } from "./devises.js";
 import { RENDUS_LONGS } from "./synthese_longue.js";
 
@@ -142,7 +143,7 @@ const RENDUS = {
     b.push(el("p", null, `Forces sur 5 séances : ${(x.forces || []).map(f => `${f.devise} ${signe(f.variation_5j)} %`).join(" · ")}`));
     b.push(el("p", "note", `Marchés : ${(x.marches || []).map(m => `${m.actif} ${signe(m.variation_5j)}${unite(m.unite)}`).join(" · ")}`));
     for (const c of x.communiques || []) b.push(el("p", null, `${c.devise} ${jj(c.date)} : ${c.ton ? `ton ${c.ton}` : `ton n/d (${c.raison_ton})`}${c.reaction ? ` · réaction J+1 : devise ${signe(c.reaction.devise_pct)} %, 2 ans ${signe(c.reaction.deux_ans_pb, 1)} pb` : ""}`));
-    if ((x.basculements || []).length) b.push(el("p", null, `Engrenages qui ont basculé : ${x.basculements.map(z => `${z.engrenage} ${z.titre} (${z.avant} → ${z.apres})`).join(" ; ")}`));
+    if ((x.basculements || []).length) b.push(el("p", null, `Moteurs qui ont basculé : ${x.basculements.map(z => `${nomMoteur(z.engrenage)} (${z.avant} → ${z.apres})`).join(" ; ")}`));
     return b;
   },
   watchlist(r) {
@@ -181,7 +182,7 @@ const RENDUS = {
   },
   tableau_de_bord(r) {
     const t = r.tableau_de_bord || {}, b = [];
-    b.push(tableau(["Engrenage", "Mesure", "État", "Direction"], (t.thermometres || []).map(x => [`${x.numero} ${x.titre}`, x.texte_valeur, x.etat, x.direction?.libelle || "n/d"])));
+    b.push(tableau(["Moteur", "Mesure", "État", "Direction"], (t.thermometres || []).map(x => [nomMoteur(x.numero), x.texte_valeur, x.etat, x.direction?.libelle || "n/d"])));
     if ((t.au_bord || []).length) b.push(liste(t.au_bord.map(s => `Au bord du seuil : ${s.libelle} (${s.texte_valeur}, à ${s.distance_texte})`)));
     return b;
   },

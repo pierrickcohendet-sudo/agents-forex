@@ -16,6 +16,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import requests
+from core import noms_moteurs as nm
 
 log = logging.getLogger(__name__)
 
@@ -41,7 +42,7 @@ def messages(dossiers: dict | None, agenda: dict | None, maintenant: datetime) -
     franchis = ((dossiers or {}).get("cockpit") or {}).get("franchis") or []
     if franchis:
         sortie.append({"cles": [f"seuil:{jour}:{x.get('id')}" for x in franchis], "titre": "Seuils franchis",
-                       "lignes": {f"seuil:{jour}:{x.get('id')}": f"Engrenage {x.get('engrenage')} · {x.get('phrase') or x.get('libelle')}"
+                       "lignes": {f"seuil:{jour}:{x.get('id')}": f"{nm.nom(x.get('engrenage')) if x.get('engrenage') else 'Moteur n/d'} · {x.get('phrase') or x.get('libelle')}"
                                   for x in franchis},
                        "priorite": "default", "tags": "chart_with_upwards_trend"})
     evts = [e for j in (agenda or {}).get("jours") or [] for e in j.get("evenements") or []]

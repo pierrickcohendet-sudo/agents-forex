@@ -1,6 +1,7 @@
 /* Lot V7 — Tableau de bord (maquette #tableau) : rapport_jour.json, marche.json, force_devises.json, tableau_macro.json,
-   dossiers.json (engrenages 2 et 5), agenda.json. La force des devises est calculée en Python (core/force_devises.py). */
+   dossiers.json (dossiers 2 et 5), agenda.json. La force des devises est calculée en Python (core/force_devises.py). */
 import { $, h, nf, sgn, num, esc, dfr, ddm, frTxt, nd, fv, classeSigne, spark, hbar, donnees, bloc, graphique, retirerGraphique, blocDetaille } from "./v7_commun.js";
+import { nomMoteur, explicationMoteur } from "./moteurs.js";
 
 const SQUELETTE = `
 <div class="alerts" id="alerts"></div>
@@ -67,7 +68,7 @@ export async function ecranTableau(section) {
     const liste = x => Array.isArray(x) ? x : [];
     const bord = liste(ck.au_bord).length ? ck.au_bord : liste(tdb.au_bord), fr = liste(ck.franchis).length ? ck.franchis : liste(tdb.franchis);
     q("#alerts").innerHTML = bord.map(x => `<div class="alert p"><b>Au bord</b><span>${esc(x.phrase || x.libelle)}</span></div>`).join("") +
-      `<details class="card" style="width:100%;padding:12px 16px"><summary style="cursor:pointer;font-weight:600;font-size:14px">${fr.length} seuil${fr.length > 1 ? "s" : ""} franchi${fr.length > 1 ? "s" : ""} aujourd'hui <span class="small">· détail par engrenage dans 8 engrenages</span></summary><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr));gap:6px 18px;margin-top:10px;font-size:13px">${fr.map(x => `<div style="display:flex;gap:8px"><span class="chip acc" style="height:20px;padding:0 7px">${x.engrenage}</span><span>${esc(x.phrase || x.libelle)} <span class="small">· ${esc(x.source || "")}</span></span></div>`).join("")}</div></details>`;
+      `<details class="card" style="width:100%;padding:12px 16px"><summary style="cursor:pointer;font-weight:600;font-size:14px">${fr.length} seuil${fr.length > 1 ? "s" : ""} franchi${fr.length > 1 ? "s" : ""} aujourd'hui <span class="small">· détail par moteur dans l'onglet « 8 engrenages »</span></summary><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr));gap:6px 18px;margin-top:10px;font-size:13px">${fr.map(x => `<div style="display:flex;gap:8px"><span class="chip acc" style="height:20px;padding:0 7px" title="${esc(explicationMoteur(x.engrenage))}">${esc(nomMoteur(x.engrenage))}</span><span>${esc(x.phrase || x.libelle)} <span class="small">· ${esc(x.source || "")}</span></span></div>`).join("")}</div></details>`;
   });
 
   bloc(q("#pm"), () => {
@@ -137,7 +138,7 @@ export async function ecranTableau(section) {
 
   bloc(q("#heat"), () => {
     const H = dos?.engrenages?.["5"]?.matrice_chaleur;
-    if (!H) { q("#heat").innerHTML = `<tbody><tr><td class="muted">Corrélations indisponibles (dossier de l'engrenage 5 absent).</td></tr></tbody>`; return; }
+    if (!H) { q("#heat").innerHTML = `<tbody><tr><td class="muted">Corrélations indisponibles (dossier « liens entre marchés » absent).</td></tr></tbody>`; return; }
     const hc = v => { if (v == null) return "background:var(--surface-2);color:var(--muted)"; const p = Math.round(Math.min(Math.abs(v), 1) * 70); return `background:color-mix(in srgb, ${v >= 0 ? "var(--accent)" : "var(--warn)"} ${p}%, var(--surface));color:${p > 45 ? "var(--surface)" : "var(--ink)"}`; };
     q("#heat").innerHTML = `<thead><tr><th>Devise</th>${H.colonnes.map(c => `<th>${esc(c)}</th>`).join("")}</tr></thead><tbody>` +
       H.lignes.map(l => `<tr><td style="font-weight:700;padding:4px 6px">${l.devise}</td>${l.valeurs.map((v, i) => `<td class="h" style="${hc(v)}" title="${v == null ? esc(l.raison || "corrélation n/d") : `précédent ${l.precedentes?.[i] != null ? sgn(l.precedentes[i], 2) : "n/d"} · percentile 5 ans ${l.percentiles?.[i] ?? "n/d"}`}">${v == null ? "n/d" : sgn(v, 2)}</td>`).join("")}</tr>`).join("") + "</tbody>";

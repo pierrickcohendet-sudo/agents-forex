@@ -15,6 +15,7 @@ from agents.agent_synthese import _retirer_ordres
 from core.llm import (FournisseurLLM, QuotaAtteint, attribution_modele, definir_etiquette, extraire_json,
                       repli_modele_suivant)
 from core.secrets import masquer_secrets
+from core import noms_moteurs as nm
 
 log = logging.getLogger(__name__)
 SCHEMA = '{"paires": {"USD/JPY": "3 lignes au plus", "...": "..."}}'
@@ -36,7 +37,7 @@ def generer(llm: FournisseurLLM | None, fiches: dict[str, dict], tentatives: int
     donnees = {p: faits(f) for p, f in fiches.items() if not f.get("raison")}
     autorises = _valeurs(donnees, set())
     prompt = ("Pour chaque paire, rédige une synthèse de 3 lignes au plus, en français, à partir des SEULS faits fournis "
-              "(calculés en Python). Aucune recommandation, aucun ordre d'achat ou de vente, aucun niveau de prix cible. "
+              "(calculés en Python). Aucune recommandation, aucun ordre d'achat ou de vente, aucun niveau de prix cible. " + nm.CONSIGNE_MODELE + " "
               f"Réponds STRICTEMENT en JSON : {SCHEMA}\n\nFAITS (JSON) :\n" + json.dumps(donnees, ensure_ascii=False))
     definir_etiquette("paires:synthese")
     for _ in range(max(1, tentatives)):

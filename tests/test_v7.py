@@ -82,7 +82,7 @@ class Point0Quota(unittest.TestCase):
     def test_redaction_sans_les_engrenages(self):
         r = {"engrenages_indisponibles": True, "theme": {}, "point_marche": {"lecture": "", "lignes": []},
              "lecture": {"detectes": []}, "scenarios": {"liste": []}, "synthese": {"catalyseurs": [], "biais": None}, "bilan": {}}
-        self.assertIn("engrenages indisponibles", ar.faits_redaction(r)["engrenages"])
+        self.assertIn("synthèse des 8 moteurs indisponible", ar.faits_redaction(r)["engrenages"])
 
     def test_compteur_du_04_11_remis_a_sa_vraie_valeur(self):
         q = json.loads((RACINE / "data" / "cache" / "quota_llm.json").read_text(encoding="utf-8"))

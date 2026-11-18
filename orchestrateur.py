@@ -180,6 +180,7 @@ def mode_hebdo(config: dict, donnees_dir: Path, dossier_rapports: Path, argument
               les_dossiers, llm, defaut=None)
     if not dossier_a_faire:
         if not arguments.sans_web and config.get("publication_web", {}).get("actif", True):
+            etape("noms des moteurs (contrôle)", _noms_moteurs, config, defaut={})
             etape("git push (synthèse des conséquences)", publication_web.pousser_git, config["publication_web"], RACINE,
                   "synthèse hebdomadaire des conséquences")
         return 0
@@ -286,6 +287,7 @@ def main() -> int:
                 if not arguments.sans_web:
                     if (tableau or {}).get("modifie"):
                         etape("site web (site.json)", site_donnees.ecrire, RACINE, config)
+                    etape("noms des moteurs (contrôle)", _noms_moteurs, config, defaut={})
                     etape("git push (séance)", publication_web.pousser_git,
                           config["publication_web"], RACINE, "séance : cours, agenda et thermomètres")
                 return 0
@@ -583,6 +585,7 @@ def main() -> int:
     if not arguments.sans_web and config.get("publication_web", {}).get("actif", True):
         etape("publication web (docs/)", publication_web.ecrire_donnees,
               rapport, RACINE / config["publication_web"]["dossier_docs"])
+        etape("noms des moteurs (contrôle)", _noms_moteurs, config, defaut={})
         etape("git push (GitHub Pages)", publication_web.pousser_git,
               config["publication_web"], RACINE)
 
@@ -702,6 +705,17 @@ def ligne_budget(b: dict) -> str:
         ligne += " ; analyses : " + ", ".join(
             f"{k} {v['statut']}" + (f" ({v['echec']})" if v.get("echec") else "") for k, v in analyses.items())
     return ligne
+
+
+def _noms_moteurs(config: dict) -> dict:
+    """Lot V10 : filet de sécurité avant publication — « engrenage » hors de l'onglet dédié remplacé par le nom du moteur,
+    signalé dans le récapitulatif."""
+    from core import noms_moteurs
+    bilan = noms_moteurs.nettoyer_publication(RACINE / config["publication_web"]["dossier_docs"] / "data")
+    _ecrire_resume_run(("aucun remplacement nécessaire" if not bilan else
+                        f"{sum(bilan.values())} remplacement(s) automatique(s) du mot « engrenage » : "
+                        + ", ".join(f"{k} ({v})" for k, v in sorted(bilan.items()))), titre="Noms des moteurs")
+    return bilan
 
 
 def _ecrire_resume_run(ligne: str, titre: str = "Quota LLM du jour") -> None:

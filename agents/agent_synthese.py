@@ -28,6 +28,7 @@ from pathlib import Path
 from core.llm import (MESSAGE_QUOTA_ATTEINT, FournisseurLLM, QuotaAtteint, attribution_modele, echec_transitoire,
                       definir_etiquette, extraire_json, repli_modele_suivant)
 from core.secrets import masquer_secrets
+from core import noms_moteurs as nm
 
 log = logging.getLogger(__name__)
 
@@ -109,7 +110,7 @@ def synthese_a_faire(entree: dict, cfg: dict) -> bool:
 def charger_systeme(cfg: dict) -> str:
     morceaux = ["Tu es un analyste de desk FX senior. Tu rédiges une SYNTHÈSE APPROFONDIE "
                 "sur UNE devise. Tu ne produis jamais de signal d'achat ou de vente, jamais de "
-                "niveau d'entrée, de stop ou d'objectif. Réponds UNIQUEMENT avec le JSON demandé."]
+                "niveau d'entrée, de stop ou d'objectif. Réponds UNIQUEMENT avec le JSON demandé. " + nm.CONSIGNE_MODELE]
     for fichier in sorted(DOSSIER_SYNTHESE.glob("*.md")):
         morceaux.append(f"\n\n# ===== {fichier.name} =====\n\n" + fichier.read_text(encoding="utf-8"))
     for nom in cfg.get("fichiers_connaissances_racine", []):

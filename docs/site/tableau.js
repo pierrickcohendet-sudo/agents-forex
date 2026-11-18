@@ -47,7 +47,7 @@ export async function pageTableau() {
   const prevues = (t.lignes || []).filter(l => l.etat?.["Prévision"] === "valeur").length;
   if (!vueComplete()) c.appendChild(el("p", "note", `Prévision : données insuffisantes pour une colonne (${prevues} ${prevues < 2 ? "ligne renseignée" : "lignes renseignées"} sur ${(t.lignes || []).length} : le consensus de la prochaine publication est rarement connu à l'avance). Elle reste dans le détail de chaque ligne.`));
   if (JSON.stringify(t.lignes || []).includes("taux de refinancement")) c.appendChild(el("p", "note",
-    "EUR, « taux de refinancement » : taux principal publié par ForexFactory. Le site utilise le taux de dépôt de la BCE (ECBDFR, 15 pb plus bas) pour le portage et les dossiers des engrenages."));
+    "EUR, « taux de refinancement » : taux principal publié par ForexFactory. Le site utilise le taux de dépôt de la BCE (ECBDFR, 15 pb plus bas) pour le portage et les dossiers des 8 moteurs du marché."));
 
   const lignes = t.lignes || [];
   function valeurTri(l, cle) {

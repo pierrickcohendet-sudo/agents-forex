@@ -70,13 +70,13 @@ def test_jours_similaires_espaces_et_indice_faible(monkeypatch):
     assert all((b - a).days >= 15 for a, b in zip(ds, ds[1:]))
     assert r["lecture"].startswith("indice faible · 5 cas") and "probabilité" in r["lecture"]
     assert r["medianes"]["EUR/USD"] is not None
-    assert "Engrenages 1, 3 et 6 exclus" in r["methode"]
+    assert "Thème dominant, chiffres économiques et géopolitique exclus" in r["methode"]
 
 
 def test_jours_similaires_sans_historique_nd(monkeypatch):
     monkeypatch.setattr(outils, "series_mesures", lambda h5, t: {})
     r = outils.jours_similaires(FauxH5(), None, [], "2026-10-23")
-    assert r["raison"].startswith("moins de 3 engrenages")
+    assert r["raison"].startswith("moins de 3 moteurs")
 
 
 def test_histoire_regles_wilson_et_echantillon():

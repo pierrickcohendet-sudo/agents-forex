@@ -2,10 +2,10 @@
    Ne charge que docs/data/accueil.json (quelques Ko) ; le globe (d3-geo, world-atlas) arrive après l'affichage.
    Notes : lues dans ce navigateur (IndexedDB du Journal), jamais envoyées. Jamais un ordre d'achat ou de vente. */
 import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, DRAPEAUX, certifier, pluriel, badgeEcart } from "./commun.js";
+import { nomMoteur, explicationMoteur } from "./moteurs.js";
 
 const DATE_LONGUE = new Intl.DateTimeFormat("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: "Europe/Paris" });
 const HEURE = new Intl.DateTimeFormat("fr-FR", { hour: "2-digit", minute: "2-digit", second: "2-digit", timeZone: "Europe/Paris" });
-const COURTS = { 1: "Thème", 2: "Monétaire", 3: "Données", 4: "Fiscale", 5: "Marchés", 6: "Géopolitique", 7: "Flux", 8: "Offre" };
 const BIAIS = { haussier: "Haussier", neutre: "Neutre", baissier: "Baissier" };
 
 function rebours(iso) {
@@ -35,7 +35,7 @@ function blocTheme(a) {
   const ligne = el("div", "ac-ligne");
   ligne.appendChild(el("span", `ck-pastille dir-${t.direction?.classe || "nd"}`, t.direction?.libelle || "direction n/d"));
   ligne.appendChild(el("span", "ac-conviction", `Conviction ${{ faible: "faible", moyen: "moyenne", fort: "forte", forte: "forte" }[t.conviction] || t.conviction || "n/d"}`));
-  if (t.alignes != null) ligne.appendChild(el("span", "note", `${pluriel(t.alignes, "engrenage aligné", "engrenages alignés")} sur ${t.evaluables}`));
+  if (t.alignes != null) ligne.appendChild(el("span", "note", `${pluriel(t.alignes, "moteur aligné", "moteurs alignés")} sur ${t.evaluables}`));
   c.appendChild(ligne);
   if (t.texte) {
     const p = el("p", "ac-texte", t.texte);
@@ -56,7 +56,7 @@ function blocBord(a) {
     const li = el("li");
     const val = el("b", "tabulaire", s.texte_valeur ?? "n/d");
     certifier(val, { libelle: s.libelle, valeur: s.texte_valeur, source: s.source, date: s.date });
-    const lien = el("a", "ac-eng", `${s.engrenage} ${COURTS[s.engrenage] || ""}`); lien.href = `#g=${s.engrenage}`;
+    const lien = el("a", "ac-eng", nomMoteur(s.engrenage)); lien.href = `#g=${s.engrenage}`; lien.title = explicationMoteur(s.engrenage);
     li.append(lien, el("span", "ac-lib", s.libelle), val, el("span", "ac-dist tabulaire", `à ${s.distance_texte} du seuil`));
     ul.appendChild(li);
   }

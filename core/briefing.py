@@ -14,6 +14,7 @@ import logging
 import re
 from datetime import date, datetime, time, timedelta, timezone
 from pathlib import Path
+from core import noms_moteurs as nm
 
 log = logging.getLogger(__name__)
 
@@ -22,7 +23,7 @@ PAIRE_PRINCIPALE = {"USD": "EUR/USD", "EUR": "EUR/USD", "GBP": "GBP/USD", "JPY":
 # Heures locales d'ouverture des places (convention de marché) : converties chaque jour à l'heure de Paris.
 SESSIONS = [("Asie", "Asia/Tokyo", 9, 18), ("Londres", "Europe/London", 8, 17), ("New York", "America/New_York", 8, 17)]
 MARCHES = ["Indice dollar (formule du DXY, non officiel)", "EUR/USD", "GBP/USD", "USD/JPY", "US 2 ans", "Or (XAU/USD)", "Brent", "VIX"]
-CONVICTION = {"faible": "faible", "moyen": "moyenne", "fort": "forte"}
+CONVICTION = {"faible": "faible", "moyen": "moyenne", "fort": "forte", "eleve": "élevée"}
 CAS_LECTURE = {"hausse": ("Hausse, ton restrictif", "Hausse, ton accommodant"),
                "baisse": ("Baisse, ton accommodant", "Baisse, ton restrictif"),
                "statu_quo": ("Maintien, ton restrictif", "Maintien, ton accommodant")}
@@ -77,7 +78,7 @@ def lignes_contexte(rj: dict, entete: dict) -> list[list[str]]:
     scen = trouve("Le mieux confirmé à ce jour : ") or trouve("Aucun scénario")
     paire = trouve("Paire à suivre en premier : ")
     devises = next((x for x in ess if "Soutenue" in x or "Sous pression" in x or "sans direction" in x), None)
-    contexte = (f"{t.get('titre', 'Thème n/d')} : {entete.get('alignes', 'n/d')} engrenages sur {entete.get('evaluables', 'n/d')} "
+    contexte = (f"{t.get('titre', 'Thème n/d')} : {entete.get('alignes', 'n/d')} moteurs sur {entete.get('evaluables', 'n/d')} "
                 f"suivent le thème, conviction {CONVICTION.get(t.get('conviction'), t.get('conviction') or 'n/d')}.")
     return [["Contexte", contexte],
             ["Scénario", _sans_prefixe(scen or "n/d : scénarios absents du rapport", "Le mieux confirmé à ce jour : ")],
@@ -164,7 +165,7 @@ def calculer(rj: dict, dossiers: dict | None, agenda: dict | None, paires: dict 
     lignes_m = {l.get("actif"): l for l in (rj.get("point_marche") or {}).get("lignes") or []}
     return {
         "genere_le": maintenant.isoformat(timespec="seconds"), "date": aujourd, "rapport_genere_le": rj.get("genere_le"),
-        "titre": titre, "titre_source": "décision de banque centrale du jour (Agenda)" if bq else "thème du jour (8 engrenages)",
+        "titre": titre, "titre_source": "décision de banque centrale du jour (Agenda)" if bq else "thème du jour (8 moteurs du marché)",
         "lignes": lignes_contexte(rj, entete),
         "sessions": sessions_paris(date.fromisoformat(aujourd)),
         "evenements": evenements,

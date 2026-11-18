@@ -2,6 +2,7 @@
    et graphiques. Colonne droite : mes notes, stockées dans le navigateur (IndexedDB), sans serveur ni clé ; export / import
    JSON (images intégrées) pour la sauvegarde et le transfert. Le biais personnel reste MA lecture, jamais un ordre. */
 import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, ouvrirDetail, certifier, pluriel } from "./commun.js";
+import { nomMoteur, explicationMoteur, decompteMoteurs } from "./moteurs.js";
 import { UNITES_V2, STATUTS, migrer, compter, performance, bilanMensuel, grilleMois, peutToucher, ics, suggestions, finDeSemaine, nombreFr } from "./journal_logique.js";
 import { graphiqueSerie, dessinerReperes } from "./dossiers.js";
 import { seanceDe, avecLeTheme, resultatR } from "./journal_stats.js";
@@ -12,7 +13,6 @@ const BIAIS = { haussier: "Haussier", neutre: "Neutre", baissier: "Baissier" };
 // Checklist en 8 étapes (modèle du Rapport du jour) : cochée par moi, enregistrée avec la note
 const CHECKLIST = [["biais", "Biais supérieur"], ["liquidite", "Liquidité"], ["structure", "Structure"], ["zone", "Zone d'intérêt"],
                    ["macro", "Confirmation macro"], ["declencheur", "Déclencheur M30"], ["invalidation", "Invalidation"], ["risque", "Risque"]];
-const COURTS = { 1: "Thème", 2: "Monétaire", 3: "Données", 4: "Fiscale", 5: "Marchés", 6: "Géopolitique", 7: "Flux", 8: "Offre" };
 const signe = (v, d = 2) => v == null ? "n/d" : `${v > 0 ? "+" : ""}${Number(v).toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d })}`.replace("-", "−");
 const nombre = (v, d = 4) => v == null ? "n/d" : Number(v).toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d });
 function s(tag, attrs, texte) { const n = document.createElementNS(SVG, tag); for (const [k, v] of Object.entries(attrs || {})) n.setAttribute(k, v); if (texte != null) n.textContent = texte; return n; }
@@ -194,13 +194,13 @@ function tuiles(f) {
 function contributions(f) {
   const dec = (f.macro || {}).decomposition || {};
   const box = el("div", "jn-contrib");
-  box.appendChild(el("h3", null, `Contribution par engrenage (${f.base} − ${f.cotation})`));
+  box.appendChild(el("h3", null, `Contribution des 8 moteurs du marché (${f.base} − ${f.cotation})`));
   const g = el("div", "jn-contrib-grille");
   for (const x of dec.contributions || []) {
     const v = x.contribution;
     const c = el("div", `jn-c ${v >= 2 ? "p2" : v === 1 ? "p1" : v <= -2 ? "n2" : v === -1 ? "n1" : "zero"}${x.incomplete ? " incomplete" : ""}`);
-    c.append(el("b", "tabulaire", v ? signe(v, 0) : "·"), el("span", null, String(x.engrenage)));
-    c.title = `${x.engrenage} ${COURTS[x.engrenage]} : ${f.base} ${signe(x.base, 0)} (${x.etat_base}) − ${f.cotation} ${signe(x.cotation, 0)} (${x.etat_cotation})${x.incomplete ? " · incomplet" : ""}`;
+    c.append(el("b", "tabulaire", v ? signe(v, 0) : "·"), el("span", null, nomMoteur(x.engrenage)));
+    c.title = `${nomMoteur(x.engrenage)} (${explicationMoteur(x.engrenage)}) : ${f.base} ${signe(x.base, 0)} (${x.etat_base}) − ${f.cotation} ${signe(x.cotation, 0)} (${x.etat_cotation})${x.incomplete ? " · incomplet" : ""}`;
     g.appendChild(c);
   }
   box.appendChild(g);
@@ -234,7 +234,7 @@ function ficheAnalyse(f, mes) {
   const tete = el("div", "jn-fiche-tete");
   tete.appendChild(el("h2", null, `Analyse automatique · ${dateCourte(f.date_rapport)}`));
   if (dec0.solde != null) {
-    const sol = el("span", `jn-solde ${dec0.solde > 0 ? "pos" : dec0.solde < 0 ? "neg" : ""}`, `Solde engrenages ${signe(dec0.solde, 0)} · ${dec0.lecture || ""}`);
+    const sol = el("span", `jn-solde ${dec0.solde > 0 ? "pos" : dec0.solde < 0 ? "neg" : ""}`, `${decompteMoteurs(dec0.contributions).texte} · ${dec0.lecture || ""}`);
     sol.title = dec0.texte || "";
     tete.appendChild(sol);
   }
@@ -261,7 +261,7 @@ function ficheAnalyse(f, mes) {
     const ul = el("ul", "jn-dec");
     for (const x of dec.contributions) {
       const li = el("li", x.incomplete ? "incomplete" : "");
-      li.append(el("span", null, `${x.engrenage} ${COURTS[x.engrenage]}`), el("b", `tabulaire ${x.contribution > 0 ? "pos" : x.contribution < 0 ? "neg" : ""}`, signe(x.contribution, 0)));
+      li.append(el("span", null, nomMoteur(x.engrenage)), el("b", `tabulaire ${x.contribution > 0 ? "pos" : x.contribution < 0 ? "neg" : ""}`, signe(x.contribution, 0)));
       ul.appendChild(li);
     }
     macro.appendChild(ul);
@@ -282,7 +282,7 @@ function ficheAnalyse(f, mes) {
   if (f.niveaux) c.appendChild(blocNiveaux(f.niveaux));
   const cons = el("div", "jn-bloc");
   cons.appendChild(el("h3", null, "Conséquences (tableau des conséquences)"));
-  cons.appendChild((f.consequences || []).length ? el("p", null, f.consequences.map(x => `${x.engrenage} ${COURTS[x.engrenage]} : ${f.base} ${x.base}, ${f.cotation} ${x.cotation}`).join(" · ")) : el("p", "note", "Aucune ligne pour cette paire."));
+  cons.appendChild((f.consequences || []).length ? el("p", null, f.consequences.map(x => `${nomMoteur(x.engrenage)} : ${f.base} ${x.base}, ${f.cotation} ${x.cotation}`).join(" · ")) : el("p", "note", "Aucune ligne pour cette paire."));
   c.appendChild(cons);
   return c;
 }

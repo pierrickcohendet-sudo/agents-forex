@@ -298,7 +298,7 @@
     }
    }
   },
-  "resume_quota": "Gemini : 39/60, engrenages : fait",
+  "resume_quota": "Gemini : 39/60, moteurs : fait",
   "appels_par_modele": {
    "gemini-3.5-flash": {
     "appels": 14,
@@ -6469,7 +6469,7 @@
   {
    "id": "src_175",
    "source": "Calcul Python",
-   "detail": "directions des engrenages 2 à 8 (règles Python et matrice d'impact)",
+   "detail": "directions des moteurs 2 à 8 (règles Python et matrice d'impact)",
    "date": "2026-10-30",
    "url": null
   },
@@ -10046,14 +10046,14 @@
   "conforme": false,
   "nb_anomalies": 2,
   "anomalies": [
-   "8 engrenages : 1 mot(s) « record » / « s'envole » remplacé(s) : non justifiés par les percentiles ou les variations",
+   "8 moteurs du marché : 1 mot(s) « record » / « s'envole » remplacé(s) : non justifiés par les percentiles ou les variations",
    "prompt LLM volumineux : 13 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 35483 à 08:51 UTC, modèle gemini-3.8-flash) — le contexte envoyé au LLM a regrossi"
   ]
  },
  "critique": {
   "incoherences": [
    "Fiche CHF (synthèse approfondie) : confusion entre politique monétaire et inflation. Le texte mentionne une 'inflation stagnante à 0,0 %' alors qu'aucune donnée CPI n'est publiée pour la Suisse et que 0,00 % correspond en réalité au taux directeur de la BNS.",
-   "Fiche CAD (menaces) vs Engrenage 8 : la menace CAD mentionne un Brent 'en baisse de 3.92 % à 123.10 $', ce qui contredit directement l'Engrenage 8 où le Brent est mesuré en hausse de +6,8 % sur 7 jours à 123,1 $.",
+   "Fiche CAD (menaces) vs commerce et flux : la menace CAD mentionne un Brent 'en baisse de 3.92 % à 123.10 $', ce qui contredit directement commerce et flux où le Brent est mesuré en hausse de +6,8 % sur 7 jours à 123,1 $.",
    "Fiches JPY et CHF (synthèses approfondies) : inversion de la convention de cotation. Les scénarios font référence à 'la paire USD/JPY sous 0,00633' (MM200 à 0,00631) et à 'USD/CHF à 1,21444', appliquant la cotation indirecte (JPY/USD et CHF/USD ou cours futures) sous le libellé des paires spot direc",
    "Fiche USD (indicateurs_tableau vs detail_score) : la valeur du Core PCE m/m est laissée à null dans le tableau d'indicateurs de l'USD, alors que le résultat (+0,5 % vs +0,3 % attendu) est déjà connu, exploité avec un sens +1 dans detail_score et listé en tête des indicateurs du jour (src_129)."
   ],
@@ -10069,7 +10069,7 @@
    },
    {
     "theme": "Harmonisation des fenêtres temporelles des matières premières",
-    "suggestion": "Préciser que toute mention d'une variation de commodité (pétrole, or) dans les fiches devises doit être explicitée en horizon temporel (séance vs 7 jours) et s'aligner sur les variations calculées dans l'engrenage Offre/Demande.",
+    "suggestion": "Préciser que toute mention d'une variation de commodité (pétrole, or) dans les fiches devises doit être explicitée en horizon temporel (séance vs 7 jours) et s'aligner sur les variations calculées dans l'moteur Offre/Demande.",
     "fichier_cible": "cas_particuliers.md"
    }
   ],

@@ -15,6 +15,7 @@ from datetime import date, timedelta
 from pathlib import Path
 
 from core import vue_ensemble
+from core import noms_moteurs as nm
 
 PROCHE_PCT = 15.0          # à moins de 15 % du couloir neutre : « proche »
 NB_SEANCES = 15
@@ -127,9 +128,9 @@ def thermometres(vue: dict, matrice: dict, rapport: dict | None, config: dict) -
     sortie = []
     # 1. Thème : engrenages alignés sur 7, seuil de thème établi
     seuil = vue_ensemble.SEUIL_THEME_FORT
-    m1 = {"libelle": "engrenages alignés sur 7", "valeur": coh.get("alignes") if coh else None, "unite": "alignés",
-          "seuil_bas": None, "seuil_haut": seuil, "date": theme.get("date_rapport"), "source": "règles Python des 8 engrenages",
-          "si_haut": "Thème établi", "si_bas": None, "raison": "synthèse des engrenages absente"}
+    m1 = {"libelle": "moteurs alignés sur 7", "valeur": coh.get("alignes") if coh else None, "unite": "alignés",
+          "seuil_bas": None, "seuil_haut": seuil, "date": theme.get("date_rapport"), "source": "règles Python des 8 moteurs du marché",
+          "si_haut": "Thème établi", "si_bas": None, "raison": "synthèse des 8 moteurs absente"}
     note1 = (vue_ensemble.THEME_NEUTRE + "." if coh.get("theme_neutre") else
              f"Seuil de thème établi : {seuil} alignés." + (" Titre imposé « Signaux mixtes »." if theme.get("titre_impose") else ""))
     sortie.append(thermometre(1, m1, theme.get("direction") or {}, note1, plage=(0, 7)))
@@ -244,17 +245,17 @@ def fil(dossier_rapports: Path | None, fin: str | None, n: int = NB_SEANCES) -> 
                              "libelle": dr["libelle"] if dr else "pas de rapport ce jour-là"})
         lignes.append({"numero": num, "titre": COURTS[num], "cellules": cellules})
     return {"jours": jours, "lignes": lignes, "source": "rapports quotidiens archivés (data/rapports)",
-            "note": "Une bande qui change de couleur = un engrenage qui bascule. Hachures : pas de rapport ce jour-là."}
+            "note": "Une bande qui change de couleur = un moteur qui bascule. Hachures : pas de rapport ce jour-là."}
 
 
 def entete(vue: dict, matrice: dict) -> dict:
     theme = (vue or {}).get("theme") or {}
     coh = theme.get("coherence") or {}
     d = theme.get("direction") or {}
-    orientes = [f"{c['numero']}. {COURTS[c['numero']]} ({c['direction']['libelle']})" for c in (vue or {}).get("cartes") or []
+    orientes = [f"{nm.nom(c['numero'])} ({c['direction']['libelle']})" for c in (vue or {}).get("cartes") or []
                 if c["numero"] != 1 and c.get("direction", {}).get("classe") in ("up", "dn")]
-    explication = (("Engrenages orientés : " + " ; ".join(orientes) + ". Les autres restent dans leur couloir neutre.")
-                   if orientes else "Aucun engrenage n'est sorti de son couloir neutre.")
+    explication = (("Moteurs orientés : " + " ; ".join(orientes) + ". Les autres restent dans leur couloir neutre.")
+                   if orientes else "Aucun moteur n'est sorti de son couloir neutre.")
     return {"alignes": coh.get("alignes"), "evaluables": coh.get("evaluables"), "sur": 7, "theme_neutre": coh.get("theme_neutre"),
             "titre": theme.get("titre") or theme.get("texte_indisponible") or "Thème non déterminé",
             "titre_impose": theme.get("titre_impose"), "dollar": d.get("dollar"), "risque": d.get("risque"),
@@ -281,4 +282,4 @@ def calculer(vue: dict, matrice: dict, rapport: dict | None, config: dict, dossi
             "rendez_vous": rdv, "fil": fil(dossier_rapports, ((vue or {}).get("theme") or {}).get("date_rapport")),
             "proche_pct": PROCHE_PCT,
             "methode": f"Distance au seuil le plus proche, en unité réelle et en % du couloir neutre (écart entre seuil bas et "
-                       f"seuil haut) ; « proche » sous {PROCHE_PCT:.0f} %. Seuils : règles Python des engrenages et de config.yaml."}
+                       f"seuil haut) ; « proche » sous {PROCHE_PCT:.0f} %. Seuils : règles Python des 8 moteurs et de config.yaml."}

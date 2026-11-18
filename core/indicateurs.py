@@ -11,6 +11,7 @@ publié avec deux valeurs différentes à la même date (test de non-régression
 from __future__ import annotations
 
 from datetime import date
+from core import noms_moteurs as nm
 
 # clé de la collecte macro -> clé de l'historique canonique
 SERIES_MACRO = {"vix": "vix", "sp500": "sp500", "petrole_wti": "wti", "petrole_brent": "brent",
@@ -89,7 +90,7 @@ def publiees(rapport: dict | None, dossiers: dict | None) -> list[dict]:
         for x in e.get("donnees_calculees") or []:
             if x.get("indicateur") in NOMS and x.get("valeur") is not None:
                 sortie.append({"indicateur": NOMS[x["indicateur"]], "date": x.get("date"), "valeur": float(x["valeur"]),
-                               "module": f"engrenage {e.get('numero')} (rapport)"})
+                               "module": f"{nm.nom(e.get('numero')) if e.get('numero') else 'moteur n/d'} (rapport)"})
     for numero, e in ((dossiers or {}).get("engrenages") or {}).items():
         for inst in (e or {}).get("instruments") or []:
             c = inst.get("cellule") or {}

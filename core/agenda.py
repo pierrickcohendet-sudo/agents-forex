@@ -20,6 +20,7 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 from core import registre_macro as rm, tableau_macro
+from core import noms_moteurs as nm
 
 log = logging.getLogger(__name__)
 
@@ -493,9 +494,9 @@ def pourquoi(ag: "Agenda", config: dict) -> None:
         autres = [d for d in (lc.get(cle_lc) or {}) if d != e["devise"]][:4]
         morceaux = [e["devise"] + (f" et par ricochet {', '.join(autres)}" if autres else "")]
         if e.get("engrenage"):
-            morceaux.append(f"engrenage {e['engrenage']} ({NOMS_ENGRENAGES.get(e['engrenage'], '')})")
+            morceaux.append(nm.avec_explication(e["engrenage"]))
         elif e.get("type") == "Réunion BC":
-            morceaux.append("engrenage 2 (politique monétaire)")
+            morceaux.append(nm.avec_explication(2))
         titres = [x["titre"] for x in scen if var and any(c[0] == var for c in x.get("conditions") or [])]
         if titres:
             morceaux.append(f"scénario « {titres[0]} »")

@@ -20,6 +20,7 @@ from pathlib import Path
 
 from core import controle_texte as ct
 from core import synthese_v9 as sv
+from core import noms_moteurs as nm
 
 log = logging.getLogger(__name__)
 
@@ -114,6 +115,7 @@ def prompt(s: dict, g: str, ids: list[str]) -> str:
             "Sections : " + " ; ".join(f"{sid} = {titres.get(sid)}" for sid in ids) + ".\n"
             "Règles impératives (un texte qui les enfreint est rejeté par un contrôle automatique) :\n"
             + ("- " + CONSIGNES_V94 + "\n" if s.get("structure") == "v9.4" else "- 2 à 4 phrases par section ;\n")
+            + "- " + nm.CONSIGNE_MODELE + "\n"
             + "- CHAQUE phrase cite au moins un chiffre ou une date tirés des FAITS ;\n"
             "- AUCUN nombre absent des FAITS (pas de calcul nouveau, pas d'arrondi inventé, pas de probabilité) ;\n"
             "- aucune formule creuse (« addition des signaux », « dans un contexte incertain », « divers facteurs ») ;\n"

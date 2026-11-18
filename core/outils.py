@@ -24,6 +24,7 @@ from datetime import date, timedelta
 from pathlib import Path
 
 from core import cockpit as ck, impact as impact_mod, matrice_impact as mi
+from core import noms_moteurs as nm
 
 log = logging.getLogger(__name__)
 
@@ -56,15 +57,16 @@ def decomposer(matrice: dict) -> dict[str, dict]:
             v = cb["valeur"] - cc["valeur"]
             inc = [d for d, c in ((base, cb), (cot, cc)) if c["etat"] == "nd"]
             if inc:
-                incompletes.append(f"engrenage {cb['engrenage']} : {', '.join(inc)} n/d")
+                incompletes.append(f"{nm.nom(cb['engrenage'])} : {', '.join(inc)} n/d")
             contributions.append({"engrenage": cb["engrenage"], "base": cb["valeur"], "cotation": cc["valeur"], "contribution": v,
                                   "etat_base": cb["etat"], "etat_cotation": cc["etat"], "incomplete": bool(inc)})
         solde = sum(c["contribution"] for c in contributions)
         lecture = ("soutien net de la base" if solde >= 3 else "soutien modéré de la base" if solde >= 1 else
                    "pression nette sur la base" if solde <= -3 else "pression modérée sur la base" if solde <= -1 else "équilibre")
+        dc = nm.decompte(contributions)
         sortie[p] = {"base": base, "cotation": cot, "contributions": contributions, "solde": solde, "lecture": lecture,
-                     "incompletes": incompletes,
-                     "texte": f"Solde {p} : {solde:+d} · {lecture}".replace("-", "−") +
+                     "incompletes": incompletes, "decompte": dc,
+                     "texte": f"{p} : {nm.texte_decompte(dc)} (somme {solde:+d}) · {lecture}".replace("-", "−") +
                               (f" · {len(incompletes)} {'case incomplète' if len(incompletes) < 2 else 'cases incomplètes'}" if incompletes else "")}
     return sortie
 
@@ -111,7 +113,7 @@ def scenarios(config: dict, matrice: dict) -> list[dict]:
                 s2[r["signal"]] = (float(seuil), ancien[1] if len(ancien) > 1 else "scénario", ancien[2] if len(ancien) > 2 else None)
                 sym = mi.SYMBOLES.get(op, op)
                 ajouter(f"{r['signal']}-{op}{seuil}", int(n), f"{r.get('texte')} {sym} {mi._fmt(seuil, r.get('unite')).lstrip('+')}",
-                        f"Engrenage {n} : " + ", ".join(f"{d} {v:+d}" for d, v in (c.get("effets") or {}).items()).replace("-", "−"),
+                        f"{nm.nom(n)} : " + ", ".join(f"{d} {v:+d}" for d, v in (c.get("effets") or {}).items()).replace("-", "−"),
                         s2, couv, actuel[0] if isinstance(actuel, (list, tuple)) else None, r.get("unite"))
     for n, liste in couv.items():
         for i, r in enumerate(liste or []):
@@ -126,7 +128,7 @@ def scenarios(config: dict, matrice: dict) -> list[dict]:
                 confirmees = [d for d, x in (r.get("devises") or {}).items() if x[sens]["confirmee"]]
                 ajouter(f"couverture-{r['indicateur']}-{sens}", int(n),
                         f"{r.get('texte')} {'≥' if sens == 'haut' else '≤'} {ck._fr(seuil, r.get('unite'), r.get('mesure') != 'niveau')}",
-                        f"Engrenage {n}, règle par devise confirmée sur 5 ans pour : {', '.join(confirmees) or 'aucune devise'}",
+                        f"{nm.nom(n)}, règle par devise confirmée sur 5 ans pour : {', '.join(confirmees) or 'aucune devise'}",
                         sig, c2, r.get("valeur"), r.get("unite"))
     return sortie
 
@@ -198,11 +200,12 @@ def jours_similaires(h5, technique: dict | None, thermos: list[dict], aujourdhui
     seuils = {t["numero"]: (t.get("seuil_bas"), t.get("seuil_haut"), t.get("valeur")) for t in thermos}
     series = series_mesures(h5, technique)
     gears = [g for g in (2, 4, 5, 7, 8) if g in series and seuils.get(g, (None, None, None))[2] is not None]
-    methode = ("Profil = position de la mesure de chaque engrenage dans son couloir neutre (en demi-couloirs, bornée à ±3) "
-               f"pour les engrenages {', '.join(map(str, gears)) or 'aucun'} ; distance euclidienne ; 5 séances les plus proches depuis "
-               "2021, espacées d'au moins 15 jours et suivies d'un mois connu. Engrenages 1, 3 et 6 exclus : pas de série sur 5 ans.")
+    methode = ("Profil = position de la mesure de chaque moteur dans son couloir neutre (en demi-couloirs, bornée à ±3) "
+               f"pour : {nm.liste_noms(gears) or 'aucun'} ; distance euclidienne ; 5 séances les plus proches depuis "
+               "2021, espacées d'au moins 15 jours et suivies d'un mois connu. Thème dominant, chiffres économiques et géopolitique "
+               "exclus : pas de série sur 5 ans.")
     if len(gears) < 3:
-        return {"raison": "moins de 3 engrenages avec une série sur 5 ans et une mesure du jour", "methode": methode}
+        return {"raison": "moins de 3 moteurs avec une série sur 5 ans et une mesure du jour", "methode": methode}
     actuel = {g: _z(seuils[g][2], seuils[g][0], seuils[g][1]) for g in gears}
     par_date = {g: dict(series[g]["points"]) for g in gears}
     dates = sorted(set.intersection(*(set(par_date[g]) for g in gears)))
@@ -266,7 +269,7 @@ SIMULATEUR_ENGRENAGE = {2: "us2a", 3: "cpi_us", 4: "us10a", 5: "vix", 6: "or", 7
 
 def _histoire(impact: dict | None, indicateur: str | None, sens: str = "hausse|1") -> dict:
     if not indicateur:
-        return {"raison": "pas d'indicateur du simulateur pour cet engrenage (thème : synthèse des autres)"}
+        return {"raison": "pas d'indicateur du simulateur pour ce moteur (thème : synthèse des autres)"}
     ind = next((i for i in (impact or {}).get("indicateurs") or [] if i.get("id") == indicateur), None)
     if not ind:
         return {"raison": "étude d'impact absente pour cet indicateur"}

@@ -20,6 +20,7 @@ from agents.agent_synthese import _retirer_ordres
 from core.llm import (MESSAGE_QUOTA_ATTEINT, QuotaAtteint, attribution_modele, definir_etiquette, echec_transitoire, extraire_json,
                       repli_modele_suivant)
 from core.secrets import masquer_secrets
+from core import noms_moteurs as nm
 
 log = logging.getLogger(__name__)
 TONS = ("plus restrictif", "inchangé", "plus accommodant")
@@ -38,7 +39,7 @@ def _norm(s: str) -> str:
     return re.sub(r"\s+", " ", str(s or "")).strip().lower()
 
 
-MENTION_ENGRENAGES = "engrenages indisponibles"
+MENTION_ENGRENAGES = "synthèse des 8 moteurs indisponible"
 CLES_PARTIE = {"1": ("synthese", "bilan", "conclusion", "lecture_marche"), "2": ("watchlist", "communiques", "plan")}
 
 
@@ -65,12 +66,12 @@ def _prompt1(faits: dict) -> str:
             "Réponds STRICTEMENT en JSON : {\"synthese\": \"3 à 5 phrases\", \"bilan\": \"4 phrases au plus\", "
             "\"conclusion\": \"2 phrases\", \"lecture_marche\": \"1 phrase qui reformule lecture_marche\"}. "
             "Utilise UNIQUEMENT les chiffres présents dans les faits. Les biais sont conditionnels : jamais une prédiction certaine, "
-            "jamais une probabilité, jamais un ordre d'achat ou de vente, aucun niveau de prix cible.\nFAITS :\n"
+            "jamais une probabilité, jamais un ordre d'achat ou de vente, aucun niveau de prix cible. " + nm.CONSIGNE_MODELE + "\nFAITS :\n"
             + json.dumps(faits, ensure_ascii=False))
 
 
 def _prompt2(faits: dict) -> str:
-    return ("Analyse en français, à partir des FAITS. Réponds STRICTEMENT en JSON : {\"watchlist\": {\"PAIRE\": {\"haussier\": "
+    return ("Analyse en français, à partir des FAITS. " + nm.CONSIGNE_MODELE + " Réponds STRICTEMENT en JSON : {\"watchlist\": {\"PAIRE\": {\"haussier\": "
             "\"1 phrase qui reformule les conditions haussières\", \"baissier\": \"1 phrase\"}}, \"communiques\": {\"DEVISE\": "
             "{\"ton\": \"plus restrictif | inchangé | plus accommodant\", \"citations\": [\"phrase copiée MOT POUR MOT du "
             "communiqué actuel\", \"...\"]}}, \"plan\": \"3 phrases qui lissent le plan (avant, pendant, clôture)\"}. Pour chaque "
@@ -182,7 +183,7 @@ def _rediger_long(r: dict, llm, sortie: dict, tentatives: int) -> None:
         autorises = _valeurs(faits, set())
         prompt = ("Reformule en français, ton de desk institutionnel, la phrase de chaque section à partir de ses FAITS (calculés en "
                   "Python). Réponds STRICTEMENT en JSON : {\"sections\": {\"<clé>\": \"2 ou 3 phrases\"}}. Aucun chiffre absent des faits, "
-                  "aucune probabilité, aucun ordre d'achat ou de vente, jamais « cause » pour une corrélation.\nFAITS :\n"
+                  "aucune probabilité, aucun ordre d'achat ou de vente, jamais « cause » pour une corrélation. " + nm.CONSIGNE_MODELE + "\nFAITS :\n"
                   + json.dumps(faits, ensure_ascii=False))
         definir_etiquette(etiquette)
         brut = None

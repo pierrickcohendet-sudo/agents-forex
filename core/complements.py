@@ -112,9 +112,9 @@ def complements_1(e: dict, rapport: dict | None, historiques: dict, dossier_rapp
     eng = (((rapport.get("synthese_globale") or {}).get("engrenages")) or {})
     par_num = {x["numero"]: x for x in eng.get("engrenages") or [] if x.get("numero")}
     coh = vue_ensemble.coherence(par_num) if par_num else None
-    tuiles.append(tuile("coherence", "Engrenages alignés sur le thème",
+    tuiles.append(tuile("coherence", "Moteurs alignés sur le thème",
                         {"valeur": coh["alignes"] if coh else None, "unite": "nombre", "date": jour,
-                         "source": "règles Python des 8 engrenages", "raison": None if coh else "synthèse des engrenages absente",
+                         "source": "règles Python des 8 moteurs du marché", "raison": None if coh else "synthèse des 8 moteurs absente",
                          "raison_percentile": "non historisé"},
                         None, raison_courbe="cohérence non historisée", lecture=(coh or {}).get("libelle")))
     if coh:
@@ -156,7 +156,7 @@ def complements_1(e: dict, rapport: dict | None, historiques: dict, dossier_rapp
                       "accord": "oui" if x["aligne"] else ("non évaluable" if not x["critere"] else "non"),
                       "conviction": ((e_n.get("conviction") or {}).get("niveau"))})
     e["suivi_theme"] = {"theme": theme.get("libelle"), "lignes": suivi, "regle": (coh or {}).get("regle"),
-                        "raison": None if coh else "synthèse des engrenages absente de ce rapport"}
+                        "raison": None if coh else "synthèse des 8 moteurs absente de ce rapport"}
 
 
 # ------------------------------------------------------------- engrenage 4

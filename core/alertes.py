@@ -34,7 +34,7 @@ def evaluer(echecs: list[str] | None, echec_push: list[str] | None, sources_donn
         alertes.append({"type": "fraicheur", "texte": f"{s.get('libelle')} : {s.get('texte')}"})
     eng = (((rapport or {}).get("synthese_globale") or {}).get("engrenages")) or {}
     if eng.get("statut") != "ok" and eng.get("quota_atteint"):
-        alertes.append({"type": "quota", "texte": "Synthèse des 8 engrenages bloquée par le quota du modèle "
+        alertes.append({"type": "quota", "texte": "Synthèse des 8 moteurs du marché bloquée par le quota du modèle "
                                                   "(directions et titre en calcul Python)"})
     return alertes
 

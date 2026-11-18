@@ -3,8 +3,8 @@
    (face-à-face), agenda.json (publications), rapport_jour.json (scénarios du top 3), Journal (IndexedDB). */
 import { $, h, nf, sgn, esc, dfr, ddm, frTxt, nd, store, donnees, bloc, tempsRelatif, pointFraicheur, animerChiffres } from "./v7_commun.js";
 import { graphiquePaire, graphiqueEcart } from "./paire_graphique.js";
+import { nomMoteur, moteurHtml, decompteMoteurs } from "./moteurs.js";
 
-const ENG = ["Thème macro", "Politique monétaire", "Données économiques", "Politique fiscale", "Marchés", "Géopolitique", "Prix et flux", "Offre et demande"];
 /* Calques, dans l'ordre de la page (lot V8.2) : [actif par défaut, libellé, couleur] ; choix mémorisés dans le navigateur */
 const CALQUES = { veille: [true, "Veille", "--c1"], semaine: [false, "Semaine précédente", "--c4"], asie: [false, "Session Asie", "--c2"],
                   sr: [true, "Supports et résistances", "--down"], tendance: [true, "Lignes de tendance", "--up"], fvg: [false, "Zones FVG", "--c3"],
@@ -55,7 +55,7 @@ const SQUELETTE = `
 </div>
 <div class="cols2">
   <div class="card pad" style="display:flex;flex-direction:column;gap:8px">
-    <div class="sec-head"><h3>Contribution des engrenages</h3><span class="small" id="ccBC"></span></div>
+    <div class="sec-head"><h3>Contribution des 8 moteurs du marché</h3><span class="small" id="ccBC"></span></div>
     <div class="contrib" id="contrib"></div>
   </div>
   <div class="card pad" style="display:flex;flex-direction:column;gap:8px"><h3>Niveaux du jour</h3><div class="lv" id="lv"></div><div class="lv lv-zones" id="lvZ"></div><span class="small" id="lvNote"></span></div>
@@ -100,8 +100,8 @@ export async function ecranPaire(section, parametre) {
     bloc(q(".pp-head"), () => {
       q("#ppEy").textContent = `${base} contre ${cot} · cours du ${ddm(t.date)}`;
       q("#ppT").textContent = paire;
-      const sol = m.decomposition?.solde;
-      q("#ppChips").innerHTML = `<span class="chip ${sol > 0 ? "up" : sol < 0 ? "dn" : ""}"><span class="dot"></span>Solde des engrenages ${sol == null ? "n/d" : (sol > 0 ? "+" : sol < 0 ? "−" : "") + Math.abs(sol)} · ${esc(m.direction_paire || "")}</span>
+      const sol = m.decomposition?.solde, dcp = m.decomposition?.contributions ? decompteMoteurs(m.decomposition.contributions) : null;
+      q("#ppChips").innerHTML = `<span class="chip ${sol > 0 ? "up" : sol < 0 ? "dn" : ""}" title="Les 8 moteurs du marché : contribution de chacun à la hausse (pour) ou à la baisse (contre) de ${esc(paire)}"><span class="dot"></span>${dcp ? esc(dcp.texte) : "Moteurs n/d"} · ${esc(m.direction_paire || "")}</span>
         <span class="chip">${base} : ${esc(m.etats?.[base] || "n/d")}</span><span class="chip">${cot} : ${esc(m.etats?.[cot] || "n/d")}</span><span class="chip">Thème : ${esc(m.theme || "n/d")}</span>`;
       const cj = f.cours_jour || {}, prix = cj.cours ?? t.cours;
       q("#ppPx").innerHTML = `<b class="anim-num">${prix == null ? "n/d" : nf(prix, p)}</b>${cj.variation_pct != null ? `<span class="${cj.variation_pct > 0 ? "pos" : cj.variation_pct < 0 ? "neg" : "muted"}" style="font-weight:600" title="${esc(cj.source || "")} · ${esc(cj.heure || "")}">${sgn(cj.variation_pct, 2, " %")} sur le jour</span>` : `<span class="muted">variation du jour ${nd(cj.raison || "cotation absente")}</span>`}`;
@@ -115,9 +115,9 @@ export async function ecranPaire(section, parametre) {
     bloc(q("#contrib"), () => {
       const d = m.decomposition || {}, sol = d.solde, cc = v => v > 0 ? "p" : v < 0 ? "m" : "z", sg = v => v == null ? "n/d" : v > 0 ? "+" + v : v < 0 ? "−" + Math.abs(v) : "0";
       q("#ccBC").textContent = `${base} · ${cot} · effet`;
-      q("#contrib").innerHTML = `<div class="r" style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.06em"><span>ENGRENAGE</span><span style="text-align:center">${base}</span><span style="text-align:center">${cot}</span><span style="text-align:center">PAIRE</span></div>` +
-        (d.contributions || []).map(c => `<div class="r"><span>${c.engrenage} · ${ENG[c.engrenage - 1]}</span><span class="c ${cc(c.base)}" title="${esc(c.etat_base || "")}">${sg(c.base)}</span><span class="c ${cc(c.cotation)}" title="${esc(c.etat_cotation || "")}">${sg(c.cotation)}</span><span class="c ${cc(c.contribution)}" style="font-size:13.5px">${sg(c.contribution)}</span></div>`).join("") +
-        `<div class="r" style="border-top:2px solid var(--line-2)"><b>Solde</b><span></span><span></span><span class="c ${cc(sol)}" style="font-family:var(--f-display);font-size:18px;font-weight:500">${sg(sol)}</span></div>`;
+      q("#contrib").innerHTML = `<div class="r" style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.06em"><span>MOTEUR</span><span style="text-align:center">${base}</span><span style="text-align:center">${cot}</span><span style="text-align:center">PAIRE</span></div>` +
+        (d.contributions || []).map(c => `<div class="r"><span>${moteurHtml(c.engrenage)}</span><span class="c ${cc(c.base)}" title="${esc(c.etat_base || "")}">${sg(c.base)}</span><span class="c ${cc(c.cotation)}" title="${esc(c.etat_cotation || "")}">${sg(c.cotation)}</span><span class="c ${cc(c.contribution)}" style="font-size:13.5px">${sg(c.contribution)}</span></div>`).join("") +
+        `<div class="r" style="border-top:2px solid var(--line-2)"><b>Somme</b><span></span><span></span><span class="c ${cc(sol)}" style="font-family:var(--f-display);font-size:18px;font-weight:500">${sg(sol)}</span></div>`;
     });
     bloc(q("#lv"), () => {
       const n = f.niveaux || {}, fx = v => v == null ? "—" : nf(v, p);
@@ -159,7 +159,7 @@ export async function ecranPaire(section, parametre) {
       q("#ppRead").innerHTML = (f.synthese_python || []).map(s => `<div style="display:flex;gap:8px"><span class="dot" style="color:var(--accent);margin-top:8px"></span><span>${esc(s)}</span></div>`).join("") +
         (f.synthese_modele?.texte ? `<p class="small" style="margin:0;color:var(--ink-2)">${esc(f.synthese_modele.texte)}</p>` : "") +
         (top && (haus || bais) ? `<div class="auto" style="background:var(--up-soft)"><b class="pos">Si la paire monte</b><span>${esc(haus || "")}</span></div><div class="auto" style="background:var(--down-soft)"><b class="neg">Si elle baisse</b><span>${esc(bais || "")}</span></div>` : '<span class="small">Scénarios détaillés rédigés pour les 3 paires prioritaires du jour.</span>') +
-        `<div class="small">Conséquences : ${(f.consequences || []).map(c => `${c.engrenage} ${esc(c.moteur)} (${esc(c.base)})`).join(" · ") || "n/d"}</div>`;
+        `<div class="small">Conséquences : ${(f.consequences || []).map(c => `${esc(nomMoteur(c.engrenage, true))} : ${esc(c.moteur)} (${esc(c.base)})`).join(" · ") || "n/d"}</div>`;
     });
     bloc(q("#ppEv"), () => {
       const s = Date.now() / 1000, tous = [];

@@ -18,6 +18,7 @@ import re
 import statistics
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
+from core import noms_moteurs as nm
 
 log = logging.getLogger(__name__)
 
@@ -76,6 +77,26 @@ def variation(points: list[tuple[str, float]], seances: int, unite: str) -> floa
 def _v(valeur, unite, date_, source, statut="confirmé", raison=None) -> dict:
     return {"valeur": valeur, "unite": unite, "date": date_, "source": source, "statut": statut if valeur is not None else None,
             "raison": raison if valeur is None else None}
+
+
+def conditions_moteurs(dec: dict, base: str, cot: str) -> tuple[list[str], list[str]]:
+    """Conditions des scénarios d'une paire en noms de moteurs : « 2 moteurs sur 8 vont dans le sens d'AUD (chiffres
+    économiques, prix et positionnement), 0 contre »."""
+    d = nm.decompte(dec.get("contributions") or [])
+    if not dec.get("contributions"):
+        return [f"les moteurs du marché se tournent vers {base} (décomposition n/d)"], [f"les moteurs du marché se tournent vers {cot} (décomposition n/d)"]
+
+    def sens(dev, pour, contre, noms):
+        return (f"{pour} moteur{'s' if pour > 1 else ''} sur 8 {'vont' if pour > 1 else 'va'} dans le sens {nm.de(dev)}"
+                + (f" ({', '.join(noms)})" if noms else "") + f", {contre} contre")
+    solde = dec.get("solde") or 0
+    h = sens(base, d["pour"], d["contre"], d["noms_pour"])
+    b = sens(cot, d["contre"], d["pour"], d["noms_contre"])
+    haussier = [h if solde > 0 else
+                f"les moteurs se retournent en faveur {nm.de(base)} (aujourd'hui {d['pour']} pour, {d['contre']} contre)"]
+    baissier = [b if solde < 0 else
+                f"les moteurs se retournent en faveur {nm.de(cot)} (aujourd'hui {d['contre']} pour {cot}, {d['pour']} contre)"]
+    return haussier, baissier
 
 
 def _fr(x: float | None, d: int = 2, signe: bool = True) -> str:
@@ -591,10 +612,7 @@ def watchlist(paires_donnees: dict | None, agenda_donnees, historiques, scen: di
         sens_scen = conseq.get(base, 0) - conseq.get(cot, 0)
         dec = ((f.get("macro") or {}).get("decomposition") or {})
         ev_paire = [e for e in forts if e["devise"] in (base, cot)][:3]
-        haussier = [f"le solde des engrenages reste favorable à {base} ({_fr(dec.get('solde'), 0)})" if (dec.get("solde") or 0) > 0 else
-                    f"le solde des engrenages ({_fr(dec.get('solde'), 0)}) se retourne en faveur de {base}"]
-        baissier = [f"le solde des engrenages reste favorable à {cot} ({_fr(dec.get('solde'), 0)})" if (dec.get("solde") or 0) < 0 else
-                    f"le solde des engrenages ({_fr(dec.get('solde'), 0)}) se retourne en faveur de {cot}"]
+        haussier, baissier = conditions_moteurs(dec, base, cot)
         if meilleur and sens_scen:
             (haussier if sens_scen > 0 else baissier).append(f"le scénario « {meilleur['titre']} » se confirme")
         for e in ev_paire:
@@ -612,7 +630,7 @@ def watchlist(paires_donnees: dict | None, agenda_donnees, historiques, scen: di
                     "risque": (cfg.get("risques") or {}).get(cot if cot in ("JPY", "NZD", "CHF", "CNY") else base) or (cfg.get("risques") or {}).get(cot)})
     return {"classement": lignes, "top": top, "mention": MENTION_WATCHLIST,
             "methode": "Score = évènements forts des deux devises (décision de banque centrale ×2, plafond 4) + variation sur 4 semaines "
-                       "de l'écart de taux à 2 ans (pb / 10, plafond 3) + |solde des engrenages| (plafond 4) + volatilité 30 j / médiane (plafond 3). "
+                       "de l'écart de taux à 2 ans (pb / 10, plafond 3) + |solde des 8 moteurs du marché| (plafond 4) + volatilité 30 j / médiane (plafond 3). "
                        f"Top 6 : au plus {MAX_PAR_DEVISE} paires par devise."}
 
 
@@ -784,7 +802,7 @@ def tableau_devises(profil: dict) -> dict:
 def essentiel(sortie: dict, profil: dict, du_jour: list[dict]) -> dict:
     """L'essentiel de la Synthèse : 5 lignes Python (thème, scénario, devises, aujourd'hui, watchlist)."""
     ent = (sortie.get("theme") or {})
-    lignes = [f"Thème : {ent['titre']}." if ent.get("titre") else "Thème du jour n/d (dossiers des engrenages absents).",
+    lignes = [f"Thème : {ent['titre']}." if ent.get("titre") else "Thème du jour n/d (dossiers des 8 moteurs absents).",
               sortie["scenarios"]["texte_mieux_confirme"]]
     par = {}
     for d in profil.get("devises") or []:
@@ -926,7 +944,7 @@ INTERTITRES = [("Banques centrales", r"\b(banque|BoE|Fed|BCE|BoJ|BNS|BoC|RBA|RBN
                ("Scénarios", r"\b(scénario|condition)s?\b"),
                ("Marchés", r"\b(rendement|dollar|or|pétrole|Brent|VIX|action|Nasdaq|S&P|indice|devise)s?\b"),
                ("Agenda", r"\b(publication|agenda|aujourd'hui|demain|semaine|catalyseur|chiffre)s?\b"),
-               ("Thème", r"\b(thème|engrenage|signaux|conviction)s?\b")]
+               ("Thème", r"\b(thème|engrenage|moteur|signaux|conviction)s?\b")]
 _PHRASE = re.compile(r"(?<=[.!?…])\s+(?=[A-ZÀÂÉÈÊÎÔÛÇ«0-9])")
 
 

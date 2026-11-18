@@ -74,7 +74,7 @@ const SQUELETTE = `
 <div id="detaille"></div>`;
 
 const dec = v => Math.abs(v) >= 20 ? 2 : 4;
-const COMPOSANTES = [["evenements", "Événements", "--c1"], ["differentiel", "Écart de taux", "--c2"], ["solde", "Solde engrenages", "--c3"], ["volatilite", "Volatilité", "--c4"]];
+const COMPOSANTES = [["evenements", "Événements", "--c1"], ["differentiel", "Écart de taux", "--c2"], ["solde", "Moteurs pour et contre", "--c3"], ["volatilite", "Volatilité", "--c4"]];
 const VARIABLES = { us2a_5j: "US 2 ans", us10a_5j: "US 10 ans", us30a_5j: "US 30 ans", reel_10a_5j: "Taux réel 10 ans", point_mort_10a_5j: "Point mort d'inflation", spread_hy_5j: "Crédit high yield", vix_5j: "VIX", brent_5j: "Brent", or_5j: "Or", nasdaq_5j: "Nasdaq 100 (QQQ)", sp500_5j: "S&P 500 (SPY)", dollar_5j: "Dollar", ecart_2a_us_de_5j: "Écart 2 ans US − All.", oat_bund: "Écart OAT − Bund", surprise_30j_usd: "Surprise USD 30 j" };
 const symbole = r => r === true ? "✓" : r === false ? "×" : "–";
 const classeCond = r => r === true ? "pos" : r === false ? "neg" : "muted";
@@ -103,19 +103,19 @@ export async function ecranSynthese(section) {
     q("#heroTitre").textContent = t.titre || "Thème n/d";
     const dir = t.direction || {};
     q("#heroChips").innerHTML = `<span class="chip ${classeDir(dir.classe)}"><span class="dot"></span>${esc(dir.libelle || "direction n/d")}</span><span class="chip">Calcul Python, pas d'avis du modèle</span>`
-      + (tx.mention_engrenages ? `<span class="chip warn" title="La synthèse des engrenages par le modèle n'est pas faite aujourd'hui : thème et directions calculés en Python">${esc(tx.mention_engrenages)}</span>` : "");
+      + (tx.mention_engrenages ? `<span class="chip warn" title="La synthèse des 8 moteurs du marché par le modèle n'est pas faite aujourd'hui : thème et directions calculés en Python">${esc(tx.mention_engrenages)}</span>` : "");
     q("#heroTxt").textContent = t.texte || "";
     q("#devStrip").innerHTML = (profil?.devises || []).map(d => `<span class="chip ${classeEtat(d.etat?.valeur)}" title="${esc((d.etat?.valeur || "n/d") + " · " + (d.etat?.raison || ""))}">${d.devise}</span>`).join("");
     const en = dos?.cockpit?.entete || {}, a = en.alignes, n = en.evaluables;
     const seuil = (dos?.cockpit?.thermometres || []).find(x => x.numero === 1)?.seuil_haut ?? 3;
     if (a != null && n) {
       const R = 46, C = 2 * Math.PI * R;
-      q("#ring").innerHTML = `<svg viewBox="0 0 116 116" role="img" aria-label="${a} engrenages alignés sur ${n}"><circle cx="58" cy="58" r="${R}" style="fill:none;stroke:var(--line)" stroke-width="9"/>
+      q("#ring").innerHTML = `<svg viewBox="0 0 116 116" role="img" aria-label="${a} moteurs alignés sur ${n}"><circle cx="58" cy="58" r="${R}" style="fill:none;stroke:var(--line)" stroke-width="9"/>
         <circle cx="58" cy="58" r="${R}" style="fill:none;stroke:var(--accent)" stroke-width="9" stroke-linecap="round" stroke-dasharray="${C * a / n} ${C}" transform="rotate(-90 58 58)"/>
         <line x1="58" y1="6" x2="58" y2="18" style="stroke:var(--ink)" stroke-width="2" transform="rotate(${seuil / n * 360} 58 58)"/>
         <text x="58" y="64" text-anchor="middle" font-family="Newsreader, Georgia, serif" font-size="26" style="fill:var(--ink)">${a}/${n}</text></svg>
-        <div><b>${a} sur ${n}</b><div class="muted" style="font-size:13.5px">engrenages alignés sur le thème. Il en faut ${seuil} pour un thème établi (le repère sur l'anneau).</div></div>`;
-    } else q("#ring").innerHTML = `<div class="muted">Cohérence des engrenages ${nd("dossiers des engrenages absents")}</div>`;
+        <div><b>${a} sur ${n}</b><div class="muted" style="font-size:13.5px">moteurs du marché alignés sur le thème. Il en faut ${seuil} pour un thème établi (le repère sur l'anneau).</div></div>`;
+    } else q("#ring").innerHTML = `<div class="muted">Cohérence des moteurs ${nd("dossiers des 8 moteurs absents")}</div>`;
     const conv = { faible: 1, moyen: 2, fort: 3 }[t.conviction] || 0;
     q("#meter").innerHTML = [1, 2, 3].map(i => `<i class="${i <= conv ? "on" : ""}"></i>`).join("");
     q("#convTxt").textContent = { faible: "Faible", moyen: "Moyenne", fort: "Forte" }[t.conviction] || "n/d";

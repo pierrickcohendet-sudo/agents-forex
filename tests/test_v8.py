@@ -76,7 +76,7 @@ def test_titre_du_briefing():
     assert briefing.titre_du_jour(RJ, "2026-11-05")[0] == "Journée Banque d'Angleterre : hausse attendue de 25 pb à 13:00"
     assert briefing.titre_du_jour(RJ, "2026-11-06")[0] == "Signaux mixtes"                           # pas de décision : le thème
     l = briefing.lignes_contexte(RJ, {"alignes": 2, "evaluables": 7})
-    assert l[0] == ["Contexte", "Signaux mixtes : 2 engrenages sur 7 suivent le thème, conviction moyenne."]
+    assert l[0] == ["Contexte", "Signaux mixtes : 2 moteurs sur 7 suivent le thème, conviction moyenne."]
     assert l[2][1].startswith("EUR/USD (priorité élevée). Devises : Soutenue")
 
 

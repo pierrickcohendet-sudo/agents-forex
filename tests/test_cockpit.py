@@ -63,7 +63,7 @@ def test_au_bord_du_seuil_et_signaux_classes():
     bord = c["au_bord"]
     assert len(bord) == 3 and bord[0]["id"] == "surprise_30j-CNY" and "du couloir neutre" in bord[0]["phrase"]
     assert all(b["etat"] in ("proche", "non") for b in bord)
-    assert c["entete"]["titre_impose"] and c["entete"]["alignes"] == 1 and "7. Flux" in c["entete"]["explication"]
+    assert c["entete"]["titre_impose"] and c["entete"]["alignes"] == 1 and "Prix et positionnement" in c["entete"]["explication"]
 
 
 def test_fil_des_seances_jours_sans_rapport_hachures():

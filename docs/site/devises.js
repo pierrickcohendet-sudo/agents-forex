@@ -1,5 +1,6 @@
 /* Onglet Devises : une fiche par devise (9), analyse du jour, indicateurs, synthèse approfondie. */
 import { chargerJson, enErreur, el, indisponible, dateCourte, dateHeure, DRAPEAUX, enBref, essentiel, vueComplete } from "./commun.js";
+import { nomMoteur, explicationMoteur } from "./moteurs.js";
 import { blocDevises } from "./consequences_synthese.js";
 import { graphiqueSerie } from "./dossiers.js";
 
@@ -224,7 +225,6 @@ function lignesTechniques(cellules, lignesRapport) {
 /* ------------------------------------------------ cartes graphiques (palier C) */
 const NOMS = { USD: "Dollar US", EUR: "Euro", GBP: "Livre sterling", JPY: "Yen", CHF: "Franc suisse", CAD: "Dollar canadien",
                AUD: "Dollar australien", NZD: "Dollar néo-zélandais", CNY: "Yuan" };
-const COURT_ENG = { 1: "Thème", 2: "Monétaire", 3: "Données", 4: "Fiscale", 5: "Marchés", 6: "Géopolitique", 7: "Flux", 8: "Offre" };
 const virgule = (v, d = 1) => String(Number(v).toFixed(d)).replace(".", ",").replace("-", "−");
 function cellule(dos, n, devise, cle) {
   return ((dos?.engrenages?.[String(n)]?.lignes || []).find(l => l.devise === devise)?.cellules || {})[cle] || null;
@@ -270,12 +270,14 @@ export function carteDevise(d, dos, coursDev, cles, rapportDev, etat) {
   c.appendChild(ind);
   const mots = moteurs(dos, d);
   const bloc = el("div", "dc-moteurs");
-  bloc.appendChild(el("span", "dc-lab", "Engrenages actifs"));
+  bloc.appendChild(el("span", "dc-lab", "Moteurs actifs"));
   if (!mots.length) bloc.appendChild(el("p", "note", "Aucune case active dans la matrice d'impact aujourd'hui."));
   for (const m of mots) {
     const r = m.regles?.[0];
-    bloc.appendChild(el("p", `dc-moteur ${m.valeur > 0 ? "pos" : "neg"}`,
-      `${m.valeur > 0 ? "▲" : "▼"} ${m.engrenage}. ${COURT_ENG[m.engrenage]} : ${r ? `${r.regle.split(" ≥")[0].split(" ≤")[0]} (${r.chiffre})` : m.libelle}`));
+    const p = el("p", `dc-moteur ${m.valeur > 0 ? "pos" : "neg"}`,
+      `${m.valeur > 0 ? "▲" : "▼"} ${nomMoteur(m.engrenage)} : ${r ? `${r.regle.split(" ≥")[0].split(" ≤")[0]} (${r.chiffre})` : m.libelle}`);
+    p.title = explicationMoteur(m.engrenage);
+    bloc.appendChild(p);
   }
   c.appendChild(bloc);
   const ouvrir = el("a", "dc-ouvrir", "Ouvrir la fiche détaillée (analyse et points de vigilance)");
@@ -380,7 +382,7 @@ export async function pageDevises(parametre) {
   const grille = el("div", "dc-grille");
   const parDevise = new Map((rapport.devises || []).map(d => [d.devise, d]));
   for (const d of Object.keys(NOMS)) grille.appendChild(carteDevise(d, dos, enErreur(cours) ? null : cours.devises?.[d], cles.get(d), parDevise.get(d), etats.get(d)));
-  const note = el("p", "note", "Indicateurs : série unique 5 ans (mêmes valeurs que le dossier 7 et le tableau de chaque fiche), survol pour la source. Engrenages actifs : cases les plus fortes de la matrice d'impact (−2 à +2). Aide à la décision, jamais un ordre.");
+  const note = el("p", "note", "Indicateurs : série unique 5 ans (mêmes valeurs que le dossier « prix et positionnement » et le tableau de chaque fiche), survol pour la source. Moteurs actifs : cases les plus fortes de la matrice d'impact (−2 à +2). Aide à la décision, jamais un ordre.");
   const syntheses = await blocDevises();
   const detail = el("details", "voir-detail");
   detail.open = !!parametre || vueComplete();
