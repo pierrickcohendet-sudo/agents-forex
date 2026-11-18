@@ -47,10 +47,10 @@ async function tx(store, mode, action) {
   });
 }
 export const lireNotes = () => tx("notes", "readonly", st => st.getAll());
-const ecrireNote = n => tx("notes", "readwrite", st => st.put(n));
-const supprimerNote = id => tx("notes", "readwrite", st => st.delete(id));
-const lireMeta = cle => tx("meta", "readonly", st => st.get(cle));
-const ecrireMeta = (cle, valeur) => tx("meta", "readwrite", st => st.put({ cle, valeur }));
+export const ecrireNote = n => tx("notes", "readwrite", st => st.put(n));
+export const supprimerNote = id => tx("notes", "readwrite", st => st.delete(id));
+export const lireMeta = cle => tx("meta", "readonly", st => st.get(cle));
+export const ecrireMeta = (cle, valeur) => tx("meta", "readwrite", st => st.put({ cle, valeur }));
 function messageErreur(e) {
   const n = String(e?.name || ""), m = String(e?.message || e);
   if (n === "QuotaExceededError" || /quota/i.test(m)) return "stockage du navigateur plein : exportez vos notes puis supprimez des images";
@@ -59,7 +59,7 @@ function messageErreur(e) {
 }
 
 /* ------------------------------------------------------------------ images : compression dans le navigateur */
-async function compresser(fichier) {
+export async function compresser(fichier) {
   const bitmap = await (window.createImageBitmap ? createImageBitmap(fichier) : new Promise((ok, ko) => {
     const img = new Image(); img.onload = () => ok(img); img.onerror = ko; img.src = URL.createObjectURL(fichier);
   }));

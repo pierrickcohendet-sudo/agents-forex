@@ -113,3 +113,74 @@ def test_site_sans_le_mot_hors_onglet():
         fautifs = [l.strip()[:120] for l in lignes if re.search(r"(?<![.\w#/_\"'])[Ee]ngrenages?(?![\w\"'\]./=:])", l)
                    and "Ouvrir le cockpit" not in l and "onglet « 8 engrenages »" not in l]
         assert not fautifs, (f, fautifs[:3])
+
+
+# ------------------------------------------------------------------ archive du contexte (Lecture du site)
+from datetime import datetime, timezone  # noqa: E402
+import shutil  # noqa: E402
+import subprocess  # noqa: E402
+
+from core import contexte  # noqa: E402
+
+DATA = RACINE / "docs" / "data"
+
+
+@pytest.fixture(scope="module")
+def archive(tmp_path_factory):
+    d = tmp_path_factory.mktemp("ctx")
+    for f in ("dossiers.json", "profil_devises.json", "rapport_jour.json", "paires.json", "agenda.json"):
+        shutil.copy(DATA / f, d / f)
+    shutil.copytree(DATA / "paires", d / "paires")
+    r1 = contexte.archiver(d, datetime(2026, 11, 17, 13, 20, tzinfo=timezone.utc))
+    r2 = contexte.archiver(d, datetime(2026, 11, 17, 14, 20, tzinfo=timezone.utc))
+    return d, r1, r2
+
+
+def test_archive_contexte_format_36_paires_raisons_datees(archive):
+    d, r1, r2 = archive
+    assert r1["ajoute"] and not r2["ajoute"]                      # instantané inchangé : pas de doublon
+    f = json.loads((d / "contexte" / "2026-11-17.json").read_text(encoding="utf-8"))
+    assert f["moteurs"]["7"]["nom"] == "Prix et positionnement" and len(f["instantanes"]) == 1
+    i = contexte.reconstituer(f, 0)
+    assert len(i["paires"]) == 36 and set(i["devises"]) == set(contexte.DEVISES)
+    for p, x in i["paires"].items():
+        assert len(x["c"]) == 8 and all(v in (-1, 0, 1, None) for v in x["c"]), p
+        assert p in i["marche"]["paires"]
+    for dev, x in i["devises"].items():
+        assert len(x["moteurs"]) == 8
+        for m in x["moteurs"]:
+            assert m["raison"] and not MOT.search(m["raison"])
+            assert m["date"] or m["raison"].startswith("n/d"), (dev, m)    # chaque raison est datée, sinon « n/d » et sa raison
+            assert m["source"] or m["raison"].startswith("n/d")
+    assert re.search(r"\d", i["devises"]["USD"]["moteurs"][2]["raison"])  # raison chiffrée
+    assert i["theme"]["titre"] and i["scenarios"]
+    idx = json.loads((d / "contexte" / "index.json").read_text(encoding="utf-8"))
+    assert idx["premier"] == "2026-11-17" and idx["jours"]["2026-11-17"] == ["2026-11-17T13:20+00:00"]
+
+
+def test_archive_purgee_apres_deux_ans(archive):
+    d, *_ = archive
+    vieux = d / "contexte" / "2024-11-01.json"
+    vieux.write_text('{"instantanes":[]}', encoding="utf-8")
+    contexte.archiver(d, datetime(2026, 11, 17, 15, 0, tzinfo=timezone.utc))
+    assert not vieux.exists() and (d / "contexte" / "2026-11-17.json").exists()
+
+
+def test_instantane_le_plus_proche_avant_l_entree():
+    idx = {"2026-11-16": ["2026-11-16T08:51+00:00", "2026-11-16T20:15+00:00"],
+           "2026-11-17": ["2026-11-17T08:52+00:00", "2026-11-17T13:20+00:00", "2026-11-17T14:21+00:00"]}
+    assert contexte.instantane_avant(idx, "2026-11-17T13:40+00:00") == ("2026-11-17", 1)
+    assert contexte.instantane_avant(idx, "2026-11-17T13:20+00:00") == ("2026-11-17", 1)   # même minute : avant ou égal
+    assert contexte.instantane_avant(idx, "2026-11-17T07:00+00:00") == ("2026-11-16", 1)   # avant le premier du jour : la veille
+    assert contexte.instantane_avant(idx, "2026-11-01T10:00+00:00") is None                # non archivé
+
+
+def test_archive_publiee_couvre_le_17_11():
+    idx = json.loads((DATA / "contexte" / "index.json").read_text(encoding="utf-8"))
+    assert idx["premier"] <= "2026-11-17" and contexte.instantane_avant(idx["jours"], "2026-11-17T13:40+00:00")
+
+
+def test_journal_v4_fonctions_pures_js():
+    r = subprocess.run(["node", str(RACINE / "tests" / "journal_v4.test.mjs")], capture_output=True, text=True, encoding="utf-8", timeout=60)
+    assert r.returncode == 0, r.stderr[-2000:]
+    assert "journal V4 : OK" in r.stdout

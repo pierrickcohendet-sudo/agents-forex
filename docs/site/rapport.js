@@ -341,7 +341,7 @@ async function sectionsPeriodiques() {
     const { sectionSynthese } = await import("./consequences_synthese.js");
     hebdo.appendChild(sectionSynthese(cs.hebdo, "hebdo"));
   } else hebdo.appendChild(el("p", "indisponible", `Données insuffisantes : ${enErreur(h) ? "dossier hebdomadaire pas encore produit (dimanche)" : syn?.raison || "synthèse non rédigée"}.`));
-  const lien = el("a", null, "Dossier complet de la semaine (8 engrenages)"); lien.href = "#engrenages/hebdo"; hebdo.appendChild(lien);
+  const lien = el("a", null, "Dossier complet de la semaine (onglet « 8 engrenages »)"); lien.href = "#engrenages/hebdo"; hebdo.appendChild(lien);
   sortie.push(hebdo);
   const mens = el("details", "carte rp-section rp-periodique"); mens.id = "rp-mensuel"; mens.open = vueComplete();
   mens.appendChild(el("summary", null, "Synthèse mensuelle"));

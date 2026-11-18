@@ -8,7 +8,7 @@ export const STATUTS = { analyse: "Analyse seulement", ouverte: "Position ouvert
 
 /* V1 -> V2 sans perte : tous les champs V1 restent ; les images deviennent des captures à unités multiples. */
 export function migrer(n) {
-  if (!n || n.version === 2) return n;
+  if (!n || n.version >= 2) return n;   // V2, V3 (même version 2) et V4 : déjà au bon format
   const captures = (n.images || []).map(im => ({ ...im, unites: im.unites || (im.unite ? [UNITE_V1[im.unite] || im.unite] : []) }));
   return {
     ...n, version: 2, migre_de: 1,

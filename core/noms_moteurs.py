@@ -108,6 +108,8 @@ def remplacer(texte: str) -> tuple[str, int]:
     t = sub(r"\b([1-8])\. (Thème|Monétaire|Données|Fiscale|Marchés|Géopolitique|Flux|Offre)\b",
             lambda m: nom(int(m.group(1))), t, 0)
     t = sub(r"solde des engrenages", "solde des moteurs", t)
+    t = sub(r"cet engrenage", "ce moteur", t)
+    t = sub(r"un engrenage", "un moteur", t)
     t = sub(r"(\d+) engrenages? sur (\d+)", r"\1 moteurs sur \2", t)
     t = sub(r"engrenages? alignés?", "moteurs alignés", t)
     t = sub(r"\b(les |des |aux )?8 engrenages\b", lambda m: f"{m.group(1) or ''}8 moteurs du marché", t)

@@ -287,6 +287,7 @@ def main() -> int:
                 if not arguments.sans_web:
                     if (tableau or {}).get("modifie"):
                         etape("site web (site.json)", site_donnees.ecrire, RACINE, config)
+                    etape("archive du contexte (Journal)", _contexte, config, defaut={})
                     etape("noms des moteurs (contrôle)", _noms_moteurs, config, defaut={})
                     etape("git push (séance)", publication_web.pousser_git,
                           config["publication_web"], RACINE, "séance : cours, agenda et thermomètres")
@@ -585,6 +586,7 @@ def main() -> int:
     if not arguments.sans_web and config.get("publication_web", {}).get("actif", True):
         etape("publication web (docs/)", publication_web.ecrire_donnees,
               rapport, RACINE / config["publication_web"]["dossier_docs"])
+        etape("archive du contexte (Journal)", _contexte, config, defaut={})
         etape("noms des moteurs (contrôle)", _noms_moteurs, config, defaut={})
         etape("git push (GitHub Pages)", publication_web.pousser_git,
               config["publication_web"], RACINE)
@@ -705,6 +707,14 @@ def ligne_budget(b: dict) -> str:
         ligne += " ; analyses : " + ", ".join(
             f"{k} {v['statut']}" + (f" ({v['echec']})" if v.get("echec") else "") for k, v in analyses.items())
     return ligne
+
+
+def _contexte(config: dict) -> dict:
+    """Lot V10 (B4) : instantané du contexte publié pour la « Lecture du site » du Journal (docs/data/contexte/)."""
+    from core import contexte
+    r = contexte.archiver(RACINE / config["publication_web"]["dossier_docs"] / "data")
+    log.info("Contexte archivé : %s", r)
+    return r
 
 
 def _noms_moteurs(config: dict) -> dict:

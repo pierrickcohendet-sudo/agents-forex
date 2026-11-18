@@ -110,3 +110,24 @@ horizontal. Comparer côte à côte avec `docs/design/reference/` et lister les 
   reste permis en français (« à long terme »).
 - Le Brent affiché est le prix spot de l'EIA, daté ; les fonds cotés (BNO, USO) n'apparaissent qu'en variation, jamais comme
   un prix au baril.
+
+## Lot V10 — noms des moteurs et Journal V4 (calendrier façon Notion)
+
+- **Noms des 8 moteurs** : définis une seule fois dans `core/noms_moteurs.py` ; le site les lit dans `docs/site/moteurs.js`
+  (module **généré**, ne pas modifier à la main) et `docs/data/moteurs.json`. Le mot « engrenage » et les numéros restent
+  **seulement** dans l'onglet « 8 engrenages ». Ailleurs : « 4 moteurs pour, 0 contre », nom du moteur avec son explication
+  en infobulle (`.moteur-nom`, soulignement pointillé). Filet de sécurité Python avant chaque publication (récapitulatif
+  « Noms des moteurs »).
+- **Journal V4** (`ecran_journal.js`, styles `v10.css`) : calendrier du mois au premier plan (`.j4-case` : vert = gain net,
+  rouge = perte nette, contour d'accent = jour choisi, pastille d'accent = aujourd'hui), bilan du mois au-dessus,
+  statistiques plus bas. À 390 px : pastille de couleur par jour, puis la liste du jour choisi (`#jJour`).
+- Panneau `.drawer.j4-panneau` (640 px sur PC, plein écran sur téléphone) : jour → saisie rapide → entrée à 3 onglets
+  (« Mon analyse », « Lecture du site », « Le trade »). Échap ferme ; brouillon de saisie gardé sur l'appareil.
+- Éditeur par blocs (`journal_editeur.js`, classes `.ed-*`) ; sérialisation, durée, orientation, migration V2/V3 → V4 :
+  fonctions pures de `journal_v4.js`, testées par `tests/journal_v4.test.mjs`.
+- « Lecture du site » (`journal_lecture.js`) : archive Python `docs/data/contexte/AAAA-MM-JJ.json` (sections stockées une
+  fois dans `blocs`, instantanés = empreintes) ; le navigateur choisit l'instantané le plus proche **avant** l'entrée et
+  l'oriente selon le sens du trade, rien d'autre.
+- Attention : un élément avec `hidden` et une règle `display` doit avoir sa règle `[hidden]{display:none}` (cas du menu « / »).
+- Parcours rejouable : `node outils/parcours_journal.mjs "http://localhost:4173/" captures/<lot>` (crée puis supprime le trade
+  de test, à 1280 et 390 px).
