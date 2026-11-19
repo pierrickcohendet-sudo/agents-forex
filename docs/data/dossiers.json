@@ -1,6 +1,6 @@
 {
  "version_schema": 1,
- "genere_le": "2026-11-19T00:38:08+00:00",
+ "genere_le": "2026-11-19T08:45:39+00:00",
  "debut_historique": "2021-09-18",
  "erreurs_collecte": [],
  "engrenages": {
@@ -23,7 +23,7 @@
     },
     {
      "libelle": "Indice de surprise global (moyenne 9 devises)",
-     "texte": "-0,09",
+     "texte": "-0,15",
      "detail": "9 devises avec un indice",
      "source": "calcul Python (registre macro, 30 j)"
     },
@@ -1268,8 +1268,8 @@
     {
      "id": "surprise_globale",
      "libelle": "Surprise globale (moyenne 9 devises)",
-     "valeur": -0.09,
-     "texte": "−0,09",
+     "valeur": -0.15,
+     "texte": "−0,15",
      "unite": "écarts",
      "date": "2026-11-19",
      "frequence": null,
@@ -1413,7 +1413,7 @@
        ],
        [
         "2026-11-19",
-        -0.09
+        -0.15
        ]
       ],
       "periode": "depuis le début de l'archive quotidienne",
@@ -7748,7 +7748,7 @@
      "devise": "AUD",
      "cellules": {
       "indice_surprise": {
-       "valeur": 0.54,
+       "valeur": -0.12,
        "raison": null,
        "source": "calcul Python (registre macro, 30 j)",
        "percentile_5a": null,
@@ -7757,23 +7757,30 @@
        "unite": "écarts",
        "date": "2026-11-19",
        "tendance": "hausse",
-       "n": 5,
+       "n": 7,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
       },
       "dispersion": {
-       "valeur": 0.53,
+       "valeur": 1.1,
        "raison": null,
        "source": "calcul Python (écart-type des surprises 30 j)",
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "n": 5,
+       "n": 7,
        "raison_percentile": "historique trop court"
       },
       "publications": {
        "valeur": null,
        "liste": [
+        {
+         "indicateur": "Taux de chômage",
+         "date": "2026-11-19",
+         "surprise": -2.0,
+         "reel": "4.9%",
+         "consensus": "4.7%"
+        },
         {
          "indicateur": "Ventes au détail",
          "date": "2026-11-04",
@@ -7782,18 +7789,11 @@
          "consensus": "0.2%"
         },
         {
-         "indicateur": "CPI annuel",
-         "date": "2026-10-28",
-         "surprise": 1.0,
-         "reel": "4.3%",
-         "consensus": "4.2%"
-        },
-        {
-         "indicateur": "Balance commerciale",
-         "date": "2026-11-05",
-         "surprise": 0.63,
-         "reel": "2.83B",
-         "consensus": "0.94B"
+         "indicateur": "Variation de l'emploi",
+         "date": "2026-11-19",
+         "surprise": -1.15,
+         "reel": "-43.5K",
+         "consensus": "25.5K"
         }
        ],
        "source": "registre macro (ForexFactory)",
@@ -7813,14 +7813,14 @@
        "raison_percentile": "pas de série gratuite à jour sur 5 ans pour ce pays (séries OCDE arrêtées)"
       },
       "chomage": {
-       "valeur": 4.7,
+       "valeur": 4.9,
        "raison": null,
        "source": "registre macro (ForexFactory)",
-       "percentile_5a": 95,
+       "percentile_5a": 98,
        "var_1s": null,
        "var_4s": null,
        "unite": "%",
-       "date": "2026-10-15",
+       "date": "2026-11-19",
        "tendance_3m": null,
        "raison_tendance": "pas de publication 2 à 4 mois plus tôt dans le registre",
        "n_5a": 61,
@@ -7832,7 +7832,7 @@
      "devise": "NZD",
      "cellules": {
       "indice_surprise": {
-       "valeur": -1.73,
+       "valeur": -1.61,
        "raison": null,
        "source": "calcul Python (registre macro, 30 j)",
        "percentile_5a": null,
@@ -7841,18 +7841,18 @@
        "unite": "écarts",
        "date": "2026-11-19",
        "tendance": "baisse",
-       "n": 4,
+       "n": 5,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
       },
       "dispersion": {
-       "valeur": 0.83,
+       "valeur": 0.92,
        "raison": null,
        "source": "calcul Python (écart-type des surprises 30 j)",
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "n": 4,
+       "n": 5,
        "raison_percentile": "historique trop court"
       },
       "publications": {
@@ -8105,7 +8105,7 @@
         ],
         [
          "2026-11-19",
-         -1.73
+         -1.61
         ]
        ]
       },
@@ -8159,63 +8159,55 @@
        ]
       },
       {
-       "nom": "AUD",
+       "nom": "CAD",
        "points": [
         [
-         "2026-08-20",
-         2.0
-        ],
-        [
-         "2026-08-27",
-         2.33
-        ],
-        [
          "2026-09-03",
-         1.07
+         -0.2
         ],
         [
          "2026-09-10",
-         1.07
+         0.08
         ],
         [
          "2026-09-17",
-         1.07
+         0.06
         ],
         [
          "2026-09-24",
-         0.39
+         0.08
         ],
         [
          "2026-10-01",
-         -0.39
+         0.07
         ],
         [
          "2026-10-08",
-         -0.52
+         -0.28
         ],
         [
          "2026-10-15",
-         -0.64
+         -0.62
         ],
         [
          "2026-10-22",
-         -0.64
+         -0.74
         ],
         [
          "2026-10-29",
-         -0.47
+         -0.75
         ],
         [
          "2026-11-05",
-         0.04
+         -0.59
         ],
         [
          "2026-11-12",
-         0.04
+         -0.56
         ],
         [
          "2026-11-19",
-         0.54
+         -0.46
         ]
        ]
       }
@@ -8400,11 +8392,11 @@
       },
       {
        "nom": "AUD",
-       "valeur": 0.54
+       "valeur": -0.12
       },
       {
        "nom": "NZD",
-       "valeur": -1.73
+       "valeur": -1.61
       },
       {
        "nom": "CNY",
@@ -8652,8 +8644,8 @@
     {
      "id": "surprise_aud",
      "libelle": "Surprise AUD (30 j)",
-     "valeur": 0.54,
-     "texte": "+0,54",
+     "valeur": -0.12,
+     "texte": "−0,12",
      "unite": "écarts",
      "date": "2026-11-19",
      "frequence": null,
@@ -8661,10 +8653,10 @@
      "source": "calcul Python (registre macro, 30 j)",
      "raison": null,
      "variation": {
-      "valeur": 1.18,
+      "valeur": 0.52,
       "unite": "écarts",
       "periode": "4 semaines",
-      "texte": "+1,18 sur 4 semaines"
+      "texte": "+0,52 sur 4 semaines"
      },
      "percentile_5a": null,
      "n_5a": null,
@@ -8726,7 +8718,7 @@
        ],
        [
         "2026-11-19",
-        0.54
+        -0.12
        ]
       ],
       "periode": "90 jours (hebdomadaire)",
@@ -8894,16 +8886,16 @@
     {
      "id": "chomage_aud",
      "libelle": "Chômage AUD",
-     "valeur": 4.7,
-     "texte": "4,70 %",
+     "valeur": 4.9,
+     "texte": "4,90 %",
      "unite": "%",
-     "date": "2026-10-15",
+     "date": "2026-11-19",
      "frequence": null,
-     "age_jours": 35,
+     "age_jours": 0,
      "source": "registre macro (ForexFactory)",
      "raison": null,
      "variation": null,
-     "percentile_5a": 95,
+     "percentile_5a": 98,
      "n_5a": 61,
      "percentile_autre": null,
      "raison_percentile": null,
@@ -8970,13 +8962,13 @@
     {
      "id": "part_positives",
      "libelle": "Publications au-dessus du consensus",
-     "valeur": 38,
-     "texte": "38 %",
+     "valeur": 36,
+     "texte": "36 %",
      "unite": "part",
      "date": "2026-11-19",
      "frequence": null,
      "age_jours": 0,
-     "source": "calcul Python (registre macro, 72 publications avec consensus sur 30 jours)",
+     "source": "calcul Python (registre macro, 75 publications avec consensus sur 30 jours)",
      "raison": null,
      "variation": null,
      "percentile_5a": null,
@@ -12310,7 +12302,7 @@
      "raison": null
     }
    ],
-   "actualites_maj": "2026-11-19T00:38+00:00",
+   "actualites_maj": "2026-11-19T08:45+00:00",
    "actualites_nb_titres_lus": 34,
    "notes": [
     "Dette et solde publics : FMI (annuel, avec 1 à 3 ans de retard) ; EUR = Allemagne. Pas de série gratuite pour CHF et NZD.",
@@ -13484,14 +13476,14 @@
      "libelle": "S&P 500",
      "unite_affichage": "indice",
      "cellule": {
-      "valeur": 7340.53,
+      "valeur": 7323.63,
       "unite": "niveau",
-      "date": "2026-11-17",
+      "date": "2026-11-18",
       "source": "FRED (SP500)",
       "frequence": "quotidien",
       "raison": null,
-      "var_1s": -2.4,
-      "var_4s": -4.82,
+      "var_1s": -3.88,
+      "var_4s": -5.59,
       "percentile_5a": 89,
       "n_5a": 262,
       "raison_percentile": null
@@ -16263,6 +16255,10 @@
         [
          "2026-11-17",
          7340.53
+        ],
+        [
+         "2026-11-18",
+         7323.63
         ]
        ]
       }
@@ -16878,19 +16874,19 @@
     {
      "id": "sp500",
      "libelle": "S&P 500",
-     "valeur": 7340.53,
-     "texte": "7 341",
+     "valeur": 7323.63,
+     "texte": "7 324",
      "unite": "niveau",
-     "date": "2026-11-17",
+     "date": "2026-11-18",
      "frequence": "quotidien",
-     "age_jours": 2,
+     "age_jours": 1,
      "source": "FRED (SP500)",
      "raison": null,
      "variation": {
-      "valeur": -4.82,
+      "valeur": -5.59,
       "unite": "%",
       "periode": "4 semaines",
-      "texte": "−4,82 % sur 4 semaines"
+      "texte": "−5,59 % sur 4 semaines"
      },
      "percentile_5a": 89,
      "n_5a": 262,
@@ -16985,6 +16981,10 @@
        [
         "2026-11-17",
         7340.53
+       ],
+       [
+        "2026-11-18",
+        7323.63
        ]
       ],
       "periode": "30 jours",
@@ -40061,9 +40061,9 @@
     },
     {
      "devise": "NZD",
-     "valeur": "-1971M",
-     "consensus": "-775M",
-     "date": "2026-10-18",
+     "valeur": "-2772M",
+     "consensus": "-1650M",
+     "date": "2026-11-18",
      "source": "ForexFactory",
      "raison": null
     },
@@ -40657,7 +40657,7 @@
       },
       {
        "nom": "NZD",
-       "valeur": -1.1
+       "valeur": -1.5
       }
      ],
      "source": "registre macro (ForexFactory), converti au dernier cours Fed H.10",
@@ -41884,7 +41884,7 @@
      "conviction": 1,
      "conviction_niveau": "faible",
      "regle": "dollar : variation hebdomadaire du 2 ans US (≥ +10 pb haussier, ≤ -10 pb baissier)",
-     "raison_couleur": "Gris (Dollar neutre) : dollar : variation hebdomadaire du 2 ans US (≥ +10 pb haussier, ≤ -10 pb baissier). Chiffre du jour : USD taux directeur 3.88% le 2026-11-16 (baisse, précédent 4.00%)"
+     "raison_couleur": "Gris (Dollar neutre) : dollar : variation hebdomadaire du 2 ans US (≥ +10 pb haussier, ≤ -10 pb baissier). Chiffre du jour : USD taux directeur 3.88% le 2026-11-17 (baisse, précédent 4.00%)"
     }
    },
    {
@@ -41899,7 +41899,7 @@
      "source": "calcul Python (registre macro, 30 j)",
      "raison": null
     },
-    "ligne": "Plus fortes surprises ailleurs : NZD −1,73, CNY −0,80.",
+    "ligne": "Plus fortes surprises ailleurs : NZD −1,61, CNY −0,80.",
     "courbe": {
      "points": [
       [
@@ -41936,7 +41936,7 @@
      "conviction": 1,
      "conviction_niveau": "faible",
      "regle": "dollar : indice de surprise 30 j de l'USD (≥ +0,3 haussier, ≤ -0,3 baissier)",
-     "raison_couleur": "Vert (Dollar haussier) : dollar : indice de surprise 30 j de l'USD (≥ +0,3 haussier, ≤ -0,3 baissier). Chiffre du jour : Indice de surprise 30 j : USD +0.87, EUR -0.19, GBP +0.21, JPY +0.28, CHF +0.45, CAD -0.46, AUD +0.54, NZD -1.73, CNY -0.80"
+     "raison_couleur": "Vert (Dollar haussier) : dollar : indice de surprise 30 j de l'USD (≥ +0,3 haussier, ≤ -0,3 baissier). Chiffre du jour : Indice de surprise 30 j : USD +0.87, EUR -0.19, GBP +0.21, JPY +0.28, CHF +0.45, CAD -0.46, AUD -0.12, NZD -1.61, CNY -0.80"
     }
    },
    {
@@ -42581,7 +42581,7 @@
      "a_retenir": "Le rendement US à 2 ans s'inscrit à 4,80 %, en hausse de +7 pb sur une semaine.",
      "a_retenir_source": "modèle",
      "texte_indisponible": null,
-     "raison_couleur": "Gris (Dollar neutre) : dollar : variation hebdomadaire du 2 ans US (≥ +10 pb haussier, ≤ -10 pb baissier). Chiffre du jour : USD taux directeur 3.88% le 2026-11-16 (baisse, précédent 4.00%)"
+     "raison_couleur": "Gris (Dollar neutre) : dollar : variation hebdomadaire du 2 ans US (≥ +10 pb haussier, ≤ -10 pb baissier). Chiffre du jour : USD taux directeur 3.88% le 2026-11-17 (baisse, précédent 4.00%)"
     },
     {
      "numero": 3,
@@ -42596,7 +42596,7 @@
       "source": "calcul Python (registre macro, 30 j)",
       "raison": null
      },
-     "ligne": "Plus fortes surprises ailleurs : NZD −1,73, CNY −0,80.",
+     "ligne": "Plus fortes surprises ailleurs : NZD −1,61, CNY −0,80.",
      "verdict": {
       "libelle": "Dollar haussier",
       "classe": "up",
@@ -42606,7 +42606,7 @@
      "a_retenir": "L'indice de surprise macro à 30 jours pour l'USD ressort fort à +0,87, alors que l'EUR fléchit à −0,19 et le NZD s'effondre à −1,73.",
      "a_retenir_source": "modèle",
      "texte_indisponible": null,
-     "raison_couleur": "Vert (Dollar haussier) : dollar : indice de surprise 30 j de l'USD (≥ +0,3 haussier, ≤ -0,3 baissier). Chiffre du jour : Indice de surprise 30 j : USD +0.87, EUR -0.19, GBP +0.21, JPY +0.28, CHF +0.45, CAD -0.46, AUD +0.54, NZD -1.73, CNY -0.80"
+     "raison_couleur": "Vert (Dollar haussier) : dollar : indice de surprise 30 j de l'USD (≥ +0,3 haussier, ≤ -0,3 baissier). Chiffre du jour : Indice de surprise 30 j : USD +0.87, EUR -0.19, GBP +0.21, JPY +0.28, CHF +0.45, CAD -0.46, AUD -0.12, NZD -1.61, CNY -0.80"
     },
     {
      "numero": 4,
@@ -42863,10 +42863,10 @@
       "libelle": "Soutien",
       "regles": [
        {
-        "regle": "S&P 500, variation sur 4 semaines ≤ −3,20 % (seuil fixe) → +1 pour USD ; confirmé sur 5 ans : 70 % des 27 cas, borne de Wilson 54,6 %",
-        "chiffre": "−4,82 %",
+        "regle": "S&P 500, variation sur 4 semaines ≤ −3,28 % (seuil fixe) → +1 pour USD ; confirmé sur 5 ans : 70 % des 27 cas, borne de Wilson 54,6 %",
+        "chiffre": "−5,59 %",
         "source": "FRED (SP500)",
-        "date": "2026-11-17",
+        "date": "2026-11-18",
         "points": 1,
         "couverture": true
        }
@@ -43063,10 +43063,10 @@
       "libelle": "Pression",
       "regles": [
        {
-        "regle": "S&P 500, variation sur 4 semaines ≤ −3,20 % (seuil fixe) → −1 pour GBP ; confirmé sur 5 ans : 67 % des 27 cas, borne de Wilson 50,8 %",
-        "chiffre": "−4,82 %",
+        "regle": "S&P 500, variation sur 4 semaines ≤ −3,28 % (seuil fixe) → −1 pour GBP ; confirmé sur 5 ans : 67 % des 27 cas, borne de Wilson 50,8 %",
+        "chiffre": "−5,59 %",
         "source": "FRED (SP500)",
-        "date": "2026-11-17",
+        "date": "2026-11-18",
         "points": -1,
         "couverture": true
        }
@@ -43161,9 +43161,9 @@
       "regles": [
        {
         "regle": "S&P 500, variation sur 4 semaines ≤ −4,00 % → +1 pour JPY",
-        "chiffre": "−4,82 %",
+        "chiffre": "−5,59 %",
         "source": "FRED (SP500)",
-        "date": "2026-11-17",
+        "date": "2026-11-18",
         "points": 1
        }
       ],
@@ -43369,10 +43369,10 @@
       "libelle": "Pression",
       "regles": [
        {
-        "regle": "S&P 500, variation sur 4 semaines ≤ −3,20 % (seuil fixe) → −1 pour CAD ; confirmé sur 5 ans : 81 % des 27 cas, borne de Wilson 66,5 %",
-        "chiffre": "−4,82 %",
+        "regle": "S&P 500, variation sur 4 semaines ≤ −3,28 % (seuil fixe) → −1 pour CAD ; confirmé sur 5 ans : 81 % des 27 cas, borne de Wilson 66,5 %",
+        "chiffre": "−5,59 %",
         "source": "FRED (SP500)",
-        "date": "2026-11-17",
+        "date": "2026-11-18",
         "points": -1,
         "couverture": true
        }
@@ -43453,20 +43453,12 @@
      },
      {
       "engrenage": 3,
-      "valeur": 1,
-      "libelle": "Soutien",
-      "regles": [
-       {
-        "regle": "indice de surprise macro 30 jours ≥ 0,50 → +1",
-        "chiffre": "+0,54",
-        "source": "calcul Python (registre macro, 30 j)",
-        "date": "2026-11-19",
-        "points": 1
-       }
-      ],
-      "raison": null,
+      "valeur": 0,
+      "libelle": "Neutre",
+      "regles": [],
+      "raison": "indice de surprise macro 30 jours : −0,12, sous les seuils",
       "bornee": false,
-      "etat": "active"
+      "etat": "neutre"
      },
      {
       "engrenage": 4,
@@ -43484,9 +43476,9 @@
       "regles": [
        {
         "regle": "S&P 500, variation sur 4 semaines ≤ −4,00 % → −1 pour AUD",
-        "chiffre": "−4,82 %",
+        "chiffre": "−5,59 %",
         "source": "FRED (SP500)",
-        "date": "2026-11-17",
+        "date": "2026-11-18",
         "points": -1
        }
       ],
@@ -43537,7 +43529,7 @@
       "etat": "sans_regle"
      }
     ],
-    "bilan": -1,
+    "bilan": -2,
     "lecture": "neutre",
     "incompletes": 1
    },
@@ -43577,7 +43569,7 @@
       "regles": [
        {
         "regle": "indice de surprise macro 30 jours ≤ −1,00 → −2",
-        "chiffre": "−1,73",
+        "chiffre": "−1,61",
         "source": "calcul Python (registre macro, 30 j)",
         "date": "2026-11-19",
         "points": -2
@@ -43603,9 +43595,9 @@
       "regles": [
        {
         "regle": "S&P 500, variation sur 4 semaines ≤ −4,00 % → −1 pour NZD",
-        "chiffre": "−4,82 %",
+        "chiffre": "−5,59 %",
         "source": "FRED (SP500)",
-        "date": "2026-11-17",
+        "date": "2026-11-18",
         "points": -1
        }
       ],
@@ -43743,15 +43735,15 @@
    }
   ],
   "comptes": {
-   "active": 24,
+   "active": 23,
    "neutralise": 3,
-   "neutre": 18,
+   "neutre": 19,
    "nd": 5,
    "sans_regle": 22
   },
-  "cases_actives": 24,
+  "cases_actives": 23,
   "cases_total": 72,
-  "compte_libelle": "24 actives, 5 n/d, 22 sans règle, 3 neutralisées",
+  "compte_libelle": "23 actives, 5 n/d, 22 sans règle, 3 neutralisées",
   "seuils_bilan": {
    "soutenue": 3,
    "pression": -3
@@ -44117,20 +44109,20 @@
       "haut": 4,
       "bas": -4
      },
-     "valeur": -4.8238,
-     "date": "2026-11-17",
+     "valeur": -5.5889,
+     "date": "2026-11-18",
      "source": "FRED (SP500)",
      "percentiles": {
-      "15": -3.1975,
-      "85": 4.0448
+      "15": -3.2809,
+      "85": 4.0403
      },
      "seuil_haut": 4,
-     "seuil_bas": -3.1975,
+     "seuil_bas": -3.2809,
      "direction": "bas",
      "declencheur": "seuil fixe",
      "neutralise": false,
      "serie_heurtee": null,
-     "n_5a": 341,
+     "n_5a": 342,
      "devises": {
       "USD": {
        "signe_classique": -1,
@@ -44663,12 +44655,12 @@
      "2026-11-19"
     ],
     "AUD": [
-     0.54,
+     -0.12,
      "calcul Python (registre macro, 30 j)",
      "2026-11-19"
     ],
     "NZD": [
-     -1.73,
+     -1.61,
      "calcul Python (registre macro, 30 j)",
      "2026-11-19"
     ],
@@ -44695,9 +44687,9 @@
     "série heurtée : +69,7 % le 05/11 en une séance (chiffres officiels)"
    ],
    "sp500_var_4s": [
-    -4.82,
+    -5.59,
     "FRED (SP500)",
-    "2026-11-17"
+    "2026-11-18"
    ],
    "titres_refuge": [
     2,
@@ -44827,9 +44819,9 @@
     "classe": "dn"
    },
    "conviction": "eleve",
-   "cases_actives": 24,
+   "cases_actives": 23,
    "cases_total": 72,
-   "compte_matrice": "24 actives, 5 n/d, 22 sans règle, 3 neutralisées",
+   "compte_matrice": "23 actives, 5 n/d, 22 sans règle, 3 neutralisées",
    "explication": "Moteurs orientés : Chiffres économiques (Dollar haussier) ; Liens entre marchés (Dollar haussier · Risk off) ; Prix et positionnement (Dollar haussier · Risk off). Les autres restent dans leur couloir neutre.",
    "texte": "Le dollar s'impose avec 3 engrenages haussiers et 4 neutres, soutenu par un environnement nettement Risk Off. L'accord des indicateurs clés valide un thème macro haussier solide pour le billet vert.",
    "texte_source": "modèle",
@@ -44930,7 +44922,7 @@
      "classe": "up"
     },
     "neutralise": null,
-    "note": "seuils ±0,30. Plus fortes surprises ailleurs : NZD −1,73, CNY −0,80.",
+    "note": "seuils ±0,30. Plus fortes surprises ailleurs : NZD −1,61, CNY −0,80.",
     "indicateur": null
    },
    {
@@ -45221,34 +45213,14 @@
     "distance_texte": "franchi"
    },
    {
-    "id": "surprise_30j-AUD",
-    "engrenage": 3,
-    "devise": "AUD",
-    "libelle": "indice de surprise macro 30 jours — AUD",
-    "effet_haut": "AUD +1 (règle 3)",
-    "effet_bas": "AUD −1 (règle 3)",
-    "valeur": 0.54,
-    "texte_valeur": "+0,54",
-    "unite": "écarts",
-    "date": "2026-11-19",
-    "source": "calcul Python (registre macro, 30 j)",
-    "seuil_bas": -0.5,
-    "seuil_haut": 0.5,
-    "etat": "franchi",
-    "distance": 0.0,
-    "distance_pct": 0.0,
-    "cote": "haut",
-    "distance_texte": "franchi"
-   },
-   {
     "id": "surprise_30j-NZD",
     "engrenage": 3,
     "devise": "NZD",
     "libelle": "indice de surprise macro 30 jours — NZD",
     "effet_haut": "NZD +1 (règle 3)",
     "effet_bas": "NZD −1 (règle 3)",
-    "valeur": -1.73,
-    "texte_valeur": "−1,73",
+    "valeur": -1.61,
+    "texte_valeur": "−1,61",
     "unite": "écarts",
     "date": "2026-11-19",
     "source": "calcul Python (registre macro, 30 j)",
@@ -45509,12 +45481,12 @@
     "libelle": "S&P 500, variation sur 4 semaines",
     "effet_haut": "devises confirmées : AUD, CAD, GBP, NZD, USD",
     "effet_bas": null,
-    "valeur": -4.8238,
-    "texte_valeur": "−4,82 %",
+    "valeur": -5.5889,
+    "texte_valeur": "−5,59 %",
     "unite": "%",
-    "date": "2026-11-17",
+    "date": "2026-11-18",
     "source": "FRED (SP500)",
-    "seuil_bas": -3.1975,
+    "seuil_bas": -3.2809,
     "seuil_haut": 4,
     "declencheur": "seuil fixe",
     "neutralise": null,
@@ -45895,6 +45867,26 @@
     "distance_texte": "10 pb"
    },
    {
+    "id": "surprise_30j-AUD",
+    "engrenage": 3,
+    "devise": "AUD",
+    "libelle": "indice de surprise macro 30 jours — AUD",
+    "effet_haut": "AUD +1 (règle 3)",
+    "effet_bas": "AUD −1 (règle 3)",
+    "valeur": -0.12,
+    "texte_valeur": "−0,12",
+    "unite": "écarts",
+    "date": "2026-11-19",
+    "source": "calcul Python (registre macro, 30 j)",
+    "seuil_bas": -0.5,
+    "seuil_haut": 0.5,
+    "etat": "non",
+    "distance": 0.38,
+    "distance_pct": 38.0,
+    "cote": "bas",
+    "distance_texte": "0,38"
+   },
+   {
     "id": "ecart_2a_us_var_4s-JPY",
     "engrenage": 2,
     "devise": "JPY",
@@ -46174,35 +46166,14 @@
     "phrase": "indice de surprise macro 30 jours — USD : +0,87, seuil haut franchi"
    },
    {
-    "id": "surprise_30j-AUD",
-    "engrenage": 3,
-    "devise": "AUD",
-    "libelle": "indice de surprise macro 30 jours — AUD",
-    "effet_haut": "AUD +1 (règle 3)",
-    "effet_bas": "AUD −1 (règle 3)",
-    "valeur": 0.54,
-    "texte_valeur": "+0,54",
-    "unite": "écarts",
-    "date": "2026-11-19",
-    "source": "calcul Python (registre macro, 30 j)",
-    "seuil_bas": -0.5,
-    "seuil_haut": 0.5,
-    "etat": "franchi",
-    "distance": 0.0,
-    "distance_pct": 0.0,
-    "cote": "haut",
-    "distance_texte": "franchi",
-    "phrase": "indice de surprise macro 30 jours — AUD : +0,54, seuil haut franchi"
-   },
-   {
     "id": "surprise_30j-NZD",
     "engrenage": 3,
     "devise": "NZD",
     "libelle": "indice de surprise macro 30 jours — NZD",
     "effet_haut": "NZD +1 (règle 3)",
     "effet_bas": "NZD −1 (règle 3)",
-    "valeur": -1.73,
-    "texte_valeur": "−1,73",
+    "valeur": -1.61,
+    "texte_valeur": "−1,61",
     "unite": "écarts",
     "date": "2026-11-19",
     "source": "calcul Python (registre macro, 30 j)",
@@ -46213,7 +46184,7 @@
     "distance_pct": 0.0,
     "cote": "bas",
     "distance_texte": "franchi",
-    "phrase": "indice de surprise macro 30 jours — NZD : −1,73, seuil bas franchi"
+    "phrase": "indice de surprise macro 30 jours — NZD : −1,61, seuil bas franchi"
    },
    {
     "id": "surprise_30j-CNY",
@@ -46476,12 +46447,12 @@
     "libelle": "S&P 500, variation sur 4 semaines",
     "effet_haut": "devises confirmées : AUD, CAD, GBP, NZD, USD",
     "effet_bas": null,
-    "valeur": -4.8238,
-    "texte_valeur": "−4,82 %",
+    "valeur": -5.5889,
+    "texte_valeur": "−5,59 %",
     "unite": "%",
-    "date": "2026-11-17",
+    "date": "2026-11-18",
     "source": "FRED (SP500)",
-    "seuil_bas": -3.1975,
+    "seuil_bas": -3.2809,
     "seuil_haut": 4,
     "declencheur": "seuil fixe",
     "neutralise": null,
@@ -46490,7 +46461,7 @@
     "distance_pct": 0.0,
     "cote": "bas",
     "distance_texte": "franchi",
-    "phrase": "S&P 500, variation sur 4 semaines : −4,82 %, seuil bas franchi"
+    "phrase": "S&P 500, variation sur 4 semaines : −5,59 %, seuil bas franchi"
    },
    {
     "id": "couverture-or",
@@ -46559,7 +46530,7 @@
     "ForexFactory, page « mois » (extraction de page, déjà lue pour le tableau macro)"
    ],
    "sources_champs": {},
-   "verifie_le": "2026-11-18T19:16",
+   "verifie_le": "2026-11-19T08:16",
    "engrenage": 3,
    "simulateur": null,
    "reaction": {
@@ -46681,8 +46652,8 @@
       },
       {
        "date": "2026-11-19",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "dn",
+       "libelle": "Dollar haussier · Risk off"
       }
      ]
     },
@@ -46762,8 +46733,8 @@
       },
       {
        "date": "2026-11-19",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "nd",
+       "libelle": "Dollar neutre"
       }
      ]
     },
@@ -46843,8 +46814,8 @@
       },
       {
        "date": "2026-11-19",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "up",
+       "libelle": "Dollar haussier"
       }
      ]
     },
@@ -46924,8 +46895,8 @@
       },
       {
        "date": "2026-11-19",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "nd",
+       "libelle": "Dollar neutre"
       }
      ]
     },
@@ -47005,8 +46976,8 @@
       },
       {
        "date": "2026-11-19",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "dn",
+       "libelle": "Dollar haussier · Risk off"
       }
      ]
     },
@@ -47086,8 +47057,8 @@
       },
       {
        "date": "2026-11-19",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "nd",
+       "libelle": "Dollar neutre"
       }
      ]
     },
@@ -47167,8 +47138,8 @@
       },
       {
        "date": "2026-11-19",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "dn",
+       "libelle": "Dollar haussier · Risk off"
       }
      ]
     },
@@ -47248,8 +47219,8 @@
       },
       {
        "date": "2026-11-19",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "nd",
+       "libelle": "Dollar neutre"
       }
      ]
     }
@@ -48154,8 +48125,8 @@
        },
        {
         "devise": "AUD",
-        "avant": -1,
-        "apres": -1,
+        "avant": -2,
+        "apres": -2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -48236,8 +48207,8 @@
        },
        {
         "devise": "AUD",
-        "avant": -1,
-        "apres": -1,
+        "avant": -2,
+        "apres": -2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -48318,8 +48289,8 @@
        },
        {
         "devise": "AUD",
-        "avant": -1,
-        "apres": -1,
+        "avant": -2,
+        "apres": -2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -48400,8 +48371,8 @@
        },
        {
         "devise": "AUD",
-        "avant": -1,
-        "apres": -1,
+        "avant": -2,
+        "apres": -2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -48554,7 +48525,7 @@
       "classe": "up"
      },
      "neutralise": null,
-     "note": "seuils ±0,30. Plus fortes surprises ailleurs : NZD −1,73, CNY −0,80.",
+     "note": "seuils ±0,30. Plus fortes surprises ailleurs : NZD −1,61, CNY −0,80.",
      "indicateur": null
     },
     "chiffres": [
@@ -48590,11 +48561,11 @@
      },
      {
       "libelle": "Surprise AUD (30 j)",
-      "texte": "+0,54",
+      "texte": "−0,12",
       "date": "2026-11-19",
       "source": "calcul Python (registre macro, 30 j)",
       "raison": null,
-      "variation": "+1,18 sur 4 semaines",
+      "variation": "+0,52 sur 4 semaines",
       "percentile_5a": null,
       "rang": "rang 5 ans n/d : indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
      }
@@ -48621,19 +48592,10 @@
       "neutralise": null
      },
      {
-      "libelle": "indice de surprise macro 30 jours — AUD",
-      "etat": "déclenchée",
-      "distance": "franchi",
-      "valeur": "+0,54",
-      "date": "2026-11-19",
-      "source": "calcul Python (registre macro, 30 j)",
-      "neutralise": null
-     },
-     {
       "libelle": "indice de surprise macro 30 jours — NZD",
       "etat": "déclenchée",
       "distance": "franchi",
-      "valeur": "−1,73",
+      "valeur": "−1,61",
       "date": "2026-11-19",
       "source": "calcul Python (registre macro, 30 j)",
       "neutralise": null
@@ -48688,6 +48650,15 @@
       "etat": "non",
       "distance": "0,31",
       "valeur": "−0,19",
+      "date": "2026-11-19",
+      "source": "calcul Python (registre macro, 30 j)",
+      "neutralise": null
+     },
+     {
+      "libelle": "indice de surprise macro 30 jours — AUD",
+      "etat": "non",
+      "distance": "0,38",
+      "valeur": "−0,12",
       "date": "2026-11-19",
       "source": "calcul Python (registre macro, 30 j)",
       "neutralise": null
@@ -48778,7 +48749,7 @@
     "lecture": {
      "texte": "L'indice de surprise macro à 30 jours pour l'USD ressort fort à +0,87, alors que l'EUR fléchit à −0,19 et le NZD s'effondre à −1,73. Le CAD enregistre également un retard à −0,46.",
      "source": "modèle",
-     "phrase_python": "Dollar haussier. seuils ±0,30. Plus fortes surprises ailleurs : NZD −1,73, CNY −0,80.",
+     "phrase_python": "Dollar haussier. seuils ±0,30. Plus fortes surprises ailleurs : NZD −1,61, CNY −0,80.",
      "texte_indisponible": null,
      "redige_par": "Flash 3.5",
      "redige_le": "2026-11-19T00:35:08+00:00",
@@ -49557,8 +49528,8 @@
        },
        {
         "devise": "AUD",
-        "avant": -1,
-        "apres": -1,
+        "avant": -2,
+        "apres": -2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -49639,8 +49610,8 @@
        },
        {
         "devise": "AUD",
-        "avant": -1,
-        "apres": -1,
+        "avant": -2,
+        "apres": -2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -49714,8 +49685,8 @@
        },
        {
         "devise": "AUD",
-        "avant": -1,
-        "apres": -1,
+        "avant": -2,
+        "apres": -2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -49796,8 +49767,8 @@
        },
        {
         "devise": "AUD",
-        "avant": -1,
-        "apres": -1,
+        "avant": -2,
+        "apres": -2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -49871,8 +49842,8 @@
        },
        {
         "devise": "AUD",
-        "avant": -1,
-        "apres": -1,
+        "avant": -2,
+        "apres": -2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -50044,11 +50015,11 @@
      },
      {
       "libelle": "S&P 500",
-      "texte": "7 341",
-      "date": "2026-11-17",
+      "texte": "7 324",
+      "date": "2026-11-18",
       "source": "FRED (SP500)",
       "raison": null,
-      "variation": "−4,82 % sur 4 semaines",
+      "variation": "−5,59 % sur 4 semaines",
       "percentile_5a": 89,
       "rang": "89e percentile sur 5 ans"
      },
@@ -50732,8 +50703,8 @@
       "libelle": "S&P 500, variation sur 4 semaines",
       "etat": "déclenchée",
       "distance": "franchi",
-      "valeur": "−4,82 %",
-      "date": "2026-11-17",
+      "valeur": "−5,59 %",
+      "date": "2026-11-18",
       "source": "FRED (SP500)",
       "neutralise": null
      },
@@ -50800,10 +50771,10 @@
        },
        {
         "devise": "AUD",
-        "avant": -1,
-        "apres": -2,
+        "avant": -2,
+        "apres": -3,
         "lecture_avant": "neutre",
-        "lecture_apres": "neutre"
+        "lecture_apres": "sous pression"
        },
        {
         "devise": "NZD",
@@ -50912,10 +50883,10 @@
        },
        {
         "devise": "AUD",
-        "avant": -1,
-        "apres": -2,
+        "avant": -2,
+        "apres": -3,
         "lecture_avant": "neutre",
-        "lecture_apres": "neutre"
+        "lecture_apres": "sous pression"
        },
        {
         "devise": "NZD",
@@ -51024,8 +50995,8 @@
        },
        {
         "devise": "AUD",
-        "avant": -1,
-        "apres": 0,
+        "avant": -2,
+        "apres": -1,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -51077,7 +51048,7 @@
       "engrenage": 5,
       "libelle": "S&P 500, variation sur 4 semaines ≥ 4,00 %",
       "description": "Liens entre marchés : AUD +1, NZD +1",
-      "valeur_actuelle": -4.82,
+      "valeur_actuelle": -5.59,
       "unite": "%",
       "bilans": [
        {
@@ -51124,8 +51095,8 @@
        },
        {
         "devise": "AUD",
-        "avant": -1,
-        "apres": 1,
+        "avant": -2,
+        "apres": 0,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -51171,7 +51142,7 @@
       "engrenage": 5,
       "libelle": "S&P 500, variation sur 4 semaines ≤ −4,00 %",
       "description": "Liens entre marchés : AUD −1, NZD −1, JPY +1",
-      "valeur_actuelle": -4.82,
+      "valeur_actuelle": -5.59,
       "unite": "%",
       "bilans": [
        {
@@ -51218,8 +51189,8 @@
        },
        {
         "devise": "AUD",
-        "avant": -1,
-        "apres": -1,
+        "avant": -2,
+        "apres": -2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -51293,8 +51264,8 @@
        },
        {
         "devise": "AUD",
-        "avant": -1,
-        "apres": -1,
+        "avant": -2,
+        "apres": -2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -51368,8 +51339,8 @@
        },
        {
         "devise": "AUD",
-        "avant": -1,
-        "apres": -1,
+        "avant": -2,
+        "apres": -2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -51396,7 +51367,7 @@
       "engrenage": 5,
       "libelle": "S&P 500, variation sur 4 semaines ≥ +4,00 %",
       "description": "Liens entre marchés, règle par devise confirmée sur 5 ans pour : aucune devise",
-      "valeur_actuelle": -4.8238,
+      "valeur_actuelle": -5.5889,
       "unite": "%",
       "bilans": [
        {
@@ -51443,8 +51414,8 @@
        },
        {
         "devise": "AUD",
-        "avant": -1,
-        "apres": -1,
+        "avant": -2,
+        "apres": -2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -51488,9 +51459,9 @@
      {
       "id": "couverture-sp500-bas",
       "engrenage": 5,
-      "libelle": "S&P 500, variation sur 4 semaines ≤ −3,20 %",
+      "libelle": "S&P 500, variation sur 4 semaines ≤ −3,28 %",
       "description": "Liens entre marchés, règle par devise confirmée sur 5 ans pour : USD, GBP, CAD, AUD, NZD",
-      "valeur_actuelle": -4.8238,
+      "valeur_actuelle": -5.5889,
       "unite": "%",
       "bilans": [
        {
@@ -51537,8 +51508,8 @@
        },
        {
         "devise": "AUD",
-        "avant": -1,
-        "apres": -1,
+        "avant": -2,
+        "apres": -2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -51612,8 +51583,8 @@
        },
        {
         "devise": "AUD",
-        "avant": -1,
-        "apres": -1,
+        "avant": -2,
+        "apres": -2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -51687,8 +51658,8 @@
        },
        {
         "devise": "AUD",
-        "avant": -1,
-        "apres": -1,
+        "avant": -2,
+        "apres": -2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -51961,8 +51932,8 @@
        },
        {
         "devise": "AUD",
-        "avant": -1,
-        "apres": -1,
+        "avant": -2,
+        "apres": -2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -52055,8 +52026,8 @@
        },
        {
         "devise": "AUD",
-        "avant": -1,
-        "apres": -1,
+        "avant": -2,
+        "apres": -2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -52149,8 +52120,8 @@
        },
        {
         "devise": "AUD",
-        "avant": -1,
-        "apres": -1,
+        "avant": -2,
+        "apres": -2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -52224,8 +52195,8 @@
        },
        {
         "devise": "AUD",
-        "avant": -1,
-        "apres": -1,
+        "avant": -2,
+        "apres": -2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -54070,8 +54041,8 @@
        },
        {
         "devise": "AUD",
-        "avant": -1,
-        "apres": -1,
+        "avant": -2,
+        "apres": -2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -54164,8 +54135,8 @@
        },
        {
         "devise": "AUD",
-        "avant": -1,
-        "apres": -1,
+        "avant": -2,
+        "apres": -2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -54252,8 +54223,8 @@
        },
        {
         "devise": "AUD",
-        "avant": -1,
-        "apres": -1,
+        "avant": -2,
+        "apres": -2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -54334,8 +54305,8 @@
        },
        {
         "devise": "AUD",
-        "avant": -1,
-        "apres": -1,
+        "avant": -2,
+        "apres": -2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -54416,8 +54387,8 @@
        },
        {
         "devise": "AUD",
-        "avant": -1,
-        "apres": -1,
+        "avant": -2,
+        "apres": -2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
@@ -54491,8 +54462,8 @@
        },
        {
         "devise": "AUD",
-        "avant": -1,
-        "apres": -1,
+        "avant": -2,
+        "apres": -2,
         "lecture_avant": "neutre",
         "lecture_apres": "neutre"
        },
