@@ -1,0 +1,587 @@
+<title>Trading baby 8 engrenages V12</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+
+/* Layout : en-tête collant (marque, sessions, onglets), puis un écran par onglet, cartes posées sur un fond légèrement teinté d'encre bleue. */
+:root{
+  --bg:#EEF1F5; --surface:#FFFFFF; --surface-2:#F6F8FB; --ink:#0D1626; --ink-2:#364153; --muted:#677286; --line:#DDE2EA; --line-2:#C9D0DB;
+  --accent:#2F55D4; --accent-soft:#E6ECFD; --up:#0E8A5A; --up-soft:#DDF3E9; --down:#C23B32; --down-soft:#FBE4E1; --warn:#A86A00; --warn-soft:#FBF0D9;
+  --c1:#3B5BDB; --c2:#1098AD; --c3:#E67700; --c4:#9C36B5;
+  --shadow:0 1px 2px rgba(13,22,38,.05),0 8px 24px -12px rgba(13,22,38,.12);
+  --f-display:"Newsreader",Georgia,"Times New Roman",serif;
+  --f-body:"Instrument Sans",-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --r:14px; --ease:cubic-bezier(.2,.7,.2,1);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#06080C; --surface:#0D1119; --surface-2:#121825; --ink:#E8ECF4; --ink-2:#BCC4D2; --muted:#848FA3; --line:#1C2330; --line-2:#2A3343;
+  --accent:#8AA4FF; --accent-soft:#18223F; --up:#43D39E; --up-soft:#0F2A20; --down:#FF7F73; --down-soft:#2D1513; --warn:#F2BE5C; --warn-soft:#2B2210;
+  --c1:#5C7CFA; --c2:#1CA3B8; --c3:#D17A0A; --c4:#B65BD6; --shadow:0 1px 0 rgba(255,255,255,.03),0 12px 32px -16px rgba(0,0,0,.8); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#06080C; --surface:#0D1119; --surface-2:#121825; --ink:#E8ECF4; --ink-2:#BCC4D2; --muted:#848FA3; --line:#1C2330; --line-2:#2A3343;
+  --accent:#8AA4FF; --accent-soft:#18223F; --up:#43D39E; --up-soft:#0F2A20; --down:#FF7F73; --down-soft:#2D1513; --warn:#F2BE5C; --warn-soft:#2B2210;
+  --c1:#5C7CFA; --c2:#1CA3B8; --c3:#D17A0A; --c4:#B65BD6; --shadow:0 1px 0 rgba(255,255,255,.03),0 12px 32px -16px rgba(0,0,0,.8); color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1320px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* En-tête */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid var(--line)}
+.top-row{display:flex;align-items:center;gap:20px;padding-block:12px;flex-wrap:wrap}
+.brand{display:flex;flex-direction:column;line-height:1.1;margin-right:auto}
+.brand b{font-family:var(--f-display);font-weight:600;font-size:23px;letter-spacing:-.01em}
+.brand span{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.sessions{display:flex;flex-direction:column;gap:4px;min-width:230px;flex:0 1 300px}
+.sess-bar{position:relative;height:22px;border-radius:6px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
+.sess{position:absolute;top:3px;bottom:3px;border-radius:4px;font-size:10px;font-weight:600;display:flex;align-items:center;padding-left:6px;color:var(--ink-2);white-space:nowrap;overflow:hidden}
+.sess.on{color:var(--ink)}
+.sess-now{position:absolute;top:0;bottom:0;width:2px;background:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 25%,transparent)}
+.sess-cap{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}
+.ctrls{display:flex;gap:8px;align-items:center}
+.switch{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 12px 0 6px;border-radius:999px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-size:13px;font-weight:600;color:var(--ink-2)}
+.switch i{width:30px;height:18px;border-radius:999px;background:var(--line-2);position:relative;transition:background .2s}
+.switch i::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:var(--surface);box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .25s var(--ease)}
+.switch[aria-pressed="true"] i{background:var(--accent)}
+.switch[aria-pressed="true"] i::after{transform:translateX(12px)}
+.iconbtn{width:36px;height:36px;border-radius:999px;border:1px solid var(--line);background:var(--surface);cursor:pointer;display:grid;place-items:center}
+.iconbtn svg{width:17px;height:17px}
+nav.tabs{display:flex;gap:2px;position:relative;overflow-x:auto;scrollbar-width:none;padding-bottom:0}
+nav.tabs::-webkit-scrollbar{display:none}
+.tab{position:relative;border:0;background:none;padding:12px 14px 14px;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;transition:color .2s}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink)}
+.tab-ink{position:absolute;bottom:0;height:2px;background:var(--ink);border-radius:2px;transition:left .35s var(--ease),width .35s var(--ease)}
+
+/* Écrans */
+main{padding-block:28px 64px}
+.screen{display:none;flex-direction:column;gap:22px}
+.screen.on{display:flex;animation:in .38s var(--ease)}
+@keyframes in{from{opacity:.0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.screen.on{animation:none}.tab-ink,.switch i::after{transition:none}}
+[data-vue="essentielle"] .full{display:none!important}
+.eyebrow{font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);font-weight:600}
+h1,h2,h3{margin:0;text-wrap:balance}
+h2{font-family:var(--f-display);font-weight:500;font-size:26px;letter-spacing:-.01em}
+h3{font-size:15px;font-weight:600}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.sec-head p{margin:0;color:var(--muted);font-size:13.5px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.pad{padding:20px}
+.grid{display:grid;gap:14px}
+.muted{color:var(--muted)}
+.src{font-size:11.5px;color:var(--muted)}
+.chip{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:999px;font-size:12.5px;font-weight:600;background:var(--surface-2);color:var(--ink-2);border:1px solid var(--line);white-space:nowrap}
+.chip.up{background:var(--up-soft);color:var(--up);border-color:transparent}
+.chip.dn{background:var(--down-soft);color:var(--down);border-color:transparent}
+.chip.warn{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.chip.acc{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex:none}
+.pos{color:var(--up)} .neg{color:var(--down)}
+.note-ex{font-size:12px;color:var(--warn);font-weight:600}
+
+/* Synthèse */
+.hero{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:0;overflow:hidden}
+.hero-main{padding:30px 32px;display:flex;flex-direction:column;gap:14px}
+.hero-main h1{font-family:var(--f-display);font-weight:500;font-size:clamp(38px,5.2vw,60px);line-height:1.02;letter-spacing:-.02em}
+.hero-main p{margin:0;font-size:17px;color:var(--ink-2);max-width:62ch}
+.hero-side{background:var(--surface-2);border-left:1px solid var(--line);padding:26px;display:flex;flex-direction:column;gap:18px;justify-content:center}
+.ring{display:flex;align-items:center;gap:18px}
+.ring svg{width:116px;height:116px;flex:none}
+.ring b{font-family:var(--f-display);font-size:30px;font-weight:500}
+.meter{display:flex;gap:4px}.meter i{width:26px;height:6px;border-radius:3px;background:var(--line-2)}.meter i.on{background:var(--accent)}
+.ess{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--line);border-radius:var(--r);overflow:hidden;border:1px solid var(--line)}
+.ess div{background:var(--surface);padding:16px 18px;display:flex;flex-direction:column;gap:6px}
+.ess span{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.ess p{margin:0;font-size:14.5px;line-height:1.45}
+.two{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:14px;align-items:start}
+.scen{display:flex;flex-direction:column;gap:10px;padding:16px 18px;border-top:1px solid var(--line)}
+.scen:first-of-type{border-top:0}
+.scen-top{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.scen-top b{font-weight:600;font-size:15px}
+.scen-top span{font-family:var(--f-display);font-size:22px}
+.segs{display:flex;gap:3px}
+.segs i{flex:1;height:8px;border-radius:3px;background:var(--line)}
+.segs i.ok{background:var(--accent)}
+.segs i.nd{background:repeating-linear-gradient(135deg,var(--line-2) 0 2px,transparent 2px 5px)}
+.conds{display:none;margin:0;padding:0;list-style:none;font-size:13px;color:var(--ink-2);gap:4px;flex-direction:column}
+.scen.open .conds{display:flex}
+.conds li{display:flex;gap:8px}
+.conds em{font-style:normal;font-weight:700;width:14px;flex:none}
+.scen button.more{align-self:flex-start;border:0;background:none;color:var(--accent);font-size:13px;font-weight:600;cursor:pointer;padding:0}
+.wl-row{display:grid;grid-template-columns:28px 92px minmax(0,1fr) 54px;gap:12px;align-items:center;padding:12px 18px;border-top:1px solid var(--line);cursor:pointer;transition:background .15s}
+.wl-row:hover{background:var(--surface-2)}
+.wl-row .rk{font-family:var(--f-display);font-size:20px;color:var(--muted)}
+.wl-row b{font-size:15px}
+.stack{display:flex;gap:2px;height:10px}
+.stack i{height:100%;border-radius:3px}
+.wl-detail{display:none;padding:0 18px 14px 58px;font-size:13.5px;color:var(--ink-2);gap:8px;flex-direction:column}
+.wl-detail.open{display:flex}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:10px;height:10px;border-radius:3px}
+.meca{display:flex;flex-wrap:wrap;gap:8px}
+.conclu{font-family:var(--f-display);font-size:20px;line-height:1.45;margin:0;max-width:70ch}
+
+/* Tableau de bord */
+.tiles{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
+.tile{padding:16px 16px 10px;display:flex;flex-direction:column;gap:4px;transition:transform .2s var(--ease),border-color .2s}
+.tile:hover{transform:translateY(-2px);border-color:var(--line-2)}
+.tile .lbl{font-size:12.5px;color:var(--muted);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile .val{font-size:26px;font-weight:600;letter-spacing:-.01em}
+.tile .chg{display:flex;gap:10px;font-size:13px;font-weight:600}
+.tile .chg span:last-child{color:var(--muted);font-weight:500}
+.tile svg{width:100%;height:46px;display:block;margin-top:6px}
+.tile .meta{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}
+.grp{font-size:12px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-top:6px}
+.scroll{overflow-x:auto}
+table.mx{border-collapse:separate;border-spacing:0;width:100%;min-width:860px;font-size:14px}
+.mx th,.mx td{padding:11px 12px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+.mx thead th{font-size:12px;letter-spacing:.08em;color:var(--muted);font-weight:700;background:var(--surface);position:sticky;top:0}
+.mx th:first-child,.mx td:first-child{text-align:left;position:sticky;left:0;background:var(--surface);font-weight:600;z-index:1}
+.mx tbody tr:hover td{background:var(--surface-2)}
+.mx td small{display:block;font-size:11.5px;color:var(--muted);font-weight:400}
+.mx .s{font-size:11px;margin-left:4px}
+.bcs{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
+.bc{padding:14px 16px;display:flex;flex-direction:column;gap:2px}
+.bc b{font-size:22px;font-weight:600}
+.bc .who{display:flex;justify-content:space-between;font-size:12.5px;font-weight:600;color:var(--muted)}
+
+/* Devises */
+.dvs{grid-template-columns:repeat(auto-fill,minmax(360px,1fr))}
+.dv{display:flex;flex-direction:column}
+.dv-head{display:flex;justify-content:space-between;align-items:center;padding:18px 20px 6px;gap:10px}
+.dv-head .code{font-family:var(--f-display);font-size:30px;font-weight:500;line-height:1}
+.dv-head .nm{font-size:13px;color:var(--muted)}
+.dv-px{padding:0 20px;display:flex;gap:10px;align-items:baseline}
+.dv-px b{font-size:20px;font-weight:600}
+.chart{height:170px;margin:8px 8px 0;position:relative}
+.dv-body{padding:14px 20px 18px;display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line);margin-top:8px;font-size:13.5px}
+.kv{display:grid;grid-template-columns:118px minmax(0,1fr);gap:4px 12px}
+.kv span:nth-child(odd){color:var(--muted)}
+.corr{position:relative;height:6px;border-radius:3px;background:var(--surface-2);border:1px solid var(--line);margin-top:6px}
+.corr::before{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--line-2)}
+.corr i{position:absolute;top:0;bottom:0;border-radius:3px}
+.ancs{display:flex;flex-wrap:wrap;gap:6px}
+
+/* Agenda */
+.days{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.day{flex:0 0 auto;min-width:96px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--surface);cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:6px;transition:border-color .2s,background .2s}
+.day:hover{border-color:var(--line-2)}
+.day[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.day .dn{font-size:12px;color:var(--muted);font-weight:600;text-transform:capitalize}
+.day .dd{font-family:var(--f-display);font-size:24px;line-height:1}
+.day .bars{display:flex;gap:2px;align-items:flex-end;height:14px}
+.day .bars i{width:4px;border-radius:1px;background:var(--line-2)}
+.day .bars i.f{background:var(--down)}
+.day.today .dn::after{content:" · aujourd'hui";color:var(--accent)}
+.ag{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:14px;align-items:start}
+.ev{display:grid;grid-template-columns:52px 50px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 18px;border-top:1px solid var(--line)}
+.ev:first-child{border-top:0}
+.ev .h{font-weight:600}
+.cur{display:inline-grid;place-items:center;height:24px;border-radius:6px;font-size:12px;font-weight:700;background:var(--surface-2);border:1px solid var(--line)}
+.ev .t{display:flex;flex-direction:column;min-width:0}
+.ev .t b{font-weight:600;font-size:14.5px}
+.ev .t small{color:var(--muted);font-size:12.5px}
+.imp{display:flex;gap:3px}.imp i{width:6px;height:14px;border-radius:2px;background:var(--line-2)}
+.imp.fort i{background:var(--down)}.imp.moyen i.on{background:var(--warn)}.imp.faible i.on{background:var(--muted)}
+.empty{padding:28px 18px;color:var(--muted);text-align:center}
+.filt{display:flex;gap:8px;flex-wrap:wrap}
+
+/* Engrenages */
+.th-list{display:flex;flex-direction:column}
+.th{display:grid;grid-template-columns:150px minmax(0,1fr) 120px;gap:16px;align-items:center;padding:13px 20px;border-top:1px solid var(--line)}
+.th:first-child{border-top:0}
+.th .nm b{display:block;font-size:14.5px}
+.th .nm small{color:var(--muted);font-size:12px}
+.track{position:relative;height:30px}
+.track .rail{position:absolute;left:0;right:0;top:13px;height:4px;border-radius:2px;background:var(--surface-2);border:1px solid var(--line)}
+.track .zone{position:absolute;top:10px;height:10px;border-radius:5px;background:var(--accent-soft);border:1px dashed color-mix(in srgb,var(--accent) 45%,transparent)}
+.track .mk{position:absolute;top:6px;width:18px;height:18px;margin-left:-9px;border-radius:50%;background:var(--surface);border:3px solid var(--ink);box-shadow:var(--shadow);transition:left .6s var(--ease)}
+.track .v{position:absolute;top:-6px;transform:translateX(-50%);font-size:11.5px;font-weight:700;white-space:nowrap}
+.th .st{justify-self:end}
+.fil{display:grid;gap:3px;min-width:640px}
+.fil .lab{font-size:12.5px;font-weight:600;color:var(--ink-2);padding-right:8px;white-space:nowrap;align-self:center}
+.fil i{height:22px;border-radius:4px;background:var(--surface-2)}
+.fil i.up{background:var(--up)} .fil i.dn{background:var(--down)} .fil i.nd{background:var(--line-2)}
+.fil i.x{background:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 5px)}
+.fil .d{font-size:10.5px;color:var(--muted);text-align:center}
+.engs{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.eng{padding:18px 18px 12px;display:flex;flex-direction:column;gap:10px}
+.eng-h{display:flex;gap:10px;align-items:baseline}
+.eng-h span{font-family:var(--f-display);font-size:26px;color:var(--muted);line-height:1}
+.mini{display:grid;grid-template-columns:minmax(0,1fr) 84px;gap:10px;align-items:center;padding-top:10px;border-top:1px solid var(--line)}
+.mini .l{font-size:12.5px;color:var(--muted);line-height:1.3}
+.mini .v{font-size:16px;font-weight:600}
+.mini .v small{font-size:12px;font-weight:500;color:var(--muted);margin-left:6px}
+.mini svg{width:84px;height:30px}
+
+/* Journal */
+.jr{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:14px;align-items:start}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.cal .hd{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;padding:4px 6px}
+.cell{min-height:86px;border-radius:10px;border:1px solid var(--line);background:var(--surface);padding:8px;display:flex;flex-direction:column;gap:3px;text-align:left;cursor:pointer;transition:border-color .2s}
+.cell:hover{border-color:var(--line-2)}
+.cell.blank{background:transparent;border:0;cursor:default}
+.cell.w{background:var(--up-soft)} .cell.l{background:var(--down-soft)}
+.cell[aria-pressed="true"]{box-shadow:inset 0 0 0 2px var(--accent)}
+.cell .n{font-size:12.5px;font-weight:700;color:var(--ink-2)}
+.cell .p{font-size:11.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cell .r{margin-top:auto;font-size:13px;font-weight:700}
+.kpis{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+.kpi{padding:14px 16px}
+.kpi span{font-size:12px;color:var(--muted);font-weight:600}
+.kpi b{display:block;font-size:24px;font-weight:600}
+.steps{display:flex;flex-direction:column;gap:2px;counter-reset:s}
+.step{display:grid;grid-template-columns:28px minmax(0,1fr);gap:12px;padding:10px 0;align-items:start;cursor:pointer;border:0;background:none;text-align:left}
+.step i{counter-increment:s;width:26px;height:26px;border-radius:50%;border:1.5px solid var(--line-2);display:grid;place-items:center;font-style:normal;font-size:12px;font-weight:700;color:var(--muted)}
+.step i::before{content:counter(s)}
+.step b{font-size:14px;font-weight:600;display:block}
+.step small{color:var(--muted);font-size:12.5px}
+.step[aria-current="step"] i{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.step.done i{background:var(--accent-soft);border-color:transparent;color:var(--accent)}
+
+/* Ajouts V7.2 : sections riches */
+.kicker{display:flex;align-items:center;gap:10px}
+.kicker .num{font-family:var(--f-display);font-size:15px;color:var(--muted)}
+.cols3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.cols2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start}
+.bcw{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:0;overflow:hidden}
+.bcw-main{padding:24px;display:flex;flex-direction:column;gap:14px}
+.bcw-side{background:var(--surface-2);border-left:1px solid var(--line);padding:20px 24px;display:flex;flex-direction:column;gap:10px}
+.big-rate{display:flex;gap:28px;align-items:flex-end;flex-wrap:wrap}
+.big-rate div{display:flex;flex-direction:column}
+.big-rate b{font-family:var(--f-display);font-size:42px;font-weight:500;line-height:1}
+.big-rate span{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.arrow{font-size:28px;color:var(--muted);padding-bottom:6px}
+.cible{position:relative;height:8px;border-radius:4px;background:var(--surface-2);border:1px solid var(--line)}
+.cible i{position:absolute;top:-1px;bottom:-1px;border-radius:4px;background:var(--warn)}
+.cible em{position:absolute;top:-5px;bottom:-5px;width:2px;background:var(--ink)}
+.watch{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:13.5px;color:var(--ink-2)}
+.itp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.itp div{background:var(--surface);padding:12px 14px;font-size:13px;display:flex;flex-direction:column;gap:4px}
+.itp b{font-size:13px}
+.itp span{color:var(--ink-2)}
+.mc{padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.mc.on{border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+.mc ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px;font-size:13px;color:var(--ink-2)}
+.mc li{display:grid;grid-template-columns:16px minmax(0,1fr);gap:6px}
+.tbl{border-collapse:collapse;width:100%;font-size:13.5px}
+.tbl th{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:0}
+.tbl td.n,.tbl th.n{text-align:right;white-space:nowrap}
+.tbl tbody tr:hover td{background:var(--surface-2)}
+.zbar{position:relative;height:8px;width:120px;background:var(--surface-2);border-radius:4px;border:1px solid var(--line)}
+.zbar::before{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--line-2)}
+.zbar i{position:absolute;top:-1px;bottom:-1px;border-radius:4px}
+.hbar{display:grid;grid-template-columns:120px minmax(0,1fr) 64px;gap:12px;align-items:center;padding:8px 0;font-size:13.5px}
+.hbar .tr{position:relative;height:14px}
+.hbar .tr::before{content:"";position:absolute;left:50%;top:-4px;bottom:-4px;width:1px;background:var(--line-2)}
+.hbar .tr i{position:absolute;top:0;bottom:0;border-radius:4px}
+.hbar .tr em{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink);opacity:.55}
+.vars{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.var{padding:12px 14px;display:flex;flex-direction:column;gap:2px}
+.var span{font-size:12px;color:var(--muted);font-weight:600;line-height:1.3}
+.var b{font-size:19px;font-weight:600}
+.var small{font-size:11px;color:var(--muted)}
+.plan{display:flex;flex-direction:column;gap:8px}
+.plan label{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--ink-2);cursor:pointer}
+.plan input{margin-top:3px;accent-color:var(--accent);width:16px;height:16px;flex:none}
+.calj{display:grid;grid-template-columns:92px minmax(0,1fr) auto;gap:12px;padding:12px 0;border-top:1px solid var(--line);align-items:baseline;font-size:13.5px}
+.calj:first-child{border-top:0}
+.alerts{display:flex;flex-wrap:wrap;gap:8px}
+.alert{display:flex;gap:10px;align-items:flex-start;padding:10px 14px;border-radius:12px;font-size:13px;max-width:520px}
+.alert.f{background:var(--accent-soft);color:var(--ink)}
+.alert.p{background:var(--warn-soft);color:var(--ink)}
+.alert b{font-size:11px;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.alert.f b{color:var(--accent)} .alert.p b{color:var(--warn)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--surface-2);gap:2px;flex-wrap:wrap}
+.seg button{border:0;background:none;padding:6px 12px;border-radius:999px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.bigchart{height:320px}
+.heat td.h{text-align:center;font-weight:600;font-size:13px;border-radius:6px;padding:9px 6px}
+.heat{border-collapse:separate;border-spacing:3px;width:100%;min-width:520px}
+.heat th{font-size:11.5px;color:var(--muted);font-weight:700;padding:4px 6px;text-align:center}
+.heat th:first-child{text-align:left}
+.mi td.c{text-align:center;font-weight:700;border-radius:6px;padding:8px 4px;font-size:13px;cursor:help}
+.mi td.c.p1{background:var(--up-soft);color:var(--up)} .mi td.c.m1{background:var(--down-soft);color:var(--down)}
+.mi td.c.z{background:var(--surface-2);color:var(--muted)} .mi td.c.nd{background:repeating-linear-gradient(135deg,var(--line) 0 2px,transparent 2px 5px);color:var(--muted)}
+.pct{position:relative;height:4px;border-radius:2px;background:var(--surface-2);margin-top:6px}
+.pct i{position:absolute;top:-3px;width:9px;height:9px;border-radius:50%;background:var(--accent);margin-left:-4px;border:2px solid var(--surface)}
+.engsel{display:flex;gap:6px;flex-wrap:wrap}
+.engsel button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 14px;font-size:13px;font-weight:600;color:var(--ink-2);cursor:pointer;display:flex;gap:8px;align-items:center}
+.engsel button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.engsel .dot{width:8px;height:8px}
+.tu{padding:16px;display:flex;flex-direction:column;gap:4px}
+.tu .l{font-size:12.5px;color:var(--muted);font-weight:600}
+.tu .v{font-size:22px;font-weight:600}
+.tu .x{font-size:12.5px;color:var(--ink-2)}
+.tu svg{width:100%;height:44px;margin-top:4px}
+.tus{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.small{font-size:12px;color:var(--muted)}
+.news{display:flex;flex-direction:column}
+.news a{display:flex;flex-direction:column;gap:3px;padding:12px 0;border-top:1px solid var(--line);color:var(--ink);text-decoration:none}
+.news a:first-child{border-top:0}
+.news a:hover b{color:var(--accent)}
+.news b{font-weight:600;font-size:14px}
+.calc{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;align-items:end}
+.calc label{display:flex;flex-direction:column;gap:5px;font-size:12.5px;color:var(--muted);font-weight:600}
+.calc input,.calc select{height:40px;border-radius:10px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);padding:0 12px;font:inherit;font-size:15px}
+.calc .out{padding:10px 14px;border-radius:12px;background:var(--accent-soft)}
+.calc .out b{display:block;font-size:22px;color:var(--ink)}
+@media (max-width:960px){.cols3,.cols2,.bcw{grid-template-columns:minmax(0,1fr)}.bcw-side{border-left:0;border-top:1px solid var(--line)}.itp{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:640px){.hbar{grid-template-columns:70px minmax(0,1fr) 56px}.calj{grid-template-columns:minmax(0,1fr)}.big-rate b{font-size:34px}}
+
+footer{padding-block:24px 40px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+@media (max-width:960px){.hero,.two,.ag,.jr{grid-template-columns:minmax(0,1fr)}.hero-side{border-left:0;border-top:1px solid var(--line)}}
+@media (max-width:640px){
+  .sessions{order:3;flex-basis:100%}
+  .hero-main{padding:22px 20px}.hero-side{padding:20px}
+  .dvs{grid-template-columns:minmax(0,1fr)}
+  .th{grid-template-columns:minmax(0,1fr);gap:6px}.th .st{justify-self:start}
+  .ev{grid-template-columns:46px 46px minmax(0,1fr)}.ev .imp{display:none}
+  .wl-row{grid-template-columns:22px 78px minmax(0,1fr) 44px;padding:12px 14px}
+  .cell{min-height:64px;padding:5px}.cell .p{display:none}
+  .switch .lab-long{display:none}
+}
+
+[hidden]{display:none!important}
+.pos{color:var(--up)} .neg{color:var(--down)}
+.btn{height:38px;padding:0 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-weight:600;cursor:pointer;font-size:14px}
+.pick{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.pick button{text-align:left;padding:16px 18px;border-radius:14px;border:1px solid var(--line);background:var(--surface);cursor:pointer;display:flex;flex-direction:column;gap:6px}
+.pick button[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.pick b{font-family:var(--f-display);font-size:21px;font-weight:500}
+.pick span{font-size:13px;color:var(--muted);line-height:1.45}
+.pick em{font-style:normal;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.idea{padding:16px 20px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;font-size:13.5px}
+.idea div{display:flex;flex-direction:column;gap:4px}
+.idea b{font-size:13px}
+.idea span{color:var(--ink-2)}
+.idea i{font-style:normal;font-family:var(--f-display);font-size:24px;color:var(--accent);line-height:1}
+.pill{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 9px;border-radius:999px;font-size:12px;font-weight:700;white-space:nowrap}
+.pill.p{background:var(--up-soft);color:var(--up)} .pill.c{background:var(--down-soft);color:var(--down)} .pill.n{background:var(--surface-2);color:var(--muted)} .pill.w{background:var(--warn-soft);color:var(--warn)}
+.cur{display:inline-grid;place-items:center;min-width:40px;height:24px;padding:0 6px;border-radius:6px;font-size:12px;font-weight:700;background:var(--surface-2);border:1px solid var(--line)}
+.ptabs{display:flex;gap:2px;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.ptabs button{border:0;background:none;padding:11px 14px;font:inherit;font-weight:600;font-size:14px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;display:flex;gap:7px;align-items:center}
+.ptabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+.ptabs .cnt{font-size:11px;font-weight:700;background:var(--surface-2);border-radius:999px;padding:1px 7px}
+/* ---------- A : dossiers ---------- */
+.layA{display:grid;grid-template-columns:300px minmax(0,1fr);gap:16px;align-items:start}
+.mlist{display:flex;flex-direction:column;gap:8px;position:sticky;top:16px}
+.mt{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--surface);cursor:pointer;text-align:left;width:100%;font:inherit;color:var(--ink);transition:border-color .2s}
+.mt:hover{border-color:var(--line-2)}
+.mt[aria-current="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.mt .no{font-family:var(--f-display);font-size:22px;color:var(--muted);line-height:1}
+.mt b{font-size:14.5px;display:block}
+.mt small{font-size:12px;color:var(--muted);display:block;line-height:1.35}
+.mt .row{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;align-items:center}
+.dossier{overflow:hidden}
+.dh{padding:26px 28px 0;display:flex;flex-direction:column;gap:12px}
+.dh h1{font-family:var(--f-display);font-weight:500;font-size:clamp(30px,3.6vw,44px);letter-spacing:-.02em;line-height:1.05}
+.dh .q{font-size:16px;color:var(--ink-2);max-width:70ch;margin:0}
+.dbody{padding:22px 28px 28px;display:flex;flex-direction:column;gap:20px}
+.lead{font-family:var(--f-display);font-size:20px;line-height:1.5;max-width:68ch;margin:0}
+.kt{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.kt div{padding:14px;border-radius:12px;border:1px solid var(--line);background:var(--surface-2);display:flex;flex-direction:column;gap:3px}
+.kt span.l{font-size:12.5px;color:var(--muted);font-weight:600}
+.kt b{font-size:21px;font-weight:600}
+.kt small{font-size:12px;color:var(--ink-2)}
+.kt svg{width:100%;height:34px;margin-top:4px}
+.kt .pc{position:relative;height:4px;border-radius:2px;background:var(--line);margin-top:6px}
+.kt .pc i{position:absolute;top:-3px;width:10px;height:10px;border-radius:50%;margin-left:-5px;background:var(--accent);border:2px solid var(--surface-2)}
+.watch{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;font-size:14px;color:var(--ink-2)}
+.watch li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:8px}
+.watch li::before{content:"◎";color:var(--accent)}
+.tl{display:flex;flex-direction:column}
+.tl .it{display:grid;grid-template-columns:92px 50px minmax(0,1fr);gap:12px;padding:12px 0;border-top:1px solid var(--line);align-items:start;font-size:14px}
+.tl .it:first-child{border-top:0}
+.tl .it .w{font-size:12.5px;color:var(--muted);font-weight:600}
+.tl .it b{font-weight:600}
+.tl .it p{margin:3px 0 0;font-size:13px;color:var(--ink-2)}
+.tl .it a{color:var(--ink);text-decoration:none}
+.tl .it a:hover b{color:var(--accent)}
+.tl .now{display:flex;align-items:center;gap:10px;color:var(--accent);font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:6px 0}
+.tl .now::after{content:"";flex:1;height:2px;background:var(--accent)}
+.imp{display:inline-flex;gap:2px;vertical-align:1px;margin-left:6px}.imp i{width:4px;height:11px;border-radius:1px;background:var(--line-2)}.imp i.on{background:var(--down)}.imp.moyen i.on{background:var(--warn)}
+.dv{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
+.dc{padding:16px 18px;border-radius:14px;border:1px solid var(--line);background:var(--surface);display:flex;flex-direction:column;gap:10px;border-top:4px solid var(--line-2)}
+.dc.p{border-top-color:var(--up)} .dc.c{border-top-color:var(--down)}
+.dc .top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.dc .top b{font-family:var(--f-display);font-size:26px;font-weight:500}
+.dc dl{margin:0;display:grid;grid-template-columns:minmax(0,1fr);gap:8px;font-size:13.5px}
+.dc dt{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.dc dd{margin:2px 0 0;color:var(--ink-2);line-height:1.45}
+.dc .next{font-size:12.5px;padding:8px 10px;border-radius:8px;background:var(--surface-2)}
+/* ---------- B : carte des transmissions ---------- */
+.layB{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start}
+.flow{position:relative;min-height:640px}
+.flow svg.links{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.cols{position:relative;display:grid;grid-template-columns:1.3fr 1fr .7fr;gap:90px;z-index:1}
+.col{display:flex;flex-direction:column;gap:8px}
+.col h3{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.node{padding:9px 11px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:12.5px;cursor:pointer;text-align:left;font:inherit;color:var(--ink);line-height:1.35;transition:opacity .2s,border-color .2s}
+.node small{display:block;color:var(--muted);font-size:11px}
+.node.dim{opacity:.25}
+.node.hi{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.node.cu{display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:14px}
+.side{position:sticky;top:16px;display:flex;flex-direction:column;gap:12px}
+.layA > *,.layB > *,.layC > *{min-width:0}
+.side .pill{flex:none;width:auto}
+/* ---------- C : matrice ---------- */
+.layC{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:16px;align-items:start}
+.mx{border-collapse:separate;border-spacing:4px;width:100%;min-width:720px}
+.mx th{font-size:11.5px;color:var(--muted);font-weight:700;padding:4px;text-align:center;line-height:1.25}
+.mx th:first-child{text-align:left}
+.mx td.c{height:46px;border-radius:8px;text-align:center;font-weight:700;cursor:pointer;font-size:14px;border:2px solid transparent}
+.mx td.c.p{background:var(--up-soft);color:var(--up)} .mx td.c.m{background:var(--down-soft);color:var(--down)} .mx td.c.z{background:var(--surface-2);color:var(--muted)}
+.mx td.c.on{border-color:var(--ink)}
+.mx td.t{font-family:var(--f-display);font-size:18px;text-align:center}
+@media (max-width:1100px){.layB,.layC{grid-template-columns:minmax(0,1fr)}.side{position:static}.idea{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:900px){.layA{grid-template-columns:minmax(0,1fr)}.mlist{position:static;flex-direction:row;overflow-x:auto;scrollbar-width:none}.mt{min-width:230px}.pick{grid-template-columns:minmax(0,1fr)}.cols{gap:40px}}
+@media (max-width:640px){.dh{padding:20px 18px 0}.dbody{padding:18px}.tl .it{grid-template-columns:70px 44px minmax(0,1fr)}.dv{grid-template-columns:minmax(0,1fr)}.idea{grid-template-columns:minmax(0,1fr)}.flow{overflow-x:auto}.cols{min-width:640px}}
+</style>
+
+<main class="wrap" style="padding-block:28px 72px;display:flex;flex-direction:column;gap:20px">
+  <div class="sec-head" style="align-items:flex-end">
+    <div><span class="eyebrow">Trading baby · maquettes de l'onglet 8 engrenages</span><h1 style="font-family:var(--f-display);font-weight:500;font-size:clamp(32px,4vw,46px);letter-spacing:-.02em;line-height:1.05">Du marché à la devise, moteur par moteur</h1></div>
+    <div style="display:flex;gap:8px;align-items:center"><span class="small" id="asof"></span><button class="iconbtn" id="themeBtn" aria-label="Changer de thème"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg></button></div>
+  </div>
+  <div class="card idea">
+    <div><i>1</i><b>Analyse détaillée</b><span>Pour chaque moteur : ce qui se passe, les chiffres clés datés et ce qu'il faut surveiller.</span></div>
+    <div><i>2</i><b>Actualités et agenda reliés</b><span>Les titres du jour et les publications à venir qui font bouger ce moteur, avant et après « maintenant ».</span></div>
+    <div><i>3</i><b>Devises touchées</b><span>Lesquelles, dans quel sens, pourquoi et par quel canal (le « comment »).</span></div>
+    <div><i>4</i><b>Réaction du pays</b><span>Ce que la banque centrale ou le gouvernement peut faire, et quand : prochaine décision, seuil d'intervention.</span></div>
+  </div>
+  <div class="pick" id="pick">
+    <button data-v="A"><em>Option A · recommandée</em><b>Dossiers par moteur</b><span>Les 8 moteurs à gauche avec leur état ; à droite le dossier du moteur choisi en 3 sous-onglets : Analyse, Actualités et agenda, Devises touchées (avec la réaction attendue du pays).</span></button>
+    <button data-v="B"><em>Option B</em><b>Carte des transmissions</b><span>Un schéma en 3 colonnes : actualités et publications → moteurs → devises. Un clic sur un élément allume son chemin et explique la transmission.</span></button>
+    <button data-v="C"><em>Option C</em><b>Matrice vivante</b><span>Le tableau 9 devises × 8 moteurs. Un clic sur une case ouvre l'explication : pourquoi, comment, réaction du pays, actualités et agenda liés.</span></button>
+  </div>
+  <section id="vA" hidden></section><section id="vB" hidden></section><section id="vC" hidden></section>
+  <footer style="padding-block:24px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><span>Maquette V12 · données réelles du pipeline du 20/11 (matrice, dossiers, agenda, actualités, banques centrales) · textes « comment » et « réaction » composés pour la maquette, produits en Python sur le vrai site</span><span>Aide à la décision. Aucun ordre d'achat ou de vente.</span></footer>
+</main>
+
+<script>
+const D = {"date":"2026-11-20","moteurs":{"1":{"nom":"Thème dominant","explication":"le grand récit du marché du moment (inflation, croissance, risque)"},"2":{"nom":"Banques centrales et taux","explication":"décisions, ton et anticipations de taux directeurs"},"3":{"nom":"Chiffres économiques","explication":"publications au-dessus ou en dessous du consensus"},"4":{"nom":"Budgets et dette publique","explication":"déficits, émissions de dette, risque souverain"},"5":{"nom":"Liens entre marchés","explication":"taux longs, actions, matières premières, volatilité"},"6":{"nom":"Géopolitique","explication":"conflits, sanctions, élections, chocs d'offre"},"7":{"nom":"Prix et positionnement","explication":"tendance des prix, positions des spéculateurs (COT)"},"8":{"nom":"Commerce et flux","explication":"balances commerciales, offre et demande de pétrole"}},"mi":[{"d":"USD","c":[{"v":2,"e":"active","r":"régime de risque du thème global = risk_off → +1 pour USD (risk_off); direction du dollar dans le thème global = haussier → +1 pour USD (haussier)"},{"v":0,"e":"neutre","r":"rendement 2 ans US, variation sur 4 semaines : +11 pb, aucun effet sur USD; écart de taux 2 ans face aux États-Unis, variation sur 4 semaines : pas de donnée pour USD"},{"v":1,"e":"active","r":"indice de surprise macro 30 jours ≥ 0,50 → +1 (+0,87)"},{"v":0,"e":"neutre","r":"prime de terme 10 ans US, variation sur 4 semaines (prime de risque budgétaire) : +0 pb, aucun effet sur USD"},{"v":1,"e":"active","r":"S&P 500, variation sur 4 semaines ≤ −3,30 % (seuil fixe) → +1 pour USD ; confirmé sur 5 ans : 70 % des 27 cas, borne de Wilson 54,6 % (−5,59 %)"},{"v":0,"e":"neutre","r":"titres du jour au canal « refuge (conflits) » : 2 titres, aucun effet sur USD"},{"v":1,"e":"active","r":"écart du cours à sa moyenne mobile 200 jours (tendance) ≥ 2,00 % → +1 (+3,06 %)"},{"v":0,"e":"sans_regle","r":"aucune règle de cet engrenage ne concerne USD"}]},{"d":"EUR","c":[{"v":0,"e":"sans_regle","r":"aucune règle de cet engrenage ne concerne EUR"},{"v":0,"e":"neutre","r":"écart de taux 2 ans face aux États-Unis, variation sur 4 semaines : −8 pb, sous les seuils"},{"v":0,"e":"neutre","r":"indice de surprise macro 30 jours : −0,19, sous les seuils"},{"v":-1,"e":"active","r":"écart Italie − Allemagne 10 ans, variation sur 3 mois ≥ 25 pb → −1 pour EUR (+45 pb)"},{"v":0,"e":"sans_regle","r":"niveau du VIX : règle classique non confirmée sur 5 ans (indice faible · 34 cas (borne de Wilson 39,2 % ≤ 50 %)); indice dollar large (Fed), variation sur 4 semaines : règle classique non confirmée sur 5 ans (indice faible · 33 cas (borne de Wilson 49,3 % ≤ 50"},{"v":-1,"e":"active","r":"titres du jour au canal « énergie » ≥ 3 titres → −1 pour EUR (3 titres)"},{"v":0,"e":"active","r":"écart du cours à sa moyenne mobile 200 jours (tendance) ≤ −2,00 % → −1 (−4,60 %); positionnement spéculatif COT, lecture contrarienne (extrêmes) ≤ 10 percentile → +1 (8 percentile)"},{"v":0,"e":"neutre","r":"Brent, variation sur 4 semaines : −19,34 %, sous les seuils (série heurtée)"}]},{"d":"GBP","c":[{"v":0,"e":"sans_regle","r":"aucune règle de cet engrenage ne concerne GBP"},{"v":0,"e":"nd","r":"écart de taux 2 ans face aux États-Unis, variation sur 4 semaines : pas de donnée pour GBP"},{"v":0,"e":"neutre","r":"indice de surprise macro 30 jours : +0,12, sous les seuils"},{"v":0,"e":"sans_regle","r":"10 ans US, variation sur 4 semaines : règle classique non confirmée sur 5 ans (médiane à 1 mois après une hausse contraire à la lecture classique)"},{"v":-1,"e":"active","r":"S&P 500, variation sur 4 semaines ≤ −3,30 % (seuil fixe) → −1 pour GBP ; confirmé sur 5 ans : 67 % des 27 cas, borne de Wilson 50,8 % (−5,59 %)"},{"v":0,"e":"sans_regle","r":"aucune règle de cet engrenage ne concerne GBP"},{"v":-1,"e":"active","r":"écart du cours à sa moyenne mobile 200 jours (tendance) ≤ −2,00 % → −1 (−2,32 %)"},{"v":0,"e":"sans_regle","r":"aucune règle de cet engrenage ne concerne GBP"}]},{"d":"JPY","c":[{"v":1,"e":"active","r":"régime de risque du thème global = risk_off → +1 pour JPY (risk_off)"},{"v":-1,"e":"active","r":"écart de taux 2 ans face aux États-Unis, variation sur 4 semaines ≤ −15 pb → −1 (−17 pb)"},{"v":0,"e":"neutre","r":"indice de surprise macro 30 jours : +0,28, sous les seuils"},{"v":0,"e":"sans_regle","r":"10 ans US, variation sur 4 semaines : règle classique non confirmée sur 5 ans (médiane à 1 mois après une hausse contraire à la lecture classique)"},{"v":1,"e":"active","r":"S&P 500, variation sur 4 semaines ≤ −4,00 % → +1 pour JPY (−5,59 %)"},{"v":-1,"e":"active","r":"titres du jour au canal « énergie » ≥ 3 titres → −1 pour JPY (3 titres)"},{"v":-1,"e":"active","r":"positionnement spéculatif COT, lecture contrarienne (extrêmes) ≥ 90 percentile → −1 (100 percentile)"},{"v":0,"e":"neutralise","r":"Brent, variation sur 4 semaines : −19,34 %, au-delà du seuil mais neutralisé : série heurtée (série heurtée : -14,2 % le 04/11 en une séance (chiffres officiels))"}]},{"d":"CHF","c":[{"v":1,"e":"active","r":"régime de risque du thème global = risk_off → +1 pour CHF (risk_off)"},{"v":0,"e":"nd","r":"écart de taux 2 ans face aux États-Unis, variation sur 4 semaines : pas de donnée pour CHF"},{"v":0,"e":"neutre","r":"indice de surprise macro 30 jours : +0,45, sous les seuils"},{"v":0,"e":"sans_regle","r":"10 ans US, variation sur 4 semaines : règle classique non confirmée sur 5 ans (médiane à 1 mois après une hausse contraire à la lecture classique)"},{"v":0,"e":"neutre","r":"niveau du VIX : 24,56 pts, sous les seuils (série heurtée); indice dollar large (Fed), variation sur 4 semaines : +1,03 %, dans le couloir (seuils −1,28 % / +1,77 %)"},{"v":0,"e":"neutre","r":"titres du jour au canal « refuge (conflits) » : 2 titres, aucun effet sur CHF"},{"v":-2,"e":"active","r":"écart du cours à sa moyenne mobile 200 jours (tendance) ≤ −2,00 % → −1 (−4,76 %); positionnement spéculatif COT, lecture contrarienne (extrêmes) ≥ 90 percentile → −1 (100 percentile)"},{"v":0,"e":"sans_regle","r":"aucune règle de cet engrenage ne concerne CHF"}]},{"d":"CAD","c":[{"v":-1,"e":"active","r":"régime de risque du thème global = risk_off → −1 pour CAD (risk_off)"},{"v":0,"e":"neutre","r":"écart de taux 2 ans face aux États-Unis, variation sur 4 semaines : −1 pb, sous les seuils"},{"v":0,"e":"neutre","r":"indice de surprise macro 30 jours : −0,46, sous les seuils"},{"v":0,"e":"sans_regle","r":"10 ans US, variation sur 4 semaines : règle classique non confirmée sur 5 ans (indice faible · 31 cas (borne de Wilson 40,3 % ≤ 50 %))"},{"v":-1,"e":"active","r":"S&P 500, variation sur 4 semaines ≤ −3,30 % (seuil fixe) → −1 pour CAD ; confirmé sur 5 ans : 81 % des 27 cas, borne de Wilson 66,5 % (−5,59 %)"},{"v":1,"e":"active","r":"titres du jour au canal « énergie » ≥ 3 titres → +1 pour CAD (3 titres)"},{"v":-1,"e":"active","r":"écart du cours à sa moyenne mobile 200 jours (tendance) ≤ −2,00 % → −1 (−2,88 %)"},{"v":0,"e":"neutralise","r":"Brent, variation sur 4 semaines : −19,34 %, au-delà du seuil mais neutralisé : série heurtée (série heurtée : -14,2 % le 04/11 en une séance (chiffres officiels)); stocks de brut US contre la moyenne 5 ans de la même semaine : −3,70 %, aucun effet sur CAD"}]},{"d":"AUD","c":[{"v":-1,"e":"active","r":"régime de risque du thème global = risk_off → −1 pour AUD (risk_off)"},{"v":0,"e":"nd","r":"écart de taux 2 ans face aux États-Unis, variation sur 4 semaines : pas de donnée pour AUD"},{"v":0,"e":"neutre","r":"indice de surprise macro 30 jours : −0,12, sous les seuils"},{"v":0,"e":"sans_regle","r":"10 ans US, variation sur 4 semaines : règle classique non confirmée sur 5 ans (médiane à 1 mois après une hausse contraire à la lecture classique)"},{"v":-1,"e":"active","r":"S&P 500, variation sur 4 semaines ≤ −4,00 % → −1 pour AUD (−5,59 %)"},{"v":0,"e":"sans_regle","r":"indice or (proxy), variation sur 4 semaines : règle classique non confirmée sur 5 ans (échantillon insuffisant après une hausse (16 cas))"},{"v":0,"e":"active","r":"écart du cours à sa moyenne mobile 200 jours (tendance) ≤ −2,00 % → −1 (−5,57 %); positionnement spéculatif COT, lecture contrarienne (extrêmes) ≤ 10 percentile → +1 (2 percentile)"},{"v":0,"e":"sans_regle","r":"aucune règle de cet engrenage ne concerne AUD"}]},{"d":"NZD","c":[{"v":-1,"e":"active","r":"régime de risque du thème global = risk_off → −1 pour NZD (risk_off)"},{"v":0,"e":"nd","r":"écart de taux 2 ans face aux États-Unis, variation sur 4 semaines : pas de donnée pour NZD"},{"v":-2,"e":"active","r":"indice de surprise macro 30 jours ≤ −1,00 → −2 (−1,82)"},{"v":0,"e":"sans_regle","r":"10 ans US, variation sur 4 semaines : règle classique non confirmée sur 5 ans (médiane à 1 mois après une hausse contraire à la lecture classique)"},{"v":-1,"e":"active","r":"S&P 500, variation sur 4 semaines ≤ −4,00 % → −1 pour NZD (−5,59 %)"},{"v":0,"e":"sans_regle","r":"aucune règle de cet engrenage ne concerne NZD"},{"v":-1,"e":"active","r":"écart du cours à sa moyenne mobile 200 jours (tendance) ≤ −2,00 % → −1 (−5,35 %)"},{"v":0,"e":"sans_regle","r":"aucune règle de cet engrenage ne concerne NZD"}]},{"d":"CNY","c":[{"v":0,"e":"sans_regle","r":"aucune règle de cet engrenage ne concerne CNY"},{"v":0,"e":"nd","r":"écart de taux 2 ans face aux États-Unis, variation sur 4 semaines : pas de donnée pour CNY"},{"v":-1,"e":"active","r":"indice de surprise macro 30 jours ≤ −0,50 → −1 (−0,80)"},{"v":0,"e":"sans_regle","r":"10 ans US, variation sur 4 semaines : règle classique non confirmée sur 5 ans (médiane à 1 mois après une hausse contraire à la lecture classique)"},{"v":0,"e":"sans_regle","r":"indice dollar large (Fed), variation sur 4 semaines : règle classique non confirmée sur 5 ans (médiane à 1 mois après une hausse contraire à la lecture classique)"},{"v":0,"e":"sans_regle","r":"aucune règle de cet engrenage ne concerne CNY"},{"v":0,"e":"neutre","r":"écart du cours à sa moyenne mobile 200 jours (tendance) : +1,32 %, sous les seuils; positionnement spéculatif COT, lecture contrarienne (extrêmes) : pas de donnée pour CNY"},{"v":0,"e":"sans_regle","r":"aucune règle de cet engrenage ne concerne CNY"}]}],"eng":{"1":{"tuiles":[{"l":"Score USD","t":"86","v":"+18 pts sur 4 semaines","d":"2026-11-20","pc":null,"lec":null,"src":"calcul Python (score de confluence 0-100)","pts":[88,82,74,56,56,68,81,78,84,68,78,71,76,74,61,71,88,88,88,90,95,90,88,95,86]},{"l":"Score CAD","t":"32","v":"+8 pts sur 4 semaines","d":"2026-11-20","pc":null,"lec":null,"src":"calcul Python (score de confluence 0-100)","pts":[24,18,16,16,36,24,30,30,30,40,55,49,39,24,50,38,44,22,42,32,38,22,26,32]},{"l":"Score AUD","t":"44","v":"−15 pts sur 4 semaines","d":"2026-11-20","pc":null,"lec":null,"src":"calcul Python (score de confluence 0-100)","pts":[50,56,56,64,64,59,68,70,66,69,73,68,53,44,44,62,60,46,39,49,50,44,44,44,44]},{"l":"Écart meilleur − moins bon score","t":"65","v":"+11 pts sur 4 semaines","d":"2026-11-20","pc":null,"lec":"plus l'écart est grand, plus le marché est tranché","src":"calcul Python (USD − EUR)","pts":[76,66,58,56,36,54,54,48,76,37,48,55,58,48,69,43,67,70,70,63,77,68,14,70,77,65]},{"l":"Moteurs alignés sur le thème","t":"3 sur 7 évaluables","v":null,"d":"2026-11-20","pc":null,"lec":"3 sur 7 évaluables","src":"règles Python des 8 moteurs du marché","pts":[0,1,0,0,0,0,0,1,1,0,1,2,1,1,1,1,2,0,2,2,2,2,3,1,1,2,3,3,4,5,3,3,3]},{"l":"Surprise globale (moyenne 9 devises)","t":"−0,19","v":null,"d":"2026-11-20","pc":null,"lec":null,"src":"calcul Python (registre macro, 30 j)","pts":[-0.0,-0.0,-0.03,-0.02,-0.04,-0.02,-0.05,-0.1,-0.12,-0.19,-0.19,-0.12,-0.09,-0.07,-0.08,-0.1,-0.07,-0.11,-0.08,-0.06,-0.03,-0.02,-0.02,-0.05,-0.07,-0.07,-0.08,-0.09,-0.04,-0.05,-0.06,-0.08,-0.15,-0.19]}],"notes":["Le thème découle des 7 autres engrenages ; la cohérence compte les directions calculées en Python qui vont dans son sens."]},"2":{"tuiles":[{"l":"Taux effectif Fed","t":"3,88 %","v":"0 pb sur 4 semaines","d":"2026-11-18","pc":42,"lec":"taux directeur : fourchette cible de la Fed ; valeur, percentile et écarts calculés sur le taux effectif (DFF)","src":"FRED (DFF, taux effectif)","pts":[3.88,3.88,3.88,3.88,3.88,3.88,3.88,3.88,3.88,3.88,3.88,3.88,3.88,3.88,3.88,3.88,3.88,3.88,3.88,3.88,3.88,3.88,3.88,3.88,3.88,3.88,3.88,3.88,3.88,3.88,3.88]},{"l":"Rendement 2 ans US","t":"4,76 %","v":"+11 pb sur 4 semaines","d":"2026-11-19","pc":86,"lec":null,"src":"FRED (DGS2)","pts":[4.79,4.81,4.65,4.69,4.68,4.7,4.67,4.61,4.56,4.59,4.61,4.58,4.46,4.51,4.56,4.73,4.86,4.88,4.83,4.8,4.8,4.76]},{"l":"2 ans US − taux effectif","t":"+88 pb","v":"+11 pb sur 4 semaines","d":"2026-11-19","pc":82,"lec":"le marché intègre des hausses","src":"calcul : DGS2 − DFF","pts":[91.0,93.0,77.0,81.0,80.0,82.0,79.0,73.0,68.0,71.0,73.0,70.0,58.0,63.0,68.0,85.0,98.0,100.0,95.0,92.0,92.0,88.0]},{"l":"Taux réel US (directeur − core)","t":"1,18 %","v":"+12 pb sur 3 mois","d":"2026-09-01","pc":58,"lec":"mois de référence de l'inflation : 2026-09","src":"calcul : DFF (moyenne du mois) − CPI core a/a (FRED CPILFESL)","pts":[1.22,1.19,1.28,1.05,1.13,1.17,1.04,0.9,0.81,1.06,1.16,1.18,1.18]},{"l":"Courbe 2-10 ans US","t":"+28 pb","v":"−3 pb sur 4 semaines","d":"2026-11-19","pc":58,"lec":null,"src":"calcul : 10 ans − 2 ans","pts":[33.0,32.0,31.0,31.0,32.0,29.0,38.0,37.0,38.0,32.0,34.0,32.0,38.0,35.0,32.0,25.0,24.0,27.0,29.0,30.0,27.0,28.0]},{"l":"BCE, taux de dépôt","t":"2,50 %","v":"0 pb sur 4 semaines","d":"2026-11-19","pc":61,"lec":"ForexFactory publie le taux de refinancement principal (2.65%), 15 pb au-dessus du taux de dépôt qui pilote le marché","src":"FRED (ECBDFR, taux de la facilité de dépôt de la BCE)","pts":[2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5]}],"notes":["USD : taux effectif quotidien de la Fed (DFF) ; ForexFactory publie la borne haute de la fourchette.","Percentile du taux directeur hors USD : calculé parmi les taux au jour le jour OCDE (mensuels, proxy).","2 ans − directeur négatif : le marché anticipe des baisses ; positif : des hausses."]},"3":{"tuiles":[{"l":"Surprise USD (30 j)","t":"+0,87","v":"+0,59 sur 4 semaines","d":"2026-11-20","pc":null,"lec":null,"src":"calcul Python (registre macro, 30 j)","pts":[0.72,0.47,0.55,0.55,0.38,-0.04,0.28,0.28,0.08,1.02,1.03,0.87]},{"l":"Surprise GBP (30 j)","t":"+0,12","v":"−0,46 sur 4 semaines","d":"2026-11-20","pc":null,"lec":null,"src":"calcul Python (registre macro, 30 j)","pts":[0.53,0.45,0.4,0.36,0.36,0.46,0.58,0.61,0.48,0.38,0.12]},{"l":"Surprise CAD (30 j)","t":"−0,46","v":"+0,24 sur 4 semaines","d":"2026-11-20","pc":null,"lec":null,"src":"calcul Python (registre macro, 30 j)","pts":[0.08,0.08,0.06,0.08,0.09,-0.43,-0.62,-0.7,-0.74,-0.6,-0.56,-0.46]},{"l":"Surprise AUD (30 j)","t":"−0,12","v":"+0,52 sur 4 semaines","d":"2026-11-20","pc":null,"lec":null,"src":"calcul Python (registre macro, 30 j)","pts":[2.0,2.33,1.07,1.07,1.07,0.39,-0.48,-0.52,-0.64,-0.64,-0.22,0.04,0.04,-0.12]},{"l":"Inflation core US (a/a)","t":"2,60 %","v":null,"d":"2026-10-14","pc":13,"lec":null,"src":"registre macro (ForexFactory)","pts":[3.11,3.02,2.6,2.65,2.51,2.47,2.6,2.74,2.82,2.57,2.47,2.45,2.57]},{"l":"Chômage GBP","t":"4,60 %","v":"−0,30 pt sur 3 mois","d":"2026-11-17","pc":74,"lec":null,"src":"registre macro (ForexFactory)","pts":[4.8,5.0,5.1,5.1,5.2,5.2,4.9,5.0,4.9,4.9,4.9,4.9,4.7]}],"notes":["Surprise en « écarts habituels » : (réel − consensus) ÷ écart habituel de l'indicateur, chômage inversé.","Percentile 5 ans : seulement là où une série gratuite à jour existe (US : FRED ; chômage GBP, JPY, CAD, AUD : OCDE)."]},"4":{"tuiles":[{"l":"Dette fédérale / PIB (US)","t":"121,2 %","v":null,"d":"2026-04","pc":null,"lec":"dette fédérale, trimestrielle","src":"FRED (GFDEGDQ188S, dette fédérale / PIB)","pts":[118.2,119.5,120.1,119.2,119.9,121.0,120.0,118.2,120.7,122.4,122.4,121.2]},{"l":"Solde fédéral / PIB (US)","t":"−5,8 %","v":null,"d":"2025","pc":null,"lec":null,"src":"FRED (FYFSGDA188S, solde fédéral / PIB)","pts":[-3.1,-3.4,-3.8,-4.6,-14.7,-11.7,-5.3,-6.1,-6.2,-5.8]},{"l":"10 ans US","t":"5,04 %","v":"+8 pb sur 4 semaines","d":"2026-11-19","pc":98,"lec":null,"src":"Trésor américain (courbe des taux quotidienne, treasury.gov) ; FRED (DGS10) en secours","pts":[5.12,5.13,4.96,5.0,5.0,4.99,5.05,4.98,4.94,4.91,4.95,4.9,4.84,4.86,4.88,4.98,5.1,5.15,5.12,5.1,5.07,5.04]},{"l":"10 ans Allemagne","t":"3,45 %","v":"+1 pb sur 4 semaines","d":"2026-11-19","pc":98,"lec":null,"src":"Bundesbank (Allemagne 10 ans)","pts":[3.48,3.47,3.44,3.39,3.43,3.42,3.43,3.42,3.4,3.37,3.38,3.38,3.33,3.29,3.33,3.31,3.37,3.36,3.43,3.45,3.42,3.43,3.45]},{"l":"10 ans Royaume-Uni","t":"5,35 %","v":"0 pb sur 4 semaines","d":"2026-11-17","pc":100,"lec":null,"src":"Banque d'Angleterre (par yield 10 ans, IUDMNPY)","pts":[5.374,5.3516,5.3337,5.2784,5.3152,5.3048,5.3046,5.3087,5.2589,5.2497,5.1677,5.2098,5.1364,5.1392,5.1184,5.1364,5.1906,5.2044,5.2514,5.3011,5.3151,5.352]},{"l":"10 ans Japon","t":"2,87 %","v":"−4 pb sur 4 semaines","d":"2026-11-19","pc":96,"lec":null,"src":"Ministère des Finances du Japon (JGB 10 ans)","pts":[2.927,2.923,2.914,2.837,2.824,2.829,2.867,2.876,2.817,2.817,2.855,2.806,2.696,2.724,2.748,2.84,2.841,2.899,2.927,2.925,2.916,2.87]}],"notes":["Dette et solde publics : FMI (annuel, avec 1 à 3 ans de retard) ; EUR = Allemagne. Pas de série gratuite pour CHF et NZD.","Prime de terme : modèle Kim-Wright (Fed, via FRED), États-Unis seulement.","Actualités budgétaires : titres des flux RSS contenant un mot-clé budgétaire (source et date)."]},"5":{"tuiles":[{"l":"Indice dollar large (Fed)","t":"122,7","v":"+1,03 % sur 4 semaines","d":"2026-11-13","pc":76,"lec":null,"src":"FRED (DTWEXBGS, indice dollar large de la Fed)","pts":[122.0037,121.5693,121.4048,121.3248,121.116,121.3422,121.3531,121.3202,121.6042,121.6622,121.8491,121.7361,121.6656,121.3702,121.8084,121.3983,121.5061,121.8803,121.6623,122.1143,122.5433,122.6503]},{"l":"VIX","t":"24,56","v":"+47,24 % sur 4 semaines","d":"2026-11-18","pc":84,"lec":"série heurtée : +69,7 % le 05/11 en une séance (chiffres officiels)","src":"FRED (VIXCLS)","pts":[18.44,17.31,16.68,19.03,19.45,18.39,17.52,16.91,17.2,19.42,21.15,20.83,16.61,28.18,25.64,19.92,19.46,17.49,18.7,19.3,22.91,25.46,24.56]},{"l":"S&P 500","t":"7 324","v":"−5,59 % sur 4 semaines","d":"2026-11-18","pc":89,"lec":null,"src":"FRED (SP500)","pts":[7690.73,7712.57,7757.17,7663.43,7623.68,7676.77,7722.6,7743.98,7720.39,7580.07,7541.4,7568.92,7688.62,7353.73,7376.86,7549.94,7520.93,7619.38,7592.4,7561.67,7416.59,7340.53,7323.63]},{"l":"Rendement 10 ans US","t":"5,04 %","v":"+8 pb sur 4 semaines","d":"2026-11-19","pc":98,"lec":null,"src":"Trésor américain (courbe des taux quotidienne, treasury.gov) ; FRED (DGS10) en secours","pts":[5.12,5.13,4.96,5.0,5.0,4.99,5.05,4.98,4.94,4.91,4.95,4.9,4.84,4.86,4.88,4.98,5.1,5.15,5.12,5.1,5.07,5.04]},{"l":"Indice or (proxy)","t":"2 248","v":"−10,40 % sur 4 semaines","d":"2026-11-18","pc":0,"lec":null,"src":"FRED (NASDAQQGLDI) — indice or (proxy)","pts":[2509.28,2501.29,2509.34,2456.88,2444.37,2453.37,2479.45,2486.58,2460.63,2381.82,2419.14,2404.59,2485.56,2501.59,2485.82,2527.05,2471.14,2445.86,2381.34,2385.34,2321.63,2318.54,2248.37]},{"l":"Pétrole Brent","t":"92,94","v":"−19,34 % sur 4 semaines","d":"2026-11-17","pc":74,"lec":"série heurtée : -14,2 % le 04/11 en une séance (chiffres officiels)","src":"FRED (DCOILBRENTEU)","pts":[118.82,115.22,117.37,125.39,128.3,128.12,123.1,119.2,115.28,120.15,107.39,107.03,91.84,97.96,97.83,91.03,90.16,92.14,95.42,95.17,92.9,92.94]}],"notes":["Indice or (proxy) : NASDAQ QGLDI, pas le cours spot (FRED n'a plus de cours de l'or gratuit).","Changement de signe : corrélation ≥ 0,3 en valeur absolue sur les deux fenêtres de 30 séances, de signe opposé."]},"6":{"tuiles":[{"l":"Titres : énergie","t":"3","v":null,"d":"2026-11-20","pc":null,"lec":null,"src":"flux RSS du jour, classement par mots-clés (Python)","pts":[3,1,2,2,3,3,3,4,2,2,2,0,2,1,1,1,1,1,4,0,3,4,4,1,3,2,2,2,2,1,1,0,0,3]},{"l":"Titres : commerce","t":"1","v":null,"d":"2026-11-20","pc":null,"lec":null,"src":"flux RSS du jour, classement par mots-clés (Python)","pts":[0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,1,1,3,1,1,1,3,3,2,1]},{"l":"Titres : sanctions","t":"0","v":null,"d":"2026-11-20","pc":null,"lec":null,"src":"flux RSS du jour, classement par mots-clés (Python)","pts":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},{"l":"Titres : refuge (conflits)","t":"2","v":null,"d":"2026-11-20","pc":null,"lec":null,"src":"flux RSS du jour, classement par mots-clés (Python)","pts":[2,3,5,5,3,3,5,3,2,2,3,6,4,4,2,3,3,4,0,7,6,2,2,3,2,1,1,2,2,4,5,1,2,2]},{"l":"Titres : politique intérieure","t":"0","v":null,"d":"2026-11-20","pc":null,"lec":null,"src":"flux RSS du jour, classement par mots-clés (Python)","pts":[0,0,0,0,0,0,0,1,1,1,2,2,2,0,1,2,2,2,4,8,2,2,2,0,2,1,0,0,0,0,0,0,0,0]},{"l":"Réaction du Brent","t":"92,94","v":"+0,04 % sur la dernière séance (2026-11-16 → 2026-11-17)","d":"2026-11-17","pc":74,"lec":null,"src":"FRED (DCOILBRENTEU)","pts":[118.82,115.22,117.37,125.39,128.3,128.12,123.1,119.2,115.28,120.15,107.39,107.03,91.84,97.96,97.83,91.03,90.16,92.14,95.42,95.17,92.9,92.94]}],"notes":["Classement par mots-clés en Python : un titre sans canal identifiable (énergie, commerce, sanctions, refuge, politique intérieure) n'est pas retenu.","Le mécanisme et les devises touchées sont ceux du canal, pas une analyse du titre : à lire comme une piste, pas un fait."]},"7":{"tuiles":[{"l":"RSI 14 de l'USD","t":"73,5","v":"+28,9 pts sur 4 semaines","d":"2026-11-20","pc":98,"lec":null,"src":"calcul Python (RSI 14) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période","pts":[43.94,48.82,47.71,39.76,41.7,38.81,38.72,38.82,47.17,46.1,51.81,54.98,63.37,60.47,59.7,61.56,62.21,69.51,71.56,67.78,68.8,70.73,72.33,74.51,70.39,71.44,66.47,69.84,66.89,65.6,69.73,62.12,64.94,58.68,52.73,53.14,47.88,45.72,43.75,44.56,48.83,51.21,51.08,49.98,47.11,46.54,52.76,46.3,48.81,61.7,50.44,58.03,63.75,66.31,68.21,69.58,69.06,71.69,73.32,73.46]},{"l":"USD : écart à la MM200","t":"3,06 %","v":null,"d":"2026-11-20","pc":85,"lec":null,"src":"calcul Python (écart à la MM200) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période","pts":[-0.7,-0.41,-0.46,-1.0,-0.88,-1.08,-1.07,-1.05,-0.63,-0.68,-0.35,-0.15,0.48,0.34,0.3,0.45,0.5,1.13,1.34,1.18,1.27,1.45,1.61,1.84,1.68,1.77,1.57,1.86,1.73,1.67,2.01,1.68,1.89,1.6,1.28,1.3,1.0,0.87,0.75,0.79,1.0,1.13,1.12,1.06,0.93,0.9,1.15,0.84,0.94,1.65,1.03,1.57,2.08,2.34,2.54,2.67,2.63,2.9,3.07,3.06]},{"l":"USD : volatilité réalisée 20 j","t":"4,5 %","v":null,"d":"2026-11-20","pc":20,"lec":null,"src":"calcul Python (volatilité 20 séances) : Twelve Data pour les 230 dernières séances (cours du jour), raccordé à la Fed H.10 pour la profondeur de 5 ans ; USD = indice synthétique (moyenne inverse des 8 autres devises), même définition sur toute la période","pts":[4.41,4.52,4.51,4.77,4.63,4.59,4.6,4.55,4.83,4.74,4.87,4.89,4.32,4.38,4.29,4.27,4.23,4.62,4.59,4.49,4.39,4.35,4.32,3.61,3.75,3.53,3.68,3.69,3.66,3.65,3.66,3.94,3.47,3.61,3.83,3.82,4.0,3.38,3.3,3.27,3.34,3.3,3.24,3.11,3.09,3.05,3.17,3.1,3.13,4.08,4.38,4.7,4.99,4.93,4.79,4.79,4.62,4.59,4.52,4.53]},{"l":"Devises en surachat / survente (RSI)","t":"1 / 3","v":null,"d":"2026-11-20","pc":96,"lec":"surachat (≥ 70) : USD ; survente (≤ 30) : EUR, CAD, AUD","src":"calcul local (RSI 14 de 9 devises)","pts":[0,0,0,1,0,1,1,1,0,1,0,0,2,0,0,0,0,3,5,4,4,6,6,6,4,4,1,3,2,1,3,0,1,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,4,4,4]},{"l":"COT AUD (net spéculatif)","t":"−151 753","v":"−22 296 contrats sur 1 semaine","d":"2026-11-10","pc":null,"lec":null,"src":"CFTC (COT legacy, positions nettes non commerciales)","pts":[85644,60155,41812,18160,-4125,-13012,-17700,-24651,-30710,-37685,-39964,-33190,-39223,-44159,-44455,-39406,-34870,-38906,-46814,-63239,-98588,-117299,-127292,-128315,-129457,-151753]},{"l":"COT EUR (net spéculatif)","t":"−136 396","v":"+21 395 contrats sur 1 semaine","d":"2026-11-10","pc":null,"lec":null,"src":"CFTC (COT legacy, positions nettes non commerciales)","pts":[33513,29426,48866,13932,34353,30158,1099,-16227,-12605,-41338,-72447,-58091,-60010,-59088,-36352,-24925,-42616,-26993,-52334,-63256,-99332,-137573,-134524,-143894,-157791,-136396]}],"notes":["Force de la devise (paires inversées pour USD/JPY, USD/CHF, USD/CAD, USD/CNH) ; USD = indice synthétique.","COT : positions des spéculateurs (non commerciaux) ; percentile sur 52 semaines, extrême ≥ 90 ou ≤ 10.","Volatilité : percentile sur 90 jours seulement (historique de prix gratuit limité)."]},"8":{"tuiles":[{"l":"Stocks de brut US","t":"417,8 M","v":"+1,28 % sur 4 semaines","d":"2026-11-13","pc":19,"lec":"moyenne des 5 mêmes semaines des 5 années précédentes","src":"EIA (WCESTUS1, stocks de brut hors réserve stratégique)","pts":[445.0,441.7,433.7,426.5,418.2,412.1,408.4,411.4,409.7,411.7,404.5,407.0,424.4,428.8,428.9,424.5,424.1,423.4,426.4,427.3,424.1,415.6,412.5,410.6,409.8,414.4,417.8]},{"l":"Stocks : écart à la moyenne 5 ans","t":"−15,8 M","v":null,"d":"2026-11-13","pc":null,"lec":"−3,7 % par rapport à la moyenne des mêmes semaines","src":"EIA (WCESTUS1, stocks de brut hors réserve stratégique)","pts":[]},{"l":"Production de brut US","t":"14 032 k b/j","v":"+5,75 % sur 4 semaines","d":"2026-11-13","pc":100,"lec":null,"src":"EIA (WCRFPUS2, production de brut US)","pts":[13702.0,13715.0,13707.0,13799.0,13806.0,13819.0,13810.0,13860.0,13861.0,13798.0,13796.0,13804.0,13805.0,13830.0,13843.0,13862.0,13947.0,13944.0,13939.0,13955.0,13979.0,13679.0,13269.0,13992.0,14003.0,14013.0,14032.0]},{"l":"Pétrole WTI","t":"89,53","v":"−17,02 % sur 4 semaines","d":"2026-11-17","pc":77,"lec":null,"src":"FRED (DCOILWTICO)","pts":[110.01,107.89,103.95,104.27,109.72,105.25,103.37,106.25,105.51,107.56,100.06,99.64,91.73,94.05,94.37,90.4,89.62,89.62,92.3,91.96,89.24,89.53]},{"l":"Pétrole Brent","t":"92,94","v":"−19,34 % sur 4 semaines","d":"2026-11-17","pc":74,"lec":"série heurtée : -14,2 % le 04/11 en une séance (chiffres officiels)","src":"FRED (DCOILBRENTEU)","pts":[118.82,115.22,117.37,125.39,128.3,128.12,123.1,119.2,115.28,120.15,107.39,107.03,91.84,97.96,97.83,91.03,90.16,92.14,95.42,95.17,92.9,92.94]},{"l":"Indice or (proxy)","t":"2 248","v":"−10,40 % sur 4 semaines","d":"2026-11-18","pc":0,"lec":null,"src":"FRED (NASDAQQGLDI) — indice or (proxy)","pts":[2509.28,2501.29,2509.34,2456.88,2444.37,2453.37,2479.45,2486.58,2460.63,2381.82,2419.14,2404.59,2485.56,2501.59,2485.82,2527.05,2471.14,2445.86,2381.34,2385.34,2321.63,2318.54,2248.37]}],"notes":["Stocks EIA : écart à la moyenne des 5 années précédentes pour la même semaine.","Balances commerciales : monnaies et unités propres à chaque pays (non comparables directement).","Indice or (proxy) : NASDAQ QGLDI, pas le cours spot."]}},"thermo":[{"numero":1,"libelle":"moteurs alignés sur 7","texte_valeur":"3","etat":"franchi","note":"Seuil de thème établi : 3 alignés.","direction":{"libelle":"Dollar haussier · Risk off","classe":"dn"}},{"numero":2,"libelle":"2 ans US sur 7 j","texte_valeur":"+7 pb","etat":"proche","note":"seuils ±10 pb. Fed à 3,88 % effectif, 2 ans −10 pb sur 7 jours.","direction":{"libelle":"Dollar neutre","classe":"nd"}},{"numero":3,"libelle":"surprise USD 30 j","texte_valeur":"+0,87","etat":"franchi","note":"seuils ±0,30. Plus fortes surprises ailleurs : NZD −1,82, CNY −0,80.","direction":{"libelle":"Dollar haussier","classe":"up"}},{"numero":4,"libelle":"prime de terme 10 ans US, 4 sem.","texte_valeur":"+0 pb","etat":"non","note":"seuils haut 20 pb. 10 ans US 5,04 %, dette fédérale / PIB 121,2 % (2026-04).","direction":{"libelle":"Dollar neutre","classe":"nd"}},{"numero":5,"libelle":"VIX","texte_valeur":"24,56","etat":"proche","note":"seuils bas 14,00 / haut 25,00. Indice dollar +0,63 % sur 7 jours, VIX à 24,6.","direction":{"libelle":"Dollar haussier · Risk off","classe":"dn"}},{"numero":6,"libelle":"titres « refuge » du jour","texte_valeur":"2","etat":"non","note":"seuils haut 3. Canaux : énergie 3, refuge (conflits) 2, commerce 1.","direction":{"libelle":"Dollar neutre · Risk on","classe":"up"}},{"numero":7,"libelle":"indice USD synthétique, 5 j","texte_valeur":"+0,67 %","etat":"franchi","note":"seuils ±0,30 %. RSI USD 73,5, +0,67 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 1 autre.","direction":{"libelle":"Dollar haussier · Risk off","classe":"dn"}},{"numero":8,"libelle":"Brent sur 4 semaines","texte_valeur":"−19,34 %","etat":"franchi","note":"seuils ±10,00 %. Stocks +3,4 M de barils sur la semaine, Brent à 92,94 $.","direction":{"libelle":"Dollar neutre","classe":"nd"}}],"entete":{"titre":"Aversion au risque, dollar soutenu","alignes":3,"evaluables":7,"explication":"Moteurs orientés : Chiffres économiques (Dollar haussier) ; Liens entre marchés (Dollar haussier · Risk off) ; Géopolitique (Dollar neutre · Risk on) ; Prix et positionnement (Dollar haussier · Risk off). Les autres restent dans leur couloir neutre."},"news":[{"theme":"asie","theme_libelle":"Chine et Asie","titre":"AMD dives on short seller report of alleged China exposure","lien":"https://www.cnbc.com/2026/11/19/amd-falls-on-short-seller-report-of-alleged-china-exposure.html","date":"2026-11-20T00:08:34+00:00","source":"CNBC"},{"theme":"asie","theme_libelle":"Chine et Asie","titre":"Commerce approved sales of more than 879,000 AI chips to Chinese companies, Rep. Mast says","lien":"https://www.cnbc.com/2026/11/19/nvidia-amd-china-chip-sales-congress.html","date":"2026-11-20T00:02:36+00:00","source":"CNBC"},{"theme":"actions","theme_libelle":"Actions et IA","titre":"Anthropic IPO takeaways: ANT debuts with $1.8 trillion market cap in landmark moment for AI","lien":"https://www.cnbc.com/2026/11/19/anthropic-ipo-ant-live-updates.html","date":"2026-11-20T00:04:56+00:00","source":"CNBC"},{"theme":"actions","theme_libelle":"Actions et IA","titre":"Lumentum CEO defends Marvell deal after stock plunge: 'We've got work to do' with shareholders","lien":"https://www.cnbc.com/2026/11/19/lumentum-marvell-deal-ceo-shareholders-cramer.html","date":"2026-11-19T23:47:42+00:00","source":"CNBC"}],"agenda":[{"d":"2026-11-20","h":"08:00","dev":"GBP","ev":"Ventes au détail M/M","imp":"moyen","cons":"0.0%","prec":"-0.4%","type":"Chiffre"},{"d":"2026-11-20","h":"09:15","dev":"EUR","ev":"Discours de Lagarde, présidente de la BCE","imp":"moyen","cons":null,"prec":null,"type":"Discours"},{"d":"2026-11-20","h":"16:00","dev":"USD","ev":"Moral des consommateurs (université du Michigan), révisé","imp":"moyen","cons":"51.7","prec":"51.0","type":"Chiffre"},{"d":"2026-11-20","h":"16:00","dev":"USD","ev":"Anticipations d'inflation (université du Michigan), révisé","imp":"moyen","cons":null,"prec":"4.3%","type":"Chiffre"},{"d":"2026-11-23","h":"09:15","dev":"EUR","ev":"France : PMI manufacturier, flash","imp":"moyen","cons":null,"prec":"49.3","type":"Chiffre"},{"d":"2026-11-23","h":"09:15","dev":"EUR","ev":"France : PMI des services, flash","imp":"moyen","cons":null,"prec":"48.4","type":"Chiffre"},{"d":"2026-11-23","h":"09:30","dev":"EUR","ev":"Allemagne : PMI manufacturier, flash","imp":"moyen","cons":null,"prec":"54.2","type":"Chiffre"},{"d":"2026-11-23","h":"09:30","dev":"EUR","ev":"Allemagne : PMI des services, flash","imp":"moyen","cons":null,"prec":"51.7","type":"Chiffre"},{"d":"2026-11-23","h":"10:30","dev":"GBP","ev":"PMI manufacturier, flash","imp":"moyen","cons":null,"prec":"52.8","type":"Chiffre"},{"d":"2026-11-23","h":"10:30","dev":"GBP","ev":"PMI des services, flash","imp":"moyen","cons":null,"prec":"53.1","type":"Chiffre"},{"d":"2026-11-23","h":"15:45","dev":"USD","ev":"PMI manufacturier, flash","imp":"moyen","cons":null,"prec":"56.0","type":"Chiffre"},{"d":"2026-11-23","h":"15:45","dev":"USD","ev":"PMI des services, flash","imp":"moyen","cons":null,"prec":"57.9","type":"Chiffre"},{"d":"2026-11-24","h":"16:00","dev":"USD","ev":"Confiance des consommateurs (Conference Board)","imp":"moyen","cons":null,"prec":"91.7","type":"Chiffre"},{"d":"2026-11-24","h":"17:30","dev":"CAD","ev":"Discours de Macklem, gouverneur de la BoC","imp":"moyen","cons":null,"prec":null,"type":"Discours"},{"d":"2026-11-25","h":"01:30","dev":"AUD","ev":"IPC M/M","imp":"fort","cons":null,"prec":null,"type":"Chiffre"},{"d":"2026-11-25","h":"01:30","dev":"AUD","ev":"IPC A/A","imp":"fort","cons":null,"prec":"4.3%","type":"Chiffre"},{"d":"2026-11-25","h":"01:30","dev":"AUD","ev":"IPC moyenne tronquée M/M","imp":"fort","cons":null,"prec":"0.3%","type":"Chiffre"},{"d":"2026-11-25","h":"14:30","dev":"USD","ev":"Indice des prix PCE sous-jacent M/M","imp":"fort","cons":null,"prec":"0.3%","type":"Chiffre"},{"d":"2026-11-25","h":"14:30","dev":"USD","ev":"PIB T/T, prélim.","imp":"fort","cons":null,"prec":"3.4%","type":"Chiffre"},{"d":"2026-11-25","h":"14:30","dev":"USD","ev":"Déflateur du PIB T/T, prélim.","imp":"moyen","cons":null,"prec":"2.3%","type":"Chiffre"},{"d":"2026-11-25","h":"14:30","dev":"USD","ev":"Inscriptions hebdomadaires au chômage","imp":"moyen","cons":null,"prec":null,"type":"Chiffre"},{"d":"2026-11-27","h":"00:30","dev":"JPY","ev":"IPC sous-jacent de Tokyo A/A","imp":"moyen","cons":null,"prec":"2.6%","type":"Chiffre"}],"banques":[{"devise":"AUD","banque":"RBA","taux_texte":"4,85 %","taux":4.85,"vocabulaire":null,"communique_lien":null,"derniere_date":"2026-11-03","decision":"hausse","variation_pb":25,"derniere_texte":"hausse de 25 pb le 03/11","prochaine":"2026-12-08","lecture":"Inflation 4,3 % au 28/10 pour une cible de 2,5 %","inflation":4.3,"cible":2.5,"source":"ForexFactory (archive des publications)","texte_profil":"RBA : hausse à 4,85 % le 03/11, conforme au consensus · prochaine 08/12"},{"devise":"USD","banque":"Fed","taux_texte":"3,75–4,00 %","taux":4.0,"vocabulaire":"vocabulaire plus restrictif","communique_lien":"https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm","derniere_date":"2026-10-28","decision":"maintien","variation_pb":0,"derniere_texte":"maintien le 28/10","prochaine":"2026-12-09","lecture":"Inflation 3,7 % au 14/10 pour une cible de 2,0 %","inflation":3.7,"cible":2.0,"source":"ForexFactory (archive des publications)","texte_profil":"Fed : maintien le 28/10, conforme au consensus · fourchette cible 3,75–4,00 % · prochaine 09/12"},{"devise":"GBP","banque":"BoE","taux_texte":"4,00 %","taux":4.0,"vocabulaire":"vocabulaire plus accommodant","communique_lien":"https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2026/november-2026","derniere_date":"2026-11-05","decision":"hausse","variation_pb":25,"derniere_texte":"hausse de 25 pb le 05/11","prochaine":"2026-12-17","lecture":"Inflation 3,6 % au 18/11 pour une cible de 2,0 %","inflation":3.6,"cible":2.0,"source":"ForexFactory (archive des publications)","texte_profil":"BoE : hausse à 4,00 % le 05/11, conforme au consensus · prochaine 17/12"},{"devise":"CNY","banque":"PBoC","taux_texte":"3,00 %","taux":3.0,"vocabulaire":null,"communique_lien":null,"derniere_date":null,"decision":null,"variation_pb":null,"derniere_texte":"n/d","prochaine":"2026-11-20","lecture":"Inflation 0,7 % au 09/11 pour une cible de 3,0 %","inflation":0.7,"cible":3.0,"source":"registre macro","texte_profil":"PBoC : dernière décision n/d (absente de l'archive) · prochaine 20/11"},{"devise":"NZD","banque":"RBNZ","taux_texte":"2,75 %","taux":2.75,"vocabulaire":null,"communique_lien":null,"derniere_date":"2026-10-28","decision":"maintien","variation_pb":0,"derniere_texte":"maintien le 28/10","prochaine":"2026-12-09","lecture":"Inflation 0,7 % au 21/10 pour une cible de 2,0 %","inflation":0.7,"cible":2.0,"source":"ForexFactory (archive des publications)","texte_profil":"RBNZ : maintien à 2,75 % le 28/10, 3,00 % attendu (−25 pb) · prochaine 09/12"},{"devise":"EUR","banque":"BCE","taux_texte":"2,50 %","taux":2.5,"vocabulaire":null,"communique_lien":"https://www.ecb.europa.eu//press/pr/date/2026/html/ecb.mp261029~9a493adf17.en.html","derniere_date":"2026-10-29","decision":"maintien","variation_pb":0,"derniere_texte":"maintien le 29/10","prochaine":"2026-12-17","lecture":"Inflation 4,0 % au 18/11 pour une cible de 2,0 %","inflation":4.0,"cible":2.0,"source":"ForexFactory (archive des publications)","texte_profil":"BCE : maintien le 29/10, conforme au consensus · dépôt 2,50 % · prochaine 17/12"},{"devise":"CAD","banque":"BoC","taux_texte":"2,50 %","taux":2.5,"vocabulaire":"vocabulaire plus accommodant","communique_lien":"https://www.bankofcanada.ca/2026/10/fad-press-release-2026-10-28/","derniere_date":"2026-10-28","decision":"hausse","variation_pb":25,"derniere_texte":"hausse de 25 pb le 28/10","prochaine":"2026-12-09","lecture":"Inflation 0,2 % au 16/11 pour une cible de 2,0 %","inflation":0.2,"cible":2.0,"source":"ForexFactory (archive des publications)","texte_profil":"BoC : hausse à 2,50 % le 28/10, conforme au consensus · prochaine 09/12"},{"devise":"JPY","banque":"BoJ","taux_texte":"<1,25 %","taux":1.25,"vocabulaire":null,"communique_lien":"http://www.boj.or.jp/en/mopo/mpmdeci/mpr_2026/k261030a.pdf","derniere_date":"2026-10-30","decision":"maintien","variation_pb":0,"derniere_texte":"maintien le 30/10","prochaine":"2026-12-18","lecture":"Inflation 2,1 % au 22/10 pour une cible de 2,0 %","inflation":2.1,"cible":2.0,"source":"ForexFactory (archive des publications)","texte_profil":"BoJ : maintien à <1,25 % le 30/10, conforme au consensus · prochaine 18/12"},{"devise":"CHF","banque":"BNS","taux_texte":"0,00 %","taux":0.0,"vocabulaire":"vocabulaire plus restrictif","communique_lien":"https://www.snb.ch/en/publications/communication/press-releases-restricted/pre_20260924","derniere_date":null,"decision":null,"variation_pb":null,"derniere_texte":"n/d","prochaine":"2026-12-10","lecture":"Inflation 0,2 % au 03/11 pour une cible de 1,0 %","inflation":0.2,"cible":1.0,"source":"registre macro","texte_profil":"BNS : dernière décision n/d (absente de l'archive) · prochaine 10/12"}],"pays":{"USD":{"pays":"États-Unis","biais":"très soutenu","faits":["Fed : taux à 3,75–4,00 %, maintien le 28/10 ; prochaine décision le 09/12","Ventes au détail hors automobiles M/M (17/11) : 0,6 % contre 0,4 % attendu, précédent 0,9 %","Ventes au détail M/M (17/11) : 0,2 % contre 0,1 % attendu, précédent 0,8 %","Inscriptions hebdomadaires au chômage (19/11) : 203 K contre 198 K attendu, précédent 200 K","Indice manufacturier de la Fed de Philadelphie (19/11) : 6,3 contre 20,6 attendu, précédent 20,9","Vote du communiqué officiel du 28/10 : 10 contre 2"],"pourquoi":"Le dollar dépend d'abord des anticipations de taux de la Fed, lisibles sur le rendement à 2 ans.","chaine":["Ventes au détail hors automobiles M/M 0,6 % contre 0,4 %","au-dessus du consensus","Moins de raisons de baisser les taux","soutien au dollar"],"retournement":"Une désinflation inattendue ou des membres de la Fed plus prudents peuvent corriger fortement les anticipations.","mon_biais":"Biais très soutenu sur le dollar : rang 1 du classement (profil « Soutenue » (20/11)).","seuil":null},"JPY":{"pays":"Japon","biais":"neutre","faits":["BoJ : taux à <1,25 %, maintien le 30/10 ; prochaine décision le 18/12","Vote du communiqué officiel du 30/10 : unanimité","USD/JPY à 0,2 % de 160 (33 pips), zone d'intervention du Japon (le ministère des Finances du Japon est intervenu en avril 2024 après un passage au-dessus de 160)"],"pourquoi":"Le yen reste pénalisé par l'écart de rendement avec les États-Unis, qui nourrit le portage (carry trade).","chaine":["écart de taux 2 ans USD − JPY +291 pb au 19/11","effet à confirmer sur le yen"],"retournement":"Une intervention des autorités japonaises ou un débouclage du portage peuvent apprécier le yen très rapidement.","mon_biais":"Biais neutre sur le yen : rang 3 du classement (force sur 5 séances : rang 2 sur 9 (+0,13 % au 20/11)).","seuil":{"paire":"USD/JPY","niveau":160.0,"sens":"hausse","nature":"zone d'intervention du Japon","explication":"le ministère des Finances du Japon est intervenu en avril 2024 après un passage au-dessus de 160","source":"Ministère des Finances du Japon, Foreign Exchange Intervention Operations (interventions du 29/04 et du 01/05/2024)","lien":"https://www.mof.go.jp/english/policy/international_policy/reference/feio/index.html","releve_le":"2026-11-13","cours":159.66879,"distance_pct":0.21,"distance_pips":33.0,"proche":true,"texte":"USD/JPY à 0,2 % de 160 (33 pips), zone d'intervention du Japon"}},"AUD":{"pays":"Australie","biais":"neutre","faits":["RBA : taux à 4,85 %, hausse de 25 pb le 03/11 ; prochaine décision le 08/12","Variation de l'emploi (19/11) : −43,5 K contre 25,5 K attendu, précédent −39,3 K","Taux de chômage (19/11) : 4,9 % contre 4,7 % attendu, précédent 4,7 %","Indice des salaires T/T (18/11) : 1,1 % contre 1,0 % attendu, précédent 0,8 %"],"pourquoi":"Le dollar australien dépend de la Chine, des matières premières et de l'appétit pour le risque.","chaine":["Variation de l'emploi −43,5 K contre 25,5 K","Marché du travail plus faible que prévu","Baisses de taux plus probables","pression sur le dollar australien"],"retournement":"Un rebond des actions et des données chinoises solides soutiendraient l'AUD.","mon_biais":"Biais neutre sur le dollar australien : rang 5 du classement (force sur 5 séances : rang 9 sur 9 (−1,83 % au 20/11)).","seuil":null},"CNY":{"pays":"Chine","biais":"devise pilotée","faits":["PBoC : taux à 3,00 % ; prochaine décision le 20/11"],"pourquoi":"Le yuan est piloté par la Banque populaire de Chine ; ses publications pèsent surtout sur AUD et NZD.","chaine":["effet à confirmer sur le yuan"],"retournement":"Un changement du fixing de la PBoC modifierait la tendance du yuan.","mon_biais":"Biais devise pilotée : change piloté par la Banque populaire de Chine (fixing quotidien) : classé à part.","seuil":null}},"commune":[{"devise":"EUR","pays":"Zone euro","biais":"neutre","classe":"","faits":["BCE à 2,50 %, maintien le 29/10"],"pourquoi":"L'euro dépend de l'écart de taux avec les États-Unis et de la facture énergétique de la zone.","retournement":"Des données européennes solides ou une détente des anticipations de la Fed soutiendraient l'euro.","pilotee":null},{"devise":"GBP","pays":"Royaume-Uni","biais":"neutre","classe":"","faits":["BoE à 4,00 %, hausse de 25 pb le 05/11","IPC A/A (18/11) : 3,6 % contre 3,6 %","Salaires moyens 3 mois/A (17/11) : 3,6 % contre 3,5 %"],"pourquoi":"La livre dépend de la vitesse de resserrement de la BoE comparée à celle de la Fed, et de la croissance britannique.","retournement":"Une croissance qui fléchit sous le poids des taux réduirait l'avantage de la livre.","pilotee":null},{"devise":"CHF","pays":"Suisse","biais":"soutenu","classe":"up","faits":["BNS à 0,00 %"],"pourquoi":"Le franc suisse joue un rôle défensif : il profite du stress, mais perd de l'attrait quand les rendements américains montent.","retournement":"Un rebond durable des actions et des rendements américains plus élevés pèseraient sur le franc.","pilotee":null},{"devise":"CAD","pays":"Canada","biais":"fragile","classe":"warn","faits":["BoC à 2,50 %, hausse de 25 pb le 28/10","IPC M/M (16/11) : 0,2 % contre 0,3 %","IPC médian A/A (16/11) : 2,0 % contre 2,0 %"],"pourquoi":"Le dollar canadien dépend du pétrole, de la Banque du Canada et de la croissance américaine.","retournement":"Un repli du pétrole ou un dollar américain plus fort peuvent peser sur le CAD malgré la Banque du Canada.","pilotee":null},{"devise":"NZD","pays":"Nouvelle-Zélande","biais":"faible","classe":"dn","faits":["RBNZ à 2,75 %, maintien le 28/10","Inflation Expectations q/q (17/11) : 2,36 %"],"pourquoi":"Le dollar néo-zélandais est très sensible à l'appétit pour le risque et à la demande chinoise.","retournement":"Une amélioration du sentiment de risque et de la demande chinoise soutiendrait le NZD.","pilotee":null}],"energie":{"brent":{"valeur":92.94,"date":"2026-11-17","qualificatif":"4e semaine de baisse"}}};
+const $ = s => document.querySelector(s);
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const ddm = iso => iso ? iso.slice(8, 10) + '/' + iso.slice(5, 7) : '';
+const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+function spark(vals, w, h, col, area) {
+  if (!vals || vals.length < 2) return `<svg viewBox="0 0 ${w} ${h}"></svg>`;
+  const mn = Math.min(...vals), mx = Math.max(...vals), r = (mx - mn) || 1, p = 3;
+  const pts = vals.map((v, i) => [p + i * (w - 2*p) / (vals.length - 1), p + (h - 2*p) * (1 - (v - mn) / r)]);
+  const d = pts.map((q, i) => (i ? 'L' : 'M') + q[0].toFixed(1) + ' ' + q[1].toFixed(1)).join('');
+  const last = pts[pts.length - 1], id = 'g' + Math.random().toString(36).slice(2, 8);
+  return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">
+    ${area ? `<defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${col}" stop-opacity=".22"/><stop offset="1" stop-color="${col}" stop-opacity="0"/></linearGradient></defs><path d="${d}L${last[0]} ${h}L${p} ${h}Z" fill="url(#${id})"/>` : ''}
+    <path d="${d}" fill="none" stroke="${col}" stroke-width="1.8" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>
+    <circle cx="${last[0]}" cy="${last[1]}" r="2.6" fill="${col}"/></svg>`;
+}
+
+
+const J = ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'];
+const DEV = ['USD', 'EUR', 'GBP', 'JPY', 'CHF', 'CAD', 'AUD', 'NZD', 'CNY'];
+const M = n => D.moteurs[String(n)];
+$('#asof').textContent = 'Données du pipeline · vendredi 20 novembre 2026';
+/* Questions et canaux de transmission (en production : core/noms_moteurs.py) */
+const Q = { 1: 'Quel récit domine le marché, et les autres moteurs vont-ils dans son sens ?', 2: 'Qui monte ou baisse ses taux, et comment évolue l\'écart de rendement entre pays ?', 3: 'Les chiffres publiés surprennent-ils au-dessus ou en dessous des attentes ?', 4: 'Les déficits et la dette publique inquiètent-ils les investisseurs ?', 5: 'Que disent les taux longs, les actions, l\'or, le pétrole et la volatilité ?', 6: 'Quels conflits, sanctions ou élections peuvent provoquer un choc ?', 7: 'Où en sont la tendance des prix et les positions des spéculateurs ?', 8: 'Que disent le commerce extérieur et le marché du pétrole ?' };
+const CANAL = { 1: 'Le régime de risque déplace les capitaux : vers USD, JPY et CHF quand le marché a peur, vers AUD, NZD et CAD quand il a confiance.', 2: 'Un écart de taux qui s\'élargit attire les capitaux de portage vers la devise la mieux rémunérée.', 3: 'Une surprise change ce que le marché attend de la banque centrale, donc l\'écart de taux.', 4: 'Un dérapage budgétaire fait monter la prime de risque du pays et peut faire fuir les investisseurs étrangers.', 5: 'Les mouvements des actions, des taux longs et des matières premières se transmettent aux devises qui y sont exposées.', 6: 'Un choc crée des flux de refuge et renchérit l\'énergie des pays importateurs.', 7: 'Des positions extrêmes rendent la devise vulnérable à un débouclage brutal.', 8: 'Le pétrole et la balance commerciale changent la demande de devise des exportateurs et des importateurs.' };
+const NEWS_M = { asie: [6, 8], actions: [5], energie: [6, 8], fed: [2], commerce: [8], geopolitique: [6] };
+function evM(e) { const t = e.ev; if (/Décision|Discours|procès|Minutes|délibérations|FOMC|taux directeur/i.test(t)) return 2; if (/Budget|déficit|dette|adjudication/i.test(t)) return 4; if (/pétrole|brut|Balance commerciale/i.test(t)) return 8; return 3; }
+const BQ = {}; D.banques.forEach(b => BQ[b.devise] = b);
+function reaction(dev, n) {
+  const b = BQ[dev], P = D.pays[dev], out = [];
+  if (P && P.seuil) out.push(`${P.seuil.texte || ''}`);
+  if (dev === 'JPY') out.push('Ministère des Finances : intervention possible au-dessus de 160 (déjà fait en avril 2024).');
+  if (dev === 'CNY') out.push('PBoC : peut orienter le yuan par le fixing quotidien.');
+  if (b) out.push(`${b.banque} : prochaine décision le ${ddm(b.prochaine)}${b.vocabulaire ? ', ' + b.vocabulaire : ''}${b.lecture ? ' · ' + b.lecture : ''}.`);
+  if (n === 4) out.push('Gouvernement : ajustement budgétaire possible si la prime de risque monte.');
+  return out.filter(Boolean).slice(0, 2).join(' ');
+}
+function nextEv(dev) { const e = D.agenda.find(x => x.dev === dev); return e ? `${J[new Date(e.d + 'T12:00:00Z').getUTCDay()]} ${ddm(e.d)} ${e.h} · ${e.ev}` : 'Rien de moyen ou fort sur 7 jours'; }
+function cell(dev, n) { const l = D.mi.find(x => x.d === dev); return l ? l.c[n - 1] : { v: 0, e: 'nd', r: 'n/d' }; }
+function effPill(c) { return c.v > 0 ? '<span class="pill p">▲ Soutien</span>' : c.v < 0 ? '<span class="pill c">▼ Pression</span>' : c.e === 'sans_regle' || c.e === 'nd' ? '<span class="pill n">Non mesuré</span>' : '<span class="pill n">Neutre</span>'; }
+function thermo(n) { return D.thermo.find(t => t.numero === n) || {}; }
+function stPill(n) { const t = thermo(n); return t.etat === 'franchi' ? '<span class="pill p">Seuil franchi</span>' : t.etat === 'proche' ? '<span class="pill w">Près du seuil</span>' : '<span class="pill n">Calme</span>'; }
+function touched(n) { return DEV.map(d => ({ d, c: cell(d, n) })).filter(x => x.c.v !== 0); }
+function newsFor(n) { return D.news.filter(x => (NEWS_M[x.theme] || []).includes(n)); }
+function evFor(n) { return D.agenda.filter(e => evM(e) === n || (n === 1 && e.imp === 'fort')); }
+/* ---------- A ---------- */
+let mA = 2, tabA = 'analyse';
+function viewA() {
+  const side = [1, 2, 3, 4, 5, 6, 7, 8].map(n => { const t = touched(n), dir = thermo(n).direction;
+    return `<button class="mt" data-n="${n}" aria-current="${n === mA}"><span class="no">${n}</span><span><b>${esc(M(n).nom)}</b><small>${esc(M(n).explication)}</small><span class="row">${stPill(n)}${t.length ? `<span class="small">${t.length} devise${t.length > 1 ? 's' : ''} touchée${t.length > 1 ? 's' : ''}</span>` : '<span class="small">aucune devise touchée</span>'}</span></span></button>`; }).join('');
+  const n = mA, th = thermo(n), E = D.eng[n], tt = touched(n), nw = newsFor(n), ev = evFor(n);
+  const kt = E.tuiles.map(x => `<div><span class="l">${esc(x.l)}</span><b>${esc(x.t ?? 'n/d')}</b><small>${esc(x.v || '')}${x.d ? ' · ' + ddm(String(x.d).slice(0, 10)) : ''}</small>${x.pc != null ? `<div class="pc" title="percentile sur 5 ans : ${x.pc}"><i style="left:${x.pc}%"></i></div>` : ''}${x.pts && x.pts.length > 2 ? spark(x.pts, 200, 34, css('--accent'), true) : ''}</div>`).join('');
+  const lead = n === 1 ? `${D.entete.titre} : ${D.entete.alignes} moteurs sur ${D.entete.evaluables} vont dans le même sens. ${D.entete.explication}` : `${th.libelle ? th.libelle + ' : ' + (th.texte_valeur || 'n/d') + '. ' : ''}${th.note || ''} ${tt.length ? `Aujourd'hui, ce moteur pousse ${tt.filter(x => x.c.v > 0).map(x => x.d).join(', ') || 'aucune devise'} et pèse sur ${tt.filter(x => x.c.v < 0).map(x => x.d).join(', ') || 'aucune devise'}.` : 'Aujourd\'hui, il ne pousse aucune devise au-delà de ses seuils.'}`;
+  let body = '';
+  if (tabA === 'analyse') body = `<p class="lead">${esc(lead)}</p><div class="sec-head"><h3>Chiffres clés</h3><span class="small">point bleu : position sur 5 ans</span></div><div class="kt">${kt}</div>
+    <div class="sec-head"><h3>Comment ce moteur fait bouger les devises</h3></div><p style="margin:0;font-size:15px;color:var(--ink-2);max-width:70ch">${CANAL[n]}</p>
+    <div class="sec-head"><h3>Ce qu'il faut surveiller</h3></div><ul class="watch">${[th.note && 'Seuil du moteur : ' + th.note, ...E.notes.slice(0, 2), ev[0] && `Prochain rendez-vous lié : ${ev[0].ev} (${ev[0].dev}, ${J[new Date(ev[0].d + 'T12:00:00Z').getUTCDay()]} ${ddm(ev[0].d)} ${ev[0].h})`].filter(Boolean).map(x => `<li>${esc(x)}</li>`).join('')}</ul>`;
+  if (tabA === 'news') body = `<p class="small" style="margin:0">Titres du jour classés sur ce moteur, puis publications de la semaine qui peuvent le faire bouger · heures de Paris</p><div class="tl">${nw.map(x => `<div class="it"><span class="w">${ddm(x.date.slice(0, 10))} ${x.date.slice(11, 16)}</span><span class="cur">${esc(x.source)}</span><a href="${esc(x.lien)}" target="_blank" rel="noopener"><b>${esc(x.titre)}</b><p>${esc(x.theme_libelle)} · ouvre l'article</p></a></div>`).join('') || '<div class="it"><span></span><span></span><span class="muted">Aucun titre classé sur ce moteur aujourd\'hui.</span></div>'}
+    <div class="now">Maintenant · ven. 20/11</div>${ev.map(e => `<div class="it"><span class="w">${J[new Date(e.d + 'T12:00:00Z').getUTCDay()]} ${ddm(e.d)} ${e.h}</span><span class="cur">${e.dev}</span><div><b>${esc(e.ev)}</b><span class="imp ${e.imp}">${[1, 2, 3].map(i => `<i class="${i <= (e.imp === 'fort' ? 3 : 2) ? 'on' : ''}"></i>`).join('')}</span><p>${e.cons ? 'attendu ' + esc(e.cons) + ' · ' : ''}${e.prec ? 'précédent ' + esc(e.prec) + ' · ' : ''}${n === 2 ? 'peut changer les anticipations de taux' : n === 3 ? 'une surprise déplacerait les anticipations de la banque centrale' : 'à surveiller pour ce moteur'}</p></div></div>`).join('') || '<div class="it"><span></span><span></span><span class="muted">Aucune publication liée cette semaine.</span></div>'}</div>`;
+  if (tabA === 'dev') body = `<p class="small" style="margin:0">Pour chaque devise : sens de l'effet, pourquoi (règle et chiffre), comment (canal), réaction possible du pays et prochain rendez-vous</p><div class="dv">${DEV.map(d => ({ d, c: cell(d, n) })).sort((a, b) => Math.abs(b.c.v) - Math.abs(a.c.v)).map(({ d, c }) => `<div class="dc ${c.v > 0 ? 'p' : c.v < 0 ? 'c' : ''}"><div class="top"><b>${d}</b>${effPill(c)}</div><dl>
+    <div><dt>Pourquoi</dt><dd>${esc(c.r || 'n/d')}</dd></div>${c.v !== 0 ? `<div><dt>Comment</dt><dd>${CANAL[n]}</dd></div>` : ''}<div><dt>Réaction possible du pays</dt><dd>${esc(reaction(d, n) || 'Pas de réaction attendue sur ce moteur.')}</dd></div></dl><div class="next">Prochain rendez-vous : ${esc(nextEv(d))}</div></div>`).join('')}</div>`;
+  $('#vA').innerHTML = `<div class="layA"><div class="mlist">${side}</div><article class="card dossier"><div class="dh"><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="eyebrow">Moteur ${n} sur 8</span>${stPill(n)}${th.direction ? `<span class="pill ${th.direction.classe === 'up' ? 'p' : th.direction.classe === 'dn' ? 'c' : 'n'}">${esc(th.direction.libelle)}</span>` : ''}</div><h1>${esc(M(n).nom)}</h1><p class="q">${Q[n]}</p>
+    <div class="ptabs">${[['analyse', 'Analyse', ''], ['news', 'Actualités et agenda', nw.length + ev.length], ['dev', 'Devises touchées', tt.length]].map(x => `<button data-t="${x[0]}" aria-selected="${x[0] === tabA}">${x[1]}${x[2] !== '' ? `<span class="cnt">${x[2]}</span>` : ''}</button>`).join('')}</div></div><div class="dbody">${body}</div></article></div>`;
+  $('#vA').querySelectorAll('.mt').forEach(b => b.onclick = () => { mA = +b.dataset.n; viewA(); });
+  $('#vA').querySelectorAll('[data-t]').forEach(b => b.onclick = () => { tabA = b.dataset.t; viewA(); });
+}
+/* ---------- B ---------- */
+let selB = null;
+function viewB() {
+  const src = [...D.news.map((x, i) => ({ id: 'n' + i, k: 'news', t: x.titre, s: x.source + ' · ' + x.date.slice(11, 16), m: NEWS_M[x.theme] || [] })), ...D.agenda.filter(e => e.imp === 'fort' || /Discours|PMI|IPC|PIB/.test(e.ev)).slice(0, 9).map((e, i) => ({ id: 'e' + i, k: 'ev', t: e.dev + ' · ' + e.ev, s: J[new Date(e.d + 'T12:00:00Z').getUTCDay()] + ' ' + ddm(e.d) + ' ' + e.h, m: [evM(e)], dev: e.dev }))];
+  const links = [];
+  src.forEach(s => s.m.forEach(m => links.push({ a: s.id, b: 'm' + m, v: 0 })));
+  for (let n = 1; n <= 8; n++) DEV.forEach(d => { const c = cell(d, n); if (c.v) links.push({ a: 'm' + n, b: 'd' + d, v: c.v }); });
+  const on = id => { if (!selB) return true; if (id === selB) return true; return links.some(l => (l.a === selB && l.b === id) || (l.b === selB && l.a === id) || (selB.startsWith('n') || selB.startsWith('e') ? links.some(k => k.a === selB && k.b === l.a && l.b === id) : false) || (selB.startsWith('d') ? links.some(k => k.b === selB && k.a === id) || links.some(k => k.b === selB && l.a === id && l.b === k.a) : false)); };
+  $('#vB').innerHTML = `<div class="layB"><div class="card pad flow" id="flow"><svg class="links" id="lk"></svg><div class="cols">
+    <div class="col"><h3>Actualités et publications</h3>${src.map(s => `<button class="node ${on(s.id) ? '' : 'dim'} ${selB === s.id ? 'hi' : ''}" data-id="${s.id}">${esc(s.t)}<small>${s.k === 'news' ? 'actualité · ' : 'agenda · '}${esc(s.s)}</small></button>`).join('')}</div>
+    <div class="col"><h3>Moteurs</h3>${[1, 2, 3, 4, 5, 6, 7, 8].map(n => `<button class="node ${on('m' + n) ? '' : 'dim'} ${selB === 'm' + n ? 'hi' : ''}" data-id="m${n}"><b>${esc(M(n).nom)}</b><small>${esc(M(n).explication)}</small></button>`).join('')}</div>
+    <div class="col"><h3>Devises</h3>${DEV.map(d => { const s = [1, 2, 3, 4, 5, 6, 7, 8].reduce((a, n) => a + cell(d, n).v, 0); return `<button class="node cu ${on('d' + d) ? '' : 'dim'} ${selB === 'd' + d ? 'hi' : ''}" data-id="d${d}">${d}<span class="${s > 0 ? 'pos' : s < 0 ? 'neg' : 'muted'}">${s > 0 ? '+' + s : s}</span></button>`; }).join('')}</div></div></div>
+    <div class="side" id="sideB"></div></div>`;
+  requestAnimationFrame(() => {
+    const fl = $('#flow'), R = fl.getBoundingClientRect(), svg = $('#lk'); svg.setAttribute('viewBox', `0 0 ${R.width} ${R.height}`);
+    const pos = id => { const e = fl.querySelector(`[data-id="${id}"]`); if (!e) return null; const r = e.getBoundingClientRect(); return { l: r.left - R.left, r: r.right - R.left, y: r.top - R.top + r.height / 2 }; };
+    svg.innerHTML = links.map(l => { const a = pos(l.a), b = pos(l.b); if (!a || !b) return ''; const lit = !selB || l.a === selB || l.b === selB || (on(l.a) && on(l.b) && selB);
+      const col = l.v > 0 ? css('--up') : l.v < 0 ? css('--down') : css('--line-2'); const x1 = a.r, x2 = b.l, mx = (x1 + x2) / 2;
+      return `<path d="M${x1} ${a.y} C${mx} ${a.y} ${mx} ${b.y} ${x2} ${b.y}" fill="none" stroke="${col}" stroke-width="${l.v ? 2.2 : 1.4}" opacity="${lit ? .85 : .08}"/>`; }).join('');
+  });
+  $('#vB').querySelectorAll('.node').forEach(b => b.onclick = () => { selB = selB === b.dataset.id ? null : b.dataset.id; viewB(); });
+  let side = `<div class="card pad" style="display:flex;flex-direction:column;gap:8px"><h3>Comment lire la carte</h3><p style="margin:0;font-size:13.5px;color:var(--ink-2)">À gauche, ce qui arrive (actualités, publications). Au centre, le moteur touché. À droite, les devises : <b class="pos">vert</b> soutien, <b class="neg">rouge</b> pression. Clique sur un élément pour suivre son chemin.</p></div>`;
+  if (selB && selB[0] === 'm') { const n = +selB.slice(1), t = touched(n); side = `<div class="card pad" style="display:flex;flex-direction:column;gap:10px"><span class="eyebrow">Moteur ${n}</span><h2>${esc(M(n).nom)}</h2><p style="margin:0;font-size:14px;color:var(--ink-2)">${CANAL[n]}</p>${t.map(x => `<div style="display:flex;flex-direction:column;gap:4px;padding:10px;border-radius:10px;background:var(--surface-2)"><div style="display:flex;justify-content:space-between"><b>${x.d}</b>${effPill(x.c)}</div><span class="small" style="color:var(--ink-2)">${esc(x.c.r)}</span><span class="small"><b>Réaction possible :</b> ${esc(reaction(x.d, n))}</span></div>`).join('') || '<span class="muted">Aucune devise touchée aujourd\'hui.</span>'}</div>`; }
+  if (selB && selB[0] === 'd') { const d = selB.slice(1); side = `<div class="card pad" style="display:flex;flex-direction:column;gap:10px"><span class="eyebrow">Devise</span><h2>${d}</h2>${[1, 2, 3, 4, 5, 6, 7, 8].map(n => ({ n, c: cell(d, n) })).filter(x => x.c.v).map(x => `<div style="display:flex;flex-direction:column;gap:4px;padding:10px;border-radius:10px;background:var(--surface-2)"><div style="display:flex;justify-content:space-between;gap:8px"><b>${esc(M(x.n).nom)}</b>${effPill(x.c)}</div><span class="small" style="color:var(--ink-2)">${esc(x.c.r)}</span></div>`).join('') || '<span class="muted">Aucun moteur actif.</span>'}<div class="small"><b>Réaction possible du pays :</b> ${esc(reaction(d, 2))}</div><div class="small"><b>Prochain rendez-vous :</b> ${esc(nextEv(d))}</div></div>`; }
+  if (selB && (selB[0] === 'n' || selB[0] === 'e')) { const s = src.find(x => x.id === selB); side = `<div class="card pad" style="display:flex;flex-direction:column;gap:10px"><span class="eyebrow">${s.k === 'news' ? 'Actualité' : 'Publication à venir'}</span><h3>${esc(s.t)}</h3><span class="small">${esc(s.s)}</span>${s.m.map(n => `<div style="padding:10px;border-radius:10px;background:var(--surface-2);font-size:13.5px"><b>${esc(M(n).nom)}</b><div class="small" style="color:var(--ink-2)">${CANAL[n]}</div><div class="small">Devises touchées par ce moteur aujourd'hui : ${touched(n).map(x => x.d + (x.c.v > 0 ? ' ▲' : ' ▼')).join(', ') || 'aucune'}</div></div>`).join('')}</div>`; }
+  $('#sideB').innerHTML = side;
+}
+/* ---------- C ---------- */
+let selC = ['JPY', 2];
+function viewC() {
+  const [d, n] = selC, c = cell(d, n);
+  const rel = [...newsFor(n).map(x => `<li><a href="${esc(x.lien)}" target="_blank" rel="noopener">${esc(x.titre)}</a> <span class="small">${esc(x.source)}</span></li>`), ...D.agenda.filter(e => e.dev === d && (evM(e) === n || n === 1)).slice(0, 3).map(e => `<li>${J[new Date(e.d + 'T12:00:00Z').getUTCDay()]} ${ddm(e.d)} ${e.h} · ${esc(e.ev)}</li>`)];
+  $('#vC').innerHTML = `<div class="layC"><div class="card pad" style="display:flex;flex-direction:column;gap:10px"><div class="sec-head"><h2>9 devises × 8 moteurs</h2><span class="small">▲ soutien · ▼ pression · clic pour l'explication</span></div><div class="scroll"><table class="mx"><thead><tr><th>Devise</th>${[1, 2, 3, 4, 5, 6, 7, 8].map(k => `<th title="${esc(M(k).explication)}">${esc(M(k).nom)}</th>`).join('')}<th>Solde</th></tr></thead><tbody>${DEV.map(x => { const s = [1, 2, 3, 4, 5, 6, 7, 8].reduce((a, k) => a + cell(x, k).v, 0); return `<tr><td style="font-weight:700">${x}</td>${[1, 2, 3, 4, 5, 6, 7, 8].map(k => { const q = cell(x, k); return `<td class="c ${q.v > 0 ? 'p' : q.v < 0 ? 'm' : 'z'} ${x === d && k === n ? 'on' : ''}" data-d="${x}" data-n="${k}" title="${esc(q.r)}">${q.v > 0 ? '▲' : q.v < 0 ? '▼' : '·'}</td>`; }).join('')}<td class="t ${s > 0 ? 'pos' : s < 0 ? 'neg' : ''}">${s > 0 ? '+' + s : s}</td></tr>`; }).join('')}</tbody></table></div></div>
+    <div class="side"><div class="card pad" style="display:flex;flex-direction:column;gap:12px"><span class="eyebrow">${d} · ${esc(M(n).nom)}</span><div style="display:flex;justify-content:space-between;align-items:center"><h2>${d}</h2>${effPill(c)}</div>
+      <div><div class="eyebrow">Pourquoi</div><p style="margin:4px 0 0;font-size:14px;color:var(--ink-2)">${esc(c.r)}</p></div>
+      <div><div class="eyebrow">Comment</div><p style="margin:4px 0 0;font-size:14px;color:var(--ink-2)">${CANAL[n]}</p></div>
+      <div><div class="eyebrow">Réaction possible du pays</div><p style="margin:4px 0 0;font-size:14px;color:var(--ink-2)">${esc(reaction(d, n) || 'Pas de réaction attendue sur ce moteur.')}</p></div>
+      <div><div class="eyebrow">Actualités et agenda liés</div><ul style="margin:6px 0 0;padding-left:18px;font-size:13.5px;display:flex;flex-direction:column;gap:4px">${rel.join('') || '<li class="muted">Rien de lié cette semaine.</li>'}</ul></div>
+      <div class="small" style="padding:8px 10px;border-radius:8px;background:var(--surface-2)">Prochain rendez-vous ${d} : ${esc(nextEv(d))}</div></div></div></div>`;
+  $('#vC').querySelectorAll('td.c').forEach(t => t.onclick = () => { selC = [t.dataset.d, +t.dataset.n]; viewC(); });
+}
+let V = 'A';
+function show(v) { V = v; store.set('mv12', v); document.querySelectorAll('#pick button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === v)); ['A', 'B', 'C'].forEach(x => $('#v' + x).hidden = x !== v); ({ A: viewA, B: viewB, C: viewC })[v](); }
+document.querySelectorAll('#pick button').forEach(b => b.onclick = () => show(b.dataset.v));
+$('#themeBtn').onclick = () => { const dk = document.documentElement.dataset.theme ? document.documentElement.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches; document.documentElement.dataset.theme = dk ? 'light' : 'dark'; show(V); };
+addEventListener('resize', () => { if (V === 'B') viewB(); });
+show(store.get('mv12') || 'A');
+</script>

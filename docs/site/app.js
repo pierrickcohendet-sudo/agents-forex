@@ -73,8 +73,8 @@ function lireAdresse() {
     history.replaceState(null, "", `#${hash}`);
   }
   if (/^g=[1-8]$/.test(hash)) hash = `engrenages/${hash}`;   // lien direct vers un dossier d'engrenage
-  const [id, parametre] = hash.split("/");
-  return [ONGLETS[id] ? id : "briefing", parametre];
+  const [id, ...suite] = hash.split("/");
+  return [ONGLETS[id] ? id : "briefing", suite.length ? suite.join("/") : undefined];   // « g=2/devises » garde son sous-onglet
 }
 async function construire(id, parametre) {
   const conf = ONGLETS[id];

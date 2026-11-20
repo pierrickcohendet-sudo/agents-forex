@@ -27,6 +27,56 @@ MOTEURS = {
     7: ("Prix et positionnement", "tendance des prix, positions des spéculateurs (COT)"),
     8: ("Commerce et flux", "balances commerciales, offre et demande de pétrole"),
 }
+# Lot V12 : la question à laquelle répond chaque moteur, et son canal de transmission général vers les devises.
+QUESTIONS = {
+    1: "Quel récit domine le marché, et les autres moteurs vont-ils dans son sens ?",
+    2: "Qui monte ou baisse ses taux, et comment évolue l'écart de rendement entre pays ?",
+    3: "Les chiffres publiés surprennent-ils au-dessus ou en dessous des attentes ?",
+    4: "Les déficits et la dette publique inquiètent-ils les investisseurs ?",
+    5: "Que disent les taux longs, les actions, l'or, le pétrole et la volatilité ?",
+    6: "Quels conflits, sanctions ou élections peuvent provoquer un choc ?",
+    7: "Où en sont la tendance des prix et les positions des spéculateurs ?",
+    8: "Que disent le commerce extérieur et le marché du pétrole ?",
+}
+CANAUX = {
+    1: "Le régime de risque déplace les capitaux : vers USD, JPY et CHF quand le marché a peur, vers AUD, NZD et CAD quand il a confiance.",
+    2: "Un écart de taux qui s'élargit attire les capitaux de portage vers la devise la mieux rémunérée ; une banque centrale plus restrictive que prévu soutient sa devise.",
+    3: "Une surprise change ce que le marché attend de la banque centrale, donc l'écart de taux et la devise.",
+    4: "Un dérapage budgétaire fait monter la prime de risque du pays et peut faire fuir les investisseurs étrangers.",
+    5: "Les mouvements des actions, des taux longs et des matières premières se transmettent aux devises qui y sont exposées.",
+    6: "Un choc crée des flux de refuge et renchérit l'énergie des pays importateurs.",
+    7: "Une tendance installée attire les suiveurs ; des positions extrêmes rendent la devise vulnérable à un débouclage brutal.",
+    8: "Le pétrole et la balance commerciale changent la demande de devise des exportateurs et des importateurs.",
+}
+# Canal adapté à la devise (sinon le canal général du moteur)
+CANAUX_DEVISE = {
+    "JPY": {2: "Portage : quand l'écart de taux avec le Japon s'élargit, emprunter en yen pour placer ailleurs rapporte davantage, ce qui pèse sur le yen ; le ministère des Finances peut intervenir si la baisse devient brutale.",
+            1: "Refuge : le yen est racheté quand le marché a peur (débouclage du portage).",
+            5: "Le yen suit la volatilité des actions : une hausse du VIX déclenche des rachats de yen."},
+    "CHF": {1: "Refuge : le franc est recherché quand le marché a peur ; la BNS peut intervenir pour freiner sa hausse.",
+            6: "Refuge : un conflit attire les capitaux vers le franc."},
+    "CAD": {8: "Pétrole : le Canada exporte du brut, un baril plus cher soutient le dollar canadien ; la balance commerciale suit.",
+            5: "Pétrole et actions américaines : le CAD suit le Brent et l'appétit pour le risque."},
+    "AUD": {5: "Matières premières et Chine : l'AUD suit les métaux, les actions et la croissance chinoise.",
+            1: "Devise de risque : l'AUD baisse quand le marché a peur."},
+    "NZD": {1: "Devise de risque : le NZD baisse quand le marché a peur.", 8: "Exportations agricoles : la balance commerciale pèse sur le NZD."},
+    "NOK": {8: "Pétrole."},
+    "USD": {1: "Monnaie de réserve : la demande de dollars monte avec le stress (financements, couvertures).",
+            2: "Écart de taux : des taux américains plus hauts que ceux des autres attirent les capitaux vers le dollar.",
+            4: "Prime de terme : un dérapage budgétaire américain peut faire monter les taux longs sans soutenir le dollar."},
+    "EUR": {8: "Facture énergétique : la zone euro importe son énergie, un pétrole cher pèse sur sa balance et sur l'euro.",
+            4: "Écarts de dette entre pays (Italie − Allemagne) : une tension souveraine pèse sur l'euro."},
+    "GBP": {4: "Crédibilité budgétaire : un dérapage fait monter les gilts et peut faire baisser la livre (2022).",
+            3: "La livre réagit fortement aux surprises d'inflation et d'emploi, qui déplacent les anticipations de la BoE."},
+    "CNY": {2: "Change piloté : la PBoC oriente le yuan par le fixing quotidien ; les écarts de taux jouent moins qu'ailleurs.",
+            8: "Excédent commercial : les exportations chinoises soutiennent la demande de yuan, les droits de douane la réduisent."},
+}
+
+
+def canal(n: int, devise: str | None = None) -> str:
+    return (CANAUX_DEVISE.get(devise or "", {}) or {}).get(int(n)) or CANAUX[int(n)]
+
+
 CONSIGNE_MODELE = (
     "Les huit moteurs du marché se nomment : " + ", ".join(f"« {v[0][0].lower() + v[0][1:]} »" for k, v in MOTEURS.items())
     + ". Cite-les par leur nom (en minuscules dans la phrase). Jamais le mot « engrenage », ni « engrenage » suivi d'un "
@@ -34,7 +84,7 @@ CONSIGNE_MODELE = (
 # Anciens libellés courts utilisés dans les textes (« 2. Monétaire », « engrenage 3 (données économiques) »)
 COURTS = {"thème": 1, "monétaire": 2, "données": 3, "fiscale": 4, "marchés": 5, "géopolitique": 6, "flux": 7, "offre": 8}
 # Fichiers propres à l'onglet « 8 engrenages » : le mot y reste
-FICHIERS_ONGLET = {"dossiers.json", "dossiers_hebdo.json", "moteurs.json"}
+FICHIERS_ONGLET = {"dossiers.json", "dossiers_hebdo.json", "moteurs.json", "moteurs_dossiers.json"}
 SOUS_ARBRES_ONGLET = {"engrenages"}
 
 
@@ -141,7 +191,7 @@ def nettoyer(obj):
 def publier(docs_data: Path) -> None:
     """docs/data/moteurs.json : noms et explications pour le site (une seule définition, ici)."""
     (Path(docs_data) / "moteurs.json").write_text(json.dumps(
-        {"moteurs": {str(k): {"nom": v[0], "explication": v[1]} for k, v in MOTEURS.items()},
+        {"moteurs": {str(k): {"nom": v[0], "explication": v[1], "question": QUESTIONS[k], "canal": CANAUX[k]} for k, v in MOTEURS.items()},
          "note": "Les 8 moteurs du marché ; numérotation et mot « engrenage » réservés à l'onglet « 8 engrenages »."},
         ensure_ascii=False, indent=1), encoding="utf-8")
     site = Path(docs_data).parent / "site"

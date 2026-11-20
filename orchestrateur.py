@@ -279,6 +279,7 @@ def main() -> int:
                 log.info("--completer : rien à compléter aujourd'hui (rapport déjà complet) — analyses inchangées")
                 etape("emploi américain (BLS)", bls.collecter, RACINE, defaut=None)
                 etape("synthèse V9 (synthese.json)", _synthese_v9, config, None, True, defaut=None)
+                etape("dossiers des 8 moteurs (moteurs_dossiers.json)", _dossiers_moteurs, config, None, defaut=None)
                 etape("briefing du jour (briefing.json)", briefing.ecrire, RACINE, config, defaut=None)
                 etape("alertes sur le téléphone (ntfy)", _alertes_telephone, RACINE, config, defaut=None)
                 etape("fraîcheur des blocs (fraicheur.json)", fraicheur_blocs.ecrire, RACINE, config, defaut=None)
@@ -521,6 +522,9 @@ def main() -> int:
                                  complet=not arguments.completer, defaut=None)
     # Lot V9 : Synthèse en 13 sections (faits Python, 4 appels groupés, secours Groq, repli Python contrôlé)
     etape("synthèse V9 (synthese.json)", _synthese_v9, config, llm, False, defaut=None)
+    # Lot V12 : dossiers des 8 moteurs (onglet « 8 engrenages ») ; un appel groupé par jour pour les introductions, Groq en
+    # secours, secours Python contrôlé
+    etape("dossiers des 8 moteurs (moteurs_dossiers.json)", _dossiers_moteurs, config, llm, defaut=None)
     # Lot V8 : Briefing (page d'accueil), alertes sur le téléphone, fraîcheur des blocs — chacun isolé
     etape("briefing du jour (briefing.json)", briefing.ecrire, RACINE, config, defaut=None)
     etape("alertes sur le téléphone (ntfy)", _alertes_telephone, RACINE, config, defaut=None)
@@ -707,6 +711,18 @@ def ligne_budget(b: dict) -> str:
         ligne += " ; analyses : " + ", ".join(
             f"{k} {v['statut']}" + (f" ({v['echec']})" if v.get("echec") else "") for k, v in analyses.items())
     return ligne
+
+
+def _dossiers_moteurs(config: dict, llm) -> dict | None:
+    """Lot V12 : moteurs_dossiers.json. Sans modèle (passage horaire), les introductions du jour déjà acceptées sont reprises ;
+    le secours Groq n'est sollicité qu'au premier passage du jour où le modèle principal manque."""
+    from agents import agent_moteurs
+    secours = None
+    try:
+        secours = agent_synthese_v9.Secours(((config.get("synthese_v9") or {}).get("secours")) or {}, RACINE)
+    except Exception as exc:  # noqa: BLE001
+        log.warning("secours des introductions indisponible : %s", exc)
+    return agent_moteurs.executer(RACINE, config, llm, secours=secours if llm is not None else None)
 
 
 def _contexte(config: dict) -> dict:

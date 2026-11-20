@@ -131,3 +131,27 @@ horizontal. Comparer côte à côte avec `docs/design/reference/` et lister les 
 - Attention : un élément avec `hidden` et une règle `display` doit avoir sa règle `[hidden]{display:none}` (cas du menu « / »).
 - Parcours rejouable : `node outils/parcours_journal.mjs "http://localhost:4173/" captures/<lot>` (crée puis supprime le trade
   de test, à 1280 et 390 px).
+
+## Lot V11 — Journal selon `maquette_v11_journal.html`
+
+- Accueil = option B (6 indicateurs, calendrier par semaines : 5 jours ouvrés, week-end en petit, total de la semaine ;
+  courbe ; panneau du jour). Page d'un trade = option A (couverture = première photo, propriétés, sous-onglets « Mon
+  analyse », « Photos N », « Lecture du site »). Vue « Liste » (A) sur PC ; fil (C) par défaut sur téléphone, bouton
+  flottant « + Nouveau trade ». Styles `v11.css`, tout préfixé `.j5` (écran, tiroir `.j5-drw`, saisie `.j5-modal`,
+  visionneuse `.j5-lb`).
+- Notes `version: 5` : `photos` (ordre, légende, unité M5 à W1), `setup`, `couverture` ; migration V2/V3/V4 → V5 dans
+  `journal_v5.js` (images de l'analyse V10 reprises dans Photos sans doublon). Une entrée sans résultat affiche
+  « résultat à compléter » et ouvre la saisie.
+- Textes générés par le site : jamais « entrée » (« À l'ouverture du trade… »). Parcours rejouable :
+  `node outils/parcours_journal.mjs "http://localhost:4173/" captures/<lot>`.
+
+## Lot V12 — onglet « 8 engrenages » selon `maquette_v12_engrenages.html`
+
+- En haut la matrice 9 devises × 8 moteurs (option C) et son panneau (pourquoi, comment, réaction possible du pays,
+  actualités et agenda, prochain rendez-vous) ; dessous les dossiers (option A) avec 3 sous-onglets. L'écran V7 complet
+  (cockpit, thermomètres, fil des 15 séances, tableaux, simulateur, 4 outils) est dans le bloc « Outils et historique »
+  (`engrenages_v7.js`). Option B (carte des transmissions) non faite.
+- Données : `docs/data/moteurs_dossiers.json` (`core/dossiers_moteurs.py`, introductions par `agents/agent_moteurs.py`).
+  Styles `v12.css` préfixés `.m12` ; les règles globales `.mx` de v7.css y sont neutralisées.
+- Adresses : `#engrenages/g=2`, `#engrenages/g=2/devises` (app.js garde désormais tout le chemin après l'onglet),
+  `#engrenages/USD-2`.

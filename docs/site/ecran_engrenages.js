@@ -1,160 +1,141 @@
-/* Lot V7 — 8 engrenages (maquette #engrenages) : dossiers.json (cockpit, matrice_impact, engrenages 1 à 8). Directions,
-   seuils, positions, soldes et règles : Python. Le simulateur et les 4 outils restent accessibles en vue complète. */
-import { $, h, sgn, esc, ddm, nd, fv, classeDir, spark, donnees, bloc, blocDetaille } from "./v7_commun.js";
-import { tableEngrenage } from "./ecran_tableau.js";
+/* Lot V12 — onglet « 8 engrenages » : une analyse complète par moteur (maquette_v12_engrenages.html).
+   En haut : la matrice 9 devises x 8 moteurs (option C) ; un clic sur une case ouvre le panneau (pourquoi, comment, réaction
+   possible du pays, actualités et agenda liés, prochain rendez-vous). En dessous : les dossiers (option A), un par moteur,
+   avec 3 sous-onglets : Analyse, Actualités et agenda, Devises touchées. Sous les dossiers : « Outils et historique »
+   (cockpit, thermomètres, fil des 15 séances, simulateur et 4 outils du V7, inchangés).
+   Toutes les données viennent de docs/data/moteurs_dossiers.json (core/dossiers_moteurs.py, agents/agent_moteurs.py) :
+   le JavaScript affiche seulement. Dans cet onglet le mot « engrenage » reste permis, chaque moteur garde son nom.
+   Adresses : #engrenages/g=2 (dossier 2), #engrenages/g=2/devises (sous-onglet), #engrenages/USD-2 (case de la matrice). */
+import { $, h, esc, ddm, nd, spark, donnees, blocDetaille } from "./v7_commun.js";
 
-const COURTS = ["Thème", "Monétaire", "Données", "Fiscale", "Marchés", "Géopolitique", "Flux", "Offre/demande"];
-const SQUELETTE = `
-<div class="card pad" style="display:flex;flex-direction:column;gap:12px">
-  <span class="eyebrow" data-fraicheur="engrenages">Cockpit</span>
-  <div style="display:flex;gap:14px;align-items:baseline;flex-wrap:wrap"><h2 id="ckT"></h2><span id="ckChip"></span></div>
-  <p style="margin:0;color:var(--ink-2);max-width:80ch" id="ckTxt"></p>
-  <div style="display:flex;gap:6px;flex-wrap:wrap" id="suivi"></div>
-</div>
-<div class="cols2">
-  <div class="card">
-    <div class="pad" style="padding-bottom:4px"><div class="sec-head"><h2>Thermomètres</h2><p>Bleu : couloir neutre</p></div></div>
-    <div class="th-list" id="ths"></div>
-  </div>
-  <div style="display:flex;flex-direction:column;gap:14px">
-    <div class="card pad" style="display:flex;flex-direction:column;gap:10px"><h3>Seuils franchis</h3><div id="ckF" style="display:flex;flex-direction:column;gap:8px;font-size:13.5px"></div></div>
-    <div class="card pad" style="display:flex;flex-direction:column;gap:10px"><h3>Au bord du seuil</h3><div id="ckB" style="display:flex;flex-direction:column;gap:8px;font-size:13.5px"></div></div>
-  </div>
-</div>
-<div class="card pad" style="display:flex;flex-direction:column;gap:12px">
-  <div class="sec-head"><h2>Matrice d'impact</h2><div class="legend"><span><i style="background:var(--up-soft);border:1px solid var(--up)"></i>Soutien +1</span><span><i style="background:var(--down-soft);border:1px solid var(--down)"></i>Pression −1</span><span><i style="background:var(--surface-2);border:1px solid var(--line-2)"></i>Neutre</span><span><i style="background:repeating-linear-gradient(135deg,var(--line-2) 0 2px,transparent 2px 5px)"></i>n/d ou sans règle (—)</span><span>Survol : la règle appliquée</span></div></div>
-  <div class="scroll"><table class="heat mi" id="mi"></table></div>
-  <p class="src" id="miSrc"></p>
-</div>
-<div class="card pad full" style="display:flex;flex-direction:column;gap:12px">
-  <div class="sec-head"><h2>Fil des 15 séances</h2><div class="legend"><span><i style="background:var(--up)"></i>Dollar haussier</span><span><i style="background:var(--down)"></i>Dollar baissier ou risk off</span><span><i style="background:var(--line-2)"></i>Neutre</span></div></div>
-  <div class="scroll"><div class="fil" id="fil"></div></div>
-</div>
-<div class="sec-head"><h2>Dossier par engrenage</h2><p>Tous les indicateurs, tableaux et conséquences</p></div>
-<div class="engsel" id="engSel" role="group" aria-label="Choisir un engrenage"></div>
-<div id="engDet" style="display:flex;flex-direction:column;gap:14px"></div>
-<div id="detaille" style="display:flex;flex-direction:column;gap:14px"></div>`;
+const DEV = ["USD", "EUR", "GBP", "JPY", "CHF", "CAD", "AUD", "NZD", "CNY"];
+const JOURS = ["dim.", "lun.", "mar.", "mer.", "jeu.", "ven.", "sam."];
+const ONGLETS = [["analyse", "Analyse"], ["news", "Actualités et agenda"], ["devises", "Devises touchées"]];
+const jourCourt = iso => `${JOURS[new Date(iso + "T12:00:00Z").getUTCDay()]} ${ddm(iso)}`;
+const heureParis = iso => { try { return new Date(iso).toLocaleTimeString("fr-FR", { timeZone: "Europe/Paris", hour: "2-digit", minute: "2-digit" }); } catch (e) { return ""; } };
+const pillEffet = e => e === "soutien" ? '<span class="pill p">▲ Soutien</span>' : e === "pression" ? '<span class="pill c">▼ Pression</span>' : e === "neutre" ? '<span class="pill n">Neutre</span>' : '<span class="pill n">Non mesuré</span>';
+const pillEtat = e => e?.code === "franchi" ? '<span class="pill p">Seuil franchi</span>' : e?.code === "proche" ? '<span class="pill w">Près du seuil</span>' : e?.code === "non" ? '<span class="pill n">Calme</span>' : '<span class="pill n">n/d</span>';
+const pillDir = e => e?.direction ? `<span class="pill ${e.classe === "up" ? "p" : e.classe === "dn" ? "c" : "n"}">${esc(e.direction)}</span>` : "";
+const imp = i => `<span class="imp ${i}" aria-label="impact ${i}">${[1, 2, 3].map(k => `<i class="${k <= (i === "fort" ? 3 : i === "moyen" ? 2 : 1) ? "on" : ""}"></i>`).join("")}</span>`;
+const reactionsHtml = l => (l || []).length ? `<div class="reac">${l.map(r => `<div><b>${esc(r.acteur)}</b> · ${esc(r.levier)}<br>Déclencheur : ${esc(r.declencheur)}<br>Quand : ${esc(r.date)}<br><span class="src">Source : ${r.lien ? `<a href="${esc(r.lien)}" target="_blank" rel="noopener">${esc(r.source)}</a>` : esc(r.source)}</span></div>`).join("")}</div>`
+  : '<p>Pas de réaction attendue du pays sur ce moteur.</p>';
+const rdvTxt = r => r ? `${jourCourt(r.date)} ${r.heure || ""} · ${r.evenement}` : "rien de moyen ou fort sur 7 jours";
 
 export async function ecranEngrenages(section, parametre) {
-  section.innerHTML = SQUELETTE;
+  section.classList.add("m12");
+  section.innerHTML = `
+    <div class="tete"><div><span class="eyebrow">8 engrenages · les moteurs du marché</span><h2 style="font-size:32px">Ce qui fait bouger les devises</h2></div><span class="small" id="asof"></span></div>
+    <div class="layC"><div class="card pad" style="display:flex;flex-direction:column;gap:10px"><div class="sec-head"><h2>9 devises × 8 moteurs</h2><span class="small">▲ soutien · ▼ pression · · neutre · — non mesuré · clic pour l'explication</span></div>
+      <div class="scroll"><table class="mx" id="mx"></table></div><p class="small" id="mxSrc" style="margin:0"></p></div>
+      <div class="side" id="mxSide"></div></div>
+    <div class="sec-head"><h2>Les dossiers</h2><p>Pour chaque moteur : ce qui se passe, ce qui arrive, quelles devises sont touchées et comment</p></div>
+    <div class="layA"><div class="mlist" id="mlist" role="tablist" aria-label="Choisir un moteur"></div><article class="card dossier" id="dossier"></article></div>
+    <div id="outilsHist" style="display:flex;flex-direction:column;gap:14px"></div>`;
   const q = s => $(s, section);
-  const dos = await donnees("dossiers");
-  if (!dos) { q("#ckT").textContent = "Dossiers des engrenages indisponibles"; return; }
-  const ck = dos.cockpit || {}, en = ck.entete || {}, thermo = ck.thermometres || [];
-
-  bloc(q(".card"), () => {
-    q("#ckT").textContent = `${en.titre || "Thème n/d"} · ${en.alignes ?? "n/d"} engrenages alignés sur ${en.evaluables ?? "n/d"}`;
-    q("#ckChip").innerHTML = en.direction ? `<span class="chip ${classeDir(en.direction.classe)}"><span class="dot"></span>${esc(en.direction.libelle)}</span>` : "";
-    q("#ckTxt").textContent = en.explication || en.texte || "";
-    const suivi = dos.engrenages?.["1"]?.suivi_theme?.lignes || [];
-    q("#suivi").innerHTML = suivi.map(s => `<span class="chip ${s.accord === "oui" ? "up" : ""}" title="${esc(`${s.nom} · ${s.direction} · conviction ${s.conviction || "n/d"} · ${s.accord}`)}">${s.accord === "oui" ? "✓" : "·"} ${s.numero} ${esc(COURTS[s.numero - 1])} : ${esc(s.direction)}</span>`).join("");
+  const D = await donnees("moteurs_dossiers");
+  // Outils et historique : l'écran V7 complet, repliable
+  let ancien = null;
+  const outils = blocDetaille("Outils et historique", "cockpit, thermomètres, fil des 15 séances, tableaux par engrenage, simulateur et 4 outils", async () => {
+    const m = await import("./engrenages_v7.js"); const hote = h("div"); hote.style.cssText = "display:flex;flex-direction:column;gap:14px";
+    await m.ancienEcran(hote, null); ancien = hote; return [hote];
   });
+  q("#outilsHist").appendChild(outils);
+  if (!D?.moteurs) {
+    q("#dossier").innerHTML = `<div class="pad muted">Dossiers des moteurs pas encore calculés (${esc(D === null ? "moteurs_dossiers.json absent ou illisible" : "données incomplètes")}) : ils apparaîtront au prochain run. Les outils et l'historique restent disponibles ci-dessous.</div>`;
+    section.allerA = async p => { await outils.ouvrirAvec(); return !!ancien?.allerA?.(p); };
+    return;
+  }
+  q("#asof").textContent = `Données du ${ddm(D.date)} · générées le ${ddm(D.genere_le)} à ${heureParis(D.genere_le)}`;
+  const M = n => D.moteurs[String(n)];
+  let choisi = 2, onglet = "analyse", caseSel = ["JPY", 2];
 
-  bloc(q("#ths"), () => {
-    q("#ths").innerHTML = thermo.map(t => {
-      const zb = t.pos_bas ?? 0, zh = t.pos_haut ?? 100, pos = Math.max(0, Math.min(100, t.pos ?? 50));
-      const st = t.etat === "franchi" ? "acc" : t.etat === "proche" ? "warn" : "";
-      const stx = t.etat === "franchi" ? "Seuil franchi" : t.etat === "proche" ? "Près du seuil" : t.valeur == null ? "n/d" : "Dans le couloir";
-      return `<div class="th"><div class="nm"><b>${t.numero} · ${esc(t.titre)}</b><small>${esc(t.libelle)}</small></div>
-        <div class="track" title="${esc([t.note, t.source, t.date ? ddm(t.date) : ""].filter(Boolean).join(" · ") || t.raison || "")}"><div class="rail"></div><div class="zone" style="left:${zb}%;width:${zh - zb}%"></div>
-          ${t.valeur == null ? "" : `<div class="mk" style="left:${pos}%"></div>`}<span class="v" style="left:${Math.max(6, Math.min(94, pos))}%">${t.valeur == null ? nd(t.raison) : esc(t.texte_valeur ?? "n/d")}</span></div>
-        <span class="chip ${st} st">${stx}</span></div>`;
-    }).join("");
-  });
+  // ------------------------------------------------------------------ matrice (option C)
+  function rendreMatrice() {
+    const mx = D.matrice;
+    q("#mx").innerHTML = `<thead><tr><th>Devise</th>${[1, 2, 3, 4, 5, 6, 7, 8].map(n => `<th title="${esc(M(n).explication)}">${esc(M(n).nom)}</th>`).join("")}<th>Solde</th></tr></thead><tbody>` +
+      DEV.map(d => `<tr><td class="d">${d}</td>${mx.cases[d].map((c, i) => {
+        const cls = c.effet === "soutien" ? "p" : c.effet === "pression" ? "m" : c.effet === "neutre" ? "z" : "nm", n = i + 1;
+        return `<td class="c ${cls} ${caseSel[0] === d && caseSel[1] === n ? "on" : ""}" data-d="${d}" data-n="${n}" tabindex="0" role="button" aria-label="${d} · ${esc(M(n).nom)} : ${esc(c.effet)}" title="${esc(c.pourquoi)}">${c.effet === "soutien" ? "▲" : c.effet === "pression" ? "▼" : c.effet === "neutre" ? "·" : "—"}</td>`;
+      }).join("")}<td class="t ${mx.solde[d] > 0 ? "pos" : mx.solde[d] < 0 ? "neg" : ""}">${mx.solde[d] > 0 ? "+" + mx.solde[d] : mx.solde[d] < 0 ? "−" + Math.abs(mx.solde[d]) : "0"}</td></tr>`).join("") + "</tbody>";
+    q("#mxSrc").textContent = `Source : ${D.sources?.matrice || "matrice d'impact"} · solde = somme des effets (−2 à +2 par case).`;
+    q("#mx").querySelectorAll("td.c").forEach(t => { const go = () => { caseSel = [t.dataset.d, +t.dataset.n]; history.replaceState(null, "", `#engrenages/${caseSel[0]}-${caseSel[1]}`); rendreMatrice();
+      if (matchMedia("(max-width:1100px)").matches) q("#mxSide").scrollIntoView({ block: "nearest" }); };
+      t.onclick = go; t.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } }; });
+    rendreCase();
+  }
+  function rendreCase() {
+    const [d, n] = caseSel, m = M(n), c = m.devises.find(x => x.devise === d) || {};
+    const tit = m.actualites.slice(0, 4), ag = m.agenda.filter(e => e.devise === d && !e.passe).slice(0, 3);
+    q("#mxSide").innerHTML = `<div class="card pad" style="display:flex;flex-direction:column;gap:12px"><span class="eyebrow">${d} · ${esc(m.nom)}</span>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h2>${d}</h2>${pillEffet(c.effet)}</div>
+      <div><div class="eyebrow">Pourquoi</div><p>${esc(c.pourquoi || "n/d")}</p></div>
+      ${c.effet === "non mesuré" ? `<div><div class="eyebrow">Non mesuré</div><p>${esc(c.raison_non_mesure)}</p></div>` : `<div><div class="eyebrow">Comment</div><p>${esc(c.comment)}</p></div>`}
+      <div><div class="eyebrow">Réaction possible du pays</div>${reactionsHtml(c.reactions)}</div>
+      <div><div class="eyebrow">Actualités et agenda liés</div><ul>${[...tit.map(t => `<li><a href="${esc(t.lien)}" target="_blank" rel="noopener">${esc(t.titre)}</a> <span class="small">${esc(t.source || "")}</span></li>`),
+        ...ag.map(e => `<li>${esc(jourCourt(e.date))} ${esc(e.heure || "")} · ${esc(e.evenement)} <span class="small">${esc(e.ce_qui_pourrait_changer)}</span></li>`)].join("") || '<li class="muted">Rien de lié aujourd\'hui ni cette semaine.</li>'}</ul></div>
+      <div class="small" style="padding:8px 10px;border-radius:8px;background:var(--surface-2)">Prochain rendez-vous ${d} : ${esc(rdvTxt(c.prochain_rdv))}</div>
+      <button type="button" class="btn sm" id="versDossier">Ouvrir le dossier « ${esc(m.nom)} »</button></div>`;
+    q("#versDossier").onclick = () => { choisi = n; onglet = "devises"; rendreDossier(); q("#dossier").scrollIntoView({ block: "start" }); };
+  }
 
-  bloc(q("#ckF"), () => {
-    const fr = ck.franchis || [], bo = ck.au_bord || [];
-    q("#ckF").innerHTML = fr.length ? fr.map(x => `<div style="display:flex;gap:10px"><span class="chip acc" style="height:22px">${x.engrenage}</span><span>${esc(x.phrase || x.libelle)}<br><span class="small">${x.cote === "haut" && x.effet_haut ? "Effet : " + esc(x.effet_haut) : x.effet_bas ? "Effet : " + esc(x.effet_bas) : ""} · ${esc(x.source || "")}</span></span></div>`).join("") : '<span class="muted">Aucun seuil franchi.</span>';
-    q("#ckB").innerHTML = bo.length ? bo.map(x => `<div style="display:flex;gap:10px"><span class="chip warn" style="height:22px">${x.engrenage}</span><span>${esc(x.phrase || x.libelle)}<br><span class="small">Si franchi : ${esc(x.cote === "haut" ? x.effet_haut : x.effet_bas)}</span></span></div>`).join("") : '<span class="muted">Aucun seuil proche.</span>';
-  });
-
-  bloc(q("#mi"), () => {
-    const mi = dos.matrice_impact || {};
-    const regle = c => [c.libelle, ...(c.regles || []).map(r => r.texte || r.regle || ""), c.raison].filter(Boolean).join(" : ");
-    q("#mi").innerHTML = `<thead><tr><th>Devise</th>${COURTS.map((c, i) => `<th>${i + 1} ${c}</th>`).join("")}<th>Solde</th></tr></thead><tbody>` +
-      (mi.lignes || []).map(l => `<tr><td style="font-weight:700;padding:4px 6px">${l.devise}</td>${(l.cases || []).map(c => {
-        const v = c.valeur, cls = c.etat === "nd" || c.etat === "sans_regle" ? "nd" : v > 0 ? "p1" : v < 0 ? "m1" : "z";
-        return `<td class="c ${cls}" tabindex="0" title="${esc(regle(c))}">${v > 0 ? "+" + v : v < 0 ? "−" + Math.abs(v) : c.etat === "nd" ? "n/d" : c.etat === "sans_regle" ? "—" : "0"}</td>`;
-      }).join("")}<td class="c solde" title="${esc(`bilan calculé en Python : ${l.lecture || ""}`)}">${l.bilan > 0 ? "+" + l.bilan : l.bilan < 0 ? "−" + Math.abs(l.bilan) : l.bilan == null ? "n/d" : "0"}</td></tr>`).join("") + "</tbody>";
-    q("#miSrc").textContent = `${mi.compte_libelle || ""} · ${mi.legende || ""}`;
-  });
-
-  bloc(q("#fil"), () => {
-    const f = ck.fil || { jours: [], lignes: [] }, n = f.jours.length;
-    let html = `<span></span>${f.jours.map(j => `<span class="d">${ddm(j)}</span>`).join("")}`;
-    for (const l of f.lignes) html += `<span class="lab">${esc(l.titre)}</span>` + (l.cellules || []).map(c => `<i class="${c.classe || "x"}" title="${ddm(c.date)} · ${esc(c.libelle || "")}"></i>`).join("");
-    const fil = q("#fil"); fil.style.gridTemplateColumns = `110px repeat(${n}, minmax(0,1fr))`; fil.innerHTML = html;
-  });
-
-  // Dossier par engrenage (8 boutons) ; lien direct #engrenages/g=N
-  let choisi = Number((parametre || "").match(/^g=([1-8])$/)?.[1] || 2);
-  const rendreSel = () => {
-    q("#engSel").innerHTML = Array.from({ length: 8 }, (_, i) => i + 1).filter(n => dos.engrenages?.[String(n)]).map(n => {
-      const t = thermo.find(x => x.numero === n), c = t?.direction?.classe || "nd", e = dos.engrenages[String(n)];
-      return `<button type="button" data-n="${n}" aria-pressed="${n === choisi}"><span class="dot" style="color:${c === "up" ? "var(--up)" : c === "dn" ? "var(--down)" : "var(--line-2)"}"></span>${n} · ${esc(e.titre)}</button>`;
-    }).join("");
-    q("#engSel").querySelectorAll("button").forEach(b => b.onclick = () => { choisi = +b.dataset.n; history.replaceState(null, "", `#engrenages/g=${choisi}`); rendreSel(); });
-    bloc(q("#engDet"), () => { q("#engDet").innerHTML = dossier(dos.engrenages[String(choisi)], thermo.find(x => x.numero === choisi)); });
-  };
-  rendreSel();
-
-  const outils = blocDetaille("Simulateur et 4 outils", "radar, scénarios « et si », paires, situations similaires", async () => {
-    const m = await import("./outils.js"); const lien = h("p", "small", 'Simulateur complet des scénarios : menu <a href="#scenarios">Plus › Scénarios et simulateur</a>.');
-    return [lien, ...(await m.pageOutils())];
-  });
-  const detailles = blocDetaille("Dossiers détaillés", "graphiques annotés, vue d'ensemble, chaînes de transmission", async arg => {
-    const m = await import("./engrenages.js"); return m.pageEngrenages(arg);
-  });
-  q("#detaille").append(outils, detailles);
-
-  // Adresses de détail : #engrenages/g=N (dossier N), #engrenages/hebdo et /mensuel (dossiers détaillés), #engrenages/outils
-  section.allerA = async parametre => {
-    const g = (parametre || "").match(/^g=([1-8])$/);
-    if (g) {
-      const b = q(`#engSel button[data-n="${g[1]}"]`);
-      if (b && b.getAttribute("aria-pressed") !== "true") b.click();
-      q("#engSel")?.scrollIntoView({ block: "start" });
-      return true;
+  // ------------------------------------------------------------------ dossiers (option A)
+  function rendreListe() {
+    q("#mlist").innerHTML = [1, 2, 3, 4, 5, 6, 7, 8].map(n => { const m = M(n);
+      return `<button type="button" class="mt" role="tab" data-n="${n}" aria-current="${n === choisi}" aria-selected="${n === choisi}"><span class="no">${n}</span><span><b>${esc(m.nom)}</b><small>${esc(m.explication)}</small>
+        <span class="row">${pillEtat(m.etat)}<span class="small">${m.touchees ? `${m.touchees} devise${m.touchees > 1 ? "s" : ""} touchée${m.touchees > 1 ? "s" : ""}` : "aucune devise touchée"}</span></span></span></button>`; }).join("");
+    q("#mlist").querySelectorAll(".mt").forEach(b => b.onclick = () => { choisi = +b.dataset.n; history.replaceState(null, "", `#engrenages/g=${choisi}`); rendreDossier(); });
+  }
+  function rendreDossier() {
+    rendreListe();
+    const n = choisi, m = M(n), e = m.etat, A = m.analyse;
+    const aVenir = m.agenda.filter(x => !x.passe), passes = m.agenda.filter(x => x.passe);
+    let corps = "";
+    if (onglet === "analyse") {
+      corps = `<p class="lead">${esc(A.introduction)}</p><span class="small" style="margin-top:-12px">${A.redige_par === "python" ? "Texte calculé en Python à partir des faits du jour" : `Rédigé par ${esc(A.redige_par)} à partir des faits calculés en Python, nombres contrôlés`}</span>
+        ${e.incoherence ? `<div class="incoh">${esc(e.incoherence)}</div>` : ""}
+        <div class="sec-head"><h3>Chiffres clés</h3><span class="small">point bleu : position sur 5 ans</span></div>
+        <div class="kt">${A.chiffres_cles.map(t => `<div title="${esc(t.source || "")}"><span class="l">${esc(t.libelle)}</span><b>${t.texte && t.texte !== "n/d" ? esc(t.texte) : nd(t.raison)}</b><small>${esc(t.variation || "")}${t.date ? " · " + ddm(String(t.date).slice(0, 10)) : ""}</small>
+          ${t.percentile_5a != null ? `<div class="pc" title="percentile sur 5 ans : ${t.percentile_5a}"><i style="left:${t.percentile_5a}%"></i></div>` : ""}${(t.points || []).length > 2 ? spark(t.points, 200, 34, "var(--accent)", true) : ""}
+          ${t.lecture ? `<small>${esc(t.lecture)}</small>` : ""}</div>`).join("") || '<p class="muted">Aucun chiffre clé publié pour ce moteur.</p>'}</div>
+        <div class="sec-head"><h3>Comment ce moteur fait bouger les devises</h3></div><p style="margin:0;font-size:15px;color:var(--ink-2);max-width:70ch">${esc(m.canal)}</p>
+        <div class="sec-head"><h3>Ce qu'il faut surveiller</h3></div><ul class="watch">${A.surveiller.map(x => `<li>${esc(x)}</li>`).join("") || "<li>Rien de particulier.</li>"}</ul>
+        ${m.manques.length ? `<p class="manques">Non mesuré sur ce moteur : ${m.manques.map(x => `${x.devise} (${esc(x.raison)})`).join(" ; ")}.</p>` : ""}`;
+    } else if (onglet === "news") {
+      const it = x => `<div class="it ${x.passe ? "passe" : ""}"><span class="w">${esc(jourCourt(x.date))} ${esc(x.heure || "")}</span><span class="cur">${esc(x.devise)}</span><div><b>${esc(x.evenement)}</b>${imp(x.impact || "faible")}
+        <p>${x.consensus ? "attendu " + esc(x.consensus) + " · " : ""}${x.precedent ? "précédent " + esc(x.precedent) + " · " : ""}${x.publie ? "publié " + esc(x.publie) + " · " : ""}${esc(x.ce_qui_pourrait_changer)}</p></div></div>`;
+      corps = `<p class="small" style="margin:0">Titres du jour classés sur ce moteur (mots-clés), puis publications des 7 prochains jours qui peuvent le faire bouger · heures de Paris</p>
+        <div class="tl">${m.actualites.map(t => `<div class="it"><span class="w">${t.date ? esc(ddm(t.date.slice(0, 10)) + " " + heureParis(t.date)) : "n/d"}</span><span class="cur">${esc(String(t.source || "").slice(0, 6))}</span>
+          <a href="${esc(t.lien)}" target="_blank" rel="noopener"><b>${esc(t.titre)}</b><p>Pourquoi ce titre compte : ${esc(t.pourquoi[String(n)])} · ${esc(t.source || "")}</p></a></div>`).join("")
+          || '<div class="it"><span></span><span></span><span class="muted">Aucun titre classé sur ce moteur aujourd\'hui.</span></div>'}
+          ${passes.map(it).join("")}<div class="now">Maintenant · ${esc(jourCourt(D.date))}</div>${aVenir.map(it).join("") || '<div class="it"><span></span><span></span><span class="muted">Aucune publication liée sur 7 jours.</span></div>'}</div>`;
+    } else {
+      corps = `<p class="small" style="margin:0">Pour chaque devise : sens de l'effet, pourquoi (règle et chiffre), comment (canal), réaction possible du pays et prochain rendez-vous</p>
+        <div class="dv">${m.devises.map(c => `<div class="dc ${c.effet === "soutien" ? "p" : c.effet === "pression" ? "c" : ""}"><div class="top"><b>${c.devise}</b>${pillEffet(c.effet)}</div><dl>
+          <div><dt>Pourquoi</dt><dd>${esc(c.pourquoi || "n/d")}</dd></div>
+          ${c.effet === "non mesuré" ? `<div><dt>Non mesuré</dt><dd>${esc(c.raison_non_mesure)}</dd></div>` : `<div><dt>Comment</dt><dd>${esc(c.comment)}</dd></div>`}
+          <div><dt>Réaction possible du pays</dt><dd>${reactionsHtml(c.reactions)}</dd></div></dl>
+          <div class="next">Prochain rendez-vous : ${esc(rdvTxt(c.prochain_rdv))}</div></div>`).join("")}</div>
+        ${m.manques.length ? `<p class="manques">Manques de données sur ce moteur : ${m.manques.map(x => `${x.devise} (${esc(x.raison)})`).join(" ; ")}.</p>` : ""}`;
     }
-    if (["hebdo", "mensuel", "quotidien"].includes(parametre)) { document.documentElement.dataset.vue = "complete"; await detailles.ouvrirAvec(parametre === "quotidien" ? undefined : parametre); detailles.scrollIntoView({ block: "start" }); return true; }
-    if (parametre === "outils") { document.documentElement.dataset.vue = "complete"; await outils.ouvrirAvec(); outils.scrollIntoView({ block: "start" }); return true; }
+    q("#dossier").innerHTML = `<div class="dh"><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="eyebrow">Engrenage ${n} sur 8</span>${pillEtat(e)}${pillDir(e)}
+        ${e.valeur != null ? `<span class="small" title="${esc(e.source || "")}">${esc(e.libelle || "")} : <b>${esc(e.valeur)}</b>${e.date ? " au " + ddm(e.date) : ""}</span>` : ""}</div>
+      <h1>${esc(m.nom)}</h1><p class="small" style="margin:-6px 0 0">${esc(m.explication)}</p><p class="q">${esc(m.question)}</p>
+      <div class="ptabs" role="tablist">${ONGLETS.map(([k, l]) => `<button type="button" role="tab" data-t="${k}" aria-selected="${k === onglet}">${l}${k === "news" ? `<span class="cnt">${m.actualites.length + aVenir.length}</span>` : k === "devises" ? `<span class="cnt">${m.touchees}</span>` : ""}</button>`).join("")}</div></div>
+      <div class="dbody">${corps}</div>`;
+    q("#dossier").querySelectorAll("[data-t]").forEach(b => b.onclick = () => { onglet = b.dataset.t; history.replaceState(null, "", `#engrenages/g=${choisi}${onglet === "analyse" ? "" : "/" + onglet}`); rendreDossier(); });
+  }
+
+  // ------------------------------------------------------------------ adresses
+  const SOUS = { devises: "devises", actualites: "news", news: "news", agenda: "news", analyse: "analyse" };
+  section.allerA = async p => {
+    const g = (p || "").match(/^g=([1-8])(?:\/(\w+))?$/);
+    if (g) { choisi = +g[1]; onglet = SOUS[g[2]] || "analyse"; rendreDossier(); q("#mlist").scrollIntoView({ block: "start" }); return true; }
+    const c = (p || "").match(/^([A-Z]{3})-([1-8])$/);
+    if (c && DEV.includes(c[1])) { caseSel = [c[1], +c[2]]; rendreMatrice(); q(".layC").scrollIntoView({ block: "start" }); return true; }
+    if (["hebdo", "mensuel", "quotidien", "outils"].includes(p)) { document.documentElement.dataset.vue = "complete"; await outils.ouvrirAvec(); outils.open = true; return ancien?.allerA ? !!(await ancien.allerA(p)) : false; }
     return false;
   };
-  if (parametre && !/^g=/.test(parametre)) { section.cible = await section.allerA(parametre); }
-  else if (parametre) { section.cible = true; requestAnimationFrame(() => q("#engSel")?.scrollIntoView({ block: "start" })); }
-}
-
-function dossier(e, t) {
-  if (!e) return '<div class="card pad muted">Dossier indisponible.</div>';
-  let html = `<div class="card pad" style="display:flex;flex-direction:column;gap:10px">
-    <div style="display:flex;gap:14px;align-items:baseline;flex-wrap:wrap"><span style="font-family:var(--f-display);font-size:44px;line-height:1;color:var(--muted)">${e.numero}</span><h2 style="font-size:30px">${esc(e.titre)}</h2>${t?.direction ? `<span class="chip ${classeDir(t.direction.classe)}"><span class="dot"></span>${esc(t.direction.libelle)}</span>` : ""}</div>
-    ${t ? `<p style="margin:0;color:var(--ink-2)">${esc(t.libelle)} : <b>${esc(t.texte_valeur ?? "n/d")}</b>. ${esc(t.note || "")}</p>` : ""}
-    ${(e.notes || []).length ? `<ul class="watch full">${e.notes.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}</div>`;
-  const tuiles = e.tuiles || [];
-  if (tuiles.length) html += `<div class="grid tus">${tuiles.map(x => {
-    const pts = (x.courbe?.points || []).map(p => p[1]);
-    return `<div class="card tu" title="${esc(x.source || "")}"><span class="l">${esc(x.libelle)}</span><span class="v">${x.texte ? esc(x.texte) : nd(x.raison)}</span>
-      <span class="x">${esc(x.variation?.texte || "")}</span>
-      ${x.percentile_5a != null ? `<div class="pct" title="percentile sur 5 ans"><i style="left:${x.percentile_5a}%"></i></div><span class="small">percentile 5 ans : ${x.percentile_5a}</span>` : ""}
-      ${pts.length > 2 ? spark(pts, 200, 44, "var(--accent)", true) : ""}
-      ${x.lecture || x.note ? `<span class="small full" style="color:var(--ink-2)">${esc(x.lecture || x.note)}</span>` : ""}
-      <span class="small">${x.date ? ddm(String(x.date).slice(0, 10)) : ""}${x.frequence ? " · " + esc(x.frequence) : ""}${x.source ? " · " + esc(String(x.source).split(/[ (,]/)[0]) : ""}</span></div>`;
-  }).join("")}</div>`;
-  if (e.lignes && e.colonnes) html += `<div class="card"><div class="pad" style="padding-bottom:4px"><div class="sec-head"><h3>Par devise</h3><span class="small">(pXX) : percentile 5 ans · survol : source, ou raison d'un n/d</span></div></div><div class="scroll"><table class="tbl" style="min-width:860px">${tableEngrenage(e)}</table></div></div>`;
-  if (e.instruments?.length) html += `<div class="card"><div class="pad" style="padding-bottom:4px"><h3>Instruments</h3></div><div class="scroll"><table class="tbl"><thead><tr><th>Instrument</th><th class="n">Niveau</th><th class="n">1 sem.</th><th class="n">4 sem.</th><th class="n">Percentile 5 ans</th><th>Date</th></tr></thead><tbody>${e.instruments.map(x => {
-    const c = x.cellule || {}, u = c.unite, niv = u === "niveau" || u === "indice";
-    return `<tr><td><b>${esc(x.libelle)}</b></td><td class="n" title="${esc(c.source || c.raison || "")}">${c.valeur == null ? nd(c.raison) : fv(c.valeur, niv ? "" : u)}</td><td class="n ${c.var_1s > 0 ? "pos" : c.var_1s < 0 ? "neg" : ""}">${c.var_1s == null ? "—" : sgn(c.var_1s, 2, niv ? " %" : "")}</td><td class="n ${c.var_4s > 0 ? "pos" : c.var_4s < 0 ? "neg" : ""}">${c.var_4s == null ? "—" : sgn(c.var_4s, 2, niv ? " %" : "")}</td><td class="n">${c.percentile_5a ?? "—"}</td><td class="small">${c.date ? ddm(c.date) : ""}</td></tr>`;
-  }).join("")}</tbody></table></div></div>`;
-  const cons = e.consequences;
-  if (cons?.moteur && cons.lignes?.length) {
-    const m = cons.moteur;
-    html += `<div class="card full"><div class="pad" style="padding-bottom:4px"><div class="sec-head"><h3>Conséquences passées : ${esc(m.libelle)}</h3><span class="small">${esc(m.source || "")} · 1 mois ${sgn(m.variation_1m, m.unite === "pb" ? 0 : 2, m.unite === "pb" ? " pb" : "")} · depuis ${m.debut ? m.debut.slice(0, 4) : ""}</span></div></div>
-      <div class="scroll"><table class="tbl" style="min-width:720px"><thead><tr><th>Actif</th><th class="n">Sensibilité</th><th class="n">Médiane si le moteur monte</th><th class="n">Médiane s'il baisse</th><th class="n">Fiabilité</th><th>Aujourd'hui</th></tr></thead><tbody>
-      ${cons.lignes.map(x => { const hm = x.si_hausse?.mediane, bm = x.si_baisse?.mediane, fi = x.fiabilite || {};
-        return `<tr><td><b>${esc(x.actif)}</b></td><td class="n">${x.sensibilite == null ? "—" : sgn(x.sensibilite, 2)}</td><td class="n ${hm > 0 ? "pos" : hm < 0 ? "neg" : ""}">${hm == null ? nd(x.si_hausse?.raison) : sgn(hm, 2, " %")}</td><td class="n ${bm > 0 ? "pos" : bm < 0 ? "neg" : ""}">${bm == null ? nd(x.si_baisse?.raison) : sgn(bm, 2, " %")}</td><td class="n">${fi.part == null ? nd(fi.raison) : fi.part + " %"} <span class="small">(n=${fi.n ?? "—"})</span></td><td title="${esc(x.aujourdhui?.raison || "")}">${esc(x.aujourdhui?.lecture || "")}</td></tr>`; }).join("")}
-      </tbody></table></div><div class="pad small" style="padding-top:8px">Moyennes passées, pas une prévision. Corrélation n'est pas causalité.</div></div>`;
-  }
-  if (e.balances?.length) html += `<div class="card"><div class="pad" style="padding-bottom:4px"><h3>Balances commerciales</h3></div><div class="scroll"><table class="tbl"><thead><tr><th>Devise</th><th class="n">Publié</th><th class="n">Consensus</th><th>Date</th></tr></thead><tbody>${e.balances.map(x => `<tr><td><b>${x.devise}</b></td><td class="n">${x.valeur ? esc(String(x.valeur).replace(".", ",")) : nd(x.raison)}</td><td class="n muted">${esc(String(x.consensus || "—").replace(".", ","))}</td><td class="small">${x.date ? ddm(x.date) : ""} ${esc(x.source || "")}</td></tr>`).join("")}</tbody></table></div></div>`;
-  if (e.evenements?.length) html += `<div class="card pad" style="display:flex;flex-direction:column;gap:4px"><h3>Fil d'actualité géopolitique</h3><div class="news">${e.evenements.slice(0, 12).map(x => `<a href="${esc(x.lien)}" target="_blank" rel="noopener"><b>${esc(x.titre)}</b><span class="small">${esc(x.mecanisme || "")} · ${(x.devises || []).join(", ")} · ${esc(x.source)} · ${ddm(x.date)}</span></a>`).join("")}</div></div>`;
-  return html;
+  rendreMatrice();
+  rendreDossier();
+  if (parametre) section.cible = await section.allerA(parametre);
 }

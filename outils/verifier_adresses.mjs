@@ -51,7 +51,11 @@ const adresses = [
   ...ONGLETS.map(o => [o, `typeof document.querySelector("#s-${o}") === "object" && !!document.querySelector("#s-${o}.on")`]),
   ...DEVISES.map(d => [`devises/${d}`, `!!document.querySelector('#s-devises.on .dv.cible[data-devise="${d}"]') && !!document.querySelector("#fiche-${d}")?.open && Math.abs(document.querySelector("#fiche-${d}").getBoundingClientRect().top) < innerHeight`]),
   ...PAIRES.map(p => [`paire/${p.replace("/", "-")}`, `document.querySelector("#s-paire.on #ppSel")?.value === "${p}"`]),
-  ...Array.from({ length: 8 }, (_, i) => [`engrenages/g=${i + 1}`, `document.querySelector('#s-engrenages.on #engSel button[data-n="${i + 1}"]')?.getAttribute("aria-pressed") === "true"`]),
+  ...Array.from({ length: 8 }, (_, i) => [`engrenages/g=${i + 1}`, `document.querySelector('#s-engrenages.on #mlist .mt[data-n="${i + 1}"]')?.getAttribute("aria-current") === "true"`]),
+  ["engrenages/g=2/devises", `document.querySelector('#s-engrenages.on #mlist .mt[data-n="2"]')?.getAttribute("aria-current") === "true" && document.querySelector('#s-engrenages.on #dossier [data-t="devises"]')?.getAttribute("aria-selected") === "true"`],
+  ["engrenages/g=8/actualites", `document.querySelector('#s-engrenages.on #dossier [data-t="news"]')?.getAttribute("aria-selected") === "true"`],
+  ["engrenages/USD-2", `!!document.querySelector('#s-engrenages.on td.c.on[data-d="USD"][data-n="2"]') && document.querySelector("#s-engrenages.on #mxSide")?.textContent.includes("USD")`],
+  ["engrenages/JPY-2", `!!document.querySelector('#s-engrenages.on td.c.on[data-d="JPY"][data-n="2"]') && document.querySelector("#s-engrenages.on #mxSide")?.textContent.includes("160")`],
   ["engrenages/hebdo", `!!document.querySelector("#s-engrenages.on details.detaille[open]")`],
 ];
 
