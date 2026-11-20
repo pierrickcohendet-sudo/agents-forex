@@ -43,9 +43,11 @@ export async function ongletLecture(note) {
   const hl = new Date(inst.heure_utc).toLocaleString("fr-FR", { timeZone: "Europe/Paris", day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
   const duree = minutesEntre(note.entree_utc, note.sortie_utc);
   c.innerHTML = `
-    <p class="jl-phrase">${esc(phraseSynthese(o, note.entree_locale, note.paire, note.sens, inst.theme))}</p>
-    <p class="small muted">Instantané du site du ${esc(hl)} (heure de Paris), le plus proche avant l'entrée · rapport du ${esc(ddm(inst.rapport_du || ""))} ·
-      moteurs : matrice d'impact (règles Python) · ce n'est ni un jugement ni un conseil.</p>
+    <div class="ctx-h"><span class="eyebrow">Lecture du site · générée automatiquement</span>
+      <b class="jl-phrase">${esc(phraseSynthese(o, note.entree_locale, note.paire, note.sens, inst.theme))}</b>
+      <div class="meter" role="img" aria-label="${o.pour} pour, ${o.contre} contre, ${o.neutres + o.nd} neutres ou non disponibles">${'<i class="p"></i>'.repeat(o.pour)}${'<i class="c"></i>'.repeat(o.contre)}${'<i class="n"></i>'.repeat(o.neutres + o.nd)}</div>
+      <span class="small">Instantané du site du ${esc(hl)} (heure de Paris), le plus proche avant l'ouverture du trade · rapport du ${esc(ddm(inst.rapport_du || ""))} ·
+      moteurs : matrice d'impact (règles Python) · ce tableau décrit le contexte, ce n'est ni un jugement ni un conseil.</span></div>
     <div class="scroll"><table class="tbl jl-tab"><thead><tr><th>Moteur</th><th>Lecture</th><th>Raison chiffrée</th><th>Date</th></tr></thead><tbody>
     ${o.lignes.map(l => `<tr><td><span class="moteur-nom" title="${esc(l.explication)}">${esc(l.nom)}</span></td>
       <td><span class="chip ${STATUT[l.statut][1]}" style="height:22px">${STATUT[l.statut][0]}</span></td>
@@ -56,9 +58,9 @@ export async function ongletLecture(note) {
       <div class="card pad"><h4>Publications pendant le trade</h4>
         ${pubs.length ? `<ul class="jl-pubs">${pubs.map(p => `<li><b>${esc(new Date(p.h).toLocaleTimeString("fr-FR", { timeZone: "Europe/Paris", hour: "2-digit", minute: "2-digit" }))}</b> ${esc(p.devise)} · ${esc(p.ev)}
           <span class="small">réel ${p.publie ? esc(p.publie) : nd("pas encore publié ou non archivé")} · consensus ${p.consensus ? esc(p.consensus) : nd("pas de consensus")}</span></li>`).join("")}</ul>`
-          : `<p class="small muted">Aucune publication d'impact moyen ou fort des deux devises ${note.sortie_utc ? "entre l'entrée et la sortie" : "après l'entrée ce jour-là"} (agenda ForexFactory archivé).</p>`}
+          : `<p class="small muted">Aucune publication d'impact moyen ou fort des deux devises ${note.sortie_utc ? "pendant le trade" : "après l'ouverture du trade, ce jour-là"} (agenda ForexFactory archivé).</p>`}
         <p class="small muted">Durée du trade : ${esc(dureeTexte(duree))}.</p></div>
-      <div class="card pad"><h4>Position du prix à l'entrée</h4>
+      <div class="card pad"><h4>Position du prix à l'ouverture</h4>
         <p><b class="tabulaire">${esc(position?.cours ?? "n/d")}</b> <span class="small muted">cours publié au moment de l'instantané (Twelve Data)</span></p>
         <ul class="small jl-pos">${(position?.lignes || []).map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>
     </div>

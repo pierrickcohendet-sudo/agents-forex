@@ -24,8 +24,16 @@ CONSERVATION_JOURS = 731
 VERSION = 1
 
 
-def paires() -> list[str]:
-    return [f"{a}/{b}" for i, a in enumerate(DEVISES) for b in DEVISES[i + 1:]]
+def paires(paires_json: dict | None = None) -> list[str]:
+    """Les 36 paires sous leur nom de marché (EUR/USD, pas USD/EUR) : liste publiée dans paires.json ; à défaut, les fiches ;
+    en dernier recours, une convention de cotation fixe."""
+    pj = paires_json or {}
+    if pj.get("paires"):
+        return list(pj["paires"])
+    if pj.get("fiches"):
+        return list(pj["fiches"])
+    ordre = ["EUR", "GBP", "AUD", "NZD", "USD", "CAD", "CHF", "JPY", "CNY"]   # convention de cotation du marché
+    return [f"{a}/{b}" for i, a in enumerate(ordre) for b in ordre[i + 1:]]
 
 
 def _lire(chemin: Path) -> dict:
@@ -84,7 +92,7 @@ def _zones(niveaux: dict) -> dict:
 def _paires(docs_data: Path, paires_json: dict, scenarios: list[dict]) -> dict:
     fiches = paires_json.get("fiches") or {}
     sortie = {}
-    for p in paires():
+    for p in paires(paires_json):
         f = fiches.get(p) or {}
         base, cot = p.split("/")
         contrib = {c["engrenage"]: c for c in ((f.get("macro") or {}).get("decomposition") or {}).get("contributions") or []}
@@ -106,7 +114,7 @@ def _marche(paires_json: dict) -> dict:
     """Partie qui change à chaque heure : cours (Twelve Data) et RSI 4 h, par paire."""
     fiches = paires_json.get("fiches") or {}
     sortie, heures = {}, []
-    for p in paires():
+    for p in paires(paires_json):
         f = fiches.get(p) or {}
         cj, t = f.get("cours_jour") or {}, f.get("technique") or {}
         cours = cj.get("cours") if cj.get("cours") is not None else t.get("cours")

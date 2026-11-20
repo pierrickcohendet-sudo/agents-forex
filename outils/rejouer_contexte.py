@@ -6,6 +6,7 @@ Usage : python outils/rejouer_contexte.py 2026-11-02
 """
 from __future__ import annotations
 
+import json
 import subprocess
 import sys
 import tempfile
@@ -32,7 +33,11 @@ def main(depuis: str) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             d = Path(tmp)
             (d / "paires").mkdir()
-            noms = FICHIERS + [f"paires/{p.replace('/', '-')}.json" for p in contexte.paires()]
+            try:
+                pj = json.loads(git("show", f"{h}:docs/data/paires.json"))
+            except (subprocess.CalledProcessError, ValueError):
+                pj = {}
+            noms = FICHIERS + [f"paires/{p.replace('/', '-')}.json" for p in contexte.paires(pj)]
             for f in noms:
                 try:
                     (d / f).write_bytes(git("show", f"{h}:docs/data/{f}"))

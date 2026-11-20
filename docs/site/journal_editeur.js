@@ -52,8 +52,8 @@ export function editeur(options) {
     clearTimeout(minuterie);
     minuterie = setTimeout(async () => {
       lireDom();
-      const utiles = new Set(blocs.filter(b => b.type === "image").map(b => b.capture));
-      try { await options.enregistrer(serialiser(blocs), captures.filter(c => utiles.has(c.id) || c.hors_analyse)); etat.textContent = "Enregistré"; }
+      // toutes les captures restent : celles de l'onglet Photos ne sont pas forcément dans l'analyse
+      try { await options.enregistrer(serialiser(blocs), captures); etat.textContent = "Enregistré"; }
       catch (e) { etat.textContent = `Non enregistré : ${e.message || e}`; }
     }, 500);
   }

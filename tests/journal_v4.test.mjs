@@ -36,7 +36,7 @@ const vente = J.orienter(inst, "USD/JPY", "Vente");
 assert.deepEqual([vente.pour, vente.contre], [1, 5]);                    // une vente inverse le sens
 assert.equal(J.orienter(inst, "EUR/USD", "Achat"), null);                 // paire absente de l'instantané : n/d
 const phrase = J.phraseSynthese(achat, "2026-11-17T14:40", "USD/JPY", "Achat", inst.theme);
-assert.equal(phrase, "Au moment de l'entrée (mardi 17/11, 14:40), 5 moteurs sur 8 allaient dans le sens de ton achat d'USD/JPY "
+assert.equal(phrase, "À l'ouverture du trade (mardi 17/11, 14:40), 5 moteurs sur 8 allaient dans le sens de ton achat d'USD/JPY "
   + "(thème dominant, banques centrales et taux, chiffres économiques, liens entre marchés, prix et positionnement), 1 contre (géopolitique), "
   + "1 neutre, 1 non disponible. Thème du jour : Dollar soutenu.");
 assert.equal(J.confrontation(achat, 120), "Contexte favorable, résultat positif.");

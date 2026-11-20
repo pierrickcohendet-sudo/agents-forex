@@ -191,7 +191,7 @@ export function orienter(inst, paire, sens) {
            noms_pour: compte("pour").map(l => l.nom.toLowerCase()), noms_contre: compte("contre").map(l => l.nom.toLowerCase()) };
 }
 
-/* « Au moment de l'entrée (mardi 17/11, 14:40), 5 moteurs sur 8 allaient dans le sens de ton achat d'USD/JPY (…), 1 contre (…), 2 neutres. Thème du jour : … » */
+/* « À l'ouverture du trade (mardi 17/11, 14:40), 5 moteurs sur 8 allaient dans le sens de ton achat d'USD/JPY (…), 1 contre (…), 2 neutres. Thème du jour : … » */
 export function phraseSynthese(o, entreeLocale, paire, sens, theme) {
   if (!o) return null;
   const d = new Date(String(entreeLocale).slice(0, 10) + "T12:00:00Z");
@@ -199,7 +199,7 @@ export function phraseSynthese(o, entreeLocale, paire, sens, theme) {
   const art = /^[AEIOUY]/.test(paire) ? "d'" : "de ";
   const action = /vente/i.test(sens) ? "ta vente" : "ton achat";
   const liste = l => l.length ? ` (${l.join(", ")})` : "";
-  let t = `Au moment de l'entrée (${quand}), ${o.pour} moteur${o.pour > 1 ? "s" : ""} sur 8 ${o.pour > 1 ? "allaient" : "allait"} dans le sens de ${action} ${art}${paire}${liste(o.noms_pour)}, `
+  let t = `À l'ouverture du trade (${quand}), ${o.pour} moteur${o.pour > 1 ? "s" : ""} sur 8 ${o.pour > 1 ? "allaient" : "allait"} dans le sens de ${action} ${art}${paire}${liste(o.noms_pour)}, `
     + `${o.contre} contre${liste(o.noms_contre)}, ${o.neutres} neutre${o.neutres > 1 ? "s" : ""}`;
   if (o.nd) t += `, ${o.nd} non disponible${o.nd > 1 ? "s" : ""}`;
   return t + "." + (theme?.titre && theme.titre !== "n/d" ? ` Thème du jour : ${theme.titre}.` : "");
