@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-20T08:40:35+00:00",
+  "genere_le": "2026-11-20T09:19:17+00:00",
   "appels_llm": [
    {
     "heure": "00:52",
@@ -205,7 +205,7 @@
    "engrenages_faits": false,
    "reserve_engrenages": 8,
    "refus_reserve_ce_run": 0,
-   "refus_budget_ce_run": 16,
+   "refus_budget_ce_run": 9,
    "budget": {
     "plafond": 60,
     "mode": "complément",
@@ -229,15 +229,15 @@
     },
     "consomme_run": {
      "engrenages": 0,
-     "rapport": 2,
+     "rapport": 0,
      "devises": 0,
-     "reste": 8
+     "reste": 0
     },
     "total_jour": 10,
     "plafond_run": 45,
-    "recues_run": 10,
+    "recues_run": 0,
     "pannes_jour": 15,
-    "pannes_run": 15,
+    "pannes_run": 0,
     "plafond_pannes": 20,
     "mode_panne": false,
     "pannes_avant_correctif": 0,
@@ -246,11 +246,7 @@
      "503": 12,
      "delai": 3
     },
-    "echecs_run": {
-     "json_invalide": 1,
-     "503": 12,
-     "delai": 3
-    },
+    "echecs_run": {},
     "abandonnees": [],
     "analyses": {
      "critique": {
@@ -380,29 +376,29 @@
      "appels_aujourdhui": 9,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-11-18T07:59:59+00:00",
-     "appels_ce_run": 16,
-     "reussites_ce_run": 9,
+     "appels_ce_run": 9,
+     "reussites_ce_run": 0,
      "sauts_ce_run": 0
     },
     "gemini-3.8-flash": {
      "appels_aujourdhui": 0,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-11-17T07:59:59+00:00",
-     "appels_ce_run": 8,
+     "appels_ce_run": 0,
      "reussites_ce_run": 0,
-     "sauts_ce_run": 1
+     "sauts_ce_run": 0
     },
     "gemini-3.5-flash-lite": {
      "appels_aujourdhui": 1,
      "plafond_jour": 20,
      "epuise_jusqu_a": null,
-     "appels_ce_run": 4,
-     "reussites_ce_run": 1,
+     "appels_ce_run": 0,
+     "reussites_ce_run": 0,
      "sauts_ce_run": 0
     }
    }
   },
-  "resume_quota": "Gemini : 10/60, moteurs : fait — Budget (run complément, plafond 60) : prévu moteurs 1 analyse (≤ 2 requêtes); rapport du jour 8 analyses (≤ 16 requêtes); devises 3 analyses (≤ 6 requêtes); reste ≤ 36 ; consommé ce run : moteurs 0, rapport du jour 2, devises 0, reste 8 (jour : 10/60) ; échecs ce run : 503 × 12, delai × 3, json_invalide × 1 ; tentatives en panne (hors budget) : 15 ce run, 15/20 aujourd'hui ; réponses reçues ce run : 10/45 ; analyses : critique faite, etat_du_monde faite, paires:synthese faite, rapport:analyse faite, rapport:redaction faite, rapport:synthese_1 à rejouer (503), rapport:synthese_2 à rejouer (503), rapport:synthese_3 à rejouer (503), synthese:AUD à rejouer (503), synthese:CAD à rejouer (503), synthese:CHF à rejouer (503), synthese:CNY faite, synthese:EUR faite, synthese:GBP faite, synthese:JPY à rejouer (503), synthese:NZD à rejouer (delai), synthese:USD faite",
+  "resume_quota": "Gemini : 10/60, moteurs : fait — Budget (run complément, plafond 60) : prévu moteurs 1 analyse (≤ 2 requêtes); rapport du jour 8 analyses (≤ 16 requêtes); devises 3 analyses (≤ 6 requêtes); reste ≤ 36 ; consommé ce run : moteurs 0, rapport du jour 0, devises 0, reste 0 (jour : 10/60) ; échecs ce run : aucun ; tentatives en panne (hors budget) : 0 ce run, 15/20 aujourd'hui ; réponses reçues ce run : 0/45 ; analyses : critique faite, etat_du_monde faite, paires:synthese faite, rapport:analyse faite, rapport:redaction faite, rapport:synthese_1 à rejouer (503), rapport:synthese_2 à rejouer (503), rapport:synthese_3 à rejouer (503), synthese:AUD à rejouer (503), synthese:CAD à rejouer (503), synthese:CHF à rejouer (503), synthese:CNY faite, synthese:EUR faite, synthese:GBP faite, synthese:JPY à rejouer (503), synthese:NZD à rejouer (delai), synthese:USD faite",
   "appels_par_modele": {
    "gemini-3.5-flash": {
     "appels": 16,
@@ -475,6 +471,40 @@
       "ouvert_a_l_appel": 10,
       "echecs_consecutifs": 3,
       "ignores": 1
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
+   },
+   {
+    "heure": "09:19",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 9,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
      },
      {
       "modele": "gemini-3.5-flash-lite",
@@ -1271,7 +1301,7 @@
     "libelle": "Flash 3.5"
    },
    "version": "quotidienne",
-   "rafraichi_le": "2026-11-20T08:19:42+00:00"
+   "rafraichi_le": "2026-11-20T09:19:17+00:00"
   },
   "classement_devises": [
    {
@@ -2896,9 +2926,10 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "synthese:JPY : 2 appels déjà faits pendant ce run (repli Python) — après : réponse précédente inexploitable : gemini-3.5-flash passé en dernier",
+    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+    "quota_atteint": true,
     "tentatives": 1,
-    "genere_le": "2026-11-20T08:25:23+00:00"
+    "genere_le": "2026-11-20T09:19:17+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.06,
@@ -3147,9 +3178,10 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "synthese:CHF : 2 appels déjà faits pendant ce run (repli Python)",
+    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+    "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-20T08:29:44+00:00"
+    "genere_le": "2026-11-20T09:19:17+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.45,
@@ -3399,9 +3431,10 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "synthese:CAD : 2 appels déjà faits pendant ce run (repli Python)",
+    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+    "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-20T08:32:20+00:00"
+    "genere_le": "2026-11-20T09:19:17+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.46,
@@ -3640,9 +3673,10 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "synthese:AUD : 2 appels déjà faits pendant ce run (repli Python)",
+    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+    "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-20T08:33:20+00:00"
+    "genere_le": "2026-11-20T09:19:17+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.12,
@@ -3885,9 +3919,10 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "synthese:NZD : 2 appels déjà faits pendant ce run (repli Python)",
+    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+    "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-20T08:40:10+00:00"
+    "genere_le": "2026-11-20T09:19:17+00:00"
    },
    "indice_surprise_30j": {
     "indice": -1.82,
@@ -9155,11 +9190,11 @@
   "conforme": false,
   "nb_anomalies": 12,
   "anomalies": [
-   "JPY : synthèse approfondie indisponible (synthese:JPY : 2 appels déjà faits pendant ce run (repli Python) — après : réponse précédente inexpl)",
-   "CHF : synthèse approfondie indisponible (synthese:CHF : 2 appels déjà faits pendant ce run (repli Python))",
-   "CAD : synthèse approfondie indisponible (synthese:CAD : 2 appels déjà faits pendant ce run (repli Python))",
-   "AUD : synthèse approfondie indisponible (synthese:AUD : 2 appels déjà faits pendant ce run (repli Python))",
-   "NZD : synthèse approfondie indisponible (synthese:NZD : 2 appels déjà faits pendant ce run (repli Python))",
+   "JPY : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+   "CHF : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+   "CAD : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+   "AUD : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+   "NZD : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
    "8 moteurs du marché : 1 mot « record » / « s'envole » remplacé : non justifiés par les percentiles ou les variations",
    "tableau macro : USD/CPI annuel : publication manquée (prévue le 10/11, aucun « réel » reçu)",
    "tableau macro : USD/CPI core annuel : publication manquée (prévue le 10/11, aucun « réel » reçu)",
@@ -9170,25 +9205,11 @@
   ]
  },
  "critique": {
-  "incoherences": [
-   "Défaut de complétude majeur : 5 devises sur 9 (JPY, CHF, CAD, AUD, NZD) ont une synthèse approfondie 'indisponible' en raison d'un dépassement de limite d'appels LLM, dégradant la fiabilité globale de l'analyse.",
-   "Contradiction pour l'EUR : l'indicateur 'pmi_surprise' attribue un score positif (+1) sur la base d'un PMI manuellement renseigné à 52,7 datant de 18 jours, alors que le tableau officiel des indicateurs indique 'aucune publication < 7 j'."
-  ],
-  "affirmations_non_sourcees": [
-   "EUR / opportunités : 'La révision à la hausse du PMI manufacturier à 52,7 offre un signal de résilience industrielle en zone euro.' (explicitement marquée non_sourcee: true avec source_id null).",
-   "GBP / synthèse approfondie : l'affirmation d'un 'PIB à +0,7 %' ne correspond à aucune donnée chiffrée présente dans le catalogue de sources ou les données calculées."
-  ],
-  "suggestions_connaissances": [
-   {
-    "theme": "Gestion des indisponibilités de synthèse LLM",
-    "suggestion": "Lorsqu'une synthèse approfondie par devise échoue après plusieurs tentatives LLM, définir un comportement de repli structuré injectant les métriques clés calculées par Python plutôt que d'afficher un statut brut d'erreur.",
-    "fichier_cible": "cas_particuliers.md"
-   }
-  ],
-  "validation": "a_revoir",
-  "redige_par": {
-   "modele": "gemini-3.5-flash",
-   "libelle": "Flash 3.5"
-  }
+  "incoherences": [],
+  "affirmations_non_sourcees": [],
+  "suggestions_connaissances": [],
+  "validation": "non_evalue",
+  "indisponible": true,
+  "note": "relecture non effectuée (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit) — 20 tentatives en panne (503, 429, délai) déjà faites aujourd'hui : pla)"
  }
 }
