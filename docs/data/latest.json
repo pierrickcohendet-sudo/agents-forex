@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-20T18:19:10+00:00",
+  "genere_le": "2026-11-20T19:19:18+00:00",
   "appels_llm": [
    {
     "heure": "00:52",
@@ -415,40 +415,6 @@
   },
   "disjoncteur": [
    {
-    "heure": "08:51",
-    "actif": true,
-    "seuil_echecs": 3,
-    "ouvert": true,
-    "appels_total": 22,
-    "replis_json_modele_suivant": 10,
-    "modeles": [
-     {
-      "modele": "gemini-3.5-flash",
-      "ouvert": true,
-      "cause": "3 échecs consécutifs — 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:",
-      "ouvert_a_l_appel": 18,
-      "echecs_consecutifs": 3,
-      "ignores": 0
-     },
-     {
-      "modele": "gemini-3.8-flash",
-      "ouvert": true,
-      "cause": "3 échecs consécutifs — HTTPSConnectionPool(host='generativelanguage.googleapis.com', port=443): Read timed out. (read timeout=180)",
-      "ouvert_a_l_appel": 10,
-      "echecs_consecutifs": 3,
-      "ignores": 1
-     },
-     {
-      "modele": "gemini-3.5-flash-lite",
-      "ouvert": false,
-      "cause": null,
-      "ouvert_a_l_appel": null,
-      "echecs_consecutifs": 0,
-      "ignores": 0
-     }
-    ]
-   },
-   {
     "heure": "09:19",
     "actif": true,
     "seuil_echecs": 3,
@@ -821,6 +787,40 @@
       "ignores": 0
      }
     ]
+   },
+   {
+    "heure": "19:19",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 9,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
    }
   ],
   "notion_url": "https://app.notion.com/p/FX-2026-11-20-quotidien-41e65bc646618100babaeaeaa2ffff2e"
@@ -1093,7 +1093,7 @@
      ],
      "donnees_calculees": [
       {
-       "texte": "Indice de surprise 30 j : USD +0.87, EUR -0.19, GBP +0.25, JPY +0.06, CHF +0.45, CAD -0.46, AUD -0.12, NZD -1.82, CNY -0.57",
+       "texte": "Indice de surprise 30 j : USD +0.87, EUR -0.19, GBP +0.25, JPY +0.06, CHF +0.45, CAD -0.40, AUD -0.12, NZD -1.82, CNY -0.57",
        "source_id": "src_148"
       }
      ],
@@ -1607,7 +1607,7 @@
     "libelle": "Flash 3.5"
    },
    "version": "quotidienne",
-   "rafraichi_le": "2026-11-20T18:19:10+00:00"
+   "rafraichi_le": "2026-11-20T19:19:18+00:00"
   },
   "classement_devises": [
    {
@@ -3235,7 +3235,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 1,
-    "genere_le": "2026-11-20T18:19:10+00:00"
+    "genere_le": "2026-11-20T19:19:18+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.06,
@@ -3487,7 +3487,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-20T18:19:10+00:00"
+    "genere_le": "2026-11-20T19:19:18+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.45,
@@ -3740,13 +3740,13 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-20T18:19:10+00:00"
+    "genere_le": "2026-11-20T19:19:18+00:00"
    },
    "indice_surprise_30j": {
-    "indice": -0.46,
+    "indice": -0.4,
     "precedent": -0.74,
     "tendance": "hausse",
-    "n": 9
+    "n": 10
    },
    "historique_score_7j": [
     {
@@ -3982,7 +3982,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-20T18:19:10+00:00"
+    "genere_le": "2026-11-20T19:19:18+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.12,
@@ -4228,7 +4228,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-20T18:19:10+00:00"
+    "genere_le": "2026-11-20T19:19:18+00:00"
    },
    "indice_surprise_30j": {
     "indice": -1.82,
@@ -9379,8 +9379,8 @@
     "taux_pct": 100.0
    },
    "Prévision": {
-    "valeur": 8,
-    "explique": 109,
+    "valeur": 16,
+    "explique": 101,
     "vide": 0,
     "total": 117,
     "taux_pct": 100.0
@@ -9425,10 +9425,10 @@
     "n": 4
    },
    "CAD": {
-    "indice": -0.46,
+    "indice": -0.4,
     "precedent": -0.74,
     "tendance": "hausse",
-    "n": 9
+    "n": 10
    },
    "AUD": {
     "indice": -0.12,
@@ -9483,7 +9483,7 @@
   },
   "CAD": {
    "etat": "Sous pression",
-   "raison": "Signaux défavorables : surprises macro 30 j −0,5 ; force −2,3 % sur 20 séances.",
+   "raison": "Signaux défavorables : surprises macro 30 j −0,4 ; force −2,3 % sur 20 séances.",
    "moteur": "Rendement US 2 ans (écart de taux 2 ans, côté US)",
    "r60": -0.43
   },
