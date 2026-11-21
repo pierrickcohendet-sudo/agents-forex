@@ -1,10 +1,10 @@
 {
  "meta": {
-  "date_rapport": "2026-11-20",
+  "date_rapport": "2026-11-21",
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-20T21:19:06+00:00",
+  "genere_le": "2026-11-21T00:06:21+00:00",
   "appels_llm": [
    {
     "heure": "00:52",
@@ -205,7 +205,7 @@
    "engrenages_faits": false,
    "reserve_engrenages": 8,
    "refus_reserve_ce_run": 0,
-   "refus_budget_ce_run": 9,
+   "refus_budget_ce_run": 10,
    "budget": {
     "plafond": 60,
     "mode": "complément",
@@ -376,7 +376,7 @@
      "appels_aujourdhui": 9,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-11-18T07:59:59+00:00",
-     "appels_ce_run": 9,
+     "appels_ce_run": 10,
      "reussites_ce_run": 0,
      "sauts_ce_run": 0
     },
@@ -414,40 +414,6 @@
    }
   },
   "disjoncteur": [
-   {
-    "heure": "11:19",
-    "actif": true,
-    "seuil_echecs": 3,
-    "ouvert": false,
-    "appels_total": 9,
-    "replis_json_modele_suivant": 0,
-    "modeles": [
-     {
-      "modele": "gemini-3.5-flash",
-      "ouvert": false,
-      "cause": null,
-      "ouvert_a_l_appel": null,
-      "echecs_consecutifs": 0,
-      "ignores": 0
-     },
-     {
-      "modele": "gemini-3.8-flash",
-      "ouvert": false,
-      "cause": null,
-      "ouvert_a_l_appel": null,
-      "echecs_consecutifs": 0,
-      "ignores": 0
-     },
-     {
-      "modele": "gemini-3.5-flash-lite",
-      "ouvert": false,
-      "cause": null,
-      "ouvert_a_l_appel": null,
-      "echecs_consecutifs": 0,
-      "ignores": 0
-     }
-    ]
-   },
    {
     "heure": "12:28",
     "actif": true,
@@ -821,9 +787,43 @@
       "ignores": 0
      }
     ]
+   },
+   {
+    "heure": "00:11",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 10,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
    }
   ],
-  "notion_url": "https://app.notion.com/p/FX-2026-11-20-quotidien-41e65bc646618100babaeaeaa2ffff2e"
+  "notion_url": "https://app.notion.com/p/FX-2026-11-21-quotidien-41f65bc6466181a59c7ffa40e2ba88b0"
  },
  "synthese_globale": {
   "biais_macro_global": "risk_off",
@@ -951,11 +951,11 @@
      "donnees_calculees": [
       {
        "texte": "Biais global risk_off ; classement : USD 86, GBP 64, AUD 44, CNY 39, CHF 37, CAD 32, NZD 30, JPY 24, EUR 21",
-       "source_id": "src_137"
+       "source_id": "src_323"
       },
       {
-       "texte": "Directions dollar des engrenages 2 à 8 : 3 haussières, 0 baissière, 4 neutres ; risque de l'engrenage 5 : risk_off",
-       "source_id": "src_175"
+       "texte": "Directions dollar des engrenages 2 à 8 : 4 haussières, 0 baissière, 3 neutres ; risque de l'engrenage 5 : risk_off",
+       "source_id": "src_335"
       }
      ],
      "sources_indisponibles": [],
@@ -1094,7 +1094,7 @@
      "donnees_calculees": [
       {
        "texte": "Indice de surprise 30 j : USD +0.87, EUR -0.19, GBP +0.25, JPY +0.06, CHF +0.45, CAD -0.40, AUD -0.12, NZD -1.82, CNY -0.57",
-       "source_id": "src_148"
+       "source_id": "src_324"
       }
      ],
      "sources_indisponibles": [],
@@ -1104,7 +1104,7 @@
       "unite": "écarts",
       "seuil_bas": -0.3,
       "seuil_haut": 0.3,
-      "date": "2026-11-20",
+      "date": "2026-11-21",
       "source": "calcul Python (registre macro)",
       "si_haut": "Dollar haussier",
       "si_bas": "Dollar baissier",
@@ -1147,16 +1147,16 @@
      ],
      "donnees_calculees": [
       {
-       "texte": "USD : 10 ans 5.04 % (+8 pb sur 4 semaines), prime de terme 10 ans 0.99 %, dette / PIB 121.2 % (2026-04)",
-       "source_id": "src_149"
+       "texte": "USD : 10 ans 4.92 % (-8 pb sur 4 semaines), prime de terme 10 ans 0.99 %, dette / PIB 121.2 % (2026-04)",
+       "source_id": "src_325"
       },
       {
-       "texte": "EUR : 10 ans 3.45 % (+1 pb sur 4 semaines), dette / PIB 63.9 % (2024)",
-       "source_id": "src_150"
+       "texte": "EUR : 10 ans 3.39 % (+0 pb sur 4 semaines), dette / PIB 63.9 % (2024)",
+       "source_id": "src_326"
       },
       {
-       "texte": "GBP : 10 ans 5.35 % (+0 pb sur 4 semaines), dette / PIB 101.2 % (2024)",
-       "source_id": "src_151"
+       "texte": "GBP : 10 ans 5.27 % (-7 pb sur 4 semaines), dette / PIB 101.2 % (2024)",
+       "source_id": "src_327"
       },
       {
        "texte": "JPY : 10 ans 2.87 % (-4 pb sur 4 semaines), dette / PIB 240.0 % (2023)",
@@ -1167,8 +1167,8 @@
        "source_id": "src_153"
       },
       {
-       "texte": "CAD : 10 ans 3.80 % (-10 pb sur 4 semaines), dette / PIB 110.8 % (2024)",
-       "source_id": "src_154"
+       "texte": "CAD : 10 ans 3.81 % (+3 pb sur 4 semaines), dette / PIB 110.8 % (2024)",
+       "source_id": "src_328"
       },
       {
        "texte": "AUD : 10 ans 5.26 %, dette / PIB 49.8 % (2024)",
@@ -1247,12 +1247,12 @@
        "date": "2026-11-19"
       },
       {
-       "texte": "Indice or (proxy) — NASDAQ QGLDI, pas le cours spot : 2248.37 le 2026-11-18 (-8.07 % sur 7 j)",
-       "source_id": "src_159"
+       "texte": "Indice or (proxy) — NASDAQ QGLDI, pas le cours spot : 2209.94 le 2026-11-19 (-7.20 % sur 7 j)",
+       "source_id": "src_329"
       },
       {
-       "texte": "Courbe US 10 ans - 2 ans : +0.27 pt le 2026-11-18 (aplatissement : compression du spread — momentum de cycle en question)",
-       "source_id": "src_015"
+       "texte": "Courbe US 10 ans - 2 ans : +0.28 pt le 2026-11-19 (stable : pas de changement notable sur un mois)",
+       "source_id": "src_280"
       }
      ],
      "sources_indisponibles": [],
@@ -1277,12 +1277,12 @@
      "diagnostic": "Les échanges multilatéraux évoquent une hausse des capacités pétrolières et des compromis commerciaux nord-américains. Néanmoins, les risques de frappes ciblées au Moyen-Orient entretiennent des menaces sur le détroit d'Hormuz.",
      "donnees_insuffisantes": false,
      "direction": {
-      "dollar": "neutre",
-      "risque": "risk_on",
+      "dollar": "haussier",
+      "risque": "risk_off",
       "calculee": {
-       "dollar": "neutre",
-       "risque": "risk_on",
-       "regle": "dollar : case USD de la matrice d'impact (Neutre : titres du jour au canal « refuge (conflits) » : 2 titres, aucun effet sur USD) ; risque : matrice d'impact, devises risque − refuge = +2"
+       "dollar": "haussier",
+       "risque": "risk_off",
+       "regle": "dollar : case USD de la matrice d'impact (Soutien : titres du jour au canal « refuge (conflits) » ≥ 3 titres → +1 pour USD) ; risque : matrice d'impact, devises risque − refuge = -2"
       },
       "origine": {
        "dollar": "calcul Python",
@@ -1309,25 +1309,26 @@
      ],
      "donnees_calculees": [
       {
-       "texte": "Titres du jour par canal de transmission : Énergie 3, Commerce 1, Refuge (conflits) 2",
-       "source_id": "src_160"
+       "texte": "Titres du jour par canal de transmission : Commerce 2, Refuge (conflits) 3",
+       "source_id": "src_330"
       },
       {
-       "texte": "Trump, Xi, Putin said they plan to boost oil production, revamp UN after trilateral talks — canal energie (CAD, NZD, AUD, JPY, EUR)",
-       "source_id": "src_161"
+       "texte": "Zscaler stock jumps 18% on report that CrowdStrike in talks to buy security vendor — canal refuge (USD, JPY, CHF)",
+       "source_id": "src_331"
       },
       {
-       "texte": "Canada seeks interim U.S. tariff deal by year-end, CBC reports — canal commerce (CNY, AUD, CAD, EUR)",
-       "source_id": "src_162"
+       "texte": "Trump says he discussed Jensen Huang with Xi; Bessent tells CNBC Nvidia chip export policy is unchanged — canal commerce (CNY, AUD, CAD, EUR)",
+       "source_id": "src_332"
       },
       {
-       "texte": "Trump weighs another strike on Iran as Hormuz shipping risks mount. Returns to Washington after overseas trip. — canal energie (CAD, NZD, AUD, JPY, EUR)",
-       "source_id": "src_163"
+       "texte": "Warsh wants Fed officials to talk less. Instead, they’re talking more — canal refuge (USD, JPY, CHF)",
+       "source_id": "src_333"
       }
      ],
      "sources_indisponibles": [],
      "mesure": null,
-     "non_source": false
+     "non_source": false,
+     "texte_redige_avant_recalcul": true
     },
     {
      "numero": 7,
@@ -1369,30 +1370,30 @@
      ],
      "donnees_calculees": [
       {
-       "texte": "Indice USD synthétique +0.67 % sur 5 j, RSI 73.5, tendance de fond haussier",
-       "source_id": "src_026"
+       "texte": "Indice USD synthétique +0.42 % sur 5 j, RSI 71.5, tendance de fond haussier",
+       "source_id": "src_291"
       },
       {
-       "texte": "Variation 5 j (force de la devise) : AUD -1.89 %, NZD -0.84 %, CAD -0.51 %, JPY +0.02 %, CHF -0.55 % ; écart risque - refuge -0.81 pt",
-       "source_id": "src_023"
+       "texte": "Variation 5 j (force de la devise) : AUD -1.73 %, NZD -0.58 %, CAD -0.34 %, JPY +0.53 %, CHF -0.02 % ; écart risque - refuge -1.14 pt",
+       "source_id": "src_288"
       },
       {
-       "texte": "COT CFTC, spéculateurs (positions du 2026-11-10) : CAD net -32 592 (+9 183 sur la semaine), percentile 52 s 77 ; NZD net -55 366 (+4 649 sur la semaine), percentile 52 s 15 ; EUR net -136 396 (+21 395 sur la semaine), percentile 52 s 8 ; USD net +13 813 (-377 sur la semaine), percentile 52 s 79 ; AUD net -151 753 (-22 296 sur la semaine), percentile 52 s 2 ; JPY net +123 113 (+20 792 sur la semaine), percentile 52 s 100 ; GBP net -43 216 (+16 605 sur la semaine), percentile 52 s 81 ; CHF net -9 153 (+7 436 sur la semaine), percentile 52 s 100. Non couvert : CNY.",
-       "source_id": "src_164"
+       "texte": "COT CFTC, spéculateurs (positions du 2026-11-17) : CAD net -45 048 (-12 456 sur la semaine), percentile 52 s 60 ; AUD net -182 060 (-30 307 sur la semaine), percentile 52 s 2 ; NZD net -63 245 (-7 879 sur la semaine), percentile 52 s 6 ; EUR net -142 710 (-6 314 sur la semaine), percentile 52 s 6 ; USD net +13 345 (-468 sur la semaine), percentile 52 s 77 ; JPY net +116 317 (-6 796 sur la semaine), percentile 52 s 96 ; GBP net -32 304 (+10 912 sur la semaine), percentile 52 s 88 ; CHF net -8 281 (+872 sur la semaine), percentile 52 s 100. Non couvert : CNY.",
+       "source_id": "src_334"
       },
       {
-       "texte": "Positionnement extrême (≥ 90e ou ≤ 10e percentile sur 52 semaines) : EUR (short extrême), AUD (short extrême), JPY (long extrême), CHF (long extrême) — risque de retournement si le flux s'inverse.",
-       "source_id": "src_164"
+       "texte": "Positionnement extrême (≥ 90e ou ≤ 10e percentile sur 52 semaines) : AUD (short extrême), NZD (short extrême), EUR (short extrême), JPY (long extrême), CHF (long extrême) — risque de retournement si le flux s'inverse.",
+       "source_id": "src_334"
       }
      ],
      "sources_indisponibles": [],
      "mesure": {
       "libelle": "indice USD synthétique, 5 j",
-      "valeur": 0.67,
+      "valeur": 0.42,
       "unite": "%",
       "seuil_bas": -0.3,
       "seuil_haut": 0.3,
-      "date": "2026-11-20",
+      "date": "2026-11-21",
       "source": "calcul local (Twelve Data, série unique)",
       "si_haut": "Dollar haussier",
       "si_bas": "Dollar baissier",
@@ -1574,15 +1575,17 @@
     "pertinence": 12
    },
    "controles": [
-    "1 mot « record » / « s'envole » remplacé : non justifiés par les percentiles ou les variations"
+    "1 mot « record » / « s'envole » remplacé : non justifiés par les percentiles ou les variations",
+    "direction recalculée après le texte du modèle pour l'engrenage 6 : le texte décrit les chiffres du moment de sa rédaction"
    ],
    "coherence": {
-    "alignes": 3,
+    "alignes": 4,
     "evaluables": 7,
     "sur": 7,
     "engrenages_alignes": [
      3,
      5,
+     6,
      7
     ],
     "engrenages_evaluables": [
@@ -1596,7 +1599,7 @@
     ],
     "theme_fort": true,
     "theme_neutre": false,
-    "libelle": "3 sur 7 évaluables",
+    "libelle": "4 sur 7 évaluables",
     "regle": "engrenage 2 à 8 aligné si sa direction dollar est celle du thème ; à défaut (thème au dollar neutre, ou engrenage sans direction dollar), si sa direction risque est celle du thème. Évaluable = engrenage qui a une direction comparable à celle du thème. Moins de 3 alignés : « Signaux mixtes ». Thème au dollar et au risque neutres : rien à mesurer."
    },
    "statut": "ok",
@@ -1607,7 +1610,7 @@
     "libelle": "Flash 3.5"
    },
    "version": "quotidienne",
-   "rafraichi_le": "2026-11-20T21:19:06+00:00"
+   "rafraichi_le": "2026-11-21T00:06:21+00:00"
   },
   "classement_devises": [
    {
@@ -2129,6 +2132,10 @@
     {
      "date": "2026-11-20",
      "score": 86
+    },
+    {
+     "date": "2026-11-21",
+     "score": 86
     }
    ]
   },
@@ -2582,6 +2589,10 @@
     {
      "date": "2026-11-20",
      "score": 21
+    },
+    {
+     "date": "2026-11-21",
+     "score": 21
     }
    ]
   },
@@ -3013,6 +3024,10 @@
     {
      "date": "2026-11-20",
      "score": 64
+    },
+    {
+     "date": "2026-11-21",
+     "score": 64
     }
    ]
   },
@@ -3235,7 +3250,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 1,
-    "genere_le": "2026-11-20T21:19:06+00:00"
+    "genere_le": "2026-11-21T00:06:21+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.06,
@@ -3254,6 +3269,10 @@
     },
     {
      "date": "2026-11-20",
+     "score": 24
+    },
+    {
+     "date": "2026-11-21",
      "score": 24
     }
    ]
@@ -3487,7 +3506,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-20T21:19:06+00:00"
+    "genere_le": "2026-11-21T00:06:21+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.45,
@@ -3506,6 +3525,10 @@
     },
     {
      "date": "2026-11-20",
+     "score": 37
+    },
+    {
+     "date": "2026-11-21",
      "score": 37
     }
    ]
@@ -3740,7 +3763,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-20T21:19:06+00:00"
+    "genere_le": "2026-11-21T00:06:21+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.4,
@@ -3759,6 +3782,10 @@
     },
     {
      "date": "2026-11-20",
+     "score": 32
+    },
+    {
+     "date": "2026-11-21",
      "score": 32
     }
    ]
@@ -3982,7 +4009,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-20T21:19:06+00:00"
+    "genere_le": "2026-11-21T00:06:21+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.12,
@@ -4005,6 +4032,10 @@
     },
     {
      "date": "2026-11-20",
+     "score": 44
+    },
+    {
+     "date": "2026-11-21",
      "score": 44
     }
    ]
@@ -4228,7 +4259,7 @@
     "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
     "quota_atteint": true,
     "tentatives": 0,
-    "genere_le": "2026-11-20T21:19:06+00:00"
+    "genere_le": "2026-11-21T00:06:21+00:00"
    },
    "indice_surprise_30j": {
     "indice": -1.82,
@@ -4251,6 +4282,10 @@
     },
     {
      "date": "2026-11-20",
+     "score": 30
+    },
+    {
+     "date": "2026-11-21",
      "score": 30
     }
    ]
@@ -4672,6 +4707,10 @@
     },
     {
      "date": "2026-11-20",
+     "score": 39
+    },
+    {
+     "date": "2026-11-21",
      "score": 39
     }
    ]
@@ -6595,6 +6634,433 @@
    "detail": "taux_fed (DFF)",
    "date": "2026-11-19",
    "url": "https://fred.stlouisfed.org/series/DFF"
+  },
+  {
+   "id": "src_275",
+   "source": "FRED",
+   "detail": "fed_cible_basse (DFEDTARL)",
+   "date": "2026-11-20",
+   "url": "https://fred.stlouisfed.org/series/DFEDTARL"
+  },
+  {
+   "id": "src_276",
+   "source": "FRED",
+   "detail": "fed_cible_haute (DFEDTARU)",
+   "date": "2026-11-20",
+   "url": "https://fred.stlouisfed.org/series/DFEDTARU"
+  },
+  {
+   "id": "src_277",
+   "source": "FRED",
+   "detail": "rendement_10y (DGS10)",
+   "date": "2026-11-20",
+   "url": "https://fred.stlouisfed.org/series/DGS10"
+  },
+  {
+   "id": "src_278",
+   "source": "FRED",
+   "detail": "rendement_2y (DGS2)",
+   "date": "2026-11-20",
+   "url": "https://fred.stlouisfed.org/series/DGS2"
+  },
+  {
+   "id": "src_279",
+   "source": "FRED",
+   "detail": "bce_depot (ECBDFR)",
+   "date": "2026-11-20",
+   "url": "https://fred.stlouisfed.org/series/ECBDFR"
+  },
+  {
+   "id": "src_280",
+   "source": "FRED",
+   "detail": "yield curve US 10Y-2Y (DGS10/DGS2)",
+   "date": "2026-11-19",
+   "url": null
+  },
+  {
+   "id": "src_281",
+   "source": "FRED + config",
+   "detail": "taux directeurs des 8 devises",
+   "date": "2026-11-21",
+   "url": null
+  },
+  {
+   "id": "src_282",
+   "source": "Marché obligataire (FRED, Bundesbank, BoE, MoF Japon, BoC, OCDE)",
+   "detail": "rendements souverains 2 ans / 10 ans et spread 2 ans vs USD",
+   "date": "2026-11-21",
+   "url": null
+  },
+  {
+   "id": "src_283",
+   "source": "Twelve Data (calculs locaux)",
+   "detail": "technique EUR — EUR/USD",
+   "date": "2026-11-21",
+   "url": null
+  },
+  {
+   "id": "src_284",
+   "source": "Twelve Data (calculs locaux)",
+   "detail": "technique GBP — GBP/USD",
+   "date": "2026-11-21",
+   "url": null
+  },
+  {
+   "id": "src_285",
+   "source": "Twelve Data (calculs locaux)",
+   "detail": "technique JPY — USD/JPY",
+   "date": "2026-11-21",
+   "url": null
+  },
+  {
+   "id": "src_286",
+   "source": "Twelve Data (calculs locaux)",
+   "detail": "technique CHF — USD/CHF",
+   "date": "2026-11-21",
+   "url": null
+  },
+  {
+   "id": "src_287",
+   "source": "Twelve Data (calculs locaux)",
+   "detail": "technique CAD — USD/CAD",
+   "date": "2026-11-21",
+   "url": null
+  },
+  {
+   "id": "src_288",
+   "source": "Twelve Data (calculs locaux)",
+   "detail": "technique AUD — AUD/USD",
+   "date": "2026-11-21",
+   "url": null
+  },
+  {
+   "id": "src_289",
+   "source": "Twelve Data (calculs locaux)",
+   "detail": "technique NZD — NZD/USD",
+   "date": "2026-11-21",
+   "url": null
+  },
+  {
+   "id": "src_290",
+   "source": "Twelve Data (calculs locaux)",
+   "detail": "technique CNY — USD/CNH",
+   "date": "2026-11-21",
+   "url": null
+  },
+  {
+   "id": "src_291",
+   "source": "Twelve Data (calculs locaux)",
+   "detail": "technique USD — indice USD synthétique (calcul local)",
+   "date": "2026-11-21",
+   "url": null
+  },
+  {
+   "id": "src_292",
+   "source": "Calcul local (Pearson, rendements Twelve Data)",
+   "detail": "matrice de corrélations 8 devises",
+   "date": "2026-11-21",
+   "url": null
+  },
+  {
+   "id": "src_293",
+   "source": "ForexFactory",
+   "detail": "President Trump Speaks",
+   "date": "2026-11-20",
+   "url": null
+  },
+  {
+   "id": "src_294",
+   "source": "RSS cnbc_world",
+   "detail": "S&P 500 and Dow close in correction; Nasdaq erases 2026 gain as AI rout picks up steam",
+   "date": "2026-11-20T23:46:18+00:00",
+   "url": "https://www.cnbc.com/2026/11/19/stock-market-today-live-updates.html"
+  },
+  {
+   "id": "src_295",
+   "source": "RSS cnbc_world",
+   "detail": "Trump vows to stop U.S. companies from building data centers abroad, threatens 'tremendous tax'",
+   "date": "2026-11-20T20:47:58+00:00",
+   "url": "https://www.cnbc.com/2026/11/20/trump-data-centers-ai-companies-tax.html"
+  },
+  {
+   "id": "src_296",
+   "source": "RSS cnbc_world",
+   "detail": "Zscaler stock jumps 18% on report that CrowdStrike in talks to buy security vendor",
+   "date": "2026-11-20T21:35:24+00:00",
+   "url": "https://www.cnbc.com/2026/11/20/zscaler-crowdstrike-deal.html"
+  },
+  {
+   "id": "src_297",
+   "source": "RSS cnbc_world",
+   "detail": "SpaceX’s subsidiary Cursor tells lawmakers it's considering phasing out Chinese AI models",
+   "date": "2026-11-20T14:07:24+00:00",
+   "url": "https://www.cnbc.com/2026/11/20/cursor-chinese-ai-models-geopolitical-risk.html"
+  },
+  {
+   "id": "src_298",
+   "source": "RSS cnbc_world",
+   "detail": "Take-Two shatters sales record as 'GTA VI' launches to massive fanfare",
+   "date": "2026-11-20T20:26:17+00:00",
+   "url": "https://www.cnbc.com/2026/11/20/take-two-sales-as-gta-vi-launches-to-massive-fanfare.html"
+  },
+  {
+   "id": "src_299",
+   "source": "RSS cnbc_world",
+   "detail": "Trump says he discussed Jensen Huang with Xi; Bessent tells CNBC Nvidia chip export policy is unchanged",
+   "date": "2026-11-20T22:08:41+00:00",
+   "url": "https://www.cnbc.com/2026/11/20/treasury-secretary-scott-bessent.html"
+  },
+  {
+   "id": "src_300",
+   "source": "RSS cnbc_world",
+   "detail": "U.S.-China trade, Taiwan and tech tensions remain unresolved as Trump returns from Asia",
+   "date": "2026-11-20T13:29:50+00:00",
+   "url": "https://www.cnbc.com/2026/11/20/apec-summit-trump-xi-china-trade-taiwan.html"
+  },
+  {
+   "id": "src_301",
+   "source": "RSS cnbc_world",
+   "detail": "The bull market has a new problem. The 'smart money' is selling",
+   "date": "2026-11-20T14:15:29+00:00",
+   "url": "https://www.cnbc.com/2026/11/20/equity-issuance-bull-market-problem.html"
+  },
+  {
+   "id": "src_302",
+   "source": "RSS cnbc_world",
+   "detail": "Anthropic could be tipping point for AI trade. Where investors should go from here",
+   "date": "2026-11-20T17:16:14+00:00",
+   "url": "https://www.cnbc.com/2026/11/20/stock-market-rotation-beyond-ai.html"
+  },
+  {
+   "id": "src_303",
+   "source": "RSS cnbc_world",
+   "detail": "Anthropic defied the odds in its record IPO. Now it has to reckon with AI market turbulence",
+   "date": "2026-11-20T21:06:45+00:00",
+   "url": "https://www.cnbc.com/2026/11/20/anthropic-defies-odds-holding-ipo-despite-massively-disruptive-market.html"
+  },
+  {
+   "id": "src_304",
+   "source": "RSS cnbc_world",
+   "detail": "‘More than just a game’: How GTA VI’s blockbuster launch fuels a booming content economy",
+   "date": "2026-11-20T07:08:36+00:00",
+   "url": "https://www.cnbc.com/2026/11/20/gta-vi-launch-streaming-content-economy.html"
+  },
+  {
+   "id": "src_305",
+   "source": "RSS cnbc_world",
+   "detail": "Forget Anthropic: In Europe, the IPO hype is about a blue lagoon",
+   "date": "2026-11-20T06:00:01+00:00",
+   "url": "https://www.cnbc.com/2026/11/20/anthropic-ipo-iceland-blue-lagoon.html"
+  },
+  {
+   "id": "src_306",
+   "source": "RSS cnbc_world",
+   "detail": "Warsh wants Fed officials to talk less. Instead, they’re talking more",
+   "date": "2026-11-20T21:10:48+00:00",
+   "url": "https://www.cnbc.com/2026/11/20/warsh-fed-forward-guidance-rate-hikes.html"
+  },
+  {
+   "id": "src_307",
+   "source": "RSS cnbc_world",
+   "detail": "Gap names new Athleta CEO, says Old Navy turnaround is seeing signs of progress",
+   "date": "2026-11-20T21:04:48+00:00",
+   "url": "https://www.cnbc.com/2026/11/19/gap-gap-q3-2026-earnings.html"
+  },
+  {
+   "id": "src_308",
+   "source": "RSS cnbc_world",
+   "detail": "Ex-GM CEO on Mary Barra succession planning: 'It's going to be tough'",
+   "date": "2026-11-20T15:50:27+00:00",
+   "url": "https://www.cnbc.com/2026/11/20/gm-ceo-succession-mary-barra-dan-akerson.html"
+  },
+  {
+   "id": "src_309",
+   "source": "RSS investinglive",
+   "detail": "investingLive Americas FX news wrap 20 Nov: Stocks get hammered as Nasdaq plunges 5.28%",
+   "date": "2026-11-20T22:21:47+00:00",
+   "url": "https://investinglive.com/news/investinglive-americas-fx-news-wrap-20-nov-stocks-get-hammered-as-nasdaq-plunges-5-28/"
+  },
+  {
+   "id": "src_310",
+   "source": "RSS investinglive",
+   "detail": "Trump weighs renewed strikes on Iran as military warns of strain. FT",
+   "date": "2026-11-20T20:42:10+00:00",
+   "url": "https://investinglive.com/news/trump-weighs-renewed-strikes-on-iran-as-military-warns-of-strain-ft/"
+  },
+  {
+   "id": "src_311",
+   "source": "RSS investinglive",
+   "detail": "European stocks end a bruising week. German DAX falls 7.29%.",
+   "date": "2026-11-20T18:12:25+00:00",
+   "url": "https://investinglive.com/news/european-stocks-end-a-bruising-week-german-dax-falls-7-29/"
+  },
+  {
+   "id": "src_312",
+   "source": "RSS investinglive",
+   "detail": "Trump: Secured two new trade deals. 10 others coming very soon.",
+   "date": "2026-11-20T17:33:44+00:00",
+   "url": "https://investinglive.com/news/trump-secured-two-new-trade-deals-10-others-coming-very-soon/"
+  },
+  {
+   "id": "src_313",
+   "source": "RSS investinglive",
+   "detail": "Bessent says Trump and Xi saw robust discussion on trade policy, AI",
+   "date": "2026-11-20T15:33:55+00:00",
+   "url": "https://investinglive.com/news/bessent-says-trump-and-xi-saw-robust-discussion-on-trade-policy-ai/"
+  },
+  {
+   "id": "src_314",
+   "source": "RSS investinglive",
+   "detail": "University of Michigan consumer sentiment 51.5 versus 51.5 estimate",
+   "date": "2026-11-20T15:04:05+00:00",
+   "url": "https://investinglive.com/news/university-of-michigan-consumer-sentiment-51-5-versus-51-5-estimate/"
+  },
+  {
+   "id": "src_315",
+   "source": "RSS investinglive",
+   "detail": "Greer says US-China trade truce extension hinges on rare earths",
+   "date": "2026-11-20T14:06:16+00:00",
+   "url": "https://investinglive.com/news/greer-says-us-china-trade-truce-extension-hinges-on-rare-earths/"
+  },
+  {
+   "id": "src_316",
+   "source": "RSS investinglive",
+   "detail": "Canada retail sales comes in stronger at 0.8% vs 0.7% estimate. Core up 1.0% vs 0.7% estimate.",
+   "date": "2026-11-20T13:30:24+00:00",
+   "url": "https://investinglive.com/news/canada-retail-sales-comes-in-stronger-at-0-8-vs-0-7-estimate-core-up-1-0-vs-0-7-estimate/"
+  },
+  {
+   "id": "src_317",
+   "source": "RSS investinglive",
+   "detail": "investingLive European news wrap: Stock markets remain under pressure, bonds rally on slowdown expectations",
+   "date": "2026-11-20T12:31:26+00:00",
+   "url": "https://investinglive.com/news/investinglive-european-news-wrap-stock-markets-remain-under-pressure-bonds-rally-on-slowdown-expectations/"
+  },
+  {
+   "id": "src_318",
+   "source": "RSS investinglive",
+   "detail": "What are the main events for today?",
+   "date": "2026-11-20T07:40:50+00:00",
+   "url": "https://investinglive.com/news/what-are-the-main-events-for-today-90/"
+  },
+  {
+   "id": "src_319",
+   "source": "RSS investinglive",
+   "detail": "UK October retail sales +0.7% vs +0.0% m/m expected",
+   "date": "2026-11-20T07:00:37+00:00",
+   "url": "https://investinglive.com/news/uk-october-retail-sales-0-7-vs-0-0-m-m-expected/"
+  },
+  {
+   "id": "src_320",
+   "source": "RSS investinglive",
+   "detail": "investingLive Asia-Pacific market news: Red Friday as Asia’s AI trade unravels",
+   "date": "2026-11-20T04:39:38+00:00",
+   "url": "https://investinglive.com/news/investinglive-asia-pacific-market-news-red-friday-as-asia-s-ai-trade-unravels/"
+  },
+  {
+   "id": "src_321",
+   "source": "RSS investinglive",
+   "detail": "US envoys float NATO membership for Ukraine in exchange for Donbas, WSJ reports",
+   "date": "2026-11-20T02:14:13+00:00",
+   "url": "https://investinglive.com/news/us-envoys-float-nato-membership-for-ukraine-in-exchange-for-donbas-wsj-reports/"
+  },
+  {
+   "id": "src_322",
+   "source": "RSS investinglive",
+   "detail": "US approved nearly 900,000 Nvidia and AMD AI chips for China. Raises more questions than answers.",
+   "date": "2026-11-20T01:16:31+00:00",
+   "url": "https://investinglive.com/news/us-approved-nearly-900-000-nvidia-and-amd-ai-chips-for-china-raises-more-questions-than-answers/"
+  },
+  {
+   "id": "src_323",
+   "source": "Calcul Python",
+   "detail": "scores de confluence et biais global du jour",
+   "date": "2026-11-21",
+   "url": null
+  },
+  {
+   "id": "src_324",
+   "source": "Calcul Python (registre macro)",
+   "detail": "indice de surprise macro 30 jours par devise",
+   "date": "2026-11-21",
+   "url": null
+  },
+  {
+   "id": "src_325",
+   "source": "Trésor américain (courbe des taux quotidienne, treasury.gov) ; FRED (DGS10) en secours",
+   "detail": "USD — politique fiscale",
+   "date": "2026-11-20",
+   "url": null
+  },
+  {
+   "id": "src_326",
+   "source": "Bundesbank (Allemagne 10 ans)",
+   "detail": "EUR — politique fiscale",
+   "date": "2026-11-20",
+   "url": null
+  },
+  {
+   "id": "src_327",
+   "source": "Banque d'Angleterre (par yield 10 ans, IUDMNPY)",
+   "detail": "GBP — politique fiscale",
+   "date": "2026-11-18",
+   "url": null
+  },
+  {
+   "id": "src_328",
+   "source": "Banque du Canada (Valet, 10 ans)",
+   "detail": "CAD — politique fiscale",
+   "date": "2026-11-19",
+   "url": null
+  },
+  {
+   "id": "src_329",
+   "source": "FRED",
+   "detail": "Indice or (proxy) — NASDAQ QGLDI, pas le cours spot (NASDAQQGLDI)",
+   "date": "2026-11-19",
+   "url": null
+  },
+  {
+   "id": "src_330",
+   "source": "Calcul Python (fil d'actualité)",
+   "detail": "titres classés par canal",
+   "date": "2026-11-21",
+   "url": null
+  },
+  {
+   "id": "src_331",
+   "source": "cnbc_world",
+   "detail": "Zscaler stock jumps 18% on report that CrowdStrike in talks to buy security vend",
+   "date": "2026-11-20",
+   "url": "https://www.cnbc.com/2026/11/20/zscaler-crowdstrike-deal.html"
+  },
+  {
+   "id": "src_332",
+   "source": "cnbc_world",
+   "detail": "Trump says he discussed Jensen Huang with Xi; Bessent tells CNBC Nvidia chip exp",
+   "date": "2026-11-20",
+   "url": "https://www.cnbc.com/2026/11/20/treasury-secretary-scott-bessent.html"
+  },
+  {
+   "id": "src_333",
+   "source": "cnbc_world",
+   "detail": "Warsh wants Fed officials to talk less. Instead, they’re talking more",
+   "date": "2026-11-20",
+   "url": "https://www.cnbc.com/2026/11/20/warsh-fed-forward-guidance-rate-hikes.html"
+  },
+  {
+   "id": "src_334",
+   "source": "CFTC (Commitments of Traders, legacy futures only)",
+   "detail": "positions nettes non commerciales (spéculateurs)",
+   "date": "2026-11-17",
+   "url": null
+  },
+  {
+   "id": "src_335",
+   "source": "Calcul Python",
+   "detail": "directions des moteurs 2 à 8 (règles Python et matrice d'impact)",
+   "date": "2026-11-21",
+   "url": null
   }
  ],
  "donnees_non_rafraichies": [],
@@ -6602,7 +7068,6 @@
   "EUR": {
    "libelle": "Force EUR (EUR/USD)",
    "dates": [
-    "2026-08-23",
     "2026-08-24",
     "2026-08-25",
     "2026-08-26",
@@ -6691,10 +7156,10 @@
     "2026-11-17",
     "2026-11-18",
     "2026-11-19",
-    "2026-11-20"
+    "2026-11-20",
+    "2026-11-21"
    ],
    "clotures": [
-    1.16761,
     1.16643,
     1.16747,
     1.1654,
@@ -6783,13 +7248,13 @@
     1.10094,
     1.09651,
     1.0974,
-    1.09721
+    1.09696,
+    1.09726
    ]
   },
   "GBP": {
    "libelle": "Force GBP (GBP/USD)",
    "dates": [
-    "2026-08-23",
     "2026-08-24",
     "2026-08-25",
     "2026-08-26",
@@ -6878,10 +7343,10 @@
     "2026-11-17",
     "2026-11-18",
     "2026-11-19",
-    "2026-11-20"
+    "2026-11-20",
+    "2026-11-21"
    ],
    "clotures": [
-    1.36352,
     1.36313,
     1.3649,
     1.35983,
@@ -6970,13 +7435,13 @@
     1.32156,
     1.31408,
     1.31007,
-    1.30896
+    1.30874,
+    1.30884
    ]
   },
   "JPY": {
    "libelle": "Force JPY (USD/JPY inversée)",
    "dates": [
-    "2026-08-23",
     "2026-08-24",
     "2026-08-25",
     "2026-08-26",
@@ -7065,10 +7530,10 @@
     "2026-11-17",
     "2026-11-18",
     "2026-11-19",
-    "2026-11-20"
+    "2026-11-20",
+    "2026-11-21"
    ],
    "clotures": [
-    0.00629,
     0.00629,
     0.00628,
     0.00628,
@@ -7157,13 +7622,13 @@
     0.00628,
     0.00628,
     0.00626,
-    0.00627
+    0.00631,
+    0.0063
    ]
   },
   "CHF": {
    "libelle": "Force CHF (USD/CHF inversée)",
    "dates": [
-    "2026-08-23",
     "2026-08-24",
     "2026-08-25",
     "2026-08-26",
@@ -7252,10 +7717,10 @@
     "2026-11-17",
     "2026-11-18",
     "2026-11-19",
-    "2026-11-20"
+    "2026-11-20",
+    "2026-11-21"
    ],
    "clotures": [
-    1.24749,
     1.246,
     1.24777,
     1.24182,
@@ -7344,13 +7809,13 @@
     1.19101,
     1.18493,
     1.1846,
-    1.18541
+    1.19215,
+    1.19031
    ]
   },
   "CAD": {
    "libelle": "Force CAD (USD/CAD inversée)",
    "dates": [
-    "2026-08-23",
     "2026-08-24",
     "2026-08-25",
     "2026-08-26",
@@ -7439,10 +7904,10 @@
     "2026-11-17",
     "2026-11-18",
     "2026-11-19",
-    "2026-11-20"
+    "2026-11-20",
+    "2026-11-21"
    ],
    "clotures": [
-    0.72501,
     0.72235,
     0.72231,
     0.72067,
@@ -7531,13 +7996,13 @@
     0.6998,
     0.6977,
     0.69752,
-    0.69732
+    0.69774,
+    0.69722
    ]
   },
   "AUD": {
    "libelle": "Force AUD (AUD/USD)",
    "dates": [
-    "2026-08-23",
     "2026-08-24",
     "2026-08-25",
     "2026-08-26",
@@ -7626,10 +8091,10 @@
     "2026-11-17",
     "2026-11-18",
     "2026-11-19",
-    "2026-11-20"
+    "2026-11-20",
+    "2026-11-21"
    ],
    "clotures": [
-    0.71666,
     0.71503,
     0.71645,
     0.71742,
@@ -7718,13 +8183,13 @@
     0.67337,
     0.67117,
     0.66638,
-    0.66515
+    0.66199,
+    0.66241
    ]
   },
   "NZD": {
    "libelle": "Force NZD (NZD/USD)",
    "dates": [
-    "2026-08-23",
     "2026-08-24",
     "2026-08-25",
     "2026-08-26",
@@ -7813,10 +8278,10 @@
     "2026-11-17",
     "2026-11-18",
     "2026-11-19",
-    "2026-11-20"
+    "2026-11-20",
+    "2026-11-21"
    ],
    "clotures": [
-    0.5974,
     0.59596,
     0.5978,
     0.59441,
@@ -7905,13 +8370,13 @@
     0.54971,
     0.54888,
     0.54907,
-    0.54851
+    0.54756,
+    0.547
    ]
   },
   "CNY": {
    "libelle": "Force CNY (USD/CNH inversée)",
    "dates": [
-    "2026-08-23",
     "2026-08-24",
     "2026-08-25",
     "2026-08-26",
@@ -8000,10 +8465,10 @@
     "2026-11-17",
     "2026-11-18",
     "2026-11-19",
-    "2026-11-20"
+    "2026-11-20",
+    "2026-11-21"
    ],
    "clotures": [
-    0.14866,
     0.14878,
     0.14887,
     0.14874,
@@ -8092,13 +8557,13 @@
     0.15001,
     0.14992,
     0.14942,
-    0.14956
+    0.14979,
+    0.14978
    ]
   },
   "USD": {
    "libelle": "Force USD (indice synthétique)",
    "dates": [
-    "2026-08-23",
     "2026-08-24",
     "2026-08-25",
     "2026-08-26",
@@ -8187,99 +8652,100 @@
     "2026-11-17",
     "2026-11-18",
     "2026-11-19",
-    "2026-11-20"
+    "2026-11-20",
+    "2026-11-21"
    ],
    "clotures": [
-    97.73884,
-    97.86779,
-    97.76372,
-    97.98838,
-    97.91263,
-    98.3692,
-    98.35131,
-    98.39651,
-    98.19013,
-    98.46369,
-    98.39542,
-    97.84089,
-    97.94414,
-    97.94463,
-    97.96409,
-    97.72315,
-    97.71621,
-    97.72071,
-    98.12566,
-    98.06128,
-    98.05876,
-    98.09717,
-    98.37163,
-    98.56283,
-    99.18172,
-    99.03398,
-    98.9951,
-    99.0106,
-    99.0273,
-    99.13175,
-    99.17887,
-    99.79999,
-    100.01522,
-    99.8497,
-    99.87346,
-    99.89565,
-    99.94442,
-    100.12852,
-    100.28863,
-    100.52105,
-    100.36066,
-    100.36579,
-    100.3344,
-    100.45975,
-    100.26596,
-    100.5556,
-    100.43767,
-    100.38678,
-    100.39799,
-    100.42835,
-    100.72106,
-    100.40414,
-    100.62124,
-    100.33247,
-    100.01869,
-    100.02713,
-    100.04831,
-    100.04417,
-    99.74827,
-    99.61755,
-    99.49606,
-    99.53431,
-    99.5264,
-    99.51234,
-    99.74002,
-    99.86081,
-    99.85456,
-    99.80518,
-    99.67538,
-    99.70997,
-    99.69604,
-    99.64954,
-    99.90964,
-    99.61994,
-    99.72786,
-    100.44795,
-    100.41269,
-    100.38368,
-    99.85484,
-    100.40031,
-    100.92328,
-    101.19329,
-    101.40606,
-    101.40659,
-    101.36655,
-    101.56348,
-    101.53762,
-    101.83319,
-    102.0296,
-    102.04701
+    98.11813,
+    98.0138,
+    98.23903,
+    98.16308,
+    98.62083,
+    98.60289,
+    98.6482,
+    98.4413,
+    98.71556,
+    98.64711,
+    98.09116,
+    98.19467,
+    98.19517,
+    98.21467,
+    97.97312,
+    97.96616,
+    97.97068,
+    98.37666,
+    98.31212,
+    98.30959,
+    98.3481,
+    98.62326,
+    98.81495,
+    99.43542,
+    99.2873,
+    99.24832,
+    99.26387,
+    99.28061,
+    99.38533,
+    99.43256,
+    100.05527,
+    100.27106,
+    100.10511,
+    100.12894,
+    100.15118,
+    100.20008,
+    100.38464,
+    100.54516,
+    100.77817,
+    100.61738,
+    100.62252,
+    100.59105,
+    100.71672,
+    100.52244,
+    100.81282,
+    100.69459,
+    100.64357,
+    100.65481,
+    100.68524,
+    100.9787,
+    100.66097,
+    100.87863,
+    100.58911,
+    100.27453,
+    100.28299,
+    100.30423,
+    100.30008,
+    100.00342,
+    99.87237,
+    99.75057,
+    99.78891,
+    99.78099,
+    99.76689,
+    99.99515,
+    100.11625,
+    100.10998,
+    100.06048,
+    99.93034,
+    99.96502,
+    99.95106,
+    99.90444,
+    100.1652,
+    99.87477,
+    99.98296,
+    100.70489,
+    100.66954,
+    100.64045,
+    100.11026,
+    100.65713,
+    101.18143,
+    101.45213,
+    101.66545,
+    101.66598,
+    101.62584,
+    101.82327,
+    101.79735,
+    102.09367,
+    102.29059,
+    102.21069,
+    102.24963
    ]
   }
  },
@@ -8820,6 +9286,7 @@
   },
   "vix": {
    "dates": [
+    "2025-12-19",
     "2025-12-26",
     "2026-01-02",
     "2026-01-09",
@@ -8847,7 +9314,6 @@
     "2026-06-12",
     "2026-06-19",
     "2026-06-26",
-    "2026-06-30",
     "2026-07-01",
     "2026-07-02",
     "2026-07-03",
@@ -8952,6 +9418,7 @@
     "2026-11-19"
    ],
    "valeurs": [
+    14.91,
     13.6,
     14.51,
     14.49,
@@ -8979,7 +9446,6 @@
     17.68,
     16.78,
     18.41,
-    16.45,
     16.59,
     16.15,
     15.81,
@@ -9354,15 +9820,15 @@
   }
  },
  "prix_cloture": {
-  "EUR": 1.09721,
-  "GBP": 1.30896,
-  "JPY": 0.00627,
-  "CHF": 1.18541,
-  "CAD": 0.69732,
-  "AUD": 0.66515,
-  "NZD": 0.54851,
-  "CNY": 0.14956,
-  "USD": 102.04701
+  "EUR": 1.09726,
+  "GBP": 1.30884,
+  "JPY": 0.0063,
+  "CHF": 1.19031,
+  "CAD": 0.69722,
+  "AUD": 0.66241,
+  "NZD": 0.547,
+  "CNY": 0.14978,
+  "USD": 102.24963
  },
  "tracabilite": {
   "mode": "marquer",
@@ -9460,33 +9926,33 @@
  "profil_devises": {
   "USD": {
    "etat": "Soutenue",
-   "raison": "Signaux favorables : surprises macro 30 j +0,9 ; force +2,5 % sur 20 séances.",
-   "moteur": "Or (XAU/USD)",
-   "r60": -0.5
+   "raison": "Signaux favorables : surprises macro 30 j +0,9 ; force +2,4 % sur 20 séances.",
+   "moteur": "Rendement US 10 ans",
+   "r60": 0.46
   },
   "EUR": {
    "etat": "Sans direction",
    "raison": "Signaux défavorables : force −2,0 % sur 20 séances. Total −1 : il faut 2 signaux concordants.",
    "moteur": "Or (XAU/USD)",
-   "r60": 0.47
+   "r60": 0.41
   },
   "GBP": {
    "etat": "Sans direction",
    "raison": "Signaux défavorables : force −2,1 % sur 20 séances. Total −1 : il faut 2 signaux concordants.",
    "moteur": "Rendement US 2 ans (écart de taux 2 ans, côté US)",
-   "r60": -0.33
+   "r60": -0.31
   },
   "JPY": {
    "etat": "Sans direction",
-   "raison": "Signaux défavorables : force −1,7 % sur 20 séances. Total −1 : il faut 2 signaux concordants.",
+   "raison": "Signaux défavorables : force −1,1 % sur 20 séances. Total −1 : il faut 2 signaux concordants.",
    "moteur": "Rendement US 2 ans (écart de taux 2 ans, côté US)",
-   "r60": -0.47
+   "r60": -0.51
   },
   "CHF": {
    "etat": "Sans direction",
-   "raison": "Signaux partagés : surprises macro 30 j +0,5 ; force −2,2 % sur 20 séances. Total 0 : il faut 2 signaux concordants.",
+   "raison": "Signaux partagés : surprises macro 30 j +0,5 ; force −1,6 % sur 20 séances. Total 0 : il faut 2 signaux concordants.",
    "moteur": "Rendement US 10 ans",
-   "r60": -0.61
+   "r60": -0.63
   },
   "CAD": {
    "etat": "Sous pression",
@@ -9496,26 +9962,26 @@
   },
   "AUD": {
    "etat": "Sans direction",
-   "raison": "Signaux défavorables : force −5,5 % sur 20 séances. Total −1 : il faut 2 signaux concordants.",
+   "raison": "Signaux défavorables : force −5,9 % sur 20 séances. Total −1 : il faut 2 signaux concordants.",
    "moteur": "Indice actions (S&P 500, ETF SPY)",
-   "r60": 0.52
+   "r60": 0.53
   },
   "NZD": {
    "etat": "Sous pression",
-   "raison": "Signaux défavorables : banque centrale : maintien à 2,75 % le 28/10, 3,00 % attendu (−25 pb) ; surprises macro 30 j −1,8 ; force −3,8 % sur 20 séances.",
+   "raison": "Signaux défavorables : banque centrale : maintien à 2,75 % le 28/10, 3,00 % attendu (−25 pb) ; surprises macro 30 j −1,8 ; force −3,9 % sur 20 séances.",
    "moteur": "Indice actions (S&P 500, ETF SPY)",
-   "r60": 0.31
+   "r60": 0.3
   },
   "CNY": {
    "etat": "Sans direction",
    "raison": "Signaux défavorables : surprises macro 30 j −0,6. Total −1 : il faut 2 signaux concordants.",
-   "moteur": "Or (XAU/USD)",
-   "r60": 0.3
+   "moteur": null,
+   "r60": null
   }
  },
  "controle_qualite": {
   "conforme": false,
-  "nb_anomalies": 12,
+  "nb_anomalies": 13,
   "anomalies": [
    "JPY : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
    "CHF : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
@@ -9523,6 +9989,7 @@
    "AUD : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
    "NZD : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
    "8 moteurs du marché : 1 mot « record » / « s'envole » remplacé : non justifiés par les percentiles ou les variations",
+   "8 moteurs du marché : direction recalculée après le texte du modèle pour géopolitique : le texte décrit les chiffres du moment de sa rédaction",
    "tableau macro : USD/CPI annuel : publication manquée (prévue le 10/11, aucun « réel » reçu)",
    "tableau macro : USD/CPI core annuel : publication manquée (prévue le 10/11, aucun « réel » reçu)",
    "tableau macro : CNY/PMI manufacturier : publication manquée (prévue le 31/10, aucun « réel » reçu)",
