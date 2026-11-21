@@ -39,7 +39,7 @@ html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0; background: var(--fond); color: var(--texte);
   font-family: var(--sans); font-size: 15px; line-height: 1.5;
-  overflow-x: hidden;
+  overflow-x: hidden; overflow-x: clip;   /* clip : garde position:sticky (sommaire du documentaire) */
 }
 a { color: var(--accent); }
 h1, h2, h3 { font-family: var(--serif); font-weight: 700; margin: 0; letter-spacing: -0.01em; }

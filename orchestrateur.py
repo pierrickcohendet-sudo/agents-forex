@@ -285,6 +285,7 @@ def main() -> int:
                 etape("emploi américain (BLS)", bls.collecter, RACINE, defaut=None)
                 etape("synthèse V9 (synthese.json)", _synthese_v9, config, None, True, defaut=None)
                 etape("dossiers des 8 moteurs (moteurs_dossiers.json)", _dossiers_moteurs, config, None, defaut=None)
+                etape("documentaire hebdomadaire (documentaire.json)", _documentaire, config, None, defaut=None)
                 etape("briefing du jour (briefing.json)", briefing.ecrire, RACINE, config, defaut=None)
                 etape("alertes sur le téléphone (ntfy)", _alertes_telephone, RACINE, config, defaut=None)
                 etape("fraîcheur des blocs (fraicheur.json)", fraicheur_blocs.ecrire, RACINE, config, defaut=None)
@@ -530,6 +531,7 @@ def main() -> int:
     # Lot V12 : dossiers des 8 moteurs (onglet « 8 engrenages ») ; un appel groupé par jour pour les introductions, Groq en
     # secours, secours Python contrôlé
     etape("dossiers des 8 moteurs (moteurs_dossiers.json)", _dossiers_moteurs, config, llm, defaut=None)
+    etape("documentaire hebdomadaire (documentaire.json)", _documentaire, config, llm, defaut=None)
     # Lot V8 : Briefing (page d'accueil), alertes sur le téléphone, fraîcheur des blocs — chacun isolé
     etape("briefing du jour (briefing.json)", briefing.ecrire, RACINE, config, defaut=None)
     etape("alertes sur le téléphone (ntfy)", _alertes_telephone, RACINE, config, defaut=None)
@@ -752,14 +754,29 @@ def _dossiers_moteurs(config: dict, llm) -> dict | None:
     return d
 
 
+def _documentaire(config: dict, llm) -> dict | None:
+    """Lot V13 : documentaire hebdomadaire de l'onglet « 8 engrenages » (docs/data/documentaire/). Titres du run accumulés
+    pour la semaine ; récit de chaque moteur rédigé une fois par jour (après 08:15 UTC), Groq si Gemini est hors quota ou en
+    panne, secours Python sinon ; récapitulatif « Documentaire : N par le modèle, M par Groq, K en Python »."""
+    from core import documentaire
+    articles = (((json.loads((RACINE / "data" / "cache" / "collecte_news.json").read_text(encoding="utf-8")) or {}).get("donnees") or {})
+                .get("articles")) if (RACINE / "data" / "cache" / "collecte_news.json").exists() else None
+    d = documentaire.ecrire(RACINE, config, None, llm, _secours_texte(config) if llm is not None else None,
+                            _fabrique_redaction(config), articles=articles)
+    if d and (d.get("redaction") or {}).get("ligne"):
+        _ecrire_resume_run(d["redaction"]["ligne"] + f" · lecture {d.get('lecture_min')} min", titre="Documentaire hebdomadaire")
+    return d
+
+
 def mode_moteurs(config: dict) -> int:
     """Passage « --moteurs » (cron du week-end 08:15 UTC) : régénère seulement les dossiers des 8 moteurs si la version du
     jour est en rédaction Python, puis publie. Aucune autre collecte, aucun autre appel au modèle."""
     log.info("=== Dossiers des 8 moteurs seuls (--moteurs) ===")
     d = etape("dossiers des 8 moteurs (moteurs_dossiers.json)", _dossiers_moteurs, config, None, defaut=None)
-    if d and config.get("publication_web", {}).get("actif", True):
+    doc = etape("documentaire hebdomadaire (documentaire.json)", _documentaire, config, None, defaut=None)
+    if (d or doc) and config.get("publication_web", {}).get("actif", True):
         etape("git push (dossiers des moteurs)", publication_web.pousser_git, config["publication_web"], RACINE,
-              "dossiers des 8 moteurs : introductions")
+              "dossiers des 8 moteurs et documentaire de la semaine")
     return 0
 
 

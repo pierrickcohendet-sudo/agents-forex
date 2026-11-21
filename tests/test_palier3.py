@@ -161,7 +161,7 @@ class AutresDossiers(unittest.TestCase):
     def test_reaction_geopolitique_sur_la_derniere_seance(self):
         h = {"series": {"brent": {"points": [["2026-10-05", 100.0], ["2026-10-06", 102.0]]}}}
         e = {"graphiques": [{"type": "serie"}, {"type": "barres", "barres": [{"nom": "Énergie", "valeur": 3}], "absentes": []}]}
-        co.complements_6(e, h)
+        co.complements_6(e, h, aujourd=date(2026, 10, 7))   # lot V13 : une réaction de plus de 3 jours est n/d
         t = {x["id"]: x for x in e["tuiles"]}
         self.assertEqual(t["canal_énergi"]["texte"], "3")
         self.assertIn("+2,00 % sur la dernière séance", t["reaction_brent"]["variation"]["texte"])

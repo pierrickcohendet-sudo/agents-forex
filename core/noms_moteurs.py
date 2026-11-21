@@ -73,6 +73,111 @@ CANAUX_DEVISE = {
 }
 
 
+# Lot V13 : « Comprendre ce moteur », texte PERMANENT écrit à la main (jamais généré), relu une fois par trimestre.
+# importance pour le change (1 à 5 étoiles), pourquoi il compte, indicateurs principaux, chaîne de transmission (étapes ->
+# devise), 3 confluences avec les marchés (signal, sens ▲ ▼ ou !, effet), piège à éviter.
+COMPRENDRE = {
+    1: {"importance": 5,
+        "pourquoi": "C'est le chef d'orchestre : il dit quel récit domine (peur ou confiance, inflation ou croissance) et donc quelles "
+                    "devises sont recherchées. Quand il est clair, les autres moteurs comptent moins et les paires bougent ensemble ; "
+                    "quand il est flou, chaque paire suit ses propres chiffres.",
+        "indicateurs": ["VIX : la peur sur les actions américaines (au-dessus de 25, régime de stress)",
+                        "S&P 500 et Nasdaq : l'appétit pour le risque",
+                        "Indice dollar large : la demande mondiale de dollars",
+                        "Or : la recherche de protection contre l'inflation et les crises",
+                        "Nombre de moteurs alignés : la solidité du thème (3 sur 7 = thème établi)"],
+        "chaine": ["Choc ou bonne nouvelle", "Régime de risque", "Flux vers refuges ou devises cycliques", "USD, JPY, CHF ↔ AUD, NZD, CAD"],
+        "confluences": [["VIX en hausse", "▲", "USD, JPY et CHF recherchés ; AUD, NZD et CAD vendus"],
+                        ["Actions en hausse avec un dollar ferme", "=", "avantage de rendement américain, pas une fuite vers la sécurité"],
+                        ["Or et dollar en hausse ensemble", "!", "stress profond : tout ce qui est perçu comme sûr est acheté"]],
+        "piege": "Un thème peut se retourner en une publication. Le regarder chaque jour, sans le confondre avec une tendance de fond."},
+    2: {"importance": 5,
+        "pourquoi": "Les devises suivent d'abord l'argent : une devise mieux rémunérée attire les capitaux. Ce moteur mesure qui monte "
+                    "ou baisse ses taux, et surtout ce que le marché anticipe, lu dans les taux à 2 ans.",
+        "indicateurs": ["Taux directeurs (Fed, BCE, BoE, BoJ, BoC, RBA, RBNZ, BNS)",
+                        "Rendement à 2 ans : ce que le marché attend des banques centrales sur 2 ans",
+                        "Écart de taux à 2 ans entre deux pays : le moteur du portage",
+                        "Taux réel (directeur − inflation sous-jacente) : le vrai niveau de restriction",
+                        "Pente 10 ans − 2 ans : l'inquiétude sur la croissance",
+                        "Probabilités de décision citées par la presse"],
+        "chaine": ["Inflation ou emploi plus forts", "Banque centrale plus restrictive attendue", "Taux à 2 ans en hausse",
+                   "Écart de taux favorable", "Devise soutenue"],
+        "confluences": [["2 ans US en hausse", "▲", "USD/JPY monte souvent avec lui (lien fort depuis 2022)"],
+                        ["Taux réels US en hausse", "▼", "l'or recule, les refuges sans rendement aussi"],
+                        ["Pente 2-10 ans qui se creuse", "!", "le marché craint une récession : prudence sur les devises cycliques"]],
+        "piege": "Le marché anticipe : une hausse de taux déjà attendue ne fait pas monter la devise. Ce sont la surprise et le ton "
+                 "qui comptent (cas de l'AUD après la hausse de la RBA du 03/11)."},
+    3: {"importance": 4,
+        "pourquoi": "Les chiffres économiques changent les anticipations de taux. Une inflation ou un emploi au-dessus du consensus "
+                    "rendent la banque centrale plus restrictive, ce qui soutient la devise ; une déception fait l'inverse.",
+        "indicateurs": ["Inflation : IPC, IPC sous-jacent, PCE (la mesure préférée de la Fed)",
+                        "Emploi : emplois non agricoles, chômage, salaires",
+                        "Activité : PIB, PMI, ventes au détail, enquêtes régionales (Fed de Philadelphie)",
+                        "Indice de surprise sur 30 jours : la somme des écarts au consensus, en écarts habituels"],
+        "chaine": ["Publication au-dessus du consensus", "Anticipations de taux revues en hausse", "Taux à 2 ans en hausse", "Devise soutenue"],
+        "confluences": [["Surprises USD positives", "▲", "rendement 2 ans US en hausse dans les heures qui suivent"],
+                        ["Emploi australien faible", "▼", "AUD fragilisé, surtout si les actions baissent aussi"],
+                        ["Inflation forte, activité faible", "!", "stagflation : réaction ambiguë, souvent négative pour la devise"]],
+        "piege": "Les révisions des mois précédents comptent autant que le chiffre du mois, et les séries volatiles (inscriptions "
+                 "hebdomadaires au chômage) ne se lisent qu'en tendance."},
+    4: {"importance": 3,
+        "pourquoi": "Lent mais puissant : quand les investisseurs doutent des finances d'un pays, ils exigent une prime pour lui prêter. "
+                    "Les taux longs montent sans que la devise en profite, comme au Royaume-Uni en 2022.",
+        "indicateurs": ["Déficit et dette publics en % du PIB (FMI, annuel)",
+                        "Adjudications : taux obtenu et demande (taux de couverture)",
+                        "Rendement à 10 ans et prime de terme",
+                        "Écarts souverains : Italie − Allemagne, France − Allemagne"],
+        "chaine": ["Dérapage budgétaire", "Prime de risque", "Taux longs en hausse", "Fuite des investisseurs étrangers", "Devise sous pression"],
+        "confluences": [["10 ans en hausse et devise en baisse", "!", "signal budgétaire, l'inverse d'un signal monétaire"],
+                        ["Écart Italie − Allemagne qui s'élargit", "▼", "l'euro souffre de la fragmentation"],
+                        ["Adjudication mal couverte", "▼", "tension sur les taux longs du pays"]],
+        "piege": "Les données de dette arrivent avec un ou deux ans de retard : ce sont les taux longs et les adjudications qui "
+                 "donnent l'alerte en temps réel."},
+    5: {"importance": 4,
+        "pourquoi": "Les devises ne vivent pas seules : actions, taux longs, or et pétrole leur transmettent leurs mouvements. Ce "
+                    "moteur repère les liens actifs entre marchés et mesure leur force.",
+        "indicateurs": ["VIX et S&P 500", "Rendement à 10 ans US", "Or (taux réels et refuge)", "Pétrole Brent et WTI",
+                        "Corrélations sur 60 séances : AUD avec les actions, JPY avec le VIX"],
+        "chaine": ["Mouvement d'un grand marché", "Lien de corrélation actif", "Devise exposée entraînée"],
+        "confluences": [["Actions en baisse", "▼", "AUD et NZD vendus (lien AUD / S&P 500)"],
+                        ["Pétrole en hausse", "▲", "CAD soutenu, JPY et EUR pénalisés (importateurs d'énergie)"],
+                        ["VIX en hausse", "▲", "JPY et CHF recherchés"]],
+        "piege": "Les corrélations changent de régime : un lien fort sur 60 séances peut disparaître en une semaine. Toujours "
+                 "vérifier sa force actuelle avant de s'y fier."},
+    6: {"importance": 3,
+        "pourquoi": "Rare mais violent : conflits, sanctions et élections créent des flux de refuge et des chocs sur l'énergie. Le "
+                    "marché réagit vite, puis s'habitue si l'offre réelle n'est pas touchée.",
+        "indicateurs": ["Titres classés : énergie, sanctions, commerce, refuge, politique intérieure",
+                        "Réaction du Brent, de l'or, d'USD/JPY et du franc suisse sur la dernière séance", "VIX"],
+        "chaine": ["Événement géopolitique", "Peur et choc d'offre", "Refuge et énergie plus chère", "USD, CHF, JPY ↑ · importateurs ↓"],
+        "confluences": [["Tension au Moyen-Orient", "▲", "Brent en hausse, CAD soutenu, JPY et EUR pénalisés"],
+                        ["Sanctions ou droits de douane", "▼", "CNY, AUD et NZD exposés au commerce chinois"],
+                        ["Élection incertaine", "▼", "devise du pays concerné sous pression jusqu'au résultat"]],
+        "piege": "Le premier choc est souvent excessif : la réaction s'efface si l'offre n'est pas réellement touchée."},
+    7: {"importance": 3,
+        "pourquoi": "Le prix et les positions disent ce que le marché a déjà fait. Une devise très achetée par les spéculateurs "
+                    "devient fragile : la moindre déception peut déclencher des ventes en cascade.",
+        "indicateurs": ["Tendance : écart à la moyenne mobile 200 jours, RSI 14", "Volatilité réalisée sur 20 jours",
+                        "COT : positions nettes des spéculateurs et leur percentile sur 5 ans (CFTC, chaque vendredi)"],
+        "chaine": ["Positions extrêmes", "Déception ou surprise contraire", "Débouclage", "Mouvement violent"],
+        "confluences": [["COT extrême et surprise contraire", "!", "mouvement brutal dans le sens du débouclage"],
+                        ["RSI au-dessus de 70 sur l'USD", "▼", "risque de pause du dollar à court terme"],
+                        ["Volatilité basse qui remonte", "!", "fin de période calme"]],
+        "piege": "Un extrême peut durer des semaines : c'est un facteur de fragilité, pas un signal de retournement à lui seul."},
+    8: {"importance": 2,
+        "pourquoi": "Structurel : les échanges et l'énergie modifient la demande de devises des exportateurs et des importateurs. "
+                    "Effets lents mais durables, surtout pour CAD, AUD, NZD, JPY et EUR.",
+        "indicateurs": ["Prix du pétrole (Brent, WTI) et écart Brent − WTI", "Stocks et production de brut américains (EIA, hebdomadaire)",
+                        "Balances commerciales", "Droits de douane et accords commerciaux"],
+        "chaine": ["Pétrole ou commerce qui bouge", "Termes de l'échange", "Demande de la devise des exportateurs",
+                   "CAD, AUD ↑ · JPY, EUR ↓ (si le pétrole monte)"],
+        "confluences": [["Brent en hausse", "▲", "CAD soutenu"], ["Stocks de brut sous la moyenne de 5 ans", "▲", "soutien au prix du pétrole"],
+                        ["Nouveaux droits de douane", "▼", "devises des exportateurs visés"]],
+        "piege": "Un pétrole qui chute parce que la demande mondiale s'effondre pèse aussi sur les devises cycliques : pas de "
+                 "lecture mécanique."},
+}
+
+
 def canal(n: int, devise: str | None = None) -> str:
     return (CANAUX_DEVISE.get(devise or "", {}) or {}).get(int(n)) or CANAUX[int(n)]
 
@@ -84,7 +189,7 @@ CONSIGNE_MODELE = (
 # Anciens libellés courts utilisés dans les textes (« 2. Monétaire », « engrenage 3 (données économiques) »)
 COURTS = {"thème": 1, "monétaire": 2, "données": 3, "fiscale": 4, "marchés": 5, "géopolitique": 6, "flux": 7, "offre": 8}
 # Fichiers propres à l'onglet « 8 engrenages » : le mot y reste
-FICHIERS_ONGLET = {"dossiers.json", "dossiers_hebdo.json", "moteurs.json", "moteurs_dossiers.json"}
+FICHIERS_ONGLET = {"dossiers.json", "dossiers_hebdo.json", "moteurs.json", "moteurs_dossiers.json", "documentaire.json"}
 SOUS_ARBRES_ONGLET = {"engrenages"}
 
 

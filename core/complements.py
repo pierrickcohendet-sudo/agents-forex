@@ -221,7 +221,26 @@ def complements_4(e: dict, historiques: dict) -> None:
 
 
 # ------------------------------------------------------------- engrenage 6
-def complements_6(e: dict, historiques: dict) -> None:
+RETARD_MAX_JOURS = 3   # lot V13 (D3, D4) : au-delà, une « réaction » ne décrit plus la séance récente
+
+
+def points_frais(historiques: dict, nom: str, h5=None, technique: dict | None = None) -> tuple[list, str]:
+    """Série la plus récente pour une réaction de séance : séries uniques Twelve Data (USD/JPY, CHF) quand elles sont plus
+    fraîches que FRED (Fed H.10 publie avec une semaine de retard), sinon la série du cache 5 ans. -> (points, source)."""
+    pts = [list(p) for p in _points(historiques, nom)]
+    source = ((historiques.get("series") or {}).get(nom) or {}).get("source", "FRED")
+    if h5 is not None and nom in ("FX_JPY", "FX_CHF"):
+        try:
+            force = h5.force(nom[3:], technique)   # dollars par unité de devise, Twelve Data raccordé à la Fed H.10
+            alt = [[d, round(1 / v, 5)] for d, v in force if v] if nom == "FX_JPY" else [[d, round(1 / v, 5)] for d, v in force if v]
+            if alt and (not pts or alt[-1][0] > pts[-1][0]):
+                pts, source = alt, "séries uniques 5 ans (Twelve Data raccordé à la Fed H.10)"
+        except Exception:  # noqa: BLE001 — la série du cache reste
+            pass
+    return pts, source
+
+
+def complements_6(e: dict, historiques: dict, h5=None, technique: dict | None = None, aujourd: date | None = None) -> None:
     comptes = {}
     for g in e.get("graphiques") or []:
         if g.get("type") == "barres":
@@ -234,16 +253,21 @@ def complements_6(e: dict, historiques: dict) -> None:
                             {"valeur": comptes.get(nom, 0), "unite": "nombre", "date": jour,
                              "source": "flux RSS du jour, classement par mots-clés (Python)", "raison_percentile": "non historisé"},
                             None, raison_courbe="décompte du jour, non historisé"))
+    aujourd = aujourd or date.today()
     for nom, lib, inverse in (("brent", "Réaction du Brent", False), ("indice_or", "Réaction de l'or (proxy)", False),
                               ("FX_JPY", "Réaction USD/JPY", False), ("FX_CHF", "Réaction du CHF (force)", True)):
-        pts = _points(historiques, nom)
+        pts, source = points_frais(historiques, nom, h5, technique)
         if inverse:
             pts = [[d, round(1 / v, 5)] for d, v in pts if v]
-        if len(pts) >= 2:
+        retard = (aujourd - date.fromisoformat(str(pts[-1][0])[:10])).days if pts else None
+        if len(pts) >= 2 and retard is not None and retard <= RETARD_MAX_JOURS:
             var = round((pts[-1][1] / pts[-2][1] - 1) * 100, 2)
-            cel = _stats(pts, "niveau", ((historiques.get("series") or {}).get(nom) or {}).get("source", "FRED"))
+            cel = _stats(pts, "niveau", source)
             cel["variation"] = {"valeur": var, "unite": "%", "periode": "dernière séance",
                                 "texte": f"{_signe(var)} % sur la dernière séance ({pts[-2][0]} → {pts[-1][0]})"}
+        elif len(pts) >= 2:
+            d = str(pts[-1][0])[:10]
+            cel = {"valeur": None, "raison": f"série en retard depuis le {d[8:10]}/{d[5:7]} ({retard} jours, {source}) : la réaction de séance n'est pas récente"}
         else:
             cel = {"valeur": None, "raison": "série indisponible"}
         tuiles.append(tuile(f"reaction_{nom.lower()}", lib, cel, _fenetre(pts, 30)))

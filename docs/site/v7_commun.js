@@ -132,7 +132,9 @@ export function rethemer() {
   for (const g of [...graphiques]) {
     if (g.mort || !g.boite.isConnected) { graphiques.delete(g); continue; }
     try {
-      g.c.applyOptions(optionsTheme());
+      const o = optionsTheme();
+      if (g.sansLogo) o.layout = { ...o.layout, attributionLogo: false };   // lot V13 : graphiques du documentaire, attribution en légende
+      g.c.applyOptions(o);
       for (const [ser, v, aire] of g.objets) {
         const col = css(v);
         ser.applyOptions(aire ? { lineColor: col, topColor: col + "44", bottomColor: col + "00" } : { color: col });

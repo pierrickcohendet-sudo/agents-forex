@@ -155,3 +155,19 @@ horizontal. Comparer côte à côte avec `docs/design/reference/` et lister les 
   Styles `v12.css` préfixés `.m12` ; les règles globales `.mx` de v7.css y sont neutralisées.
 - Adresses : `#engrenages/g=2`, `#engrenages/g=2/devises` (app.js garde désormais tout le chemin après l'onglet),
   `#engrenages/USD-2`.
+
+## Lot V13 — documentaire hebdomadaire selon `maquette_v13_engrenages_documentaire.html`
+
+- L'onglet « 8 engrenages » s'ouvre sur le documentaire de la semaine (`documentaire.js`) ; la vue V12 est sous le bouton
+  « Vue tableau » (`engrenages_tableau.js`). L'adresse décide de la vue (aucune préférence mémorisée) : `#engrenages`,
+  `#engrenages/c3` (chapitre), `#engrenages/tableau`, `#engrenages/s=2026-S47` (semaine archivée, sélecteur « Semaine du »
+  affiché dès qu'il y a plus d'une semaine) ; les adresses V12 (`g=2`, `USD-2`, `hebdo`…) ouvrent la vue tableau.
+- Mise en page : sommaire collant à gauche avec barre de progression (rangée qui défile en haut sous 1100 px), colonne
+  d'article d'environ 72 caractères, titres, lettrine et exergue en Newsreader, texte Instrument Sans 17 px / 1,7.
+  Styles `v13.css`, tout préfixé `.dz` (les règles globales `.tl` de v8.css y sont neutralisées).
+- Graphiques Lightweight Charts dessinés à l'approche (IntersectionObserver), sans logo (`attributionLogo: false`,
+  mention « TradingView Lightweight Charts » en légende), redessinés au changement de thème.
+- Position de lecture gardée par semaine (`fxdesk-doc-position-<semaine>`), bouton « Reprendre là où j'en étais ».
+- `html` et `body` : `overflow-x: clip` (et non `hidden`, qui désactive tout `position: sticky`). L'en-tête du site
+  n'est plus collant (114 px sur PC, 228 px sur téléphone) : ce sont les sommaires (documentaire, Synthèse) qui restent
+  visibles en haut de l'écran.

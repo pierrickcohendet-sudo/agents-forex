@@ -57,6 +57,11 @@ const adresses = [
   ["engrenages/USD-2", `!!document.querySelector('#s-engrenages.on td.c.on[data-d="USD"][data-n="2"]') && document.querySelector("#s-engrenages.on #mxSide")?.textContent.includes("USD")`],
   ["engrenages/JPY-2", `!!document.querySelector('#s-engrenages.on td.c.on[data-d="JPY"][data-n="2"]') && document.querySelector("#s-engrenages.on #mxSide")?.textContent.includes("160")`],
   ["engrenages/hebdo", `!!document.querySelector("#s-engrenages.on details.detaille[open]")`],
+  // Lot V13 : documentaire par défaut, chapitre, vue tableau, semaine archivée (les adresses V12 ci-dessus ouvrent la vue tableau)
+  ["engrenages", `!document.querySelector("#s-engrenages.on #dzDoc").hidden && document.querySelectorAll("#s-engrenages.on #dzDoc .chap").length >= 9`],
+  ["engrenages/c3", `document.querySelector("#s-engrenages.on .toc a.on")?.textContent.includes("Chiffres") && Math.abs(document.querySelector("#s-engrenages.on #c3").getBoundingClientRect().top) < 140`],
+  ["engrenages/tableau", `document.querySelector("#s-engrenages.on #dzDoc").hidden && !document.querySelector("#s-engrenages.on #dzTab").hidden && !!document.querySelector("#s-engrenages.on #mlist")`],
+  ["engrenages/s=2026-S47", `!document.querySelector("#s-engrenages.on #dzDoc").hidden && /16 au 20 novembre 2026/.test(document.querySelector("#s-engrenages.on #dzDoc").textContent)`],
 ];
 
 if (filtre) adresses.splice(0, adresses.length, ...adresses.filter(([a]) => a.includes(filtre)));

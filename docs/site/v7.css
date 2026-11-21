@@ -7,7 +7,8 @@ button{font:inherit;color:inherit}
 .wrap{max-width:1320px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 
 /* En-tête */
-header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid var(--line)}
+/* En-tête non collant (lot V13) : 114 px sur PC, 228 px sur téléphone ; ce sont les sommaires qui restent visibles. */
+header.top{position:relative;z-index:20;background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid var(--line)}
 .top-row{display:flex;align-items:center;gap:20px;padding-block:12px;flex-wrap:wrap}
 .brand{display:flex;flex-direction:column;line-height:1.1;margin-right:auto}
 .brand b{font-family:var(--f-display);font-weight:600;font-size:23px;letter-spacing:-.01em}
@@ -339,8 +340,8 @@ footer{padding-block:24px 40px;border-top:1px solid var(--line);color:var(--mute
   --rayon:10px; --serif:var(--f-display); --sans:var(--f-body); --mono:var(--f-body);
   --chaleur-pos:var(--up); --chaleur-neg:var(--down);
 }
-html{overflow-x:hidden}
-body{margin:0;overflow-x:hidden}
+html{overflow-x:hidden;overflow-x:clip}
+body{margin:0;overflow-x:hidden;overflow-x:clip}
 h1,h2{font-family:var(--f-display);font-weight:500}
 h3{font-family:var(--f-body);font-weight:600}
 main.wrap{display:block;max-width:1320px;margin:0 auto;padding-top:28px;padding-bottom:64px;grid-template-columns:none}

@@ -142,7 +142,7 @@ synthese_v9:
     actif: true
     fournisseur: groq
     modele: openai/gpt-oss-120b     # offre gratuite Groq (console.groq.com/docs/models) ; secret GitHub GROQ_API_KEY
-    quota_jour: 16                  # appels par jour UTC (data/cache/quota_secours_texte.json), séparés du quota Gemini (V9.4 : 5 à 6 groupes par run)
+    quota_jour: 30                  # appels par jour UTC (lot V13 : + 8 récits du documentaire et 1 introduction groupée des moteurs) (data/cache/quota_secours_texte.json), séparés du quota Gemini (V9.4 : 5 à 6 groupes par run)
     pause_entre_appels_s: 45        # 8 000 jetons par minute en offre gratuite : un appel par fenêtre
     budget_tokens_message: 4500
     budget_tokens_total_max: 6000

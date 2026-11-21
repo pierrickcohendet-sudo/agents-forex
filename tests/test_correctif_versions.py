@@ -49,8 +49,8 @@ def test_erreur_d_affichage_et_adresses_de_detail():
     assert "carteErreur" in app and "data-recharger" in app and "unhandledrejection" in app and "s.allerA" in app
     dev = (SITE / "ecran_devises.js").read_text(encoding="utf-8")
     assert "section.allerA" in dev and "fiche-${code}" in dev
-    eng = (SITE / "ecran_engrenages.js").read_text(encoding="utf-8")
-    assert "section.allerA" in eng and '"hebdo"' in eng
+    eng = (SITE / "engrenages_tableau.js").read_text(encoding="utf-8")   # lot V13 : vue V12 sous « Vue tableau »
+    assert "allerA" in eng and '"hebdo"' in eng and "section.allerA" in (SITE / "ecran_engrenages.js").read_text(encoding="utf-8")
     # plus aucun lien vers une adresse que le routeur ne sait pas ouvrir
     tout = "\n".join(f.read_text(encoding="utf-8") for f in SITE.glob("*.js"))
     assert 'href = "#outils"' not in tout and "lien: `#devises` }" not in tout

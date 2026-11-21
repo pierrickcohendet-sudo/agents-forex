@@ -440,7 +440,9 @@ def _indicateur(e: dict, cfg_tm: dict) -> str | None:
     return next((ind for motif, ind in MOTS_INDICATEURS if re.search(motif, nom, re.I)), None)
 
 
-def ecart(publie, consensus, indicateur: str | None, cfg_tm: dict, type_evt: str | None = None) -> dict | None:
+def ecart(publie, consensus, indicateur: str | None, cfg_tm: dict, type_evt: str | None = None,
+          index_hist: dict | None = None, devise: str | None = None, evenement_en: str | None = None,
+          date_pub: str | None = None) -> dict | None:
     """Réel contre consensus : sens (au-dessus / en dessous / conforme), écart dans l'unité publiée, écart en écarts
     habituels de l'indicateur (σ, échelle du registre) ; favorable à la devise selon le sens de la variable (chômage :
     inverse) ; « marqué » si |écart| ≥ 0,5 point ou ≥ 1 σ."""
@@ -452,11 +454,19 @@ def ecart(publie, consensus, indicateur: str | None, cfg_tm: dict, type_evt: str
     suffixe = (str(publie).strip()[-1] if str(publie).strip()[-1:] in "KMBT" else "")
     cfg_ind = ((cfg_tm.get("indicateurs") or {}).get(indicateur) or {}) if indicateur else {}
     echelle = cfg_ind.get("echelle_surprise_absolue") if suffixe and cfg_ind.get("echelle_surprise_absolue") else cfg_ind.get("echelle_surprise")
+    base_z, raison_z = ("registre", None) if echelle else (None, None)
     if suffixe and cfg_ind.get("echelle_surprise_absolue"):
         mult = {"K": 1e3, "M": 1e6, "B": 1e9, "T": 1e12}[suffixe]
         z = round(d * mult / float(echelle), 2)
+    elif echelle and not (suffixe and not pourcent):
+        z = round(d / float(echelle), 2)
     else:
-        z = round(d / float(echelle), 2) if echelle else None
+        # Lot V13 (D1, D2) : échelle du registre absente, ou en points de % pour un chiffre en milliers : écart habituel
+        # des écarts historiques au consensus (même publication, sinon sa famille), dans l'unité réelle
+        from core import surprises
+        zh = surprises.z_publication(publie, consensus, devise, evenement_en, index_hist or {}, date_pub) if index_hist is not None else {"z": None, "raison": "archive des publications absente"}
+        z, echelle = zh["z"], zh.get("echelle")
+        base_z, raison_z = zh.get("base"), zh.get("raison")
     inverse = cfg_ind.get("sens") == "inverse"
     sens = "conforme" if d == 0 else "au-dessus" if d > 0 else "en dessous"
     if type_evt == "Réunion BC" and pourcent:
@@ -468,7 +478,7 @@ def ecart(publie, consensus, indicateur: str | None, cfg_tm: dict, type_evt: str
     return {"sens": sens, "ecart": d, "unite": "point" if pourcent else (suffixe or "unité"), "z": z, "indicateur": indicateur,
             "favorable": None if d == 0 else ((d > 0) != inverse), "inverse": inverse,
             "marque": d != 0 and ((pourcent and abs(d) >= 0.5) or (z is not None and abs(z) >= 1)),
-            "texte": re.sub(r"-(?=\d)", "−", texte.replace(".", ",")), "echelle": echelle}
+            "texte": re.sub(r"-(?=\d)", "−", texte.replace(".", ",")), "echelle": echelle, "base_z": base_z, "raison_z": raison_z}
 
 
 NOMS_ENGRENAGES = {1: "thème", 2: "politique monétaire", 3: "données économiques", 4: "politique budgétaire",
@@ -503,10 +513,13 @@ def pourquoi(ag: "Agenda", config: dict) -> None:
         e["pourquoi"] = "Pourquoi c'est important : " + " · ".join(morceaux) + "."
 
 
-def ecarts(ag: "Agenda", cfg_tm: dict) -> None:
+def ecarts(ag: "Agenda", cfg_tm: dict, archive_surprises: dict | None = None) -> None:
+    from core import surprises
+    index = surprises.ecarts_archives(archive_surprises) if archive_surprises is not None else None
     for e in ag.lignes.values():
         if e.get("publie") and e.get("consensus"):
-            e["ecart"] = ecart(e["publie"], e["consensus"], _indicateur(e, cfg_tm), cfg_tm, e.get("type"))
+            e["ecart"] = ecart(e["publie"], e["consensus"], _indicateur(e, cfg_tm), cfg_tm, e.get("type"),
+                               index, e.get("devise"), e.get("evenement_en"), e.get("date_paris"))
 
 
 # ------------------------------------------------------------------ statut de chaque chiffre
@@ -708,7 +721,7 @@ def calculer(ff_brut: str | None, glissants: list[dict] | None, registre: dict |
              maintenant: datetime | None = None, mois: list[dict] | None = None, fred: dict | None = None,
              impact: dict | None = None, archive: dict | None = None, series: dict | None = None,
              macro: dict | None = None, verifs: dict | None = None, tresor: dict | None = None,
-             revisions: dict | None = None) -> dict:
+             revisions: dict | None = None, archive_surprises: dict | None = None) -> dict:
     maintenant = maintenant or datetime.now(timezone.utc)
     ag = Agenda(config, maintenant)
     cfg = ag.cfg
@@ -725,7 +738,7 @@ def calculer(ff_brut: str | None, glissants: list[dict] | None, registre: dict |
     badges(ag, refs)
     reactions(ag, impact, archive, series or {})
     statuts(ag, revisions)
-    ecarts(ag, (config or {}).get("tableau_macro") or {})
+    ecarts(ag, (config or {}).get("tableau_macro") or {}, archive_surprises)
     pourquoi(ag, config or {})
     for e in ag.lignes.values():
         if not e.get("consensus"):
@@ -946,7 +959,8 @@ def ecrire(racine: str | Path, registre: dict | None, config: dict, h5=None, tec
                            archive=_lire_json(racine / "data" / "archives" / "publications.json"),
                            series=_series_principales(h5, technique) if h5 is not None else {}, macro=macro,
                            verifs={"mois": (mois.get("maj") or "")[:16] or None, "semaine": semaine.get("date")},
-                           tresor=tresor, revisions=revisions)
+                           tresor=tresor, revisions=revisions,
+                           archive_surprises=_lire_json(cache / "publications_archive.json") or {})
         (docs / "agenda.json").write_text(json.dumps(donnees, ensure_ascii=False, indent=1), encoding="utf-8")
         from core import publications_archive   # lot V9 : chaque « publié » archivé dès sa sortie
         publications_archive.mettre_a_jour(donnees, racine)

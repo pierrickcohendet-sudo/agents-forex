@@ -146,7 +146,7 @@ def test_redaction_par_le_modele_controlee(racine_rejeu, d2011):
 
 
 def test_ecran_et_adresses():
-    s = (RACINE / "docs" / "site" / "ecran_engrenages.js").read_text(encoding="utf-8")
+    s = (RACINE / "docs" / "site" / "engrenages_tableau.js").read_text(encoding="utf-8")   # lot V13 : vue tableau
     for x in ("g=([1-8])(?:\\/(\\w+))?", "([A-Z]{3})-([1-8])", "Outils et historique", "Actualités et agenda", "Devises touchées"):
         assert x in s, x
     v = (RACINE / "outils" / "verifier_adresses.mjs").read_text(encoding="utf-8")

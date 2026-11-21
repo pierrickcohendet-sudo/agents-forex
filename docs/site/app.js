@@ -155,6 +155,7 @@ async function afficher() {
       if (id === "agenda" && s.choisirJour && /^jour=/.test(parametre)) s.choisirJour(parametre.slice(5));
       if (s.allerA) defile = !!(await s.allerA(parametre));   // devises/EUR, engrenages/g=3, engrenages/hebdo
     } else if (parametre && s.cible) defile = true;           // première construction : l'écran a déjà défilé vers sa cible
+    else if (!parametre && s.dataset.construit === "1" && s.vueParDefaut) await s.vueParDefaut();   // #engrenages : le documentaire
   } catch (e) { console.error(e); erreurGlobale(e); }
   s.dataset.construit = "1";
   if (!defile) window.scrollTo(0, 0);

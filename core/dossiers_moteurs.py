@@ -113,11 +113,18 @@ def classer_titre(titre: str, resume: str = "") -> list[int]:
     return [n for _, n in sorted(scores)[:2]]
 
 
+# Titres sans portée de marché (concours, prix, journées portes ouvertes, offres d'emploi, nominations de personnel)
+SANS_PORTEE = re.compile(r"challenge winners|announces? (the )?winners|\bawards?\b|prize|competition|open day|job (opening|vacanc)|"
+                         r"career|internship|scholarship|recrutement|concours|webinar|podcast|museum|exhibition", re.I)
+
+
 def titres_classes(articles: list[dict], jour: str) -> list[dict]:
     """Titres du jour (ou de la veille au soir), sans doublon, classés sur 1 à 2 moteurs."""
     vus, sortie = set(), []
     for a in articles or []:
         titre = str(a.get("titre") or "").strip()
+        if SANS_PORTEE.search(titre):
+            continue
         cle = re.sub(r"\W+", " ", _sans_accent(titre)).strip()
         if not titre or cle in vus:
             continue

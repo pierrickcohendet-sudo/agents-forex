@@ -147,7 +147,7 @@ def engrenage_2(historiques: dict, registre: dict, config: dict) -> dict:
         effectif = {"USD": ("USD_taux_effectif", "FRED (DFF, taux effectif)",
                             f"fourchette cible : borne haute {actuel.get('valeur')} (ForexFactory)"),
                     "JPY": ("JPY_taux_effectif", "Banque du Japon (call rate non garanti au jour le jour)",
-                            f"objectif publié « {actuel.get('valeur')} » (ForexFactory) : une borne, pas un taux"),
+                            f"cible publiée « {actuel.get('valeur')} » (ForexFactory) : une borne, pas un taux"),
                     "EUR": ("EUR_taux_depot", "FRED (ECBDFR, taux de la facilité de dépôt de la BCE)",
                             f"ForexFactory publie le taux de refinancement principal ({actuel.get('valeur')}), "
                             "15 pb au-dessus du taux de dépôt qui pilote le marché")}
@@ -881,7 +881,7 @@ def construire(historiques: dict, registre: dict, technique: dict, config: dict,
     # Palier 3 : dossiers 1, 4, 6, 7 et 8 (tuiles, graphiques et tableaux manquants)
     complements_par = {"1": lambda e: complements.complements_1(e, rapport, historiques, dossier_rapports, sortie["engrenages"]),
                        "4": lambda e: complements.complements_4(e, historiques),
-                       "6": lambda e: complements.complements_6(e, historiques),
+                       "6": lambda e: complements.complements_6(e, historiques, h5, technique),
                        "7": lambda e: complements.complements_7(e, technique, flux, h5),
                        "8": lambda e: complements.complements_8(e, historiques, registre)}
     for numero, fabrique in complements_par.items():

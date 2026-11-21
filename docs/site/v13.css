@@ -1,0 +1,134 @@
+/* Lot V13 — onglet « 8 engrenages » en documentaire hebdomadaire (maquette_v13_engrenages_documentaire.html).
+   Sommaire collant à gauche (rangée qui défile sur téléphone), article en colonne de lecture d'environ 72 caractères.
+   Newsreader pour les titres, la lettrine et l'exergue ; Instrument Sans pour le texte (17 px, interligne 1,7). Préfixe .dz. */
+.dz [hidden]{display:none!important}
+.dz .pos{color:var(--up)} .dz .neg{color:var(--down)}
+.dz-bascule{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.dz-bascule .seg button{font-size:13px}
+.dz-sem{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.dz-sem select{height:34px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-size:13px;padding:0 10px}
+.dz .doc{display:grid;grid-template-columns:230px minmax(0,1fr);gap:44px;align-items:start}
+.dz .toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 20px);display:flex;flex-direction:column;gap:2px;font-size:13px}
+.dz .toc a{display:grid;grid-template-columns:24px minmax(0,1fr);gap:6px;padding:7px 8px;border-radius:8px;color:var(--muted);text-decoration:none;font-weight:600;line-height:1.3}
+.dz .toc a .n{font-family:var(--f-display);font-weight:500}
+.dz .toc a:hover{color:var(--ink);background:var(--surface)}
+.dz .toc a.on{color:var(--ink);background:var(--surface);box-shadow:var(--shadow)}
+.dz .toc .st{display:block;font-size:11px;font-weight:600;margin-top:2px}
+.dz .toc .bar{height:3px;border-radius:2px;background:var(--line);margin:10px 8px 0;overflow:hidden}
+.dz .toc .bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .2s linear}
+.dz article.d{display:flex;flex-direction:column;gap:72px;min-width:0}
+.dz .hero{display:flex;flex-direction:column;gap:16px;padding-bottom:8px}
+.dz .hero h1{font-family:var(--f-display);font-weight:500;font-size:clamp(40px,5.4vw,70px);line-height:.98;letter-spacing:-.025em;max-width:16ch;margin:0}
+.dz .hero .dek{font-family:var(--f-display);font-size:22px;line-height:1.45;color:var(--ink-2);max-width:60ch;margin:0}
+.dz .meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.dz .reprendre{align-self:flex-start}
+.dz .chap{display:flex;flex-direction:column;gap:28px;scroll-margin-top:24px;min-width:0}
+.dz .chap-h{display:grid;grid-template-columns:auto minmax(0,1fr);gap:22px;align-items:end;border-top:2px solid var(--ink);padding-top:18px}
+.dz .chap-h .num{font-family:var(--f-display);font-size:96px;line-height:.8;font-weight:500;color:var(--accent)}
+.dz .chap-h h2{font-family:var(--f-display);font-size:clamp(30px,3.6vw,46px);font-weight:500;letter-spacing:-.02em;line-height:1.02;margin:0}
+.dz .chap-h p{margin:6px 0 0;color:var(--muted);font-size:15px}
+.dz .badges{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.dz .pill{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:999px;font-size:12.5px;font-weight:700;white-space:nowrap}
+.dz .pill.p{background:var(--up-soft);color:var(--up)} .dz .pill.c{background:var(--down-soft);color:var(--down)} .dz .pill.n{background:var(--surface-2);color:var(--muted)}
+.dz .pill.w{background:var(--warn-soft);color:var(--warn)} .dz .pill.a{background:var(--accent-soft);color:var(--accent)}
+.dz .stars{color:var(--warn);letter-spacing:2px;font-size:15px}
+.dz .sub{display:flex;flex-direction:column;gap:14px;min-width:0}
+.dz .sub>h3{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700;display:flex;gap:10px;align-items:center;margin:0}
+.dz .sub>h3::after{content:"";flex:1;height:1px;background:var(--line)}
+.dz .prose{font-size:17px;line-height:1.7;color:var(--ink-2);max-width:72ch;display:flex;flex-direction:column;gap:14px}
+.dz .prose p{margin:0}
+.dz .prose b{color:var(--ink);font-weight:600}
+.dz .prose .drop::first-letter{font-family:var(--f-display);float:left;font-size:58px;line-height:.9;padding:6px 10px 0 0;color:var(--ink)}
+.dz .pull{font-family:var(--f-display);font-style:italic;font-size:24px;line-height:1.4;color:var(--ink);border-left:3px solid var(--accent);padding:4px 0 4px 20px;margin:4px 0;max-width:60ch}
+.dz .par{font-size:12px;color:var(--muted)}
+.dz .learn{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.dz .learn>div{padding:18px;border-radius:14px;background:var(--surface);border:1px solid var(--line);display:flex;flex-direction:column;gap:8px;font-size:14.5px;line-height:1.55;color:var(--ink-2);min-width:0}
+.dz .learn b.t{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.dz .learn ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:5px}
+.dz .chain{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.dz .chain span{padding:8px 12px;border-radius:10px;background:var(--surface-2);font-size:13.5px;font-weight:600;color:var(--ink)}
+.dz .chain span.end{background:var(--accent-soft);color:var(--accent)}
+.dz .chain i{font-style:normal;color:var(--muted)}
+.dz .conf{display:flex;flex-direction:column}
+.dz .conf div{display:grid;grid-template-columns:minmax(0,1fr) 60px minmax(0,1.3fr);gap:12px;padding:10px 0;border-top:1px solid var(--line);font-size:14px;align-items:center}
+.dz .conf div:first-child{border-top:0}
+.dz .conf em{font-style:normal;text-align:center;font-weight:700;font-size:16px}
+.dz .note{font-size:12.5px;color:var(--muted);padding:10px 14px;border-radius:10px;background:var(--surface-2)}
+.dz .charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.dz .fig{padding:16px 16px 12px;display:flex;flex-direction:column;gap:6px;margin:0;min-width:0}
+.dz .fig h4{font-size:14px;font-weight:600;margin:0}
+.dz .fig .v{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.dz .fig .v b{font-size:26px;font-weight:600;font-variant-numeric:tabular-nums}
+.dz .fig .ch{height:200px}
+.dz .fig figcaption{font-size:12.5px;color:var(--muted);line-height:1.45}
+.dz .fig figcaption a{color:inherit}
+.dz .ind{display:flex;flex-direction:column}
+.dz .ind>div{display:grid;grid-template-columns:minmax(0,1.1fr) 120px 120px minmax(0,1.6fr);gap:14px;padding:14px 0;border-top:1px solid var(--line);align-items:start;font-size:14px}
+.dz .ind>div:first-child{border-top:0}
+.dz .ind .nm b{display:block;font-size:14.5px}
+.dz .ind .nm small{color:var(--muted);font-size:12px}
+.dz .ind .val b{font-size:19px;font-weight:600;font-variant-numeric:tabular-nums}
+.dz .ind .val small{display:block;font-size:12px;color:var(--muted)}
+.dz .ind svg{width:120px;height:34px}
+.dz .ind .exp{color:var(--ink-2);line-height:1.5;font-size:13.5px}
+.dz .pc{position:relative;height:4px;border-radius:2px;background:var(--line);margin-top:8px;width:100px}
+.dz .pc i{position:absolute;top:-3px;width:10px;height:10px;border-radius:50%;margin-left:-5px;background:var(--accent);border:2px solid var(--bg)}
+.dz .tl{display:flex;flex-direction:column;height:auto;position:static;margin:0}   /* .tl de v8.css (frise du Briefing) neutralisée */
+.dz .tl .it{display:grid;grid-template-columns:96px 46px minmax(0,1fr) auto;gap:12px;padding:11px 0;border-top:1px solid var(--line);align-items:start;font-size:14px}
+.dz .tl .it:first-child{border-top:0}
+.dz .tl .w{font-size:12.5px;color:var(--muted);font-weight:600}
+.dz .cur{display:inline-grid;place-items:center;min-width:40px;height:24px;padding:0 6px;border-radius:6px;font-size:12px;font-weight:700;background:var(--surface-2);border:1px solid var(--line)}
+.dz .tl a{color:var(--ink);text-decoration:none}.dz .tl a:hover{color:var(--accent)}
+.dz .tl p{margin:3px 0 0;font-size:13px;color:var(--ink-2)}
+.dz .sb{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.dz .sr{display:grid;grid-template-columns:44px minmax(0,1fr) 52px 60px;gap:10px;align-items:center}
+.dz .tr{position:relative;height:14px;background:var(--surface-2);border-radius:4px}
+.dz .tr::after{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--line-2)}
+.dz .tr i{position:absolute;top:0;bottom:0;border-radius:4px}.dz .tr i.up{background:var(--up)}.dz .tr i.dn{background:var(--down)}
+.dz .dv{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.dz .dc{padding:16px 18px;border-radius:14px;border:1px solid var(--line);background:var(--surface);display:flex;flex-direction:column;gap:8px;border-top:4px solid var(--line-2);font-size:13.5px;color:var(--ink-2);line-height:1.5;min-width:0}
+.dz .dc.p{border-top-color:var(--up)} .dz .dc.c{border-top-color:var(--down)}
+.dz .dc .top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.dz .dc .top b{font-family:var(--f-display);font-size:26px;font-weight:500;color:var(--ink)}
+.dz .dc .k{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.dz .dc .chg{font-size:12.5px;padding:6px 9px;border-radius:8px;background:var(--surface-2)}
+.dz .dc .chg.oui{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.dz .risk{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.dz .risk>div{padding:16px 18px;border-radius:14px;display:flex;flex-direction:column;gap:6px;font-size:14px;line-height:1.5;color:var(--ink-2);min-width:0}
+.dz .risk b{color:var(--ink)}
+.dz .risk .si{grid-column:1 / -1;background:var(--accent-soft);border:0}
+.dz .box{padding:22px 24px;border-radius:16px;background:var(--ink);color:var(--surface);display:flex;flex-direction:column;gap:12px}
+.dz .box .eyebrow{color:color-mix(in srgb,var(--surface) 60%,transparent)}
+.dz .box p{margin:0;font-size:16px;line-height:1.6;opacity:.92}
+.dz .box .tj{display:flex;flex-direction:column;gap:4px;font-size:14px;opacity:.9}
+.dz .week5{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.dz .week5 a{padding:14px;border-radius:12px;border:1px solid var(--line);background:var(--surface);text-decoration:none;color:var(--ink);display:flex;flex-direction:column;gap:6px;font-size:13px;min-width:0}
+.dz .week5 a:hover{border-color:var(--line-2)}
+.dz .week5 a b{font-size:14px}
+.dz .next{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.dz .next .day{border-radius:12px;border:1px solid var(--line);background:var(--surface);overflow:hidden;min-width:0}
+.dz .next .day header{padding:9px 12px;border-bottom:1px solid var(--line);font-weight:700;font-size:13px}
+.dz .next .day .fe{padding:6px 12px;font-size:11.5px;color:var(--warn);background:var(--warn-soft);font-weight:600}
+.dz .next .day div.e{padding:8px 12px;border-top:1px solid var(--line);font-size:12.5px;display:flex;flex-direction:column;gap:2px}
+.dz .next .day div.e:first-of-type{border-top:0}
+.dz .next .day div.e.f{box-shadow:inset 3px 0 0 var(--down)}
+.dz .erreur{padding:14px 16px;border-radius:12px;background:var(--warn-soft);color:var(--ink-2);font-size:14px}
+@media (max-width:1100px){
+  .dz .doc{grid-template-columns:minmax(0,1fr);gap:16px}
+  .dz .toc{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;flex-direction:row;overflow-x:auto;scrollbar-width:none;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(10px);padding:8px 0}
+  .dz .toc a{white-space:nowrap;grid-template-columns:auto auto}
+  .dz .toc .st,.dz .toc .bar{display:none}
+  .dz .chap{scroll-margin-top:64px}
+  .dz .week5{grid-template-columns:repeat(2,minmax(0,1fr))}.dz .next{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:760px){
+  .dz .learn,.dz .charts,.dz .risk{grid-template-columns:minmax(0,1fr)}
+  .dz .ind>div{grid-template-columns:minmax(0,1fr) 110px}.dz .ind svg,.dz .ind .exp{grid-column:1 / -1}
+  .dz .chap-h .num{font-size:64px}.dz .prose{font-size:16px}
+  .dz .tl .it{grid-template-columns:72px 44px minmax(0,1fr)}.dz .tl .it>:last-child{grid-column:3}
+  .dz .conf div{grid-template-columns:minmax(0,1fr) 40px}.dz .conf div span:last-child{grid-column:1 / -1;color:var(--muted)}
+  .dz .week5,.dz .next{grid-template-columns:minmax(0,1fr)}
+  .dz .hero .dek{font-size:19px}.dz .pull{font-size:20px}
+  .dz .sr{grid-template-columns:40px minmax(0,1fr) 46px}.dz .sr .small{display:none}
+}
+@media (prefers-reduced-motion:reduce){.dz .toc .bar i{transition:none}}
