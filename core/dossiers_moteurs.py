@@ -24,6 +24,7 @@ from pathlib import Path
 
 from core import noms_moteurs as nm
 from core import seuils as seuils_mod
+from core.actualites import SOURCES as SOURCES_MEDIAS
 
 log = logging.getLogger(__name__)
 
@@ -79,7 +80,7 @@ MOTS_CLES: dict[int, list[str]] = {
         r"technical", r"technique", r"overbought", r"oversold", r"surachat", r"survente", r"moving average", r"moyenne mobile",
         r"breakout", r"cassure", r"resistance", r"support level", r"\brsi\b", r"momentum", r"trend"],
     8: [r"\boil\b", r"crude", r"\bbrent\b", r"\bwti\b", r"petrole", r"\bbrut\b", r"opec", r"\bopep\b", r"\beia\b", r"inventor(y|ies)",
-        r"stocks de brut", r"tariffs?", r"droits de douane", r"trade (balance|deficit|surplus|war|deal|talks)", r"balance commerciale",
+        r"stocks de brut", r"tariffs?", r"droits de douane", r"trade (balance|deficit|surplus|war|deals?|talks|agreements?)", r"free trade", r"accord commercial", r"balance commerciale",
         r"exports?", r"imports?", r"exportations?", r"importations?", r"shipping", r"supply chain", r"\blng\b", r"natural gas", r"\bgaz\b",
         r"chips? (sales|exports)", r"semiconductor exports"],
 }
@@ -122,9 +123,13 @@ def titres_classes(articles: list[dict], jour: str) -> list[dict]:
             continue
         vus.add(cle)
         moteurs = classer_titre(titre, a.get("resume") or "")
+        mf = a.get("moteur_flux")
+        if mf in MOTS_CLES and a.get("classement") == "flux":   # flux spécialisé : son moteur d'abord, les mots-clés peuvent en ajouter un second
+            moteurs = [int(mf)] + [n for n in moteurs if n != int(mf)][:1]
         if not moteurs:
             continue
-        sortie.append({"titre": titre, "lien": a.get("lien"), "source": a.get("source_nom") or a.get("source"), "date": a.get("date"),
+        sortie.append({"titre": titre, "lien": a.get("lien"), "source": a.get("source_nom") or SOURCES_MEDIAS.get(a.get("source"), a.get("source")), "date": a.get("date"),
+                       "officiel": bool(a.get("officiel")), "licence": a.get("licence"),
                        "moteurs": moteurs, "pourquoi": {str(n): POURQUOI_TITRE[n] for n in moteurs}})
     return sortie
 

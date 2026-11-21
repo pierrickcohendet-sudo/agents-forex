@@ -68,7 +68,7 @@ def du_jour(arts: list[dict], maximum: int = 8, par_theme: int = 2) -> list[dict
     for c, lib, _ in THEMES:
         for a in choisis[c]:
             sortie.append({"theme": c, "theme_libelle": lib, "titre": a["titre"], "lien": a.get("lien"), "date": a.get("date"),
-                           "source": SOURCES.get(a.get("source"), a.get("source"))})
+                           "source": a.get("source_nom") or SOURCES.get(a.get("source"), a.get("source"))})
     return sortie[:maximum]
 
 
@@ -94,7 +94,7 @@ def extraire_proba(article: dict) -> dict | None:
                 continue
             return {"valeur": v, "sens": sens, "citation": phrase.strip()[:280], "champ": champ, "titre": article.get("titre"),
                     "lien": article.get("lien"), "date": (article.get("date") or "")[:10], "heure_utc": (article.get("date") or "")[11:16],
-                    "source": SOURCES.get(article.get("source"), article.get("source"))}
+                    "source": article.get("source_nom") or SOURCES.get(article.get("source"), article.get("source"))}
     return None
 
 
@@ -122,7 +122,7 @@ def declarations(arts: list[dict], maximum: int = 6) -> list[dict]:
         st = fomc_2026.statut(nom, dev) if dev == "USD" else {}
         sortie.append({"personne": st.get("nom") or nom, "devise": dev, "fonction": st.get("role") or f"membre de {lib}",
                        "statut": st.get("libelle"), "citation": t[:180], "lien": a.get("lien"), "date": (a.get("date") or "")[:10],
-                       "source": SOURCES.get(a.get("source"), a.get("source")),
+                       "source": a.get("source_nom") or SOURCES.get(a.get("source"), a.get("source")),
                        "avertissement": "opinion personnelle, pas une décision du comité"})
         if len(sortie) >= maximum:
             break

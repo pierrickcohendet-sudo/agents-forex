@@ -1044,6 +1044,37 @@ rss:
   boe_actualites:  "https://www.bankofengland.co.uk/rss/news"
   boc_communiques: "https://www.bankofcanada.ca/content_type/press-releases/feed/"
 
+# Flux officiels supplémentaires (21/11/2026), classés par moteur pour l'onglet « 8 engrenages » (core/dossiers_moteurs.py).
+# Chaque flux a été testé (réponse 200, flux lisible) et sa licence vérifiée : seuls les titres, liens et résumés du flux
+# sont repris, toujours avec leur source et leur lien. « classement: flux » : flux spécialisé, ses titres vont d'abord sur son moteur ;
+# sinon (flux généralistes : Commission, Conseil, ONU, Foreign Office) un titre n'est retenu que si les mots-clés le classent.
+# Un flux en échec est ignoré sans casser le run (jamais de
+# contournement d'un 403). Écartés le 21/11 : FMI, département d'État, OPEP (403 au robot), Trésor américain (pas de flux,
+# abonnement par courriel seulement ; ses adjudications passent par TreasuryDirect), USTR (flux arrêté en 2009).
+rss_officiels:
+  bns_actualites:   { url: "https://www.snb.ch/public/en/rss/news", nom: "Banque nationale suisse", moteur: 2,
+                      classement: flux, licence: "usage non commercial autorisé avec la source (snb.ch, Disclaimer & copyright)" }
+  boj_nouveautes:   { url: "https://www.boj.or.jp/en/rss/whatsnew.xml", nom: "Banque du Japon", moteur: 2,
+                      classement: flux, licence: "reproduction non commerciale autorisée avec la source (boj.or.jp, Copyright)" }
+  tresor_adjudications: { url: "https://www.treasurydirect.gov/TA_WS/securities/announced/rss", nom: "Trésor américain (TreasuryDirect)", moteur: 4,
+                      accept: "application/rss+xml", classement: flux, licence: "domaine public (publication du gouvernement américain)" }
+  commission_ue:    { url: "https://ec.europa.eu/commission/presscorner/api/rss?language=en", nom: "Commission européenne", moteur: 4,
+                      licence: "réutilisation autorisée avec la source (décision 2011/833/UE)" }
+  hm_treasury:      { url: "https://www.gov.uk/government/organisations/hm-treasury.atom", nom: "HM Treasury (GOV.UK)", moteur: 4,
+                      classement: flux, licence: "Open Government Licence v3.0" }
+  mof_japon:        { url: "https://www.mof.go.jp/english/news.rss", nom: "Ministère des Finances du Japon", moteur: 4,
+                      classement: flux, licence: "Public Data License 1.0 (compatible CC BY 4.0), source citée" }
+  onu_paix:         { url: "https://news.un.org/feed/subscribe/en/news/topic/peace-and-security/feed/rss.xml", nom: "ONU Info (paix et sécurité)", moteur: 6,
+                      licence: "réutilisation avec attribution à UN News et lien vers l'article" }
+  onu_economie:     { url: "https://news.un.org/feed/subscribe/en/news/topic/economic-development/feed/rss.xml", nom: "ONU Info (développement économique)", moteur: 3,
+                      licence: "réutilisation avec attribution à UN News et lien vers l'article" }
+  fcdo:             { url: "https://www.gov.uk/government/organisations/foreign-commonwealth-development-office.atom", nom: "Foreign Office (GOV.UK)", moteur: 6,
+                      licence: "Open Government Licence v3.0" }
+  conseil_ue:       { url: "https://www.consilium.europa.eu/en/rss/pressreleases.ashx", nom: "Conseil de l'UE", moteur: 6,
+                      licence: "reproduction autorisée avec la source (consilium.europa.eu, Copyright)" }
+  eia_energie:      { url: "https://www.eia.gov/rss/todayinenergy.xml", nom: "EIA (Today in Energy)", moteur: 8,
+                      classement: flux, licence: "domaine public (publication du gouvernement américain)" }
+
 # --- Registre des sources (lot V5, page « Santé ») ----------------------------------------------
 # statut : officielle | api (API sous licence gratuite) | flux (flux public) | extraction (extraction de page)
 # frequence : quotidienne (jours ouvrés) | hebdomadaire | mensuelle | trimestrielle | annuelle | collecte (date de la collecte)
@@ -1084,6 +1115,9 @@ sources:
       alimente: "Textes : jamais un chiffre, une direction ni un seuil", mesure: { quota: true }, motifs: ["modèle", "Gemini"] }
   - { id: rss, nom: "Flux RSS (CNBC, InvestingLive, communiqués Fed / BCE / BoE / BoC)", statut: flux, frequence: collecte, retard_jours: 0,
       alimente: "Titres du jour (engrenage 6), communiqués officiels", mesure: { news: true }, motifs: ["RSS", "flux RSS"] }
+  - { id: rss_officiels, nom: "Flux officiels (BNS, BoJ, TreasuryDirect, Commission et Conseil de l'UE, HM Treasury, MoF Japon, ONU Info, Foreign Office, EIA)",
+      statut: flux, frequence: collecte, retard_jours: 0,
+      alimente: "Actualités reliées des dossiers des 8 moteurs (onglet « 8 engrenages »)", mesure: { news: true }, motifs: ["rss_officiels"] }
   - { id: ff_flux, nom: "ForexFactory · flux public JSON de la semaine", statut: flux, frequence: collecte, retard_jours: 0,
       alimente: "Agenda : consensus et heures de la semaine en cours", mesure: { cache_scrape: forexfactory }, motifs: ["flux public JSON"] }
   - { id: officielles, nom: "Instituts officiels : ONS, Statistique Canada, Eurostat", statut: officielle, frequence: mensuelle, retard_jours: 30,
