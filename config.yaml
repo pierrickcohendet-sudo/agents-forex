@@ -36,6 +36,9 @@ llm:
   # faite aujourd'hui : aucune autre section ne les consomme. Le run du matin (complet) s'arrête à `plafond_matin`,
   # le reste du quota gratuit sert aux compléments horaires. Une même analyse : 2 appels au plus par run, puis
   # repli Python ; une analyse déjà en échec pendant 2 runs dans la journée n'est plus rejouée.
+  # Remise à zéro du quota gratuit Gemini (minuit heure du Pacifique) + marge : les introductions des 8 moteurs encore
+  # en rédaction Python sont retentées au premier passage après cette heure (UTC), week-end compris (cron « --moteurs »).
+  remise_a_zero_quota_utc: "08:15"
   budget:
     plafond_matin: 45
     # Lot V7 (V6.1-bis) : plafond de RÉPONSES REÇUES par run, matin comme complément. Le « 60 » affiché pour un complément

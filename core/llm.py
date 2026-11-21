@@ -859,6 +859,16 @@ class FournisseurGroq(_FournisseurAvecCadence):
             timeout=180,
         )
 
+    def _poster_avec_429(self, corps: dict) -> requests.Response:
+        rep = self._poster(corps)
+        if rep.status_code == 429:
+            attente = self._delai_apres_429(rep)
+            log.warning("Groq 429 (limite de requêtes/minute) : attente de %.0f s "
+                        "avant un unique nouvel essai", attente)
+            time.sleep(attente)
+            rep = self._poster(corps)
+        return rep
+
     def appeler_llm(self, prompt: str, systeme: str | None = None) -> str:
         systeme_reduit = (_reduire_systeme(systeme, _budget_car(self.budget_tokens_systeme),
                                            self.connaissances_prioritaires)
@@ -883,16 +893,21 @@ class FournisseurGroq(_FournisseurAvecCadence):
             "model": self.modele,
             "messages": messages,
             "temperature": self.temperature,
-            "response_format": {"type": "json_object"},
         }
-        rep = self._poster(corps)
-        if rep.status_code == 429:
-            attente = self._delai_apres_429(rep)
-            log.warning("Groq 429 (limite de requêtes/minute) : attente de %.0f s "
-                        "avant un unique nouvel essai", attente)
-            time.sleep(attente)
-            rep = self._poster(corps)
-        rep.raise_for_status()
+        # Incident du 18 au 21/11/2026 : avec le mode JSON strict de Groq, openai/gpt-oss-* (modèle à raisonnement) échoue
+        # souvent en 400 « json_validate_failed » (génération vide). Pour ces modèles : pas de mode strict, raisonnement
+        # court ; le JSON est extrait de la réponse par extraire_json chez l'appelant, comme pour Gemini.
+        if self.modele.startswith("openai/gpt-oss"):
+            corps["reasoning_effort"] = "low"
+        else:
+            corps["response_format"] = {"type": "json_object"}
+        rep = self._poster_avec_429(corps)
+        if rep.status_code == 400 and "json_validate_failed" in rep.text and "response_format" in corps:
+            log.warning("Groq 400 json_validate_failed : un nouvel essai sans le mode JSON strict")
+            corps.pop("response_format")
+            rep = self._poster_avec_429(corps)
+        if rep.status_code >= 400:   # le corps de l'erreur Groq dit pourquoi (json_validate_failed, modèle retiré…)
+            raise requests.HTTPError(f"{rep.status_code} Groq : {masquer_secrets(rep.text)[:300]}", response=rep)
         donnees = rep.json()
         try:
             return donnees["choices"][0]["message"]["content"]

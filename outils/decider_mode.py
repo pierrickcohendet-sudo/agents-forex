@@ -8,6 +8,7 @@ Déclencheurs :
 
 Règles :
 - dimanche (cron 07:15 ou créneau externe « dimanche ») : hebdo ;
+- samedi et dimanche 08:15 UTC (cron « 15 8 * * 0,6 » ou créneau externe « moteurs ») : moteurs (dossiers des 8 moteurs seuls) ;
 - sans rapport du jour (data/rapports/AAAA-MM-JJ.json, date UTC) : run complet (rattrapage) ;
 - avec rapport du jour : complément (le secours de 08:45 ne fait rien) ;
 - garde-fou anti-doublon : un déclenchement automatique (cron ou externe) arrivé moins de 20 minutes après un autre
@@ -49,6 +50,9 @@ def doublon(runs: list[dict], run_id: str | int | None, maintenant: datetime, ec
     return None
 
 
+CRON_MOTEURS = "15 8 * * 0,6"   # samedi et dimanche, après la remise à zéro du quota Gemini
+
+
 def decider(evt: str, cron: str, entrees: dict, rapport_existe: bool, runs: list[dict] | None = None,
             run_id: str | None = None, maintenant: datetime | None = None) -> tuple[str, str]:
     maintenant = maintenant or datetime.now(timezone.utc)
@@ -64,6 +68,8 @@ def decider(evt: str, cron: str, entrees: dict, rapport_existe: bool, runs: list
                             f"{d.get('createdAt') or d.get('created_at')}, moins de {ECART_MIN} min avant")
     if (evt == "schedule" and cron == "15 7 * * 0") or (externe and creneau == "dimanche") or (evt == "workflow_dispatch" and vrai("hebdo")):
         return "hebdo", "dossier hebdomadaire des engrenages"
+    if (evt == "schedule" and cron == CRON_MOTEURS) or (externe and creneau == "moteurs"):
+        return "moteurs", "week-end 08:15 UTC : dossiers des 8 moteurs après la remise à zéro du quota (si encore en Python)"
     if evt == "workflow_dispatch" and not externe:
         return ("completer", "lancement manuel : complément") if vrai("completer") else ("complet", "lancement manuel : run complet")
     if evt == "schedule" and cron == "45 8 * * 1-5" and rapport_existe:

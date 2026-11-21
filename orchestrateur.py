@@ -218,6 +218,9 @@ def main() -> int:
                          help="Dossier hebdomadaire d'économiste des 8 engrenages (dimanche) : un appel LLM par "
                               "engrenage + synthèse finale, à partir des chiffres déjà calculés ; ne refait que ce "
                               "qui manque pour la semaine en cours.")
+    parseur.add_argument("--moteurs", action="store_true",
+                         help="Régénère seulement les dossiers des 8 moteurs (introductions du jour encore en Python), "
+                              "par exemple au premier passage après la remise à zéro du quota, week-end compris.")
     arguments = parseur.parse_args()
 
     load_dotenv(RACINE / ".env")
@@ -229,6 +232,8 @@ def main() -> int:
 
     if arguments.hebdo:
         return mode_hebdo(config, donnees_dir, dossier_rapports, arguments)
+    if arguments.moteurs:
+        return mode_moteurs(config)
 
     type_rapport = type_de_rapport(arguments.type)
     log.info("=== Pipeline FX — rapport %s du %s%s ===", type_rapport, date.today().isoformat(),
@@ -713,16 +718,49 @@ def ligne_budget(b: dict) -> str:
     return ligne
 
 
-def _dossiers_moteurs(config: dict, llm) -> dict | None:
-    """Lot V12 : moteurs_dossiers.json. Sans modèle (passage horaire), les introductions du jour déjà acceptées sont reprises ;
-    le secours Groq n'est sollicité qu'au premier passage du jour où le modèle principal manque."""
-    from agents import agent_moteurs
-    secours = None
+def _secours_texte(config: dict):
     try:
-        secours = agent_synthese_v9.Secours(((config.get("synthese_v9") or {}).get("secours")) or {}, RACINE)
+        return agent_synthese_v9.Secours(((config.get("synthese_v9") or {}).get("secours")) or {}, RACINE)
     except Exception as exc:  # noqa: BLE001
-        log.warning("secours des introductions indisponible : %s", exc)
-    return agent_moteurs.executer(RACINE, config, llm, secours=secours if llm is not None else None)
+        log.warning("secours Groq indisponible : %s", exc)
+        return None
+
+
+def _fabrique_redaction(config: dict):
+    """(modèle principal avec le budget d'un passage de complément, secours Groq) : créés seulement si une tentative est due."""
+    def fabrique():
+        llm = None
+        try:
+            llm = creer_fournisseur(config)
+            if hasattr(llm, "configurer_budget") and config["llm"].get("budget"):
+                llm.configurer_budget(config["llm"]["budget"], complet=False, lundi=date.today().weekday() == 0)
+        except Exception as exc:  # noqa: BLE001 — quota épuisé, clé absente : Groq seul
+            log.warning("modèle principal non initialisé (%s) : secours Groq seul", exc)
+        return llm, _secours_texte(config)
+    return fabrique
+
+
+def _dossiers_moteurs(config: dict, llm) -> dict | None:
+    """Lot V12 : moteurs_dossiers.json. Introductions : une tentative avant la remise à zéro du quota Gemini et une après
+    (08:15 UTC, week-end compris) tant que la version du jour est en rédaction Python. Gemini hors quota ou en panne : Groq.
+    Le récapitulatif du run donne « Moteurs : N par le modèle, M par Groq, K en Python »."""
+    from agents import agent_moteurs
+    d = agent_moteurs.executer(RACINE, config, llm, secours=_secours_texte(config) if llm is not None else None,
+                               fabrique=_fabrique_redaction(config))
+    if d and (d.get("redaction") or {}).get("ligne"):
+        _ecrire_resume_run(d["redaction"]["ligne"], titre="Dossiers des 8 moteurs")
+    return d
+
+
+def mode_moteurs(config: dict) -> int:
+    """Passage « --moteurs » (cron du week-end 08:15 UTC) : régénère seulement les dossiers des 8 moteurs si la version du
+    jour est en rédaction Python, puis publie. Aucune autre collecte, aucun autre appel au modèle."""
+    log.info("=== Dossiers des 8 moteurs seuls (--moteurs) ===")
+    d = etape("dossiers des 8 moteurs (moteurs_dossiers.json)", _dossiers_moteurs, config, None, defaut=None)
+    if d and config.get("publication_web", {}).get("actif", True):
+        etape("git push (dossiers des moteurs)", publication_web.pousser_git, config["publication_web"], RACINE,
+              "dossiers des 8 moteurs : introductions")
+    return 0
 
 
 def _contexte(config: dict) -> dict:

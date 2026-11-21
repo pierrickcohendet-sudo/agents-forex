@@ -17,6 +17,7 @@ from core import noms_moteurs as nm
 
 log = logging.getLogger(__name__)
 CACHE = Path("data") / "cache" / "moteurs_intros.json"
+REMISE_A_ZERO_UTC = "08:15"   # remise à zéro du quota gratuit Gemini (minuit heure du Pacifique) + marge, comme le run complet
 ENGRENAGE_SEUL = re.compile(r"\bengrenages?\s*(n°\s*)?\d\b", re.I)
 
 
@@ -97,7 +98,37 @@ def rediger(d: dict, llm=None, secours=None) -> tuple[dict, dict]:
     return ok, journal
 
 
-def executer(racine: str | Path, config: dict, llm=None, maintenant: datetime | None = None, secours=None) -> dict | None:
+def doit_rediger(ancien: dict, jour: str, maintenant: datetime, n_intros: int, remise: str = REMISE_A_ZERO_UTC) -> tuple[bool, str]:
+    """Fonction pure : faut-il solliciter le modèle (ou Groq) pour les introductions ? Une tentative par période : avant la
+    remise à zéro du quota (00:00 -> 08:15 UTC) et après ; week-end compris. Jamais si les 8 introductions du jour existent."""
+    if n_intros >= 8:
+        return False, "8 introductions du jour déjà rédigées"
+    tentatives = [t for t in (ancien.get("tentatives") or []) if str(t).startswith(jour)] if ancien.get("date") == jour else []
+    if ancien.get("date") == jour and ancien.get("tente") == jour and not tentatives:
+        tentatives = [f"{jour}T00:00:00+00:00"]          # ancien format (lot V12) : une tentative sans heure
+    seuil = f"{jour}T{remise}:00+00:00"
+    apres = maintenant.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S+00:00") >= seuil
+    if not tentatives:
+        return True, "première tentative du jour"
+    if apres and all(t < seuil for t in tentatives):
+        return True, f"version du jour en rédaction Python : nouvelle tentative après la remise à zéro du quota ({remise} UTC)"
+    return False, "déjà tentée sur cette période (" + ("après" if apres else "avant") + f" la remise à zéro de {remise} UTC)"
+
+
+def bilan(intros: dict) -> dict:
+    """{modele, groq, python} : numéros des moteurs selon le rédacteur de leur introduction."""
+    groq = sorted(k for k, (_, par) in intros.items() if "groq" in str(par).lower() or str(par).startswith("secours"))
+    modele = sorted(k for k in intros if k not in groq)
+    return {"modele": modele, "groq": groq, "python": sorted(set(str(n) for n in range(1, 9)) - set(intros))}
+
+
+def ligne_bilan(b: dict) -> str:
+    return f"Moteurs : {len(b['modele'])} introduction{'s' if len(b['modele']) > 1 else ''} par le modèle, {len(b['groq'])} par Groq, {len(b['python'])} en Python"
+
+
+def executer(racine: str | Path, config: dict, llm=None, maintenant: datetime | None = None, secours=None,
+             fabrique=None) -> dict | None:
+    """`fabrique()` -> (llm, secours) : crée le modèle et le secours seulement si une tentative est due (passages horaires)."""
     """Calcule les dossiers, reprend les textes du jour encore valides, appelle le modèle une fois par jour si besoin, écrit le JSON."""
     racine = Path(racine)
     maintenant = maintenant or datetime.now(timezone.utc)
@@ -114,18 +145,30 @@ def executer(racine: str | Path, config: dict, llm=None, maintenant: datetime | 
         rejets = controler(textes, f)
         intros = {k: (v["texte"], v["par"]) for k, v in ancien["textes"].items() if k not in rejets}
     journal = None
-    if len(intros) < 8 and (llm is not None or secours is not None) and ancien.get("tente") != d["date"]:
+    remise = ((config.get("llm") or {}).get("remise_a_zero_quota_utc")) or REMISE_A_ZERO_UTC
+    faire, motif = doit_rediger(ancien, d["date"], maintenant, len(intros), remise)
+    if faire and llm is None and secours is None and fabrique is not None:
+        try:
+            llm, secours = fabrique()
+        except Exception as exc:  # noqa: BLE001
+            log.warning("introductions des moteurs : modèle non initialisé (%s)", exc)
+    if faire and (llm is not None or secours is not None):
+        log.info("Introductions des moteurs : %s", motif)
         nouveaux, journal = rediger(d, llm, secours)
+        journal["motif"] = motif
         intros.update({k: v for k, v in nouveaux.items() if k not in intros})
+        tentatives = ([t for t in (ancien.get("tentatives") or []) if str(t).startswith(d["date"])] if ancien.get("date") == d["date"] else [])
+        tentatives.append(maintenant.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S+00:00"))
         try:
             cache.parent.mkdir(parents=True, exist_ok=True)
-            cache.write_text(json.dumps({"date": d["date"], "tente": d["date"], "journal": journal,
+            cache.write_text(json.dumps({"date": d["date"], "tentatives": tentatives, "journal": journal,
                                          "textes": {k: {"texte": t, "par": p} for k, (t, p) in intros.items()}}, ensure_ascii=False, indent=1), encoding="utf-8")
         except OSError as exc:
             log.warning("cache des introductions non écrit : %s", exc)
     sortie = dm.ecrire(racine, None, intros, maintenant)
     if sortie is not None:
-        sortie["redaction"] = {"modele": sorted(intros), "python": sorted(set(sortie["moteurs"]) - set(intros)), "journal": journal}
+        b = bilan(intros)
+        sortie["redaction"] = {**b, "journal": journal or (ancien.get("journal") if ancien.get("date") == d["date"] else None), "ligne": ligne_bilan(b)}
         (racine / "docs" / "data" / "moteurs_dossiers.json").write_text(json.dumps(sortie, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
-        log.info("Dossiers des 8 moteurs : %d introduction(s) du modèle, %d en secours Python", len(intros), 8 - len(intros))
+        log.info("Dossiers des 8 moteurs : %s", ligne_bilan(b))
     return sortie
