@@ -1,0 +1,691 @@
+{
+ "type": "hebdo",
+ "periode": "2026-W47",
+ "genere_le": "2026-11-22T07:17:53+00:00",
+ "donnees_du": "2026-11-22T07:17:48+00:00",
+ "mention": "Corrélation n'est pas causalité ; aide à la décision, jamais un ordre d'achat ou de vente.",
+ "contexte": {
+  "chiffres_semaine": [
+   {
+    "libelle": "VIX",
+    "variation_5s": 9.74,
+    "unite": "pts",
+    "du": "2026-11-12",
+    "au": "2026-11-19",
+    "niveau": 28.44
+   },
+   {
+    "libelle": "Indice or (proxy)",
+    "variation_5s": -7.2,
+    "unite": "%",
+    "du": "2026-11-12",
+    "au": "2026-11-19",
+    "niveau": 2209.94
+   },
+   {
+    "libelle": "S&P 500",
+    "variation_5s": -5.49,
+    "unite": "%",
+    "du": "2026-11-12",
+    "au": "2026-11-19",
+    "niveau": 7175.83
+   },
+   {
+    "libelle": "Brent",
+    "variation_5s": 3.08,
+    "unite": "%",
+    "du": "2026-11-10",
+    "au": "2026-11-17",
+    "niveau": 92.94
+   },
+   {
+    "libelle": "Rendement 2 ans US",
+    "variation_5s": -25.0,
+    "unite": "pb",
+    "du": "2026-11-13",
+    "au": "2026-11-20",
+    "niveau": 4.63
+   },
+   {
+    "libelle": "Rendement 10 ans US",
+    "variation_5s": -23.0,
+    "unite": "pb",
+    "du": "2026-11-13",
+    "au": "2026-11-20",
+    "niveau": 4.92
+   },
+   {
+    "libelle": "Indice dollar large (Fed)",
+    "variation_5s": 0.94,
+    "unite": "%",
+    "du": "2026-11-05",
+    "au": "2026-11-13",
+    "niveau": 122.65
+   }
+  ],
+  "semaine_suivante": [
+   {
+    "date": "2026-11-25",
+    "devise": "AUD",
+    "evenement": "IPC M/M",
+    "type": "Chiffre",
+    "consensus": "0.4%"
+   },
+   {
+    "date": "2026-11-25",
+    "devise": "AUD",
+    "evenement": "IPC A/A",
+    "type": "Chiffre",
+    "consensus": "4.8%"
+   },
+   {
+    "date": "2026-11-25",
+    "devise": "AUD",
+    "evenement": "IPC moyenne tronquée M/M",
+    "type": "Chiffre",
+    "consensus": "0.3%"
+   },
+   {
+    "date": "2026-11-25",
+    "devise": "USD",
+    "evenement": "Indice des prix PCE sous-jacent M/M",
+    "type": "Chiffre",
+    "consensus": "0.3%"
+   },
+   {
+    "date": "2026-11-25",
+    "devise": "USD",
+    "evenement": "PIB T/T, prélim.",
+    "type": "Chiffre",
+    "consensus": "3.5%"
+   },
+   {
+    "date": "2026-11-29",
+    "devise": "CAD",
+    "evenement": "Comité de suivi OPEP+ (JMMC) : offre de pétrole",
+    "type": "Grand rendez-vous",
+    "consensus": null
+   }
+  ]
+ },
+ "synthese": {
+  "phrase_python": "Moteurs les plus actifs : VIX +11,13 pts sur 1 mois (au-dessus de +1 écart-type, ±5,15) ; Brent −24,99 % sur 1 mois (au-dessous de −1 écart-type, ±12,34) ; écart 2 ans US − taux effectif Fed −18,00 pb sur 1 mois (zone calme, ±34,75). Chiffres de la semaine : VIX +9,74 pts sur 5 séances ; Indice or (proxy) −7,20 % sur 5 séances ; S&P 500 −5,49 % sur 5 séances. Semaine suivante : AUD IPC M/M (25/11) ; AUD IPC A/A (25/11) ; AUD IPC moyenne tronquée M/M (25/11) ; USD Indice des prix PCE sous-jacent M/M (25/11) ; USD PIB T/T, prélim. (25/11).",
+  "texte": "Les moteurs les plus actifs de la période sont le Brent (−24,99 % sur 1 mois, zone basse au-delà d'un écart-type) et le VIX (+11,13 pts sur 1 mois, zone haute au-delà d'un écart-type). Sur la semaine, le VIX s'est tendu de 9,74 pts à 28,44 et l'indice or a chuté de 7,2 % à 2209,94, tandis que le rendement US 2 ans a perdu 25,0 pb à 4,63. La semaine à venir sera notamment marquée le 25 novembre par le PIB américain (consensus 3,5 %) et les IPC australiens, puis par le comité OPEP+ le 29 novembre."
+ },
+ "devises": {
+  "USD": {
+   "faits": {
+    "devise": "USD",
+    "lignes": [
+     {
+      "engrenage": 2,
+      "nom": "Monétaire",
+      "moteur": "écart 2 ans US − taux effectif Fed",
+      "variation_moteur_1m": -18.0,
+      "unite": "pb",
+      "date": "2026-11-20",
+      "sigma_moteur": 34.75,
+      "zone": "calme",
+      "lecture": "Neutre",
+      "n": 32,
+      "part_sens_attendu": 53,
+      "borne_wilson_90": 38.9,
+      "sensibilite": 0.32,
+      "mediane_si_hausse": 0.24,
+      "mediane_si_baisse": -0.02,
+      "raison": "moteur calme : −18,00 sur 1 mois, dans ±1 écart−type (±34,75)"
+     },
+     {
+      "engrenage": 4,
+      "nom": "Fiscale",
+      "moteur": "prime de terme 10 ans US",
+      "variation_moteur_1m": -5.95,
+      "unite": "pb",
+      "date": "2026-11-13",
+      "sigma_moteur": 14.79,
+      "zone": "calme",
+      "lecture": "Neutre",
+      "n": 32,
+      "part_sens_attendu": 59,
+      "borne_wilson_90": 44.9,
+      "sensibilite": 0.46,
+      "mediane_si_hausse": 0.5,
+      "mediane_si_baisse": -1.78,
+      "raison": "moteur calme : −5,95 sur 1 mois, dans ±1 écart−type (±14,79)"
+     },
+     {
+      "engrenage": 5,
+      "nom": "Marchés",
+      "moteur": "VIX",
+      "variation_moteur_1m": 11.13,
+      "unite": "pts",
+      "date": "2026-11-19",
+      "sigma_moteur": 5.15,
+      "zone": "haute",
+      "lecture": "Indice faible",
+      "n": 37,
+      "part_sens_attendu": 43,
+      "borne_wilson_90": 30.8,
+      "sensibilite": 0.35,
+      "mediane_si_hausse": -0.66,
+      "mediane_si_baisse": -0.67,
+      "raison": "moteur en hausse de plus d'1 écart-type sur 1 mois ; sens attendu vérifié dans 43 % des 37 cas, mais la médiane historique (−0,66 %) contredit le sens de la sensibilité"
+     },
+     {
+      "engrenage": 6,
+      "nom": "Géopolitique",
+      "moteur": "Brent",
+      "variation_moteur_1m": -24.99,
+      "unite": "%",
+      "date": "2026-11-17",
+      "sigma_moteur": 12.34,
+      "zone": "basse",
+      "lecture": "Indice faible",
+      "n": 32,
+      "part_sens_attendu": 53,
+      "borne_wilson_90": 38.9,
+      "sensibilite": 0.12,
+      "mediane_si_hausse": 0.28,
+      "mediane_si_baisse": 0.03,
+      "raison": "moteur en baisse de plus d'1 écart-type sur 1 mois ; sens attendu vérifié dans 53 % des 32 cas, mais la médiane historique (+0,03 %) contredit le sens de la sensibilité"
+     },
+     {
+      "engrenage": 8,
+      "nom": "Offre",
+      "moteur": "stocks de brut US contre la moyenne saisonnière 5 ans",
+      "variation_moteur_1m": -1.3,
+      "unite": "pts",
+      "date": "2026-11-13",
+      "sigma_moteur": 2.97,
+      "zone": "calme",
+      "lecture": "Neutre",
+      "n": 9,
+      "part_sens_attendu": null,
+      "borne_wilson_90": null,
+      "sensibilite": -0.04,
+      "mediane_si_hausse": -0.57,
+      "mediane_si_baisse": null,
+      "raison": "moteur calme : −1,30 sur 1 mois, dans ±1 écart−type (±2,97)"
+     }
+    ],
+    "comptes": {
+     "Soutien": 0,
+     "Pression": 0,
+     "Indice faible": 2,
+     "Neutre": 3,
+     "n/d": 0
+    },
+    "bilan": "sans direction établie"
+   },
+   "phrase_python": "USD : bilan sans direction établie. Moteurs : VIX +11,13 pts sur 1 mois (au-dessus de +1 écart-type, ±5,15) ; Brent −24,99 % sur 1 mois (au-dessous de −1 écart-type, ±12,34). 5. Marchés (VIX) : Indice faible · 37 cas ; 6. Géopolitique (Brent) : Indice faible · 32 cas.",
+   "texte": "Le USD reste sans direction établie sous l'influence du VIX (+11,13 pts sur 1 mois, zone haute au-delà d'un écart-type) et du Brent (−24,99 % sur 1 mois, zone basse au-delà d'un écart-type). Les lectures associées au VIX et au Brent sont qualifiées d'indice faible, ce qui constitue une preuve insuffisante."
+  },
+  "EUR": {
+   "faits": {
+    "devise": "EUR",
+    "lignes": [
+     {
+      "engrenage": 2,
+      "nom": "Monétaire",
+      "moteur": "écart 2 ans US − taux effectif Fed",
+      "variation_moteur_1m": -18.0,
+      "unite": "pb",
+      "date": "2026-11-20",
+      "sigma_moteur": 34.75,
+      "zone": "calme",
+      "lecture": "Neutre",
+      "n": 32,
+      "part_sens_attendu": 44,
+      "borne_wilson_90": 30.4,
+      "sensibilite": -0.31,
+      "mediane_si_hausse": 0.25,
+      "mediane_si_baisse": -0.19,
+      "raison": "moteur calme : −18,00 sur 1 mois, dans ±1 écart−type (±34,75)"
+     },
+     {
+      "engrenage": 4,
+      "nom": "Fiscale",
+      "moteur": "prime de terme 10 ans US",
+      "variation_moteur_1m": -5.95,
+      "unite": "pb",
+      "date": "2026-11-13",
+      "sigma_moteur": 14.79,
+      "zone": "calme",
+      "lecture": "Neutre",
+      "n": 32,
+      "part_sens_attendu": 62,
+      "borne_wilson_90": 48.0,
+      "sensibilite": -0.41,
+      "mediane_si_hausse": -0.44,
+      "mediane_si_baisse": 1.53,
+      "raison": "moteur calme : −5,95 sur 1 mois, dans ±1 écart−type (±14,79)"
+     },
+     {
+      "engrenage": 6,
+      "nom": "Géopolitique",
+      "moteur": "Brent",
+      "variation_moteur_1m": -24.99,
+      "unite": "%",
+      "date": "2026-11-17",
+      "sigma_moteur": 12.34,
+      "zone": "basse",
+      "lecture": "Indice faible",
+      "n": 32,
+      "part_sens_attendu": 47,
+      "borne_wilson_90": 33.2,
+      "sensibilite": -0.15,
+      "mediane_si_hausse": -0.96,
+      "mediane_si_baisse": -0.32,
+      "raison": "moteur en baisse de plus d'1 écart-type sur 1 mois ; sens attendu vérifié dans 47 % des 32 cas, mais la médiane historique (−0,32 %) contredit le sens de la sensibilité"
+     }
+    ],
+    "comptes": {
+     "Soutien": 0,
+     "Pression": 0,
+     "Indice faible": 1,
+     "Neutre": 2,
+     "n/d": 0
+    },
+    "bilan": "sans direction établie"
+   },
+   "phrase_python": "EUR : bilan sans direction établie. Moteurs : Brent −24,99 % sur 1 mois (au-dessous de −1 écart-type, ±12,34) ; écart 2 ans US − taux effectif Fed −18,00 pb sur 1 mois (zone calme, ±34,75). 6. Géopolitique (Brent) : Indice faible · 32 cas.",
+   "texte": "L'EUR évolue sans direction établie face au Brent (−24,99 % sur 1 mois, zone basse au-delà d'un écart-type) et à l'écart 2 ans US − taux effectif Fed (−18,0 pb sur 1 mois, zone calme). Le facteur géopolitique lié au Brent représente un indice faible et une preuve insuffisante d'orientation."
+  },
+  "GBP": {
+   "faits": {
+    "devise": "GBP",
+    "lignes": [
+     {
+      "engrenage": 2,
+      "nom": "Monétaire",
+      "moteur": "écart 2 ans US − taux effectif Fed",
+      "variation_moteur_1m": -18.0,
+      "unite": "pb",
+      "date": "2026-11-20",
+      "sigma_moteur": 34.75,
+      "zone": "calme",
+      "lecture": "Neutre",
+      "n": 32,
+      "part_sens_attendu": 53,
+      "borne_wilson_90": 38.9,
+      "sensibilite": -0.27,
+      "mediane_si_hausse": -0.61,
+      "mediane_si_baisse": -0.28,
+      "raison": "moteur calme : −18,00 sur 1 mois, dans ±1 écart−type (±34,75)"
+     }
+    ],
+    "comptes": {
+     "Soutien": 0,
+     "Pression": 0,
+     "Indice faible": 0,
+     "Neutre": 1,
+     "n/d": 0
+    },
+    "bilan": "sans direction établie"
+   },
+   "phrase_python": "GBP : bilan sans direction établie. Moteurs : écart 2 ans US − taux effectif Fed −18,00 pb sur 1 mois (zone calme, ±34,75). Aucun moteur hors de sa zone calme.",
+   "texte": "Le GBP demeure sans direction établie, influencé par l'écart 2 ans US − taux effectif Fed (−18,0 pb sur 1 mois, zone calme). Aucun facteur ne dégage de pression ou de soutien caractérisé cette semaine."
+  },
+  "JPY": {
+   "faits": {
+    "devise": "JPY",
+    "lignes": [
+     {
+      "engrenage": 2,
+      "nom": "Monétaire",
+      "moteur": "écart 2 ans US − taux effectif Fed",
+      "variation_moteur_1m": -18.0,
+      "unite": "pb",
+      "date": "2026-11-20",
+      "sigma_moteur": 34.75,
+      "zone": "calme",
+      "lecture": "Neutre",
+      "n": 32,
+      "part_sens_attendu": 56,
+      "borne_wilson_90": 41.9,
+      "sensibilite": -0.55,
+      "mediane_si_hausse": -0.37,
+      "mediane_si_baisse": -1.77,
+      "raison": "moteur calme : −18,00 sur 1 mois, dans ±1 écart−type (±34,75)"
+     },
+     {
+      "engrenage": 4,
+      "nom": "Fiscale",
+      "moteur": "prime de terme 10 ans US",
+      "variation_moteur_1m": -5.95,
+      "unite": "pb",
+      "date": "2026-11-13",
+      "sigma_moteur": 14.79,
+      "zone": "calme",
+      "lecture": "Neutre",
+      "n": 32,
+      "part_sens_attendu": 62,
+      "borne_wilson_90": 48.0,
+      "sensibilite": -0.63,
+      "mediane_si_hausse": -0.76,
+      "mediane_si_baisse": 2.52,
+      "raison": "moteur calme : −5,95 sur 1 mois, dans ±1 écart−type (±14,79)"
+     },
+     {
+      "engrenage": 5,
+      "nom": "Marchés",
+      "moteur": "VIX",
+      "variation_moteur_1m": 11.13,
+      "unite": "pts",
+      "date": "2026-11-19",
+      "sigma_moteur": 5.15,
+      "zone": "haute",
+      "lecture": "n/d",
+      "n": 37,
+      "part_sens_attendu": null,
+      "borne_wilson_90": null,
+      "sensibilite": 0.04,
+      "mediane_si_hausse": -0.66,
+      "mediane_si_baisse": 0.6,
+      "raison": "pas de sens attendu (sensibilité nulle ou non calculable)"
+     },
+     {
+      "engrenage": 6,
+      "nom": "Géopolitique",
+      "moteur": "Brent",
+      "variation_moteur_1m": -24.99,
+      "unite": "%",
+      "date": "2026-11-17",
+      "sigma_moteur": 12.34,
+      "zone": "basse",
+      "lecture": "Indice faible",
+      "n": 32,
+      "part_sens_attendu": 47,
+      "borne_wilson_90": 33.2,
+      "sensibilite": -0.15,
+      "mediane_si_hausse": -1.06,
+      "mediane_si_baisse": -0.84,
+      "raison": "moteur en baisse de plus d'1 écart-type sur 1 mois ; sens attendu vérifié dans 47 % des 32 cas, mais la médiane historique (−0,84 %) contredit le sens de la sensibilité"
+     },
+     {
+      "engrenage": 8,
+      "nom": "Offre",
+      "moteur": "stocks de brut US contre la moyenne saisonnière 5 ans",
+      "variation_moteur_1m": -1.3,
+      "unite": "pts",
+      "date": "2026-11-13",
+      "sigma_moteur": 2.97,
+      "zone": "calme",
+      "lecture": "Neutre",
+      "n": 9,
+      "part_sens_attendu": null,
+      "borne_wilson_90": null,
+      "sensibilite": 0.22,
+      "mediane_si_hausse": 0.64,
+      "mediane_si_baisse": null,
+      "raison": "moteur calme : −1,30 sur 1 mois, dans ±1 écart−type (±2,97)"
+     }
+    ],
+    "comptes": {
+     "Soutien": 0,
+     "Pression": 0,
+     "Indice faible": 1,
+     "Neutre": 3,
+     "n/d": 1
+    },
+    "bilan": "sans direction établie"
+   },
+   "phrase_python": "JPY : bilan sans direction établie. Moteurs : VIX +11,13 pts sur 1 mois (au-dessus de +1 écart-type, ±5,15) ; Brent −24,99 % sur 1 mois (au-dessous de −1 écart-type, ±12,34). 6. Géopolitique (Brent) : Indice faible · 32 cas.",
+   "texte": "Le JPY s'affiche sans direction établie alors que le VIX progresse de 11,13 pts sur 1 mois (zone haute au-delà d'un écart-type) et que le Brent recule de 24,99 % (zone basse au-delà d'un écart-type). La lecture géopolitique liée au Brent constitue un indice faible, apportant une preuve insuffisante."
+  },
+  "CHF": {
+   "faits": {
+    "devise": "CHF",
+    "lignes": [
+     {
+      "engrenage": 4,
+      "nom": "Fiscale",
+      "moteur": "prime de terme 10 ans US",
+      "variation_moteur_1m": -5.95,
+      "unite": "pb",
+      "date": "2026-11-13",
+      "sigma_moteur": 14.79,
+      "zone": "calme",
+      "lecture": "Neutre",
+      "n": 32,
+      "part_sens_attendu": 56,
+      "borne_wilson_90": 41.9,
+      "sensibilite": -0.54,
+      "mediane_si_hausse": -0.32,
+      "mediane_si_baisse": 2.22,
+      "raison": "moteur calme : −5,95 sur 1 mois, dans ±1 écart−type (±14,79)"
+     },
+     {
+      "engrenage": 5,
+      "nom": "Marchés",
+      "moteur": "VIX",
+      "variation_moteur_1m": 11.13,
+      "unite": "pts",
+      "date": "2026-11-19",
+      "sigma_moteur": 5.15,
+      "zone": "haute",
+      "lecture": "Indice faible",
+      "n": 37,
+      "part_sens_attendu": 46,
+      "borne_wilson_90": 33.2,
+      "sensibilite": -0.18,
+      "mediane_si_hausse": 1.2,
+      "mediane_si_baisse": 0.45,
+      "raison": "moteur en hausse de plus d'1 écart-type sur 1 mois ; sens attendu vérifié dans 46 % des 37 cas, mais la médiane historique (+1,20 %) contredit le sens de la sensibilité"
+     }
+    ],
+    "comptes": {
+     "Soutien": 0,
+     "Pression": 0,
+     "Indice faible": 1,
+     "Neutre": 1,
+     "n/d": 0
+    },
+    "bilan": "sans direction établie"
+   },
+   "phrase_python": "CHF : bilan sans direction établie. Moteurs : VIX +11,13 pts sur 1 mois (au-dessus de +1 écart-type, ±5,15) ; prime de terme 10 ans US −5,95 pb sur 1 mois (zone calme, ±14,79). 5. Marchés (VIX) : Indice faible · 37 cas.",
+   "texte": "Le CHF reste sans direction établie avec un VIX à +11,13 pts sur 1 mois (zone haute au-delà d'un écart-type) et une prime de terme 10 ans US à −5,95 pb (zone calme). L'impact identifié du VIX relève d'un indice faible, ne fournissant qu'une preuve insuffisante."
+  },
+  "CAD": {
+   "faits": {
+    "devise": "CAD",
+    "lignes": [
+     {
+      "engrenage": 5,
+      "nom": "Marchés",
+      "moteur": "VIX",
+      "variation_moteur_1m": 11.13,
+      "unite": "pts",
+      "date": "2026-11-19",
+      "sigma_moteur": 5.15,
+      "zone": "haute",
+      "lecture": "Indice faible",
+      "n": 37,
+      "part_sens_attendu": 46,
+      "borne_wilson_90": 33.2,
+      "sensibilite": -0.38,
+      "mediane_si_hausse": 0.87,
+      "mediane_si_baisse": -0.17,
+      "raison": "moteur en hausse de plus d'1 écart-type sur 1 mois ; sens attendu vérifié dans 46 % des 37 cas, mais la médiane historique (+0,87 %) contredit le sens de la sensibilité"
+     },
+     {
+      "engrenage": 6,
+      "nom": "Géopolitique",
+      "moteur": "Brent",
+      "variation_moteur_1m": -24.99,
+      "unite": "%",
+      "date": "2026-11-17",
+      "sigma_moteur": 12.34,
+      "zone": "basse",
+      "lecture": "Indice faible",
+      "n": 32,
+      "part_sens_attendu": 44,
+      "borne_wilson_90": 30.4,
+      "sensibilite": 0.14,
+      "mediane_si_hausse": -0.76,
+      "mediane_si_baisse": -0.68,
+      "raison": "moteur en baisse de plus d'1 écart-type sur 1 mois ; sens attendu vérifié dans 44 % des 32 cas ; borne basse de Wilson à 90 % : 30,4 % (doit dépasser 50 %)"
+     },
+     {
+      "engrenage": 8,
+      "nom": "Offre",
+      "moteur": "stocks de brut US contre la moyenne saisonnière 5 ans",
+      "variation_moteur_1m": -1.3,
+      "unite": "pts",
+      "date": "2026-11-13",
+      "sigma_moteur": 2.97,
+      "zone": "calme",
+      "lecture": "Neutre",
+      "n": 9,
+      "part_sens_attendu": null,
+      "borne_wilson_90": null,
+      "sensibilite": 0.11,
+      "mediane_si_hausse": -0.89,
+      "mediane_si_baisse": null,
+      "raison": "moteur calme : −1,30 sur 1 mois, dans ±1 écart−type (±2,97)"
+     }
+    ],
+    "comptes": {
+     "Soutien": 0,
+     "Pression": 0,
+     "Indice faible": 2,
+     "Neutre": 1,
+     "n/d": 0
+    },
+    "bilan": "sans direction établie"
+   },
+   "phrase_python": "CAD : bilan sans direction établie. Moteurs : VIX +11,13 pts sur 1 mois (au-dessus de +1 écart-type, ±5,15) ; Brent −24,99 % sur 1 mois (au-dessous de −1 écart-type, ±12,34). 5. Marchés (VIX) : Indice faible · 37 cas ; 6. Géopolitique (Brent) : Indice faible · 32 cas.",
+   "texte": "Le CAD s'inscrit sans direction établie, encadré par le Brent (−24,99 % sur 1 mois, zone basse au-delà d'un écart-type) et les stocks de brut US (−1,3 pts sur 1 mois, zone calme). Les signaux issus du VIX (+11,13 pts, zone haute au-delà d'un écart-type) et du Brent sont des indices faibles et des preuves insuffisantes."
+  },
+  "AUD": {
+   "faits": {
+    "devise": "AUD",
+    "lignes": [
+     {
+      "engrenage": 2,
+      "nom": "Monétaire",
+      "moteur": "écart 2 ans US − taux effectif Fed",
+      "variation_moteur_1m": -18.0,
+      "unite": "pb",
+      "date": "2026-11-20",
+      "sigma_moteur": 34.75,
+      "zone": "calme",
+      "lecture": "Neutre",
+      "n": 32,
+      "part_sens_attendu": null,
+      "borne_wilson_90": null,
+      "sensibilite": 0.02,
+      "mediane_si_hausse": 0.1,
+      "mediane_si_baisse": 0.02,
+      "raison": "moteur calme : −18,00 sur 1 mois, dans ±1 écart−type (±34,75)"
+     },
+     {
+      "engrenage": 5,
+      "nom": "Marchés",
+      "moteur": "VIX",
+      "variation_moteur_1m": 11.13,
+      "unite": "pts",
+      "date": "2026-11-19",
+      "sigma_moteur": 5.15,
+      "zone": "haute",
+      "lecture": "Indice faible",
+      "n": 37,
+      "part_sens_attendu": 41,
+      "borne_wilson_90": 28.4,
+      "sensibilite": -0.6,
+      "mediane_si_hausse": 1.49,
+      "mediane_si_baisse": 0.7,
+      "raison": "moteur en hausse de plus d'1 écart-type sur 1 mois ; sens attendu vérifié dans 41 % des 37 cas, mais la médiane historique (+1,49 %) contredit le sens de la sensibilité"
+     },
+     {
+      "engrenage": 6,
+      "nom": "Géopolitique",
+      "moteur": "Brent",
+      "variation_moteur_1m": -24.99,
+      "unite": "%",
+      "date": "2026-11-17",
+      "sigma_moteur": 12.34,
+      "zone": "basse",
+      "lecture": "n/d",
+      "n": 32,
+      "part_sens_attendu": null,
+      "borne_wilson_90": null,
+      "sensibilite": -0.02,
+      "mediane_si_hausse": 0.35,
+      "mediane_si_baisse": 0.87,
+      "raison": "pas de sens attendu (sensibilité nulle ou non calculable)"
+     }
+    ],
+    "comptes": {
+     "Soutien": 0,
+     "Pression": 0,
+     "Indice faible": 1,
+     "Neutre": 1,
+     "n/d": 1
+    },
+    "bilan": "sans direction établie"
+   },
+   "phrase_python": "AUD : bilan sans direction établie. Moteurs : VIX +11,13 pts sur 1 mois (au-dessus de +1 écart-type, ±5,15) ; Brent −24,99 % sur 1 mois (au-dessous de −1 écart-type, ±12,34). 5. Marchés (VIX) : Indice faible · 37 cas.",
+   "texte": "L'AUD évolue sans direction établie en présence du VIX (+11,13 pts sur 1 mois, zone haute au-delà d'un écart-type) et de l'écart 2 ans US − taux effectif Fed (−18,0 pb, zone calme). La composante marché issue du VIX demeure un indice faible, traduisant une preuve insuffisante."
+  },
+  "NZD": {
+   "faits": {
+    "devise": "NZD",
+    "lignes": [
+     {
+      "engrenage": 5,
+      "nom": "Marchés",
+      "moteur": "VIX",
+      "variation_moteur_1m": 11.13,
+      "unite": "pts",
+      "date": "2026-11-19",
+      "sigma_moteur": 5.15,
+      "zone": "haute",
+      "lecture": "Indice faible",
+      "n": 37,
+      "part_sens_attendu": 43,
+      "borne_wilson_90": 30.8,
+      "sensibilite": -0.47,
+      "mediane_si_hausse": 1.6,
+      "mediane_si_baisse": 0.48,
+      "raison": "moteur en hausse de plus d'1 écart-type sur 1 mois ; sens attendu vérifié dans 43 % des 37 cas, mais la médiane historique (+1,60 %) contredit le sens de la sensibilité"
+     }
+    ],
+    "comptes": {
+     "Soutien": 0,
+     "Pression": 0,
+     "Indice faible": 1,
+     "Neutre": 0,
+     "n/d": 0
+    },
+    "bilan": "sans direction établie"
+   },
+   "phrase_python": "NZD : bilan sans direction établie. Moteurs : VIX +11,13 pts sur 1 mois (au-dessus de +1 écart-type, ±5,15). 5. Marchés (VIX) : Indice faible · 37 cas.",
+   "texte": "Le NZD se maintient sans direction établie, réagissant au VIX qui s'établit à +11,13 pts sur 1 mois (zone haute au-delà d'un écart-type). L'analyse de ce moteur constitue un indice faible et ne fournit pas de preuve suffisante."
+  },
+  "CNY": {
+   "faits": {
+    "devise": "CNY",
+    "lignes": [],
+    "comptes": {
+     "Soutien": 0,
+     "Pression": 0,
+     "Indice faible": 0,
+     "Neutre": 0,
+     "n/d": 0
+    },
+    "bilan": "sans direction établie"
+   },
+   "phrase_python": "CNY : aucune ligne du tableau des conséquences ne la concerne cette période.",
+   "texte": "Le CNY demeure sans direction établie au sein d'un environnement global marqué par le VIX (+11,13 pts sur 1 mois, zone haute au-delà d'un écart-type). Aucun soutien ou pression spécifique n'émerge en l'absence de relais probant."
+  }
+ },
+ "statut": "ok",
+ "tentatives": 1,
+ "controles": [],
+ "redige_par": {
+  "modele": "gemini-3.5-flash",
+  "libelle": "Flash 3.5"
+ },
+ "raison": null
+}
