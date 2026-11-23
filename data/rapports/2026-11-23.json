@@ -4,7 +4,7 @@
   "type_rapport": "hebdomadaire",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-23T15:19:40+00:00",
+  "genere_le": "2026-11-23T16:19:54+00:00",
   "appels_llm": [
    {
     "heure": "09:33",
@@ -585,6 +585,40 @@
       "ignores": 0
      }
     ]
+   },
+   {
+    "heure": "16:20",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 3,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 3
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
    }
   ]
  },
@@ -924,11 +958,11 @@
        "date": "2026-11-13"
       },
       {
-       "texte": "S&P 500 7175.83 le 2026-11-19 (-2.02 % sur la séance)",
-       "source_id": "src_013",
+       "texte": "S&P 500 6910.39 le 2026-11-20 (-3.70 % sur la séance)",
+       "source_id": "src_173",
        "indicateur": "sp500",
-       "valeur": 7175.83,
-       "date": "2026-11-19"
+       "valeur": 6910.39,
+       "date": "2026-11-20"
       },
       {
        "texte": "Indice or (proxy) — NASDAQ QGLDI, pas le cours spot : 2209.94 le 2026-11-19 (-7.20 % sur 7 j)",
@@ -1309,7 +1343,7 @@
     "libelle": "Flash 3.5"
    },
    "version": "quotidienne",
-   "rafraichi_le": "2026-11-23T15:19:40+00:00",
+   "rafraichi_le": "2026-11-23T16:19:54+00:00",
    "titre_theme_impose": "Signaux mixtes"
   },
   "classement_devises": [],
@@ -4011,6 +4045,13 @@
    "detail": "vix (VIXCLS)",
    "date": "2026-11-20",
    "url": "https://fred.stlouisfed.org/series/VIXCLS"
+  },
+  {
+   "id": "src_173",
+   "source": "FRED",
+   "detail": "sp500 (SP500)",
+   "date": "2026-11-20",
+   "url": "https://fred.stlouisfed.org/series/SP500"
   }
  ],
  "donnees_non_rafraichies": [],
