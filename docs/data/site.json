@@ -1,14 +1,14 @@
 {
  "version_schema": 1,
- "genere_le": "2026-11-21T00:12:01+00:00",
+ "genere_le": "2026-11-23T09:52:42+00:00",
  "sources": {
-  "rapport": "2026-11-21T00:06:21+00:00",
-  "tableau_macro": "2026-11-20T19:16:04+00:00"
+  "rapport": "2026-11-23T09:36:02+00:00",
+  "tableau_macro": "2026-11-23T09:16:18+00:00"
  },
  "regime": {
-  "biais": "risk_off",
-  "libelle": "Risk Off",
-  "ecart_points": -13.7,
+  "biais": "neutre",
+  "libelle": "Neutre",
+  "ecart_points": null,
   "seuil_points": 5.0,
   "devises_risque": [
    "AUD",
@@ -21,14 +21,14 @@
    "USD"
   ],
   "explication": "Écart entre le score de confluence moyen des devises « risque » et celui des devises « refuge » (calcul Python) : au-delà du seuil, Risk On ; en deçà de son opposé, Risk Off ; sinon Neutre.",
-  "driver": "Régime de risque global : aversion au risque (calcul Python). Le détail par devise est dans le profil des devises (état, moteur du moment, banque centrale).",
-  "relecture": "non_evalue",
-  "date_rapport": "2026-11-21",
-  "maj": "2026-11-21T00:06:21+00:00",
-  "type_rapport": "quotidien",
+  "driver": "Régime de risque global : neutre (calcul Python). Le détail par devise est dans le profil des devises (état, moteur du moment, banque centrale).",
+  "relecture": "a_revoir",
+  "date_rapport": "2026-11-23",
+  "maj": "2026-11-23T09:36:02+00:00",
+  "type_rapport": "hebdomadaire",
   "nb_devises": 9,
-  "nb_devises_disponibles": 9,
-  "notion_url": "https://app.notion.com/p/FX-2026-11-21-quotidien-41f65bc6466181a59c7ffa40e2ba88b0",
+  "nb_devises_disponibles": 0,
+  "notion_url": "https://app.notion.com/p/Rapport-du-jour-2026-11-23-longue-42165bc6466181a7b1a6c195329f40fd",
   "notion_page_du_jour": true
  },
  "colonnes_cles": [
@@ -81,7 +81,7 @@
     "taux_directeur": {
      "texte": "3,75–4,00 % [fourchette cible] · taux effectif 3,88 %",
      "valeur_num": 3.75,
-     "date": "2026-11-19",
+     "date": "2026-11-20",
      "source": "FRED (DFEDTARL / DFEDTARU)",
      "consensus": null,
      "surprise": null,
@@ -127,13 +127,13 @@
      "raison": null
     },
     "rendement_2a": {
-     "texte": "4,80 %",
-     "valeur_num": 4.8,
-     "date": "2026-11-18",
+     "texte": "4,76 %",
+     "valeur_num": 4.76,
+     "date": "2026-11-19",
      "source": "FRED (DGS2)",
      "consensus": null,
      "surprise": null,
-     "precedent": "4,73 %",
+     "precedent": "4,86 %",
      "manuel": false,
      "etat": "valeur",
      "raison": null
@@ -145,25 +145,20 @@
      "n": 7,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-11-20",
+     "date": "2026-11-23",
      "raison": null
     },
     "score": {
-     "texte": "86",
-     "valeur_num": 86,
-     "etat": "valeur",
-     "source": "score de confluence (calcul Python)",
-     "date": "2026-11-21",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota gratuit journalier épuisé pour gemini-3.5-"
     },
     "biais": {
-     "texte": "Haussier",
-     "valeur_num": 86,
-     "code": "haussier",
-     "etat": "valeur",
-     "profil": "off",
-     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "score du jour indisponible"
     }
    }
   },
@@ -174,7 +169,7 @@
     "taux_directeur": {
      "texte": "2,50 % [dépôt] · refinancement 2,65 % (registre macro)",
      "valeur_num": 2.5,
-     "date": "2026-11-19",
+     "date": "2026-11-20",
      "source": "FRED (ECBDFR, taux de la facilité de dépôt de la BCE)",
      "consensus": "2,65 %",
      "surprise": null,
@@ -208,55 +203,50 @@
      "raison": null
     },
     "pmi_manufacturier": {
-     "texte": "52,7",
-     "valeur_num": 52.7,
-     "date": "2026-11-02",
+     "texte": "52,9",
+     "valeur_num": 52.9,
+     "date": "2026-11-23",
      "source": "ForexFactory",
-     "consensus": "52,4",
+     "consensus": "52,7",
      "surprise": "▲",
-     "precedent": "52,4",
+     "precedent": "52,7 (révisé)",
      "manuel": false,
      "etat": "valeur",
      "raison": null
     },
     "rendement_2a": {
-     "texte": "3,14 %",
-     "valeur_num": 3.14,
-     "date": "2026-11-19",
+     "texte": "3,08 %",
+     "valeur_num": 3.08,
+     "date": "2026-11-20",
      "source": "Bundesbank (Allemagne 2 ans)",
      "consensus": null,
      "surprise": null,
-     "precedent": "3,09 %",
+     "precedent": "3,13 %",
      "manuel": false,
      "etat": "valeur",
      "raison": null
     },
     "indice_surprise": {
-     "texte": "-0,2",
-     "valeur_num": -0.19,
-     "tendance": "baisse",
+     "texte": "-0,1",
+     "valeur_num": -0.14,
+     "tendance": "stable",
      "n": 13,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-11-20",
+     "date": "2026-11-23",
      "raison": null
     },
     "score": {
-     "texte": "21",
-     "valeur_num": 21,
-     "etat": "valeur",
-     "source": "score de confluence (calcul Python)",
-     "date": "2026-11-21",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota gratuit journalier épuisé pour gemini-3.5-"
     },
     "biais": {
-     "texte": "Baissier",
-     "valeur_num": 21,
-     "code": "baissier",
-     "etat": "valeur",
-     "profil": "neutre",
-     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "score du jour indisponible"
     }
    }
   },
@@ -326,30 +316,25 @@
     },
     "indice_surprise": {
      "texte": "+0,2",
-     "valeur_num": 0.25,
+     "valeur_num": 0.21,
      "tendance": "baisse",
-     "n": 13,
+     "n": 10,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-11-20",
+     "date": "2026-11-23",
      "raison": null
     },
     "score": {
-     "texte": "64",
-     "valeur_num": 64,
-     "etat": "valeur",
-     "source": "score de confluence (calcul Python)",
-     "date": "2026-11-21",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota gratuit journalier épuisé pour gemini-3.5-"
     },
     "biais": {
-     "texte": "Haussier",
-     "valeur_num": 64,
-     "code": "haussier",
-     "etat": "valeur",
-     "profil": "neutre",
-     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "score du jour indisponible"
     }
    }
   },
@@ -418,31 +403,26 @@
      "raison": null
     },
     "indice_surprise": {
-     "texte": "+0,1",
-     "valeur_num": 0.06,
+     "texte": "+0,2",
+     "valeur_num": 0.22,
      "tendance": "hausse",
-     "n": 9,
+     "n": 7,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-11-20",
+     "date": "2026-11-23",
      "raison": null
     },
     "score": {
-     "texte": "24",
-     "valeur_num": 24,
-     "etat": "valeur",
-     "source": "score de confluence (calcul Python)",
-     "date": "2026-11-21",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "analyses:JPY-CHF-CAD : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 S"
     },
     "biais": {
-     "texte": "Baissier",
-     "valeur_num": 24,
-     "code": "baissier",
-     "etat": "valeur",
-     "profil": "off",
-     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "score du jour indisponible"
     }
    }
   },
@@ -513,29 +493,24 @@
     "indice_surprise": {
      "texte": "+0,5",
      "valeur_num": 0.45,
-     "tendance": "hausse",
+     "tendance": "stable",
      "n": 4,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-11-20",
+     "date": "2026-11-23",
      "raison": null
     },
     "score": {
-     "texte": "37",
-     "valeur_num": 37,
-     "etat": "valeur",
-     "source": "score de confluence (calcul Python)",
-     "date": "2026-11-21",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "analyses:JPY-CHF-CAD : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 S"
     },
     "biais": {
-     "texte": "Baissier",
-     "valeur_num": 37,
-     "code": "baissier",
-     "etat": "valeur",
-     "profil": "off",
-     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "score du jour indisponible"
     }
    }
   },
@@ -594,41 +569,36 @@
     "rendement_2a": {
      "texte": "3,30 %",
      "valeur_num": 3.3,
-     "date": "2026-11-18",
+     "date": "2026-11-19",
      "source": "Banque du Canada (Valet, 2 ans)",
      "consensus": null,
      "surprise": null,
-     "precedent": "3,25 %",
+     "precedent": "3,33 %",
      "manuel": false,
      "etat": "valeur",
      "raison": null
     },
     "indice_surprise": {
      "texte": "-0,4",
-     "valeur_num": -0.4,
+     "valeur_num": -0.41,
      "tendance": "hausse",
-     "n": 10,
+     "n": 9,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-11-20",
+     "date": "2026-11-23",
      "raison": null
     },
     "score": {
-     "texte": "32",
-     "valeur_num": 32,
-     "etat": "valeur",
-     "source": "score de confluence (calcul Python)",
-     "date": "2026-11-21",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "analyses:JPY-CHF-CAD : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 S"
     },
     "biais": {
-     "texte": "Baissier",
-     "valeur_num": 32,
-     "code": "baissier",
-     "etat": "valeur",
-     "profil": "on",
-     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "score du jour indisponible"
     }
    }
   },
@@ -673,9 +643,9 @@
      "raison": null
     },
     "pmi_manufacturier": {
-     "texte": "49,7",
-     "valeur_num": 49.7,
-     "date": "2026-10-22",
+     "texte": "48,7",
+     "valeur_num": 48.7,
+     "date": "2026-11-22",
      "source": "ForexFactory",
      "consensus": null,
      "surprise": null,
@@ -703,25 +673,20 @@
      "n": 7,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-11-20",
+     "date": "2026-11-23",
      "raison": null
     },
     "score": {
-     "texte": "44",
-     "valeur_num": 44,
-     "etat": "valeur",
-     "source": "score de confluence (calcul Python)",
-     "date": "2026-11-21",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 S"
     },
     "biais": {
-     "texte": "Neutre",
-     "valeur_num": 44,
-     "code": "neutre",
-     "etat": "valeur",
-     "profil": "on",
-     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "score du jour indisponible"
     }
    }
   },
@@ -790,31 +755,26 @@
      "raison": "RBNZ (tableau B2) : accès automatisé refusé (403), jamais contourné"
     },
     "indice_surprise": {
-     "texte": "-1,8",
-     "valeur_num": -1.82,
+     "texte": "-1,1",
+     "valeur_num": -1.13,
      "tendance": "baisse",
-     "n": 4,
+     "n": 5,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-11-20",
+     "date": "2026-11-23",
      "raison": null
     },
     "score": {
-     "texte": "30",
-     "valeur_num": 30,
-     "etat": "valeur",
-     "source": "score de confluence (calcul Python)",
-     "date": "2026-11-21",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 S"
     },
     "biais": {
-     "texte": "Baissier",
-     "valeur_num": 30,
-     "code": "baissier",
-     "etat": "valeur",
-     "profil": "on",
-     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "score du jour indisponible"
     }
    }
   },
@@ -889,25 +849,20 @@
      "n": 5,
      "etat": "valeur",
      "source": "calcul Python (registre macro, 30 j)",
-     "date": "2026-11-20",
+     "date": "2026-11-23",
      "raison": null
     },
     "score": {
-     "texte": "39",
-     "valeur_num": 39,
-     "etat": "valeur",
-     "source": "score de confluence (calcul Python)",
-     "date": "2026-11-21",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 S"
     },
     "biais": {
-     "texte": "Baissier",
-     "valeur_num": 39,
-     "code": "baissier",
-     "etat": "valeur",
-     "profil": "neutre",
-     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
-     "raison": null
+     "texte": "n/d",
+     "valeur_num": null,
+     "etat": "absent",
+     "raison": "score du jour indisponible"
     }
    }
   }
@@ -973,7 +928,7 @@
      "taux_directeur": {
       "texte": "3,75–4,00 % [fourchette cible] · taux effectif 3,88 %",
       "valeur_num": 3.75,
-      "date": "2026-11-19",
+      "date": "2026-11-20",
       "source": "FRED (DFEDTARL / DFEDTARU)",
       "consensus": null,
       "surprise": null,
@@ -1116,7 +1071,7 @@
      "taux_directeur": {
       "texte": "2,50 % [dépôt] · refinancement 2,65 % (registre macro)",
       "valeur_num": 2.5,
-      "date": "2026-11-19",
+      "date": "2026-11-20",
       "source": "FRED (ECBDFR, taux de la facilité de dépôt de la BCE)",
       "consensus": "2,65 %",
       "surprise": null,
@@ -1166,30 +1121,30 @@
       "z": 0.67
      },
      "pmi_manufacturier": {
-      "texte": "52,7",
-      "valeur_num": 52.7,
-      "date": "2026-11-02",
+      "texte": "52,9",
+      "valeur_num": 52.9,
+      "date": "2026-11-23",
       "source": "ForexFactory",
-      "consensus": "52,4",
+      "consensus": "52,7",
       "surprise": "▲",
-      "precedent": "52,4",
+      "precedent": "52,7 (révisé)",
       "manuel": false,
       "etat": "valeur",
       "raison": null,
-      "z": 0.3
+      "z": 0.2
      },
      "pmi_services": {
-      "texte": "51,4",
-      "valeur_num": 51.4,
-      "date": "2026-11-04",
+      "texte": "51,2",
+      "valeur_num": 51.2,
+      "date": "2026-11-23",
       "source": "ForexFactory",
-      "consensus": "51,7",
+      "consensus": "51,8",
       "surprise": "▼",
-      "precedent": "51,7",
+      "precedent": "51,4 (révisé)",
       "manuel": false,
       "etat": "valeur",
       "raison": null,
-      "z": -0.3
+      "z": -0.6
      },
      "chomage": {
       "texte": "6,5 %",
@@ -1245,11 +1200,11 @@
      }
     },
     "indice_30j": {
-     "indice": -0.19,
-     "precedent": 0.11,
-     "tendance": "baisse",
+     "indice": -0.14,
+     "precedent": -0.1,
+     "tendance": "stable",
      "n": 13,
-     "texte": "-0,2 ▼ (n=13)",
+     "texte": "-0,1 = (n=13)",
      "rang": 6
     }
    },
@@ -1388,12 +1343,12 @@
      }
     },
     "indice_30j": {
-     "indice": 0.25,
-     "precedent": 0.54,
+     "indice": 0.21,
+     "precedent": 0.58,
      "tendance": "baisse",
-     "n": 13,
-     "texte": "+0,2 ▼ (n=13)",
-     "rang": 3
+     "n": 10,
+     "texte": "+0,2 ▼ (n=10)",
+     "rang": 4
     }
    },
    {
@@ -1531,12 +1486,12 @@
      }
     },
     "indice_30j": {
-     "indice": 0.06,
-     "precedent": -0.35,
+     "indice": 0.22,
+     "precedent": -0.3,
      "tendance": "hausse",
-     "n": 9,
-     "texte": "+0,1 ▲ (n=9)",
-     "rang": 4
+     "n": 7,
+     "texte": "+0,2 ▲ (n=7)",
+     "rang": 3
     }
    },
    {
@@ -1675,10 +1630,10 @@
     },
     "indice_30j": {
      "indice": 0.45,
-     "precedent": 0.27,
-     "tendance": "hausse",
+     "precedent": 0.38,
+     "tendance": "stable",
      "n": 4,
-     "texte": "+0,5 ▲ (n=4)",
+     "texte": "+0,5 = (n=4)",
      "rang": 2
     }
    },
@@ -1817,11 +1772,11 @@
      }
     },
     "indice_30j": {
-     "indice": -0.4,
-     "precedent": -0.74,
+     "indice": -0.41,
+     "precedent": -0.8,
      "tendance": "hausse",
-     "n": 10,
-     "texte": "-0,4 ▲ (n=10)",
+     "n": 9,
+     "texte": "-0,4 ▲ (n=9)",
      "rang": 7
     }
    },
@@ -1881,9 +1836,9 @@
       "z": 0.33
      },
      "pmi_manufacturier": {
-      "texte": "49,7",
-      "valeur_num": 49.7,
-      "date": "2026-10-22",
+      "texte": "48,7",
+      "valeur_num": 48.7,
+      "date": "2026-11-22",
       "source": "ForexFactory",
       "consensus": null,
       "surprise": null,
@@ -1894,13 +1849,13 @@
       "z": null
      },
      "pmi_services": {
-      "texte": "47,8",
-      "valeur_num": 47.8,
-      "date": "2026-10-22",
+      "texte": "46,2",
+      "valeur_num": 46.2,
+      "date": "2026-11-22",
       "source": "ForexFactory",
       "consensus": null,
       "surprise": null,
-      "precedent": "51,9 (révisé)",
+      "precedent": "48,5 (révisé)",
       "manuel": false,
       "etat": "valeur",
       "raison": "pas de consensus publié pour cette publication",
@@ -1961,7 +1916,7 @@
     },
     "indice_30j": {
      "indice": -0.12,
-     "precedent": -0.64,
+     "precedent": -0.77,
      "tendance": "hausse",
      "n": 7,
      "texte": "-0,1 ▲ (n=7)",
@@ -2076,17 +2031,17 @@
       "z": -3.0
      },
      "ventes_detail": {
-      "texte": "-0,5 % [t/t]",
-      "valeur_num": -0.5,
-      "date": "2026-08-23",
+      "texte": "2,2 % [t/t]",
+      "valeur_num": 2.2,
+      "date": "2026-11-22",
       "source": "ForexFactory",
-      "consensus": "0,1 %",
-      "surprise": "▼",
-      "precedent": "1,0 % [t/t] (révisé)",
+      "consensus": "0,5 %",
+      "surprise": "▲",
+      "precedent": "-0,4 % [t/t] (révisé)",
       "manuel": false,
       "etat": "valeur",
       "raison": null,
-      "z": -2.0
+      "z": 3.0
      },
      "balance_commerciale": {
       "texte": "-2772M",
@@ -2103,11 +2058,11 @@
      }
     },
     "indice_30j": {
-     "indice": -1.82,
+     "indice": -1.13,
      "precedent": -0.85,
      "tendance": "baisse",
-     "n": 4,
-     "texte": "-1,8 ▼ (n=4)",
+     "n": 5,
+     "texte": "-1,1 ▼ (n=5)",
      "rang": 9
     }
    },
