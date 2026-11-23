@@ -4,7 +4,7 @@
   "type_rapport": "hebdomadaire",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-23T09:36:02+00:00",
+  "genere_le": "2026-11-23T10:22:10+00:00",
   "appels_llm": [
    {
     "heure": "09:33",
@@ -111,6 +111,46 @@
     "ok": false,
     "etiquette": "rapport:long1",
     "echec": "503"
+   },
+   {
+    "heure": "10:21",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 5038,
+    "tokens_message": 19994,
+    "tokens_total": 25032,
+    "ok": false,
+    "etiquette": "analyses:USD-EUR-GBP",
+    "echec": "503"
+   },
+   {
+    "heure": "10:21",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 5038,
+    "tokens_message": 16099,
+    "tokens_total": 21137,
+    "ok": false,
+    "etiquette": "analyses:JPY-CHF-CAD",
+    "echec": "503"
+   },
+   {
+    "heure": "10:22",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 5038,
+    "tokens_message": 16448,
+    "tokens_total": 21486,
+    "ok": false,
+    "etiquette": "analyses:AUD-NZD-CNY",
+    "echec": "503"
+   },
+   {
+    "heure": "10:22",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 0,
+    "tokens_message": 2685,
+    "tokens_total": 2685,
+    "ok": false,
+    "etiquette": "rapport:redaction",
+    "echec": "503"
    }
   ],
   "quota_llm": {
@@ -125,21 +165,21 @@
    "engrenages_faits": true,
    "reserve_engrenages": 8,
    "refus_reserve_ce_run": 0,
-   "refus_budget_ce_run": 27,
+   "refus_budget_ce_run": 20,
    "budget": {
-    "plafond": 45,
-    "mode": "complet",
+    "plafond": 60,
+    "mode": "complément",
     "lundi": true,
-    "max_appels_par_analyse": 2,
+    "max_appels_par_analyse": 1,
     "prevu_analyses": {
      "engrenages": 1,
      "rapport": 10,
      "devises": 3
     },
     "prevu_appels_max": {
-     "engrenages": 2,
-     "rapport": 20,
-     "devises": 6
+     "engrenages": 1,
+     "rapport": 10,
+     "devises": 3
     },
     "consomme_jour": {
      "engrenages": 1,
@@ -148,26 +188,25 @@
      "reste": 3
     },
     "consomme_run": {
-     "engrenages": 1,
+     "engrenages": 0,
      "rapport": 0,
      "devises": 0,
-     "reste": 3
+     "reste": 0
     },
     "total_jour": 4,
     "plafond_run": 45,
-    "recues_run": 4,
-    "pannes_jour": 15,
-    "pannes_run": 15,
+    "recues_run": 0,
+    "pannes_jour": 19,
+    "pannes_run": 4,
     "plafond_pannes": 20,
-    "mode_panne": false,
+    "mode_panne": true,
     "pannes_avant_correctif": 0,
     "echecs_jour": {
-     "503": 12,
+     "503": 20,
      "429": 3
     },
     "echecs_run": {
-     "503": 12,
-     "429": 3
+     "503": 8
     },
     "abandonnees": [],
     "analyses": {
@@ -175,7 +214,7 @@
       "statut": "à rejouer",
       "echec": "503",
       "types": {
-       "503": 2
+       "503": 4
       },
       "appels": 0
      },
@@ -183,7 +222,7 @@
       "statut": "à rejouer",
       "echec": "503",
       "types": {
-       "503": 2
+       "503": 4
       },
       "appels": 0
      },
@@ -192,7 +231,7 @@
       "echec": "503",
       "types": {
        "429": 1,
-       "503": 1
+       "503": 3
       },
       "appels": 0
      },
@@ -249,9 +288,9 @@
      },
      "rapport:redaction": {
       "statut": "à rejouer",
-      "echec": "429",
+      "echec": "503",
       "types": {
-       "503": 1,
+       "503": 3,
        "429": 1
       },
       "appels": 0
@@ -263,37 +302,37 @@
      "appels_aujourdhui": 1,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-11-24T07:59:59+00:00",
-     "appels_ce_run": 2,
-     "reussites_ce_run": 1,
-     "sauts_ce_run": 26
+     "appels_ce_run": 0,
+     "reussites_ce_run": 0,
+     "sauts_ce_run": 4
     },
     "gemini-3.8-flash": {
      "appels_aujourdhui": 0,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-11-17T07:59:59+00:00",
-     "appels_ce_run": 15,
+     "appels_ce_run": 4,
      "reussites_ce_run": 0,
-     "sauts_ce_run": 12
+     "sauts_ce_run": 0
     },
     "gemini-3.5-flash-lite": {
      "appels_aujourdhui": 3,
      "plafond_jour": 20,
      "epuise_jusqu_a": null,
-     "appels_ce_run": 18,
-     "reussites_ce_run": 3,
+     "appels_ce_run": 0,
+     "reussites_ce_run": 0,
      "sauts_ce_run": 0
     }
    }
   },
-  "resume_quota": "Gemini : 4/60, moteurs : fait — Budget (run complet, lundi, plafond 45) : prévu moteurs 1 analyse (≤ 2 requêtes); rapport du jour 10 analyses (≤ 20 requêtes); devises 3 analyses (≤ 6 requêtes); reste ≤ 17 ; consommé ce run : moteurs 1, rapport du jour 0, devises 0, reste 3 (jour : 4/45) ; échecs ce run : 429 × 3, 503 × 12 ; tentatives en panne (hors budget) : 15 ce run, 15/20 aujourd'hui ; réponses reçues ce run : 4/45 ; analyses : analyses:AUD-NZD-CNY à rejouer (503), analyses:JPY-CHF-CAD à rejouer (503), analyses:USD-EUR-GBP à rejouer (503), auto_evaluation faite, critique faite, moteurs faite, etat_du_monde à rejouer (503), paires:synthese faite, rapport:analyse à rejouer (429), rapport:long1 à rejouer (503), rapport:redaction à rejouer (429)",
+  "resume_quota": "Gemini : 4/60, moteurs : fait — Budget (run complément, lundi, plafond 60) : prévu moteurs 1 analyse (≤ 1 requêtes); rapport du jour 10 analyses (≤ 10 requêtes); devises 3 analyses (≤ 3 requêtes); reste ≤ 46 ; consommé ce run : moteurs 0, rapport du jour 0, devises 0, reste 0 (jour : 4/60) ; échecs ce run : 503 × 8 ; tentatives en panne (hors budget) : 4 ce run, 19/20 aujourd'hui ; réponses reçues ce run : 0/45 ; MODE PANNE : priorités seulement, 1 essai chacune, sans repli ; analyses : analyses:AUD-NZD-CNY à rejouer (503), analyses:JPY-CHF-CAD à rejouer (503), analyses:USD-EUR-GBP à rejouer (503), auto_evaluation faite, critique faite, moteurs faite, etat_du_monde à rejouer (503), paires:synthese faite, rapport:analyse à rejouer (429), rapport:long1 à rejouer (503), rapport:redaction à rejouer (503)",
   "appels_par_modele": {
    "gemini-3.5-flash": {
     "appels": 2,
     "echecs": 1
    },
    "gemini-3.8-flash": {
-    "appels": 6,
-    "echecs": 6
+    "appels": 10,
+    "echecs": 10
    },
    "gemini-3.5-flash-lite": {
     "appels": 3,
@@ -334,9 +373,43 @@
       "ignores": 0
      }
     ]
+   },
+   {
+    "heure": "10:27",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": true,
+    "appels_total": 4,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 4
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": true,
+      "cause": "3 échecs consécutifs — 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:",
+      "ouvert_a_l_appel": 3,
+      "echecs_consecutifs": 4,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
    }
   ],
-  "notion_url": "https://app.notion.com/p/Rapport-du-jour-2026-11-23-longue-42165bc6466181a7b1a6c195329f40fd"
+  "notion_url": "https://app.notion.com/p/FX-2026-11-23-hebdomadaire-42165bc6466181a7b1a6c195329f40fd"
  },
  "synthese_globale": {
   "biais_macro_global": "neutre",
@@ -522,7 +595,7 @@
      ],
      "donnees_calculees": [
       {
-       "texte": "Indice de surprise 30 j : USD +0.87, EUR -0.14, GBP +0.21, JPY +0.22, CHF +0.45, CAD -0.41, AUD -0.12, NZD -1.13, CNY -0.57",
+       "texte": "Indice de surprise 30 j : USD +0.87, EUR -0.14, GBP +0.10, JPY +0.22, CHF +0.45, CAD -0.41, AUD -0.12, NZD -1.13, CNY -0.57",
        "source_id": "src_144"
       }
      ],
@@ -1059,8 +1132,8 @@
     "libelle": "Flash 3.5"
    },
    "version": "quotidienne",
-   "titre_theme_impose": "Signaux mixtes",
-   "rafraichi_le": "2026-11-23T09:36:02+00:00"
+   "rafraichi_le": "2026-11-23T10:22:10+00:00",
+   "titre_theme_impose": "Signaux mixtes"
   },
   "classement_devises": [],
   "devises_indisponibles": [
@@ -1081,12 +1154,12 @@
    "risk_on_off": "off",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota gratuit journalier épuisé pour gemini-3.5-",
+   "raison_indisponibilite": "analyses:USD-EUR-GBP : 1 appels déjà faits pendant ce run (repli Python)",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota gratuit journalier épuisé pour gemini-3.5-)",
+    "commentaire": "analyse indisponible (analyses:USD-EUR-GBP : 1 appels déjà faits pendant ce run (repli Python))",
     "source_id": null
    },
    "detail_score": [],
@@ -1242,12 +1315,12 @@
    "risk_on_off": "neutre",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota gratuit journalier épuisé pour gemini-3.5-",
+   "raison_indisponibilite": "analyses:USD-EUR-GBP : 1 appels déjà faits pendant ce run (repli Python)",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota gratuit journalier épuisé pour gemini-3.5-)",
+    "commentaire": "analyse indisponible (analyses:USD-EUR-GBP : 1 appels déjà faits pendant ce run (repli Python))",
     "source_id": null
    },
    "detail_score": [],
@@ -1403,12 +1476,12 @@
    "risk_on_off": "neutre",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota gratuit journalier épuisé pour gemini-3.5-",
+   "raison_indisponibilite": "analyses:USD-EUR-GBP : 1 appels déjà faits pendant ce run (repli Python)",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota gratuit journalier épuisé pour gemini-3.5-)",
+    "commentaire": "analyse indisponible (analyses:USD-EUR-GBP : 1 appels déjà faits pendant ce run (repli Python))",
     "source_id": null
    },
    "detail_score": [],
@@ -1535,10 +1608,10 @@
     "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
    },
    "indice_surprise_30j": {
-    "indice": 0.21,
+    "indice": 0.1,
     "precedent": 0.58,
     "tendance": "baisse",
-    "n": 10
+    "n": 12
    },
    "historique_score_7j": [
     {
@@ -1564,12 +1637,12 @@
    "risk_on_off": "off",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "analyses:JPY-CHF-CAD : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 S",
+   "raison_indisponibilite": "analyses:JPY-CHF-CAD : 1 appels déjà faits pendant ce run (repli Python)",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (analyses:JPY-CHF-CAD : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 S)",
+    "commentaire": "analyse indisponible (analyses:JPY-CHF-CAD : 1 appels déjà faits pendant ce run (repli Python))",
     "source_id": null
    },
    "detail_score": [],
@@ -1725,12 +1798,12 @@
    "risk_on_off": "off",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "analyses:JPY-CHF-CAD : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 S",
+   "raison_indisponibilite": "analyses:JPY-CHF-CAD : 1 appels déjà faits pendant ce run (repli Python)",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (analyses:JPY-CHF-CAD : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 S)",
+    "commentaire": "analyse indisponible (analyses:JPY-CHF-CAD : 1 appels déjà faits pendant ce run (repli Python))",
     "source_id": null
    },
    "detail_score": [],
@@ -1896,12 +1969,12 @@
    "risk_on_off": "on",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "analyses:JPY-CHF-CAD : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 S",
+   "raison_indisponibilite": "analyses:JPY-CHF-CAD : 1 appels déjà faits pendant ce run (repli Python)",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (analyses:JPY-CHF-CAD : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 S)",
+    "commentaire": "analyse indisponible (analyses:JPY-CHF-CAD : 1 appels déjà faits pendant ce run (repli Python))",
     "source_id": null
    },
    "detail_score": [],
@@ -2068,12 +2141,12 @@
    "risk_on_off": "on",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 S",
+   "raison_indisponibilite": "analyses:AUD-NZD-CNY : 1 appels déjà faits pendant ce run (repli Python)",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 S)",
+    "commentaire": "analyse indisponible (analyses:AUD-NZD-CNY : 1 appels déjà faits pendant ce run (repli Python))",
     "source_id": null
    },
    "detail_score": [],
@@ -2229,12 +2302,12 @@
    "risk_on_off": "on",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 S",
+   "raison_indisponibilite": "analyses:AUD-NZD-CNY : 1 appels déjà faits pendant ce run (repli Python)",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 S)",
+    "commentaire": "analyse indisponible (analyses:AUD-NZD-CNY : 1 appels déjà faits pendant ce run (repli Python))",
     "source_id": null
    },
    "detail_score": [],
@@ -2390,12 +2463,12 @@
    "risk_on_off": "neutre",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 S",
+   "raison_indisponibilite": "analyses:AUD-NZD-CNY : 1 appels déjà faits pendant ce run (repli Python)",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 S)",
+    "commentaire": "analyse indisponible (analyses:AUD-NZD-CNY : 1 appels déjà faits pendant ce run (repli Python))",
     "source_id": null
    },
    "detail_score": [],
@@ -6573,10 +6646,10 @@
     "n": 13
    },
    "GBP": {
-    "indice": 0.21,
+    "indice": 0.1,
     "precedent": 0.58,
     "tendance": "baisse",
-    "n": 10
+    "n": 12
    },
    "JPY": {
     "indice": 0.22,
@@ -6676,22 +6749,22 @@
   "conforme": false,
   "nb_anomalies": 16,
   "anomalies": [
-   "USD : analyse indisponible aujourd'hui (analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota gratuit journalier épuisé pour gemini-3.5-) — exclue du classement",
-   "EUR : analyse indisponible aujourd'hui (analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota gratuit journalier épuisé pour gemini-3.5-) — exclue du classement",
-   "GBP : analyse indisponible aujourd'hui (analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota gratuit journalier épuisé pour gemini-3.5-) — exclue du classement",
-   "JPY : analyse indisponible aujourd'hui (analyses:JPY-CHF-CAD : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 S) — exclue du classement",
-   "CHF : analyse indisponible aujourd'hui (analyses:JPY-CHF-CAD : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 S) — exclue du classement",
-   "CAD : analyse indisponible aujourd'hui (analyses:JPY-CHF-CAD : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 S) — exclue du classement",
-   "AUD : analyse indisponible aujourd'hui (analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 S) — exclue du classement",
-   "NZD : analyse indisponible aujourd'hui (analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 S) — exclue du classement",
-   "CNY : analyse indisponible aujourd'hui (analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 S) — exclue du classement",
+   "USD : analyse indisponible aujourd'hui (analyses:USD-EUR-GBP : 1 appels déjà faits pendant ce run (repli Python)) — exclue du classement",
+   "EUR : analyse indisponible aujourd'hui (analyses:USD-EUR-GBP : 1 appels déjà faits pendant ce run (repli Python)) — exclue du classement",
+   "GBP : analyse indisponible aujourd'hui (analyses:USD-EUR-GBP : 1 appels déjà faits pendant ce run (repli Python)) — exclue du classement",
+   "JPY : analyse indisponible aujourd'hui (analyses:JPY-CHF-CAD : 1 appels déjà faits pendant ce run (repli Python)) — exclue du classement",
+   "CHF : analyse indisponible aujourd'hui (analyses:JPY-CHF-CAD : 1 appels déjà faits pendant ce run (repli Python)) — exclue du classement",
+   "CAD : analyse indisponible aujourd'hui (analyses:JPY-CHF-CAD : 1 appels déjà faits pendant ce run (repli Python)) — exclue du classement",
+   "AUD : analyse indisponible aujourd'hui (analyses:AUD-NZD-CNY : 1 appels déjà faits pendant ce run (repli Python)) — exclue du classement",
+   "NZD : analyse indisponible aujourd'hui (analyses:AUD-NZD-CNY : 1 appels déjà faits pendant ce run (repli Python)) — exclue du classement",
+   "CNY : analyse indisponible aujourd'hui (analyses:AUD-NZD-CNY : 1 appels déjà faits pendant ce run (repli Python)) — exclue du classement",
    "état du monde absent de la synthèse globale",
    "tableau macro : USD/CPI annuel : publication manquée (prévue le 10/11, aucun « réel » reçu)",
    "tableau macro : USD/CPI core annuel : publication manquée (prévue le 10/11, aucun « réel » reçu)",
    "tableau macro : CNY/PMI manufacturier : publication manquée (prévue le 31/10, aucun « réel » reçu)",
    "tableau macro : CNY/PMI services : publication manquée (prévue le 31/10, aucun « réel » reçu)",
    "tableau macro : CNY/Balance commerciale : publication manquée (prévue le 10/11, aucun « réel » reçu)",
-   "prompt LLM volumineux : 5 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 24834 à 09:36 UTC, modèle gemini-3.5-flash-lite) — le contexte envoyé au LLM a regrossi"
+   "prompt LLM volumineux : 8 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 25032 à 10:21 UTC, modèle gemini-3.8-flash) — le contexte envoyé au LLM a regrossi"
   ]
  },
  "auto_evaluation": {
@@ -6775,25 +6848,14 @@
   ],
   "taux_reussite_biais_pct": 66.7,
   "correlation_classement_spearman": null,
-  "commentaire_llm": "Bilan correct à 66,7% de réussite, porté par de bonnes anticipations sur l'USD, l'EUR et les matières premières. En revanche, la lecture neutre sur le GBP et l'AUD était trop timorée face à la volatilité réelle."
+  "commentaire_llm": "Taux de réussite : 66.7 % ; corrélation de classement : None."
  },
  "critique": {
-  "incoherences": [
-   "Anomalies critiques de fiabilité relevées par le contrôle qualité : l'ensemble des 9 analyses par devise est indisponible suite à l'épuisement des quotas des modèles LLM (gemini-3.5-flash / gemini-3.8-flash), ce qui vide le rapport de ses scores de confluence et de son classement.",
-   "Le champ etat_du_monde est null dans la synthese_globale, ce qui constitue une omission structurelle selon les vérifications programmatiques."
-  ],
+  "incoherences": [],
   "affirmations_non_sourcees": [],
-  "suggestions_connaissances": [
-   {
-    "theme": "Gestion des pannes de quotas LLM sur les analyses de devises",
-    "suggestion": "En cas d'épuisement des quotas API des modèles LLM bloquant la génération des analyses individuelles de devises, le système doit basculer automatiquement sur un mode de repli (fallback) synthétique pour éviter de retourner des scores de confluence totalement vides (null) et préserver la structure minimale du rapport.",
-    "fichier_cible": "cas_particuliers.md"
-   }
-  ],
-  "validation": "a_revoir",
-  "redige_par": {
-   "modele": "gemini-3.5-flash-lite",
-   "libelle": "Flash-Lite 3.5"
-  }
+  "suggestions_connaissances": [],
+  "validation": "non_evalue",
+  "indisponible": true,
+  "note": "relecture non effectuée (critique : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python))"
  }
 }
