@@ -4,7 +4,7 @@
   "type_rapport": "hebdomadaire",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-23T14:19:52+00:00",
+  "genere_le": "2026-11-23T15:19:40+00:00",
   "appels_llm": [
    {
     "heure": "09:33",
@@ -175,7 +175,7 @@
    "engrenages_faits": true,
    "reserve_engrenages": 8,
    "refus_reserve_ce_run": 0,
-   "refus_budget_ce_run": 12,
+   "refus_budget_ce_run": 13,
    "budget": {
     "plafond": 60,
     "mode": "complément",
@@ -551,6 +551,40 @@
       "ignores": 0
      }
     ]
+   },
+   {
+    "heure": "15:19",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 3,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 3
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
    }
   ]
  },
@@ -864,7 +898,7 @@
      "comprendre": "En phase de Stress boursier (VIX au-dessus de 25), les investisseurs liquident leurs positions risquées et recherchent la liquidité en dollar américain et en valeurs refuges.",
      "desk": "VIX supérieur à 25 (28,44) : signal actif d'aversion pour le risque autorisant le positionnement acheteur USD et CHF.",
      "conviction": {
-      "niveau": "moyen",
+      "niveau": "eleve",
       "origine": "calcul Python",
       "justification": "Franchissement net du seuil de stress sur la volatilité actions confirment la posture défensive."
      },
@@ -876,11 +910,11 @@
      ],
      "donnees_calculees": [
       {
-       "texte": "VIX 28.44 le 2026-11-19 (+52.1 % sur 7 j)",
-       "source_id": "src_010",
+       "texte": "VIX 35.89 le 2026-11-20 (+86.0 % sur 7 j)",
+       "source_id": "src_172",
        "indicateur": "vix",
-       "valeur": 28.44,
-       "date": "2026-11-19"
+       "valeur": 35.89,
+       "date": "2026-11-20"
       },
       {
        "texte": "Indice dollar large (Fed) 122.6503 le 2026-11-13 (+0.63 % sur 7 j)",
@@ -908,11 +942,11 @@
      "sources_indisponibles": [],
      "mesure": {
       "libelle": "VIX",
-      "valeur": 28.44,
+      "valeur": 35.89,
       "unite": "pts",
       "seuil_bas": 14,
       "seuil_haut": 25,
-      "date": "2026-11-19",
+      "date": "2026-11-20",
       "source": "FRED (VIXCLS)",
       "si_haut": "Risk off",
       "si_bas": "Risk on",
@@ -1275,7 +1309,7 @@
     "libelle": "Flash 3.5"
    },
    "version": "quotidienne",
-   "rafraichi_le": "2026-11-23T14:19:52+00:00",
+   "rafraichi_le": "2026-11-23T15:19:40+00:00",
    "titre_theme_impose": "Signaux mixtes"
   },
   "classement_devises": [],
@@ -1346,12 +1380,12 @@
     {
      "indicateur": "vix",
      "nom": "VIX",
-     "valeur": 28.44,
+     "valeur": 35.89,
      "prevision": null,
      "precedent": 24.56,
      "source": "FRED (VIXCLS)",
-     "date": "2026-11-19",
-     "anciennete_jours": 4,
+     "date": "2026-11-20",
+     "anciennete_jours": 3,
      "note": ""
     },
     {
@@ -1507,12 +1541,12 @@
     {
      "indicateur": "vix",
      "nom": "VIX",
-     "valeur": 28.44,
+     "valeur": 35.89,
      "prevision": null,
      "precedent": 24.56,
      "source": "FRED (VIXCLS)",
-     "date": "2026-11-19",
-     "anciennete_jours": 4,
+     "date": "2026-11-20",
+     "anciennete_jours": 3,
      "note": ""
     },
     {
@@ -1668,12 +1702,12 @@
     {
      "indicateur": "vix",
      "nom": "VIX",
-     "valeur": 28.44,
+     "valeur": 35.89,
      "prevision": null,
      "precedent": 24.56,
      "source": "FRED (VIXCLS)",
-     "date": "2026-11-19",
-     "anciennete_jours": 4,
+     "date": "2026-11-20",
+     "anciennete_jours": 3,
      "note": ""
     },
     {
@@ -1829,12 +1863,12 @@
     {
      "indicateur": "vix",
      "nom": "VIX",
-     "valeur": 28.44,
+     "valeur": 35.89,
      "prevision": null,
      "precedent": 24.56,
      "source": "FRED (VIXCLS)",
-     "date": "2026-11-19",
-     "anciennete_jours": 4,
+     "date": "2026-11-20",
+     "anciennete_jours": 3,
      "note": ""
     },
     {
@@ -1990,12 +2024,12 @@
     {
      "indicateur": "vix",
      "nom": "VIX",
-     "valeur": 28.44,
+     "valeur": 35.89,
      "prevision": null,
      "precedent": 24.56,
      "source": "FRED (VIXCLS)",
-     "date": "2026-11-19",
-     "anciennete_jours": 4,
+     "date": "2026-11-20",
+     "anciennete_jours": 3,
      "note": ""
     },
     {
@@ -2161,12 +2195,12 @@
     {
      "indicateur": "vix",
      "nom": "VIX",
-     "valeur": 28.44,
+     "valeur": 35.89,
      "prevision": null,
      "precedent": 24.56,
      "source": "FRED (VIXCLS)",
-     "date": "2026-11-19",
-     "anciennete_jours": 4,
+     "date": "2026-11-20",
+     "anciennete_jours": 3,
      "note": ""
     },
     {
@@ -2333,12 +2367,12 @@
     {
      "indicateur": "vix",
      "nom": "VIX",
-     "valeur": 28.44,
+     "valeur": 35.89,
      "prevision": null,
      "precedent": 24.56,
      "source": "FRED (VIXCLS)",
-     "date": "2026-11-19",
-     "anciennete_jours": 4,
+     "date": "2026-11-20",
+     "anciennete_jours": 3,
      "note": ""
     },
     {
@@ -2494,12 +2528,12 @@
     {
      "indicateur": "vix",
      "nom": "VIX",
-     "valeur": 28.44,
+     "valeur": 35.89,
      "prevision": null,
      "precedent": 24.56,
      "source": "FRED (VIXCLS)",
-     "date": "2026-11-19",
-     "anciennete_jours": 4,
+     "date": "2026-11-20",
+     "anciennete_jours": 3,
      "note": ""
     },
     {
@@ -2699,12 +2733,12 @@
     {
      "indicateur": "vix",
      "nom": "VIX",
-     "valeur": 28.44,
+     "valeur": 35.89,
      "prevision": null,
      "precedent": 24.56,
      "source": "FRED (VIXCLS)",
-     "date": "2026-11-19",
-     "anciennete_jours": 4,
+     "date": "2026-11-20",
+     "anciennete_jours": 3,
      "note": ""
     },
     {
@@ -3970,6 +4004,13 @@
    "detail": "directions des engrenages 2 à 8 (règles Python et matrice d'impact)",
    "date": "2026-11-23",
    "url": null
+  },
+  {
+   "id": "src_172",
+   "source": "FRED",
+   "detail": "vix (VIXCLS)",
+   "date": "2026-11-20",
+   "url": "https://fred.stlouisfed.org/series/VIXCLS"
   }
  ],
  "donnees_non_rafraichies": [],
@@ -6195,7 +6236,6 @@
   },
   "vix": {
    "dates": [
-    "2025-12-19",
     "2025-12-26",
     "2026-01-02",
     "2026-01-09",
@@ -6324,10 +6364,10 @@
     "2026-11-16",
     "2026-11-17",
     "2026-11-18",
-    "2026-11-19"
+    "2026-11-19",
+    "2026-11-20"
    ],
    "valeurs": [
-    14.91,
     13.6,
     14.51,
     14.49,
@@ -6456,7 +6496,8 @@
     22.91,
     25.46,
     24.56,
-    28.44
+    28.44,
+    35.89
    ],
    "source_canonique": "vix"
   },
