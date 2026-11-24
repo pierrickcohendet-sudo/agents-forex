@@ -1,65 +1,47 @@
 {
- "date": "2026-11-23",
+ "date": "2026-11-24",
  "modeles": {
   "gemini-3.5-flash": {
-   "appels": 1,
-   "epuise_jusqu_a": "2026-11-24T07:59:59+00:00",
-   "pannes": 2
+   "appels": 0,
+   "epuise_jusqu_a": "2026-11-25T07:59:59+00:00",
+   "pannes": 1
   },
   "gemini-3.8-flash": {
    "appels": 0,
    "epuise_jusqu_a": "2026-11-17T07:59:59+00:00",
-   "pannes": 18
+   "pannes": 11
   },
   "gemini-3.5-flash-lite": {
-   "appels": 3,
-   "epuise_jusqu_a": null
+   "appels": 2,
+   "epuise_jusqu_a": null,
+   "pannes": 3
   }
  },
- "engrenages_faits": true,
+ "engrenages_faits": false,
  "categories": {
-  "engrenages": 1,
-  "reste": 3
+  "reste": 2
  },
  "etiquettes": {
   "engrenages": {
-   "appels": 1,
-   "echecs": 1,
-   "ok": true,
+   "appels": 0,
+   "echecs": 2,
+   "ok": false,
    "types": {
+    "429": 1,
     "503": 1
    },
    "dernier_echec": "503"
   },
   "analyses:USD-EUR-GBP": {
    "appels": 0,
-   "echecs": 6,
+   "echecs": 2,
    "ok": false,
    "types": {
-    "429": 1,
-    "503": 5
+    "delai": 2
    },
-   "dernier_echec": "503"
+   "dernier_echec": "delai"
   },
   "analyses:JPY-CHF-CAD": {
-   "appels": 0,
-   "echecs": 4,
-   "ok": false,
-   "types": {
-    "503": 4
-   },
-   "dernier_echec": "503"
-  },
-  "analyses:AUD-NZD-CNY": {
-   "appels": 0,
-   "echecs": 4,
-   "ok": false,
-   "types": {
-    "503": 4
-   },
-   "dernier_echec": "503"
-  },
-  "etat_du_monde": {
    "appels": 0,
    "echecs": 2,
    "ok": false,
@@ -68,10 +50,23 @@
    },
    "dernier_echec": "503"
   },
-  "auto_evaluation": {
+  "analyses:AUD-NZD-CNY": {
+   "appels": 0,
+   "echecs": 2,
+   "ok": false,
+   "types": {
+    "503": 2
+   },
+   "dernier_echec": "503"
+  },
+  "etat_du_monde": {
    "appels": 1,
-   "echecs": 0,
-   "ok": true
+   "echecs": 1,
+   "ok": true,
+   "types": {
+    "503": 1
+   },
+   "dernier_echec": "503"
   },
   "critique": {
    "appels": 1,
@@ -79,31 +74,24 @@
    "ok": true
   },
   "paires:synthese": {
-   "appels": 1,
-   "echecs": 0,
-   "ok": true
-  },
-  "rapport:redaction": {
-   "appels": 0,
-   "echecs": 4,
-   "ok": false,
-   "types": {
-    "503": 3,
-    "429": 1
-   },
-   "dernier_echec": "503"
-  },
-  "rapport:analyse": {
    "appels": 0,
    "echecs": 2,
    "ok": false,
    "types": {
-    "503": 1,
-    "429": 1
+    "503": 2
    },
-   "dernier_echec": "429"
+   "dernier_echec": "503"
   },
-  "rapport:long1": {
+  "rapport:redaction": {
+   "appels": 0,
+   "echecs": 2,
+   "ok": false,
+   "types": {
+    "503": 2
+   },
+   "dernier_echec": "503"
+  },
+  "rapport:analyse": {
    "appels": 0,
    "echecs": 2,
    "ok": false,
@@ -114,17 +102,18 @@
   }
  },
  "echecs": {
-  "503": 22,
-  "429": 3
+  "429": 1,
+  "503": 12,
+  "delai": 2
  },
  "faits": [],
- "pannes": 20,
+ "pannes": 15,
  "pannes_avant_correctif": 0,
  "dernier_run": {
-  "id": "2026-11-23T11:19:01.639991+00:00",
-  "envois": 1,
-  "503": 1,
-  "recues": 0,
-  "mode": "complément"
+  "id": "2026-11-24T09:31:53.273723+00:00",
+  "envois": 17,
+  "503": 12,
+  "recues": 2,
+  "mode": "complet"
  }
 }
