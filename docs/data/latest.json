@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-24T16:19:23+00:00",
+  "genere_le": "2026-11-24T17:19:32+00:00",
   "appels_llm": [
    {
     "heure": "09:31",
@@ -165,7 +165,7 @@
    "engrenages_faits": false,
    "reserve_engrenages": 8,
    "refus_reserve_ce_run": 0,
-   "refus_budget_ce_run": 12,
+   "refus_budget_ce_run": 13,
    "budget": {
     "plafond": 60,
     "mode": "complément",
@@ -598,6 +598,40 @@
       "ignores": 0
      }
     ]
+   },
+   {
+    "heure": "17:19",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 3,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 3
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 3
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
    }
   ],
   "notion_url": "https://app.notion.com/p/FX-2026-11-24-quotidien-42265bc6466181e28e0df1e556d715bd"
@@ -672,7 +706,7 @@
    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
    "quota_atteint": true,
    "tentatives": 0,
-   "genere_le": "2026-11-24T16:19:03+00:00",
+   "genere_le": "2026-11-24T17:19:12+00:00",
    "engrenages": [
     {
      "numero": 1,
@@ -989,7 +1023,7 @@
      "source_ids": [
       "src_200",
       "src_154",
-      "src_013",
+      "src_201",
       "src_155"
      ],
      "donnees_calculees": [
@@ -1008,11 +1042,11 @@
        "date": "2026-11-20"
       },
       {
-       "texte": "S&P 500 6910.39 le 2026-11-20 (-3.70 % sur la séance)",
-       "source_id": "src_013",
+       "texte": "S&P 500 7237.17 le 2026-11-23 (+4.73 % sur la séance)",
+       "source_id": "src_201",
        "indicateur": "sp500",
-       "valeur": 6910.39,
-       "date": "2026-11-20"
+       "valeur": 7237.17,
+       "date": "2026-11-23"
       },
       {
        "texte": "Indice or (proxy) — NASDAQ QGLDI, pas le cours spot : 2209.94 le 2026-11-19 (-7.20 % sur 7 j)",
@@ -1333,7 +1367,7 @@
    },
    "repli_python": true,
    "texte_indisponible": "Texte indisponible : quota du jour atteint",
-   "rafraichi_le": "2026-11-24T16:19:23+00:00"
+   "rafraichi_le": "2026-11-24T17:19:32+00:00"
   },
   "classement_devises": [
    {
@@ -4512,6 +4546,13 @@
    "detail": "vix (VIXCLS)",
    "date": "2026-11-23",
    "url": "https://fred.stlouisfed.org/series/VIXCLS"
+  },
+  {
+   "id": "src_201",
+   "source": "FRED",
+   "detail": "sp500 (SP500)",
+   "date": "2026-11-23",
+   "url": "https://fred.stlouisfed.org/series/SP500"
   }
  ],
  "donnees_non_rafraichies": [],
