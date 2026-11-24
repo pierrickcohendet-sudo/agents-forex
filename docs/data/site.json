@@ -1,9 +1,9 @@
 {
  "version_schema": 1,
- "genere_le": "2026-11-24T09:58:10+00:00",
+ "genere_le": "2026-11-24T10:26:26+00:00",
  "sources": {
-  "rapport": "2026-11-24T09:41:44+00:00",
-  "tableau_macro": "2026-11-24T09:16:28+00:00"
+  "rapport": "2026-11-24T10:20:39+00:00",
+  "tableau_macro": "2026-11-24T10:16:00+00:00"
  },
  "regime": {
   "biais": "neutre",
@@ -22,13 +22,13 @@
   ],
   "explication": "Écart entre le score de confluence moyen des devises « risque » et celui des devises « refuge » (calcul Python) : au-delà du seuil, Risk On ; en deçà de son opposé, Risk Off ; sinon Neutre.",
   "driver": "Régime de risque global : neutre (calcul Python). Le détail par devise est dans le profil des devises (état, moteur du moment, banque centrale).",
-  "relecture": "a_revoir",
+  "relecture": "non_evalue",
   "date_rapport": "2026-11-24",
-  "maj": "2026-11-24T09:41:44+00:00",
+  "maj": "2026-11-24T10:20:39+00:00",
   "type_rapport": "quotidien",
   "nb_devises": 9,
-  "nb_devises_disponibles": 0,
-  "notion_url": "https://app.notion.com/p/Rapport-du-jour-2026-11-24-courte-42265bc6466181e28e0df1e556d715bd",
+  "nb_devises_disponibles": 3,
+  "notion_url": "https://app.notion.com/p/FX-2026-11-24-quotidien-42265bc6466181e28e0df1e556d715bd",
   "notion_page_du_jour": true
  },
  "colonnes_cles": [
@@ -81,7 +81,7 @@
     "taux_directeur": {
      "texte": "3,75–4,00 % [fourchette cible] · taux effectif 3,88 %",
      "valeur_num": 3.75,
-     "date": "2026-11-22",
+     "date": "2026-11-23",
      "source": "FRED (DFEDTARL / DFEDTARU)",
      "consensus": null,
      "surprise": null,
@@ -152,7 +152,7 @@
      "texte": "n/d",
      "valeur_num": null,
      "etat": "absent",
-     "raison": "analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : HTTPS"
+     "raison": "analyses:USD-EUR-GBP : 1 appels déjà faits pendant ce run (repli Python)"
     },
     "biais": {
      "texte": "n/d",
@@ -169,7 +169,7 @@
     "taux_directeur": {
      "texte": "2,50 % [dépôt] · refinancement 2,65 % (registre macro)",
      "valeur_num": 2.5,
-     "date": "2026-11-20",
+     "date": "2026-11-23",
      "source": "FRED (ECBDFR, taux de la facilité de dépôt de la BCE)",
      "consensus": "2,65 %",
      "surprise": null,
@@ -240,7 +240,7 @@
      "texte": "n/d",
      "valeur_num": null,
      "etat": "absent",
-     "raison": "analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : HTTPS"
+     "raison": "analyses:USD-EUR-GBP : 1 appels déjà faits pendant ce run (repli Python)"
     },
     "biais": {
      "texte": "n/d",
@@ -328,7 +328,7 @@
      "texte": "n/d",
      "valeur_num": null,
      "etat": "absent",
-     "raison": "analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : HTTPS"
+     "raison": "analyses:USD-EUR-GBP : 1 appels déjà faits pendant ce run (repli Python)"
     },
     "biais": {
      "texte": "n/d",
@@ -416,7 +416,7 @@
      "texte": "n/d",
      "valeur_num": null,
      "etat": "absent",
-     "raison": "analyses:JPY-CHF-CAD : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 S"
+     "raison": "analyses:JPY-CHF-CAD : 1 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : quota"
     },
     "biais": {
      "texte": "n/d",
@@ -504,7 +504,7 @@
      "texte": "n/d",
      "valeur_num": null,
      "etat": "absent",
-     "raison": "analyses:JPY-CHF-CAD : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 S"
+     "raison": "analyses:JPY-CHF-CAD : 1 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : quota"
     },
     "biais": {
      "texte": "n/d",
@@ -592,7 +592,7 @@
      "texte": "n/d",
      "valeur_num": null,
      "etat": "absent",
-     "raison": "analyses:JPY-CHF-CAD : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 S"
+     "raison": "analyses:JPY-CHF-CAD : 1 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : quota"
     },
     "biais": {
      "texte": "n/d",
@@ -677,16 +677,21 @@
      "raison": null
     },
     "score": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 S"
+     "texte": "36",
+     "valeur_num": 36,
+     "etat": "valeur",
+     "source": "score de confluence (calcul Python)",
+     "date": "2026-11-24",
+     "raison": null
     },
     "biais": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "score du jour indisponible"
+     "texte": "Baissier",
+     "valeur_num": 36,
+     "code": "baissier",
+     "etat": "valeur",
+     "profil": "on",
+     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
+     "raison": null
     }
    }
   },
@@ -765,16 +770,21 @@
      "raison": null
     },
     "score": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 S"
+     "texte": "26",
+     "valeur_num": 26,
+     "etat": "valeur",
+     "source": "score de confluence (calcul Python)",
+     "date": "2026-11-24",
+     "raison": null
     },
     "biais": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "score du jour indisponible"
+     "texte": "Baissier",
+     "valeur_num": 26,
+     "code": "baissier",
+     "etat": "valeur",
+     "profil": "on",
+     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
+     "raison": null
     }
    }
   },
@@ -853,16 +863,21 @@
      "raison": null
     },
     "score": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint | gemini-3.8-flash : 503 S"
+     "texte": "45",
+     "valeur_num": 45,
+     "etat": "valeur",
+     "source": "score de confluence (calcul Python)",
+     "date": "2026-11-24",
+     "raison": null
     },
     "biais": {
-     "texte": "n/d",
-     "valeur_num": null,
-     "etat": "absent",
-     "raison": "score du jour indisponible"
+     "texte": "Neutre",
+     "valeur_num": 45,
+     "code": "neutre",
+     "etat": "valeur",
+     "profil": "neutre",
+     "source": "dérivé du score (≥ 60 haussier, ≤ 40 baissier)",
+     "raison": null
     }
    }
   }
@@ -928,7 +943,7 @@
      "taux_directeur": {
       "texte": "3,75–4,00 % [fourchette cible] · taux effectif 3,88 %",
       "valeur_num": 3.75,
-      "date": "2026-11-22",
+      "date": "2026-11-23",
       "source": "FRED (DFEDTARL / DFEDTARU)",
       "consensus": null,
       "surprise": null,
@@ -1071,7 +1086,7 @@
      "taux_directeur": {
       "texte": "2,50 % [dépôt] · refinancement 2,65 % (registre macro)",
       "valeur_num": 2.5,
-      "date": "2026-11-20",
+      "date": "2026-11-23",
       "source": "FRED (ECBDFR, taux de la facilité de dépôt de la BCE)",
       "consensus": "2,65 %",
       "surprise": null,

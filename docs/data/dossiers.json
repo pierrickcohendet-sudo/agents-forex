@@ -1,6 +1,6 @@
 {
  "version_schema": 1,
- "genere_le": "2026-11-24T09:41:44+00:00",
+ "genere_le": "2026-11-24T10:20:40+00:00",
  "debut_historique": "2021-09-23",
  "erreurs_collecte": [],
  "engrenages": {
@@ -170,6 +170,208 @@
         [
          "2026-11-21",
          86
+        ]
+       ]
+      },
+      {
+       "nom": "CNY",
+       "points": [
+        [
+         "2026-10-20",
+         49
+        ],
+        [
+         "2026-10-21",
+         48
+        ],
+        [
+         "2026-10-22",
+         50
+        ],
+        [
+         "2026-10-23",
+         40
+        ],
+        [
+         "2026-10-26",
+         36
+        ],
+        [
+         "2026-10-27",
+         58
+        ],
+        [
+         "2026-10-28",
+         60
+        ],
+        [
+         "2026-10-29",
+         48
+        ],
+        [
+         "2026-10-30",
+         53
+        ],
+        [
+         "2026-10-31",
+         46
+        ],
+        [
+         "2026-11-02",
+         50
+        ],
+        [
+         "2026-11-03",
+         50
+        ],
+        [
+         "2026-11-04",
+         65
+        ],
+        [
+         "2026-11-05",
+         66
+        ],
+        [
+         "2026-11-06",
+         60
+        ],
+        [
+         "2026-11-09",
+         26
+        ],
+        [
+         "2026-11-10",
+         57
+        ],
+        [
+         "2026-11-12",
+         43
+        ],
+        [
+         "2026-11-13",
+         48
+        ],
+        [
+         "2026-11-16",
+         30
+        ],
+        [
+         "2026-11-18",
+         40
+        ],
+        [
+         "2026-11-19",
+         30
+        ],
+        [
+         "2026-11-20",
+         39
+        ],
+        [
+         "2026-11-21",
+         39
+        ]
+       ]
+      },
+      {
+       "nom": "NZD",
+       "points": [
+        [
+         "2026-10-20",
+         38
+        ],
+        [
+         "2026-10-21",
+         38
+        ],
+        [
+         "2026-10-22",
+         42
+        ],
+        [
+         "2026-10-23",
+         48
+        ],
+        [
+         "2026-10-26",
+         40
+        ],
+        [
+         "2026-10-27",
+         38
+        ],
+        [
+         "2026-10-28",
+         30
+        ],
+        [
+         "2026-10-29",
+         32
+        ],
+        [
+         "2026-10-30",
+         42
+        ],
+        [
+         "2026-10-31",
+         28
+        ],
+        [
+         "2026-11-02",
+         18
+        ],
+        [
+         "2026-11-03",
+         26
+        ],
+        [
+         "2026-11-04",
+         15
+        ],
+        [
+         "2026-11-05",
+         40
+        ],
+        [
+         "2026-11-06",
+         46
+        ],
+        [
+         "2026-11-09",
+         32
+        ],
+        [
+         "2026-11-10",
+         26
+        ],
+        [
+         "2026-11-12",
+         35
+        ],
+        [
+         "2026-11-13",
+         42
+        ],
+        [
+         "2026-11-16",
+         35
+        ],
+        [
+         "2026-11-18",
+         30
+        ],
+        [
+         "2026-11-19",
+         30
+        ],
+        [
+         "2026-11-20",
+         30
+        ],
+        [
+         "2026-11-21",
+         30
         ]
        ]
       },
@@ -428,7 +630,20 @@
      "type": "barres",
      "titre": "Classement des 9 devises aujourd'hui",
      "unite": "0-100",
-     "barres": [],
+     "barres": [
+      {
+       "nom": "CNY",
+       "valeur": 45
+      },
+      {
+       "nom": "AUD",
+       "valeur": 36
+      },
+      {
+       "nom": "NZD",
+       "valeur": 26
+      }
+     ],
      "source": "calcul Python (scores de confluence)",
      "note": null,
      "absentes": [
@@ -437,12 +652,9 @@
       "GBP",
       "JPY",
       "CHF",
-      "CAD",
-      "AUD",
-      "NZD",
-      "CNY"
+      "CAD"
      ],
-     "raison": "valeurs indisponibles"
+     "raison": null
     }
    ],
    "notes": [
@@ -706,14 +918,14 @@
     {
      "id": "score_aud",
      "libelle": "Score AUD",
-     "valeur": null,
-     "texte": null,
+     "valeur": 36,
+     "texte": "36",
      "unite": "score",
      "date": "2026-11-24",
      "frequence": null,
      "age_jours": 0,
      "source": "calcul Python (score de confluence 0-100)",
-     "raison": "donnée indisponible",
+     "raison": null,
      "variation": {
       "valeur": -15,
       "unite": "pts",
@@ -831,14 +1043,14 @@
     {
      "id": "ecart_max",
      "libelle": "Écart meilleur − moins bon score",
-     "valeur": null,
-     "texte": null,
+     "valeur": 19,
+     "texte": "19",
      "unite": "score",
      "date": "2026-11-24",
      "frequence": null,
      "age_jours": 0,
-     "source": null,
-     "raison": "scores indisponibles",
+     "source": "calcul Python (CNY − NZD)",
+     "raison": null,
      "variation": {
       "valeur": 11,
       "unite": "pts",
@@ -12192,7 +12404,7 @@
      "raison": null
     }
    ],
-   "actualites_maj": "2026-11-24T09:41+00:00",
+   "actualites_maj": "2026-11-24T10:20+00:00",
    "actualites_nb_titres_lus": 78,
    "notes": [
     "Dette et solde publics : FMI (annuel, avec 1 à 3 ans de retard) ; EUR = Allemagne. Pas de série gratuite pour CHF et NZD.",
@@ -41789,7 +42001,7 @@
     "conviction": 2,
     "conviction_niveau": "moyen",
     "regle": "dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (4 accords, 1 désaccord)",
-    "raison_couleur": "Rouge (Dollar haussier · Risk off) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (4 accords, 1 désaccord). Chiffre du jour : Directions dollar des engrenages 2 à 8 : 3 haussières, 1 baissière, 3 neutres ; risque de l'engrenage 5 : risk_off"
+    "raison_couleur": "Rouge (Dollar haussier · Risk off) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (4 accords, 1 désaccord). Chiffre du jour : Biais global neutre ; classement : CNY 45, AUD 36, NZD 26"
    },
    "coherence": {
     "alignes": 3,
@@ -41890,7 +42102,7 @@
      "conviction": 2,
      "conviction_niveau": "moyen",
      "regle": "dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (4 accords, 1 désaccord)",
-     "raison_couleur": "Rouge (Dollar haussier · Risk off) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (4 accords, 1 désaccord). Chiffre du jour : Directions dollar des engrenages 2 à 8 : 3 haussières, 1 baissière, 3 neutres ; risque de l'engrenage 5 : risk_off"
+     "raison_couleur": "Rouge (Dollar haussier · Risk off) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (4 accords, 1 désaccord). Chiffre du jour : Biais global neutre ; classement : CNY 45, AUD 36, NZD 26"
     }
    },
    {
@@ -42002,7 +42214,7 @@
      "conviction": 3,
      "conviction_niveau": "eleve",
      "regle": "dollar : variation hebdomadaire du 2 ans US (≥ +10 pb haussier, ≤ -10 pb baissier)",
-     "raison_couleur": "Rouge (Dollar baissier) : dollar : variation hebdomadaire du 2 ans US (≥ +10 pb haussier, ≤ -10 pb baissier). Chiffre du jour : USD taux directeur 3.88% le 2026-11-19 (baisse, précédent 4.00%)"
+     "raison_couleur": "Rouge (Dollar baissier) : dollar : variation hebdomadaire du 2 ans US (≥ +10 pb haussier, ≤ -10 pb baissier). Chiffre du jour : USD taux directeur 3.88% le 2026-11-20 (baisse, précédent 4.00%)"
     }
    },
    {
@@ -42649,7 +42861,7 @@
      "a_retenir": "Direction calculée : Dollar haussier · Risk off.",
      "a_retenir_source": "calcul Python",
      "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
-     "raison_couleur": "Rouge (Dollar haussier · Risk off) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (4 accords, 1 désaccord). Chiffre du jour : Directions dollar des engrenages 2 à 8 : 3 haussières, 1 baissière, 3 neutres ; risque de l'engrenage 5 : risk_off"
+     "raison_couleur": "Rouge (Dollar haussier · Risk off) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (4 accords, 1 désaccord). Chiffre du jour : Biais global neutre ; classement : CNY 45, AUD 36, NZD 26"
     },
     {
      "numero": 1,
@@ -42674,7 +42886,7 @@
      "a_retenir": "Dollar haussier · Risk off. Règle Python : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (4 accords, 1 désaccord).",
      "a_retenir_source": "calcul Python",
      "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
-     "raison_couleur": "Rouge (Dollar haussier · Risk off) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (4 accords, 1 désaccord). Chiffre du jour : Directions dollar des engrenages 2 à 8 : 3 haussières, 1 baissière, 3 neutres ; risque de l'engrenage 5 : risk_off"
+     "raison_couleur": "Rouge (Dollar haussier · Risk off) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (4 accords, 1 désaccord). Chiffre du jour : Biais global neutre ; classement : CNY 45, AUD 36, NZD 26"
     },
     {
      "numero": 2,
@@ -42699,7 +42911,7 @@
      "a_retenir": "Dollar baissier. Règle Python : dollar : variation hebdomadaire du 2 ans US (≥ +10 pb haussier, ≤ -10 pb baissier).",
      "a_retenir_source": "calcul Python",
      "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
-     "raison_couleur": "Rouge (Dollar baissier) : dollar : variation hebdomadaire du 2 ans US (≥ +10 pb haussier, ≤ -10 pb baissier). Chiffre du jour : USD taux directeur 3.88% le 2026-11-19 (baisse, précédent 4.00%)"
+     "raison_couleur": "Rouge (Dollar baissier) : dollar : variation hebdomadaire du 2 ans US (≥ +10 pb haussier, ≤ -10 pb baissier). Chiffre du jour : USD taux directeur 3.88% le 2026-11-20 (baisse, précédent 4.00%)"
     },
     {
      "numero": 3,
@@ -46941,8 +47153,8 @@
       },
       {
        "date": "2026-11-24",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "dn",
+       "libelle": "Dollar haussier · Risk off"
       }
      ]
     },
@@ -47022,8 +47234,8 @@
       },
       {
        "date": "2026-11-24",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "dn",
+       "libelle": "Dollar baissier"
       }
      ]
     },
@@ -47103,8 +47315,8 @@
       },
       {
        "date": "2026-11-24",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "up",
+       "libelle": "Dollar haussier"
       }
      ]
     },
@@ -47184,8 +47396,8 @@
       },
       {
        "date": "2026-11-24",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "nd",
+       "libelle": "Dollar neutre"
       }
      ]
     },
@@ -47265,8 +47477,8 @@
       },
       {
        "date": "2026-11-24",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "dn",
+       "libelle": "Dollar haussier · Risk off"
       }
      ]
     },
@@ -47346,8 +47558,8 @@
       },
       {
        "date": "2026-11-24",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "dn",
+       "libelle": "Dollar haussier · Risk off"
       }
      ]
     },
@@ -47427,8 +47639,8 @@
       },
       {
        "date": "2026-11-24",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "dn",
+       "libelle": "Dollar neutre · Risk off"
       }
      ]
     },
@@ -47508,8 +47720,8 @@
       },
       {
        "date": "2026-11-24",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "nd",
+       "libelle": "Dollar neutre"
       }
      ]
     }
@@ -47578,20 +47790,20 @@
      },
      {
       "libelle": "Score AUD",
-      "texte": "n/d",
+      "texte": "36",
       "date": "2026-11-24",
       "source": "calcul Python (score de confluence 0-100)",
-      "raison": "donnée indisponible",
+      "raison": null,
       "variation": "−15 pts sur 4 semaines",
       "percentile_5a": null,
       "rang": "rang 5 ans n/d : scores archivés depuis août 2026 seulement"
      },
      {
       "libelle": "Écart meilleur − moins bon score",
-      "texte": "n/d",
+      "texte": "19",
       "date": "2026-11-24",
-      "source": null,
-      "raison": "scores indisponibles",
+      "source": "calcul Python (CNY − NZD)",
+      "raison": null,
       "variation": "+11 pts sur 4 semaines",
       "percentile_5a": null,
       "rang": "rang 5 ans n/d : scores archivés depuis août 2026 seulement"
