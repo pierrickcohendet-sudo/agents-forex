@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-25T12:29:18+00:00",
+  "genere_le": "2026-11-25T13:19:55+00:00",
   "appels_llm": [
    {
     "heure": "08:19",
@@ -269,7 +269,7 @@
    "engrenages_faits": true,
    "reserve_engrenages": 8,
    "refus_reserve_ce_run": 0,
-   "refus_budget_ce_run": 15,
+   "refus_budget_ce_run": 13,
    "budget": {
     "plafond": 60,
     "mode": "complément",
@@ -704,6 +704,40 @@
    },
    {
     "heure": "12:29",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 0,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
+   },
+   {
+    "heure": "13:20",
     "actif": true,
     "seuil_echecs": 3,
     "ouvert": false,
@@ -1548,7 +1582,7 @@
     "libelle": "Flash 3.5"
    },
    "version": "quotidienne",
-   "rafraichi_le": "2026-11-25T12:28:18+00:00"
+   "rafraichi_le": "2026-11-25T13:19:15+00:00"
   },
   "classement_devises": [
    {
@@ -2541,10 +2575,10 @@
     ]
    },
    "synthese_approfondie": {
-    "statut": "indisponible",
+    "statut": "abandonnee",
     "raison": "synthese:GBP : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python)",
-    "tentatives": 3,
-    "genere_le": "2026-11-25T12:28:38+00:00"
+    "tentatives": 4,
+    "genere_le": "2026-11-25T13:19:15+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.1,
@@ -2786,10 +2820,10 @@
     ]
    },
    "synthese_approfondie": {
-    "statut": "indisponible",
+    "statut": "abandonnee",
     "raison": "synthese:JPY : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python)",
-    "tentatives": 3,
-    "genere_le": "2026-11-25T12:28:58+00:00"
+    "tentatives": 4,
+    "genere_le": "2026-11-25T13:19:35+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.05,
@@ -3035,10 +3069,10 @@
     "evenements": []
    },
    "synthese_approfondie": {
-    "statut": "indisponible",
+    "statut": "abandonnee",
     "raison": "synthese:CHF : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python)",
-    "tentatives": 3,
-    "genere_le": "2026-11-25T12:29:18+00:00"
+    "tentatives": 4,
+    "genere_le": "2026-11-25T13:19:55+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.45,
@@ -9676,9 +9710,9 @@
   "nb_anomalies": 10,
   "anomalies": [
    "EUR : synthèse approfondie abandonnee (synthese:EUR : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
-   "GBP : synthèse approfondie indisponible (synthese:GBP : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
-   "JPY : synthèse approfondie indisponible (synthese:JPY : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
-   "CHF : synthèse approfondie indisponible (synthese:CHF : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
+   "GBP : synthèse approfondie abandonnee (synthese:GBP : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
+   "JPY : synthèse approfondie abandonnee (synthese:JPY : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
+   "CHF : synthèse approfondie abandonnee (synthese:CHF : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
    "tableau macro : USD/CPI annuel : publication manquée (prévue le 10/11, aucun « réel » reçu)",
    "tableau macro : USD/CPI core annuel : publication manquée (prévue le 10/11, aucun « réel » reçu)",
    "tableau macro : CNY/PMI manufacturier : publication manquée (prévue le 31/10, aucun « réel » reçu)",
