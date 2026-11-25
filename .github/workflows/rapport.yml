@@ -34,6 +34,8 @@ on:
                               # RATTRAPAGE : sans rapport du jour, le passage fait un run complet
     - cron: "15 7 * * 0"      # dimanche : dossier hebdomadaire des 8 engrenages (--hebdo)
     - cron: "15 8 * * 0,6"    # samedi et dimanche : dossiers des 8 moteurs seuls (--moteurs), après la remise à zéro du quota
+    - cron: "7,37 0-21 * * 1-5" # lot V14 : lecture ForexFactory planifiée 5 à 10 min après les publications fortes (--lecture) ;
+                                # le décideur ne lance rien si aucune lecture n'est due (data/cache/ff_planning.json)
   workflow_dispatch:
     inputs:
       completer:
@@ -51,7 +53,7 @@ on:
         type: string
         default: ""
       creneau:
-        description: "Réservé au déclencheur externe : matin, heure, dimanche ou moteurs (laisser vide)"
+        description: "Réservé au déclencheur externe : matin, heure, dimanche, moteurs ou lecture (laisser vide)"
         type: string
         default: ""
 
@@ -118,6 +120,7 @@ jobs:
             hebdo) ARGS="--hebdo" ;;
             completer) ARGS="--completer" ;;
             moteurs) ARGS="--moteurs" ;;
+            lecture) ARGS="--lecture" ;;
             *) ARGS="" ;;
           esac
           echo "Lancement : python orchestrateur.py $ARGS"

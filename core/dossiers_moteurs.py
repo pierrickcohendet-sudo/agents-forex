@@ -58,7 +58,10 @@ def fr(v, d: int = 2) -> str:
 # ------------------------------------------------------------------ 1. classement des titres par mots-clés (FR + EN)
 MOTS_CLES: dict[int, list[str]] = {
     1: [r"risk[- ]?(off|on)", r"appetit pour le risque", r"aversion au risque", r"safe[- ]haven", r"recession", r"stagflation",
-        r"soft landing", r"atterrissage"],
+        r"soft landing", r"atterrissage",
+        # Lot V14 (V13.1) : synthèses de marché (« wrap ») et humeur générale du marché -> moteur 1
+        r"\bwrap\b", r"market news", r"risk (appetite|sentiment|assets)", r"broad-based", r"short covering", r"sell-?off",
+        r"markets? (rebound|tumble|slide|rally|rallies|fall|drop)", r"global markets", r"bilan des marches", r"tour des marches"],
     2: [r"\bfed\b", r"fomc", r"\becb\b", r"\bbce\b", r"\bboe\b", r"\bboj\b", r"\brba\b", r"\brbnz\b", r"\bboc\b", r"\bsnb\b", r"\bbns\b",
         r"\bpboc\b", r"central bank", r"banque centrale", r"rate (cut|hike|decision)s?", r"\b(cut|hike)s? rates?", r"interest rates?",
         r"taux directeur", r"baisse de taux", r"hausse de taux", r"powell", r"warsh", r"lagarde", r"bailey", r"ueda", r"macklem",
@@ -73,7 +76,7 @@ MOTS_CLES: dict[int, list[str]] = {
     5: [r"\bstocks?\b", r"equities", r"\bactions?\b", r"s&p 500", r"nasdaq", r"\bdow\b", r"wall street", r"\bvix\b", r"volatility",
         r"\bgold\b", r"\bor\b(?= |,)", r"10-year", r"bond (market|yields?)", r"\bipo\b", r"earnings", r"resultats trimestriels",
         r"\bshares?\b", r"commodit", r"copper", r"cuivre", r"bitcoin", r"crypto"],
-    6: [r"sanctions?", r"\bwar\b", r"\bguerre\b", r"conflict", r"conflit", r"missile", r"strikes?\b(?! price)", r"attack", r"attaque",
+    6: [r"sanctions?", r"\bwar\b", r"\bguerre\b", r"conflict", r"conflit", r"missile", r"\bstrikes?\b(?! price)", r"attack", r"attaque",
         r"ceasefire", r"cessez-le-feu", r"election", r"\bvote\b", r"geopolit", r"\biran\b", r"israel", r"ukraine", r"russia", r"russie",
         r"taiwan", r"north korea", r"coree du nord", r"middle east", r"moyen-orient", r"tensions?", r"military", r"militaire"],
     7: [r"\bcot\b", r"commitments of traders", r"positioning", r"positionnement", r"speculat", r"net (long|short)s?",
@@ -87,7 +90,14 @@ MOTS_CLES: dict[int, list[str]] = {
 _MOTIFS = {n: [re.compile(m) for m in ms] for n, ms in MOTS_CLES.items()}
 # Indices régionaux de la Fed (Philly Fed, Empire State…) : des chiffres économiques, pas une décision de banque centrale
 _INDICES_FED = re.compile(r"(philly|philadelphia|richmond|kansas city|dallas|new york|chicago) fed( manufacturing| business| index)?|empire state")
-MOTS_CLES[3] += [r"manufacturing index", r"jobless claims", r"claims"]
+MOTS_CLES[3] += [r"manufacturing index", r"jobless claims", r"claims",
+                 # lot V14 (V13.1)
+                 r"economy (unexpectedly )?(contracts|shrinks|grows|expands)", r"economic sentiment", r"\bzew\b", r"\bifo\b",
+                 r"house prices", r"\bpsi\b", r"\bvs\b.{0,20}\bexpected\b"]
+MOTS_CLES[1] += [r"global economy", r"\bimf\b", r"\bfmi\b"]
+MOTS_CLES[6] += [r"\bsummit\b", r"\bsommet\b"]
+_MOTIFS[1] = [re.compile(m) for m in MOTS_CLES[1]]
+_MOTIFS[6] = [re.compile(m) for m in MOTS_CLES[6]]
 _MOTIFS[3] = [re.compile(m) for m in MOTS_CLES[3]]
 POURQUOI_TITRE = {
     1: "change le récit du marché (peur ou confiance), donc la direction des capitaux entre devises de refuge et de risque",
@@ -102,15 +112,57 @@ POURQUOI_TITRE = {
 
 
 def classer_titre(titre: str, resume: str = "") -> list[int]:
-    """1 ou 2 moteurs, du plus au moins cité (mots-clés FR et EN, accents ignorés) ; [] si aucun motif."""
+    """1 ou 2 moteurs, du plus au moins cité (mots-clés FR et EN, accents ignorés) ; [] si aucun motif.
+    Lot V14 (V13.1) : un moteur trouvé dans le titre l'emporte ; le résumé ne départage ou ne complète que si le titre
+    ne contient aucun mot-clé (avant, « Trump: Secured two new trade deals » recevait aussi le moteur 2 par son résumé)."""
     t = _INDICES_FED.sub(" manufacturing index ", _sans_accent(f"{titre} {resume or ''}"))
     titre = _INDICES_FED.sub(" manufacturing index ", _sans_accent(titre))
-    scores = []
+    scores, dans_titre = [], set()
     for n, motifs in _MOTIFS.items():
         k = sum(1 for m in motifs if m.search(t))
         if k:
-            scores.append((-k - (2 if any(m.search(_sans_accent(titre)) for m in motifs) else 0), n))
-    return [n for _, n in sorted(scores)[:2]]
+            if any(m.search(titre) for m in motifs):
+                dans_titre.add(n)
+            scores.append((-k - (2 if n in dans_titre else 0), n))
+    if dans_titre:
+        scores = [x for x in scores if x[1] in dans_titre]
+    ordre = [n for _, n in sorted(scores)]
+    if SYNTHESE.search(titre):   # synthèse de marché : le récit d'ensemble (moteur 1) d'abord
+        ordre = [1] + [n for n in ordre if n != 1]
+    return ordre[:2]
+
+
+SYNTHESE = re.compile(r"\bwrap\b|market news|tour des marches|bilan des marches")
+
+
+# Lot V14 (V13.1) : titre sur une entreprise isolée (action, rachat, introduction en Bourse, dirigeant) sans mot-clé macro
+_ENTREPRISE = re.compile(r"\bshares?\b|\bstock (jumps|soars|surges|falls|drops|slides|plunges|rallies|rises|sinks)|\bto buy\b|"
+                         r"\bacquir|\bacquisition|\bbuyback|\bceo\b|\bipo\b|\bsubsidiary\b|\bearnings\b|\bpremarket\b|"
+                         r"\bstartup\b|\bchipmaker\b|\bdrugmaker\b|\boffering\b")
+_MARCHE_LARGE = re.compile(r"\bmarkets?\b|\bindex|\bindices\b|s&p 500|nasdaq|\bdow\b|wall street|\bfutures\b|\bequities\b|"
+                           r"\bstocks (fall|rise|rally|slide|drop|tumble)|sell-?off|\bsector\b|\bwrap\b")
+
+
+def entreprise_isolee(titre: str) -> bool:
+    """Vrai si le titre ne parle que d'une entreprise (Zscaler, SpaceX / Cursor…) : aucun mot-clé des moteurs macro
+    (1 à 4, 6, 8) dans le titre et aucun marché d'ensemble (indice, Bourse, contrats à terme)."""
+    t = _sans_accent(titre)
+    if not _ENTREPRISE.search(t) or _MARCHE_LARGE.search(t):
+        return False
+    return not any(m.search(t) for n in (1, 2, 3, 4, 6, 8) for m in _MOTIFS[n])
+
+
+def reclasser(t: dict) -> list[int]:
+    """Moteurs d'un titre déjà collecté, avec les règles du jour (titre seul : le résumé n'est pas gardé en cache).
+    Flux officiel spécialisé : son moteur reste en premier. [] : titre écarté."""
+    titre = str(t.get("titre") or "")
+    if SANS_PORTEE.search(titre) or entreprise_isolee(titre):
+        return []
+    m = classer_titre(titre, t.get("resume") or "") or [int(x) for x in (t.get("moteurs") or [])][:2]
+    if t.get("officiel") and t.get("moteurs"):
+        premier = int(t["moteurs"][0])
+        m = [premier] + [x for x in m if x != premier][:1]
+    return m
 
 
 # Titres sans portée de marché (concours, prix, journées portes ouvertes, offres d'emploi, nominations de personnel)
@@ -129,6 +181,8 @@ def titres_classes(articles: list[dict], jour: str) -> list[dict]:
         if not titre or cle in vus:
             continue
         vus.add(cle)
+        if entreprise_isolee(titre):   # lot V14 (V13.1)
+            continue
         moteurs = classer_titre(titre, a.get("resume") or "")
         mf = a.get("moteur_flux")
         if mf in MOTS_CLES and a.get("classement") == "flux":   # flux spécialisé : son moteur d'abord, les mots-clés peuvent en ajouter un second
@@ -149,7 +203,7 @@ def moteur_publication(e: dict) -> int:
     typ = _sans_accent(e.get("type") or "")
     if re.search(r"opep|opec|crude|petrole|brut|balance commerciale|trade balance|current account|compte courant|exportations|importations|imports|exports", t):
         return 8
-    if typ in ("adjudication",) or re.search(r"auction|adjudication|budget|deficit|dette|debt|fiscal", t):
+    if typ in ("adjudication",) or re.search(r"auction|adjudication|budget|deficit|dette|debt|fiscal|borrowing|emprunt|besoin de financement", t):
         return 4
     if typ in ("reunion bc", "discours", "proces-verbal") or re.search(
             r"rate decision|decision|speaks|discours|minutes|proces-verbal|deliberations|statement|press conference|conference de presse|"

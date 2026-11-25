@@ -221,6 +221,9 @@ def main() -> int:
     parseur.add_argument("--moteurs", action="store_true",
                          help="Régénère seulement les dossiers des 8 moteurs (introductions du jour encore en Python), "
                               "par exemple au premier passage après la remise à zéro du quota, week-end compris.")
+    parseur.add_argument("--lecture", action="store_true",
+                         help="Lot V14 : lecture ForexFactory planifiée (5 à 10 min après une publication forte), puis "
+                              "agenda, thermomètres et séance recalculés ; aucun appel au modèle.")
     arguments = parseur.parse_args()
 
     load_dotenv(RACINE / ".env")
@@ -234,6 +237,8 @@ def main() -> int:
         return mode_hebdo(config, donnees_dir, dossier_rapports, arguments)
     if arguments.moteurs:
         return mode_moteurs(config)
+    if arguments.lecture:
+        return mode_lecture(config)
 
     type_rapport = type_de_rapport(arguments.type)
     log.info("=== Pipeline FX — rapport %s du %s%s ===", type_rapport, date.today().isoformat(),
@@ -418,6 +423,7 @@ def main() -> int:
                         dossier_rapports, type_rapport, overrides_du_jour, rapport_existant,
                         extras_synthese={
                             "registre": registre_macro.charger(donnees_dir / "registre_macro.json"),
+                            "h5": _historique_5ans(),   # lot V14 : 2 ans US quotidien (thermomètre du moteur 2)
                             "indice_surprise": (tableau or {}).get("indice_surprise", {}),
                             "dossiers": dossiers_jour},
                         fatal=True)
@@ -777,6 +783,36 @@ def mode_moteurs(config: dict) -> int:
     if (d or doc) and config.get("publication_web", {}).get("actif", True):
         etape("git push (dossiers des moteurs)", publication_web.pousser_git, config["publication_web"], RACINE,
               "dossiers des 8 moteurs et documentaire de la semaine")
+    return 0
+
+
+def _historique_5ans():
+    """Cache 5 ans (séries quotidiennes FRED) ; None s'il est illisible (le moteur 2 garde alors le registre)."""
+    try:
+        from core import historique_5ans
+        return historique_5ans.charger()
+    except Exception as exc:  # noqa: BLE001
+        log.warning("cache 5 ans illisible : %s", exc)
+        return None
+
+
+def mode_lecture(config: dict) -> int:
+    """Passage « --lecture » (lot V14, A1.5) : la lecture ForexFactory planifiée 5 à 10 min après les publications fortes
+    du jour (data/cache/ff_planning.json), puis le réel de l'agenda, les thermomètres et la séance recalculés, et publication.
+    Aucun appel au modèle ; si aucune lecture n'est due, rien n'est publié."""
+    log.info("=== Lecture ForexFactory planifiée (--lecture) ===")
+    tableau = etape("tableau macro (lecture planifiée)", tableau_macro.mettre_a_jour, config, RACINE, RACINE / "config.yaml",
+                    avec_notion=False, defaut=None)
+    ff = (tableau or {}).get("ff") or {}
+    _ecrire_resume_run(f"page « mois » : {ff.get('statut') or 'n/d'} ({ff.get('note') or ''})", titre="Lecture ForexFactory")
+    if ff.get("statut") != "frais":
+        log.info("Lecture ForexFactory : rien de nouveau (%s)", ff.get("note"))
+        return 0
+    etape("mises à jour en séance", seance.rafraichir, RACINE, config, _charger_rapport_existant(RACINE / config["chemins"]["donnees"] / "rapports"),
+          defaut={})
+    if config.get("publication_web", {}).get("actif", True):
+        etape("git push (lecture ForexFactory)", publication_web.pousser_git, config["publication_web"], RACINE,
+              "lecture ForexFactory : réels de l'agenda")
     return 0
 
 

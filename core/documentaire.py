@@ -27,6 +27,7 @@ from core import contexte as ctx_mod
 from core import dossiers_moteurs as dm
 from core import noms_moteurs as nm
 from core import seuils as seuils_mod
+from core import indicateurs_cles
 from core import surprises
 
 log = logging.getLogger(__name__)
@@ -278,10 +279,12 @@ def accumuler_titres(racine: Path, articles: list[dict], maintenant: datetime) -
     d = _lire(chemin) or {"semaines": {}}
     sem = semaine_iso(maintenant.astimezone(PARIS).date())
     stock = d["semaines"].setdefault(sem, {})
+    resumes = {str(a.get("titre") or "").strip(): str(a.get("resume") or "")[:300] for a in articles or []}
     for t in dm.titres_classes(articles, maintenant.date().isoformat()):
         cle = re.sub(r"\W+", " ", dm._sans_accent(t["titre"])).strip()[:120]
-        if cle not in stock:
-            stock[cle] = {**t, "vu_le": maintenant.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M+00:00")}
+        if cle not in stock:   # lot V14 : le résumé est gardé pour reclasser plus tard avec les règles du jour
+            stock[cle] = {**t, "resume": resumes.get(t["titre"]) or None,
+                          "vu_le": maintenant.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M+00:00")}
     for s in sorted(d["semaines"])[:-3]:
         d["semaines"].pop(s, None)
     try:
@@ -293,8 +296,15 @@ def accumuler_titres(racine: Path, articles: list[dict], maintenant: datetime) -
 
 
 def titres_semaine(racine: Path, sem: str) -> list[dict]:
+    """Titres accumulés de la semaine, reclassés avec les règles du jour (lot V14 : synthèses de marché au moteur 1,
+    entreprise isolée écartée)."""
     d = _lire(Path(racine) / CACHE_TITRES)
-    return sorted((d.get("semaines") or {}).get(sem, {}).values(), key=lambda t: str(t.get("date") or t.get("vu_le") or ""), reverse=True)
+    sortie = []
+    for t in (d.get("semaines") or {}).get(sem, {}).values():
+        m = dm.reclasser(t)
+        if m:
+            sortie.append({**t, "moteurs": m, "pourquoi": {str(n): dm.POURQUOI_TITRE[n] for n in m}})
+    return sorted(sortie, key=lambda t: str(t.get("date") or t.get("vu_le") or ""), reverse=True)
 
 
 # ------------------------------------------------------------------ publications de la semaine
@@ -305,7 +315,8 @@ def publications_semaine(archive: dict, cfg_tm: dict, du: str, fin: str) -> list
     index = surprises.ecarts_archives(archive)
     sortie = []
     for p in ((archive or {}).get("publications") or {}).values():
-        if not (du <= str(p.get("date")) <= fin) or p.get("devise") not in DEVISES or p.get("impact") not in ("moyen", "fort"):
+        impact, releve = indicateurs_cles.relever(p.get("devise"), p.get("evenement_en"), p.get("impact"))   # lot V14 (V13.1)
+        if not (du <= str(p.get("date")) <= fin) or p.get("devise") not in DEVISES or impact not in ("moyen", "fort"):
             continue
         e = {"evenement": p.get("evenement"), "evenement_en": p.get("evenement_en"), "type": p.get("type"), "devise": p.get("devise")}
         ec = None
@@ -315,7 +326,7 @@ def publications_semaine(archive: dict, cfg_tm: dict, du: str, fin: str) -> list
         pastille = "sans consensus" if not ec else ec["sens"]
         sortie.append({"id": f"{p.get('date')}|{p.get('devise')}|{str(p.get('evenement_en') or '').lower()}", "date": p.get("date"),
                        "heure": p.get("heure_paris"), "devise": p.get("devise"), "evenement": p.get("evenement"),
-                       "evenement_en": p.get("evenement_en"), "type": p.get("type"), "impact": p.get("impact"),
+                       "evenement_en": p.get("evenement_en"), "type": p.get("type"), "impact": impact, "impact_releve": releve,
                        "reel": p.get("reel"), "consensus": p.get("consensus"), "precedent": p.get("precedent"), "pastille": pastille,
                        "z": (ec or {}).get("z"), "favorable": (ec or {}).get("favorable"), "base_z": (ec or {}).get("base_z"),
                        "raison_z": (ec or {}).get("raison_z"), "moteur": dm.moteur_publication(e),
@@ -586,13 +597,8 @@ def recit_python(ch: dict, sem: dict, theme_jours: list[dict]) -> dict:
     if e.get("note"):
         ouverture += f" Pour situer ce chiffre : {e['note'].rstrip('.')}."
     P.append(ouverture)
-    bouges = sorted([i for i in ch["indicateurs"] if (i["variation_semaine"] or {}).get("valeur") is not None], key=lambda i: -i["ampleur"])[:4]
-    if bouges:
-        phrases = [f"« {i['libelle']} » termine à {i['texte']}, soit {i['variation_semaine'].get('court') or i['variation_semaine']['texte']}"
-                   + (f" ; {i['lecture_niveau'][0].lower() + i['lecture_niveau'][1:].rstrip('.')}" if i.get("lecture_niveau") else "")
-                   for i in bouges]
-        P.append("Du côté des indicateurs, " + phrases[0] + ". " + " ".join(f"{p[0].upper() + p[1:]}." for p in phrases[1:])
-                 + " Ces mouvements donnent la tonalité de la semaine pour ce moteur, au-delà du seul chiffre du jour.")
+    bouges = sorted([i for i in ch["indicateurs"] if (i["variation_semaine"] or {}).get("valeur") is not None], key=lambda i: -i["ampleur"])[:5]
+    P.extend(paragraphes_indicateurs(bouges))
     for g in ch["graphiques"]:
         if g.get("derniere") and (g.get("variation_semaine") or {}).get("valeur") is not None and len(P) < 4:
             P.append(f"Sur six mois, la série « {g['titre']} » se termine à {fr(g['derniere'][1], g['decimales'])}{unite_graphique(g['titre'])} le {ddm(g['derniere'][0])}, "
@@ -629,11 +635,9 @@ def recit_python(ch: dict, sem: dict, theme_jours: list[dict]) -> dict:
         P.append(f"{len(ch['publications'])} publication{'s' if len(ch['publications']) > 1 else ''} de la semaine "
                  f"{'sont reliées' if len(ch['publications']) > 1 else 'est reliée'} à ce moteur, sans consensus publié pour en mesurer la surprise.")
     # titres cités dans le récit : jamais un titre qui contient un mot interdit (« stop », « short »…) ou un ordre
-    t = [x for x in ch["actualite"] if titre_citable(x.get("titre"))][:3]
+    t = [x for x in ch["actualite"] if titre_citable(x.get("titre"))][:8]
     if ch["actualite"] and t:
-        P.append("Dans l'actualité, " + f"{len(ch['actualite'])} titre{'s' if len(ch['actualite']) > 1 else ''} de la semaine {'relèvent' if len(ch['actualite']) > 1 else 'relève'} de ce moteur, "
-                 + "dont " + " ; ".join(f"« {x['titre']} » ({x.get('source') or 'source n/d'}, {ddm(x.get('date'))})" for x in t) + ". "
-                 + f"Ils comptent parce qu'ils {dm.POURQUOI_TITRE[n].split(' : ')[0].replace('touche', 'touchent').replace('porte', 'portent').replace('concerne', 'concernent').replace('change', 'changent').replace('signale', 'signalent')}.")
+        P.append(paragraphe_actualite(ch["actualite"], t, n))
     sout = [d for d in ch["devises"] if d["effet"] == "soutien"]
     pres = [d for d in ch["devises"] if d["effet"] == "pression"]
     if sout or pres:
@@ -661,6 +665,81 @@ def recit_python(ch: dict, sem: dict, theme_jours: list[dict]) -> dict:
                     + ", ".join(x.split(' : ')[0] for x in c.get("indicateurs", [])) + ".")
     exergue = _exergue_python(ch)
     return {"paragraphes": P, "exergue": exergue, "redige_par": "python", "mots": mots(" ".join(P))}
+
+
+LIAISONS = ["Dans le même temps,", "En parallèle,", "À côté de cela,"]
+
+
+def _phrase_indicateur(i: dict) -> str:
+    v = i["variation_semaine"]
+    lecture = i.get("lecture_niveau")
+    base = f"« {i['libelle']} » termine à {i['texte']} ({v.get('court') or v['texte']})"
+    if lecture:
+        base += f", {lecture[0].lower() + lecture[1:].rstrip('.')}"
+    return base
+
+
+def paragraphes_indicateurs(bouges: list[dict]) -> list[str]:
+    """Lot V14 (V13.1) : les indicateurs qui ont le plus bougé, 2 ou 3 par paragraphe, reliés par une phrase de liaison
+    (avant : une suite de phrases « « X » termine à… » sans lien)."""
+    if not bouges:
+        return []
+    groupes = [bouges[:3], bouges[3:5]] if len(bouges) > 3 else [bouges]
+    sortie = []
+    for k, g in enumerate(groupes):
+        if not g:
+            continue
+        tete = "Du côté des indicateurs, " if k == 0 else "Deux autres mesures complètent le tableau : "
+        corps = _phrase_indicateur(g[0]) + "."
+        for j, i in enumerate(g[1:]):
+            corps += f" {LIAISONS[j % len(LIAISONS)]} {_phrase_indicateur(i)}."
+        fin = (" Ces mouvements donnent la tonalité de la semaine pour ce moteur, au-delà du seul chiffre du jour." if k == 0
+               else " Pris ensemble, ils confirment ou nuancent la lecture du thermomètre.")
+        sortie.append(tete + corps + fin)
+    return sortie
+
+
+# Sujet en français d'un titre de presse (mot-clé reconnu), pour ne jamais citer un titre anglais tel quel
+SUJETS = [(r"tariff|droits de douane", "les droits de douane"), (r"trade (deal|agreement|talks)|accord commercial", "les accords commerciaux"),
+          (r"\boil\b|crude|brent|\bwti\b|petrole|opec|opep", "le pétrole"), (r"natural gas|\blng\b|\bgaz\b", "le gaz"),
+          (r"export|import", "le commerce extérieur"), (r"sanction", "les sanctions"), (r"\bwar\b|guerre|missile|attack|strike|military", "les tensions militaires"),
+          (r"ceasefire|cessez", "un cessez-le-feu"), (r"election|\bvote\b", "une élection"), (r"summit|sommet", "un sommet international"),
+          (r"\bfed\b|fomc|powell|warsh|waller", "la Réserve fédérale"), (r"\becb\b|\bbce\b|lagarde", "la BCE"), (r"\bboe\b|bailey", "la Banque d'Angleterre"),
+          (r"\bboj\b|ueda", "la Banque du Japon"), (r"\brba\b", "la Banque de réserve d'Australie"), (r"\bboc\b|macklem", "la Banque du Canada"),
+          (r"rate (cut|hike)|interest rate", "les taux d'intérêt"), (r"\bcpi\b|inflation", "l'inflation"), (r"payroll|jobs|unemployment|jobless|chomage", "l'emploi"),
+          (r"\bgdp\b|\bpib\b|economy (contracts|shrinks|grows)", "la croissance"), (r"\bpmi\b|manufacturing", "l'activité industrielle"),
+          (r"retail sales|ventes au detail", "la consommation"), (r"house prices|housing", "l'immobilier"),
+          (r"budget|deficit|\bdebt\b|dette|borrowing|fiscal|\bgilts?\b", "les finances publiques"), (r"auction|adjudication", "une adjudication de dette"),
+          (r"wrap|risk sentiment|risk (on|off)|sell-?off|markets? (rebound|fall|tumble)", "l'humeur générale des marchés"),
+          (r"\bstocks?\b|equities|nasdaq|s&p|wall street|\bdow\b", "les marchés d'actions"), (r"\bgold\b", "l'or"), (r"\bvix\b|volatility", "la volatilité"),
+          (r"bitcoin|crypto", "les cryptomonnaies"), (r"\bchina\b|\bchine\b", "la Chine"), (r"\bjapan\b", "le Japon")]
+
+
+def sujet_titre(titre: str) -> str | None:
+    t = dm._sans_accent(titre)
+    return next((lib for m, lib in SUJETS if re.search(m, t)), None)
+
+
+def paragraphe_actualite(tous: list[dict], citables: list[dict], n: int) -> str:
+    """Lot V14 (V13.1) : l'actualité racontée par ses sujets (en français), avec la source et la date ; les titres
+    anglais ne sont plus recopiés tels quels."""
+    vus, morceaux = set(), []
+    for x in citables:
+        suj = sujet_titre(x.get("titre") or "")
+        if not suj or suj in vus:
+            continue
+        vus.add(suj)
+        morceaux.append(f"{suj} ({x.get('source') or 'source n/d'}, {ddm(x.get('date'))})")
+        if len(morceaux) == 3:
+            break
+    nb = len(tous)
+    verbe = dm.POURQUOI_TITRE[n].split(' : ')[0]
+    for a, b in (("touche", "touchent"), ("porte", "portent"), ("concerne", "concernent"), ("change", "changent"), ("signale", "signalent")):
+        verbe = verbe.replace(a, b)
+    tete = f"Dans l'actualité, {nb} titre{'s' if nb > 1 else ''} de la semaine {'relèvent' if nb > 1 else 'relève'} de ce moteur"
+    if morceaux:
+        tete += (", et les plus récents portent sur " + (", ".join(morceaux[:-1]) + " et " + morceaux[-1] if len(morceaux) > 1 else morceaux[0]))
+    return tete + f". Ils comptent parce qu'ils {verbe} ; la liste complète, avec les liens vers les articles, suit ce récit."
 
 
 def _exergue_python(ch: dict) -> str:
@@ -705,6 +784,20 @@ def controler_recit(r: dict, faits: dict, nom: str) -> list[str]:
     if nom.lower() not in texte.lower():
         raisons.append(f"le moteur n'est pas cité par son nom ({nom})")
     return raisons[:8]
+
+
+def vocabulaire_interdit(r: dict) -> list[str]:
+    """Mots interdits et formulations d'ordre dans un récit (sans le contrôle des nombres)."""
+    from core import controle_texte as ct
+    sortie = []
+    for morceau in [str(p) for p in (r.get("paragraphes") or [])] + [str(r.get("exergue") or "")]:
+        m = INTERDITS.search(morceau)
+        if m:
+            sortie.append(m.group())
+        sortie += [re.search(x, morceau.lower()).group() for x in ct.ORDRES if re.search(x, morceau.lower())]
+        if ENGRENAGE_SEUL.search(morceau):
+            sortie.append("engrenage N")
+    return sortie
 
 
 def prompt_recit(faits: dict, nom: str) -> str:
@@ -847,7 +940,7 @@ def calculer(racine: Path, maintenant: datetime | None = None, h5=None, config: 
             zs = [p for p in ch["publications"] if p.get("z") is not None]
             if n == 3 and zs:   # chiffres économiques : la surprise la plus nette de la semaine
                 p = max(zs, key=lambda x: abs(x["z"]))
-                ch["plus_bouge"] = {"libelle": f"{p['evenement']} ({p['devise']})", "texte": f"{p['reel']} contre {p['consensus']} attendu",
+                ch["plus_bouge"] = {"libelle": f"{p['evenement']} ({p['devise']})", "texte": f"{frtxt(p['reel'])} contre {frtxt(p['consensus'])} attendu",
                                     "variation": f"{sgn(p['z'], 1)} écart habituel, {jour_court(p['date'])}"}
             chapitres[str(n)] = ch
         except Exception as exc:  # noqa: BLE001 — un chapitre qui échoue ne casse jamais les autres
@@ -953,10 +1046,14 @@ def rediger(d: dict, racine: Path, maintenant: datetime, llm=None, secours=None,
         forts = forts_du_moteur(ch)
         faire, motif = doit_rediger_recit(entree, sem, maintenant, forts)
         retenu = None
-        if entree and entree.get("semaine") == sem and not faire:
+        if entree and entree.get("semaine") == sem and not faire and entree.get("paragraphes"):
+            # Lot V14 (V13.1) : le texte a passé le contrôle des nombres à sa rédaction, sur les faits de ce moment-là ;
+            # il n'est plus rejeté parce que les faits ont bougé depuis (avant : les récits Groq du matin retombaient en
+            # Python au fil des runs). Seul le vocabulaire est revérifié ; il est daté (« rédigé le JJ/MM à HH:MM »).
             r = {"paragraphes": entree.get("paragraphes") or [], "exergue": entree.get("exergue") or ""}
-            if not controler_recit(r, faits, ch["nom"]):
-                retenu = {**r, "redige_par": entree.get("redige_par"), "mots": mots(" ".join(r["paragraphes"]))}
+            if not vocabulaire_interdit(r):
+                retenu = {**r, "redige_par": entree.get("redige_par"), "mots": mots(" ".join(r["paragraphes"])),
+                          "redige_le": entree.get("redige_le")}
         if faire:
             if llm is None and secours is None and fabrique is not None and not fabrique_faite:
                 try:
@@ -969,12 +1066,14 @@ def rediger(d: dict, racine: Path, maintenant: datetime, llm=None, secours=None,
                 bilan["journal"][k] = {"motif": motif, **journal}
                 u = maintenant.astimezone(timezone.utc)
                 if r:
-                    retenu = r
+                    retenu = {**r, "redige_le": u.strftime("%Y-%m-%dT%H:%M+00:00")}
                     cache[k] = {"semaine": sem, "jour": u.date().isoformat(), "forts": forts, "paragraphes": r["paragraphes"],
-                                "exergue": r["exergue"], "redige_par": r["redige_par"], "complet": maintenant.astimezone(PARIS).weekday() >= 5}
+                                "exergue": r["exergue"], "redige_par": r["redige_par"], "redige_le": retenu["redige_le"],
+                                "complet": maintenant.astimezone(PARIS).weekday() >= 5}
                 else:   # échec : on note la tentative du jour pour ne pas rappeler le modèle à chaque run
-                    cache[k] = {**(entree if entree and entree.get("semaine") == sem else {"semaine": sem}), "jour": u.date().isoformat(), "forts": forts,
-                                "complet": (entree or {}).get("complet", False) or maintenant.astimezone(PARIS).weekday() >= 5,
+                    meme = bool(entree and entree.get("semaine") == sem)
+                    cache[k] = {**(entree if meme else {"semaine": sem}), "jour": u.date().isoformat(), "forts": forts,
+                                "complet": (meme and (entree or {}).get("complet", False)) or maintenant.astimezone(PARIS).weekday() >= 5,
                                 "paragraphes": (entree or {}).get("paragraphes") if (entree or {}).get("semaine") == sem else None,
                                 "exergue": (entree or {}).get("exergue") if (entree or {}).get("semaine") == sem else None,
                                 "redige_par": (entree or {}).get("redige_par") if (entree or {}).get("semaine") == sem else None}

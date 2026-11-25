@@ -21,6 +21,8 @@ from pathlib import Path
 
 from core import registre_macro as rm, tableau_macro
 from core import noms_moteurs as nm
+from core import indicateurs_cles
+from core import ff_historique
 
 log = logging.getLogger(__name__)
 
@@ -235,9 +237,14 @@ class Agenda:
         impact_fr = IMPACTS.get(str(impact or "").lower(), "n/d")
         if titre_en in self.non_marche or impact_fr == "férié":
             texte, _ = self.trad.traduire(titre_en)
-            d = self.discrets.setdefault((jour, texte), {"date_paris": jour, "texte": texte, "devises": [], "source": source})
+            d = self.discrets.setdefault((jour, texte), {"date_paris": jour, "texte": texte, "texte_en": titre_en, "devises": [], "source": source,
+                                                         "type": "Férié" if impact_fr == "férié" else "Hors marché",
+                                                         "iso_utc": quand.astimezone(timezone.utc).isoformat(timespec="minutes"),
+                                                         "heure_paris": "journée", "impact": impact_fr, "ff": []})
             if devise not in d["devises"]:
                 d["devises"].append(devise)
+            if extra and extra.get("ff_id"):
+                d["ff"].append({"devise": devise, "ff_id": extra["ff_id"], "ff_url": extra.get("ff_url")})
             return None
         cle = (devise, jour, titre_en.lower())
         if cle in self.lignes:   # même évènement vu par une autre source : on complète sans écraser
@@ -251,6 +258,7 @@ class Agenda:
             return e
         fr, ok = (titre_fr, True) if titre_fr else self.trad.traduire(titre_en)
         typ = type_force or type_evenement(titre_en)
+        impact_fr, releve = indicateurs_cles.relever(devise, titre_en, impact_fr)   # lot V14 (V13.1)
         sans_heure = not heure_connue or (local.hour, local.minute) == (0, 0)
         e = {"iso_utc": quand.astimezone(timezone.utc).isoformat(timespec="minutes"), "date_paris": jour,
              "heure_paris": "journée" if sans_heure else local.strftime("%H:%M"), "heure_connue": not sans_heure,
@@ -260,6 +268,8 @@ class Agenda:
              "source": source, "sources": [source], "sources_champs": {}, "verifie_le": verifie_le,
              "engrenage": engrenage(titre_en), "simulateur": simulateur(devise, titre_en)}
         e["sources_champs"] = {c: source for c in ("precedent", "consensus", "publie") if e[c]}
+        if releve:
+            e["impact_releve"] = releve
         if extra:
             e.update(extra)
         self.lignes[cle] = e
@@ -277,14 +287,64 @@ def _quand_ff(iso: str) -> datetime | None:
         return None
 
 
+FF = "https://www.forexfactory.com"
+MOIS_FF = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
+FUSEAU_LIEN_FF = "America/New_York"   # jour du lien « day= » : fuseau d'affichage par défaut de ForexFactory (vérifié le 26/11)
+
+
+def lien_ff(ff_id, dateline=None, url: str | None = None, fuseau: str = FUSEAU_LIEN_FF) -> str | None:
+    """Lot V14 (A1.1) : lien d'une publication sur ForexFactory. Le lien fourni par la page (« url ») l'emporte ;
+    sinon il est construit : https://www.forexfactory.com/calendar?day=nov25.2026#detail=<id> (jour dans le fuseau
+    d'affichage de ForexFactory). Sans identifiant : la page du jour, ou None."""
+    if url and str(url).startswith("http"):
+        return str(url)
+    if url and str(url).startswith("/"):
+        return FF + str(url)
+    if dateline is None:
+        return None
+    j = datetime.fromtimestamp(int(dateline), tz=timezone.utc).astimezone(_zone(fuseau)).date()
+    jour = f"{MOIS_FF[j.month - 1]}{j.day}.{j.year}"
+    return f"{FF}/calendar?day={jour}" + (f"#detail={ff_id}" if ff_id else "")
+
+
+def _zone(nom: str):
+    from zoneinfo import ZoneInfo
+    return ZoneInfo(nom)
+
+
+def _extra_ff(it: dict) -> dict:
+    x = {"ff_id": it.get("id"), "ff_url": lien_ff(it.get("id"), it.get("dateline"), it.get("url")), "ff_ebase": it.get("ebase_id")}
+    if it.get("revision"):
+        x["revision"] = it["revision"]
+    if it.get("reel") and it.get("reel_vu_le"):
+        x["publie_releve"] = {"source": SOURCE_MOIS, "le": it["reel_vu_le"]}
+    return x
+
+
 def _depuis_mois(ag: Agenda, mois: list[dict] | None, verifie_le: str | None) -> None:
     for it in mois or []:
         if not it.get("dateline") or not it.get("nom"):
             continue
         quand = datetime.fromtimestamp(int(it["dateline"]), tz=timezone.utc)
-        ag.ajouter(str(it.get("devise") or "").upper(), str(it["nom"])[:150], quand, it.get("impact") or "",
+        devise = str(it.get("devise") or "").upper()
+        if devise == "ALL":   # lot V14 (A1.4) : réunions de l'OPEP+, G20… gardées avec la pastille « Événement »
+            _evenement_global(ag, it, quand)
+            continue
+        ag.ajouter(devise, str(it["nom"])[:150], quand, it.get("impact") or "",
                    it.get("precedent"), it.get("prevision"), it.get("reel"), SOURCE_MOIS, verifie_le=verifie_le,
-                   extra={"revision": it.get("revision")} if it.get("revision") else None)
+                   extra=_extra_ff(it))
+
+
+def _evenement_global(ag: Agenda, it: dict, quand: datetime) -> None:
+    if not ag.dans_fenetre(quand):
+        return
+    local = quand.astimezone(ag.paris)
+    texte, _ = ag.trad.traduire(str(it["nom"]))
+    ag.discrets[(local.date().isoformat(), texte)] = {
+        "date_paris": local.date().isoformat(), "heure_paris": local.strftime("%H:%M"), "iso_utc": quand.isoformat(timespec="minutes"),
+        "texte": texte, "texte_en": it.get("nom"), "devises": ["Toutes"], "type": "Événement",
+        "impact": IMPACTS.get(str(it.get("impact") or "").lower(), "n/d"), "source": SOURCE_MOIS,
+        "ff": [{"devise": "All", "ff_id": it.get("id"), "ff_url": lien_ff(it.get("id"), it.get("dateline"), it.get("url"))}]}
 
 
 def _depuis_semaine(ag: Agenda, ff_brut: str | None, verifie_le: str | None) -> None:
@@ -324,6 +384,100 @@ def _depuis_registre(ag: Agenda, registre: dict | None) -> None:
                        None if actuel.get("origine") else actuel.get("valeur"), prev.get("valeur"), None, SOURCE_REGISTRE)
         if e is not None and actuel.get("origine") and e.get("precedent") is None:   # USD : taux effectif FRED (DFF)
             e["raison_precedent"] = f"valeur du registre = {actuel.get('source') or 'valeur de repli'}, pas la dernière publication"
+
+
+LIENS_SOURCES = [("FRED", "https://fred.stlouisfed.org/releases/calendar"),
+                 ("TreasuryDirect", "https://www.treasurydirect.gov/auctions/upcoming/")]
+GLOBAUX = re.compile(r"opec|opep|jmmc|g20|g7", re.I)
+
+
+def rapprocher_ff(ag: Agenda, mois: list[dict] | None) -> list[dict]:
+    """Lot V14 (A1.1) : lignes sans identifiant ForexFactory (le 25/11 : 4 sur 170).
+    - registre macro dont la date de prochaine publication est périmée (BOJ Core CPI au 24/11 alors que ForexFactory l'a
+      déplacé au 25/11) : même devise et même nom à moins de 10 jours -> doublon retiré si la ligne ForexFactory existe,
+      sinon identifiant repris ;
+    - grand rendez-vous de la configuration (réunion de l'OPEP+) : événement « All » de ForexFactory à moins de 3 jours ;
+    - sources officielles absentes de ForexFactory (FRED, TreasuryDirect) : pas d'identifiant, raison et lien de la source.
+    -> journal des rapprochements."""
+    journal = []
+    par_nom: dict[tuple, list[dict]] = {}
+    for it in mois or []:
+        if it.get("dateline") and it.get("nom"):
+            par_nom.setdefault((str(it.get("devise") or "").upper(), str(it["nom"]).strip().lower()), []).append(it)
+    ids = {e.get("ff_id") for e in ag.lignes.values() if e.get("ff_id")}
+    for cle_l, e in list(ag.lignes.items()):
+        if e.get("ff_id"):
+            continue
+        t = datetime.fromisoformat(e["iso_utc"])
+        cands = [it for it in par_nom.get((e["devise"], str(e.get("evenement_en") or "").strip().lower()), [])
+                 if abs(int(it["dateline"]) - t.timestamp()) <= 10 * 86400]
+        if not cands and e.get("type") == "Grand rendez-vous" and GLOBAUX.search(f"{e.get('evenement')} {e.get('evenement_en')}"):
+            mot = "jmmc" if re.search("jmmc", f"{e.get('evenement')} {e.get('evenement_en')}", re.I) else None
+            cands = [it for (dv, nom), l in par_nom.items() if dv == "ALL" and GLOBAUX.search(nom) and (not mot or mot in nom)
+                     for it in l if abs(int(it["dateline"]) - t.timestamp()) <= 3 * 86400]
+        if cands:
+            it = min(cands, key=lambda x: abs(int(x["dateline"]) - t.timestamp()))
+            quand_ff = datetime.fromtimestamp(int(it["dateline"]), tz=timezone.utc)
+            if it.get("id") in ids and str(it.get("devise")).upper() != "ALL":
+                del ag.lignes[cle_l]
+                journal.append({"evenement": f"{e['devise']} {e.get('evenement_en')}", "date": e["date_paris"], "action": "doublon retiré",
+                                "raison": f"date périmée ({e['sources'][0]}) : ForexFactory la publie le "
+                                          f"{quand_ff.astimezone(ag.paris).strftime('%d/%m à %H:%M')} (identifiant {it.get('id')})"})
+                continue
+            e.update(_extra_ff(it))
+            if str(it.get("devise")).upper() == "ALL":   # le rendez-vous prend l'heure ForexFactory, plus précise
+                local = quand_ff.astimezone(ag.paris)
+                e.update(iso_utc=quand_ff.isoformat(timespec="minutes"), date_paris=local.date().isoformat(),
+                         heure_paris=local.strftime("%H:%M"), heure_connue=True, devises_concernees=e.get("devises_concernees"))
+                for k in [k for k, d in ag.discrets.items() if any(x.get("ff_id") == it.get("id") for x in d.get("ff") or [])]:
+                    ag.discrets.pop(k, None)
+            ids.add(it.get("id"))
+            journal.append({"evenement": f"{e['devise']} {e.get('evenement_en')}", "date": e["date_paris"], "action": "identifiant repris",
+                            "raison": f"rapproché de « {it.get('nom')} » ({it.get('devise')}, identifiant {it.get('id')})"})
+            continue
+        src = e.get("source") or ""
+        e["ff_id"], e["ff_url"] = None, None
+        e["ff_raison"] = f"absent du calendrier ForexFactory : publication annoncée par {src.split(' (')[0] or 'une autre source'}"
+        e["lien_source"] = next((u for k, u in LIENS_SOURCES if k in src), None)
+        journal.append({"evenement": f"{e['devise']} {e.get('evenement_en')}", "date": e["date_paris"], "action": "sans identifiant",
+                        "raison": e["ff_raison"]})
+    return journal
+
+
+def nommer_feries(ag: Agenda) -> None:
+    """« Jour férié » (ForexFactory : Bank Holiday) -> nom du jour férié quand il est connu (Thanksgiving le 26/11)."""
+    try:
+        from core.documentaire import jours_feries
+    except Exception:  # noqa: BLE001
+        return
+    cache: dict[int, dict] = {}
+    pays = {"USD": "États-Unis", "JPY": "Japon", "GBP": "Royaume-Uni", "EUR": "zone euro", "CHF": "Suisse", "CAD": "Canada",
+            "AUD": "Australie", "NZD": "Nouvelle-Zélande", "CNY": "Chine"}
+    for d in ag.discrets.values():
+        if d.get("type") != "Férié":
+            continue
+        a = int(d["date_paris"][:4])
+        noms = cache.setdefault(a, jours_feries(a)).get(d["date_paris"]) or []
+        cibles = [pays.get(x, x) for x in d.get("devises") or []]
+        nom = next((n for n in noms if any(c in n for c in cibles)), None) or (noms[0] if noms and len(cibles) > 1 else None)
+        d["nom_ferie"] = nom or f"Jour férié ({', '.join(cibles)})"
+
+
+def texte_precedent(precedent, revision) -> str | None:
+    """« précédent 49,3, révisé 49,5 » : ForexFactory donne dans « previous » la valeur publiée à l'origine et dans
+    « revision » la valeur révisée (vérifié sur 22 cas sur 23 du calendrier du 25/11 : « previous » = réel publié le mois
+    d'avant)."""
+    if precedent in (None, ""):
+        return None
+    t = f"précédent {_fr_txt(precedent)}"
+    if revision not in (None, "") and str(revision) != str(precedent):
+        t += f", révisé {_fr_txt(revision)}"
+    return t
+
+
+def _fr_txt(v) -> str:
+    t = re.sub(r"(\d)\.(\d)", r"\1,\2", str(v))
+    return re.sub(r"(\d)%", r"\1 %", t)
 
 
 def dates_reunions(cfg_bc: dict | None, debut: date, fin: date) -> list[date]:
@@ -721,7 +875,8 @@ def calculer(ff_brut: str | None, glissants: list[dict] | None, registre: dict |
              maintenant: datetime | None = None, mois: list[dict] | None = None, fred: dict | None = None,
              impact: dict | None = None, archive: dict | None = None, series: dict | None = None,
              macro: dict | None = None, verifs: dict | None = None, tresor: dict | None = None,
-             revisions: dict | None = None, archive_surprises: dict | None = None) -> dict:
+             revisions: dict | None = None, archive_surprises: dict | None = None,
+             historique_ff: dict | None = None) -> dict:
     maintenant = maintenant or datetime.now(timezone.utc)
     ag = Agenda(config, maintenant)
     cfg = ag.cfg
@@ -734,6 +889,7 @@ def calculer(ff_brut: str | None, glissants: list[dict] | None, registre: dict |
     _depuis_fred(ag, fred, cfg.get("fred_publications") or {})
     _depuis_tresor(ag, tresor)
     grands = _depuis_grands(ag, cfg.get("grands_rendez_vous"))
+    rapprochements = rapprocher_ff(ag, mois)
     refs = _references_taux(registre, macro)
     badges(ag, refs)
     reactions(ag, impact, archive, series or {})
@@ -745,7 +901,17 @@ def calculer(ff_brut: str | None, glissants: list[dict] | None, registre: dict |
             e.setdefault("raison_consensus", "pas de consensus publié" if e["type"] in ("Chiffre", "Réunion BC") else
                          "sans objet (pas un chiffre)")
         e["sources_champs"] = e.get("sources_champs") or {}
+        # Lot V14 : précédent et valeur révisée dans le bon sens ; historique des 6 dernières valeurs ; relevé du réel
+        e["precedent_texte"] = texte_precedent(e.get("precedent"), e.get("revision"))
+        if e["type"] == "Chiffre":
+            e["historique"] = ff_historique.historique(e["devise"], e.get("evenement_en"), e["iso_utc"][:10],
+                                                       archive_surprises, historique_ff)
+        if e.get("publie") and not e.get("publie_releve"):
+            src = e["sources_champs"].get("publie") or e.get("source")
+            le = verifs.get("semaine") if src == SOURCE_SEMAINE else verifs.get("mois") if src == SOURCE_MOIS else None
+            e["publie_releve"] = {"source": src, "le": le}
     evts = sorted(ag.lignes.values(), key=lambda e: e["iso_utc"])
+    nommer_feries(ag)
     jours = []
     for k in range(14):
         d = (ag.debut.date() + timedelta(days=k)).isoformat()
@@ -777,6 +943,10 @@ def calculer(ff_brut: str | None, glissants: list[dict] | None, registre: dict |
                         "officiels": {d: {k: c.get(k) for k in ("source", "verifie_le", "statut")}
                                       for d, c in (cfg.get("reunions") or {}).items()}},
             "raison_vide": None if evts else "aucune source de calendrier disponible",
+            "rapprochements_ff": rapprochements,
+            "ff": {"avec_lien": sum(1 for e in evts if e.get("ff_url")), "sans_lien": sum(1 for e in evts if not e.get("ff_url")),
+                   "format_lien": "https://www.forexfactory.com/calendar?day=<mois><jour>.<année>#detail=<identifiant>",
+                   "historique": ff_historique.etat(historique_ff or {}, maintenant.date())},
             "note": "Valeur publiée dès qu'elle existe dans les données collectées. Aide à la décision, jamais un ordre."}
 
 
@@ -820,10 +990,17 @@ def memoriser_mois(evenements: list[dict], dossier_cache: str | Path, maintenant
     ancien = _lire_json(chemin) or {}
     bas, haut = (maintenant - timedelta(days=14)).timestamp(), (maintenant + timedelta(days=60)).timestamp()
     garde = {str(e.get("id") or (e.get("devise"), e.get("nom"), e.get("dateline"))): e for e in ancien.get("evenements") or []}
+    lu_le = maintenant.isoformat(timespec="minutes")
     for e in evenements or []:
         if e.get("dateline"):
-            garde[str(e.get("id") or (e.get("devise"), e.get("nom"), e.get("dateline")))] = {
-                k: e.get(k) for k in ("id", "devise", "nom", "impact", "dateline", "reel", "prevision", "precedent", "revision")}
+            k = str(e.get("id") or (e.get("devise"), e.get("nom"), e.get("dateline")))
+            avant = garde.get(k) or {}
+            # Lot V14 : identifiant, lien et identifiant de type ForexFactory gardés jusqu'à agenda.json ; heure à laquelle
+            # le réel a été relevé pour la première fois (fraîcheur affichée sur le site)
+            garde[k] = {**{c: e.get(c) for c in ("id", "devise", "nom", "impact", "dateline", "reel", "prevision", "precedent",
+                                                  "revision", "url", "ebase_id")},
+                        "reel_vu_le": (avant.get("reel_vu_le") if avant.get("reel") == e.get("reel") and avant.get("reel_vu_le") else
+                                       lu_le if e.get("reel") else None)}
     liste = sorted((e for e in garde.values() if bas <= int(e["dateline"]) <= haut), key=lambda e: int(e["dateline"]))
     chemin.write_text(json.dumps({"maj": maintenant.isoformat(timespec="seconds"), "evenements": liste}, ensure_ascii=False),
                       encoding="utf-8")
@@ -960,8 +1137,18 @@ def ecrire(racine: str | Path, registre: dict | None, config: dict, h5=None, tec
                            series=_series_principales(h5, technique) if h5 is not None else {}, macro=macro,
                            verifs={"mois": (mois.get("maj") or "")[:16] or None, "semaine": semaine.get("date")},
                            tresor=tresor, revisions=revisions,
-                           archive_surprises=_lire_json(cache / "publications_archive.json") or {})
+                           archive_surprises=ff_historique.fusionner_archives(_lire_json(cache / "publications_archive.json") or {},
+                                                                              ff_historique.lire(cache)),
+                           historique_ff=ff_historique.lire(cache))
         (docs / "agenda.json").write_text(json.dumps(donnees, ensure_ascii=False, indent=1), encoding="utf-8")
+        try:   # lot V14 (A1.5) : lectures ForexFactory de demain, 7 min après les publications fortes
+            from core import ff_planning
+            reste = not ff_historique.etat(ff_historique.lire(cache), aujourd)["termine"]
+            ff_planning.mettre_a_jour(cache, donnees, plafond=int(((config.get("tableau_macro") or {}).get("forexfactory") or {})
+                                                                  .get("plafond_requetes_par_jour", 6)),
+                                      reserve=ff_planning.RESERVE_HISTORIQUE if reste else 0)
+        except Exception as exc:  # noqa: BLE001
+            log.warning("planning des lectures ForexFactory non écrit : %s", exc)
         from core import publications_archive   # lot V9 : chaque « publié » archivé dès sa sortie
         publications_archive.mettre_a_jour(donnees, racine)
         return donnees

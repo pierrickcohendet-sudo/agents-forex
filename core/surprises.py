@@ -28,6 +28,11 @@ FAMILLES = [
     ("inscriptions_chomage", "inscriptions au chômage", r"unemployment claims|jobless claims|continuing claims"),
     ("pmi", "indices PMI", r"\bpmi\b"),
 ]
+# Lot V14 (V13.1) : familles mises en commun toutes devises, en dernier recours (salaires britanniques sans écart habituel :
+# un seul écart archivé). Unités comparables : variations de salaires en points de pourcentage.
+FAMILLES_GLOBALES = [
+    ("salaires", "salaires, toutes devises", r"average (hourly |cash )?earnings|wage price index|labou?r cost index"),
+]
 
 
 def nombre(t) -> tuple[float | None, str]:
@@ -45,9 +50,14 @@ def famille(evenement_en: str) -> tuple[str, str] | None:
     return next(((k, lib) for k, lib, m in FAMILLES if re.search(m, t)), None)
 
 
+def famille_globale(evenement_en: str) -> tuple[str, str] | None:
+    t = str(evenement_en or "").lower()
+    return next(((k, lib) for k, lib, m in FAMILLES_GLOBALES if re.search(m, t)), None)
+
+
 def ecarts_archives(archive: dict | None) -> dict:
     """{(devise, nom_en): [(écart, date, nom)]} et {(devise, famille): [...]} sur l'archive (unités homogènes par clé)."""
-    par_nom, par_famille = {}, {}
+    par_nom, par_famille, par_globale = {}, {}, {}
     for p in ((archive or {}).get("publications") or {}).values():
         r, ur = nombre(p.get("reel"))
         c, uc = nombre(p.get("consensus"))
@@ -58,7 +68,10 @@ def ecarts_archives(archive: dict | None) -> dict:
         f = famille(p.get("evenement_en"))
         if f:
             par_famille.setdefault((p.get("devise"), f[0]), []).append(d)
-    return {"nom": par_nom, "famille": par_famille}
+        g = famille_globale(p.get("evenement_en"))
+        if g and ur == "%":
+            par_globale.setdefault(g[0], []).append(d)
+    return {"nom": par_nom, "famille": par_famille, "globale": par_globale}
 
 
 def _habituel(ecarts: list[float], minimum: int = MIN_POINTS) -> float | None:
@@ -84,6 +97,12 @@ def echelle_historique(index: dict, devise: str, evenement_en: str, exclure_date
             return {"echelle": s, "base": f"{len(ef)} publications de la famille « {f[1]} »", "n": len(ef), "raison": None}
         return {"echelle": None, "base": None, "n": len(ef),
                 "raison": f"historique trop court ({len(ef)} écarts au consensus pour la famille « {f[1]} », il en faut {MIN_POINTS_FAMILLE})"}
+    g = famille_globale(evenement_en)
+    if g:
+        eg = garder((index.get("globale") or {}).get(g[0]) or [])
+        s = _habituel(eg)
+        if s:
+            return {"echelle": s, "base": f"{len(eg)} publications de la famille « {g[1]} »", "n": len(eg), "raison": None}
     return {"echelle": None, "base": None, "n": len(e),
             "raison": f"historique trop court ({len(e)} écarts au consensus archivés, il en faut {MIN_POINTS})"}
 

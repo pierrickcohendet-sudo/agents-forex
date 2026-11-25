@@ -761,6 +761,14 @@ def mettre_a_jour(config: dict, racine: str | Path, chemin_config: str | Path | 
                         break
                     rm.integrer_evenements(registre, suite["evenements"], cfg_tm, maintenant)
                     _memoriser_agenda(suite["evenements"], donnees / "cache", maintenant)
+            # Lot V14 (A1.3) : reprise unique de l'historique (12 derniers mois), 2 pages au plus par jour (compte tenu
+            # dans ff_historique.json), dans le plafond commun ; reprise au run suivant si elle est interrompue. Seulement
+            # avec le planning des lectures (2 requêtes y sont réservées tant que la reprise n'est pas finie).
+            if ff.get("declencheur") == "planning":
+                from core import ff_historique
+                rep_h = ff_historique.reprendre(cfg_tm, client_scraping, donnees / "cache", maintenant)
+                resultat["ff"]["historique"] = {"lus": rep_h["lus"], "echecs": rep_h["echecs"], "avancement":
+                                                f"{rep_h['etat']['n_lus']}/{rep_h['etat']['n_total']} mois"}
         elif ff["statut"] == "indisponible":
             log.warning("Tableau macro : ForexFactory indisponible (%s) — registre inchangé", ff["note"])
     except _PageMoisCoupee:

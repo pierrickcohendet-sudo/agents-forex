@@ -7,6 +7,8 @@ Déclencheurs :
 - lancement manuel (workflow_dispatch, cases « completer » / « hebdo ») : jamais bloqué par le garde-fou.
 
 Règles :
+- lot V14 : cron « 7,37 0-21 * * 1-5 » (ou créneau externe « lecture ») : lecture ForexFactory planifiée (mode lecture) si
+  une lecture de data/cache/ff_planning.json est due, sinon rien ;
 - dimanche (cron 07:15 ou créneau externe « dimanche ») : hebdo ;
 - samedi et dimanche 08:15 UTC (cron « 15 8 * * 0,6 » ou créneau externe « moteurs ») : moteurs (dossiers des 8 moteurs seuls) ;
 - sans rapport du jour (data/rapports/AAAA-MM-JJ.json, date UTC) : run complet (rattrapage) ;
@@ -51,11 +53,41 @@ def doublon(runs: list[dict], run_id: str | int | None, maintenant: datetime, ec
 
 
 CRON_MOTEURS = "15 8 * * 0,6"   # samedi et dimanche, après la remise à zéro du quota Gemini
+CRON_LECTURES = "7,37 0-21 * * 1-5"   # lot V14 : lectures ForexFactory planifiées (ne fait rien si aucune n'est due)
+
+
+def lecture_due(planning: dict | None, budget: dict | None, maintenant: datetime, plafond: int = 6) -> tuple[bool, str]:
+    """Fonction pure (lot V14, A1.5). Une lecture planifiée est due si son heure est passée, qu'aucune requête
+    ForexFactory n'a eu lieu depuis, et que le plafond du jour n'est pas atteint (même règle que
+    agents/collecte_forexfactory_mois.collecte_due)."""
+    jour = maintenant.date().isoformat()
+    plan = ((planning or {}).get("jours") or {}).get(jour)
+    if not plan or not plan.get("lectures"):
+        return False, "aucune lecture ForexFactory planifiée aujourd'hui"
+    faites = [x for x in ((budget or {}).get("horodatages") or [])] if (budget or {}).get("date") == jour else []
+    if len(faites) >= plafond:
+        return False, f"plafond de {plafond} lectures atteint"
+    passees = []
+    for x in plan["lectures"]:
+        h, m = (int(v) for v in x["heure_utc"].split(":"))
+        c = maintenant.replace(hour=h, minute=m, second=0, microsecond=0)
+        if c <= maintenant:
+            passees.append((c, x))
+    if not passees:
+        return False, "prochaine lecture planifiée : " + plan["lectures"][0]["heure_utc"] + " UTC"
+    c, x = max(passees, key=lambda p: p[0])
+    if any((_date(f) or datetime.min.replace(tzinfo=timezone.utc)) >= c for f in faites):
+        return False, f"lecture de {x['heure_utc']} UTC déjà faite"
+    return True, f"lecture planifiée de {x['heure_utc']} UTC ({x.get('motif')})"
 
 
 def decider(evt: str, cron: str, entrees: dict, rapport_existe: bool, runs: list[dict] | None = None,
-            run_id: str | None = None, maintenant: datetime | None = None) -> tuple[str, str]:
+            run_id: str | None = None, maintenant: datetime | None = None, lecture: tuple[bool, str] | None = None) -> tuple[str, str]:
     maintenant = maintenant or datetime.now(timezone.utc)
+    if (evt == "schedule" and cron == CRON_LECTURES) or (evt == "workflow_dispatch" and entrees.get("declencheur") == "externe"
+                                                         and (entrees.get("creneau") or "") == "lecture"):
+        ok, raison = lecture or (False, "planning des lectures non lu")
+        return ("lecture", raison) if ok else ("rien", raison)
     vrai = lambda k: str(entrees.get(k, "")).lower() == "true"
     externe = evt == "workflow_dispatch" and entrees.get("declencheur") == "externe"
     creneau = entrees.get("creneau") or ""
@@ -89,7 +121,14 @@ def main() -> int:
         runs = []
         print("Liste des runs illisible : garde-fou anti-doublon inactif pour ce passage.")
     entrees = {k: env.get(f"IN_{k.upper()}", "") for k in ("completer", "hebdo", "declencheur", "creneau")}
-    mode, raison = decider(env.get("EVT", ""), env.get("CRON", ""), entrees, rapport.exists(), runs, env.get("RUN_ID"), maintenant)
+    def lire(chemin):
+        try:
+            return json.loads(Path(chemin).read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            return None
+    lecture = lecture_due(lire("data/cache/ff_planning.json"), lire("data/cache/forexfactory_requetes.json"), maintenant)
+    mode, raison = decider(env.get("EVT", ""), env.get("CRON", ""), entrees, rapport.exists(), runs, env.get("RUN_ID"), maintenant,
+                           lecture)
     print(f"Événement : {env.get('EVT')} {env.get('CRON')} {entrees} -> mode : {mode} ({raison})")
     sortie = env.get("GITHUB_OUTPUT")
     if sortie:

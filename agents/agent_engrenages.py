@@ -14,7 +14,7 @@ from __future__ import annotations
 import json
 import logging
 import re
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 from agents.agent_synthese import _Catalogue, _ids, _norm, _retirer_ordres, _texte
@@ -160,6 +160,38 @@ def saut_atypique(serie: dict | None, seuil_pct: float = 8.0, n: int = 10) -> st
     return ", ".join(t for _, t in sorted(pires, reverse=True)[:2]) or None
 
 
+def variation_par_date(points: list, jours: int = 7, en_pb: bool = True) -> dict | None:
+    """Lot V14 (correctif V13.1) : variation sur `jours` jours calendaires, PAR DATE, sur une série quotidienne
+    [(date, valeur)] : dernier point contre le dernier point daté au plus tard `jours` jours avant. -> {valeur, fin,
+    date_fin, date_ref, ref} ou None (série trop courte)."""
+    pts = [(str(d)[:10], v) for d, v in points or [] if v is not None]
+    if len(pts) < 2:
+        return None
+    d_fin, v_fin = pts[-1]
+    limite = (date.fromisoformat(d_fin) - timedelta(days=jours)).isoformat()
+    ref = next(((d, v) for d, v in reversed(pts) if d <= limite), None)
+    if ref is None:
+        return None
+    var = (v_fin - ref[1]) * 100 if en_pb else (v_fin / ref[1] - 1) * 100 if ref[1] else None
+    return None if var is None else {"valeur": round(var, 1), "fin": v_fin, "date_fin": d_fin, "date_ref": ref[0], "ref": ref[1]}
+
+
+def mesure_2ans(case_registre: dict | None, serie_quotidienne: list | None) -> dict:
+    """Moteur 2 : source la plus récente entre le registre macro (relevé hebdomadaire) et la série quotidienne FRED DGS2
+    (cache 5 ans), variation sur 7 jours calculée par date. -> {valeur, date, source, detail}."""
+    us2 = case_registre or {}
+    act = us2.get("actuel") or {}
+    d_reg = str(act.get("date_pub") or "")[:10] or None
+    v = variation_par_date(serie_quotidienne or [], 7, en_pb=True)
+    if v and (d_reg is None or v["date_fin"] >= d_reg or us2.get("variation_pb") is None):
+        return {"valeur": v["valeur"], "date": v["date_fin"], "niveau": v["fin"],
+                "source": "FRED (DGS2), série quotidienne du cache 5 ans",
+                "detail": f"{v['fin']:.2f} % le {v['date_fin'][8:10]}/{v['date_fin'][5:7]} contre {v['ref']:.2f} % le "
+                          f"{v['date_ref'][8:10]}/{v['date_ref'][5:7]}".replace(".", ",")}
+    return {"valeur": us2.get("variation_pb"), "date": d_reg, "niveau": act.get("valeur_num"),
+            "source": act.get("source") or "registre macro", "detail": None}
+
+
 def _dir(valeur: float | None, seuil: float, haut: str, bas: str) -> str | None:
     if valeur is None:
         return None
@@ -294,8 +326,14 @@ def signaux(config: dict, donnees: dict, macro: dict, devises: list[dict], biais
                                   + (f" ({sens}, précédent {prec.get('valeur')})" if sens else ""),
                          "source_id": src_registre(devise, "taux_directeur", actuel)})
     us2 = cases.get("USD|rendement_2a") or {}
-    var2 = us2.get("variation_pb")
-    if var2 is not None and (us2.get("actuel") or {}).get("valeur"):
+    # Lot V14 (V13.1) : la série quotidienne DGS2 l'emporte quand elle est plus récente que le relevé du registre
+    h5 = (extras or {}).get("h5")   # cache 5 ans transmis par l'orchestrateur ; absent : registre seul
+    m2 = mesure_2ans(us2, h5.serie("USD_2a") if h5 is not None else None)
+    var2 = m2["valeur"]
+    if var2 is not None and m2.get("detail"):
+        donnees2.append({"texte": f"Rendement US 2 ans {m2['detail']} ({var2:+.0f} pb sur 7 jours)",
+                         "source_id": cat.src(m2["source"], "USD — rendement 2 ans", m2["date"])})
+    elif var2 is not None and (us2.get("actuel") or {}).get("valeur"):
         donnees2.append({"texte": f"Rendement US 2 ans {us2['actuel']['valeur']} ({var2:+.0f} pb sur une semaine)",
                          "source_id": src_registre("USD", "rendement_2a", us2["actuel"])})
     k2 = SEUILS["us2a_pb"]
@@ -303,9 +341,9 @@ def signaux(config: dict, donnees: dict, macro: dict, devises: list[dict], biais
                    "devises": [d for d, s in decisions if s in ("hausse", "baisse")],
                    "regle": f"dollar : variation hebdomadaire du 2 ans US (≥ +{k2} pb haussier, ≤ -{k2} pb baissier)",
                    "donnees": donnees2, "force": _force(var2, k2),
-                   "mesure": _mesure("2 ans US sur 7 j", var2, "pb", -k2, k2, (us2.get("actuel") or {}).get("date_pub"),
-                                     (us2.get("actuel") or {}).get("source") or "registre macro", "Dollar haussier", "Dollar baissier",
-                                     "variation du 2 ans US absente du registre")}
+                   "mesure": _mesure("2 ans US sur 7 j", var2, "pb", -k2, k2, m2["date"], m2["source"],
+                                     "Dollar haussier", "Dollar baissier",
+                                     "variation du 2 ans US absente du registre et de la série quotidienne")}
 
     # 3. Données économiques : indice de surprise 30 j
     indices = (extras or {}).get("indice_surprise") or {}

@@ -169,7 +169,10 @@ def test_jours_feries_thanksgiving():
 # ------------------------------------------------------------------ rejeu du 16 au 20/11
 def test_rejeu_moteur_3_publications_et_surprises(semaine):
     c3 = semaine["chapitres"]["3"]
-    assert len(c3["publications"]) == 17 and all(p["moteur"] == 3 for p in c3["publications"])
+    # 17 publications moyennes et fortes, + 3 relevées par le site au lot V14 (ventes au détail CAD et sous-jacentes,
+    # IPC sous-jacent national JPY ; le besoin de financement public GBP va au moteur 4)
+    assert len(c3["publications"]) == 20 and all(p["moteur"] == 3 for p in c3["publications"])
+    assert sum(1 for p in c3["publications"] if p.get("impact_releve")) == 3
     aud = next(p for p in c3["publications"] if p["devise"] == "AUD" and p["evenement_en"] == "Employment Change")
     assert (aud["reel"], aud["consensus"], aud["favorable"]) == ("-43.5K", "25.5K", False)
     philly = next(p for p in c3["publications"] if "Philly" in p["evenement_en"])
@@ -278,15 +281,21 @@ class GroqRenvoie:
         return self.texte
 
 
+def _regroupe(ch):
+    """Le récit Python du moteur 7, regroupé en 5 paragraphes au plus, passe le contrôle du modèle (longueur, paragraphes,
+    nombres, vocabulaire) : il sert de réponse simulée."""
+    p = ch["recit"]["paragraphes"]
+    return {"paragraphes": p[:4] + [" ".join(p[4:])] if len(p) > 5 else p, "exergue": ch["recit"]["exergue"]}
+
+
 def _texte_valide(ch):
-    """Le récit Python du moteur 7 passe le contrôle (longueur, paragraphes, nombres, vocabulaire) : il sert de réponse."""
-    return json.dumps({"paragraphes": ch["recit"]["paragraphes"], "exergue": ch["recit"]["exergue"]}, ensure_ascii=False)
+    return json.dumps(_regroupe(ch), ensure_ascii=False)
 
 
 def test_controle_recit_rejette_un_nombre_invente(semaine):
     ch = semaine["chapitres"]["7"]
     faits = doc.faits_recit(ch, _sem(semaine), semaine["theme"]["jour_par_jour"])
-    assert doc.controler_recit(ch["recit"], faits, ch["nom"]) == []
+    assert doc.controler_recit(_regroupe(ch), faits, ch["nom"]) == []
     faux = {"paragraphes": ch["recit"]["paragraphes"][:-1] + [ch["recit"]["paragraphes"][-1] + " Le dollar a pris 12,34 % en une séance."],
             "exergue": ch["recit"]["exergue"]}
     assert any("12,34" in r for r in doc.controler_recit(faux, faits, ch["nom"]))

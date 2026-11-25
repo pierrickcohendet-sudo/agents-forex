@@ -130,7 +130,7 @@ function chapitre(c, D) {
   s.innerHTML = `<div class="chap-h"><span class="num">${c.numero}</span><div><h2>${esc(c.nom)}</h2><p>${esc(c.question)}</p></div></div>
     <div class="badges"><span class="stars" title="importance pour le change">${"★".repeat(L.importance || 0)}${"☆".repeat(5 - (L.importance || 0))}</span><span class="small">importance pour le change</span>${pillEtat(c.etat)}${pillDir(c.etat)}</div>
     <div class="sub"><h3>Le récit de la semaine</h3><div class="prose">${paras.join("")}</div>
-      <span class="par">${qui === "python" ? `Texte construit en Python à partir des faits de la semaine (${r.mots || "n/d"} mots)` : `Rédigé par ${esc(qui)} à partir des faits calculés en Python, nombres contrôlés (${r.mots || "n/d"} mots)`}</span></div>
+      <span class="par">${qui === "python" ? `Texte construit en Python à partir des faits de la semaine (${r.mots || "n/d"} mots)` : `Rédigé par ${esc(qui)}${r.redige_le ? ` le ${r.redige_le.slice(8, 10)}/${r.redige_le.slice(5, 7)} à ${r.redige_le.slice(11, 16)} UTC` : ""} à partir des faits calculés en Python, nombres contrôlés à la rédaction (${r.mots || "n/d"} mots)`}</span></div>
     ${comprendre(L, c)}
     ${graphiques(c)}
     ${indicateurs(c)}

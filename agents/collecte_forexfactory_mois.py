@@ -135,14 +135,26 @@ def collecter(cfg_tm: dict, client, dossier_cache: str | Path, maintenant: datet
     statut : frais | non_due | indisponible. Budget : data/cache/forexfactory_requetes.json
     (committé pour survivre entre runs)."""
     maintenant = maintenant or datetime.now(timezone.utc)
-    cfg_ff = cfg_tm["forexfactory"]
+    cfg_ff = dict(cfg_tm["forexfactory"])
     chemin = Path(dossier_cache) / "forexfactory_requetes.json"
     jour = maintenant.date().isoformat()
     budget = _lire_budget(chemin, jour)
     plafond = int(cfg_ff.get("plafond_requetes_par_jour", 2))
     premier = not budget["horodatages"]
+    # Lot V14 (A1.5) : lectures planifiées 5 à 10 min après les publications fortes du jour (core/ff_planning.py) ;
+    # sans plan pour ce jour, repli sur les créneaux fixes de config.yaml et les mises à jour ciblées.
+    try:
+        from core import ff_planning
+        prevus = ff_planning.creneaux(Path(dossier_cache), maintenant.date())
+    except Exception:  # noqa: BLE001
+        prevus = None
+    if prevus is not None:
+        cfg_ff["creneaux_utc"] = prevus
+        cibles_fn = None
     due, raison = collecte_due(budget["horodatages"], cfg_ff, maintenant)
-    declencheur = "creneau"
+    if prevus is not None:
+        raison = f"lecture planifiée : {raison}" if prevus else "aucune lecture planifiée aujourd'hui (pas de publication forte)"
+    declencheur = "creneau" if prevus is None else "planning"
     if not due and len(budget["horodatages"]) < plafond and cibles_fn is not None:
         cibles = cibles_fn(budget["ciblees"])
         if cibles:
