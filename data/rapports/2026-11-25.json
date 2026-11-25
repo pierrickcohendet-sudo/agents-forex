@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-25T09:29:25+00:00",
+  "genere_le": "2026-11-25T10:19:37+00:00",
   "appels_llm": [
    {
     "heure": "08:19",
@@ -269,7 +269,7 @@
    "engrenages_faits": true,
    "reserve_engrenages": 8,
    "refus_reserve_ce_run": 0,
-   "refus_budget_ce_run": 9,
+   "refus_budget_ce_run": 8,
    "budget": {
     "plafond": 60,
     "mode": "complément",
@@ -293,27 +293,25 @@
     },
     "consomme_run": {
      "engrenages": 0,
-     "rapport": 7,
+     "rapport": 0,
      "devises": 0,
-     "reste": 9
+     "reste": 0
     },
     "total_jour": 20,
     "plafond_run": 45,
-    "recues_run": 16,
-    "pannes_jour": 14,
-    "pannes_run": 13,
+    "recues_run": 0,
+    "pannes_jour": 15,
+    "pannes_run": 1,
     "plafond_pannes": 20,
     "mode_panne": false,
     "pannes_avant_correctif": 0,
     "echecs_jour": {
-     "503": 14,
+     "503": 15,
      "json_invalide": 1,
      "429": 1
     },
     "echecs_run": {
-     "json_invalide": 1,
-     "503": 12,
-     "429": 1
+     "503": 1
     },
     "abandonnees": [],
     "analyses": {
@@ -459,7 +457,7 @@
       "echec": "503",
       "types": {
        "json_invalide": 1,
-       "503": 1
+       "503": 2
       },
       "appels": 1
      },
@@ -498,29 +496,29 @@
      "appels_aujourdhui": 18,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-11-26T07:59:59+00:00",
-     "appels_ce_run": 15,
-     "reussites_ce_run": 14,
-     "sauts_ce_run": 3
+     "appels_ce_run": 0,
+     "reussites_ce_run": 0,
+     "sauts_ce_run": 8
     },
     "gemini-3.8-flash": {
      "appels_aujourdhui": 1,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-11-25T07:59:59+00:00",
-     "appels_ce_run": 7,
-     "reussites_ce_run": 1,
-     "sauts_ce_run": 2
+     "appels_ce_run": 8,
+     "reussites_ce_run": 0,
+     "sauts_ce_run": 0
     },
     "gemini-3.5-flash-lite": {
      "appels_aujourdhui": 1,
      "plafond_jour": 20,
      "epuise_jusqu_a": null,
-     "appels_ce_run": 6,
-     "reussites_ce_run": 1,
+     "appels_ce_run": 0,
+     "reussites_ce_run": 0,
      "sauts_ce_run": 0
     }
    }
   },
-  "resume_quota": "Gemini : 20/60, engrenages : fait — Budget (run complément, plafond 60) : prévu engrenages 1 analyse (≤ 2 requêtes); rapport du jour 8 analyses (≤ 16 requêtes); devises 3 analyses (≤ 6 requêtes); reste ≤ 36 ; consommé ce run : engrenages 0, rapport du jour 7, devises 0, reste 9 (jour : 20/60) ; échecs ce run : 429 × 1, 503 × 12, json_invalide × 1 ; tentatives en panne (hors budget) : 13 ce run, 14/20 aujourd'hui ; réponses reçues ce run : 16/45 ; analyses : analyses:AUD-NZD-CNY faite, analyses:JPY-CHF-CAD faite, analyses:USD-EUR-GBP faite, critique faite, engrenages faite, etat_du_monde faite, moteurs:intros à rejouer (503), paires:synthese faite, rapport:analyse faite, rapport:redaction faite, rapport:synthese_1 faite, rapport:synthese_2 faite, rapport:synthese_3 faite, rapport:synthese_4 faite, rapport:synthese_5 à rejouer (503), rapport:synthese_6 à rejouer (503), rapport:synthese_7 faite, synthese:AUD faite, synthese:CAD faite, synthese:CHF à rejouer (503), synthese:CNY faite, synthese:EUR à rejouer (503), synthese:GBP à rejouer (503), synthese:JPY à rejouer (503), synthese:NZD faite, synthese:USD faite",
+  "resume_quota": "Gemini : 20/60, engrenages : fait — Budget (run complément, plafond 60) : prévu engrenages 1 analyse (≤ 2 requêtes); rapport du jour 8 analyses (≤ 16 requêtes); devises 3 analyses (≤ 6 requêtes); reste ≤ 36 ; consommé ce run : engrenages 0, rapport du jour 0, devises 0, reste 0 (jour : 20/60) ; échecs ce run : 503 × 1 ; tentatives en panne (hors budget) : 1 ce run, 15/20 aujourd'hui ; réponses reçues ce run : 0/45 ; analyses : analyses:AUD-NZD-CNY faite, analyses:JPY-CHF-CAD faite, analyses:USD-EUR-GBP faite, critique faite, engrenages faite, etat_du_monde faite, moteurs:intros à rejouer (503), paires:synthese faite, rapport:analyse faite, rapport:redaction faite, rapport:synthese_1 faite, rapport:synthese_2 faite, rapport:synthese_3 faite, rapport:synthese_4 faite, rapport:synthese_5 à rejouer (503), rapport:synthese_6 à rejouer (503), rapport:synthese_7 faite, synthese:AUD faite, synthese:CAD faite, synthese:CHF à rejouer (503), synthese:CNY faite, synthese:EUR à rejouer (503), synthese:GBP à rejouer (503), synthese:JPY à rejouer (503), synthese:NZD faite, synthese:USD faite",
   "appels_par_modele": {
    "gemini-3.5-flash": {
     "appels": 19,
@@ -634,6 +632,40 @@
       "cause": null,
       "ouvert_a_l_appel": null,
       "echecs_consecutifs": 1,
+      "ignores": 0
+     }
+    ]
+   },
+   {
+    "heure": "10:22",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 8,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 8
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
       "ignores": 0
      }
     ]
@@ -1450,7 +1482,7 @@
     "libelle": "Flash 3.5"
    },
    "version": "quotidienne",
-   "rafraichi_le": "2026-11-25T09:19:35+00:00"
+   "rafraichi_le": "2026-11-25T10:19:02+00:00"
   },
   "classement_devises": [
    {
@@ -2189,9 +2221,10 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "synthese:EUR : 2 appels déjà faits pendant ce run (repli Python) — après : réponse précédente inexploitable : gemini-3.5-flash passé en dernier",
+    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+    "quota_atteint": true,
     "tentatives": 2,
-    "genere_le": "2026-11-25T09:22:18+00:00"
+    "genere_le": "2026-11-25T10:19:37+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.14,
@@ -2444,9 +2477,10 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "synthese:GBP : 2 appels déjà faits pendant ce run (repli Python)",
+    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+    "quota_atteint": true,
     "tentatives": 1,
-    "genere_le": "2026-11-25T09:23:11+00:00"
+    "genere_le": "2026-11-25T10:19:37+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.1,
@@ -2689,9 +2723,10 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "synthese:JPY : 2 appels déjà faits pendant ce run (repli Python)",
+    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+    "quota_atteint": true,
     "tentatives": 1,
-    "genere_le": "2026-11-25T09:24:05+00:00"
+    "genere_le": "2026-11-25T10:19:37+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.05,
@@ -2938,9 +2973,10 @@
    },
    "synthese_approfondie": {
     "statut": "indisponible",
-    "raison": "synthese:CHF : 2 appels déjà faits pendant ce run (repli Python)",
+    "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+    "quota_atteint": true,
     "tentatives": 1,
-    "genere_le": "2026-11-25T09:25:01+00:00"
+    "genere_le": "2026-11-25T10:19:37+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.45,
@@ -9577,10 +9613,10 @@
   "conforme": false,
   "nb_anomalies": 10,
   "anomalies": [
-   "EUR : synthèse approfondie indisponible (synthese:EUR : 2 appels déjà faits pendant ce run (repli Python) — après : réponse précédente inexpl)",
-   "GBP : synthèse approfondie indisponible (synthese:GBP : 2 appels déjà faits pendant ce run (repli Python))",
-   "JPY : synthèse approfondie indisponible (synthese:JPY : 2 appels déjà faits pendant ce run (repli Python))",
-   "CHF : synthèse approfondie indisponible (synthese:CHF : 2 appels déjà faits pendant ce run (repli Python))",
+   "EUR : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+   "GBP : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+   "JPY : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+   "CHF : synthèse approfondie indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
    "tableau macro : USD/CPI annuel : publication manquée (prévue le 10/11, aucun « réel » reçu)",
    "tableau macro : USD/CPI core annuel : publication manquée (prévue le 10/11, aucun « réel » reçu)",
    "tableau macro : CNY/PMI manufacturier : publication manquée (prévue le 31/10, aucun « réel » reçu)",
@@ -9590,30 +9626,11 @@
   ]
  },
  "critique": {
-  "incoherences": [
-   "Incohérence logique dans l'invalidation du CAD : la synthèse approfondie du CAD affiche une orientation baissière, mais la deuxième condition d'invalidation mentionne 'Un retour de la paire USD/CAD durablement au-dessus de sa moyenne mobile à 200 jours', ce qui confirmerait la baisse du CAD (hausse ",
-   "Contradiction entre detail_score et indicateurs_tableau sur le PMI AUD : le detail_score pénalise la devise (sens −1) en citant des PMI Flash à 49,7 et 47,8, tandis que le tableau d'indicateurs indique une valeur null avec la note 'aucune publication < 7 j'.",
-   "Défaut de complétude soulevé par le contrôle qualité : 4 devises sur 9 (EUR, GBP, JPY, CHF) affichent une synthèse approfondie 'indisponible' en raison d'échecs d'appels LLM, dégradant la fiabilité globale du rapport avant publication."
-  ],
-  "affirmations_non_sourcees": [
-   "Dans l'invalidation du CAD, le niveau précis de la moyenne mobile 200 jours à '0,71734' (associé par erreur à USD/CAD au lieu du cours inversé CAD/USD) ne figure dans aucune donnée calculée du catalogue de sources."
-  ],
-  "suggestions_connaissances": [
-   {
-    "theme": "Standardisation des cotations de paires indirectes dans les invalidations",
-    "suggestion": "Lors de la rédaction des scénarios d'invalidation sur les devises cotées à l'incertain contre le dollar (ex. CAD, JPY, CHF), vérifier automatiquement que la direction du cours exprimé (USD/XXX vs XXX/USD) correspond bien au sens économique de l'invalidation du biais.",
-    "fichier_cible": "cas_particuliers.md"
-   },
-   {
-    "theme": "Gestion du repli dégradé des synthèses approfondies par devise",
-    "suggestion": "Prévoir une procédure de secours déterministe (génération de 2-3 phrases clés fondées sur le score de confluence et le biais macro) lorsque le modèle LLM échoue à produire la synthese_approfondie d'une devise après 2 tentatives.",
-    "fichier_cible": "cas_particuliers.md"
-   }
-  ],
-  "validation": "a_revoir",
-  "redige_par": {
-   "modele": "gemini-3.5-flash",
-   "libelle": "Flash 3.5"
-  }
+  "incoherences": [],
+  "affirmations_non_sourcees": [],
+  "suggestions_connaissances": [],
+  "validation": "non_evalue",
+  "indisponible": true,
+  "note": "relecture non effectuée (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit) — 20 tentatives en panne (503, 429, délai) déjà faites aujourd'hui : pla)"
  }
 }
