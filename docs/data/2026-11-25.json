@@ -4,10 +4,57 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-25T03:48:16+00:00",
-  "appels_llm": [],
+  "genere_le": "2026-11-25T08:24:36+00:00",
+  "appels_llm": [
+   {
+    "heure": "08:19",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 768,
+    "tokens_message": 6630,
+    "tokens_total": 7398,
+    "ok": true,
+    "etiquette": "engrenages"
+   },
+   {
+    "heure": "08:20",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 5038,
+    "tokens_message": 21101,
+    "tokens_total": 26139,
+    "ok": true,
+    "etiquette": "analyses:USD-EUR-GBP"
+   },
+   {
+    "heure": "08:21",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 5038,
+    "tokens_message": 17207,
+    "tokens_total": 22245,
+    "ok": true,
+    "etiquette": "analyses:JPY-CHF-CAD"
+   },
+   {
+    "heure": "08:21",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 5038,
+    "tokens_message": 17556,
+    "tokens_total": 22594,
+    "ok": true,
+    "etiquette": "analyses:AUD-NZD-CNY"
+   },
+   {
+    "heure": "08:24",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 0,
+    "tokens_message": 2750,
+    "tokens_total": 2750,
+    "ok": false,
+    "etiquette": "rapport:redaction",
+    "echec": "503"
+   }
+  ],
   "quota_llm": {
-   "date": "2026-11-24",
+   "date": "2026-11-25",
    "ordre": [
     "gemini-3.5-flash",
     "gemini-3.8-flash",
@@ -15,157 +62,125 @@
    ],
    "appels_aujourdhui": 4,
    "plafond_jour": 60,
-   "engrenages_faits": false,
+   "engrenages_faits": true,
    "reserve_engrenages": 8,
    "refus_reserve_ce_run": 0,
-   "refus_budget_ce_run": 15,
+   "refus_budget_ce_run": 40,
    "budget": {
-    "plafond": 45,
-    "mode": "complet",
+    "plafond": 60,
+    "mode": "complément",
     "lundi": false,
-    "max_appels_par_analyse": 2,
+    "max_appels_par_analyse": 1,
     "prevu_analyses": {
      "engrenages": 1,
      "rapport": 8,
      "devises": 3
     },
     "prevu_appels_max": {
-     "engrenages": 2,
-     "rapport": 16,
-     "devises": 6
+     "engrenages": 1,
+     "rapport": 8,
+     "devises": 3
     },
     "consomme_jour": {
-     "engrenages": 0,
-     "rapport": 1,
-     "devises": 1,
-     "reste": 2
+     "engrenages": 1,
+     "rapport": 0,
+     "devises": 3,
+     "reste": 0
     },
     "consomme_run": {
-     "engrenages": 0,
+     "engrenages": 1,
      "rapport": 0,
-     "devises": 0,
+     "devises": 3,
      "reste": 0
     },
     "total_jour": 4,
     "plafond_run": 45,
-    "recues_run": 0,
-    "pannes_jour": 20,
-    "pannes_run": 0,
+    "recues_run": 4,
+    "pannes_jour": 1,
+    "pannes_run": 1,
     "plafond_pannes": 20,
-    "mode_panne": false,
+    "mode_panne": true,
     "pannes_avant_correctif": 0,
     "echecs_jour": {
-     "429": 2,
-     "503": 18,
-     "delai": 2
+     "503": 2
     },
-    "echecs_run": {},
+    "echecs_run": {
+     "503": 2
+    },
     "abandonnees": [],
     "analyses": {
      "analyses:AUD-NZD-CNY": {
       "statut": "faite",
       "echec": null,
-      "types": {
-       "503": 2
-      },
+      "types": {},
       "appels": 1
      },
      "analyses:JPY-CHF-CAD": {
-      "statut": "à rejouer",
-      "echec": "429",
-      "types": {
-       "503": 2,
-       "429": 1
-      },
-      "appels": 0
+      "statut": "faite",
+      "echec": null,
+      "types": {},
+      "appels": 1
      },
      "analyses:USD-EUR-GBP": {
-      "statut": "à rejouer",
-      "echec": "503",
-      "types": {
-       "delai": 2,
-       "503": 2
-      },
-      "appels": 0
-     },
-     "critique": {
       "statut": "faite",
       "echec": null,
       "types": {},
       "appels": 1
      },
      "engrenages": {
-      "statut": "à rejouer",
-      "echec": "503",
-      "types": {
-       "429": 1,
-       "503": 5
-      },
-      "appels": 0
-     },
-     "etat_du_monde": {
       "statut": "faite",
       "echec": null,
-      "types": {
-       "503": 1
-      },
+      "types": {},
       "appels": 1
-     },
-     "paires:synthese": {
-      "statut": "à rejouer",
-      "echec": "503",
-      "types": {
-       "503": 2
-      },
-      "appels": 0
-     },
-     "rapport:analyse": {
-      "statut": "à rejouer",
-      "echec": "503",
-      "types": {
-       "503": 2
-      },
-      "appels": 0
      },
      "rapport:redaction": {
-      "statut": "faite",
-      "echec": null,
+      "statut": "à rejouer",
+      "echec": "503",
       "types": {
        "503": 2
       },
-      "appels": 1
+      "appels": 0
      }
     }
    },
    "modeles": {
     "gemini-3.5-flash": {
-     "appels_aujourdhui": 0,
+     "appels_aujourdhui": 4,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-11-25T07:59:59+00:00",
-     "appels_ce_run": 0,
-     "reussites_ce_run": 0,
-     "sauts_ce_run": 15
+     "appels_ce_run": 4,
+     "reussites_ce_run": 4,
+     "sauts_ce_run": 0
     },
     "gemini-3.8-flash": {
      "appels_aujourdhui": 0,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-11-25T07:59:59+00:00",
-     "appels_ce_run": 0,
+     "appels_ce_run": 1,
      "reussites_ce_run": 0,
-     "sauts_ce_run": 15
+     "sauts_ce_run": 0
     },
     "gemini-3.5-flash-lite": {
-     "appels_aujourdhui": 4,
+     "appels_aujourdhui": 0,
      "plafond_jour": 20,
      "epuise_jusqu_a": null,
-     "appels_ce_run": 15,
+     "appels_ce_run": 0,
      "reussites_ce_run": 0,
      "sauts_ce_run": 0
     }
    }
   },
-  "resume_quota": "Gemini : 4/60, moteurs : en attente (quota du jour atteint ; directions et titre en calcul Python) — Budget (run complet, plafond 45) : prévu moteurs 1 analyse (≤ 2 requêtes); rapport du jour 8 analyses (≤ 16 requêtes); devises 3 analyses (≤ 6 requêtes); reste ≤ 21 ; consommé ce run : moteurs 0, rapport du jour 0, devises 0, reste 0 (jour : 4/45) ; échecs ce run : aucun ; tentatives en panne (hors budget) : 0 ce run, 20/20 aujourd'hui ; réponses reçues ce run : 0/45 ; analyses : analyses:AUD-NZD-CNY faite, analyses:JPY-CHF-CAD à rejouer (429), analyses:USD-EUR-GBP à rejouer (503), critique faite, moteurs à rejouer (503), etat_du_monde faite, paires:synthese à rejouer (503), rapport:analyse à rejouer (503), rapport:redaction faite",
-  "appels_par_modele": {},
+  "resume_quota": "Gemini : 4/60, moteurs : fait — Budget (run complément, plafond 60) : prévu moteurs 1 analyse (≤ 1 requêtes); rapport du jour 8 analyses (≤ 8 requêtes); devises 3 analyses (≤ 3 requêtes); reste ≤ 48 ; consommé ce run : moteurs 1, rapport du jour 0, devises 3, reste 0 (jour : 4/60) ; échecs ce run : 503 × 2 ; tentatives en panne (hors budget) : 1 ce run, 1/20 aujourd'hui ; réponses reçues ce run : 4/45 ; MODE PANNE : priorités seulement, 1 essai chacune, sans repli ; analyses : analyses:AUD-NZD-CNY faite, analyses:JPY-CHF-CAD faite, analyses:USD-EUR-GBP faite, moteurs faite, rapport:redaction à rejouer (503)",
+  "appels_par_modele": {
+   "gemini-3.5-flash": {
+    "appels": 4,
+    "echecs": 0
+   },
+   "gemini-3.8-flash": {
+    "appels": 1,
+    "echecs": 1
+   }
+  },
   "disjoncteur": [
    {
     "heure": "03:54",
@@ -200,26 +215,55 @@
       "ignores": 0
      }
     ]
+   },
+   {
+    "heure": "08:35",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 5,
+    "replis_json_modele_suivant": 24,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 1,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
    }
   ],
-  "notion_url": "https://app.notion.com/p/Rapport-du-jour-2026-11-25-courte-42365bc6466181d98411cfa582ef41a0"
+  "notion_url": "https://app.notion.com/p/FX-2026-11-25-quotidien-42365bc6466181d98411cfa582ef41a0"
  },
  "synthese_globale": {
-  "biais_macro_global": "neutre",
-  "commentaire": "Régime de risque global : neutre (calcul Python). Le détail par devise est dans le profil des devises (état, moteur du moment, banque centrale).",
+  "biais_macro_global": "risk_off",
+  "commentaire": "Régime de risque global : aversion au risque (calcul Python). Le détail par devise est dans le profil des devises (état, moteur du moment, banque centrale).",
   "etat_du_monde": null,
   "engrenages": {
-   "statut": "indisponible",
-   "raison": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
-   "quota_atteint": true,
-   "tentatives": 0,
-   "genere_le": "2026-11-25T03:47:36+00:00",
    "engrenages": [
     {
      "numero": 1,
      "cle": "theme",
      "nom": "Thème macro",
-     "diagnostic": "",
+     "diagnostic": "Le thème macro global est dominé par l'aversion au risque et la recherche de valeurs refuges. La majorité des engrenages soutient le dollar malgré la pression baissière exercée par la baisse des taux courts américains.",
      "donnees_insuffisantes": false,
      "direction": {
       "dollar": "haussier",
@@ -233,20 +277,26 @@
        "dollar": "calcul Python",
        "risque": "calcul Python"
       },
-      "devises_concernees": [],
-      "texte": ""
+      "devises_concernees": [
+       "USD"
+      ],
+      "texte": "Alignement haussier sur le dollar dans un environnement de marché Risk Off."
      },
-     "comprendre": "",
-     "desk": "",
+     "comprendre": "Le thème macro synthétise l'interaction entre les flux financiers, la géopolitique et la dynamique monétaire. Il donne la direction générale du sentiment de marché.",
+     "desk": "Arbitrage entre la hausse du VIX et le recul du rendement à 2 ans américain.",
      "conviction": {
       "niveau": "moyen",
       "origine": "calcul Python",
-      "justification": ""
+      "justification": "Trois engrenages majeurs s'alignent avec le thème haussier dollar sur quatre évaluables."
      },
      "source_ids": [
       "src_171"
      ],
      "donnees_calculees": [
+      {
+       "texte": "Biais global risk_off ; classement : USD 88, GBP 52, AUD 42, CNY 34, NZD 32, CAD 32, JPY 30, CHF 27, EUR 8",
+       "source_id": "src_133"
+      },
       {
        "texte": "Directions dollar des engrenages 2 à 8 : 3 haussières, 1 baissière, 3 neutres ; risque de l'engrenage 5 : risk_off",
        "source_id": "src_171"
@@ -254,13 +304,13 @@
      ],
      "sources_indisponibles": [],
      "mesure": null,
-     "texte_indisponible": "Texte indisponible : quota du jour atteint"
+     "non_source": false
     },
     {
      "numero": 2,
      "cle": "politique_monetaire",
      "nom": "Politique monétaire",
-     "diagnostic": "",
+     "diagnostic": "Le taux directeur américain s'établit à 3,88 % et le rendement US à 2 ans recule de 20 pb à 4,63 %. Plusieurs banques centrales partenaires (GBP, CAD, AUD) affichent des politiques plus restrictives avec de récentes hausses de taux.",
      "donnees_insuffisantes": false,
      "direction": {
       "dollar": "baissier",
@@ -280,25 +330,25 @@
        "CAD",
        "AUD"
       ],
-      "texte": ""
+      "texte": "La nette détente du rendement à 2 ans américain dégrade le différentiel de taux du dollar."
      },
-     "comprendre": "",
-     "desk": "",
+     "comprendre": "Le rendement à 2 ans intègre directement les anticipations de baisse des taux des banques centrales. Un recul rapide réduit l'attrait rémunérateur des placements à court terme dans la devise.",
+     "desk": "Variation hebdomadaire du rendement 2 ans US (−20 pb) traduisant le re-pricing de la Fed.",
      "conviction": {
       "niveau": "eleve",
       "origine": "calcul Python",
-      "justification": ""
+      "justification": "Baisse supérieure au seuil de 10 pb sur le taux à 2 ans américain."
      },
      "source_ids": [
-      "src_134",
+      "src_172",
       "src_135",
       "src_136",
-      "src_137"
+      "src_139"
      ],
      "donnees_calculees": [
       {
-       "texte": "USD taux directeur 3.88% le 2026-11-20 (baisse, précédent 4.00%)",
-       "source_id": "src_134"
+       "texte": "USD taux directeur 3.88% le 2026-11-23 (baisse, précédent 4.00%)",
+       "source_id": "src_172"
       },
       {
        "texte": "EUR taux directeur 2.65% le 2026-10-29 (statu quo, précédent 2.65%)",
@@ -350,13 +400,13 @@
       "si_bas": "Dollar baissier",
       "raison": null
      },
-     "texte_indisponible": "Texte indisponible : quota du jour atteint"
+     "non_source": false
     },
     {
      "numero": 3,
      "cle": "donnees",
      "nom": "Données économiques",
-     "diagnostic": "",
+     "diagnostic": "L'indice de surprise économique à 30 jours pour l'USD atteint +0,87, traduisant des publications supérieures aux attentes. À l'inverse, le NZD (−1,13) et le CNY (−0,57) accusent un net retard macroéconomique.",
      "donnees_insuffisantes": false,
      "direction": {
       "dollar": "haussier",
@@ -375,21 +425,21 @@
        "USD",
        "CNY"
       ],
-      "texte": ""
+      "texte": "La surperformance des chiffres macroéconomiques américains soutient la devise."
      },
-     "comprendre": "",
-     "desk": "",
+     "comprendre": "L'indice de surprise évalue la santé réelle de l'économie par rapport aux prévisions des analystes. Des chiffres solides renforcent le soutien fondamental d'une monnaie.",
+     "desk": "Indice de surprise USD à +0,87 indiquant une conjoncture américaine résiliente.",
      "conviction": {
       "niveau": "faible",
       "origine": "calcul Python",
-      "justification": ""
+      "justification": "Signaux très divergents selon les devises malgré la force de l'USD."
      },
      "source_ids": [
       "src_144"
      ],
      "donnees_calculees": [
       {
-       "texte": "Indice de surprise 30 j : USD +0.87, EUR -0.14, GBP +0.10, JPY +0.22, CHF +0.45, CAD -0.41, AUD +0.40, NZD -1.13, CNY -0.57",
+       "texte": "Indice de surprise 30 j : USD +0.87, EUR -0.14, GBP +0.10, JPY -0.05, CHF +0.45, CAD -0.41, AUD +0.40, NZD -1.13, CNY -0.57",
        "source_id": "src_144"
       }
      ],
@@ -406,13 +456,13 @@
       "si_bas": "Dollar baissier",
       "raison": null
      },
-     "texte_indisponible": "Texte indisponible : quota du jour atteint"
+     "non_source": false
     },
     {
      "numero": 4,
      "cle": "fiscale",
      "nom": "Politique fiscale",
-     "diagnostic": "",
+     "diagnostic": "Le rendement à 10 ans US s'établit à 4,91 % avec une prime de terme de 0,89 % et un ratio dette/PIB de 121,2 %. Les rendements souverains se détendent légèrement en Europe et au Canada sans générer de stress budgétaire immédiat.",
      "donnees_insuffisantes": false,
      "direction": {
       "dollar": "neutre",
@@ -429,20 +479,19 @@
       "devises_concernees": [
        "EUR"
       ],
-      "texte": ""
+      "texte": "Variation modérée de la prime de terme américaine maintenant un impact neutre sur l'USD."
      },
-     "comprendre": "",
-     "desk": "",
+     "comprendre": "Une prime de risque budgétaire apparaît lorsque le marché exige une rémunération accrue pour éponger les déficits d'un État. Une variation faible traduit une absorption fluide des émissions obligataires.",
+     "desk": "Suivi de la prime de terme à 10 ans US (−8 pb sur 4 semaines) pour mesurer le risque d'émission.",
      "conviction": {
       "niveau": "faible",
       "origine": "calcul Python",
-      "justification": ""
+      "justification": "Absence de choc sur la prime de risque budgétaire américaine."
      },
      "source_ids": [
       "src_145",
       "src_146",
-      "src_147",
-      "src_148"
+      "src_150"
      ],
      "donnees_calculees": [
       {
@@ -484,13 +533,13 @@
      ],
      "sources_indisponibles": [],
      "mesure": null,
-     "texte_indisponible": "Texte indisponible : quota du jour atteint"
+     "non_source": false
     },
     {
      "numero": 5,
      "cle": "interconnexions",
      "nom": "Interconnexions de marchés",
-     "diagnostic": "",
+     "diagnostic": "Le VIX grimpe à 26,62 (+16,2 % en 7 jours), actant un passage en régime Risk Off. L'indice dollar large progresse de 0,77 % à 123,60 tandis que l'indice or (proxy) s'ajuste en baisse de 7,20 % à 2209,94.",
      "donnees_insuffisantes": false,
      "direction": {
       "dollar": "haussier",
@@ -509,14 +558,14 @@
        "CHF",
        "AUD"
       ],
-      "texte": ""
+      "texte": "Le pic de volatilité sur les marchés d'actions déclenche un flux de recherche de liquidité vers l'USD."
      },
-     "comprendre": "",
-     "desk": "",
+     "comprendre": "En phase d'incertitude boursière, les investisseurs réduisent leur exposition aux actifs risqués et rapatrient leurs liquidités sur les monnaies de réserve comme le dollar américain.",
+     "desk": "Niveau du VIX supérieur au seuil critique de 25 validant l'aversion au risque.",
      "conviction": {
       "niveau": "moyen",
       "origine": "calcul Python",
-      "justification": ""
+      "justification": "Hausse marquée du VIX corrélée à la progression de l'indice dollar large."
      },
      "source_ids": [
       "src_010",
@@ -568,13 +617,13 @@
       "si_bas": "Risk on",
       "raison": null
      },
-     "texte_indisponible": "Texte indisponible : quota du jour atteint"
+     "non_source": false
     },
     {
      "numero": 6,
      "cle": "geopolitique",
      "nom": "Géopolitique",
-     "diagnostic": "",
+     "diagnostic": "Trois événements majeurs sont répertoriés sur les canaux géopolitiques refuge, énergie et commerce. Une attaque au Moyen-Orient et le retour des menaces tarifaires ravivent l'incertitude internationale.",
      "donnees_insuffisantes": false,
      "direction": {
       "dollar": "haussier",
@@ -594,14 +643,14 @@
        "CHF",
        "CAD"
       ],
-      "texte": ""
+      "texte": "L'accumulation d'incertitudes géopolitiques et commerciales profite au statut refuge de l'USD."
      },
-     "comprendre": "",
-     "desk": "",
+     "comprendre": "Les tensions géopolitiques et le protectionnisme tarifaire menacent la croissance mondiale et les échanges marchands, poussant les flux vers la sécurité de la première devise mondiale.",
+     "desk": "Activation du canal refuge avec 3 titres majeurs soutenant directement le billet vert.",
      "conviction": {
       "niveau": "moyen",
       "origine": "calcul Python",
-      "justification": ""
+      "justification": "Seuil de 3 titres atteint sur le canal refuge de la matrice d'impact."
      },
      "source_ids": [
       "src_156",
@@ -629,13 +678,13 @@
      ],
      "sources_indisponibles": [],
      "mesure": null,
-     "texte_indisponible": "Texte indisponible : quota du jour atteint"
+     "non_source": false
     },
     {
      "numero": 7,
      "cle": "price_action",
      "nom": "Price action et flux",
-     "diagnostic": "",
+     "diagnostic": "L'indice USD synthétique affiche une quasi-stabilité (−0,02 % sur 5 jours) avec un RSI à 66,1. Le positionnement spéculatif montre de forts déséquilibres avec un positionnement vendeur extrême sur EUR, AUD et NZD contre un positionnement acheteur extrême sur JPY et CHF.",
      "donnees_insuffisantes": false,
      "direction": {
       "dollar": "neutre",
@@ -650,19 +699,18 @@
        "risque": "calcul Python"
       },
       "devises_concernees": [],
-      "texte": ""
+      "texte": "Consolidation latérale de l'indice dollar à court terme malgré une tendance de fond haussière."
      },
-     "comprendre": "",
-     "desk": "",
+     "comprendre": "Des positions spéculatives poussées à des extrêmes historiques signalent un marché vulnérable à des rachat de positions si le sentiment pivote brutalement.",
+     "desk": "Surveillance des percentiles COT sur l'EUR et l'AUD pour détecter un risque de short squeeze.",
      "conviction": {
       "niveau": "faible",
       "origine": "calcul Python",
-      "justification": ""
+      "justification": "Indice dollar synthétique sans direction marquée sur l'horizon 5 jours."
      },
      "source_ids": [
       "src_026",
       "src_023",
-      "src_160",
       "src_160"
      ],
      "donnees_calculees": [
@@ -696,13 +744,13 @@
       "si_bas": "Dollar baissier",
       "raison": null
      },
-     "texte_indisponible": "Texte indisponible : quota du jour atteint"
+     "non_source": false
     },
     {
      "numero": 8,
      "cle": "offre_demande",
      "nom": "Offre et demande",
-     "diagnostic": "",
+     "diagnostic": "Le pétrole WTI est quasi inchangé à 89,53 $ (−0,1 % sur 7 jours) et les stocks de brut américains progressent de 3,4 millions de barils. La balance commerciale des États-Unis reste fortement déficitaire à −105,0 millards USD.",
      "donnees_insuffisantes": false,
      "direction": {
       "dollar": "neutre",
@@ -719,18 +767,17 @@
       "devises_concernees": [
        "CAD"
       ],
-      "texte": ""
+      "texte": "Marché pétrolier stable réduisant l'impact direct sur les devises liées aux ressources."
      },
-     "comprendre": "",
-     "desk": "",
+     "comprendre": "La balance commerciale et l'offre d'énergie dictent les flux réels d'importation et d'exportation. Des flux commerciaux équilibrés limitent la pression de change immédiate.",
+     "desk": "Évolution hebdomadaire des stocks de brut US pour mesurer l'équilibre offre-demande.",
      "conviction": {
       "niveau": "moyen",
       "origine": "calcul Python",
-      "justification": ""
+      "justification": "Stabilité du prix du WTI et progression modérée des stocks pétroliers."
      },
      "source_ids": [
       "src_011",
-      "src_012",
       "src_161",
       "src_162"
      ],
@@ -794,37 +841,93 @@
      ],
      "sources_indisponibles": [],
      "mesure": null,
-     "texte_indisponible": "Texte indisponible : quota du jour atteint"
+     "non_source": false
     }
    ],
-   "chaines": [],
+   "chaines": [
+    {
+     "titre": "Transmission géopolitique et repli refuge",
+     "maillons": [
+      {
+       "engrenage": 6,
+       "texte": "Une attaque sur les infrastructures au Moyen-Orient et la résurgence des droits de douane relancent les craintes (src_157, src_159).",
+       "source_id": "src_157",
+       "non_sourcee": false
+      },
+      {
+       "engrenage": 5,
+       "texte": "Le VIX s'élève à 26,62, confirmant un basculement des investisseurs en mode Risk Off sur les actions (src_010).",
+       "source_id": "src_010",
+       "non_sourcee": false
+      },
+      {
+       "engrenage": 1,
+       "texte": "Le dollar capte les flux de liquidité en tant qu'actif refuge dominant (src_171).",
+       "source_id": "src_171",
+       "non_sourcee": false
+      }
+     ]
+    },
+    {
+     "titre": "Divergence entre surcharges macro et détente obligataire",
+     "maillons": [
+      {
+       "engrenage": 3,
+       "texte": "L'indice de surprise économique de l'USD ressort à +0,87, attestant d'indicateurs US solides (src_144).",
+       "source_id": "src_144",
+       "non_sourcee": false
+      },
+      {
+       "engrenage": 2,
+       "texte": "Le rendement 2 ans américain baisse néanmoins de 20 pb à 4,63 % après l'ajustement du taux directeur (src_143, src_172).",
+       "source_id": "src_143",
+       "non_sourcee": false
+      },
+      {
+       "engrenage": 7,
+       "texte": "L'indice dollar synthétique marque le pas à −0,02 % sur 5 jours sous la pression des taux courts (src_026).",
+       "source_id": "src_026",
+       "non_sourcee": false
+      }
+     ]
+    }
+   ],
    "conflits": [
     {
      "engrenages": [
       1,
       2
      ],
-     "texte": "Thème macro (haussier) contre Politique monétaire (baissier) sur le dollar",
-     "source_ids": [],
-     "origine": "calcul Python"
+     "texte": "Thème macro (haussier) contre Politique monétaire (baissier) sur le dollar.",
+     "source_ids": [
+      "src_171",
+      "src_172"
+     ],
+     "origine": "modèle"
     },
     {
      "engrenages": [
       2,
       3
      ],
-     "texte": "Politique monétaire (baissier) contre Données économiques (haussier) sur le dollar",
-     "source_ids": [],
-     "origine": "calcul Python"
+     "texte": "Politique monétaire (baissier) contre Données économiques (haussier) sur le dollar.",
+     "source_ids": [
+      "src_143",
+      "src_144"
+     ],
+     "origine": "modèle"
     },
     {
      "engrenages": [
       2,
       5
      ],
-     "texte": "Politique monétaire (baissier) contre Interconnexions de marchés (haussier) sur le dollar",
-     "source_ids": [],
-     "origine": "calcul Python"
+     "texte": "Politique monétaire (baissier) contre Interconnexions de marchés (haussier) sur le dollar.",
+     "source_ids": [
+      "src_143",
+      "src_010"
+     ],
+     "origine": "modèle"
     },
     {
      "engrenages": [
@@ -836,7 +939,18 @@
      "origine": "calcul Python"
     }
    ],
-   "concept": null,
+   "concept": {
+    "id": "politique_budgetaire",
+    "titre": "Politique budgétaire et devise",
+    "definition": "Un déficit qui se creuse oblige l'État à emprunter davantage, ce qui pousse les rendements à la hausse. Selon la confiance des investisseurs, la devise peut alors monter (rendement) ou chuter (prime de risque).",
+    "explication": "La politique budgétaire définit les choix de recettes et de dépenses d'un État. Lorsqu'un déficit se creuse, l'État doit émettre massivement des titres de dette, ce qui peut accroître la prime de risque exigée par les investisseurs obligataires.",
+    "exemple": "Aux États-Unis, le ratio dette/PIB atteint 121,2 % et le rendement 10 ans ressort à 4,91 % avec une prime de terme de 0,89 %.",
+    "source_ids": [
+     "src_145"
+    ],
+    "cycle": null,
+    "pertinence": null
+   },
    "controles": [],
    "coherence": {
     "alignes": 3,
@@ -861,41 +975,185 @@
     "libelle": "3 sur 7 évaluables",
     "regle": "engrenage 2 à 8 aligné si sa direction dollar est celle du thème ; à défaut (thème au dollar neutre, ou engrenage sans direction dollar), si sa direction risque est celle du thème. Évaluable = engrenage qui a une direction comparable à celle du thème. Moins de 3 alignés : « Signaux mixtes ». Thème au dollar et au risque neutres : rien à mesurer."
    },
-   "repli_python": true,
-   "texte_indisponible": "Texte indisponible : quota du jour atteint",
-   "rafraichi_le": "2026-11-25T03:48:16+00:00"
+   "statut": "ok",
+   "tentatives": 1,
+   "genere_le": "2026-11-25T08:19:10+00:00",
+   "redige_par": {
+    "modele": "gemini-3.5-flash",
+    "libelle": "Flash 3.5"
+   },
+   "version": "quotidienne",
+   "rafraichi_le": "2026-11-25T08:21:56+00:00"
   },
-  "classement_devises": [],
-  "devises_indisponibles": [
-   "USD",
-   "EUR",
-   "GBP",
-   "JPY",
-   "CHF",
-   "CAD",
-   "AUD",
-   "NZD",
-   "CNY"
-  ]
+  "classement_devises": [
+   {
+    "rang": 1,
+    "devise": "USD",
+    "score_confluence": 88,
+    "risk_on_off": "off"
+   },
+   {
+    "rang": 2,
+    "devise": "GBP",
+    "score_confluence": 52,
+    "risk_on_off": "neutre"
+   },
+   {
+    "rang": 3,
+    "devise": "AUD",
+    "score_confluence": 42,
+    "risk_on_off": "on"
+   },
+   {
+    "rang": 4,
+    "devise": "CNY",
+    "score_confluence": 34,
+    "risk_on_off": "neutre"
+   },
+   {
+    "rang": 5,
+    "devise": "CAD",
+    "score_confluence": 32,
+    "risk_on_off": "on"
+   },
+   {
+    "rang": 6,
+    "devise": "NZD",
+    "score_confluence": 32,
+    "risk_on_off": "on"
+   },
+   {
+    "rang": 7,
+    "devise": "JPY",
+    "score_confluence": 30,
+    "risk_on_off": "off"
+   },
+   {
+    "rang": 8,
+    "devise": "CHF",
+    "score_confluence": 27,
+    "risk_on_off": "off"
+   },
+   {
+    "rang": 9,
+    "devise": "EUR",
+    "score_confluence": 8,
+    "risk_on_off": "neutre"
+   }
+  ],
+  "devises_indisponibles": []
  },
  "devises": [
   {
    "devise": "USD",
    "risk_on_off": "off",
-   "score_confluence": null,
-   "analyse_indisponible": true,
-   "raison_indisponibilite": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+   "redige_par": {
+    "modele": "gemini-3.5-flash",
+    "libelle": "Flash 3.5"
+   },
+   "score_confluence": 88,
+   "detail_score": [
+    {
+     "indicateur": "taux_directeur",
+     "sens": 1,
+     "poids": 20,
+     "justification": "Taux effectif à 3,88 % contre 2,75 % de médiane G8, procurant un avantage de rendement.",
+     "source_id": "src_005"
+    },
+    {
+     "indicateur": "cpi_surprise",
+     "sens": 0,
+     "poids": 15,
+     "justification": "CPI mensuel à +0,35 % sans surprise publiée aujourd'hui avant le Core PCE.",
+     "source_id": "src_001"
+    },
+    {
+     "indicateur": "yield_curve",
+     "sens": 1,
+     "poids": 12,
+     "justification": "Spread 10Y-2Y à +0,29 % avec un 10 ans à 4,91 %, reflétant des anticipations de taux soutenues.",
+     "source_id": "src_015"
+    },
+    {
+     "indicateur": "vix",
+     "sens": 1,
+     "poids": 10,
+     "justification": "VIX à 26,62 malgré un repli de 25,83 %, alimentant les flux refuges vers le dollar.",
+     "source_id": "src_010"
+    },
+    {
+     "indicateur": "dxy",
+     "sens": 1,
+     "poids": 10,
+     "justification": "Indice USD synthétique à 103,50, maintenu au-dessus de sa MM200 (+2,93 %).",
+     "source_id": "src_026"
+    },
+    {
+     "indicateur": "pmi_surprise",
+     "sens": 0,
+     "poids": 10,
+     "justification": "PMI manufacturier à 54,5 et services à 55,6, confirmant l'expansion sans choc majeur.",
+     "source_id": "src_089"
+    },
+    {
+     "indicateur": "differentiel_taux",
+     "sens": 1,
+     "poids": 8,
+     "justification": "Différentiel de taux directeurs de +1,13 point par rapport à la médiane G8.",
+     "source_id": "src_016"
+    },
+    {
+     "indicateur": "rsi",
+     "sens": 1,
+     "poids": 8,
+     "justification": "RSI 14 à 66,1, validant un momentum haussier fort sur l'indice dollar.",
+     "source_id": "src_026"
+    },
+    {
+     "indicateur": "trendline",
+     "sens": 1,
+     "poids": 7,
+     "justification": "Structure haussière préservée au-dessus des supports à 102,11 et 101,87.",
+     "source_id": "src_026"
+    }
+   ],
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
-    "sens": "range",
-    "commentaire": "analyse indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
-    "source_id": null
+    "sens": "haussier",
+    "commentaire": "Théorie de Dow : hauts et bas successivement plus hauts sur l'indice synthétique USD",
+    "source_id": "src_026"
    },
-   "detail_score": [],
-   "opportunites": [],
-   "menaces": [],
-   "synthese_une_phrase": "USD : RSI 14 à 66,1 (momentum haussier, percentile 5 ans 87) ; cours au-dessus de sa moyenne mobile 200 jours (+2,93 %) ; positions nettes des spéculateurs (COT) +13 345 contrats, percentile 52 semaines 77 ; taux directeur 3,88 % (+1,13 pt face à la médiane G8). Score de confluence n/d : il dépend de l'analyse du modèle, indisponible aujourd'hui.",
+   "carry": {
+    "taux_directeur": 3.88,
+    "differentiel_vs_mediane_g8": 1.13,
+    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   },
+   "opportunites": [
+    {
+     "texte": "Confiance des consommateurs Conference Board ressortie à 103,3 vs 92,5 attendu, soutenant l'économie US.",
+     "source_id": "src_124",
+     "non_sourcee": false
+    },
+    {
+     "texte": "Test possible de la résistance technique à 103,70 soutenue par la dynamique du RSI à 66,1.",
+     "source_id": "src_026",
+     "non_sourcee": false
+    }
+   ],
+   "menaces": [
+    {
+     "texte": "Divergence potentielle si l'adjudication des bons du Trésor continue de détendre les rendements obligataires.",
+     "source_id": "src_121",
+     "non_sourcee": false
+    },
+    {
+     "texte": "Annonce de nouvelles taxes douanières globales risquant de susciter une volatilité bilatérale imprévisible.",
+     "source_id": "src_123",
+     "non_sourcee": false
+    }
+   ],
+   "synthese_une_phrase": "Le dollar américain demeure soutenu par la fermeté de ses rendements obligataires, la solidité de la confiance des ménages et un biais technique nettement haussier.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -999,21 +1257,22 @@
    ],
    "contexte_geopolitique": {
     "banque_centrale_pourquoi": {
-     "texte": "",
-     "source_id": null
+     "texte": "La Réserve fédérale maintient son taux effectif à 3,88 % et adapte sa politique au cas par cas selon les données d'inflation Core PCE et d'emploi.",
+     "source_id": "src_005"
     },
-    "evenements": []
+    "evenements": [
+     {
+      "texte": "L'administration américaine prépare l'instauration de nouveaux droits de douane visant la Chine et l'Union européenne.",
+      "source_id": "src_123",
+      "non_sourcee": false
+     }
+    ]
    },
-   "texte_automatique": true,
-   "texte_automatique_sources": [
-    "technique : série unique 5 ans (Twelve Data + Fed H.10), au 2026-11-25",
-    "COT : CFTC, au 2026-11-17",
-    "taux : FRED (DFF, taux effectif), au 2026-11-23"
-   ],
-   "carry": {
-    "taux_directeur": 3.88,
-    "differentiel_vs_mediane_g8": 1.13,
-    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   "synthese_approfondie": {
+    "statut": "indisponible",
+    "raison": "synthese:USD : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python)",
+    "tentatives": 1,
+    "genere_le": "2026-11-25T08:21:56+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.87,
@@ -1033,26 +1292,123 @@
     {
      "date": "2026-11-21",
      "score": 86
+    },
+    {
+     "date": "2026-11-25",
+     "score": 88
     }
    ]
   },
   {
    "devise": "EUR",
    "risk_on_off": "neutre",
-   "score_confluence": null,
-   "analyse_indisponible": true,
-   "raison_indisponibilite": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+   "redige_par": {
+    "modele": "gemini-3.5-flash",
+    "libelle": "Flash 3.5"
+   },
+   "score_confluence": 8,
+   "detail_score": [
+    {
+     "indicateur": "taux_directeur",
+     "sens": -1,
+     "poids": 20,
+     "justification": "Taux de facilité de dépôt à 2,50 %, inférieur de 0,25 point à la médiane G8.",
+     "source_id": "src_014"
+    },
+    {
+     "indicateur": "cpi_surprise",
+     "sens": 0,
+     "poids": 15,
+     "justification": "Aucune publication d'inflation majeure ce jour dans la zone euro.",
+     "source_id": "src_045"
+    },
+    {
+     "indicateur": "yield_curve",
+     "sens": -1,
+     "poids": 12,
+     "justification": "Écart de rendement à 2 ans défavorable de −157 pb face au Trésor américain.",
+     "source_id": "src_017"
+    },
+    {
+     "indicateur": "vix",
+     "sens": -1,
+     "poids": 10,
+     "justification": "VIX maintenu à 26,62, limitant l'appétit pour l'euro au profit des valeurs refuges.",
+     "source_id": "src_010"
+    },
+    {
+     "indicateur": "dxy",
+     "sens": -1,
+     "poids": 10,
+     "justification": "Force de l'indice dollar à 103,50 pesant directement sur la paire EUR/USD.",
+     "source_id": "src_026"
+    },
+    {
+     "indicateur": "pmi_surprise",
+     "sens": -1,
+     "poids": 10,
+     "justification": "PMI services français en repli à 47,4 vs 48,4 précédent, illustrant des faiblesses sectorielles.",
+     "source_id": "src_086"
+    },
+    {
+     "indicateur": "differentiel_taux",
+     "sens": -1,
+     "poids": 8,
+     "justification": "Carry négatif de −0,25 point par rapport à la médiane G8 et désavantage face à l'USD.",
+     "source_id": "src_016"
+    },
+    {
+     "indicateur": "rsi",
+     "sens": -1,
+     "poids": 8,
+     "justification": "RSI 14 sur EUR/USD à 33,9, confirmant la prédominance du momentum vendeur.",
+     "source_id": "src_018"
+    },
+    {
+     "indicateur": "trendline",
+     "sens": -1,
+     "poids": 7,
+     "justification": "Prix évoluant à −4,65 % sous la moyenne mobile 200 jours (1,1488).",
+     "source_id": "src_018"
+    }
+   ],
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
-    "sens": "range",
-    "commentaire": "analyse indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
-    "source_id": null
+    "sens": "baissier",
+    "commentaire": "Théorie de Dow : hauts et bas successivement plus bas sur EUR/USD",
+    "source_id": "src_018"
    },
-   "detail_score": [],
-   "opportunites": [],
-   "menaces": [],
-   "synthese_une_phrase": "EUR : RSI 14 à 33,9 (momentum baissier, percentile 5 ans 10) ; cours en dessous de sa moyenne mobile 200 jours (−4,65 %) ; positions nettes des spéculateurs (COT) -142 710 contrats, percentile 52 semaines 6, extrême vendeur ; taux directeur 2,50 % (−0,25 pt face à la médiane G8) ; écart de taux 2 ans face aux États−Unis −157 pb. Score de confluence n/d : il dépend de l'analyse du modèle, indisponible aujourd'hui.",
+   "carry": {
+    "taux_directeur": 2.5,
+    "differentiel_vs_mediane_g8": -0.25,
+    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   },
+   "opportunites": [
+    {
+     "texte": "Amélioration de l'indice du climat des affaires German Ifo à 90,6 vs 90,5 attendu, suggérant une stabilisation en Allemagne.",
+     "source_id": "src_128",
+     "non_sourcee": false
+    },
+    {
+     "texte": "Proximité de zones de survente RSI (33,9) pouvant offrir un répit technique à court terme.",
+     "source_id": "src_018",
+     "non_sourcee": false
+    }
+   ],
+   "menaces": [
+    {
+     "texte": "Risque de récession accru en France souligné par la dégradation des indicateurs du secteur des services.",
+     "source_id": "src_113",
+     "non_sourcee": false
+    },
+    {
+     "texte": "Menaces de barrières douanières américaines pesant directement sur le secteur exportateur européen.",
+     "source_id": "src_122",
+     "non_sourcee": false
+    }
+   ],
+   "synthese_une_phrase": "L'euro reste handicapé par un différentiel de rendement défavorable face à l'USD et des fragilités économiques persistantes au sein de la zone euro.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -1156,21 +1512,22 @@
    ],
    "contexte_geopolitique": {
     "banque_centrale_pourquoi": {
-     "texte": "",
-     "source_id": null
+     "texte": "La BCE garde son taux de dépôt à 2,50 % et observe l'évolution de la croissance et de l'inflation sans engagement précipité.",
+     "source_id": "src_014"
     },
-    "evenements": []
+    "evenements": [
+     {
+      "texte": "Les marchés européens réagissent négativement aux menaces de retours de tarifs douaniers par Washington.",
+      "source_id": "src_122",
+      "non_sourcee": false
+     }
+    ]
    },
-   "texte_automatique": true,
-   "texte_automatique_sources": [
-    "technique : série unique 5 ans (Twelve Data + Fed H.10), au 2026-11-25",
-    "COT : CFTC, au 2026-11-17",
-    "taux : FRED (ECBDFR, taux de la facilité de dépôt de la BCE), au 2026-11-24"
-   ],
-   "carry": {
-    "taux_directeur": 2.5,
-    "differentiel_vs_mediane_g8": -0.25,
-    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   "synthese_approfondie": {
+    "statut": "indisponible",
+    "raison": "synthese:EUR : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python)",
+    "tentatives": 1,
+    "genere_le": "2026-11-25T08:22:16+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.14,
@@ -1190,26 +1547,123 @@
     {
      "date": "2026-11-21",
      "score": 21
+    },
+    {
+     "date": "2026-11-25",
+     "score": 8
     }
    ]
   },
   {
    "devise": "GBP",
    "risk_on_off": "neutre",
-   "score_confluence": null,
-   "analyse_indisponible": true,
-   "raison_indisponibilite": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+   "redige_par": {
+    "modele": "gemini-3.5-flash",
+    "libelle": "Flash 3.5"
+   },
+   "score_confluence": 52,
+   "detail_score": [
+    {
+     "indicateur": "taux_directeur",
+     "sens": 1,
+     "poids": 20,
+     "justification": "Taux directeur fixé à 4,00 %, soit +1,25 point au-dessus de la médiane G8.",
+     "source_id": "src_016"
+    },
+    {
+     "indicateur": "cpi_surprise",
+     "sens": 0,
+     "poids": 15,
+     "justification": "Pas de nouvelle statistique d'inflation publiée sur la séance.",
+     "source_id": "src_042"
+    },
+    {
+     "indicateur": "yield_curve",
+     "sens": 0,
+     "poids": 12,
+     "justification": "Rendement du Gilt 10 ans à 5,21 % maintenant une structure de taux élevée.",
+     "source_id": "src_017"
+    },
+    {
+     "indicateur": "vix",
+     "sens": -1,
+     "poids": 10,
+     "justification": "Niveau du VIX à 26,62 freinant les flux d'achats sur la livre sterling.",
+     "source_id": "src_010"
+    },
+    {
+     "indicateur": "dxy",
+     "sens": -1,
+     "poids": 10,
+     "justification": "Pression constante exercée par la vigueur du dollar synthétique (103,50).",
+     "source_id": "src_026"
+    },
+    {
+     "indicateur": "pmi_surprise",
+     "sens": 1,
+     "poids": 10,
+     "justification": "Flash PMI manufacturier à 53,0 et services à 53,0, attestant de la résilience du secteur privé.",
+     "source_id": "src_089"
+    },
+    {
+     "indicateur": "differentiel_taux",
+     "sens": 1,
+     "poids": 8,
+     "justification": "Différentiel de taux positif de +1,25 point face à la médiane des pays du G8.",
+     "source_id": "src_016"
+    },
+    {
+     "indicateur": "rsi",
+     "sens": -1,
+     "poids": 8,
+     "justification": "RSI 14 à 37,5 sur GBP/USD, s'inscrivant dans un cadre technique baissier.",
+     "source_id": "src_019"
+    },
+    {
+     "indicateur": "trendline",
+     "sens": -1,
+     "poids": 7,
+     "justification": "Cours situé sous les moyennes mobiles 100 (−2,11 %) et 200 jours (−2,19 %).",
+     "source_id": "src_019"
+    }
+   ],
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
-    "sens": "range",
-    "commentaire": "analyse indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
-    "source_id": null
+    "sens": "baissier",
+    "commentaire": "Théorie de Dow : hauts et bas successivement plus bas sur GBP/USD",
+    "source_id": "src_019"
    },
-   "detail_score": [],
-   "opportunites": [],
-   "menaces": [],
-   "synthese_une_phrase": "GBP : RSI 14 à 37,5 (momentum baissier, percentile 5 ans 17) ; cours en dessous de sa moyenne mobile 200 jours (−2,19 %) ; positions nettes des spéculateurs (COT) -32 304 contrats, percentile 52 semaines 88 ; taux directeur 4,00 % (+1,25 pt face à la médiane G8). Score de confluence n/d : il dépend de l'analyse du modèle, indisponible aujourd'hui.",
+   "carry": {
+    "taux_directeur": 4.0,
+    "differentiel_vs_mediane_g8": 1.25,
+    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   },
+   "opportunites": [
+    {
+     "texte": "Rendement de portage élevé soutenu par un taux directeur de la Banque d'Angleterre maintenu à 4,00 %.",
+     "source_id": "src_016",
+     "non_sourcee": false
+    },
+    {
+     "texte": "Maintien de l'activité du secteur privé en zone d'expansion avec des PMI à 53,0.",
+     "source_id": "src_089",
+     "non_sourcee": false
+    }
+   ],
+   "menaces": [
+    {
+     "texte": "Recul marqué des ventes de détail CBI ressorties à −27 vs −10 précédent, signalant une faiblesse de la consommation.",
+     "source_id": "src_069",
+     "non_sourcee": false
+    },
+    {
+     "texte": "Résistance technique majeure à 1,3205 limitant les tentatives de rebond du câble.",
+     "source_id": "src_019",
+     "non_sourcee": false
+    }
+   ],
+   "synthese_une_phrase": "La livre sterling bénéficie d'un portage attractif et de PMI solides, mais demeure bridée par sa tendance technique baissière face au dollar.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -1313,21 +1767,22 @@
    ],
    "contexte_geopolitique": {
     "banque_centrale_pourquoi": {
-     "texte": "",
-     "source_id": null
+     "texte": "La Banque d'Angleterre maintient son taux directeur à 4,00 % pour contenance de l'inflation tout en évaluant les risques sur la stabilité financière.",
+     "source_id": "src_016"
     },
-    "evenements": []
+    "evenements": [
+     {
+      "texte": "La publication prochaine du rapport de stabilité financière de la BoE garde le marché prudent sur le secteur bancaire britannique.",
+      "source_id": "src_042",
+      "non_sourcee": false
+     }
+    ]
    },
-   "texte_automatique": true,
-   "texte_automatique_sources": [
-    "technique : série unique 5 ans (Twelve Data + Fed H.10), au 2026-11-25",
-    "COT : CFTC, au 2026-11-17",
-    "taux : registre macro (ForexFactory, publication officielle), au 2026-11-05"
-   ],
-   "carry": {
-    "taux_directeur": 4.0,
-    "differentiel_vs_mediane_g8": 1.25,
-    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   "synthese_approfondie": {
+    "statut": "indisponible",
+    "raison": "synthese:GBP : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python)",
+    "tentatives": 1,
+    "genere_le": "2026-11-25T08:22:36+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.1,
@@ -1347,26 +1802,113 @@
     {
      "date": "2026-11-21",
      "score": 64
+    },
+    {
+     "date": "2026-11-25",
+     "score": 52
     }
    ]
   },
   {
    "devise": "JPY",
    "risk_on_off": "off",
-   "score_confluence": null,
-   "analyse_indisponible": true,
-   "raison_indisponibilite": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
-   "biais_banque_centrale": "data_dependent",
+   "redige_par": {
+    "modele": "gemini-3.5-flash",
+    "libelle": "Flash 3.5"
+   },
+   "score_confluence": 30,
+   "detail_score": [
+    {
+     "indicateur": "taux_directeur",
+     "sens": -1,
+     "poids": 20,
+     "justification": "Taux directeur à 1,23 %, très nettement inférieur à la médiane G8 de 2,75 %.",
+     "source_id": "src_016"
+    },
+    {
+     "indicateur": "cpi_surprise",
+     "sens": 1,
+     "poids": 15,
+     "justification": "Indice des prix des services aux entreprises en hausse de 4,2 % en octobre, renforçant les pressions inflationnistes.",
+     "source_id": "src_118"
+    },
+    {
+     "indicateur": "yield_curve",
+     "sens": 0,
+     "poids": 12,
+     "justification": "Spread 10Y-2Y US stable à 0,29 %, sans impulsion majeure sur la courbe.",
+     "source_id": "src_015"
+    },
+    {
+     "indicateur": "vix",
+     "sens": -1,
+     "poids": 10,
+     "justification": "VIX en baisse à 26,62 (−25,83 %), réduisant temporairement la demande de couverture refuge.",
+     "source_id": "src_010"
+    },
+    {
+     "indicateur": "dxy",
+     "sens": -1,
+     "poids": 10,
+     "justification": "Indice USD synthétique solide à 103,50 avec un RSI de 66,1, maintenant la pression sur le yen.",
+     "source_id": "src_026"
+    },
+    {
+     "indicateur": "pmi_surprise",
+     "sens": 0,
+     "poids": 10,
+     "justification": "Flash Manufacturing PMI attendu à 53,5 contre 53,3 précédemment, sans chiffre publié ce jour.",
+     "source_id": "src_089"
+    },
+    {
+     "indicateur": "differentiel_taux",
+     "sens": -1,
+     "poids": 8,
+     "justification": "Spread obligataire 2 ans JPY vs USD très défavorable à −285 pb, alimentant le carry défavorable.",
+     "source_id": "src_017"
+    },
+    {
+     "indicateur": "rsi",
+     "sens": -1,
+     "poids": 8,
+     "justification": "RSI USD/JPY inverse à 45,2, signalant la persistance d'un momentum baissier.",
+     "source_id": "src_020"
+    },
+    {
+     "indicateur": "trendline",
+     "sens": 0,
+     "poids": 7,
+     "justification": "Aucune structure de trendline à au moins 3 points de contact identifiée sur l'unité de temps.",
+     "source_id": "src_020"
+    }
+   ],
+   "biais_banque_centrale": "hawkish",
    "tendance_fond": {
     "unite_temps": "weekly",
-    "sens": "range",
-    "commentaire": "analyse indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
-    "source_id": null
+    "sens": "baissier",
+    "commentaire": "Dow : hauts et bas successivement plus bas",
+    "source_id": "src_020"
    },
-   "detail_score": [],
-   "opportunites": [],
-   "menaces": [],
-   "synthese_une_phrase": "JPY : RSI 14 à 45,2 (momentum baissier, percentile 5 ans 52) ; cours en dessous de sa moyenne mobile 200 jours (−0,20 %) ; positions nettes des spéculateurs (COT) +116 317 contrats, percentile 52 semaines 96, extrême acheteur ; taux directeur 1,23 % (−1,52 pt face à la médiane G8) ; écart de taux 2 ans face aux États−Unis −285 pb. Score de confluence n/d : il dépend de l'analyse du modèle, indisponible aujourd'hui.",
+   "carry": {
+    "taux_directeur": 1.228,
+    "differentiel_vs_mediane_g8": -1.52,
+    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   },
+   "opportunites": [
+    {
+     "texte": "La nette accélération des prix des services (+4,2 %) accroît la probabilité d'un resserrement monétaire de la BOJ en décembre.",
+     "source_id": "src_118",
+     "non_sourcee": false
+    }
+   ],
+   "menaces": [
+    {
+     "texte": "L'écart de rendement 2 ans à −285 pb face aux États-Unis continue d'entretenir des flux de carry trade défavorables au yen.",
+     "source_id": "src_017",
+     "non_sourcee": false
+    }
+   ],
+   "synthese_une_phrase": "Le yen reste pesé par son important désavantage de rendement et la fermeté du dollar, en dépit du soutien apporté par les anticipations croissantes de hausse de taux de la BOJ.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -1470,27 +2012,28 @@
    ],
    "contexte_geopolitique": {
     "banque_centrale_pourquoi": {
-     "texte": "",
-     "source_id": null
+     "texte": "La Banque du Japon prépare une nouvelle hausse de ses taux d'intérêt afin d'endiguer la transmission des coûts salariaux et des services à l'inflation globale.",
+     "source_id": "src_118"
     },
-    "evenements": []
+    "evenements": [
+     {
+      "texte": "Le bond de 4,2 % de l'indice des prix des services aux entreprises renforce la spéculation du marché en faveur d'une hausse des taux lors de la réunion de décembre.",
+      "source_id": "src_118",
+      "non_sourcee": false
+     }
+    ]
    },
-   "texte_automatique": true,
-   "texte_automatique_sources": [
-    "technique : série unique 5 ans (Twelve Data + Fed H.10), au 2026-11-25",
-    "COT : CFTC, au 2026-11-17",
-    "taux : Banque du Japon (STRDCLUCON, taux d'appel au jour le jour non garanti), au 2026-11-20"
-   ],
-   "carry": {
-    "taux_directeur": 1.228,
-    "differentiel_vs_mediane_g8": -1.52,
-    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   "synthese_approfondie": {
+    "statut": "indisponible",
+    "raison": "synthese:JPY : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python)",
+    "tentatives": 1,
+    "genere_le": "2026-11-25T08:22:56+00:00"
    },
    "indice_surprise_30j": {
-    "indice": 0.22,
+    "indice": -0.05,
     "precedent": -0.93,
     "tendance": "hausse",
-    "n": 8
+    "n": 9
    },
    "historique_score_7j": [
     {
@@ -1504,26 +2047,113 @@
     {
      "date": "2026-11-21",
      "score": 24
+    },
+    {
+     "date": "2026-11-25",
+     "score": 30
     }
    ]
   },
   {
    "devise": "CHF",
    "risk_on_off": "off",
-   "score_confluence": null,
-   "analyse_indisponible": true,
-   "raison_indisponibilite": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
-   "biais_banque_centrale": "data_dependent",
+   "redige_par": {
+    "modele": "gemini-3.5-flash",
+    "libelle": "Flash 3.5"
+   },
+   "score_confluence": 27,
+   "detail_score": [
+    {
+     "indicateur": "taux_directeur",
+     "sens": -1,
+     "poids": 20,
+     "justification": "Taux directeur fixé à 0,00 %, le plus bas de l'ensemble du G8.",
+     "source_id": "src_016"
+    },
+    {
+     "indicateur": "cpi_surprise",
+     "sens": 0,
+     "poids": 15,
+     "justification": "Aucune publication d'inflation récente disponible dans le calendrier pour modifier le biais.",
+     "source_id": null
+    },
+    {
+     "indicateur": "yield_curve",
+     "sens": 0,
+     "poids": 12,
+     "justification": "Régime de courbe US stable avec un spread 10Y-2Y à 0,29 %.",
+     "source_id": "src_015"
+    },
+    {
+     "indicateur": "vix",
+     "sens": -1,
+     "poids": 10,
+     "justification": "Repli du VIX à 26,62 (−25,83 %), atténuant le soutien découlant du statut de valeur refuge.",
+     "source_id": "src_010"
+    },
+    {
+     "indicateur": "dxy",
+     "sens": -1,
+     "poids": 10,
+     "justification": "USD synthétique orienté à la hausse (103,50, RSI 66,1), exerçant une pression baissière sur le CHF.",
+     "source_id": "src_026"
+    },
+    {
+     "indicateur": "pmi_surprise",
+     "sens": 1,
+     "poids": 10,
+     "justification": "PMI manufacturier saisi à 56,7 contre 55,3 attendu, confirmant une expansion industrielle robuste.",
+     "source_id": "src_021"
+    },
+    {
+     "indicateur": "differentiel_taux",
+     "sens": -1,
+     "poids": 8,
+     "justification": "Carry défavorable de −2,75 % par rapport à la médiane G8, pesant lourdement sur les flux.",
+     "source_id": "src_016"
+    },
+    {
+     "indicateur": "rsi",
+     "sens": -1,
+     "poids": 8,
+     "justification": "RSI USD/CHF inverse à 44,6, confirmant un momentum fondamentalement lourd.",
+     "source_id": "src_021"
+    },
+    {
+     "indicateur": "trendline",
+     "sens": 0,
+     "poids": 7,
+     "justification": "Absence de droite de tendance validée à 3 points de contact dans la structure actuelle.",
+     "source_id": "src_021"
+    }
+   ],
+   "biais_banque_centrale": "dovish",
    "tendance_fond": {
     "unite_temps": "weekly",
-    "sens": "range",
-    "commentaire": "analyse indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
-    "source_id": null
+    "sens": "baissier",
+    "commentaire": "Dow : hauts et bas successivement plus bas",
+    "source_id": "src_021"
    },
-   "detail_score": [],
-   "opportunites": [],
-   "menaces": [],
-   "synthese_une_phrase": "CHF : RSI 14 à 44,6 (momentum baissier, percentile 5 ans 32) ; cours en dessous de sa moyenne mobile 200 jours (−3,83 %) ; positions nettes des spéculateurs (COT) -8 281 contrats, percentile 52 semaines 100, extrême acheteur ; taux directeur 0,00 % (−2,75 pt face à la médiane G8). Score de confluence n/d : il dépend de l'analyse du modèle, indisponible aujourd'hui.",
+   "carry": {
+    "taux_directeur": 0.0,
+    "differentiel_vs_mediane_g8": -2.75,
+    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   },
+   "opportunites": [
+    {
+     "texte": "Le PMI manufacturier ressorti à 56,7 (vs 55,3 prévus) met en évidence la résistance du secteur industriel suisse.",
+     "source_id": "src_021",
+     "non_sourcee": false
+    }
+   ],
+   "menaces": [
+    {
+     "texte": "Le rendement nul du franc suisse le pénalise fortement dans les arbitrages de taux face aux autres devises du G8.",
+     "source_id": "src_016",
+     "non_sourcee": false
+    }
+   ],
+   "synthese_une_phrase": "Pénalisé par un portage nul et un dollar vigoureux, le franc suisse peine à tirer parti de la solidité de ses indicateurs d'activité industrielle.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -1637,21 +2267,16 @@
    ],
    "contexte_geopolitique": {
     "banque_centrale_pourquoi": {
-     "texte": "",
-     "source_id": null
+     "texte": "La Banque Nationale Suisse conserve son taux à 0,00 % pour contrer les risques de surévaluation du franc tout en maintenant des conditions financières accommodantes.",
+     "source_id": "src_016"
     },
     "evenements": []
    },
-   "texte_automatique": true,
-   "texte_automatique_sources": [
-    "technique : série unique 5 ans (Twelve Data + Fed H.10), au 2026-11-25",
-    "COT : CFTC, au 2026-11-17",
-    "taux : registre macro (ForexFactory, publication officielle), au 2026-09-24"
-   ],
-   "carry": {
-    "taux_directeur": 0.0,
-    "differentiel_vs_mediane_g8": -2.75,
-    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   "synthese_approfondie": {
+    "statut": "indisponible",
+    "raison": "synthese:CHF : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python)",
+    "tentatives": 1,
+    "genere_le": "2026-11-25T08:23:16+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.45,
@@ -1671,26 +2296,113 @@
     {
      "date": "2026-11-21",
      "score": 37
+    },
+    {
+     "date": "2026-11-25",
+     "score": 27
     }
    ]
   },
   {
    "devise": "CAD",
    "risk_on_off": "on",
-   "score_confluence": null,
-   "analyse_indisponible": true,
-   "raison_indisponibilite": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+   "redige_par": {
+    "modele": "gemini-3.5-flash",
+    "libelle": "Flash 3.5"
+   },
+   "score_confluence": 32,
+   "detail_score": [
+    {
+     "indicateur": "taux_directeur",
+     "sens": -1,
+     "poids": 20,
+     "justification": "Taux directeur à 2,50 %, inférieur de 25 pb à la médiane du G8 (2,75 %).",
+     "source_id": "src_016"
+    },
+    {
+     "indicateur": "cpi_surprise",
+     "sens": 0,
+     "poids": 15,
+     "justification": "Aucun chiffre d'inflation publié aujourd'hui au Canada.",
+     "source_id": null
+    },
+    {
+     "indicateur": "yield_curve",
+     "sens": 0,
+     "poids": 12,
+     "justification": "Spread US 10Y-2Y inchangé à 0,29 %, signalant un contexte macroéconomique neutre.",
+     "source_id": "src_015"
+    },
+    {
+     "indicateur": "vix",
+     "sens": 1,
+     "poids": 10,
+     "justification": "Accalmie relative du VIX à 26,62 (−25,83 %), bénéficiant modérément aux devises sensibles au risque.",
+     "source_id": "src_010"
+    },
+    {
+     "indicateur": "dxy",
+     "sens": -1,
+     "poids": 10,
+     "justification": "Tendance haussière sur l'indice dollar (103,50) qui pèse mécaniquement sur la parité USD/CAD.",
+     "source_id": "src_026"
+    },
+    {
+     "indicateur": "pmi_surprise",
+     "sens": 0,
+     "poids": 10,
+     "justification": "Pas de données PMI publiées sur la session pour le Canada.",
+     "source_id": null
+    },
+    {
+     "indicateur": "differentiel_taux",
+     "sens": -1,
+     "poids": 8,
+     "justification": "Spread souverain 2 ans à −142 pb par rapport aux taux américains, défavorable au CAD.",
+     "source_id": "src_017"
+    },
+    {
+     "indicateur": "rsi",
+     "sens": -1,
+     "poids": 8,
+     "justification": "RSI USD/CAD inverse sous la zone pivot des 50 (41,4), confirmant la pression baissière.",
+     "source_id": "src_022"
+    },
+    {
+     "indicateur": "trendline",
+     "sens": 0,
+     "poids": 7,
+     "justification": "Aucune trendline technique à 3 contacts validés relevée sur la paire.",
+     "source_id": "src_022"
+    }
+   ],
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
-    "sens": "range",
-    "commentaire": "analyse indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
-    "source_id": null
+    "sens": "baissier",
+    "commentaire": "Dow : hauts et bas successivement plus bas",
+    "source_id": "src_022"
    },
-   "detail_score": [],
-   "opportunites": [],
-   "menaces": [],
-   "synthese_une_phrase": "CAD : RSI 14 à 41,4 (momentum baissier, percentile 5 ans 29) ; cours en dessous de sa moyenne mobile 200 jours (−2,31 %) ; positions nettes des spéculateurs (COT) -45 048 contrats, percentile 52 semaines 60 ; taux directeur 2,50 % (−0,25 pt face à la médiane G8) ; écart de taux 2 ans face aux États−Unis −142 pb. Score de confluence n/d : il dépend de l'analyse du modèle, indisponible aujourd'hui.",
+   "carry": {
+    "taux_directeur": 2.5,
+    "differentiel_vs_mediane_g8": -0.25,
+    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   },
+   "opportunites": [
+    {
+     "texte": "Les cours du pétrole WTI maintenus à 89,53 $/bbl offrent un soutien structurel aux termes de l'échange canadiens.",
+     "source_id": "src_011",
+     "non_sourcee": false
+    }
+   ],
+   "menaces": [
+    {
+     "texte": "Le gouverneur Macklem souligne la morosité du marché immobilier, confirmant qu'il ne constituera pas le moteur de la reprise.",
+     "source_id": "src_119",
+     "non_sourcee": false
+    }
+   ],
+   "synthese_une_phrase": "Le dollar canadien reste contraint par son désavantage de taux face au billet vert et la prudence de la BoC, en dépit du soutien des cours du pétrole.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -1805,21 +2517,22 @@
    ],
    "contexte_geopolitique": {
     "banque_centrale_pourquoi": {
-     "texte": "",
-     "source_id": null
+     "texte": "La Banque du Canada adopte une approche dépendante des données face à un marché de l'immobilier atone et une reprise économique modérée.",
+     "source_id": "src_119"
     },
-    "evenements": []
+    "evenements": [
+     {
+      "texte": "Lors de son intervention, le gouverneur Macklem a réitéré que le secteur du logement restait faible et ne tirerait pas la croissance canadienne.",
+      "source_id": "src_119",
+      "non_sourcee": false
+     }
+    ]
    },
-   "texte_automatique": true,
-   "texte_automatique_sources": [
-    "technique : série unique 5 ans (Twelve Data + Fed H.10), au 2026-11-25",
-    "COT : CFTC, au 2026-11-17",
-    "taux : registre macro (ForexFactory, publication officielle), au 2026-10-28"
-   ],
-   "carry": {
-    "taux_directeur": 2.5,
-    "differentiel_vs_mediane_g8": -0.25,
-    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   "synthese_approfondie": {
+    "statut": "indisponible",
+    "raison": "synthese:CAD : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python)",
+    "tentatives": 1,
+    "genere_le": "2026-11-25T08:23:36+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.41,
@@ -1839,26 +2552,118 @@
     {
      "date": "2026-11-21",
      "score": 32
+    },
+    {
+     "date": "2026-11-25",
+     "score": 32
     }
    ]
   },
   {
    "devise": "AUD",
    "risk_on_off": "on",
-   "score_confluence": null,
-   "analyse_indisponible": true,
-   "raison_indisponibilite": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
-   "biais_banque_centrale": "data_dependent",
+   "redige_par": {
+    "modele": "gemini-3.5-flash",
+    "libelle": "Flash 3.5"
+   },
+   "score_confluence": 42,
+   "detail_score": [
+    {
+     "indicateur": "taux_directeur",
+     "sens": 1,
+     "poids": 20,
+     "justification": "Taux directeur à 4,85 %, soit +2,10 pts au-dessus de la médiane G8 (2,75 %).",
+     "source_id": "src_016"
+    },
+    {
+     "indicateur": "cpi_surprise",
+     "sens": 0,
+     "poids": 15,
+     "justification": "Attente de l'inflation à 4,7 % y/y contre 4,3 % précédemment ; aucun chiffre publié ce jour.",
+     "source_id": "src_082"
+    },
+    {
+     "indicateur": "yield_curve",
+     "sens": 0,
+     "poids": 12,
+     "justification": "Spread US 10Y-2Y à 0,29 % sans déport majeur sur un mois (−0,02 pt).",
+     "source_id": "src_015"
+    },
+    {
+     "indicateur": "vix",
+     "sens": -1,
+     "poids": 10,
+     "justification": "VIX s'établit à 26,62, maintenant un climat d'aversion au risque défavorable aux devises risquées.",
+     "source_id": "src_010"
+    },
+    {
+     "indicateur": "dxy",
+     "sens": -1,
+     "poids": 10,
+     "justification": "Indice USD à 103,50 avec un RSI 14 à 66,1, pesant mécaniquement sur l'AUD/USD.",
+     "source_id": "src_026"
+    },
+    {
+     "indicateur": "pmi_surprise",
+     "sens": -1,
+     "poids": 10,
+     "justification": "PMI Flash manufacturier (49,7) et services (47,8) ancrés en zone de contraction.",
+     "source_id": "src_096"
+    },
+    {
+     "indicateur": "differentiel_taux",
+     "sens": 1,
+     "poids": 8,
+     "justification": "Avantage de portage le plus élevé du G8 (+2,10 pts face à la médiane).",
+     "source_id": "src_016"
+    },
+    {
+     "indicateur": "rsi",
+     "sens": -1,
+     "poids": 8,
+     "justification": "RSI 14 à 23,5 signale un survente extrême et une forte pression baissière.",
+     "source_id": "src_023"
+    },
+    {
+     "indicateur": "trendline",
+     "sens": -1,
+     "poids": 7,
+     "justification": "Cours à 0,66131 évoluant nettement sous la MM200 à 0,7034 (−5,99 %).",
+     "source_id": "src_023"
+    }
+   ],
+   "biais_banque_centrale": "hawkish",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
-    "source_id": null
+    "commentaire": "Dow : pivots non alignés (structure mixte en consolidation hebdomadaire).",
+    "source_id": "src_023"
    },
-   "detail_score": [],
-   "opportunites": [],
-   "menaces": [],
-   "synthese_une_phrase": "AUD : RSI 14 à 23,5 (survente, percentile 5 ans 0) ; cours en dessous de sa moyenne mobile 200 jours (−5,99 %) ; positions nettes des spéculateurs (COT) -182 060 contrats, percentile 52 semaines 2, extrême vendeur ; taux directeur 4,85 % (+2,10 pt face à la médiane G8). Score de confluence n/d : il dépend de l'analyse du modèle, indisponible aujourd'hui.",
+   "carry": {
+    "taux_directeur": 4.85,
+    "differentiel_vs_mediane_g8": 2.1,
+    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   },
+   "opportunites": [
+    {
+     "texte": "Différentiel de taux de 4,85 % fournissant un soutien de carry structurel face aux devises à faible rendement.",
+     "source_id": "src_016",
+     "non_sourcee": false
+    }
+   ],
+   "menaces": [
+    {
+     "texte": "Détérioration du sentiment global de risque avec un VIX maintenu au-dessus de 26 et contraction des PMI locaux.",
+     "source_id": "src_010",
+     "non_sourcee": false
+    },
+    {
+     "texte": "Annonce de nouvelles menaces tarifaires américaines pesant indirectement sur le bloc matières premières.",
+     "source_id": "src_123",
+     "non_sourcee": false
+    }
+   ],
+   "synthese_une_phrase": "L'Australien subit la pression d'un VIX élevé et d'indicateurs d'activité détériorés malgré le soutien de son fort différentiel de taux.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -1962,21 +2767,22 @@
    ],
    "contexte_geopolitique": {
     "banque_centrale_pourquoi": {
-     "texte": "",
-     "source_id": null
+     "texte": "La RBA maintient son taux directeur à 4,85 % pour contenir une inflation sous-jacente persistance avant la publication des chiffres de CPI.",
+     "source_id": "src_120"
     },
-    "evenements": []
+    "evenements": [
+     {
+      "texte": "Renforcement des menaces tarifaires américaines contre la Chine et les partenaires commerciaux pesant sur les proxys asiatiques.",
+      "source_id": "src_123",
+      "non_sourcee": false
+     }
+    ]
    },
-   "texte_automatique": true,
-   "texte_automatique_sources": [
-    "technique : série unique 5 ans (Twelve Data + Fed H.10), au 2026-11-25",
-    "COT : CFTC, au 2026-11-17",
-    "taux : registre macro (ForexFactory, publication officielle), au 2026-11-03"
-   ],
-   "carry": {
-    "taux_directeur": 4.85,
-    "differentiel_vs_mediane_g8": 2.1,
-    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   "synthese_approfondie": {
+    "statut": "indisponible",
+    "raison": "synthese:AUD : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python)",
+    "tentatives": 1,
+    "genere_le": "2026-11-25T08:23:56+00:00"
    },
    "indice_surprise_30j": {
     "indice": 0.4,
@@ -2000,26 +2806,113 @@
     {
      "date": "2026-11-24",
      "score": 36
+    },
+    {
+     "date": "2026-11-25",
+     "score": 42
     }
    ]
   },
   {
    "devise": "NZD",
    "risk_on_off": "on",
-   "score_confluence": null,
-   "analyse_indisponible": true,
-   "raison_indisponibilite": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+   "redige_par": {
+    "modele": "gemini-3.5-flash",
+    "libelle": "Flash 3.5"
+   },
+   "score_confluence": 32,
+   "detail_score": [
+    {
+     "indicateur": "taux_directeur",
+     "sens": 0,
+     "poids": 20,
+     "justification": "Taux directeur à 2,75 %, strictement aligné sur la médiane G8 (2,75 %).",
+     "source_id": "src_016"
+    },
+    {
+     "indicateur": "cpi_surprise",
+     "sens": 0,
+     "poids": 15,
+     "justification": "Aucune publication de CPI néo-zélandais au calendrier aujourd'hui.",
+     "source_id": null
+    },
+    {
+     "indicateur": "yield_curve",
+     "sens": 0,
+     "poids": 12,
+     "justification": "Spread US 10Y-2Y stable à 0,29 %, sans impact directionnel sur la paire.",
+     "source_id": "src_015"
+    },
+    {
+     "indicateur": "vix",
+     "sens": -1,
+     "poids": 10,
+     "justification": "VIX à 26,62 traduisant une aversion au risque pénalisante pour le Kiwi.",
+     "source_id": "src_010"
+    },
+    {
+     "indicateur": "dxy",
+     "sens": -1,
+     "poids": 10,
+     "justification": "Indice dollar synthétique en hausse à 103,50, maintenant la pression sur NZD/USD.",
+     "source_id": "src_026"
+    },
+    {
+     "indicateur": "pmi_surprise",
+     "sens": 0,
+     "poids": 10,
+     "justification": "Pas d'indicateur PMI disponible au calendrier du jour pour la Nouvelle-Zélande.",
+     "source_id": null
+    },
+    {
+     "indicateur": "differentiel_taux",
+     "sens": 0,
+     "poids": 8,
+     "justification": "Différentiel de taux nul (0,00 pt) par rapport à la médiane G8.",
+     "source_id": "src_016"
+    },
+    {
+     "indicateur": "rsi",
+     "sens": -1,
+     "poids": 8,
+     "justification": "RSI 14 à 34,4 confirmant un momentum baissier bien établi.",
+     "source_id": "src_024"
+    },
+    {
+     "indicateur": "trendline",
+     "sens": -1,
+     "poids": 7,
+     "justification": "Prix sous la MM200 (0,5787, soit −5,51 %), validant la structure baissière.",
+     "source_id": "src_024"
+    }
+   ],
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
-    "sens": "range",
-    "commentaire": "analyse indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
-    "source_id": null
+    "sens": "baissier",
+    "commentaire": "Dow : hauts et bas successivement plus bas.",
+    "source_id": "src_024"
    },
-   "detail_score": [],
-   "opportunites": [],
-   "menaces": [],
-   "synthese_une_phrase": "NZD : RSI 14 à 34,4 (momentum baissier, percentile 5 ans 14) ; cours en dessous de sa moyenne mobile 200 jours (−5,51 %) ; positions nettes des spéculateurs (COT) -63 245 contrats, percentile 52 semaines 6, extrême vendeur ; taux directeur 2,75 % (0,00 pt face à la médiane G8). Score de confluence n/d : il dépend de l'analyse du modèle, indisponible aujourd'hui.",
+   "carry": {
+    "taux_directeur": 2.75,
+    "differentiel_vs_mediane_g8": 0.0,
+    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   },
+   "opportunites": [
+    {
+     "texte": "Zone de résistance daily à 0,55962 (3 impacts) pour cadrer un scénario de reprise en cas de reboisement Risk On.",
+     "source_id": "src_024",
+     "non_sourcee": false
+    }
+   ],
+   "menaces": [
+    {
+     "texte": "Tendance hebdomadaire baissière et absence d'avantage de carry pour contrer la force du billet vert.",
+     "source_id": "src_024",
+     "non_sourcee": false
+    }
+   ],
+   "synthese_une_phrase": "Le dollar néo-zélandais reste vulnérable en raison d'une dynamique hebdomadaire baissière et de l'absence de soutien par les taux.",
    "indicateurs_tableau": [
     {
      "indicateur": "taux_directeur",
@@ -2123,21 +3016,16 @@
    ],
    "contexte_geopolitique": {
     "banque_centrale_pourquoi": {
-     "texte": "",
-     "source_id": null
+     "texte": "La RBNZ conserve une posture prudente dépendant des données après ses récents ajustements monétaires.",
+     "source_id": "src_016"
     },
     "evenements": []
    },
-   "texte_automatique": true,
-   "texte_automatique_sources": [
-    "technique : série unique 5 ans (Twelve Data + Fed H.10), au 2026-11-25",
-    "COT : CFTC, au 2026-11-17",
-    "taux : registre macro (ForexFactory, publication officielle), au 2026-10-28"
-   ],
-   "carry": {
-    "taux_directeur": 2.75,
-    "differentiel_vs_mediane_g8": 0.0,
-    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   "synthese_approfondie": {
+    "statut": "indisponible",
+    "raison": "synthese:NZD : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python)",
+    "tentatives": 1,
+    "genere_le": "2026-11-25T08:24:16+00:00"
    },
    "indice_surprise_30j": {
     "indice": -1.13,
@@ -2161,26 +3049,125 @@
     {
      "date": "2026-11-24",
      "score": 26
+    },
+    {
+     "date": "2026-11-25",
+     "score": 32
     }
    ]
   },
   {
    "devise": "CNY",
    "risk_on_off": "neutre",
-   "score_confluence": null,
-   "analyse_indisponible": true,
-   "raison_indisponibilite": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+   "redige_par": {
+    "modele": "gemini-3.5-flash",
+    "libelle": "Flash 3.5"
+   },
+   "score_confluence": 34,
+   "detail_score": [
+    {
+     "indicateur": "fixing_pboc",
+     "sens": -1,
+     "poids": 22,
+     "justification": "Fixing USD/CNY fixé à 6,7111 contre une estimation de marché à 6,6757, signalant une tolérance à la dépréciation.",
+     "source_id": "src_130"
+    },
+    {
+     "indicateur": "taux_directeur",
+     "sens": 0,
+     "poids": 15,
+     "justification": "Taux directeur (LPR) à 3,00 %, proche de la médiane G8 (2,75 %).",
+     "source_id": "src_016"
+    },
+    {
+     "indicateur": "cpi_surprise",
+     "sens": 0,
+     "poids": 12,
+     "justification": "Aucune publication sur l'inflation chinoise au calendrier du jour.",
+     "source_id": null
+    },
+    {
+     "indicateur": "pmi_surprise",
+     "sens": 0,
+     "poids": 12,
+     "justification": "Aucun chiffre PMI chinois publié au calendrier aujourd'hui.",
+     "source_id": null
+    },
+    {
+     "indicateur": "dxy",
+     "sens": -1,
+     "poids": 12,
+     "justification": "Indice dollar à 103,50 générant des pressions haussières sur USD/CNH.",
+     "source_id": "src_026"
+    },
+    {
+     "indicateur": "differentiel_taux",
+     "sens": 0,
+     "poids": 8,
+     "justification": "Écart de taux modeste de +0,25 pt par rapport à la médiane G8.",
+     "source_id": "src_016"
+    },
+    {
+     "indicateur": "yield_curve",
+     "sens": 0,
+     "poids": 6,
+     "justification": "Régime de courbe US stable (0,29 pt), neutre sur les flux offshore.",
+     "source_id": "src_015"
+    },
+    {
+     "indicateur": "vix",
+     "sens": -1,
+     "poids": 6,
+     "justification": "Niveau de VIX à 26,62 maintenant une prudence globale sur l'actif émergent.",
+     "source_id": "src_010"
+    },
+    {
+     "indicateur": "rsi",
+     "sens": 1,
+     "poids": 4,
+     "justification": "RSI 14 à 54,6 reflétant un momentum légèrement haussier sur la valeur offshore du yuan.",
+     "source_id": "src_025"
+    },
+    {
+     "indicateur": "trendline",
+     "sens": 1,
+     "poids": 3,
+     "justification": "Cours offshore au-dessus de la MM200 à 0,14769 (+1,56 %).",
+     "source_id": "src_025"
+    }
+   ],
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
-    "sens": "range",
-    "commentaire": "analyse indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
-    "source_id": null
+    "sens": "haussier",
+    "commentaire": "Dow : hauts et bas successivement plus hauts (sur CNH/USD).",
+    "source_id": "src_025"
    },
-   "detail_score": [],
-   "opportunites": [],
-   "menaces": [],
-   "synthese_une_phrase": "CNY : RSI 14 à 54,6 (momentum haussier, percentile 5 ans 59) ; cours au-dessus de sa moyenne mobile 200 jours (+1,56 %) ; taux directeur 3,00 % (+0,25 pt face à la médiane G8). Score de confluence n/d : il dépend de l'analyse du modèle, indisponible aujourd'hui.",
+   "carry": {
+    "taux_directeur": 3.0,
+    "differentiel_vs_mediane_g8": 0.25,
+    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   },
+   "opportunites": [
+    {
+     "texte": "Maintien de la structure technique weekly au-dessus de la moyenne mobile 200 jours.",
+     "source_id": "src_025",
+     "non_sourcee": false
+    }
+   ],
+   "menaces": [
+    {
+     "texte": "Fixing de la PBoC plus faible que prévu (6,7111 vs 6,6757), encadrant la dépréciation du yuan.",
+     "source_id": "src_130",
+     "non_sourcee": false
+    },
+    {
+     "texte": "Tensions technologiques et judiciaires US-Chine marquées par la condamnation de Huawei aux États-Unis.",
+     "source_id": "src_105",
+     "non_sourcee": false
+    }
+   ],
+   "synthese_une_phrase": "Le yuan évolue sous contrôle administratif de la PBoC dans un contexte de frictions commerciales et technologiques avec Washington.",
    "indicateurs_tableau": [
     {
      "indicateur": "fixing_pboc",
@@ -2295,20 +3282,27 @@
    ],
    "contexte_geopolitique": {
     "banque_centrale_pourquoi": {
-     "texte": "",
-     "source_id": null
+     "texte": "La PBoC adapte quotidiennement son fixing pour contenir la volatilité de change tout en soutenant l'économie nationale.",
+     "source_id": "src_130"
     },
-    "evenements": []
+    "evenements": [
+     {
+      "texte": "Condamnation pénale de Huawei par un jury américain pour fraude et vol de secrets industriels.",
+      "source_id": "src_105",
+      "non_sourcee": false
+     },
+     {
+      "texte": "Annonce par la Maison Blanche de préparatifs pour de nouvelles surtaxes douanières ciblant la Chine.",
+      "source_id": "src_123",
+      "non_sourcee": false
+     }
+    ]
    },
-   "texte_automatique": true,
-   "texte_automatique_sources": [
-    "technique : série unique 5 ans (Twelve Data + Fed H.10), au 2026-11-25",
-    "taux : registre macro (ForexFactory, publication officielle), au 2026-11-20"
-   ],
-   "carry": {
-    "taux_directeur": 3.0,
-    "differentiel_vs_mediane_g8": 0.25,
-    "commentaire": "Facteur structurel de flux (swap) — jamais un déclencheur seul."
+   "synthese_approfondie": {
+    "statut": "indisponible",
+    "raison": "synthese:CNY : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python)",
+    "tentatives": 1,
+    "genere_le": "2026-11-25T08:24:36+00:00"
    },
    "indice_surprise_30j": {
     "indice": -0.57,
@@ -2332,6 +3326,10 @@
     {
      "date": "2026-11-24",
      "score": 45
+    },
+    {
+     "date": "2026-11-25",
+     "score": 34
     }
    ]
   }
@@ -3532,6 +4530,713 @@
    "source": "Calcul Python",
    "detail": "directions des moteurs 2 à 8 (règles Python et matrice d'impact)",
    "date": "2026-11-25",
+   "url": null
+  },
+  {
+   "id": "src_172",
+   "source": "FRED (DFF, taux effectif) (registre macro)",
+   "detail": "USD — Taux directeur",
+   "date": "2026-11-23",
+   "url": null
+  },
+  {
+   "id": "src_173",
+   "source": "ForexFactory (calendrier)",
+   "detail": "USD — Prelim GDP q/q",
+   "date": "2026-11-25",
+   "url": null
+  },
+  {
+   "id": "src_174",
+   "source": "ForexFactory (calendrier)",
+   "detail": "USD — ISM Manufacturing PMI",
+   "date": "2026-12-01",
+   "url": null
+  },
+  {
+   "id": "src_175",
+   "source": "ForexFactory (calendrier)",
+   "detail": "USD — ISM Services PMI",
+   "date": "2026-12-03",
+   "url": null
+  },
+  {
+   "id": "src_176",
+   "source": "ForexFactory (calendrier)",
+   "detail": "USD — Unemployment Rate",
+   "date": "2026-12-04",
+   "url": null
+  },
+  {
+   "id": "src_177",
+   "source": "ForexFactory (calendrier)",
+   "detail": "USD — Non-Farm Employment Change",
+   "date": "2026-12-04",
+   "url": null
+  },
+  {
+   "id": "src_178",
+   "source": "ForexFactory (calendrier)",
+   "detail": "USD — Federal Funds Rate",
+   "date": "2026-12-09",
+   "url": null
+  },
+  {
+   "id": "src_179",
+   "source": "ForexFactory (calendrier)",
+   "detail": "USD — Retail Sales m/m",
+   "date": "2026-12-16",
+   "url": null
+  },
+  {
+   "id": "src_180",
+   "source": "ForexFactory (registre macro)",
+   "detail": "USD — CPI annuel",
+   "date": "2026-10-14",
+   "url": null
+  },
+  {
+   "id": "src_181",
+   "source": "ForexFactory (registre macro)",
+   "detail": "USD — CPI core annuel",
+   "date": "2026-10-14",
+   "url": null
+  },
+  {
+   "id": "src_182",
+   "source": "ForexFactory (registre macro)",
+   "detail": "USD — PIB trimestriel",
+   "date": "2026-10-29",
+   "url": null
+  },
+  {
+   "id": "src_183",
+   "source": "ForexFactory (registre macro)",
+   "detail": "USD — PMI manufacturier",
+   "date": "2026-11-02",
+   "url": null
+  },
+  {
+   "id": "src_184",
+   "source": "ForexFactory (registre macro)",
+   "detail": "USD — PMI services",
+   "date": "2026-11-04",
+   "url": null
+  },
+  {
+   "id": "src_185",
+   "source": "ForexFactory (registre macro)",
+   "detail": "USD — Taux de chômage",
+   "date": "2026-11-06",
+   "url": null
+  },
+  {
+   "id": "src_186",
+   "source": "ForexFactory (registre macro)",
+   "detail": "USD — Variation de l'emploi",
+   "date": "2026-11-06",
+   "url": null
+  },
+  {
+   "id": "src_187",
+   "source": "ForexFactory (registre macro)",
+   "detail": "USD — Ventes au détail",
+   "date": "2026-11-17",
+   "url": null
+  },
+  {
+   "id": "src_188",
+   "source": "ForexFactory (calendrier)",
+   "detail": "EUR — Final Manufacturing PMI",
+   "date": "2026-12-01",
+   "url": null
+  },
+  {
+   "id": "src_189",
+   "source": "ForexFactory (calendrier)",
+   "detail": "EUR — CPI Flash Estimate y/y",
+   "date": "2026-12-01",
+   "url": null
+  },
+  {
+   "id": "src_190",
+   "source": "ForexFactory (calendrier)",
+   "detail": "EUR — Core CPI Flash Estimate y/y",
+   "date": "2026-12-01",
+   "url": null
+  },
+  {
+   "id": "src_191",
+   "source": "ForexFactory (calendrier)",
+   "detail": "EUR — Unemployment Rate",
+   "date": "2026-12-02",
+   "url": null
+  },
+  {
+   "id": "src_192",
+   "source": "ForexFactory (registre macro)",
+   "detail": "EUR — CPI annuel",
+   "date": "2026-11-18",
+   "url": null
+  },
+  {
+   "id": "src_193",
+   "source": "ForexFactory (registre macro)",
+   "detail": "EUR — CPI core annuel",
+   "date": "2026-11-18",
+   "url": null
+  },
+  {
+   "id": "src_194",
+   "source": "ForexFactory (registre macro)",
+   "detail": "EUR — PIB trimestriel",
+   "date": "2026-10-30",
+   "url": null
+  },
+  {
+   "id": "src_195",
+   "source": "ForexFactory (registre macro)",
+   "detail": "EUR — PMI manufacturier",
+   "date": "2026-11-23",
+   "url": null
+  },
+  {
+   "id": "src_196",
+   "source": "ForexFactory (registre macro)",
+   "detail": "EUR — PMI services",
+   "date": "2026-11-23",
+   "url": null
+  },
+  {
+   "id": "src_197",
+   "source": "ForexFactory (registre macro)",
+   "detail": "EUR — Taux de chômage",
+   "date": "2026-10-30",
+   "url": null
+  },
+  {
+   "id": "src_198",
+   "source": "ForexFactory (registre macro)",
+   "detail": "EUR — Variation de l'emploi",
+   "date": "2026-09-07",
+   "url": null
+  },
+  {
+   "id": "src_199",
+   "source": "ForexFactory (registre macro)",
+   "detail": "EUR — Ventes au détail",
+   "date": "2026-11-06",
+   "url": null
+  },
+  {
+   "id": "src_200",
+   "source": "ForexFactory (calendrier)",
+   "detail": "GBP — Final Manufacturing PMI",
+   "date": "2026-12-01",
+   "url": null
+  },
+  {
+   "id": "src_201",
+   "source": "ForexFactory (calendrier)",
+   "detail": "GBP — Final Services PMI",
+   "date": "2026-12-03",
+   "url": null
+  },
+  {
+   "id": "src_202",
+   "source": "ForexFactory (calendrier)",
+   "detail": "GBP — Unemployment Rate",
+   "date": "2026-12-15",
+   "url": null
+  },
+  {
+   "id": "src_203",
+   "source": "ForexFactory (calendrier)",
+   "detail": "GBP — CPI y/y",
+   "date": "2026-12-16",
+   "url": null
+  },
+  {
+   "id": "src_204",
+   "source": "ForexFactory (registre macro)",
+   "detail": "GBP — CPI annuel",
+   "date": "2026-11-18",
+   "url": null
+  },
+  {
+   "id": "src_205",
+   "source": "ForexFactory (registre macro)",
+   "detail": "GBP — CPI core annuel",
+   "date": "2026-11-18",
+   "url": null
+  },
+  {
+   "id": "src_206",
+   "source": "ForexFactory (registre macro)",
+   "detail": "GBP — PIB trimestriel",
+   "date": "2026-11-12",
+   "url": null
+  },
+  {
+   "id": "src_207",
+   "source": "ForexFactory (registre macro)",
+   "detail": "GBP — PMI manufacturier",
+   "date": "2026-11-23",
+   "url": null
+  },
+  {
+   "id": "src_208",
+   "source": "ForexFactory (registre macro)",
+   "detail": "GBP — PMI services",
+   "date": "2026-11-23",
+   "url": null
+  },
+  {
+   "id": "src_209",
+   "source": "ForexFactory (registre macro)",
+   "detail": "GBP — Taux de chômage",
+   "date": "2026-11-17",
+   "url": null
+  },
+  {
+   "id": "src_210",
+   "source": "ForexFactory (registre macro)",
+   "detail": "GBP — Variation de l'emploi",
+   "date": "2026-11-17",
+   "url": null
+  },
+  {
+   "id": "src_211",
+   "source": "ForexFactory (registre macro)",
+   "detail": "GBP — Ventes au détail",
+   "date": "2026-11-20",
+   "url": null
+  },
+  {
+   "id": "src_212",
+   "source": "ForexFactory (calendrier)",
+   "detail": "JPY — Retail Sales y/y",
+   "date": "2026-11-29",
+   "url": null
+  },
+  {
+   "id": "src_213",
+   "source": "ForexFactory (calendrier)",
+   "detail": "JPY — Unemployment Rate",
+   "date": "2026-11-30",
+   "url": null
+  },
+  {
+   "id": "src_214",
+   "source": "ForexFactory (calendrier)",
+   "detail": "JPY — Final Manufacturing PMI",
+   "date": "2026-12-01",
+   "url": null
+  },
+  {
+   "id": "src_215",
+   "source": "ForexFactory (calendrier)",
+   "detail": "JPY — Final GDP q/q",
+   "date": "2026-12-07",
+   "url": null
+  },
+  {
+   "id": "src_216",
+   "source": "ForexFactory (registre macro)",
+   "detail": "JPY — CPI annuel",
+   "date": "2026-11-19",
+   "url": null
+  },
+  {
+   "id": "src_217",
+   "source": "ForexFactory (registre macro)",
+   "detail": "JPY — CPI core annuel",
+   "date": "2026-11-25",
+   "url": null
+  },
+  {
+   "id": "src_218",
+   "source": "ForexFactory (registre macro)",
+   "detail": "JPY — PIB trimestriel",
+   "date": "2026-11-15",
+   "url": null
+  },
+  {
+   "id": "src_219",
+   "source": "ForexFactory (registre macro)",
+   "detail": "JPY — PMI manufacturier",
+   "date": "2026-11-24",
+   "url": null
+  },
+  {
+   "id": "src_220",
+   "source": "ForexFactory (registre macro)",
+   "detail": "JPY — Taux de chômage",
+   "date": "2026-10-29",
+   "url": null
+  },
+  {
+   "id": "src_221",
+   "source": "ForexFactory (registre macro)",
+   "detail": "JPY — Ventes au détail",
+   "date": "2026-10-29",
+   "url": null
+  },
+  {
+   "id": "src_222",
+   "source": "ForexFactory (calendrier)",
+   "detail": "CHF — Retail Sales y/y",
+   "date": "2026-11-30",
+   "url": null
+  },
+  {
+   "id": "src_223",
+   "source": "ForexFactory (calendrier)",
+   "detail": "CHF — GDP q/q",
+   "date": "2026-11-30",
+   "url": null
+  },
+  {
+   "id": "src_224",
+   "source": "ForexFactory (calendrier)",
+   "detail": "CHF — CPI m/m",
+   "date": "2026-12-02",
+   "url": null
+  },
+  {
+   "id": "src_225",
+   "source": "ForexFactory (calendrier)",
+   "detail": "CHF — SNB Policy Rate",
+   "date": "2026-12-10",
+   "url": null
+  },
+  {
+   "id": "src_226",
+   "source": "ForexFactory (registre macro)",
+   "detail": "CHF — CPI annuel",
+   "date": "2026-11-03",
+   "url": null
+  },
+  {
+   "id": "src_227",
+   "source": "ForexFactory (registre macro)",
+   "detail": "CHF — PIB trimestriel",
+   "date": "2026-09-03",
+   "url": null
+  },
+  {
+   "id": "src_228",
+   "source": "ForexFactory (registre macro)",
+   "detail": "CHF — PMI manufacturier",
+   "date": "2026-11-02",
+   "url": null
+  },
+  {
+   "id": "src_229",
+   "source": "ForexFactory (registre macro)",
+   "detail": "CHF — Taux de chômage",
+   "date": "2026-11-05",
+   "url": null
+  },
+  {
+   "id": "src_230",
+   "source": "ForexFactory (registre macro)",
+   "detail": "CHF — Ventes au détail",
+   "date": "2026-11-02",
+   "url": null
+  },
+  {
+   "id": "src_231",
+   "source": "ForexFactory (calendrier)",
+   "detail": "CAD — GDP m/m",
+   "date": "2026-11-30",
+   "url": null
+  },
+  {
+   "id": "src_232",
+   "source": "ForexFactory (calendrier)",
+   "detail": "CAD — Unemployment Rate",
+   "date": "2026-12-04",
+   "url": null
+  },
+  {
+   "id": "src_233",
+   "source": "ForexFactory (calendrier)",
+   "detail": "CAD — Employment Change",
+   "date": "2026-12-04",
+   "url": null
+  },
+  {
+   "id": "src_234",
+   "source": "ForexFactory (calendrier)",
+   "detail": "CAD — Overnight Rate",
+   "date": "2026-12-09",
+   "url": null
+  },
+  {
+   "id": "src_235",
+   "source": "ForexFactory (calendrier)",
+   "detail": "CAD — CPI m/m",
+   "date": "2026-12-14",
+   "url": null
+  },
+  {
+   "id": "src_236",
+   "source": "ForexFactory (calendrier)",
+   "detail": "CAD — Median CPI y/y",
+   "date": "2026-12-14",
+   "url": null
+  },
+  {
+   "id": "src_237",
+   "source": "ForexFactory (registre macro)",
+   "detail": "CAD — CPI annuel",
+   "date": "2026-11-16",
+   "url": null
+  },
+  {
+   "id": "src_238",
+   "source": "ForexFactory (registre macro)",
+   "detail": "CAD — CPI core annuel",
+   "date": "2026-11-16",
+   "url": null
+  },
+  {
+   "id": "src_239",
+   "source": "ForexFactory (registre macro)",
+   "detail": "CAD — PIB trimestriel",
+   "date": "2026-10-30",
+   "url": null
+  },
+  {
+   "id": "src_240",
+   "source": "ForexFactory (registre macro)",
+   "detail": "CAD — PMI manufacturier",
+   "date": "2026-11-02",
+   "url": null
+  },
+  {
+   "id": "src_241",
+   "source": "ForexFactory (registre macro)",
+   "detail": "CAD — PMI services",
+   "date": "2026-11-06",
+   "url": null
+  },
+  {
+   "id": "src_242",
+   "source": "ForexFactory (registre macro)",
+   "detail": "CAD — Taux de chômage",
+   "date": "2026-11-06",
+   "url": null
+  },
+  {
+   "id": "src_243",
+   "source": "ForexFactory (registre macro)",
+   "detail": "CAD — Variation de l'emploi",
+   "date": "2026-11-06",
+   "url": null
+  },
+  {
+   "id": "src_244",
+   "source": "ForexFactory (registre macro)",
+   "detail": "CAD — Ventes au détail",
+   "date": "2026-11-20",
+   "url": null
+  },
+  {
+   "id": "src_245",
+   "source": "ForexFactory (calendrier)",
+   "detail": "AUD — CPI y/y",
+   "date": "2026-11-25",
+   "url": null
+  },
+  {
+   "id": "src_246",
+   "source": "ForexFactory (calendrier)",
+   "detail": "AUD — Trimmed Mean CPI m/m",
+   "date": "2026-11-25",
+   "url": null
+  },
+  {
+   "id": "src_247",
+   "source": "ForexFactory (calendrier)",
+   "detail": "AUD — GDP q/q",
+   "date": "2026-12-02",
+   "url": null
+  },
+  {
+   "id": "src_248",
+   "source": "ForexFactory (calendrier)",
+   "detail": "AUD — Cash Rate",
+   "date": "2026-12-08",
+   "url": null
+  },
+  {
+   "id": "src_249",
+   "source": "ForexFactory (registre macro)",
+   "detail": "AUD — CPI annuel",
+   "date": "2026-11-25",
+   "url": null
+  },
+  {
+   "id": "src_250",
+   "source": "ForexFactory (registre macro)",
+   "detail": "AUD — CPI core annuel",
+   "date": "2026-11-25",
+   "url": null
+  },
+  {
+   "id": "src_251",
+   "source": "ForexFactory (registre macro)",
+   "detail": "AUD — PIB trimestriel",
+   "date": "2026-09-02",
+   "url": null
+  },
+  {
+   "id": "src_252",
+   "source": "ForexFactory (registre macro)",
+   "detail": "AUD — PMI manufacturier",
+   "date": "2026-11-22",
+   "url": null
+  },
+  {
+   "id": "src_253",
+   "source": "ForexFactory (registre macro)",
+   "detail": "AUD — PMI services",
+   "date": "2026-11-22",
+   "url": null
+  },
+  {
+   "id": "src_254",
+   "source": "ForexFactory (registre macro)",
+   "detail": "AUD — Taux de chômage",
+   "date": "2026-11-19",
+   "url": null
+  },
+  {
+   "id": "src_255",
+   "source": "ForexFactory (registre macro)",
+   "detail": "AUD — Variation de l'emploi",
+   "date": "2026-11-19",
+   "url": null
+  },
+  {
+   "id": "src_256",
+   "source": "ForexFactory (registre macro)",
+   "detail": "AUD — Ventes au détail",
+   "date": "2026-11-04",
+   "url": null
+  },
+  {
+   "id": "src_257",
+   "source": "ForexFactory (calendrier)",
+   "detail": "NZD — Official Cash Rate",
+   "date": "2026-12-09",
+   "url": null
+  },
+  {
+   "id": "src_258",
+   "source": "ForexFactory (calendrier)",
+   "detail": "NZD — GDP q/q",
+   "date": "2026-12-16",
+   "url": null
+  },
+  {
+   "id": "src_259",
+   "source": "ForexFactory (registre macro)",
+   "detail": "NZD — CPI annuel",
+   "date": "2026-10-21",
+   "url": null
+  },
+  {
+   "id": "src_260",
+   "source": "ForexFactory (registre macro)",
+   "detail": "NZD — PIB trimestriel",
+   "date": "2026-09-16",
+   "url": null
+  },
+  {
+   "id": "src_261",
+   "source": "ForexFactory (registre macro)",
+   "detail": "NZD — Taux de chômage",
+   "date": "2026-11-03",
+   "url": null
+  },
+  {
+   "id": "src_262",
+   "source": "ForexFactory (registre macro)",
+   "detail": "NZD — Variation de l'emploi",
+   "date": "2026-11-03",
+   "url": null
+  },
+  {
+   "id": "src_263",
+   "source": "ForexFactory (registre macro)",
+   "detail": "NZD — Ventes au détail",
+   "date": "2026-11-22",
+   "url": null
+  },
+  {
+   "id": "src_264",
+   "source": "ForexFactory (calendrier)",
+   "detail": "CNY — CPI y/y",
+   "date": "2026-12-09",
+   "url": null
+  },
+  {
+   "id": "src_265",
+   "source": "ForexFactory (calendrier)",
+   "detail": "CNY — Unemployment Rate",
+   "date": "2026-12-15",
+   "url": null
+  },
+  {
+   "id": "src_266",
+   "source": "ForexFactory (calendrier)",
+   "detail": "CNY — Retail Sales y/y",
+   "date": "2026-12-15",
+   "url": null
+  },
+  {
+   "id": "src_267",
+   "source": "ForexFactory (registre macro)",
+   "detail": "CNY — CPI annuel",
+   "date": "2026-11-09",
+   "url": null
+  },
+  {
+   "id": "src_268",
+   "source": "ForexFactory (registre macro)",
+   "detail": "CNY — PIB trimestriel",
+   "date": "2026-10-19",
+   "url": null
+  },
+  {
+   "id": "src_269",
+   "source": "ForexFactory (registre macro)",
+   "detail": "CNY — PMI manufacturier",
+   "date": "2026-09-30",
+   "url": null
+  },
+  {
+   "id": "src_270",
+   "source": "ForexFactory (registre macro)",
+   "detail": "CNY — PMI services",
+   "date": "2026-09-30",
+   "url": null
+  },
+  {
+   "id": "src_271",
+   "source": "ForexFactory (registre macro)",
+   "detail": "CNY — Taux de chômage",
+   "date": "2026-11-16",
+   "url": null
+  },
+  {
+   "id": "src_272",
+   "source": "ForexFactory (registre macro)",
+   "detail": "CNY — Ventes au détail",
+   "date": "2026-11-16",
    "url": null
   }
  ],
@@ -6358,10 +8063,10 @@
     "n": 12
    },
    "JPY": {
-    "indice": 0.22,
+    "indice": -0.05,
     "precedent": -0.93,
     "tendance": "hausse",
-    "n": 8
+    "n": 9
    },
    "CHF": {
     "indice": 0.45,
@@ -6455,22 +8160,22 @@
   "conforme": false,
   "nb_anomalies": 16,
   "anomalies": [
-   "USD : analyse indisponible aujourd'hui (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)) — exclue du classement",
-   "EUR : analyse indisponible aujourd'hui (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)) — exclue du classement",
-   "GBP : analyse indisponible aujourd'hui (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)) — exclue du classement",
-   "JPY : analyse indisponible aujourd'hui (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)) — exclue du classement",
-   "CHF : analyse indisponible aujourd'hui (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)) — exclue du classement",
-   "CAD : analyse indisponible aujourd'hui (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)) — exclue du classement",
-   "AUD : analyse indisponible aujourd'hui (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)) — exclue du classement",
-   "NZD : analyse indisponible aujourd'hui (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)) — exclue du classement",
-   "CNY : analyse indisponible aujourd'hui (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)) — exclue du classement",
-   "8 moteurs du marché : indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+   "USD : synthèse approfondie indisponible (synthese:USD : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
+   "EUR : synthèse approfondie indisponible (synthese:EUR : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
+   "GBP : synthèse approfondie indisponible (synthese:GBP : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
+   "JPY : synthèse approfondie indisponible (synthese:JPY : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
+   "CHF : synthèse approfondie indisponible (synthese:CHF : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
+   "CAD : synthèse approfondie indisponible (synthese:CAD : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
+   "AUD : synthèse approfondie indisponible (synthese:AUD : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
+   "NZD : synthèse approfondie indisponible (synthese:NZD : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
+   "CNY : synthèse approfondie indisponible (synthese:CNY : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les anal)",
    "état du monde absent de la synthèse globale",
    "tableau macro : USD/CPI annuel : publication manquée (prévue le 10/11, aucun « réel » reçu)",
    "tableau macro : USD/CPI core annuel : publication manquée (prévue le 10/11, aucun « réel » reçu)",
    "tableau macro : CNY/PMI manufacturier : publication manquée (prévue le 31/10, aucun « réel » reçu)",
    "tableau macro : CNY/PMI services : publication manquée (prévue le 31/10, aucun « réel » reçu)",
-   "tableau macro : CNY/Balance commerciale : publication manquée (prévue le 10/11, aucun « réel » reçu)"
+   "tableau macro : CNY/Balance commerciale : publication manquée (prévue le 10/11, aucun « réel » reçu)",
+   "prompt LLM volumineux : 3 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 26139 à 08:20 UTC, modèle gemini-3.5-flash) — le contexte envoyé au LLM a regrossi"
   ]
  },
  "critique": {
@@ -6479,6 +8184,6 @@
   "suggestions_connaissances": [],
   "validation": "non_evalue",
   "indisponible": true,
-  "note": "relecture non effectuée (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit) — 20 tentatives en panne (503, 429, délai) déjà faites aujourd'hui : pla)"
+  "note": "relecture non effectuée (critique : mode panne (plus de la moitié des requêtes du run précédent en 503) — seules les analyses prioritaires sont tentées (repli Python))"
  }
 }
