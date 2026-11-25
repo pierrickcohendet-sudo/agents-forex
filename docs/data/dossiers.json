@@ -1,6 +1,6 @@
 {
  "version_schema": 1,
- "genere_le": "2026-11-25T13:19:56+00:00",
+ "genere_le": "2026-11-25T14:19:01+00:00",
  "debut_historique": "2021-09-24",
  "erreurs_collecte": [],
  "engrenages": {
@@ -23,14 +23,14 @@
     },
     {
      "libelle": "Indice de surprise global (moyenne 9 devises)",
-     "texte": "-0,05",
+     "texte": "-0,03",
      "detail": "9 devises avec un indice",
      "source": "calcul Python (registre macro, 30 j)"
     },
     {
      "libelle": "État du dollar (profil des devises)",
-     "texte": "n/d",
-     "detail": "profil calculé au prochain run",
+     "texte": "Soutenue",
+     "detail": "Signaux favorables : surprises macro 30 j +0,9 ; force +2,1 % sur 20 séances.",
      "source": "calcul Python (profil des devises)"
     }
    ],
@@ -1272,8 +1272,8 @@
     {
      "id": "surprise_globale",
      "libelle": "Surprise globale (moyenne 9 devises)",
-     "valeur": -0.05,
-     "texte": "−0,05",
+     "valeur": -0.03,
+     "texte": "−0,03",
      "unite": "écarts",
      "date": "2026-11-25",
      "frequence": null,
@@ -1441,7 +1441,7 @@
        ],
        [
         "2026-11-25",
-        -0.05
+        -0.03
        ]
       ],
       "periode": "depuis le début de l'archive quotidienne",
@@ -7253,7 +7253,7 @@
      "devise": "USD",
      "cellules": {
       "indice_surprise": {
-       "valeur": 0.87,
+       "valeur": 1.12,
        "raison": null,
        "source": "calcul Python (registre macro, 30 j)",
        "percentile_5a": null,
@@ -7262,23 +7262,30 @@
        "unite": "écarts",
        "date": "2026-11-25",
        "tendance": "hausse",
-       "n": 7,
+       "n": 8,
        "raison_percentile": "indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
       },
       "dispersion": {
-       "valeur": 0.57,
+       "valeur": 0.83,
        "raison": null,
        "source": "calcul Python (écart-type des surprises 30 j)",
        "percentile_5a": null,
        "var_1s": null,
        "var_4s": null,
        "unite": "écarts",
-       "n": 7,
+       "n": 8,
        "raison_percentile": "historique trop court"
       },
       "publications": {
        "valeur": null,
        "liste": [
+        {
+         "indicateur": "PIB trimestriel",
+         "date": "2026-11-25",
+         "surprise": 2.67,
+         "reel": "4.3%",
+         "consensus": "3.5%"
+        },
         {
          "indicateur": "Variation de l'emploi",
          "date": "2026-11-06",
@@ -7292,13 +7299,6 @@
          "surprise": 1.0,
          "reel": "55.5",
          "consensus": "54.5"
-        },
-        {
-         "indicateur": "Taux de chômage",
-         "date": "2026-11-06",
-         "surprise": 1.0,
-         "reel": "4.1%",
-         "consensus": "4.2%"
         }
        ],
        "source": "registre macro (ForexFactory)",
@@ -8051,7 +8051,7 @@
         ],
         [
          "2026-11-25",
-         0.87
+         1.12
         ]
        ]
       },
@@ -8252,19 +8252,11 @@
          "date_evenement": "2026-11-06"
         },
         {
-         "type": "haut",
-         "date": "2026-11-11",
-         "valeur": 1.02,
-         "texte": "Plus haut 1,02 écarts",
-         "detail": "USD : plus haut sur 30 j : 1,02 écarts le 11/11/2026",
-         "source": "calcul Python (registre macro)"
-        },
-        {
          "type": "dernier",
          "date": "2026-11-25",
-         "valeur": 0.87,
-         "texte": "0,87 écarts au 25/11",
-         "detail": "USD : dernière valeur 0,87 écarts le 25/11/2026",
+         "valeur": 1.12,
+         "texte": "1,12 écarts au 25/11",
+         "detail": "USD : dernière valeur 1,12 écarts le 25/11/2026 (plus haut de la période)",
          "source": "calcul Python (registre macro)"
         }
        ],
@@ -8287,19 +8279,11 @@
          "date_evenement": "2026-11-06"
         },
         {
-         "type": "haut",
-         "date": "2026-11-11",
-         "valeur": 1.02,
-         "texte": "Plus haut 1,02 écarts",
-         "detail": "USD : plus haut sur 90 j : 1,02 écarts le 11/11/2026",
-         "source": "calcul Python (registre macro)"
-        },
-        {
          "type": "dernier",
          "date": "2026-11-25",
-         "valeur": 0.87,
-         "texte": "0,87 écarts au 25/11",
-         "detail": "USD : dernière valeur 0,87 écarts le 25/11/2026",
+         "valeur": 1.12,
+         "texte": "1,12 écarts au 25/11",
+         "detail": "USD : dernière valeur 1,12 écarts le 25/11/2026 (plus haut de la période)",
          "source": "calcul Python (registre macro)"
         }
        ],
@@ -8322,19 +8306,11 @@
          "date_evenement": "2026-11-06"
         },
         {
-         "type": "haut",
-         "date": "2026-11-11",
-         "valeur": 1.02,
-         "texte": "Plus haut 1,02 écarts",
-         "detail": "USD : plus haut sur 1 an : 1,02 écarts le 11/11/2026",
-         "source": "calcul Python (registre macro)"
-        },
-        {
          "type": "dernier",
          "date": "2026-11-25",
-         "valeur": 0.87,
-         "texte": "0,87 écarts au 25/11",
-         "detail": "USD : dernière valeur 0,87 écarts le 25/11/2026",
+         "valeur": 1.12,
+         "texte": "1,12 écarts au 25/11",
+         "detail": "USD : dernière valeur 1,12 écarts le 25/11/2026 (plus haut de la période)",
          "source": "calcul Python (registre macro)"
         }
        ],
@@ -8357,19 +8333,11 @@
          "date_evenement": "2026-11-06"
         },
         {
-         "type": "haut",
-         "date": "2026-11-11",
-         "valeur": 1.02,
-         "texte": "Plus haut 1,02 écarts",
-         "detail": "USD : plus haut sur la série : 1,02 écarts le 11/11/2026",
-         "source": "calcul Python (registre macro)"
-        },
-        {
          "type": "dernier",
          "date": "2026-11-25",
-         "valeur": 0.87,
-         "texte": "0,87 écarts au 25/11",
-         "detail": "USD : dernière valeur 0,87 écarts le 25/11/2026",
+         "valeur": 1.12,
+         "texte": "1,12 écarts au 25/11",
+         "detail": "USD : dernière valeur 1,12 écarts le 25/11/2026 (plus haut de la période)",
          "source": "calcul Python (registre macro)"
         }
        ]
@@ -8383,7 +8351,7 @@
      "barres": [
       {
        "nom": "USD",
-       "valeur": 0.87
+       "valeur": 1.12
       },
       {
        "nom": "EUR",
@@ -8436,8 +8404,8 @@
     {
      "id": "surprise_usd",
      "libelle": "Surprise USD (30 j)",
-     "valeur": 0.87,
-     "texte": "+0,87",
+     "valeur": 1.12,
+     "texte": "+1,12",
      "unite": "écarts",
      "date": "2026-11-25",
      "frequence": null,
@@ -8445,10 +8413,10 @@
      "source": "calcul Python (registre macro, 30 j)",
      "raison": null,
      "variation": {
-      "valeur": 0.59,
+      "valeur": 0.84,
       "unite": "écarts",
       "periode": "4 semaines",
-      "texte": "+0,59 sur 4 semaines"
+      "texte": "+0,84 sur 4 semaines"
      },
      "percentile_5a": null,
      "n_5a": null,
@@ -8506,7 +8474,7 @@
        ],
        [
         "2026-11-25",
-        0.87
+        1.12
        ]
       ],
       "periode": "90 jours (hebdomadaire)",
@@ -8989,13 +8957,13 @@
     {
      "id": "part_positives",
      "libelle": "Publications au-dessus du consensus",
-     "valeur": 40,
-     "texte": "40 %",
+     "valeur": 41,
+     "texte": "41 %",
      "unite": "part",
      "date": "2026-11-25",
      "frequence": null,
      "age_jours": 0,
-     "source": "calcul Python (registre macro, 73 publications avec consensus sur 30 jours)",
+     "source": "calcul Python (registre macro, 74 publications avec consensus sur 30 jours)",
      "raison": null,
      "variation": null,
      "percentile_5a": null,
@@ -12327,7 +12295,7 @@
      "raison": null
     }
    ],
-   "actualites_maj": "2026-11-25T13:19+00:00",
+   "actualites_maj": "2026-11-25T14:19+00:00",
    "actualites_nb_titres_lus": 88,
    "notes": [
     "Dette et solde publics : FMI (annuel, avec 1 à 3 ans de retard) ; EUR = Allemagne. Pas de série gratuite pour CHF et NZD.",
@@ -41873,7 +41841,7 @@
  },
  "vue_ensemble": {
   "theme": {
-   "titre": "Aversion au risque, dollar soutenu",
+   "titre": "Aversion au risque, dollar en tête",
    "titre_impose": false,
    "texte_python": null,
    "texte_indisponible": null,
@@ -41967,14 +41935,14 @@
     "titre": "Thème macro",
     "chiffre": {
      "libelle": "État du dollar",
-     "valeur": null,
-     "texte": null,
+     "valeur": 1,
+     "texte": "Soutenue",
      "unite": "",
      "date": "2026-11-25",
      "source": "calcul Python (profil des devises)",
-     "raison": "profil des devises pas encore calculé"
+     "raison": null
     },
-    "ligne": "Profil des devises indisponible.",
+    "ligne": "Soutenue : USD · Sans direction : EUR, GBP, JPY, CHF, AUD, CNY · Sous pression : CAD, NZD.",
     "courbe": {
      "points": [],
      "periode": "jour",
@@ -42114,8 +42082,8 @@
     "titre": "Données économiques",
     "chiffre": {
      "libelle": "Surprise USD (30 j)",
-     "valeur": 0.87,
-     "texte": "+0,87",
+     "valeur": 1.12,
+     "texte": "+1,12",
      "unite": "",
      "date": "2026-11-25",
      "source": "calcul Python (registre macro, 30 j)",
@@ -42142,7 +42110,7 @@
       ],
       [
        "2026-11-25",
-       0.87
+       1.12
       ]
      ],
      "periode": "30 jours",
@@ -42445,7 +42413,7 @@
      "source": "calcul local (Twelve Data)",
      "raison": null
     },
-    "ligne": "RSI USD 66,1, −0,02 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 2 autres.",
+    "ligne": "RSI USD 65,7, −0,02 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 2 autres.",
     "courbe": {
      "points": [
       [
@@ -42735,7 +42703,7 @@
     {
      "numero": 0,
      "surtitre": "Thème du jour",
-     "titre": "Aversion au risque, dollar soutenu",
+     "titre": "Aversion au risque, dollar en tête",
      "chiffre": {
       "libelle": "Cohérence des engrenages",
       "texte": "3 sur 7",
@@ -42761,14 +42729,14 @@
      "titre": "Thème macro",
      "chiffre": {
       "libelle": "État du dollar",
-      "valeur": null,
-      "texte": null,
+      "valeur": 1,
+      "texte": "Soutenue",
       "unite": "",
       "date": "2026-11-25",
       "source": "calcul Python (profil des devises)",
-      "raison": "profil des devises pas encore calculé"
+      "raison": null
      },
-     "ligne": "Profil des devises indisponible.",
+     "ligne": "Soutenue : USD · Sans direction : EUR, GBP, JPY, CHF, AUD, CNY · Sous pression : CAD, NZD.",
      "verdict": {
       "libelle": "Dollar haussier · Risk off",
       "classe": "dn",
@@ -42811,8 +42779,8 @@
      "titre": "Données économiques",
      "chiffre": {
       "libelle": "Surprise USD (30 j)",
-      "valeur": 0.87,
-      "texte": "+0,87",
+      "valeur": 1.12,
+      "texte": "+1,12",
       "unite": "",
       "date": "2026-11-25",
       "source": "calcul Python (registre macro, 30 j)",
@@ -42919,7 +42887,7 @@
       "source": "calcul local (Twelve Data)",
       "raison": null
      },
-     "ligne": "RSI USD 66,1, −0,02 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 2 autres.",
+     "ligne": "RSI USD 65,7, −0,02 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 2 autres.",
      "verdict": {
       "libelle": "Dollar neutre · Risque neutre",
       "classe": "nd",
@@ -43084,15 +43052,15 @@
      },
      {
       "engrenage": 3,
-      "valeur": 1,
-      "libelle": "Soutien",
+      "valeur": 2,
+      "libelle": "Soutien fort",
       "regles": [
        {
-        "regle": "indice de surprise macro 30 jours ≥ 0,50 → +1",
-        "chiffre": "+0,87",
+        "regle": "indice de surprise macro 30 jours ≥ 1,00 → +2",
+        "chiffre": "+1,12",
         "source": "calcul Python (registre macro, 30 j)",
         "date": "2026-11-25",
-        "points": 1
+        "points": 2
        }
       ],
       "raison": null,
@@ -43177,7 +43145,7 @@
       "etat": "sans_regle"
      }
     ],
-    "bilan": 7,
+    "bilan": 8,
     "lecture": "soutenue",
     "incompletes": 0
    },
@@ -44989,7 +44957,7 @@
    ],
    "surprise_30j": {
     "USD": [
-     0.87,
+     1.12,
      "calcul Python (registre macro, 30 j)",
      "2026-11-25"
     ],
@@ -45174,7 +45142,7 @@
    "evaluables": 7,
    "sur": 7,
    "theme_neutre": false,
-   "titre": "Aversion au risque, dollar soutenu",
+   "titre": "Aversion au risque, dollar en tête",
    "titre_impose": false,
    "dollar": "haussier",
    "risque": "risk_off",
@@ -45414,7 +45382,7 @@
      "classe": "nd"
     },
     "neutralise": null,
-    "note": "seuils ±0,30 %. RSI USD 66,1, −0,02 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 2 autres.",
+    "note": "seuils ±0,30 %. RSI USD 65,7, −0,02 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 2 autres.",
     "indicateur": null
    },
    {
@@ -45584,8 +45552,8 @@
     "libelle": "indice de surprise macro 30 jours — USD",
     "effet_haut": "USD +1 (règle 3)",
     "effet_bas": "USD −1 (règle 3)",
-    "valeur": 0.87,
-    "texte_valeur": "+0,87",
+    "valeur": 1.12,
+    "texte_valeur": "+1,12",
     "unite": "écarts",
     "date": "2026-11-25",
     "source": "calcul Python (registre macro, 30 j)",
@@ -46537,8 +46505,8 @@
     "libelle": "indice de surprise macro 30 jours — USD",
     "effet_haut": "USD +1 (règle 3)",
     "effet_bas": "USD −1 (règle 3)",
-    "valeur": 0.87,
-    "texte_valeur": "+0,87",
+    "valeur": 1.12,
+    "texte_valeur": "+1,12",
     "unite": "écarts",
     "date": "2026-11-25",
     "source": "calcul Python (registre macro, 30 j)",
@@ -46549,7 +46517,7 @@
     "distance_pct": 0.0,
     "cote": "haut",
     "distance_texte": "franchi",
-    "phrase": "indice de surprise macro 30 jours — USD : +0,87, seuil haut franchi"
+    "phrase": "indice de surprise macro 30 jours — USD : +1,12, seuil haut franchi"
    },
    {
     "id": "surprise_30j-NZD",
@@ -46962,61 +46930,56 @@
    }
   ],
   "rendez_vous": {
-   "iso_utc": "2026-11-25T13:30+00:00",
-   "date_paris": "2026-11-25",
+   "iso_utc": "2026-11-30T13:30+00:00",
+   "date_paris": "2026-11-30",
    "heure_paris": "14:30",
    "heure_connue": true,
-   "devise": "USD",
-   "evenement": "PIB T/T, prélim.",
-   "evenement_en": "Prelim GDP q/q",
+   "devise": "CAD",
+   "evenement": "PIB M/M",
+   "evenement_en": "GDP m/m",
    "traduit": true,
    "type": "Chiffre",
    "impact": "fort",
    "points": "●●●",
-   "precedent": "3.4%",
-   "consensus": "3.5%",
+   "precedent": "0.0%",
+   "consensus": null,
    "publie": null,
    "source": "ForexFactory, page « mois » (extraction de page, déjà lue pour le tableau macro)",
    "sources": [
     "ForexFactory, page « mois » (extraction de page, déjà lue pour le tableau macro)",
-    "ForexFactory, flux public JSON de la semaine",
     "registre macro (ForexFactory, prochaine publication)"
    ],
    "sources_champs": {
-    "precedent": "ForexFactory, page « mois » (extraction de page, déjà lue pour le tableau macro)",
-    "consensus": "ForexFactory, page « mois » (extraction de page, déjà lue pour le tableau macro)"
+    "precedent": "ForexFactory, page « mois » (extraction de page, déjà lue pour le tableau macro)"
    },
-   "verifie_le": "2026-11-25T08:15",
+   "verifie_le": "2026-11-25T14:16",
    "engrenage": 3,
-   "simulateur": "pib_us",
-   "confirme_par": [
-    "FRED releases/dates : Gross Domestic Product"
-   ],
+   "simulateur": null,
    "reaction": {
-    "mesure": "force de l'USD (panier), séance suivante, en %",
+    "mesure": "force de la devise lue sur USD/CAD, séance suivante, en %",
     "cote": {
      "au_dessus": {
-      "n": 13,
-      "mediane": 0.362,
-      "wilson": 46.5,
+      "n": 0,
+      "mediane": null,
+      "wilson": null,
       "faible": true
      },
      "au_dessous": {
-      "n": 16,
-      "mediane": -0.142,
-      "wilson": 54.5,
+      "n": 1,
+      "mediane": -0.128,
+      "wilson": 27.0,
       "faible": true
      }
     },
-    "source": "simulateur d'impact : publications ALFRED sur 15-20 ans et cours sur 5 ans",
-    "lien": "#scenarios/i=pib_us",
-    "lecture": "au-dessus / au-dessous de la publication précédente (variation de la publication)"
+    "source": "archive des publications du site (depuis le 24/10/2026) et cours sur 5 ans",
+    "lien": "#scenarios",
+    "lecture": "réel au-dessus / au-dessous du consensus (ou du précédent sans consensus)"
    },
    "statuts": {
-    "consensus": "estimation",
     "precedent": "confirmé"
    },
-   "pourquoi": "Pourquoi c'est important : USD et par ricochet EUR, GBP, JPY, CHF · chiffres économiques (publications au-dessus ou en dessous du consensus)."
+   "pourquoi": "Pourquoi c'est important : CAD · chiffres économiques (publications au-dessus ou en dessous du consensus).",
+   "raison_consensus": "pas de consensus publié"
   },
   "fil": {
    "jours": [
@@ -48544,8 +48507,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 7,
-        "apres": 9,
+        "avant": 8,
+        "apres": 10,
         "lecture_avant": "soutenue",
         "lecture_apres": "soutenue"
        },
@@ -48626,8 +48589,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 7,
-        "apres": 8,
+        "avant": 8,
+        "apres": 9,
         "lecture_avant": "soutenue",
         "lecture_apres": "soutenue"
        },
@@ -48708,8 +48671,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 7,
-        "apres": 5,
+        "avant": 8,
+        "apres": 6,
         "lecture_avant": "soutenue",
         "lecture_apres": "soutenue"
        },
@@ -48790,8 +48753,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 7,
-        "apres": 6,
+        "avant": 8,
+        "apres": 7,
         "lecture_avant": "soutenue",
         "lecture_apres": "soutenue"
        },
@@ -48992,11 +48955,11 @@
     "chiffres": [
      {
       "libelle": "Surprise USD (30 j)",
-      "texte": "+0,87",
+      "texte": "+1,12",
       "date": "2026-11-25",
       "source": "calcul Python (registre macro, 30 j)",
       "raison": null,
-      "variation": "+0,59 sur 4 semaines",
+      "variation": "+0,84 sur 4 semaines",
       "percentile_5a": null,
       "rang": "rang 5 ans n/d : indice calculé depuis 2026 seulement (pas 5 ans d'historique)"
      },
@@ -49047,7 +49010,7 @@
       "libelle": "indice de surprise macro 30 jours — USD",
       "etat": "déclenchée",
       "distance": "franchi",
-      "valeur": "+0,87",
+      "valeur": "+1,12",
       "date": "2026-11-25",
       "source": "calcul Python (registre macro, 30 j)",
       "neutralise": null
@@ -49947,8 +49910,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 7,
-        "apres": 6,
+        "avant": 8,
+        "apres": 7,
         "lecture_avant": "soutenue",
         "lecture_apres": "soutenue"
        },
@@ -50029,8 +49992,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 7,
-        "apres": 7,
+        "avant": 8,
+        "apres": 8,
         "lecture_avant": "soutenue",
         "lecture_apres": "soutenue"
        },
@@ -50104,8 +50067,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 7,
-        "apres": 7,
+        "avant": 8,
+        "apres": 8,
         "lecture_avant": "soutenue",
         "lecture_apres": "soutenue"
        },
@@ -50186,8 +50149,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 7,
-        "apres": 7,
+        "avant": 8,
+        "apres": 8,
         "lecture_avant": "soutenue",
         "lecture_apres": "soutenue"
        },
@@ -50261,8 +50224,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 7,
-        "apres": 7,
+        "avant": 8,
+        "apres": 8,
         "lecture_avant": "soutenue",
         "lecture_apres": "soutenue"
        },
@@ -51186,8 +51149,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 7,
-        "apres": 7,
+        "avant": 8,
+        "apres": 8,
         "lecture_avant": "soutenue",
         "lecture_apres": "soutenue"
        },
@@ -51268,8 +51231,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 7,
-        "apres": 7,
+        "avant": 8,
+        "apres": 8,
         "lecture_avant": "soutenue",
         "lecture_apres": "soutenue"
        },
@@ -51343,8 +51306,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 7,
-        "apres": 6,
+        "avant": 8,
+        "apres": 7,
         "lecture_avant": "soutenue",
         "lecture_apres": "soutenue"
        },
@@ -51455,8 +51418,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 7,
-        "apres": 7,
+        "avant": 8,
+        "apres": 8,
         "lecture_avant": "soutenue",
         "lecture_apres": "soutenue"
        },
@@ -51549,8 +51512,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 7,
-        "apres": 7,
+        "avant": 8,
+        "apres": 8,
         "lecture_avant": "soutenue",
         "lecture_apres": "soutenue"
        },
@@ -51624,8 +51587,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 7,
-        "apres": 7,
+        "avant": 8,
+        "apres": 8,
         "lecture_avant": "soutenue",
         "lecture_apres": "soutenue"
        },
@@ -51699,8 +51662,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 7,
-        "apres": 7,
+        "avant": 8,
+        "apres": 8,
         "lecture_avant": "soutenue",
         "lecture_apres": "soutenue"
        },
@@ -51774,8 +51737,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 7,
-        "apres": 6,
+        "avant": 8,
+        "apres": 7,
         "lecture_avant": "soutenue",
         "lecture_apres": "soutenue"
        },
@@ -51868,8 +51831,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 7,
-        "apres": 7,
+        "avant": 8,
+        "apres": 8,
         "lecture_avant": "soutenue",
         "lecture_apres": "soutenue"
        },
@@ -51943,8 +51906,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 7,
-        "apres": 7,
+        "avant": 8,
+        "apres": 8,
         "lecture_avant": "soutenue",
         "lecture_apres": "soutenue"
        },
@@ -52018,8 +51981,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 7,
-        "apres": 7,
+        "avant": 8,
+        "apres": 8,
         "lecture_avant": "soutenue",
         "lecture_apres": "soutenue"
        },
@@ -52298,8 +52261,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 7,
-        "apres": 7,
+        "avant": 8,
+        "apres": 8,
         "lecture_avant": "soutenue",
         "lecture_apres": "soutenue"
        },
@@ -52373,8 +52336,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 7,
-        "apres": 7,
+        "avant": 8,
+        "apres": 8,
         "lecture_avant": "soutenue",
         "lecture_apres": "soutenue"
        },
@@ -52448,8 +52411,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 7,
-        "apres": 7,
+        "avant": 8,
+        "apres": 8,
         "lecture_avant": "soutenue",
         "lecture_apres": "soutenue"
        },
@@ -52523,8 +52486,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 7,
-        "apres": 7,
+        "avant": 8,
+        "apres": 8,
         "lecture_avant": "soutenue",
         "lecture_apres": "soutenue"
        },
@@ -52712,7 +52675,7 @@
       "classe": "nd"
      },
      "neutralise": null,
-     "note": "seuils ±0,30 %. RSI USD 66,1, −0,02 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 2 autres.",
+     "note": "seuils ±0,30 %. RSI USD 65,7, −0,02 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 2 autres.",
      "indicateur": null
     },
     "chiffres": [
@@ -53616,7 +53579,7 @@
     "lecture": {
      "texte": "L'indice USD synthétique affiche une quasi-stabilité (−0,02 % sur 5 jours) avec un RSI à 66,1. Le positionnement spéculatif montre de forts déséquilibres avec un positionnement vendeur extrême sur EUR, AUD et NZD contre un positionnement acheteur extrême sur JPY et CHF.",
      "source": "modèle",
-     "phrase_python": "Dollar neutre · Risque neutre. seuils ±0,30 %. RSI USD 66,1, −0,02 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 2 autres.",
+     "phrase_python": "Dollar neutre · Risque neutre. seuils ±0,30 %. RSI USD 65,7, −0,02 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 2 autres.",
      "texte_indisponible": null,
      "redige_par": "Flash 3.5",
      "redige_le": "2026-11-25T08:19:10+00:00",
@@ -54369,8 +54332,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 7,
-        "apres": 7,
+        "avant": 8,
+        "apres": 8,
         "lecture_avant": "soutenue",
         "lecture_apres": "soutenue"
        },
@@ -54463,8 +54426,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 7,
-        "apres": 7,
+        "avant": 8,
+        "apres": 8,
         "lecture_avant": "soutenue",
         "lecture_apres": "soutenue"
        },
@@ -54551,8 +54514,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 7,
-        "apres": 7,
+        "avant": 8,
+        "apres": 8,
         "lecture_avant": "soutenue",
         "lecture_apres": "soutenue"
        },
@@ -54633,8 +54596,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 7,
-        "apres": 7,
+        "avant": 8,
+        "apres": 8,
         "lecture_avant": "soutenue",
         "lecture_apres": "soutenue"
        },
@@ -54715,8 +54678,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 7,
-        "apres": 7,
+        "avant": 8,
+        "apres": 8,
         "lecture_avant": "soutenue",
         "lecture_apres": "soutenue"
        },
@@ -54790,8 +54753,8 @@
       "bilans": [
        {
         "devise": "USD",
-        "avant": 7,
-        "apres": 7,
+        "avant": 8,
+        "apres": 8,
         "lecture_avant": "soutenue",
         "lecture_apres": "soutenue"
        },
