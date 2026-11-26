@@ -171,3 +171,19 @@ horizontal. Comparer côte à côte avec `docs/design/reference/` et lister les 
 - `html` et `body` : `overflow-x: clip` (et non `hidden`, qui désactive tout `position: sticky`). L'en-tête du site
   n'est plus collant (114 px sur PC, 228 px sur téléphone) : ce sont les sommaires (documentaire, Synthèse) qui restent
   visibles en haut de l'écran.
+
+## Lot V14 — Agenda façon ForexFactory selon `maquette_v14_agenda.html`
+
+- Écran `ecran_agenda.js` (styles `v14.css`, tout préfixé `.ag14`) : en-tête avec légende de l'impact (barres rouge,
+  orange, grise ; bleu pour férié et événement) et des couleurs (vert / rouge : réel bon / mauvais pour la devise, champ
+  `ecart.favorable` calculé en Python) ; barre de filtres collante sur PC, non collante sous 700 px (périodes, publications
+  passées, impact, devises ; double-clic : une devise seule ; filtres mémorisés en `localStorage`, clé
+  `fxdesk-agenda-filtres`, entre `try` et `catch`) ; bandeau « Prochaine publication » rafraîchi chaque minute ; tableau
+  par jour (en-tête de jour collant sous la barre), ligne « maintenant », « en attente » pour un réel attendu ; clic sur
+  une ligne : panneau Historique / Ce que ça change / Sources et liens ; cartes sous 700 px.
+- Écart volontaire à la maquette : heures et chiffres en Instrument Sans à chiffres tabulaires (la maquette utilise
+  JetBrains Mono, interdit pour un chiffre par la règle ci-dessus).
+- Globe des banques centrales, prochaines réunions, grands rendez-vous et « Agenda détaillé » : vue complète, sous le
+  tableau.
+- Adresses : `#agenda` (semaine en cours), `#agenda/hier|jour|dem|sem|suiv`, `#agenda/USD` (filtre de l'adresse, non
+  mémorisé), `#agenda/e=<ff_id>` (panneau d'une publication), `#agenda/jour=AAAA-MM-JJ` (ancienne adresse).

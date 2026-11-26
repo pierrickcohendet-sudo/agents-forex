@@ -7,7 +7,7 @@ Déclencheurs :
 - lancement manuel (workflow_dispatch, cases « completer » / « hebdo ») : jamais bloqué par le garde-fou.
 
 Règles :
-- lot V14 : cron « 7,37 0-21 * * 1-5 » (ou créneau externe « lecture ») : lecture ForexFactory planifiée (mode lecture) si
+- lot V14 : cron « 7,37 * * * 0-5 » (ou créneau externe « lecture ») : lecture ForexFactory planifiée (mode lecture) si
   une lecture de data/cache/ff_planning.json est due, sinon rien ;
 - dimanche (cron 07:15 ou créneau externe « dimanche ») : hebdo ;
 - samedi et dimanche 08:15 UTC (cron « 15 8 * * 0,6 » ou créneau externe « moteurs ») : moteurs (dossiers des 8 moteurs seuls) ;
@@ -53,7 +53,7 @@ def doublon(runs: list[dict], run_id: str | int | None, maintenant: datetime, ec
 
 
 CRON_MOTEURS = "15 8 * * 0,6"   # samedi et dimanche, après la remise à zéro du quota Gemini
-CRON_LECTURES = "7,37 0-21 * * 1-5"   # lot V14 : lectures ForexFactory planifiées (ne fait rien si aucune n'est due)
+CRON_LECTURES = "7,37 * * * 0-5"   # lot V14 : lectures ForexFactory planifiées (ne fait rien si aucune n'est due)
 
 
 def lecture_due(planning: dict | None, budget: dict | None, maintenant: datetime, plafond: int = 6) -> tuple[bool, str]:

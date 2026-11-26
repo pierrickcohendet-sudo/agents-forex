@@ -57,6 +57,11 @@ const adresses = [
   ["engrenages/USD-2", `!!document.querySelector('#s-engrenages.on td.c.on[data-d="USD"][data-n="2"]') && document.querySelector("#s-engrenages.on #mxSide")?.textContent.includes("USD")`],
   ["engrenages/JPY-2", `!!document.querySelector('#s-engrenages.on td.c.on[data-d="JPY"][data-n="2"]') && document.querySelector("#s-engrenages.on #mxSide")?.textContent.includes("160")`],
   ["engrenages/hebdo", `!!document.querySelector("#s-engrenages.on details.detaille[open]")`],
+  // Lot V14 : agenda façon ForexFactory (période, devise, panneau d'une publication par son identifiant ForexFactory)
+  ["agenda/jour", `document.querySelector('#s-agenda.on #agPer [data-p="jour"]')?.getAttribute("aria-pressed") === "true"`],
+  ["agenda/suiv", `document.querySelector('#s-agenda.on #agPer [data-p="suiv"]')?.getAttribute("aria-pressed") === "true" && document.querySelectorAll("#s-agenda.on tr.ag-ev").length > 0`],
+  ["agenda/USD", `[...document.querySelectorAll("#s-agenda.on tr.ag-ev:not(.ag-glob) .ag-cur")].every(c => c.textContent === "USD") && document.querySelectorAll("#s-agenda.on tr.ag-ev").length > 0`],
+  ["agenda/e=" + (process.env.FF_ID || "152602"), `!!document.querySelector("#s-agenda.on tr.ag-ev.open + tr.ag-det .ag-dg")`],
   // Lot V13 : documentaire par défaut, chapitre, vue tableau, semaine archivée (les adresses V12 ci-dessus ouvrent la vue tableau)
   ["engrenages", `!document.querySelector("#s-engrenages.on #dzDoc").hidden && document.querySelectorAll("#s-engrenages.on #dzDoc .chap").length >= 9`],
   ["engrenages/c3", `document.querySelector("#s-engrenages.on .toc a.on")?.textContent.includes("Chiffres") && Math.abs(document.querySelector("#s-engrenages.on #c3").getBoundingClientRect().top) < 140`],

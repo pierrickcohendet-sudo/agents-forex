@@ -39,13 +39,13 @@ def ff(id_, devise, nom, iso, impact="low", reel=None, prev=None, precedent=None
 
 
 # ------------------------------------------------------------------ A1.1 identifiants et liens ForexFactory
-def test_lien_ff_fourni_puis_construit():
-    assert ag_mod.lien_ff(148352, None, "/calendar?day=oct14.2026#detail=148352") == \
-        "https://www.forexfactory.com/calendar?day=oct14.2026#detail=148352"
-    # sans « url » : construit, jour dans le fuseau d'affichage de ForexFactory (New York)
+def test_lien_ff_a_la_date_de_paris():
+    # format vérifié sur une vraie page (26/11) : /calendar?day=oct2.2026#detail=146936 ; jour dans le fuseau du lecteur
     assert ag_mod.lien_ff(147679, ts("2026-11-23T08:15+00:00")) == "https://www.forexfactory.com/calendar?day=nov23.2026#detail=147679"
-    # 00:30 UTC le 25/11 = 19:30 à New York le 24/11 (même jour que le lien fourni par ForexFactory)
-    assert ag_mod.lien_ff(152602, ts("2026-11-25T00:30+00:00")).endswith("day=nov24.2026#detail=152602")
+    # 00:30 UTC le 25/11 = 01:30 à Paris le 25/11 (le lien fourni à un runner GitHub portait nov24, date de New York)
+    assert ag_mod.lien_ff(152602, ts("2026-11-25T00:30+00:00"), "/calendar?day=nov24.2026#detail=152602") == \
+        "https://www.forexfactory.com/calendar?day=nov25.2026#detail=152602"
+    assert ag_mod.lien_ff(None, None, "/calendar?day=oct14.2026#detail=148352").endswith("day=oct14.2026#detail=148352")
     assert ag_mod.lien_ff(None, None) is None
 
 

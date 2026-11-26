@@ -289,19 +289,23 @@ def _quand_ff(iso: str) -> datetime | None:
 
 FF = "https://www.forexfactory.com"
 MOIS_FF = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
-FUSEAU_LIEN_FF = "America/New_York"   # jour du lien « day= » : fuseau d'affichage par défaut de ForexFactory (vérifié le 26/11)
+FUSEAU_LIEN_FF = "Europe/Paris"
+# Vérifié le 26/11/2026 (une requête, outils/verifier_lien_ff.py) : ForexFactory écrit le jour du lien « day= » dans le
+# fuseau de CELUI QUI LIT la page (441 liens sur 441 à la date de Paris depuis un poste en France ; date de New York pour
+# les runners GitHub). Le lien est donc construit à la date de Paris, celle du lecteur du site, avec l'identifiant.
 
 
 def lien_ff(ff_id, dateline=None, url: str | None = None, fuseau: str = FUSEAU_LIEN_FF) -> str | None:
-    """Lot V14 (A1.1) : lien d'une publication sur ForexFactory. Le lien fourni par la page (« url ») l'emporte ;
-    sinon il est construit : https://www.forexfactory.com/calendar?day=nov25.2026#detail=<id> (jour dans le fuseau
-    d'affichage de ForexFactory). Sans identifiant : la page du jour, ou None."""
-    if url and str(url).startswith("http"):
-        return str(url)
-    if url and str(url).startswith("/"):
-        return FF + str(url)
+    """Lot V14 (A1.1) : lien d'une publication sur ForexFactory,
+    https://www.forexfactory.com/calendar?day=nov25.2026#detail=<id>, jour à la date de Paris. Sans date : le lien fourni
+    par la page (« url »), tel quel ; sans identifiant : la page du jour ; rien : None."""
     if dateline is None:
-        return None
+        if url and str(url).startswith("/"):
+            return FF + str(url)
+        return str(url) if url and str(url).startswith("http") else None
+    if not ff_id and url:
+        m = re.search(r"#detail=(\d+)", str(url))
+        ff_id = int(m.group(1)) if m else None
     j = datetime.fromtimestamp(int(dateline), tz=timezone.utc).astimezone(_zone(fuseau)).date()
     jour = f"{MOIS_FF[j.month - 1]}{j.day}.{j.year}"
     return f"{FF}/calendar?day={jour}" + (f"#detail={ff_id}" if ff_id else "")

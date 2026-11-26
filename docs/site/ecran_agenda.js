@@ -187,7 +187,7 @@ export async function ecranAgenda(section, parametre) {
   section.allerA = async p => {
     p = p || "";
     if (PERIODES[p]) { st.p = p; st.ouvert = null; rendre(); return false; }
-    if (DEVS.includes(p.toUpperCase())) { st.dev = new Set([p.toUpperCase()]); garder(); rendre(); return false; }
+    if (DEVS.includes(p.toUpperCase())) { st.dev = new Set([p.toUpperCase()]); rendre(); return false; }   // filtre de l'adresse : non mémorisé
     const m = p.match(/^e=(\d+)$/); if (m) return ouvrir("ff" + m[1]);
     const j = p.match(/^jour=(\d{4}-\d{2}-\d{2})$/);
     if (j) { const aujourd = paris(new Date()); st.p = j[1] >= bornes("suiv", aujourd)[0] ? "suiv" : "sem"; rendre();
@@ -195,6 +195,7 @@ export async function ecranAgenda(section, parametre) {
     return false;
   };
   section.choisirJour = d => section.allerA("jour=" + d);
+  section.vueParDefaut = () => { st.p = "sem"; st.ouvert = null; rendre(); };   // #agenda : la semaine en cours
   rendre();
   if (parametre) section.cible = await section.allerA(parametre);
 
