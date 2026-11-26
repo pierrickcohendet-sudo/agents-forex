@@ -4,24 +4,94 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-26T02:41:32+00:00",
-  "appels_llm": [],
+  "genere_le": "2026-11-26T08:27:16+00:00",
+  "appels_llm": [
+   {
+    "heure": "08:19",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 768,
+    "tokens_message": 6699,
+    "tokens_total": 7467,
+    "ok": true,
+    "etiquette": "engrenages"
+   },
+   {
+    "heure": "08:25",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 5038,
+    "tokens_message": 17070,
+    "tokens_total": 22108,
+    "ok": false,
+    "etiquette": "analyses:JPY-CHF-CAD",
+    "echec": "503"
+   },
+   {
+    "heure": "08:26",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 5038,
+    "tokens_message": 17419,
+    "tokens_total": 22457,
+    "ok": false,
+    "etiquette": "analyses:AUD-NZD-CNY",
+    "echec": "503"
+   },
+   {
+    "heure": "08:27",
+    "modele": "gemini-3.5-flash",
+    "tokens_systeme": 5038,
+    "tokens_message": 15123,
+    "tokens_total": 20161,
+    "ok": false,
+    "etiquette": "etat_du_monde",
+    "echec": "503"
+   },
+   {
+    "heure": "08:29",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 0,
+    "tokens_message": 23859,
+    "tokens_total": 23859,
+    "ok": false,
+    "etiquette": "critique",
+    "echec": "503"
+   },
+   {
+    "heure": "08:30",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 0,
+    "tokens_message": 2071,
+    "tokens_total": 2071,
+    "ok": false,
+    "etiquette": "paires:synthese",
+    "echec": "503"
+   },
+   {
+    "heure": "08:31",
+    "modele": "gemini-3.8-flash",
+    "tokens_systeme": 0,
+    "tokens_message": 2600,
+    "tokens_total": 2600,
+    "ok": false,
+    "etiquette": "rapport:redaction",
+    "echec": "503"
+   }
+  ],
   "quota_llm": {
-   "date": "2026-11-25",
+   "date": "2026-11-26",
    "ordre": [
     "gemini-3.5-flash",
     "gemini-3.8-flash",
     "gemini-3.5-flash-lite"
    ],
-   "appels_aujourdhui": 20,
+   "appels_aujourdhui": 1,
    "plafond_jour": 60,
    "engrenages_faits": true,
    "reserve_engrenages": 8,
    "refus_reserve_ce_run": 0,
-   "refus_budget_ce_run": 16,
+   "refus_budget_ce_run": 25,
    "budget": {
-    "plafond": 45,
-    "mode": "complet",
+    "plafond": 60,
+    "mode": "complément",
     "lundi": false,
     "max_appels_par_analyse": 2,
     "prevu_analyses": {
@@ -36,81 +106,74 @@
     },
     "consomme_jour": {
      "engrenages": 1,
-     "rapport": 7,
-     "devises": 3,
-     "reste": 9
-    },
-    "consomme_run": {
-     "engrenages": 0,
      "rapport": 0,
      "devises": 0,
      "reste": 0
     },
-    "total_jour": 20,
+    "consomme_run": {
+     "engrenages": 1,
+     "rapport": 0,
+     "devises": 0,
+     "reste": 0
+    },
+    "total_jour": 1,
     "plafond_run": 45,
-    "recues_run": 0,
-    "pannes_jour": 20,
-    "pannes_run": 5,
+    "recues_run": 1,
+    "pannes_jour": 15,
+    "pannes_run": 15,
     "plafond_pannes": 20,
     "mode_panne": false,
     "pannes_avant_correctif": 0,
     "echecs_jour": {
-     "503": 17,
-     "json_invalide": 1,
-     "429": 1,
-     "delai": 3
+     "delai": 1,
+     "503": 14
     },
     "echecs_run": {
-     "delai": 3,
-     "503": 2
+     "delai": 1,
+     "503": 14
     },
     "abandonnees": [],
     "analyses": {
      "analyses:AUD-NZD-CNY": {
-      "statut": "faite",
-      "echec": null,
-      "types": {},
-      "appels": 1
+      "statut": "à rejouer",
+      "echec": "503",
+      "types": {
+       "503": 2
+      },
+      "appels": 0
      },
      "analyses:JPY-CHF-CAD": {
-      "statut": "faite",
-      "echec": null,
+      "statut": "à rejouer",
+      "echec": "503",
       "types": {
-       "delai": 1
+       "503": 2
       },
-      "appels": 1
+      "appels": 0
      },
      "analyses:USD-EUR-GBP": {
-      "statut": "faite",
-      "echec": null,
+      "statut": "à rejouer",
+      "echec": "503",
       "types": {
        "delai": 1,
        "503": 1
       },
-      "appels": 1
+      "appels": 0
      },
      "critique": {
-      "statut": "faite",
-      "echec": null,
-      "types": {},
-      "appels": 1
+      "statut": "à rejouer",
+      "echec": "503",
+      "types": {
+       "503": 2
+      },
+      "appels": 0
      },
      "engrenages": {
       "statut": "faite",
       "echec": null,
-      "types": {
-       "delai": 1,
-       "503": 1
-      },
-      "appels": 1
-     },
-     "etat_du_monde": {
-      "statut": "faite",
-      "echec": null,
       "types": {},
       "appels": 1
      },
-     "moteurs:intros": {
+     "etat_du_monde": {
       "statut": "à rejouer",
       "echec": "503",
       "types": {
@@ -119,166 +182,69 @@
       "appels": 0
      },
      "paires:synthese": {
-      "statut": "faite",
-      "echec": null,
-      "types": {},
-      "appels": 1
-     },
-     "rapport:analyse": {
-      "statut": "faite",
-      "echec": null,
-      "types": {},
-      "appels": 1
-     },
-     "rapport:redaction": {
-      "statut": "faite",
-      "echec": null,
-      "types": {
-       "503": 2
-      },
-      "appels": 1
-     },
-     "rapport:synthese_1": {
-      "statut": "faite",
-      "echec": null,
-      "types": {},
-      "appels": 1
-     },
-     "rapport:synthese_2": {
-      "statut": "faite",
-      "echec": null,
-      "types": {},
-      "appels": 1
-     },
-     "rapport:synthese_3": {
-      "statut": "faite",
-      "echec": null,
-      "types": {},
-      "appels": 1
-     },
-     "rapport:synthese_4": {
-      "statut": "faite",
-      "echec": null,
-      "types": {},
-      "appels": 1
-     },
-     "rapport:synthese_5": {
       "statut": "à rejouer",
       "echec": "503",
       "types": {
-       "429": 1,
+       "503": 2
+      },
+      "appels": 0
+     },
+     "rapport:analyse": {
+      "statut": "à rejouer",
+      "echec": "503",
+      "types": {
        "503": 1
       },
       "appels": 0
      },
-     "rapport:synthese_6": {
+     "rapport:redaction": {
       "statut": "à rejouer",
       "echec": "503",
       "types": {
        "503": 2
       },
       "appels": 0
-     },
-     "rapport:synthese_7": {
-      "statut": "faite",
-      "echec": null,
-      "types": {},
-      "appels": 1
-     },
-     "synthese:AUD": {
-      "statut": "faite",
-      "echec": null,
-      "types": {},
-      "appels": 1
-     },
-     "synthese:CAD": {
-      "statut": "faite",
-      "echec": null,
-      "types": {},
-      "appels": 1
-     },
-     "synthese:CHF": {
-      "statut": "à rejouer",
-      "echec": "503",
-      "types": {
-       "503": 2
-      },
-      "appels": 0
-     },
-     "synthese:CNY": {
-      "statut": "faite",
-      "echec": null,
-      "types": {},
-      "appels": 1
-     },
-     "synthese:EUR": {
-      "statut": "à rejouer",
-      "echec": "503",
-      "types": {
-       "json_invalide": 1,
-       "503": 2
-      },
-      "appels": 1
-     },
-     "synthese:GBP": {
-      "statut": "à rejouer",
-      "echec": "503",
-      "types": {
-       "503": 2
-      },
-      "appels": 0
-     },
-     "synthese:JPY": {
-      "statut": "à rejouer",
-      "echec": "503",
-      "types": {
-       "503": 2
-      },
-      "appels": 0
-     },
-     "synthese:NZD": {
-      "statut": "faite",
-      "echec": null,
-      "types": {},
-      "appels": 1
-     },
-     "synthese:USD": {
-      "statut": "faite",
-      "echec": null,
-      "types": {},
-      "appels": 1
      }
     }
    },
    "modeles": {
     "gemini-3.5-flash": {
-     "appels_aujourdhui": 18,
+     "appels_aujourdhui": 1,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-11-26T07:59:59+00:00",
-     "appels_ce_run": 0,
-     "reussites_ce_run": 0,
-     "sauts_ce_run": 15
+     "appels_ce_run": 12,
+     "reussites_ce_run": 1,
+     "sauts_ce_run": 10
     },
     "gemini-3.8-flash": {
-     "appels_aujourdhui": 1,
+     "appels_aujourdhui": 0,
      "plafond_jour": 20,
      "epuise_jusqu_a": "2026-11-25T07:59:59+00:00",
-     "appels_ce_run": 15,
+     "appels_ce_run": 7,
      "reussites_ce_run": 0,
-     "sauts_ce_run": 0
+     "sauts_ce_run": 8
     },
     "gemini-3.5-flash-lite": {
-     "appels_aujourdhui": 1,
+     "appels_aujourdhui": 0,
      "plafond_jour": 20,
      "epuise_jusqu_a": null,
-     "appels_ce_run": 0,
+     "appels_ce_run": 11,
      "reussites_ce_run": 0,
      "sauts_ce_run": 0
     }
    }
   },
-  "resume_quota": "Gemini : 20/60, moteurs : en attente — Budget (run complet, plafond 45) : prévu moteurs 1 analyse (≤ 2 requêtes); rapport du jour 8 analyses (≤ 16 requêtes); devises 3 analyses (≤ 6 requêtes); reste ≤ 21 ; consommé ce run : moteurs 0, rapport du jour 0, devises 0, reste 0 (jour : 20/45) ; échecs ce run : 503 × 2, delai × 3 ; tentatives en panne (hors budget) : 5 ce run, 20/20 aujourd'hui ; réponses reçues ce run : 0/45 ; analyses : analyses:AUD-NZD-CNY faite, analyses:JPY-CHF-CAD faite, analyses:USD-EUR-GBP faite, critique faite, moteurs faite, etat_du_monde faite, moteurs:intros à rejouer (503), paires:synthese faite, rapport:analyse faite, rapport:redaction faite, rapport:synthese_1 faite, rapport:synthese_2 faite, rapport:synthese_3 faite, rapport:synthese_4 faite, rapport:synthese_5 à rejouer (503), rapport:synthese_6 à rejouer (503), rapport:synthese_7 faite, synthese:AUD faite, synthese:CAD faite, synthese:CHF à rejouer (503), synthese:CNY faite, synthese:EUR à rejouer (503), synthese:GBP à rejouer (503), synthese:JPY à rejouer (503), synthese:NZD faite, synthese:USD faite",
-  "appels_par_modele": {},
+  "resume_quota": "Gemini : 1/60, moteurs : fait — Budget (run complément, plafond 60) : prévu moteurs 1 analyse (≤ 2 requêtes); rapport du jour 8 analyses (≤ 16 requêtes); devises 3 analyses (≤ 6 requêtes); reste ≤ 36 ; consommé ce run : moteurs 1, rapport du jour 0, devises 0, reste 0 (jour : 1/60) ; échecs ce run : 503 × 14, delai × 1 ; tentatives en panne (hors budget) : 15 ce run, 15/20 aujourd'hui ; réponses reçues ce run : 1/45 ; analyses : analyses:AUD-NZD-CNY à rejouer (503), analyses:JPY-CHF-CAD à rejouer (503), analyses:USD-EUR-GBP à rejouer (503), critique à rejouer (503), moteurs faite, etat_du_monde à rejouer (503), paires:synthese à rejouer (503), rapport:analyse à rejouer (503), rapport:redaction à rejouer (503)",
+  "appels_par_modele": {
+   "gemini-3.5-flash": {
+    "appels": 4,
+    "echecs": 3
+   },
+   "gemini-3.8-flash": {
+    "appels": 3,
+    "echecs": 3
+   }
+  },
   "disjoncteur": [
    {
     "heure": "02:47",
@@ -313,25 +279,55 @@
       "ignores": 0
      }
     ]
+   },
+   {
+    "heure": "08:43",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": true,
+    "appels_total": 24,
+    "replis_json_modele_suivant": 4,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": true,
+      "cause": "3 échecs consécutifs — 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:",
+      "ouvert_a_l_appel": 5,
+      "echecs_consecutifs": 3,
+      "ignores": 10
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": true,
+      "cause": "3 échecs consécutifs — 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:",
+      "ouvert_a_l_appel": 8,
+      "echecs_consecutifs": 3,
+      "ignores": 8
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
    }
   ],
-  "notion_url": "https://app.notion.com/p/Rapport-du-jour-2026-11-26-courte-42465bc6466181b892cfcffd9f7735f4"
+  "notion_url": "https://app.notion.com/p/FX-2026-11-26-quotidien-42465bc6466181b892cfcffd9f7735f4"
  },
  "synthese_globale": {
   "biais_macro_global": "neutre",
   "commentaire": "Régime de risque global : neutre (calcul Python). Le détail par devise est dans le profil des devises (état, moteur du moment, banque centrale).",
   "etat_du_monde": null,
   "engrenages": {
-   "statut": "indisponible",
-   "raison": "engrenages : 2 appels déjà faits pendant ce run (repli Python)",
-   "tentatives": 0,
-   "genere_le": "2026-11-26T02:28:02+00:00",
    "engrenages": [
     {
      "numero": 1,
      "cle": "theme",
      "nom": "Thème macro",
-     "diagnostic": "",
+     "diagnostic": "Le dollar ressort haussier et l'environnement s'oriente vers le Risk Off, soutenu par la majorité des signaux d'interconnexions et de géopolitique. (source: src_171)",
      "donnees_insuffisantes": false,
      "direction": {
       "dollar": "haussier",
@@ -345,15 +341,17 @@
        "dollar": "calcul Python",
        "risque": "calcul Python"
       },
-      "devises_concernees": [],
-      "texte": ""
+      "devises_concernees": [
+       "USD"
+      ],
+      "texte": "Le dollar bénéficie d'une orientation haussière couplée à un environnement Risk Off."
      },
-     "comprendre": "",
-     "desk": "",
+     "comprendre": "Le thème macro synthétise l'interaction des taux, de l'aversion au risque et des flux de capitaux. Il donne la direction dominante du marché.",
+     "desk": "Arbitrage entre flux de liquidité dollar et appétit pour le risque global.",
      "conviction": {
       "niveau": "moyen",
       "origine": "calcul Python",
-      "justification": ""
+      "justification": "Accord partiel entre les signaux d'interconnexion, de géopolitique et de données économiques."
      },
      "source_ids": [
       "src_171"
@@ -366,13 +364,13 @@
      ],
      "sources_indisponibles": [],
      "mesure": null,
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable"
+     "non_source": false
     },
     {
      "numero": 2,
      "cle": "politique_monetaire",
      "nom": "Politique monétaire",
-     "diagnostic": "",
+     "diagnostic": "Le taux directeur USD est à 3,88% et le rendement 2 ans US a reculé de 17 pb à 4,63%. Les autres banques centrales montrent des dynamiques variées avec des hausses au Royaume-Uni (4,00%), au Canada (2,50%) et en Australie (4,85%).",
      "donnees_insuffisantes": false,
      "direction": {
       "dollar": "baissier",
@@ -392,25 +390,25 @@
        "CAD",
        "AUD"
       ],
-      "texte": ""
+      "texte": "La détérioration de 17 pb du 2 ans américain exerce une pression baissière sur le dollar."
      },
-     "comprendre": "",
-     "desk": "",
+     "comprendre": "Le rendement à 2 ans reflète directement les anticipations de baisse ou de hausse de taux des investisseurs. Une détente marquée indique un assouplissement monétaire anticipé.",
+     "desk": "Écart de rendement 2 ans inter-pays pour capter les divergences de politique monétaire.",
      "conviction": {
       "niveau": "moyen",
       "origine": "calcul Python",
-      "justification": ""
+      "justification": "Nette baisse du rendement 2 ans US appuyant l'hypothèse d'assouplissement."
      },
      "source_ids": [
-      "src_134",
-      "src_135",
+      "src_172",
+      "src_143",
       "src_136",
-      "src_137"
+      "src_139"
      ],
      "donnees_calculees": [
       {
-       "texte": "USD taux directeur 3.88% le 2026-11-23 (baisse, précédent 4.00%)",
-       "source_id": "src_134"
+       "texte": "USD taux directeur 3.88% le 2026-11-24 (baisse, précédent 4.00%)",
+       "source_id": "src_172"
       },
       {
        "texte": "EUR taux directeur 2.65% le 2026-10-29 (statu quo, précédent 2.65%)",
@@ -462,13 +460,13 @@
       "si_bas": "Dollar baissier",
       "raison": null
      },
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable"
+     "non_source": false
     },
     {
      "numero": 3,
      "cle": "donnees",
      "nom": "Données économiques",
-     "diagnostic": "",
+     "diagnostic": "L'indice de surprise économique sur 30 jours s'établit à +1,12 pour l'USD, affichant un surcroît de robustesse macro. En contrepartie, le NZD (−1,13), le CNY (−0,57) et le JPY (−0,47) enregistrent de nettes déceptions.",
      "donnees_insuffisantes": false,
      "direction": {
       "dollar": "haussier",
@@ -483,18 +481,19 @@
        "risque": null
       },
       "devises_concernees": [
-       "NZD",
        "USD",
-       "CNY"
+       "NZD",
+       "CNY",
+       "JPY"
       ],
-      "texte": ""
+      "texte": "Les surperformances des données américaines soutiennent la fermeté du dollar."
      },
-     "comprendre": "",
-     "desk": "",
+     "comprendre": "L'indice de surprise compare les chiffres publiés aux attentes des analystes. Des publications supérieures au consensus renforcent la devise nationale.",
+     "desk": "Indice de surprise 30j pour ajuster le biais avant les annonces majeures.",
      "conviction": {
       "niveau": "faible",
       "origine": "calcul Python",
-      "justification": ""
+      "justification": "Valeur calculée à conviction faible malgré le score élevé de l'USD."
      },
      "source_ids": [
       "src_144"
@@ -518,13 +517,13 @@
       "si_bas": "Dollar baissier",
       "raison": null
      },
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable"
+     "non_source": false
     },
     {
      "numero": 4,
      "cle": "fiscale",
      "nom": "Politique fiscale",
-     "diagnostic": "",
+     "diagnostic": "Le rendement 10 ans US ressort à 4,85% (−20 pb sur 4 semaines) avec une prime de terme de 0,89% et une dette à 121,2% du PIB. En zone euro et au Royaume-Uni, le 10 ans recule de 13 pb.",
      "donnees_insuffisantes": false,
      "direction": {
       "dollar": "neutre",
@@ -539,22 +538,23 @@
        "risque": null
       },
       "devises_concernees": [
-       "EUR"
+       "EUR",
+       "USD",
+       "GBP"
       ],
-      "texte": ""
+      "texte": "La baisse modérée de la prime de terme n'offre pas d'impact net sur le dollar."
      },
-     "comprendre": "",
-     "desk": "",
+     "comprendre": "La prime de terme est la compensation exigée pour prêter à long terme. Un dérapage budgétaire tend à la faire monter.",
+     "desk": "Rendement 10 ans et adjudications du Trésor US pour évaluer le risque de dette.",
      "conviction": {
       "niveau": "faible",
       "origine": "calcul Python",
-      "justification": ""
+      "justification": "La variation sur 4 semaines reste insuffisante pour impacter le biais USD."
      },
      "source_ids": [
       "src_145",
       "src_146",
-      "src_147",
-      "src_148"
+      "src_147"
      ],
      "donnees_calculees": [
       {
@@ -596,13 +596,13 @@
      ],
      "sources_indisponibles": [],
      "mesure": null,
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable"
+     "non_source": false
     },
     {
      "numero": 5,
      "cle": "interconnexions",
      "nom": "Interconnexions de marchés",
-     "diagnostic": "",
+     "diagnostic": "Le VIX monte à 26,36 (+3,5 % sur 7 j), dépassant le seuil d'alerte des 25. L'indice dollar large gagne +0,77 % sur 7 j à 123,5978 tandis que l'indice or (proxy) chute de 7,38 %.",
      "donnees_insuffisantes": false,
      "direction": {
       "dollar": "haussier",
@@ -619,22 +619,23 @@
       "devises_concernees": [
        "JPY",
        "CHF",
-       "AUD"
+       "AUD",
+       "USD"
       ],
-      "texte": ""
+      "texte": "La montée du VIX au-dessus de 25 installe une séquence Risk Off au bénéfice du dollar."
      },
-     "comprendre": "",
-     "desk": "",
+     "comprendre": "En période de stress sur les marchés d'actions, la volatilité augmente et pousse les capitaux vers la liquidité du dollar.",
+     "desk": "VIX et indice dollar large pour valider l'entrée en phase d'aversion au risque.",
      "conviction": {
       "niveau": "moyen",
       "origine": "calcul Python",
-      "justification": ""
+      "justification": "Le franchissement des 25 sur le VIX confirme le passage en Risk Off."
      },
      "source_ids": [
       "src_010",
       "src_154",
-      "src_013",
-      "src_155"
+      "src_155",
+      "src_013"
      ],
      "donnees_calculees": [
       {
@@ -680,13 +681,13 @@
       "si_bas": "Risk on",
       "raison": null
      },
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable"
+     "non_source": false
     },
     {
      "numero": 6,
      "cle": "geopolitique",
      "nom": "Géopolitique",
-     "diagnostic": "",
+     "diagnostic": "Le canal refuge prédomine avec 6 titres enregistrés sur les risques géopolitiques et de marché. Les détails tarifaires américains ont en revanche été qualifiés de moins sévères que le pire scénario.",
      "donnees_insuffisantes": false,
      "direction": {
       "dollar": "haussier",
@@ -705,14 +706,14 @@
        "JPY",
        "CHF"
       ],
-      "texte": ""
+      "texte": "L'accumulation d'incertitudes alimente la recherche de valeurs refuges."
      },
-     "comprendre": "",
-     "desk": "",
+     "comprendre": "Les tensions internationales poussent les investisseurs à réduire l'exposition aux devises cycliques au profit des devises refuges.",
+     "desk": "Flux sur les canaux de transmission pour évaluer la prime de risque géopolitique.",
      "conviction": {
       "niveau": "moyen",
       "origine": "calcul Python",
-      "justification": ""
+      "justification": "Dominance claire du canal refuge au sein des flux d'actualité."
      },
      "source_ids": [
       "src_156",
@@ -740,13 +741,13 @@
      ],
      "sources_indisponibles": [],
      "mesure": null,
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable"
+     "non_source": false
     },
     {
      "numero": 7,
      "cle": "price_action",
      "nom": "Price action et flux",
-     "diagnostic": "",
+     "diagnostic": "L'indice USD synthétique abandonne −0,31 % sur 5 j avec un RSI à 62,4. Le positionnement spéculatif COT indique un long extrême au 100e percentile sur le CHF et au 96e percentile sur le JPY.",
      "donnees_insuffisantes": false,
      "direction": {
       "dollar": "baissier",
@@ -762,21 +763,22 @@
       },
       "devises_concernees": [
        "CAD",
-       "CHF"
+       "CHF",
+       "JPY",
+       "EUR"
       ],
-      "texte": ""
+      "texte": "Le retracement technique à 5 jours sur le dollar signale un repli de court terme."
      },
-     "comprendre": "",
-     "desk": "",
+     "comprendre": "Des positions spéculatives poussées aux extrêmes historiques augmentent le risque de retournement brusque lors des débouclages de positions.",
+     "desk": "Percentiles COT 52 semaines pour repérer les risques de squeezes.",
      "conviction": {
       "niveau": "moyen",
       "origine": "calcul Python",
-      "justification": ""
+      "justification": "Présence de plusieurs devises majeures à des percentiles de positionnement extêmes."
      },
      "source_ids": [
       "src_026",
       "src_023",
-      "src_160",
       "src_160"
      ],
      "donnees_calculees": [
@@ -810,13 +812,13 @@
       "si_bas": "Dollar baissier",
       "raison": null
      },
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable"
+     "non_source": false
     },
     {
      "numero": 8,
      "cle": "offre_demande",
      "nom": "Offre et demande",
-     "diagnostic": "",
+     "diagnostic": "Le WTI s'inscrit en baisse à 82,24 $ (−8,1 % sur 7 j) sur fond de progression des stocks américains de brut à 418,9 M barils (+1,1 M sur la semaine). Le déficit commercial américain s'affiche à −105,0B.",
      "donnees_insuffisantes": false,
      "direction": {
       "dollar": "neutre",
@@ -833,20 +835,20 @@
       "devises_concernees": [
        "CAD",
        "NZD",
-       "AUD"
+       "AUD",
+       "USD"
       ],
-      "texte": ""
+      "texte": "Le repli des cours pétroliers pèse sur le pétro-dollar canadien sans influer sur l'USD."
      },
-     "comprendre": "",
-     "desk": "",
+     "comprendre": "L'accumulation des stocks énergétiques détend les cours des matières premières et fragilise les devises des pays exportateurs.",
+     "desk": "Rapport hebdomadaire des stocks de brut de l'EIA et dynamique du WTI.",
      "conviction": {
       "niveau": "moyen",
       "origine": "calcul Python",
-      "justification": ""
+      "justification": "Signaux d'offre excédentaire évidents sur l'énergie sans impact direct sur le billet vert."
      },
      "source_ids": [
       "src_011",
-      "src_012",
       "src_161",
       "src_162"
      ],
@@ -910,19 +912,87 @@
      ],
      "sources_indisponibles": [],
      "mesure": null,
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable"
+     "non_source": false
     }
    ],
-   "chaines": [],
+   "chaines": [
+    {
+     "titre": "De la surprise macro américaine à l'appui fondamental du dollar",
+     "maillons": [
+      {
+       "engrenage": 3,
+       "texte": "L'indice de surprise économique 30 jours de l'USD ressort à +1,12, traduisant de solides publications.",
+       "source_id": "src_144",
+       "non_sourcee": false
+      },
+      {
+       "engrenage": 1,
+       "texte": "Ces résultats soutiennent le biais haussier global du dollar dans la synthèse macro.",
+       "source_id": "src_171",
+       "non_sourcee": false
+      }
+     ]
+    },
+    {
+     "titre": "De la montée du risque equity vers les flux refuges sur le dollar",
+     "maillons": [
+      {
+       "engrenage": 5,
+       "texte": "Le VIX progresse à 26,36 (+3,5 % sur 7 j), franchissant la zone d'aversion au risque.",
+       "source_id": "src_010",
+       "non_sourcee": false
+      },
+      {
+       "engrenage": 6,
+       "texte": "Les tensions géopolitiques alimentent le canal refuge avec 6 titres répertoriés.",
+       "source_id": "src_156",
+       "non_sourcee": false
+      },
+      {
+       "engrenage": 5,
+       "texte": "L'indice dollar large progresse de 0,77 % sous l'effet des flux de protection.",
+       "source_id": "src_154",
+       "non_sourcee": false
+      }
+     ]
+    }
+   ],
    "conflits": [
     {
      "engrenages": [
       1,
       2
      ],
-     "texte": "Thème macro (haussier) contre Politique monétaire (baissier) sur le dollar",
-     "source_ids": [],
-     "origine": "calcul Python"
+     "texte": "Thème macro (haussier) contre Politique monétaire (baissier) sur le dollar.",
+     "source_ids": [
+      "src_171",
+      "src_143"
+     ],
+     "origine": "modèle"
+    },
+    {
+     "engrenages": [
+      3,
+      7
+     ],
+     "texte": "Données économiques (haussier) contre Price action et flux (baissier) sur le dollar.",
+     "source_ids": [
+      "src_144",
+      "src_026"
+     ],
+     "origine": "modèle"
+    },
+    {
+     "engrenages": [
+      5,
+      7
+     ],
+     "texte": "Interconnexions de marchés (haussier) contre Price action et flux (baissier) sur le dollar.",
+     "source_ids": [
+      "src_010",
+      "src_026"
+     ],
+     "origine": "modèle"
     },
     {
      "engrenages": [
@@ -962,24 +1032,6 @@
     },
     {
      "engrenages": [
-      3,
-      7
-     ],
-     "texte": "Données économiques (haussier) contre Price action et flux (baissier) sur le dollar",
-     "source_ids": [],
-     "origine": "calcul Python"
-    },
-    {
-     "engrenages": [
-      5,
-      7
-     ],
-     "texte": "Interconnexions de marchés (haussier) contre Price action et flux (baissier) sur le dollar",
-     "source_ids": [],
-     "origine": "calcul Python"
-    },
-    {
-     "engrenages": [
       6,
       7
      ],
@@ -988,7 +1040,19 @@
      "origine": "calcul Python"
     }
    ],
-   "concept": null,
+   "concept": {
+    "id": "volatilite_implicite",
+    "titre": "Le VIX, indice de la peur",
+    "definition": "Le VIX mesure la volatilité attendue des actions américaines sur 30 jours. Au-dessus de 20-25, les investisseurs se protègent : les devises cycliques souffrent et les refuges montent.",
+    "explication": "Le VIX mesure la volatilité attendue du marché d'actions américain à 30 jours. Lorsqu'il dépasse 20 à 25, les investisseurs achètent de la protection, ce qui pénalise les devises risquées et profite aux devises refuges.",
+    "exemple": "Le VIX s'établit à 26,36 (+3,5 % sur 7 j), signalant un régime de Risk Off qui stimule l'indice dollar large (+0,77 %).",
+    "source_ids": [
+     "src_010",
+     "src_154"
+    ],
+    "cycle": null,
+    "pertinence": null
+   },
    "controles": [],
    "coherence": {
     "alignes": 3,
@@ -1013,9 +1077,15 @@
     "libelle": "3 sur 7 évaluables",
     "regle": "engrenage 2 à 8 aligné si sa direction dollar est celle du thème ; à défaut (thème au dollar neutre, ou engrenage sans direction dollar), si sa direction risque est celle du thème. Évaluable = engrenage qui a une direction comparable à celle du thème. Moins de 3 alignés : « Signaux mixtes ». Thème au dollar et au risque neutres : rien à mesurer."
    },
-   "repli_python": true,
-   "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
-   "rafraichi_le": "2026-11-26T02:41:32+00:00"
+   "statut": "ok",
+   "tentatives": 1,
+   "genere_le": "2026-11-26T08:19:18+00:00",
+   "redige_par": {
+    "modele": "gemini-3.5-flash",
+    "libelle": "Flash 3.5"
+   },
+   "version": "quotidienne",
+   "rafraichi_le": "2026-11-26T08:27:16+00:00"
   },
   "classement_devises": [],
   "devises_indisponibles": [
@@ -1036,12 +1106,12 @@
    "risk_on_off": "off",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint",
+   "raison_indisponibilite": "analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python)",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint)",
+    "commentaire": "analyse indisponible (analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python))",
     "source_id": null
    },
    "detail_score": [],
@@ -1193,12 +1263,12 @@
    "risk_on_off": "neutre",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint",
+   "raison_indisponibilite": "analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python)",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint)",
+    "commentaire": "analyse indisponible (analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python))",
     "source_id": null
    },
    "detail_score": [],
@@ -1350,12 +1420,12 @@
    "risk_on_off": "neutre",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint",
+   "raison_indisponibilite": "analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python)",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint)",
+    "commentaire": "analyse indisponible (analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python))",
     "source_id": null
    },
    "detail_score": [],
@@ -1507,12 +1577,12 @@
    "risk_on_off": "off",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+   "raison_indisponibilite": "analyses:JPY-CHF-CAD : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: h",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+    "commentaire": "analyse indisponible (analyses:JPY-CHF-CAD : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: h)",
     "source_id": null
    },
    "detail_score": [],
@@ -1664,12 +1734,12 @@
    "risk_on_off": "off",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+   "raison_indisponibilite": "analyses:JPY-CHF-CAD : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: h",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+    "commentaire": "analyse indisponible (analyses:JPY-CHF-CAD : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: h)",
     "source_id": null
    },
    "detail_score": [],
@@ -1831,12 +1901,12 @@
    "risk_on_off": "on",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+   "raison_indisponibilite": "analyses:JPY-CHF-CAD : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: h",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+    "commentaire": "analyse indisponible (analyses:JPY-CHF-CAD : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: h)",
     "source_id": null
    },
    "detail_score": [],
@@ -1999,12 +2069,12 @@
    "risk_on_off": "on",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+   "raison_indisponibilite": "analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: h",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+    "commentaire": "analyse indisponible (analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: h)",
     "source_id": null
    },
    "detail_score": [],
@@ -2160,12 +2230,12 @@
    "risk_on_off": "on",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+   "raison_indisponibilite": "analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: h",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+    "commentaire": "analyse indisponible (analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: h)",
     "source_id": null
    },
    "detail_score": [],
@@ -2321,12 +2391,12 @@
    "risk_on_off": "neutre",
    "score_confluence": null,
    "analyse_indisponible": true,
-   "raison_indisponibilite": "indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)",
+   "raison_indisponibilite": "analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: h",
    "biais_banque_centrale": "data_dependent",
    "tendance_fond": {
     "unite_temps": "weekly",
     "sens": "range",
-    "commentaire": "analyse indisponible (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit))",
+    "commentaire": "analyse indisponible (analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: h)",
     "source_id": null
    },
    "detail_score": [],
@@ -3684,6 +3754,13 @@
    "source": "Calcul Python",
    "detail": "directions des moteurs 2 à 8 (règles Python et matrice d'impact)",
    "date": "2026-11-26",
+   "url": null
+  },
+  {
+   "id": "src_172",
+   "source": "FRED (DFF, taux effectif) (registre macro)",
+   "detail": "USD — Taux directeur",
+   "date": "2026-11-24",
    "url": null
   }
  ],
@@ -6476,8 +6553,8 @@
     "taux_pct": 100.0
    },
    "Prévision": {
-    "valeur": 10,
-    "explique": 107,
+    "valeur": 9,
+    "explique": 108,
     "vide": 0,
     "total": 117,
     "taux_pct": 100.0
@@ -6607,22 +6684,22 @@
   "conforme": false,
   "nb_anomalies": 16,
   "anomalies": [
-   "USD : analyse indisponible aujourd'hui (analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint) — exclue du classement",
-   "EUR : analyse indisponible aujourd'hui (analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint) — exclue du classement",
-   "GBP : analyse indisponible aujourd'hui (analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : quota du jour atteint) — exclue du classement",
-   "JPY : analyse indisponible aujourd'hui (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)) — exclue du classement",
-   "CHF : analyse indisponible aujourd'hui (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)) — exclue du classement",
-   "CAD : analyse indisponible aujourd'hui (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)) — exclue du classement",
-   "AUD : analyse indisponible aujourd'hui (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)) — exclue du classement",
-   "NZD : analyse indisponible aujourd'hui (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)) — exclue du classement",
-   "CNY : analyse indisponible aujourd'hui (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit)) — exclue du classement",
-   "8 moteurs du marché : indisponible (moteurs : 2 appels déjà faits pendant ce run (repli Python))",
+   "USD : analyse indisponible aujourd'hui (analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python)) — exclue du classement",
+   "EUR : analyse indisponible aujourd'hui (analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python)) — exclue du classement",
+   "GBP : analyse indisponible aujourd'hui (analyses:USD-EUR-GBP : 2 appels déjà faits pendant ce run (repli Python)) — exclue du classement",
+   "JPY : analyse indisponible aujourd'hui (analyses:JPY-CHF-CAD : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: h) — exclue du classement",
+   "CHF : analyse indisponible aujourd'hui (analyses:JPY-CHF-CAD : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: h) — exclue du classement",
+   "CAD : analyse indisponible aujourd'hui (analyses:JPY-CHF-CAD : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: h) — exclue du classement",
+   "AUD : analyse indisponible aujourd'hui (analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: h) — exclue du classement",
+   "NZD : analyse indisponible aujourd'hui (analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: h) — exclue du classement",
+   "CNY : analyse indisponible aujourd'hui (analyses:AUD-NZD-CNY : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : 503 Server Error: Service Unavailable for url: h) — exclue du classement",
    "état du monde absent de la synthèse globale",
    "tableau macro : USD/CPI annuel : publication manquée (prévue le 10/11, aucun « réel » reçu)",
    "tableau macro : USD/CPI core annuel : publication manquée (prévue le 10/11, aucun « réel » reçu)",
    "tableau macro : CNY/PMI manufacturier : publication manquée (prévue le 31/10, aucun « réel » reçu)",
    "tableau macro : CNY/PMI services : publication manquée (prévue le 31/10, aucun « réel » reçu)",
-   "tableau macro : CNY/Balance commerciale : publication manquée (prévue le 10/11, aucun « réel » reçu)"
+   "tableau macro : CNY/Balance commerciale : publication manquée (prévue le 10/11, aucun « réel » reçu)",
+   "prompt LLM volumineux : 4 appel(s) au-dessus du seuil (18000 tokens estimés, 12000 pour les synthèses) (max 23859 à 08:29 UTC, modèle gemini-3.8-flash) — le contexte envoyé au LLM a regrossi"
   ]
  },
  "critique": {
@@ -6631,6 +6708,6 @@
   "suggestions_connaissances": [],
   "validation": "non_evalue",
   "indisponible": true,
-  "note": "relecture non effectuée (indisponible : quota atteint (retentée dès la remise à zéro du quota gratuit) — 20 tentatives en panne (503, 429, délai) déjà faites aujourd'hui : pla)"
+  "note": "relecture non effectuée (critique : 2 appels déjà faits pendant ce run (repli Python) — après : gemini-3.5-flash : ignoré (disjoncteur) | gemini-3.8-flash : 503 Server Error: )"
  }
 }
