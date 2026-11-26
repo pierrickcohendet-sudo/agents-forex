@@ -515,17 +515,9 @@ def titre_citable(titre) -> bool:
 
 
 def vocabulaire_interdit(r: dict) -> list[str]:
-    """Mots interdits et formulations d'ordre dans un récit (sans le contrôle des nombres)."""
-    from core import controle_texte as ct
-    sortie = []
-    for morceau in [str(x) for x in (r.get("paragraphes") or [])] + [str(r.get("exergue") or "")] + [str(x) for x in r.get("a_surveiller") or []]:
-        m = INTERDITS.search(morceau)
-        if m:
-            sortie.append(m.group())
-        sortie += [re.search(x, morceau.lower()).group() for x in ct.ORDRES if re.search(x, morceau.lower())]
-        if ENGRENAGE_SEUL.search(morceau):
-            sortie.append("engrenage N")
-    return sortie
+    """Mots interdits et formulations d'ordre dans un récit (sans le contrôle des nombres) : même règle que le contrôle de
+    la rédaction (core/redaction_documentaire.controler)."""
+    return rd.controler({**r, "paragraphes": r.get("paragraphes") or ["x " * 200]}, [], None)["vocabulaire"]
 
 
 # ------------------------------------------------------------------ cache des récits (un appel par jour et par moteur)

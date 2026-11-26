@@ -187,3 +187,14 @@ horizontal. Comparer côte à côte avec `docs/design/reference/` et lister les 
   tableau.
 - Adresses : `#agenda` (semaine en cours), `#agenda/hier|jour|dem|sem|suiv`, `#agenda/USD` (filtre de l'adresse, non
   mémorisé), `#agenda/e=<ff_id>` (panneau d'une publication), `#agenda/jour=AAAA-MM-JJ` (ancienne adresse).
+
+## Lot V15 — textes du documentaire écrits par une IA
+
+- Récit d'un chapitre : texte d'IA seulement (Gemini, sinon Groq), avec « À surveiller » en encadré et la mention de
+  l'auteur et de l'heure ; un récit d'un jour précédent porte « Récit écrit le JJ/MM, mis à jour au prochain passage du
+  modèle ». Sans texte d'IA : encadré « Les faits de la semaine » (5 à 8 puces, bord pointillé), jamais de faux récit.
+- « Comprendre ce moteur » : « En une phrase » (Newsreader) et « Comment ça marche » visibles ; « Ce qu'on regarde »,
+  « Un exemple », « Ce que ça fait aux devises » et « Le piège » dans un détail repliable.
+- Cartes des devises : « Pourquoi » en phrase ; la règle brute dans un détail repliable « Règle de calcul ».
+- Glossaire repliable en bas de l'onglet ; les mots du glossaire sont soulignés en pointillé (classe `.gl`, focalisable),
+  bulle au survol ou au toucher. Jamais le mot « percentile » à l'écran.

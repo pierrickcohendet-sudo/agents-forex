@@ -155,7 +155,9 @@ synthese_v9:
 # la semaine, sinon l'encadré « Les faits de la semaine ».
 documentaire:
   modeles: [gemini-3.5-flash, gemini-3.5-flash-lite]
-  groq_modele: openai/gpt-oss-120b
+  # essai du 26/11 sur le chapitre « Banques centrales et taux » (23 au 25/11) : llama-3.3-70b-versatile retiré par Groq (404) ;
+  # gpt-oss-120b : contresens (niveau confondu avec une variation), anglicismes ; qwen3.8-27b : phrases courtes, termes expliqués
+  groq_modele: qwen/qwen3.8-27b
 
 # --- Tableau macro (base Notion + dashboard web) ------------------------------
 # Indicateurs en lignes, devises en colonnes, 3 types de valeur (Actuel /

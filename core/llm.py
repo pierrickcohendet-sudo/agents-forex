@@ -446,7 +446,8 @@ class RegistreQuotas:
             if not e.get("ok") and e.get("echecs_runs", 0) >= self._max_echecs():
                 raise PlafondAnalyse(f"{etiquette} : déjà en échec {e['echecs_runs']} fois aujourd'hui, "
                                      "non rejouée (texte Python)")
-            if self.run_etiquettes.get(etiquette, 0) >= self._max_appels():
+            # lot V15 : le documentaire a deux modèles dans sa chaîne (flash puis flash-lite) : deux fois le plafond par étiquette
+            if self.run_etiquettes.get(etiquette, 0) >= self._max_appels() * (2 if etiquette.startswith("documentaire") else 1):
                 raise PlafondAnalyse(f"{etiquette} : {self._max_appels()} appels déjà faits pendant ce run "
                                      "(repli Python)")
         par_run = self.plafond_par_run()
@@ -1118,7 +1119,9 @@ class FournisseurChaine(FournisseurLLM):
                 self._echec(m, exc, msg)
                 raisons.append(f"{m['modele']} : {msg[:100]}")
                 autre_echec = autre_echec or not isinstance(exc, QuotaJournalierEpuise)
-                if self.registre is not None and self.registre.mode_panne and not isinstance(exc, QuotaJournalierEpuise):
+                # Lot V15 : le documentaire garde son ordre de secours (gemini-3.5-flash -> gemini-3.5-flash-lite) même en mode panne
+                if (self.registre is not None and self.registre.mode_panne and not isinstance(exc, QuotaJournalierEpuise)
+                        and not str(etiquette or "").startswith("documentaire")):
                     log.warning("Mode panne : %s en échec (%s) — pas de repli sur les autres modèles", m["modele"], msg[:150])
                     break
                 log.warning("Modèle %s en échec (%s) — essai du modèle suivant", m["modele"], msg[:150])

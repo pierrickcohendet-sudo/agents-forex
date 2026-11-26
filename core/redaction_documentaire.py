@@ -27,7 +27,14 @@ log = logging.getLogger(__name__)
 
 GROUPES = {"g1": ["0", "1", "2", "3", "4"], "g2": ["5", "6", "7", "8", "final"]}
 MOTS_MIN_ACCEPTE = 120
-INTERDITS = re.compile(r"\b(entrées?|stops?|objectifs?|short)\b|\bLONG\b|\bSHORT\b", re.I)
+INTERDITS = re.compile(r"\b(entrées?|stops?|objectifs?)\b", re.I)
+INTERDITS_MAJ = re.compile(r"\bLONG\b|\bSHORT\b|\b[Ss]hort\b")   # « long » en minuscules (« à long terme ») reste permis
+# Ordres de trading (lot V15) : formes qui prescrivent une action ; décrire ce que font les investisseurs (« ils achètent des
+# dollars ») reste permis, contrairement à la liste plus large de core/controle_texte.ORDRES
+ORDRES_DOC = [r"\bachetez\b", r"\bvendez\b", r"\bachète[sz]? maintenant\b", r"\bprendre position\b", r"\bprenez position\b",
+              r"\bpoint d'entrée\b", r"\bniveau d'entrée\b", r"\bstop[- ]loss\b", r"\btake[- ]profit\b", r"\bobjectif de cours\b",
+              r"\bcible de prix\b", r"\bentrer (?:à|sur)\b", r"\bpositions? (?:longue|courte)s?\b", r"\bil faut (?:acheter|vendre)\b",
+              r"\b(?:acheter|vendre) (?:maintenant|dès)\b"]
 ENGRENAGE_SEUL = re.compile(r"\bengrenages?\s*(n°\s*)?\d\b", re.I)
 PETITS_ENTIERS = set(range(0, 13)) | {15, 20, 24, 25, 30, 35, 50, 60, 70, 100, 200}
 
@@ -52,7 +59,8 @@ Style :
 Interdits : nombre absent des FAITS (les arrondis sont permis) ; ordre d'achat ou de vente ; les mots « entrée », « stop »,
 « objectif », « LONG », « SHORT ». Tu donnes des conditions et des effets probables (« si…, le dollar devrait… »).
 
-Longueur : 350 à 700 mots en 4 à 6 paragraphes, plus une phrase d'exergue simple et frappante (moins de 25 mots).
+Longueur : 350 à 700 mots en 4 à 6 paragraphes pour CHAQUE chapitre de moteur (1 à 8), plus une phrase d'exergue simple et
+frappante (moins de 25 mots). 350 mots est un minimum : un chapitre de moteur plus court est incomplet, même si tu en écris plusieurs.
 Le chapitre « 0 » (la semaine en bref) et le chapitre « final » (ce qui peut bouger la semaine prochaine) font 150 à 350 mots.
 
 Exemple de ton attendu (pour le style seulement, n'en reprends aucun chiffre) : voir EXEMPLE.
@@ -71,7 +79,8 @@ Pour le yen, l'enjeu reste le même. L'écart entre les taux américains et japo
 À surveiller : la prochaine décision de la Fed, le 09/12. Si les chiffres de croissance et d'emploi restent forts d'ici là, le rendement à 2 ans devrait remonter et redonner de l'élan au dollar. S'ils faiblissent, la baisse de la semaine dernière pourrait n'être qu'un début."""
 
 FORMAT = ('Réponds STRICTEMENT en JSON : {"chapitres": {"<numéro>": {"paragraphes": ["…"], "exergue": "…", '
-          '"a_surveiller": ["…"]}, …}} avec une entrée pour CHAQUE chapitre demandé.')
+          '"a_surveiller": ["…"]}, …}} avec une entrée pour CHAQUE chapitre demandé ; les clés de « chapitres » sont exactement '
+          'les numéros demandés (par exemple "2" pour le chapitre 2, "final" pour le chapitre final).')
 
 
 # ------------------------------------------------------------------ outils de mise en forme
@@ -148,6 +157,32 @@ SENS = [
 ]
 
 
+# Libellés techniques -> libellés clairs dans les faits donnés au modèle (essai du 26/11 : « 2 ans US − taux effectif » lu
+# comme un « taux réel » par les deux modèles Groq essayés)
+LIBELLES_CLAIRS = [
+    (r"^2 ans US − taux effectif.*", "L'écart entre le taux à 2 ans américain et le taux de la Fed"),
+    (r"^Courbe 2-10 ans US.*", "L'écart entre les taux américains à 10 ans et à 2 ans"),
+    (r"^Taux réel (.*)", r"Le taux réel \1 (taux directeur moins inflation)"),
+    (r"^Taux effectif Fed.*", "Le taux de la Fed au jour le jour"),
+    (r"^Rendement 2 ans (.*)", r"Le taux à 2 ans \1"),
+    (r"^Rendement 10 ans (.*)", r"Le taux à 10 ans \1"),
+    (r"^10 ans (.*)", r"Le taux à 10 ans \1"),
+    (r"^Score ([A-Z]{3})", r"La note de force du \1 (0 à 100)"),
+    (r"^Surprise ([A-Z]{3}).*", r"L'indice de surprise du \1 (30 jours)"),
+    (r"^Surprise globale.*", "L'indice de surprise moyen des 9 devises"),
+    (r"^Prime de terme.*", "La prime de terme américaine (supplément exigé pour prêter 10 ans)"),
+    (r"^Écart Italie − Allemagne.*", "L'écart de taux à 10 ans entre l'Italie et l'Allemagne"),
+    (r"^Indice dollar large.*", "Le dollar face à un large panier de devises"),
+]
+
+
+def libelle_clair(libelle: str) -> str:
+    for m, r in LIBELLES_CLAIRS:
+        if re.search(m, libelle or ""):
+            return re.sub(m, r, libelle).replace("US", "américain").strip()
+    return libelle
+
+
 def sens_mouvement(libelle: str, hausse: bool) -> tuple[str, str]:
     """(sens, explication) d'une hausse ou d'une baisse d'un indicateur, d'après son libellé. Exemple : S&P 500 en hausse
     -> (« prise de risque », « les investisseurs reprennent du risque »)."""
@@ -195,11 +230,11 @@ def _mouvement(libelle: str, v: dict, texte_fin: str | None, source=None) -> dic
     de_a = ""
     if v.get("debut") is not None and v.get("fin") is not None:
         de_a = f" (de {fr(v['debut'], 2)} à {fr(v['fin'], 2)})"
-    t = f"{libelle} {verbe} {quantite} entre le {ddm(v.get('du'))} et le {ddm(v.get('au'))}{de_a} : {expl}."
+    t = f"{libelle_clair(libelle)} {verbe} {quantite} entre le {ddm(v.get('du'))} et le {ddm(v.get('au'))}{de_a} : {expl}."
     if texte_fin:
         t += f" {texte_fin}"
     if val == 0:
-        sens, t = "stable", f"{libelle} est stable entre le {ddm(v.get('du'))} et le {ddm(v.get('au'))}."
+        sens, t = "stable", f"{libelle_clair(libelle)} est stable entre le {ddm(v.get('du'))} et le {ddm(v.get('au'))}."
     return _fait(t, sens, 1.0, v.get("au"), source)
 
 
@@ -406,6 +441,14 @@ def nombres_introuvables(texte: str, faits: list[dict], dates_semaine: list[str]
         if (j, mo) not in dates and not (1 <= j <= 31 and 1 <= mo <= 12 and any(abs(j - a) <= 14 and mo == b for a, b in dates)):
             hors.append(m.group())
     sans_dates = re.sub(r"\b\d{1,2}/\d{1,2}\b", " ", sans_dates)
+    # dates écrites en toutes lettres (« 26 novembre », « lundi 30 ») : acceptées si elles tombent à moins de 15 jours des faits
+    mois = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"]
+    for m in list(re.finditer(r"\b(\d{1,2})(?:er)? (" + "|".join(mois) + r")\b", sans_dates)):
+        j, mo = int(m.group(1)), mois.index(m.group(2)) + 1
+        if not (1 <= j <= 31 and any(abs(j - a) <= 14 and mo == b or (mo - b) % 12 == 1 and j <= 15 for a, b in dates)):
+            hors.append(m.group())
+    sans_dates = re.sub(r"\b\d{1,2}(?:er)? (" + "|".join(mois) + r")\b", " ", sans_dates)
+    sans_dates = re.sub(r"\b(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche) (\d{1,2})\b", r"\1", sans_dates)
     for t, v, d in ct.nombres_texte(sans_dates):
         if not autorise_tolerant(v, d, vals):
             hors.append(t)
@@ -415,16 +458,16 @@ def nombres_introuvables(texte: str, faits: list[dict], dates_semaine: list[str]
 def controler(r: dict, faits: list[dict], dates_semaine: list[str] | None = None) -> dict:
     """-> {"nombres": [...], "vocabulaire": [...], "bloquant": bool}. Seuls l'absence de texte, le vocabulaire interdit,
     les ordres et les nombres introuvables comptent ; la longueur n'est plus une cause de rejet au-delà de 120 mots."""
-    from core import controle_texte as ct
     paras = [str(p) for p in (r.get("paragraphes") or []) if str(p).strip()]
     morceaux = paras + [str(r.get("exergue") or "")] + [str(x) for x in r.get("a_surveiller") or []]
     texte = " ".join(morceaux)
     voc = []
     for m in morceaux:
-        x = INTERDITS.search(m)
-        if x:
-            voc.append(x.group())
-        voc += [re.search(o, m.lower()).group() for o in ct.ORDRES if re.search(o, m.lower())]
+        for rx in (INTERDITS, INTERDITS_MAJ):
+            x = rx.search(m)
+            if x:
+                voc.append(x.group())
+        voc += [re.search(o, m.lower()).group() for o in ORDRES_DOC if re.search(o, m.lower())]
         if ENGRENAGE_SEUL.search(m):
             voc.append(ENGRENAGE_SEUL.search(m).group())
         if re.search(r"percentile", m, re.I):
@@ -467,12 +510,26 @@ def extraire(brut: str) -> dict:
     return sortie
 
 
+def aligner(textes: dict, demandes) -> dict:
+    """Réponse rangée sous d'autres clés que celles demandées : un seul chapitre demandé et un seul rendu -> réaligné ;
+    même nombre de chapitres -> dans l'ordre. Les chapitres déjà bien rangés ne bougent pas."""
+    demandes = list(demandes)
+    if set(textes) >= set(demandes):
+        return textes
+    if len(demandes) == 1 and len(textes) == 1:
+        return {demandes[0]: next(iter(textes.values()))}
+    if len(textes) == len(demandes) and not set(textes) & set(demandes):
+        return dict(zip(demandes, textes.values()))
+    return textes
+
+
 def mots(texte: str) -> int:
     return len(re.findall(r"\b[\wÀ-ÿ'’-]+\b", str(texte or "")))
 
 
 # ------------------------------------------------------------------ 6. rédaction d'un groupe
-def rediger_groupe(faits_par_ch: dict[str, dict], dates_semaine: list[str], gemini=None, groq=None, etiquette: str = "documentaire:g1") -> tuple[dict, dict]:
+def rediger_groupe(faits_par_ch: dict[str, dict], dates_semaine: list[str], gemini=None, groq=None, etiquette: str = "documentaire:g1",
+                   correction: bool = True) -> tuple[dict, dict]:
     """Gemini (chaîne gemini-3.5-flash -> gemini-3.5-flash-lite) pour tout le groupe, avec un appel de correction ; puis
     Groq chapitre par chapitre pour ce qui manque. -> ({numéro: récit accepté}, journal)."""
     from core.llm import definir_etiquette, libelle_modele, dernier_modele
@@ -491,6 +548,7 @@ def rediger_groupe(faits_par_ch: dict[str, dict], dates_semaine: list[str], gemi
             r.pop("_court", None)
             if c["bloquant"]:
                 problemes[k] = c
+                journal.setdefault("rejetes", {})[k] = {**r, "par": par, "controle": {x: c[x] for x in ("nombres", "vocabulaire", "vide")}}
             else:
                 acceptes[k] = {**r, "redige_par": par, "mots": mots(" ".join(r["paragraphes"]))}
                 restants.pop(k)
@@ -501,14 +559,14 @@ def rediger_groupe(faits_par_ch: dict[str, dict], dates_semaine: list[str], gemi
             definir_etiquette(etiquette)
             brut = gemini.appeler_llm(prompt_groupe(restants))
             par = libelle_modele(dernier_modele()) or "modèle principal"
-            textes = extraire(brut)
+            textes = aligner(extraire(brut), restants)
             problemes = examiner(textes, par)
             journal["tentatives"].append({"par": par, "chapitres": sorted(textes), "problemes": {k: {x: p[x] for x in ("nombres", "vocabulaire", "vide")} for k, p in problemes.items()}})
-            corrigeables = {k: p for k, p in problemes.items() if not p["vide"] and k in textes}
+            corrigeables = {k: p for k, p in problemes.items() if not p["vide"] and k in textes} if correction else {}
             if corrigeables:
                 definir_etiquette(etiquette + ":correction")
                 brut2 = gemini.appeler_llm(prompt_correction(textes, corrigeables))
-                textes2 = extraire(brut2)
+                textes2 = aligner(extraire(brut2), corrigeables)
                 p2 = examiner(textes2, f"{par}, corrigé")
                 journal["tentatives"].append({"par": f"{par} (correction)", "problemes": {k: {x: p[x] for x in ("nombres", "vocabulaire", "vide")} for k, p in p2.items()}})
         except Exception as exc:  # noqa: BLE001 — quota épuisé, panne : Groq
@@ -520,11 +578,11 @@ def rediger_groupe(faits_par_ch: dict[str, dict], dates_semaine: list[str], gemi
                 break
             try:
                 brut = groq.appeler(prompt_groupe({k: restants[k]}))
-                textes = extraire(brut)
+                textes = aligner(extraire(brut), [k])
                 par = f"secours {getattr(groq, 'nom', 'groq')}"
                 problemes = examiner(textes, par)
                 if k in problemes and not problemes[k]["vide"] and groq.disponible():
-                    textes2 = extraire(groq.appeler(prompt_correction(textes, {k: problemes[k]})))
+                    textes2 = aligner(extraire(groq.appeler(prompt_correction(textes, {k: problemes[k]}))), [k])
                     problemes = examiner(textes2, f"{par}, corrigé")
                 journal["tentatives"].append({"par": par, "chapitre": k, "problemes": {c: {x: p[x] for x in ("nombres", "vocabulaire", "vide")} for c, p in problemes.items()}})
             except Exception as exc:  # noqa: BLE001
