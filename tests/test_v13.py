@@ -218,14 +218,13 @@ def test_rejeu_en_tete_et_temps_de_lecture(semaine):
     assert semaine["lecture_min"] == doc.temps_lecture(semaine) and semaine["lecture_min"] >= 10
 
 
-def test_recit_python_au_moins_250_mots_pour_chaque_moteur(semaine):
+def test_faits_de_la_semaine_pour_chaque_moteur(semaine):
+    """Lot V15 : plus de récit Python ; sans texte d'IA, l'encadré « Les faits de la semaine » (5 à 8 puces)."""
     for k, ch in semaine["chapitres"].items():
-        r = ch["recit"]
-        assert r["redige_par"] == "python" and r["mots"] >= 250, (k, r["mots"])
-        assert 3 <= len(r["paragraphes"]) and r["exergue"]
-        texte = " ".join(r["paragraphes"] + [r["exergue"]])
+        assert ch["recit"] is None and 5 <= len(ch["faits_semaine"]) <= 8, k
+        texte = " ".join(ch["faits_semaine"])
         assert not doc.INTERDITS.search(texte), (k, doc.INTERDITS.search(texte).group())
-        assert not doc.ENGRENAGE_SEUL.search(texte)
+        assert not doc.ENGRENAGE_SEUL.search(texte) and "percentile" not in texte
         assert not re.search(r"\b\d{4}-\d{2}-\d{2}\b", texte)          # dates en JJ/MM
 
 
@@ -292,36 +291,6 @@ def _texte_valide(ch):
     return json.dumps(_regroupe(ch), ensure_ascii=False)
 
 
-def test_controle_recit_rejette_un_nombre_invente(semaine):
-    ch = semaine["chapitres"]["7"]
-    faits = doc.faits_recit(ch, _sem(semaine), semaine["theme"]["jour_par_jour"])
-    assert doc.controler_recit(_regroupe(ch), faits, ch["nom"]) == []
-    faux = {"paragraphes": ch["recit"]["paragraphes"][:-1] + [ch["recit"]["paragraphes"][-1] + " Le dollar a pris 12,34 % en une séance."],
-            "exergue": ch["recit"]["exergue"]}
-    assert any("12,34" in r for r in doc.controler_recit(faux, faits, ch["nom"]))
-    ordre = {"paragraphes": ch["recit"]["paragraphes"] + ["Placer un stop sous le plus bas."], "exergue": "x"}
-    assert any("interdit" in r or "ordre" in r for r in doc.controler_recit(ordre, faits, ch["nom"]))
-
-
-def test_texte_du_modele_rejete_repli_python(semaine):
-    ch = semaine["chapitres"]["7"]
-    faits = doc.faits_recit(ch, _sem(semaine), semaine["theme"]["jour_par_jour"])
-    mauvais = json.dumps({"paragraphes": ["Le dollar a pris 12,34 %."] * 4, "exergue": "x"})
-    r, journal = doc.rediger_recit(faits, ch["nom"], ModeleRenvoie(mauvais), None)
-    assert r is None and journal["tentatives"][0]["rejets"]
-
-
-def test_quota_epuise_bascule_sur_groq(semaine):
-    ch = semaine["chapitres"]["7"]
-    faits = doc.faits_recit(ch, _sem(semaine), semaine["theme"]["jour_par_jour"])
-    gemini = ModeleRenvoie(erreur=BudgetEpuise("quota atteint (429)"))
-    groq = GroqRenvoie(_texte_valide(ch))
-    r, journal = doc.rediger_recit(faits, ch["nom"], gemini, groq)
-    assert gemini.appels == 1 and groq.appels == 1
-    assert r and "groq" in r["redige_par"] and r["mots"] >= 450
-    assert "BudgetEpuise" in journal["tentatives"][0]["erreur"]
-
-
 def test_doit_rediger_recit_un_appel_par_jour():
     forts = ["2026-11-19|AUD|employment change"]
     nuit = datetime(2026, 11, 19, 6, 0, tzinfo=timezone.utc)
@@ -341,26 +310,6 @@ def test_doit_rediger_recit_un_appel_par_jour():
     assert doc.doit_rediger_recit({**entree, "jour": "2026-11-21", "complet": True}, "2026-S47", SAMEDI, forts)[0] is False
 
 
-def test_rediger_cache_un_appel_par_jour_et_bilan(racine):
-    d = doc.calculer(racine, SAMEDI, _h5(), CONFIG)
-    groq = GroqRenvoie(_texte_valide(d["chapitres"]["7"]))
-    gemini = ModeleRenvoie(erreur=BudgetEpuise("quota atteint"))
-    d = doc.rediger(d, racine, SAMEDI, gemini, groq)
-    assert gemini.appels == 8 and groq.appels == 8                          # une tentative par moteur
-    assert d["redaction"]["groq"] == ["7"] and len(d["redaction"]["python"]) == 7
-    assert d["redaction"]["ligne"] == "Documentaire : 0 récits par le modèle, 1 par Groq, 7 en Python"
-    assert d["chapitres"]["7"]["recit"]["redige_par"].startswith("secours groq")
-    # deuxième run du même jour : aucun appel, le récit Groq est repris du cache
-    d2 = doc.rediger(doc.calculer(racine, SAMEDI.replace(hour=11), _h5(), CONFIG), racine, SAMEDI.replace(hour=11), gemini, groq)
-    assert gemini.appels == 8 and groq.appels == 8
-    assert d2["redaction"]["groq"] == ["7"]
-
-
-def test_rediger_sans_modele_tout_en_python(racine):
-    d = doc.rediger(doc.calculer(racine, SAMEDI, _h5(), CONFIG), racine, SAMEDI)
-    assert d["redaction"]["ligne"] == "Documentaire : 0 récits par le modèle, 0 par Groq, 8 en Python"
-
-
 # ------------------------------------------------------------------ mode dégradé
 def test_source_absente_chapitre_degrade(racine):
     (racine / "data" / "cache" / "publications_archive.json").unlink()
@@ -368,7 +317,7 @@ def test_source_absente_chapitre_degrade(racine):
     d = doc.calculer(racine, SAMEDI, historique_5ans.Historique({}), CONFIG)
     assert len(d["chapitres"]) == 8
     c3 = d["chapitres"]["3"]
-    assert c3["publications"] == [] and c3["recit"]["mots"] >= 250 and c3["indicateurs"] == []
+    assert c3["publications"] == [] and c3["faits_semaine"] and c3["indicateurs"] == []
     g = d["chapitres"]["2"]["graphiques"][0]
     assert g["raison"] == "série absente du cache 5 ans"
     assert d["final"]["calendrier"]
@@ -384,10 +333,10 @@ def test_section_en_echec_ne_casse_pas_les_autres(racine, monkeypatch):
     monkeypatch.setattr(doc, "graphiques_moteur", casse)
     d = doc.calculer(racine, SAMEDI, _h5(), CONFIG)
     assert d["chapitres"]["5"]["graphiques"] == [] and "série illisible" in d["chapitres"]["5"]["erreurs"][0]
-    assert d["chapitres"]["5"]["recit"]["mots"] >= 250
+    assert d["chapitres"]["5"]["faits_semaine"]
     assert d["chapitres"]["2"]["graphiques"]
 
-    monkeypatch.setattr(doc, "recit_python", lambda *a: (_ for _ in ()).throw(RuntimeError("panne")))
+    monkeypatch.setattr(doc.rd, "faits_chapitre", lambda *a: (_ for _ in ()).throw(RuntimeError("panne")))
     d = doc.calculer(racine, SAMEDI, _h5(), CONFIG)
     assert all("erreur" in c for c in d["chapitres"].values())
     assert d["final"]["calendrier"]                                         # le chapitre final reste

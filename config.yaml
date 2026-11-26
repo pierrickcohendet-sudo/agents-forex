@@ -48,6 +48,8 @@ llm:
     max_appels_par_analyse: 2
     max_echecs_jour_par_analyse: 2
     priorites:
+      # Lot V15 : le documentaire d'abord (2 appels par jour : chapitres 0 à 4, puis 5 à 8 et final ; × max_appels = 2)
+      - { categorie: documentaire, analyses: 1 }
       - { categorie: engrenages, analyses: 1 }
       - { categorie: rapport, analyses: 8, lundi: 10 }    # lot V9.4 : + 5 à 6 appels groupés de la Synthèse
       - { categorie: devises, analyses: 3 }     # 9 devises en 3 appels groupés de 3
@@ -146,6 +148,14 @@ synthese_v9:
     pause_entre_appels_s: 45        # 8 000 jetons par minute en offre gratuite : un appel par fenêtre
     budget_tokens_message: 4500
     budget_tokens_total_max: 6000
+
+# --- Documentaire de la semaine (lot V15) ---------------------------------------
+# Ordre de secours : gemini-3.5-flash, gemini-3.5-flash-lite (un appel par groupe de chapitres + un appel de correction),
+# puis Groq chapitre par chapitre (modèle choisi après un essai sur le rejeu du 23 au 25/11), puis le dernier récit d'IA de
+# la semaine, sinon l'encadré « Les faits de la semaine ».
+documentaire:
+  modeles: [gemini-3.5-flash, gemini-3.5-flash-lite]
+  groq_modele: openai/gpt-oss-120b
 
 # --- Tableau macro (base Notion + dashboard web) ------------------------------
 # Indicateurs en lignes, devises en colonnes, 3 types de valeur (Actuel /

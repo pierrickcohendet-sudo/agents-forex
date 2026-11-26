@@ -68,7 +68,7 @@ export async function vueTableau(section, parametre) {
     const tit = m.actualites.slice(0, 4), ag = m.agenda.filter(e => e.devise === d && !e.passe).slice(0, 3);
     q("#mxSide").innerHTML = `<div class="card pad" style="display:flex;flex-direction:column;gap:12px"><span class="eyebrow">${d} · ${esc(m.nom)}</span>
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h2>${d}</h2>${pillEffet(c.effet)}</div>
-      <div><div class="eyebrow">Pourquoi</div><p>${esc(c.pourquoi || "n/d")}</p></div>
+      <div><div class="eyebrow">Pourquoi</div><p>${esc(c.pourquoi_phrase || c.pourquoi || "n/d")}</p>${c.pourquoi_phrase && c.pourquoi ? `<details><summary class="small">Règle de calcul</summary><p class="small">${esc(c.pourquoi)}</p></details>` : ""}</div>
       ${c.effet === "non mesuré" ? `<div><div class="eyebrow">Non mesuré</div><p>${esc(c.raison_non_mesure)}</p></div>` : `<div><div class="eyebrow">Comment</div><p>${esc(c.comment)}</p></div>`}
       <div><div class="eyebrow">Réaction possible du pays</div>${reactionsHtml(c.reactions)}</div>
       <div><div class="eyebrow">Actualités et agenda liés</div><ul>${[...tit.map(t => `<li><a href="${esc(t.lien)}" target="_blank" rel="noopener">${esc(t.titre)}</a> <span class="small">${esc(t.source || "")}</span></li>`),
@@ -111,7 +111,7 @@ export async function vueTableau(section, parametre) {
     } else {
       corps = `<p class="small" style="margin:0">Pour chaque devise : sens de l'effet, pourquoi (règle et chiffre), comment (canal), réaction possible du pays et prochain rendez-vous</p>
         <div class="dv">${m.devises.map(c => `<div class="dc ${c.effet === "soutien" ? "p" : c.effet === "pression" ? "c" : ""}"><div class="top"><b>${c.devise}</b>${pillEffet(c.effet)}</div><dl>
-          <div><dt>Pourquoi</dt><dd>${esc(c.pourquoi || "n/d")}</dd></div>
+          <div><dt>Pourquoi</dt><dd>${esc(c.pourquoi_phrase || c.pourquoi || "n/d")}${c.pourquoi_phrase && c.pourquoi ? `<details><summary class="small">Règle de calcul</summary><span class="small">${esc(c.pourquoi)}</span></details>` : ""}</dd></div>
           ${c.effet === "non mesuré" ? `<div><dt>Non mesuré</dt><dd>${esc(c.raison_non_mesure)}</dd></div>` : `<div><dt>Comment</dt><dd>${esc(c.comment)}</dd></div>`}
           <div><dt>Réaction possible du pays</dt><dd>${reactionsHtml(c.reactions)}</dd></div></dl>
           <div class="next">Prochain rendez-vous : ${esc(rdvTxt(c.prochain_rdv))}</div></div>`).join("")}</div>

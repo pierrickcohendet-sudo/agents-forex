@@ -312,22 +312,14 @@ def test_trump_trade_deals_seulement_moteur_8_et_crowdstrike_pas_une_attaque():
 
 
 # ------------------------------------------------------------------ B4 mise en forme
-def test_plus_bouge_et_recit_sans_titre_anglais():
-    ch = {"numero": 8, "nom": "Commerce et flux", "question": "q", "etat": {"libelle": "Brent", "valeur": "−25 %", "date": "2026-11-24", "etat": "seuil franchi"},
-          "indicateurs": [{"libelle": f"Indicateur {i}", "texte": f"{i},0", "date": "2026-11-20", "variation_4s": None,
-                           "variation_semaine": {"valeur": i, "texte": f"+{i} sur la semaine (x)", "court": f"+{i} sur la semaine"},
-                           "lecture_niveau": None, "ampleur": i} for i in range(1, 6)],
-          "graphiques": [], "publications": [], "actualite": [
-              {"titre": "European stocks fall as Trump turns back to tariffs. Italy leads the declines.", "source": "InvestingLive", "date": "2026-11-24", "moteurs": [8]},
-              {"titre": "Brent crude slides as OPEC weighs output", "source": "CNBC", "date": "2026-11-23", "moteurs": [8]}],
-          "devises": [], "risques": {"seuil": {}, "rendez_vous": [], "scenario_si": "Si le Brent…"}}
-    r = doc.recit_python(ch, {"du": "2026-11-23", "au": "2026-11-27", "jours": ["2026-11-23", "2026-11-24"], "statut": "en cours",
-                              "fin_donnees": "2026-11-24"}, [])
-    texte = " ".join(r["paragraphes"])
-    assert "European stocks fall" not in texte and "les droits de douane (InvestingLive, 24/11)" in texte and "le pétrole (CNBC, 23/11)" in texte
-    paras_ind = [p for p in r["paragraphes"] if "termine à" in p]
-    assert len(paras_ind) == 2 and all(p.count("termine à") <= 3 for p in paras_ind)
-    assert "Dans le même temps," in paras_ind[0]
+def test_plus_bouge_et_faits_sans_titre_anglais():
+    """V13.1 puis V15 : l'actualité est résumée par son sujet en français, avec la source et la date."""
+    ch = {"numero": 8, "etat": {}, "indicateurs": [], "graphiques": [], "publications": [], "devises": [], "risques": {},
+          "actualite": [{"titre": "European stocks fall as Trump turns back to tariffs. Italy leads the declines.", "source": "InvestingLive",
+                         "date": "2026-11-24", "moteurs": [8]},
+                        {"titre": "Brent crude slides as OPEC weighs output", "source": "CNBC", "date": "2026-11-23", "moteurs": [8]}]}
+    texte = " ".join(f["texte"] for f in doc.rd.faits_chapitre(ch, {}, []))
+    assert "European stocks fall" not in texte and "les droits de douane (InvestingLive)" in texte and "le pétrole (CNBC)" in texte
     assert doc.frtxt("0.7%") + " contre " + doc.frtxt("0.0%") == "0,7 % contre 0,0 %"
 
 
@@ -341,38 +333,6 @@ def test_salaires_britanniques_ont_un_ecart_habituel():
 
 
 # ------------------------------------------------------------------ B5 récits : le texte du matin n'est plus perdu
-def test_recit_groq_garde_dans_la_journee_meme_si_les_faits_bougent(tmp_path):
-    sem = "2026-S48"
-    ch = {"numero": 7, "nom": "Prix et positionnement", "question": "q", "etat": {"etat": "n/d"}, "publications": [], "actualite": [],
-          "indicateurs": [], "graphiques": [], "devises": [], "risques": {"seuil": {}, "rendez_vous": [], "scenario_si": ""},
-          "recit": {"paragraphes": ["p"], "exergue": "e", "mots": 260, "redige_par": "python"}}
-    d = {"semaine": sem, "du": "2026-11-23", "au": "2026-11-27", "jours_couverts": ["2026-11-23"], "statut": "en cours",
-         "fin_donnees": "2026-11-25", "theme": {"jour_par_jour": []}, "chapitres": {"7": ch}}
-    cache = {"7": {"semaine": sem, "jour": "2026-11-25", "forts": [], "paragraphes": ["Le moteur Prix et positionnement a bougé de 12,34 %."] * 4,
-                   "exergue": "Une phrase.", "redige_par": "secours groq/openai/gpt-oss-120b", "redige_le": "2026-11-25T08:36+00:00"}}
-    (tmp_path / "data" / "cache").mkdir(parents=True)
-    (tmp_path / "data" / "cache" / "documentaire_recits.json").write_text(json.dumps(cache), encoding="utf-8")
-    r = doc.rediger(d, tmp_path, datetime(2026, 11, 25, 16, 19, tzinfo=timezone.utc))
-    assert r["redaction"]["groq"] == ["7"] and r["chapitres"]["7"]["recit"]["redige_le"] == "2026-11-25T08:36+00:00"
-
-
-def test_marqueur_complet_jamais_repris_d_une_autre_semaine(tmp_path):
-    class Echec:
-        def appeler_llm(self, prompt, systeme=None):
-            raise RuntimeError("503")
-    sem = "2026-S48"
-    ch = {"numero": 7, "nom": "Prix et positionnement", "question": "q", "etat": {"etat": "n/d"}, "publications": [], "actualite": [],
-          "indicateurs": [], "graphiques": [], "devises": [], "risques": {"seuil": {}, "rendez_vous": [], "scenario_si": ""},
-          "recit": {"paragraphes": ["p"], "exergue": "e", "mots": 260, "redige_par": "python"}}
-    d = {"semaine": sem, "du": "2026-11-23", "au": "2026-11-27", "jours_couverts": ["2026-11-23"], "statut": "en cours",
-         "fin_donnees": "2026-11-23", "theme": {"jour_par_jour": []}, "chapitres": {"7": ch}}
-    (tmp_path / "data" / "cache").mkdir(parents=True)
-    (tmp_path / "data" / "cache" / "documentaire_recits.json").write_text(json.dumps({"7": {"semaine": "2026-S47", "complet": True, "jour": "2026-11-21"}}))
-    doc.rediger(d, tmp_path, datetime(2026, 11, 23, 9, 0, tzinfo=timezone.utc), Echec(), None)
-    c = json.loads((tmp_path / "data" / "cache" / "documentaire_recits.json").read_text(encoding="utf-8"))
-    assert c["7"]["semaine"] == sem and c["7"]["complet"] is False
-
-
 # ------------------------------------------------------------------ site
 def test_site_agenda_v14():
     js = (RACINE / "docs" / "site" / "ecran_agenda.js").read_text(encoding="utf-8")

@@ -164,7 +164,7 @@ ANALYSES_PANNE = ("engrenages", "rapport:redaction", "analyses:")
 
 def analyse_prioritaire_panne(etiquette: str | None) -> bool:
     e = etiquette or ""
-    return e == "engrenages" or e == "rapport:redaction" or e.startswith("analyses:")
+    return e == "engrenages" or e == "rapport:redaction" or e.startswith("analyses:") or e.startswith("documentaire:")
 
 
 def echec_transitoire(llm, etiquette: str) -> bool:
@@ -177,6 +177,8 @@ def echec_transitoire(llm, etiquette: str) -> bool:
 def categorie_budget(etiquette: str) -> str:
     """Catégorie de budget d'un appel, d'après son étiquette (priorité : engrenages, rapport, devises, reste)."""
     e = etiquette or ""
+    if e.startswith("documentaire"):   # lot V15 : 2 appels réservés chaque jour, avant le rapport
+        return "documentaire"
     if e.startswith("engrenages"):
         return "engrenages"
     if e.startswith("rapport:"):

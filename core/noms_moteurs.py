@@ -76,105 +76,200 @@ CANAUX_DEVISE = {
 # Lot V13 : « Comprendre ce moteur », texte PERMANENT écrit à la main (jamais généré), relu une fois par trimestre.
 # importance pour le change (1 à 5 étoiles), pourquoi il compte, indicateurs principaux, chaîne de transmission (étapes ->
 # devise), 3 confluences avec les marchés (signal, sens ▲ ▼ ou !, effet), piège à éviter.
+# Lot V15 : textes permanents « Comprendre ce moteur » réécrits par l'utilisateur (6 rubriques).
 COMPRENDRE = {
     1: {"importance": 5,
-        "pourquoi": "C'est le chef d'orchestre : il dit quel récit domine (peur ou confiance, inflation ou croissance) et donc quelles "
-                    "devises sont recherchées. Quand il est clair, les autres moteurs comptent moins et les paires bougent ensemble ; "
-                    "quand il est flou, chaque paire suit ses propres chiffres.",
-        "indicateurs": ["VIX : la peur sur les actions américaines (au-dessus de 25, régime de stress)",
-                        "S&P 500 et Nasdaq : l'appétit pour le risque",
-                        "Indice dollar large : la demande mondiale de dollars",
-                        "Or : la recherche de protection contre l'inflation et les crises",
-                        "Nombre de moteurs alignés : la solidité du thème (3 sur 7 = thème établi)"],
-        "chaine": ["Choc ou bonne nouvelle", "Régime de risque", "Flux vers refuges ou devises cycliques", "USD, JPY, CHF ↔ AUD, NZD, CAD"],
-        "confluences": [["VIX en hausse", "▲", "USD, JPY et CHF recherchés ; AUD, NZD et CAD vendus"],
-                        ["Actions en hausse avec un dollar ferme", "=", "avantage de rendement américain, pas une fuite vers la sécurité"],
-                        ["Or et dollar en hausse ensemble", "!", "stress profond : tout ce qui est perçu comme sûr est acheté"]],
-        "piege": "Un thème peut se retourner en une publication. Le regarder chaque jour, sans le confondre avec une tendance de fond."},
+        "une_phrase": "L'humeur générale du marché. Est-ce qu'on a peur, ou est-ce qu'on a envie de prendre des risques ?",
+        "comment": "Comme dans une salle de classe avant un contrôle, l'ambiance compte autant que les cours. Quand les investisseurs ont "
+                   "peur (une crise, une guerre, une chute de la Bourse), ils vendent ce qui est risqué et achètent ce qui est sûr. Quand ils "
+                   "sont confiants, ils font l'inverse. Le thème dominant résume cette humeur et dit quelles devises en profitent. Quand il "
+                   "est net, il écrase les autres moteurs : une bonne statistique australienne ne sauve pas l'AUD un jour de panique.",
+        "regarde": ["le VIX, l'« indice de la peur » : sous 15 c'est le calme, au-dessus de 25 c'est la tension, au-dessus de 35 c'est la panique",
+                    "la Bourse américaine (S&P 500) : si elle monte, on prend du risque",
+                    "l'or : on l'achète quand on a peur",
+                    "le nombre de moteurs qui vont dans le même sens : à 3 ou plus, l'humeur est installée"],
+        "exemple": "Le 20/11/2026, le VIX est monté à 35,89 et le S&P 500 a perdu plus de 3 % en une séance. Le dollar, le yen et le franc "
+                   "suisse ont été recherchés ; les dollars australien et néo-zélandais ont été vendus.",
+        "effets": "Quand la peur domine, le dollar américain, le yen et le franc suisse montent, car ce sont les « valeurs refuges ». Quand la "
+                  "confiance domine, ce sont les devises des pays qui vivent des matières premières et du commerce mondial qui montent : "
+                  "dollars australien, néo-zélandais et canadien.",
+        "piege": "L'humeur peut changer en une journée. Un thème dit « où souffle le vent aujourd'hui », pas « où il soufflera dans un mois »."},
     2: {"importance": 5,
-        "pourquoi": "Les devises suivent d'abord l'argent : une devise mieux rémunérée attire les capitaux. Ce moteur mesure qui monte "
-                    "ou baisse ses taux, et surtout ce que le marché anticipe, lu dans les taux à 2 ans.",
-        "indicateurs": ["Taux directeurs (Fed, BCE, BoE, BoJ, BoC, RBA, RBNZ, BNS)",
-                        "Rendement à 2 ans : ce que le marché attend des banques centrales sur 2 ans",
-                        "Écart de taux à 2 ans entre deux pays : le moteur du portage",
-                        "Taux réel (directeur − inflation sous-jacente) : le vrai niveau de restriction",
-                        "Pente 10 ans − 2 ans : l'inquiétude sur la croissance",
-                        "Probabilités de décision citées par la presse"],
-        "chaine": ["Inflation ou emploi plus forts", "Banque centrale plus restrictive attendue", "Taux à 2 ans en hausse",
-                   "Écart de taux favorable", "Devise soutenue"],
-        "confluences": [["2 ans US en hausse", "▲", "USD/JPY monte souvent avec lui (lien fort depuis 2022)"],
-                        ["Taux réels US en hausse", "▼", "l'or recule, les refuges sans rendement aussi"],
-                        ["Pente 2-10 ans qui se creuse", "!", "le marché craint une récession : prudence sur les devises cycliques"]],
-        "piege": "Le marché anticipe : une hausse de taux déjà attendue ne fait pas monter la devise. Ce sont la surprise et le ton "
-                 "qui comptent (cas de l'AUD après la hausse de la RBA du 03/11)."},
+        "une_phrase": "L'argent va là où il est le mieux rémunéré ; les banques centrales fixent cette rémunération.",
+        "comment": "Chaque pays a une banque centrale (la Fed aux États-Unis, la BCE en zone euro…) qui fixe un taux directeur, le prix de "
+                   "l'argent dans le pays. Si les États-Unis rémunèrent l'argent à 4 % et le Japon à 1 %, les investisseurs ont intérêt à "
+                   "placer en dollars plutôt qu'en yens : ils achètent des dollars, qui montent. Mais le marché vit dans le futur : ce qui "
+                   "compte, c'est ce que la banque centrale va faire. C'est pourquoi on regarde surtout le taux à 2 ans, qui résume ce que le "
+                   "marché attend pour les deux prochaines années.",
+        "regarde": ["les taux directeurs et les dates des réunions",
+                    "le rendement à 2 ans de chaque pays",
+                    "l'écart de rendement à 2 ans entre deux pays (pour une paire comme USD/JPY, c'est le chiffre clé)",
+                    "le taux réel (taux directeur moins inflation), qui dit si la politique freine vraiment l'économie",
+                    "les discours des banquiers centraux"],
+        "exemple": "Entre le 13/11 et le 20/11/2026, le rendement à 2 ans américain est passé de 4,88 % à 4,63 %. Le marché a revu à la "
+                   "baisse ses attentes de hausse de taux de la Fed.",
+        "effets": "Une banque centrale plus sévère que prévu (des taux plus hauts, ou un discours plus dur) fait monter sa devise. Une "
+                  "banque centrale plus douce que prévu la fait baisser.",
+        "piege": "Une hausse de taux déjà attendue ne fait pas monter la devise, car elle est « dans les prix ». Exemple : la hausse de la "
+                 "banque centrale australienne du 03/11/2026 n'a pas soutenu l'AUD. Ce qui fait bouger, c'est la surprise."},
     3: {"importance": 4,
-        "pourquoi": "Les chiffres économiques changent les anticipations de taux. Une inflation ou un emploi au-dessus du consensus "
-                    "rendent la banque centrale plus restrictive, ce qui soutient la devise ; une déception fait l'inverse.",
-        "indicateurs": ["Inflation : IPC, IPC sous-jacent, PCE (la mesure préférée de la Fed)",
-                        "Emploi : emplois non agricoles, chômage, salaires",
-                        "Activité : PIB, PMI, ventes au détail, enquêtes régionales (Fed de Philadelphie)",
-                        "Indice de surprise sur 30 jours : la somme des écarts au consensus, en écarts habituels"],
-        "chaine": ["Publication au-dessus du consensus", "Anticipations de taux revues en hausse", "Taux à 2 ans en hausse", "Devise soutenue"],
-        "confluences": [["Surprises USD positives", "▲", "rendement 2 ans US en hausse dans les heures qui suivent"],
-                        ["Emploi australien faible", "▼", "AUD fragilisé, surtout si les actions baissent aussi"],
-                        ["Inflation forte, activité faible", "!", "stagflation : réaction ambiguë, souvent négative pour la devise"]],
-        "piege": "Les révisions des mois précédents comptent autant que le chiffre du mois, et les séries volatiles (inscriptions "
-                 "hebdomadaires au chômage) ne se lisent qu'en tendance."},
+        "une_phrase": "Les statistiques (inflation, emploi, croissance) qui disent si l'économie va mieux ou moins bien que prévu.",
+        "comment": "Chaque statistique a une prévision, ce que les économistes attendaient. Le marché ne réagit pas au chiffre lui-même, mais "
+                   "à l'écart entre le chiffre et la prévision. Une inflation plus forte que prévu, c'est une banque centrale qui risque de "
+                   "monter ses taux, donc une devise qui monte. Un emploi plus faible que prévu, c'est l'inverse.",
+        "regarde": ["l'inflation (IPC, et le PCE aux États-Unis, la mesure préférée de la Fed)",
+                    "l'emploi (créations d'emplois, chômage, salaires)",
+                    "la croissance (PIB)",
+                    "les enquêtes auprès des entreprises (PMI : au-dessus de 50, l'activité progresse ; en dessous, elle recule)",
+                    "l'indice de surprise du site, qui additionne les bonnes et mauvaises surprises de chaque devise sur 30 jours"],
+        "exemple": "Le 19/11/2026, l'emploi australien a reculé de 43 500 postes alors qu'on attendait 25 500 créations. L'AUD a perdu un "
+                   "argument : la banque centrale australienne aura plus de mal à monter ses taux.",
+        "effets": "Une série de bonnes surprises soutient la devise pendant des semaines ; une série de déceptions l'affaiblit.",
+        "piege": "Regarder aussi la révision du mois précédent. Un bon chiffre accompagné d'une forte révision à la baisse du mois d'avant "
+                 "n'est pas une si bonne nouvelle."},
     4: {"importance": 3,
-        "pourquoi": "Lent mais puissant : quand les investisseurs doutent des finances d'un pays, ils exigent une prime pour lui prêter. "
-                    "Les taux longs montent sans que la devise en profite, comme au Royaume-Uni en 2022.",
-        "indicateurs": ["Déficit et dette publics en % du PIB (FMI, annuel)",
-                        "Adjudications : taux obtenu et demande (taux de couverture)",
-                        "Rendement à 10 ans et prime de terme",
-                        "Écarts souverains : Italie − Allemagne, France − Allemagne"],
-        "chaine": ["Dérapage budgétaire", "Prime de risque", "Taux longs en hausse", "Fuite des investisseurs étrangers", "Devise sous pression"],
-        "confluences": [["10 ans en hausse et devise en baisse", "!", "signal budgétaire, l'inverse d'un signal monétaire"],
-                        ["Écart Italie − Allemagne qui s'élargit", "▼", "l'euro souffre de la fragmentation"],
-                        ["Adjudication mal couverte", "▼", "tension sur les taux longs du pays"]],
-        "piege": "Les données de dette arrivent avec un ou deux ans de retard : ce sont les taux longs et les adjudications qui "
-                 "donnent l'alerte en temps réel."},
+        "une_phrase": "La santé des finances de l'État, qui joue lentement mais peut tout faire basculer.",
+        "comment": "Un État qui dépense plus qu'il ne gagne emprunte. Tant que les prêteurs ont confiance, tout va bien. S'ils commencent à "
+                   "douter, ils demandent un taux plus élevé pour prêter : les taux longs (10 ans) montent. Normalement, des taux plus hauts "
+                   "attirent les capitaux et font monter la devise. Mais quand ils montent parce qu'on a peur pour les finances du pays, les "
+                   "investisseurs fuient, et la devise baisse en même temps que les taux montent. C'est le signal d'alarme.",
+        "regarde": ["le déficit et la dette (en % du PIB)",
+                    "les adjudications, c'est-à-dire les ventes de dette de l'État : les prêteurs se bousculent-ils ?",
+                    "le rendement à 10 ans",
+                    "la « prime de terme », le supplément exigé pour prêter longtemps",
+                    "l'écart Italie − Allemagne pour la zone euro"],
+        "exemple": "En septembre 2022, le Royaume-Uni a annoncé des baisses d'impôts non financées. Les taux britanniques ont bondi et la "
+                   "livre a touché son plus bas historique face au dollar.",
+        "effets": "Des taux longs qui montent avec une devise qui baisse signalent une crise de confiance. C'est mauvais pour la devise tant "
+                  "que le gouvernement n'a pas rassuré.",
+        "piege": "Les chiffres de dette arrivent avec des mois de retard. En temps réel, ce sont les taux à 10 ans et les adjudications qui "
+                 "donnent l'alerte."},
     5: {"importance": 4,
-        "pourquoi": "Les devises ne vivent pas seules : actions, taux longs, or et pétrole leur transmettent leurs mouvements. Ce "
-                    "moteur repère les liens actifs entre marchés et mesure leur force.",
-        "indicateurs": ["VIX et S&P 500", "Rendement à 10 ans US", "Or (taux réels et refuge)", "Pétrole Brent et WTI",
-                        "Corrélations sur 60 séances : AUD avec les actions, JPY avec le VIX"],
-        "chaine": ["Mouvement d'un grand marché", "Lien de corrélation actif", "Devise exposée entraînée"],
-        "confluences": [["Actions en baisse", "▼", "AUD et NZD vendus (lien AUD / S&P 500)"],
-                        ["Pétrole en hausse", "▲", "CAD soutenu, JPY et EUR pénalisés (importateurs d'énergie)"],
-                        ["VIX en hausse", "▲", "JPY et CHF recherchés"]],
-        "piege": "Les corrélations changent de régime : un lien fort sur 60 séances peut disparaître en une semaine. Toujours "
-                 "vérifier sa force actuelle avant de s'y fier."},
+        "une_phrase": "Les devises sont reliées aux actions, au pétrole, à l'or et aux taux, et elles suivent souvent leurs mouvements.",
+        "comment": "Certaines devises ont des « cousins » sur d'autres marchés. Le dollar canadien suit souvent le pétrole, parce que le "
+                   "Canada en exporte beaucoup. Le dollar australien suit souvent la Bourse et les matières premières. Le yen monte souvent "
+                   "quand la peur monte. Ce moteur repère quels liens sont actifs en ce moment, et avec quelle force.",
+        "regarde": ["le VIX et la Bourse américaine",
+                    "le rendement à 10 ans américain",
+                    "l'or",
+                    "le pétrole (Brent et WTI)",
+                    "les corrélations sur 60 séances, c'est-à-dire à quel point deux marchés ont bougé ensemble ces trois derniers mois"],
+        "exemple": "En novembre 2026, le Brent a baissé quatre semaines de suite. Le dollar canadien en a souffert, tandis que le Japon et "
+                   "la zone euro, qui importent leur énergie, en ont profité.",
+        "effets": ["pétrole en hausse : CAD soutenu, JPY et EUR pénalisés",
+                   "Bourse en baisse : AUD et NZD vendus",
+                   "peur en hausse : JPY et CHF recherchés"],
+        "piege": "Un lien peut se casser du jour au lendemain. Toujours vérifier qu'il est encore actif avant de s'en servir."},
     6: {"importance": 3,
-        "pourquoi": "Rare mais violent : conflits, sanctions et élections créent des flux de refuge et des chocs sur l'énergie. Le "
-                    "marché réagit vite, puis s'habitue si l'offre réelle n'est pas touchée.",
-        "indicateurs": ["Titres classés : énergie, sanctions, commerce, refuge, politique intérieure",
-                        "Réaction du Brent, de l'or, d'USD/JPY et du franc suisse sur la dernière séance", "VIX"],
-        "chaine": ["Événement géopolitique", "Peur et choc d'offre", "Refuge et énergie plus chère", "USD, CHF, JPY ↑ · importateurs ↓"],
-        "confluences": [["Tension au Moyen-Orient", "▲", "Brent en hausse, CAD soutenu, JPY et EUR pénalisés"],
-                        ["Sanctions ou droits de douane", "▼", "CNY, AUD et NZD exposés au commerce chinois"],
-                        ["Élection incertaine", "▼", "devise du pays concerné sous pression jusqu'au résultat"]],
-        "piege": "Le premier choc est souvent excessif : la réaction s'efface si l'offre n'est pas réellement touchée."},
+        "une_phrase": "Guerres, sanctions, élections et tensions entre pays, qui créent des peurs soudaines.",
+        "comment": "Un événement géopolitique agit par deux canaux. Le premier est la peur : les investisseurs se réfugient dans le dollar, "
+                   "le franc suisse, le yen et l'or. Le second est l'énergie : une tension au Moyen-Orient fait monter le pétrole, ce qui "
+                   "aide les pays exportateurs (Canada, Norvège) et pénalise les importateurs (Japon, zone euro).",
+        "regarde": ["les titres du jour classés par type (énergie, sanctions, commerce, élections)",
+                    "la réaction du pétrole, de l'or, du franc suisse et de USD/JPY",
+                    "le VIX"],
+        "exemple": "Quand une menace pèse sur le détroit d'Ormuz, par où passe une grande partie du pétrole mondial, le Brent monte en "
+                   "quelques heures, le CAD se renforce et le yen recule.",
+        "effets": "À court terme, la peur profite au dollar et au franc suisse. Si le pétrole s'en mêle, le CAD monte et l'EUR et le JPY "
+                  "baissent.",
+        "piege": "Le marché s'habitue vite. Le premier choc est souvent exagéré, et il s'efface si l'approvisionnement n'est pas vraiment "
+                 "touché."},
     7: {"importance": 3,
-        "pourquoi": "Le prix et les positions disent ce que le marché a déjà fait. Une devise très achetée par les spéculateurs "
-                    "devient fragile : la moindre déception peut déclencher des ventes en cascade.",
-        "indicateurs": ["Tendance : écart à la moyenne mobile 200 jours, RSI 14", "Volatilité réalisée sur 20 jours",
-                        "COT : positions nettes des spéculateurs et leur percentile sur 5 ans (CFTC, chaque vendredi)"],
-        "chaine": ["Positions extrêmes", "Déception ou surprise contraire", "Débouclage", "Mouvement violent"],
-        "confluences": [["COT extrême et surprise contraire", "!", "mouvement brutal dans le sens du débouclage"],
-                        ["RSI au-dessus de 70 sur l'USD", "▼", "risque de pause du dollar à court terme"],
-                        ["Volatilité basse qui remonte", "!", "fin de période calme"]],
-        "piege": "Un extrême peut durer des semaines : c'est un facteur de fragilité, pas un signal de retournement à lui seul."},
+        "une_phrase": "Ce que le marché a déjà fait, et qui est déjà « à fond » dans un sens.",
+        "comment": "Imagine une salle de concert : si tout le monde s'est déjà rué vers la même sortie, il n'y a plus personne pour pousser, "
+                   "et au moindre bruit inattendu, la foule repart dans l'autre sens. C'est pareil sur les devises. Quand presque tous les "
+                   "spéculateurs ont parié sur la hausse d'une devise, il reste peu d'acheteurs. Une mauvaise surprise suffit alors à "
+                   "déclencher des ventes en cascade.",
+        "regarde": ["la tendance (le prix est-il au-dessus de sa moyenne des 200 derniers jours ?)",
+                    "le RSI, qui dit si la hausse ou la baisse a été trop rapide (au-dessus de 70 : surachat ; sous 30 : survente)",
+                    "la volatilité, c'est-à-dire l'ampleur des mouvements récents",
+                    "le rapport COT, publié chaque vendredi aux États-Unis, qui montre les paris des spéculateurs"],
+        "exemple": "À l'été 2024, les spéculateurs avaient massivement parié contre le yen. Quand la Banque du Japon a monté ses taux fin "
+                   "juillet, ils ont dû racheter des yens en urgence, et USD/JPY est passé d'environ 162 début juillet à environ 142 début "
+                   "août.",
+        "effets": "Une devise très achetée devient fragile ; une devise très vendue peut rebondir fort au moindre bon chiffre.",
+        "piege": "Un excès peut durer longtemps. C'est un facteur de fragilité, pas un signal de retournement à lui seul."},
     8: {"importance": 2,
-        "pourquoi": "Structurel : les échanges et l'énergie modifient la demande de devises des exportateurs et des importateurs. "
-                    "Effets lents mais durables, surtout pour CAD, AUD, NZD, JPY et EUR.",
-        "indicateurs": ["Prix du pétrole (Brent, WTI) et écart Brent − WTI", "Stocks et production de brut américains (EIA, hebdomadaire)",
-                        "Balances commerciales", "Droits de douane et accords commerciaux"],
-        "chaine": ["Pétrole ou commerce qui bouge", "Termes de l'échange", "Demande de la devise des exportateurs",
-                   "CAD, AUD ↑ · JPY, EUR ↓ (si le pétrole monte)"],
-        "confluences": [["Brent en hausse", "▲", "CAD soutenu"], ["Stocks de brut sous la moyenne de 5 ans", "▲", "soutien au prix du pétrole"],
-                        ["Nouveaux droits de douane", "▼", "devises des exportateurs visés"]],
-        "piege": "Un pétrole qui chute parce que la demande mondiale s'effondre pèse aussi sur les devises cycliques : pas de "
-                 "lecture mécanique."},
+        "une_phrase": "Les échanges de marchandises et l'énergie, qui créent une demande de fond pour certaines devises.",
+        "comment": "Quand le Canada vend du pétrole, ses clients doivent acheter des dollars canadiens pour le payer. Plus le pétrole est "
+                   "cher, plus cette demande est forte. Pareil pour l'Australie avec le minerai de fer. À l'inverse, le Japon et la zone "
+                   "euro achètent leur énergie à l'étranger : un pétrole cher les appauvrit. Les droits de douane et les accords commerciaux "
+                   "modifient aussi ces flux.",
+        "regarde": ["le prix du pétrole (Brent pour le monde, WTI pour les États-Unis)",
+                    "les stocks de pétrole américains (chaque mercredi)",
+                    "les balances commerciales (exportations moins importations)",
+                    "les annonces de droits de douane"],
+        "exemple": "Des stocks de pétrole américains plus bas que d'habitude soutiennent le prix du baril, donc le dollar canadien.",
+        "effets": "Un pétrole cher soutient le CAD et pèse sur le JPY et l'EUR. Les nouveaux droits de douane pèsent sur les devises des "
+                  "pays visés.",
+        "piege": "Si le pétrole baisse parce que l'économie mondiale ralentit, toutes les devises liées à la croissance souffrent, pas "
+                 "seulement le CAD."},
+}
+
+# « Ce que c'est » sous chaque indicateur (lot V15) : une phrase simple, sans jargon ni « percentile ». Rédigées une fois
+# (Claude, relues) puis figées ici ; le premier motif qui correspond au libellé de la tuile l'emporte.
+DEFINITIONS = [
+    (r"^Score ", "Une note de 0 à 100 que le site calcule chaque jour à partir des 8 moteurs : au-dessus de 60, la devise est recherchée ; sous 40, elle est délaissée."),
+    (r"^Écart meilleur", "La distance entre la devise la plus forte et la plus faible du jour : plus elle est grande, plus le marché fait des choix tranchés."),
+    (r"[Mm]oteurs alignés", "Le nombre de moteurs qui poussent dans le même sens que l'humeur du marché : à partir de 3, cette humeur est bien installée."),
+    (r"Surprise globale", "La moyenne des bonnes et mauvaises surprises économiques des 9 devises : sous 0, le monde publie des chiffres plus faibles que prévu."),
+    (r"Régime actuel", "Depuis combien de temps le marché est dans la même humeur (peur ou confiance) : plus ça dure, plus les positions s'y sont adaptées."),
+    (r"^VIX", "L'« indice de la peur » de la Bourse américaine : sous 15, c'est le calme ; au-dessus de 25, la tension ; au-dessus de 35, la panique."),
+    (r"Taux effectif Fed", "Le taux auquel les banques américaines se prêtent de l'argent pour une nuit : c'est le vrai prix de l'argent en dollars, piloté par la Fed."),
+    (r"Rendement 2 ans US", "Le taux auquel l'État américain emprunte sur 2 ans : il résume ce que le marché attend de la Fed, c'est le meilleur thermomètre du dollar."),
+    (r"2 ans US − taux effectif", "Si le taux à 2 ans est au-dessus du taux de la Fed, le marché attend des hausses de taux ; en dessous, il attend des baisses."),
+    (r"Taux réel", "Le taux directeur moins l'inflation : s'il dépasse 1 %, la banque centrale freine vraiment l'économie."),
+    (r"Courbe 2-10", "L'écart entre le taux à 10 ans et le taux à 2 ans : quand il est négatif, le marché craint un ralentissement de l'économie."),
+    (r"BCE", "Le taux que la BCE verse aux banques sur leurs dépôts : c'est lui qui guide l'euro."),
+    (r"2 ans allemand", "Le taux auquel l'Allemagne emprunte sur 2 ans : il dit ce que le marché attend de la BCE ; son écart avec le taux américain guide EUR/USD."),
+    (r"BoE", "Le taux directeur de la Banque d'Angleterre, qui guide la livre."),
+    (r"BoJ", "Le taux de l'argent au jour le jour au Japon : très bas, il pousse les investisseurs à emprunter en yens pour placer ailleurs."),
+    (r"2 ans japonais", "Le taux auquel le Japon emprunte sur 2 ans : quand il monte, l'écart avec les États-Unis se réduit et le yen est soutenu."),
+    (r"RBA", "Le taux directeur de la banque centrale australienne, qui guide le dollar australien."),
+    (r"^Surprise [A-Z]{3}", "La somme, sur 30 jours, des écarts entre les chiffres publiés et les prévisions : au-dessus de 0, l'économie surprend en bien, ce qui soutient la devise."),
+    (r"Inflation core US", "L'inflation américaine sans l'énergie ni l'alimentation, qui varient beaucoup : c'est elle que la Fed surveille pour décider de ses taux."),
+    (r"^Chômage", "La part des actifs sans emploi : quand elle monte, la banque centrale devient plus prudente et baisse plus volontiers ses taux."),
+    (r"au-dessus du consensus", "La part des chiffres publiés meilleurs que prévu sur 30 jours, toutes devises confondues."),
+    (r"Dette fédérale", "La dette de l'État américain rapportée à sa richesse annuelle : plus elle est lourde, plus une hausse des taux coûte cher."),
+    (r"Solde fédéral", "Le déficit de l'État américain sur un an : il faut le financer en empruntant davantage."),
+    (r"Prime de terme", "Le supplément que les prêteurs exigent pour prêter 10 ans d'un coup : il monte quand ils doutent des finances de l'État."),
+    (r"^10 ans", "Le taux auquel l'État emprunte sur 10 ans : il mêle les attentes de croissance, d'inflation et la confiance dans les finances publiques."),
+    (r"Italie − Allemagne", "L'écart de taux à 10 ans entre l'Italie et l'Allemagne : quand il s'élargit, les investisseurs doutent de l'Italie, et l'euro peut en souffrir."),
+    (r"Indice dollar large", "La valeur du dollar face à un large panier de devises, calculée par la Fed : elle montre la tendance de fond du dollar."),
+    (r"S&P 500", "Le grand indice de la Bourse américaine : quand il baisse, les devises liées à la croissance (AUD, NZD, CAD) souffrent."),
+    (r"Rendement 10 ans US", "Le taux auquel l'État américain emprunte sur 10 ans, la référence mondiale : quand il monte, il attire les capitaux vers le dollar."),
+    (r"or \(proxy\)|Indice or", "Un indice qui suit le prix de l'or : on achète de l'or quand on a peur ou qu'on craint l'inflation."),
+    (r"Brent − WTI", "L'écart de prix entre le pétrole mondial (Brent) et le pétrole américain (WTI) : il grandit quand l'offre se tend hors des États-Unis."),
+    (r"Brent", "Le prix du pétrole de référence dans le monde : quand il monte, le dollar canadien est soutenu, le yen et l'euro souffrent."),
+    (r"WTI", "Le prix du pétrole américain : il pèse sur les revenus du Canada, grand exportateur de pétrole vers les États-Unis."),
+    (r"Corrélation AUD", "À quel point le dollar australien et la Bourse ont bougé ensemble sur 3 mois : si c'est le cas, l'AUD suit l'humeur du marché."),
+    (r"Corrélation JPY", "À quel point le yen et l'indice de la peur ont bougé ensemble sur 3 mois : si c'est le cas, le yen joue son rôle de refuge."),
+    (r"^Titres", "Le nombre de titres de presse du jour qui parlent de ce type de risque (énergie, sanctions, conflits…)."),
+    (r"^Réaction", "Le mouvement de ce marché lors de la dernière séance : il dit si l'actualité fait vraiment réagir les prix."),
+    (r"RSI", "Un indicateur de vitesse du prix sur 14 séances : au-dessus de 70, la hausse a été trop rapide ; sous 30, la baisse."),
+    (r"MM200", "L'écart entre le prix et sa moyenne des 200 dernières séances : au-dessus, la tendance de fond monte ; en dessous, elle baisse."),
+    (r"volatilité réalisée", "L'ampleur des mouvements des 20 dernières séances : quand elle est très basse, un réveil brutal arrive souvent."),
+    (r"surachat|survente", "Le nombre de devises qui ont bougé trop vite dans un sens : beaucoup d'excès annoncent souvent des retours en arrière."),
+    (r"^COT", "Les paris des spéculateurs sur les marchés à terme américains, publiés chaque vendredi : quand ils sont tous du même côté, la devise devient fragile."),
+    (r"Stocks de brut US|Stocks : écart", "Le pétrole stocké aux États-Unis, publié chaque mercredi : des stocks plus bas que d'habitude soutiennent le prix du baril."),
+    (r"Production de brut", "La quantité de pétrole produite aux États-Unis : une production record limite la hausse des prix."),
+    (r"Balance commerciale", "Les exportations moins les importations : un pays qui vend plus qu'il n'achète crée une demande pour sa devise."),
+]
+
+# Glossaire de l'onglet (lot V15) : mots soulignés en pointillé dans les textes, bulle au survol ou au toucher
+GLOSSAIRE = {
+    "VIX": "L'« indice de la peur » : il mesure les variations attendues de la Bourse américaine. Sous 15, calme ; au-dessus de 25, tension ; au-dessus de 35, panique.",
+    "rendement": "Le taux d'intérêt que rapporte une obligation, c'est-à-dire un prêt à un État ou une entreprise. Quand le prix de l'obligation monte, son rendement baisse.",
+    "point de base": "Un centième de point de pourcentage : passer de 4,88 % à 4,63 %, c'est une baisse de 25 points de base (pb).",
+    "écart de taux": "La différence de rendement entre deux pays pour la même durée : l'argent va plutôt vers le pays qui rapporte le plus.",
+    "portage": "Emprunter dans une devise qui rapporte peu (le yen) pour placer dans une devise qui rapporte plus (le dollar) et toucher la différence.",
+    "valeur refuge": "Un placement recherché quand on a peur : le dollar américain, le yen, le franc suisse et l'or.",
+    "PMI": "Une enquête auprès des directeurs d'achat des entreprises : au-dessus de 50, l'activité progresse ; en dessous, elle recule.",
+    "consensus": "La prévision moyenne des économistes pour un chiffre à venir : c'est la référence à laquelle le marché compare le chiffre publié.",
+    "surprise": "L'écart entre un chiffre publié et sa prévision : c'est lui, et non le chiffre seul, qui fait bouger les devises.",
+    "COT": "Le rapport hebdomadaire de l'autorité américaine des marchés à terme (CFTC) qui montre les paris des spéculateurs sur chaque devise.",
+    "RSI": "Un indicateur de vitesse du prix sur 14 séances : au-dessus de 70, la hausse a été trop rapide (surachat) ; sous 30, la baisse (survente).",
+    "prime de terme": "Le supplément de rendement exigé pour prêter longtemps plutôt que de renouveler des prêts courts : il monte quand la confiance baisse.",
 }
 
 

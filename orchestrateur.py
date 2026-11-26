@@ -412,6 +412,9 @@ def main() -> int:
 
     # ---------------------------------------------------------------- analyse
     reinitialiser_journal()
+    # Lot V15 : le documentaire passe en priorité au premier run après la remise à zéro du quota Gemini (2 appels réservés :
+    # chapitres 0 à 4, puis 5 à 8 et final), avant le rapport ; données du run précédent, faits recalculés plus loin.
+    etape("documentaire (priorité du quota Gemini)", _documentaire, config, None, True, defaut=None)
     try:
         llm = creer_fournisseur(config)
         if hasattr(llm, "configurer_budget") and config["llm"].get("budget"):
@@ -734,6 +737,40 @@ def _secours_texte(config: dict):
         return None
 
 
+def _fabrique_documentaire(config: dict, complet: bool = False):
+    """Lot V15 : gemini-3.5-flash puis gemini-3.5-flash-lite (budget « documentaire »), puis Groq (modèle du documentaire)."""
+    def fabrique():
+        from core import redaction_documentaire as rd
+        gemini = None
+        try:
+            gemini = rd.chaine_gemini(config, complet=complet)
+        except Exception as exc:  # noqa: BLE001 — clé absente, quota : Groq seul
+            log.warning("documentaire : Gemini non initialisé (%s)", exc)
+        groq = None
+        try:
+            groq = rd.secours_groq(config, RACINE)
+        except Exception as exc:  # noqa: BLE001
+            log.warning("documentaire : Groq non initialisé (%s)", exc)
+        return gemini, groq
+    return fabrique
+
+
+def _partage_quota() -> str:
+    """Partage du quota Gemini du jour par catégorie (lot V15), lu dans data/cache/quota_llm.json."""
+    try:
+        q = json.loads((RACINE / "data" / "cache" / "quota_llm.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return "quota du jour illisible"
+    cats = q.get("categories") or {}
+    total = sum(int(v.get("appels", 0)) for v in (q.get("modeles") or {}).values())
+    ordre = ["documentaire", "engrenages", "rapport", "devises", "reste"]
+    morceaux = [f"{c} {cats.get(c, 0)}" for c in ordre if c in cats or c == "documentaire"]
+    pannes = sum(int(v.get("pannes", 0)) for v in (q.get("modeles") or {}).values())
+    return (f"{q.get('date')} : {total} réponses reçues — " + ", ".join(morceaux)
+            + f" ; {pannes} tentatives en panne ; par modèle : "
+            + ", ".join(f"{m} {v.get('appels', 0)}" for m, v in (q.get("modeles") or {}).items()))
+
+
 def _fabrique_redaction(config: dict):
     """(modèle principal avec le budget d'un passage de complément, secours Groq) : créés seulement si une tentative est due."""
     def fabrique():
@@ -760,17 +797,18 @@ def _dossiers_moteurs(config: dict, llm) -> dict | None:
     return d
 
 
-def _documentaire(config: dict, llm) -> dict | None:
+def _documentaire(config: dict, llm, complet: bool = False) -> dict | None:
     """Lot V13 : documentaire hebdomadaire de l'onglet « 8 engrenages » (docs/data/documentaire/). Titres du run accumulés
     pour la semaine ; récit de chaque moteur rédigé une fois par jour (après 08:15 UTC), Groq si Gemini est hors quota ou en
     panne, secours Python sinon ; récapitulatif « Documentaire : N par le modèle, M par Groq, K en Python »."""
     from core import documentaire
     articles = (((json.loads((RACINE / "data" / "cache" / "collecte_news.json").read_text(encoding="utf-8")) or {}).get("donnees") or {})
                 .get("articles")) if (RACINE / "data" / "cache" / "collecte_news.json").exists() else None
-    d = documentaire.ecrire(RACINE, config, None, llm, _secours_texte(config) if llm is not None else None,
-                            _fabrique_redaction(config), articles=articles)
+    # Lot V15 : jamais le modèle principal du rapport ; la chaîne propre au documentaire est créée seulement si une rédaction est due
+    d = documentaire.ecrire(RACINE, config, None, None, None, _fabrique_documentaire(config, complet), articles=articles)
     if d and (d.get("redaction") or {}).get("ligne"):
         _ecrire_resume_run(d["redaction"]["ligne"] + f" · lecture {d.get('lecture_min')} min", titre="Documentaire hebdomadaire")
+    _ecrire_resume_run(_partage_quota(), titre="Partage du quota Gemini")
     return d
 
 

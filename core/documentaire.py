@@ -28,6 +28,7 @@ from core import dossiers_moteurs as dm
 from core import noms_moteurs as nm
 from core import seuils as seuils_mod
 from core import indicateurs_cles
+from core import redaction_documentaire as rd
 from core import surprises
 
 log = logging.getLogger(__name__)
@@ -55,53 +56,7 @@ GRAPHIQUES = {
 }
 
 # « Ce que c'est » : texte fixe par indicateur (motif sur le libellé de la tuile, premier qui correspond)
-DEFINITIONS = [
-    (r"^Score ", "Score de force de la devise (0 à 100) calculé chaque jour sur les 8 moteurs : au-dessus de 60 la devise est recherchée, sous 40 elle est délaissée."),
-    (r"^Écart meilleur", "Distance entre la devise la plus forte et la plus faible : un marché tranché offre des paires aux tendances nettes."),
-    (r"[Mm]oteurs alignés", "Nombre de moteurs qui pointent dans la même direction que le thème : à 3 ou plus, le thème est établi."),
-    (r"Surprise globale", "Moyenne des surprises des 9 devises : sous 0, le monde publie des chiffres plus faibles que prévu."),
-    (r"Régime actuel", "Durée du régime de risque en cours : plus il dure, plus il influence les positions de fond."),
-    (r"^VIX", "Volatilité attendue sur le S&P 500 pour 30 jours, l'indice de la peur : sous 15 calme, au-dessus de 25 stress, au-dessus de 35 panique."),
-    (r"Taux effectif Fed", "Taux auquel les banques se prêtent au jour le jour aux États-Unis, piloté par la Fed : le vrai prix de l'argent en dollar."),
-    (r"Rendement 2 ans US", "Le taux de l'État américain à 2 ans résume ce que le marché attend de la Fed sur les 2 prochaines années : le meilleur thermomètre du dollar."),
-    (r"2 ans US − taux effectif", "Si le 2 ans est au-dessus du taux directeur, le marché attend des hausses ; en dessous, des baisses."),
-    (r"Taux réel", "Taux directeur moins inflation sous-jacente : au-dessus de 1 %, la politique monétaire freine réellement l'économie."),
-    (r"Courbe 2-10", "Écart entre le 10 ans et le 2 ans : négatif (courbe inversée), le marché craint une récession."),
-    (r"BCE", "Taux auquel la BCE rémunère les dépôts des banques : c'est le taux qui guide l'euro depuis 2022."),
-    (r"2 ans allemand", "Ce que le marché attend de la BCE : l'écart avec le 2 ans américain guide EUR/USD."),
-    (r"BoE", "Taux directeur de la Banque d'Angleterre, qui guide la livre."),
-    (r"BoJ", "Taux au jour le jour au Japon : encore très bas, c'est ce qui finance le portage vendeur de yen."),
-    (r"2 ans japonais", "Ce que le marché attend de la BoJ : sa hausse réduit l'écart avec les États-Unis et soutient le yen."),
-    (r"RBA", "Taux directeur de la Banque de réserve d'Australie, qui guide l'AUD."),
-    (r"^Surprise [A-Z]{3}", "Somme, sur 30 jours, des écarts entre chiffres publiés et consensus, en écarts habituels : au-dessus de 0, l'économie surprend en bien et soutient la devise."),
-    (r"Inflation core US", "Inflation hors énergie et alimentation : c'est elle que la Fed regarde pour décider de ses taux."),
-    (r"^Chômage", "Taux de chômage : sa hausse annonce une banque centrale moins restrictive."),
-    (r"au-dessus du consensus", "Part des publications meilleures que prévu sur 30 jours, toutes devises confondues."),
-    (r"Dette fédérale", "Poids de la dette fédérale américaine : un niveau élevé rend le pays sensible à toute hausse des taux longs."),
-    (r"Solde fédéral", "Déficit public annuel : un déficit large doit être financé par de nouvelles émissions de dette."),
-    (r"Prime de terme", "Supplément exigé pour prêter à 10 ans plutôt que de renouveler des prêts courts : il monte quand les investisseurs doutent des finances publiques."),
-    (r"^10 ans", "Taux de l'État à 10 ans : il mélange attentes de croissance, d'inflation et prime de risque budgétaire."),
-    (r"Italie − Allemagne", "Écart de taux à 10 ans entre l'Italie et l'Allemagne : son élargissement signale un risque de fragmentation de la zone euro."),
-    (r"Indice dollar large", "Valeur du dollar contre un large panier de devises (Fed) : la tendance de fond du billet vert."),
-    (r"S&P 500", "Principal indice d'actions américaines : sa baisse pèse sur les devises liées à la croissance (AUD, NZD, CAD)."),
-    (r"Rendement 10 ans US", "Le taux de référence mondial : sa hausse renchérit le crédit partout et attire les capitaux vers le dollar."),
-    (r"or \(proxy\)|Indice or", "Indice de l'or (proxy gratuit) : refuge contre les crises et l'inflation, il recule quand les taux réels montent."),
-    (r"Brent − WTI", "Écart entre pétrole mondial et américain : il reflète les tensions d'offre hors des États-Unis."),
-    (r"Brent", "Prix du pétrole de référence mondiale : sa hausse soutient le CAD et pèse sur le JPY et l'EUR."),
-    (r"WTI", "Prix du pétrole américain : il guide la balance énergétique du Canada."),
-    (r"Corrélation AUD", "Lien entre l'AUD et les actions sur 60 séances : positif, l'AUD suit l'appétit pour le risque."),
-    (r"Corrélation JPY", "Lien entre la force du yen et le VIX : positif, le yen joue son rôle de refuge."),
-    (r"^Titres", "Nombre de titres du jour classés dans cette famille de risques géopolitiques."),
-    (r"^Réaction", "Mouvement de l'actif sur la dernière séance disponible : il dit si le marché réagit vraiment aux titres."),
-    (r"RSI", "Indicateur de vitesse du prix sur 14 séances : au-dessus de 70 surachat, sous 30 survente."),
-    (r"MM200", "Écart à la moyenne des 200 dernières séances : au-dessus, la tendance de fond est haussière."),
-    (r"volatilité réalisée", "Amplitude réelle des mouvements sur 20 jours : très basse, elle précède souvent un réveil brutal."),
-    (r"surachat|survente", "Nombre de devises dont le RSI est en zone extrême : beaucoup d'extrêmes annoncent des mouvements de rappel."),
-    (r"^COT", "Positions nettes des spéculateurs sur les contrats à terme (CFTC, chaque vendredi) : un extrême rend la devise fragile à une surprise contraire."),
-    (r"Stocks de brut US|Stocks : écart", "Stocks de pétrole brut aux États-Unis (EIA, chaque mercredi) : sous la moyenne de 5 ans, ils soutiennent le prix."),
-    (r"Production de brut", "Production américaine de pétrole : record, elle limite la hausse des prix."),
-    (r"Balance commerciale", "Exportations moins importations : un excédent crée une demande naturelle pour la devise."),
-]
+DEFINITIONS = nm.DEFINITIONS   # lot V15 : figées dans core/noms_moteurs.py
 
 
 # ------------------------------------------------------------------ outils
@@ -433,7 +388,7 @@ def indicateurs_moteur(dos: dict, n: int, sem: dict) -> list[dict]:
         sortie.append({"libelle": t.get("libelle"), "texte": t.get("texte") or "n/d", "date": t.get("date"), "source": t.get("source"),
                        "raison": t.get("raison"), "variation_4s": (t.get("variation") or {}).get("texte"), "variation_semaine": vs,
                        "percentile_5a": p5, "points": [v for _, v in pts][-60:], "ce_que_cest": definition(t.get("libelle")),
-                       "lecture_niveau": (f"Au {p5}e percentile de ses 5 dernières années : {lecture_niveau(p5)}." if p5 is not None else None),
+                       "lecture_niveau": (lambda t: (t[0].upper() + t[1:] + ".") if t else None)(rd.niveau_simple(p5)),
                        "lecture_jour": t.get("lecture") or t.get("note"), "ampleur": round(_ampleur(pts, vs.get("valeur"), _mesure_tuile(t)), 2)})
     return sortie
 
@@ -547,250 +502,23 @@ def scenario_si(n: int, ind: list[dict], graph: list[dict], rdv: list[dict], rdv
     return "Aucun rendez-vous avec consensus relié à ce moteur dans les 7 prochains jours : pas de scénario conditionnel chiffré."
 
 
-# ------------------------------------------------------------------ récit : faits, secours Python, contrôle
-INTERDITS = re.compile(r"\b(entrées?|stops?|objectifs?|short)\b|\bLONG\b|\bSHORT\b", re.I)
-ENGRENAGE_SEUL = re.compile(r"\bengrenages?\s*(n°\s*)?\d\b", re.I)
-MOTS_MIN, MOTS_MAX = 450, 1150   # consigne 600 à 900 mots, tolérance du contrôle
+# ------------------------------------------------------------------ récit (lot V15 : core/redaction_documentaire.py)
+INTERDITS = rd.INTERDITS
+ENGRENAGE_SEUL = rd.ENGRENAGE_SEUL
 
 
 def titre_citable(titre) -> bool:
-    """Un titre de presse peut être cité dans un récit s'il ne contient ni mot interdit ni formulation d'ordre."""
+    """Un titre de presse peut être cité s'il ne contient ni mot interdit ni formulation d'ordre."""
     from core import controle_texte as ct
     t = str(titre or "")
     return bool(t) and not INTERDITS.search(t) and not any(re.search(m, t.lower()) for m in ct.ORDRES)
-
-
-def faits_recit(ch: dict, sem: dict, theme_jours: list[dict]) -> dict:
-    return {"moteur": ch["nom"], "question": ch["question"], "semaine": {"du": sem["du"], "au": sem["au"], "jours_couverts": sem["jours"], "statut": sem["statut"]},
-            "etat": {k: ch["etat"].get(k) for k in ("libelle", "valeur", "date", "etat", "direction", "note")},
-            "theme_jour_par_jour": theme_jours if ch["numero"] == 1 else None,
-            "indicateurs": [{"libelle": i["libelle"], "valeur": i["texte"], "date": i["date"], "semaine": (i["variation_semaine"] or {}).get("texte"),
-                             "quatre_semaines": i["variation_4s"], "niveau": i["lecture_niveau"]} for i in ch["indicateurs"][:10]],
-            "graphiques": [{"serie": g["titre"], "derniere": g.get("derniere"), "semaine": (g.get("variation_semaine") or {}).get("texte")}
-                           for g in ch["graphiques"] if g.get("derniere")],
-            "publications": [{k: p.get(k) for k in ("date", "heure", "devise", "evenement", "reel", "consensus", "precedent", "pastille", "z")}
-                             for p in ch["publications"][:20]],
-            "surprises_par_devise": (ch.get("surprises") or {}).get("barres"),
-            "titres": [{"date": t.get("date"), "titre": t["titre"], "source": t.get("source")} for t in ch["actualite"] if titre_citable(t.get("titre"))][:8],
-            "decisions_et_discours": [{k: e.get(k) for k in ("date", "heure", "devise", "evenement")} for e in ch.get("discours", [])],
-            "seuil": ch["risques"]["seuil"].get("texte"),
-            "effets_devises": [{"devise": d["devise"], "effet": d["effet"], "pourquoi": str(d.get("pourquoi") or "")[:200],
-                                "depuis_lundi": (d.get("changement") or {}).get("texte")} for d in ch["devises"] if d["effet"] in ("soutien", "pression")],
-            "a_venir": [{k: e.get(k) for k in ("date", "heure", "devise", "evenement", "consensus")} for e in ch["risques"]["rendez_vous"][:5]],
-            "scenario_si": ch["risques"]["scenario_si"]}
-
-
-def recit_python(ch: dict, sem: dict, theme_jours: list[dict]) -> dict:
-    """Secours Python : un vrai texte en phrases complètes, un paragraphe par fait marquant (gabarits), au moins 250 mots."""
-    n, nom, e = ch["numero"], ch["nom"], ch["etat"]
-    c = nm.COMPRENDRE.get(n, {})
-    periode = f"du {jour_long(sem['du'])} au {jour_long(sem['jours'][-1] if sem['jours'] else sem['au'])}"
-    P = []
-    ouverture = (f"Sur la période {periode}, le moteur « {nom} » se lit d'abord dans son thermomètre : « {e.get('libelle') or 'n/d'} » "
-                 f"est à {e.get('valeur') or 'n/d'} au {ddm(e.get('date'))}, soit {e.get('etat') or 'un état n/d'}"
-                 + (f", avec une direction « {e['direction']} »" if e.get("direction") else "") + ".")
-    if n == 1 and len(theme_jours) > 1:
-        etapes = [f"{jour_long(t['date'])} « {t['titre']} » ({t['alignes']} moteurs alignés)" for t in theme_jours]
-        ouverture += " Le récit du marché a évolué au fil des séances : " + ", puis ".join(etapes) + "."
-    elif n == 1 and theme_jours:
-        ouverture += f" Le thème du jour est « {theme_jours[-1]['titre']} »."
-    if e.get("note"):
-        ouverture += f" Pour situer ce chiffre : {e['note'].rstrip('.')}."
-    P.append(ouverture)
-    bouges = sorted([i for i in ch["indicateurs"] if (i["variation_semaine"] or {}).get("valeur") is not None], key=lambda i: -i["ampleur"])[:5]
-    P.extend(paragraphes_indicateurs(bouges))
-    for g in ch["graphiques"]:
-        if g.get("derniere") and (g.get("variation_semaine") or {}).get("valeur") is not None and len(P) < 4:
-            P.append(f"Sur six mois, la série « {g['titre']} » se termine à {fr(g['derniere'][1], g['decimales'])}{unite_graphique(g['titre'])} le {ddm(g['derniere'][0])}, "
-                     f"soit {g['variation_semaine'].get('court') or g['variation_semaine']['texte']}. {g['legende']} : c'est l'une des deux courbes qui résument ce moteur.")
-            break
-    pubs = [p for p in ch["publications"] if p.get("consensus")]
-    if pubs:
-        npub = len(ch["publications"])
-        groupes = {}
-        for p in pubs:
-            groupes.setdefault((p["date"], p["devise"]), []).append(p)
-        etapes = []
-        for (j, dev), l in sorted(groupes.items())[:7]:
-            details = ", ".join(f"{x['evenement']} à {frtxt(x['reel'])} pour {frtxt(x['consensus'])} attendu ({x['pastille']})" for x in l[:3])
-            etapes.append(f"{jour_long(j)}, {PAYS.get(dev, dev)} {'publient' if dev == 'USD' else 'publie'} {details}")
-        P.append(f"La semaine a compté {npub} publication{'s' if npub > 1 else ''} reliée{'s' if npub > 1 else ''} à ce moteur. "
-                 + ". ".join(e[0].upper() + e[1:] for e in etapes) + ".")
-        nettes = sorted([p for p in pubs if p.get("z") is not None and p["pastille"] != "conforme"], key=lambda x: -abs(x["z"]))[:3]
-        if nettes:
-            phr = []
-            for x in nettes:
-                bon = x.get("favorable")
-                pl = "s" if abs(x["z"]) >= 2 else ""
-                phr.append(f"{x['evenement']} ({x['devise']}, {ddm(x['date'])}) s'écarte de {fr(abs(x['z']), 1)} écart{pl} habituel{pl} du consensus, "
-                           + ("une bonne surprise pour " if bon else "une déception pour " if bon is False else "un écart neutre pour ") + devise(x["devise"]))
-            P.append("Les surprises les plus nettes de la semaine sont les suivantes : " + " ; ".join(phr) + ".")
-        barres = (ch.get("surprises") or {}).get("barres") or []
-        if len(barres) > 1:
-            haut, bas = barres[0], barres[-1]
-            P.append(f"En solde, {devise(haut['devise'])} a la semaine la plus favorable ({sgn(haut['solde'], 1)} sur {haut['n']} publication{'s' if haut['n'] > 1 else ''}) "
-                     f"et {devise(bas['devise'])} la plus décevante ({sgn(bas['solde'], 1)} sur {bas['n']}) : des chiffres au-dessus des attentes poussent une banque "
-                     "centrale à rester restrictive, des déceptions l'incitent à la patience.")
-    elif ch["publications"]:
-        P.append(f"{len(ch['publications'])} publication{'s' if len(ch['publications']) > 1 else ''} de la semaine "
-                 f"{'sont reliées' if len(ch['publications']) > 1 else 'est reliée'} à ce moteur, sans consensus publié pour en mesurer la surprise.")
-    # titres cités dans le récit : jamais un titre qui contient un mot interdit (« stop », « short »…) ou un ordre
-    t = [x for x in ch["actualite"] if titre_citable(x.get("titre"))][:8]
-    if ch["actualite"] and t:
-        P.append(paragraphe_actualite(ch["actualite"], t, n))
-    sout = [d for d in ch["devises"] if d["effet"] == "soutien"]
-    pres = [d for d in ch["devises"] if d["effet"] == "pression"]
-    if sout or pres:
-        p = "Sur les devises, ce moteur " + " et ".join(x for x in [
-            ("soutient " + ", ".join(d["devise"] for d in sout)) if sout else "",
-            ("pèse sur " + ", ".join(d["devise"] for d in pres)) if pres else ""] if x) + f" au {ddm(sem['fin_donnees'])}."
-        exemple = (sout or pres)[0]
-        p += f" Pour {devise(exemple['devise'])}, la règle appliquée est la suivante : {str(exemple.get('pourquoi') or '').split(' ; ')[0]}."
-        chg = [d["changement"]["texte"] for d in ch["devises"] if (d.get("changement") or {}).get("change")]
-        if chg:
-            p += " Ce qui a changé depuis le début de la semaine : " + " ; ".join(chg[:4]) + "."
-        P.append(p)
-    else:
-        P.append(f"Au {ddm(sem['fin_donnees'])}, ce moteur ne pousse aucune devise au-delà des seuils de la matrice : son effet reste en réserve.")
-    rdv = ch["risques"]["rendez_vous"]
-    cle = next((e for e in rdv if e.get("impact") == "fort"), rdv[0] if rdv else None)
-    suite = "Pour la suite, " + (f"{len(rdv)} rendez-vous lié{'s' if len(rdv) > 1 else ''} {'sont' if len(rdv) > 1 else 'est'} au calendrier des 7 prochains jours ; le plus important : "
-                                 f"{cle['evenement']} ({cle['devise']}, {jour_long(cle['date'])}{' à ' + cle['heure'] if cle.get('heure') else ''}). " if rdv else "aucun rendez-vous relié n'est au calendrier des 7 prochains jours. ")
-    suite += ch["risques"]["scenario_si"]
-    P.append(suite)
-    P.append(f"Pour rappel, ce moteur agit ainsi : {nm.canal(n)} Le piège à éviter : {c.get('piege', '').rstrip('.')}.")
-    texte = " ".join(P)
-    if mots(texte) < 250:
-        P.insert(1, f"Pourquoi ce moteur compte : {c.get('pourquoi', '')} Ses indicateurs principaux sont "
-                    + ", ".join(x.split(' : ')[0] for x in c.get("indicateurs", [])) + ".")
-    exergue = _exergue_python(ch)
-    return {"paragraphes": P, "exergue": exergue, "redige_par": "python", "mots": mots(" ".join(P))}
-
-
-LIAISONS = ["Dans le même temps,", "En parallèle,", "À côté de cela,"]
-
-
-def _phrase_indicateur(i: dict) -> str:
-    v = i["variation_semaine"]
-    lecture = i.get("lecture_niveau")
-    base = f"« {i['libelle']} » termine à {i['texte']} ({v.get('court') or v['texte']})"
-    if lecture:
-        base += f", {lecture[0].lower() + lecture[1:].rstrip('.')}"
-    return base
-
-
-def paragraphes_indicateurs(bouges: list[dict]) -> list[str]:
-    """Lot V14 (V13.1) : les indicateurs qui ont le plus bougé, 2 ou 3 par paragraphe, reliés par une phrase de liaison
-    (avant : une suite de phrases « « X » termine à… » sans lien)."""
-    if not bouges:
-        return []
-    groupes = [bouges[:3], bouges[3:5]] if len(bouges) > 3 else [bouges]
-    sortie = []
-    for k, g in enumerate(groupes):
-        if not g:
-            continue
-        tete = "Du côté des indicateurs, " if k == 0 else "Deux autres mesures complètent le tableau : "
-        corps = _phrase_indicateur(g[0]) + "."
-        for j, i in enumerate(g[1:]):
-            corps += f" {LIAISONS[j % len(LIAISONS)]} {_phrase_indicateur(i)}."
-        fin = (" Ces mouvements donnent la tonalité de la semaine pour ce moteur, au-delà du seul chiffre du jour." if k == 0
-               else " Pris ensemble, ils confirment ou nuancent la lecture du thermomètre.")
-        sortie.append(tete + corps + fin)
-    return sortie
-
-
-# Sujet en français d'un titre de presse (mot-clé reconnu), pour ne jamais citer un titre anglais tel quel
-SUJETS = [(r"tariff|droits de douane", "les droits de douane"), (r"trade (deal|agreement|talks)|accord commercial", "les accords commerciaux"),
-          (r"\boil\b|crude|brent|\bwti\b|petrole|opec|opep", "le pétrole"), (r"natural gas|\blng\b|\bgaz\b", "le gaz"),
-          (r"export|import", "le commerce extérieur"), (r"sanction", "les sanctions"), (r"\bwar\b|guerre|missile|attack|strike|military", "les tensions militaires"),
-          (r"ceasefire|cessez", "un cessez-le-feu"), (r"election|\bvote\b", "une élection"), (r"summit|sommet", "un sommet international"),
-          (r"\bfed\b|fomc|powell|warsh|waller", "la Réserve fédérale"), (r"\becb\b|\bbce\b|lagarde", "la BCE"), (r"\bboe\b|bailey", "la Banque d'Angleterre"),
-          (r"\bboj\b|ueda", "la Banque du Japon"), (r"\brba\b", "la Banque de réserve d'Australie"), (r"\bboc\b|macklem", "la Banque du Canada"),
-          (r"rate (cut|hike)|interest rate", "les taux d'intérêt"), (r"\bcpi\b|inflation", "l'inflation"), (r"payroll|jobs|unemployment|jobless|chomage", "l'emploi"),
-          (r"\bgdp\b|\bpib\b|economy (contracts|shrinks|grows)", "la croissance"), (r"\bpmi\b|manufacturing", "l'activité industrielle"),
-          (r"retail sales|ventes au detail", "la consommation"), (r"house prices|housing", "l'immobilier"),
-          (r"budget|deficit|\bdebt\b|dette|borrowing|fiscal|\bgilts?\b", "les finances publiques"), (r"auction|adjudication", "une adjudication de dette"),
-          (r"wrap|risk sentiment|risk (on|off)|sell-?off|markets? (rebound|fall|tumble)", "l'humeur générale des marchés"),
-          (r"\bstocks?\b|equities|nasdaq|s&p|wall street|\bdow\b", "les marchés d'actions"), (r"\bgold\b", "l'or"), (r"\bvix\b|volatility", "la volatilité"),
-          (r"bitcoin|crypto", "les cryptomonnaies"), (r"\bchina\b|\bchine\b", "la Chine"), (r"\bjapan\b", "le Japon")]
-
-
-def sujet_titre(titre: str) -> str | None:
-    t = dm._sans_accent(titre)
-    return next((lib for m, lib in SUJETS if re.search(m, t)), None)
-
-
-def paragraphe_actualite(tous: list[dict], citables: list[dict], n: int) -> str:
-    """Lot V14 (V13.1) : l'actualité racontée par ses sujets (en français), avec la source et la date ; les titres
-    anglais ne sont plus recopiés tels quels."""
-    vus, morceaux = set(), []
-    for x in citables:
-        suj = sujet_titre(x.get("titre") or "")
-        if not suj or suj in vus:
-            continue
-        vus.add(suj)
-        morceaux.append(f"{suj} ({x.get('source') or 'source n/d'}, {ddm(x.get('date'))})")
-        if len(morceaux) == 3:
-            break
-    nb = len(tous)
-    verbe = dm.POURQUOI_TITRE[n].split(' : ')[0]
-    for a, b in (("touche", "touchent"), ("porte", "portent"), ("concerne", "concernent"), ("change", "changent"), ("signale", "signalent")):
-        verbe = verbe.replace(a, b)
-    tete = f"Dans l'actualité, {nb} titre{'s' if nb > 1 else ''} de la semaine {'relèvent' if nb > 1 else 'relève'} de ce moteur"
-    if morceaux:
-        tete += (", et les plus récents portent sur " + (", ".join(morceaux[:-1]) + " et " + morceaux[-1] if len(morceaux) > 1 else morceaux[0]))
-    return tete + f". Ils comptent parce qu'ils {verbe} ; la liste complète, avec les liens vers les articles, suit ce récit."
-
-
-def _exergue_python(ch: dict) -> str:
-    pubs = [p for p in ch["publications"] if p.get("z") is not None and p.get("consensus")]
-    if pubs:
-        p = max(pubs, key=lambda x: abs(x["z"]))
-        return f"{p['evenement']} ({p['devise']}) : {frtxt(p['reel'])} contre {frtxt(p['consensus'])} attendu, la surprise la plus nette de la semaine pour ce moteur."
-    e = ch["etat"]
-    return f"« {e.get('libelle') or ch['nom']} » à {e.get('valeur') or 'n/d'} au {ddm(e.get('date'))} : {e.get('etat') or 'état n/d'}."
-
-
-def controler_recit(r: dict, faits: dict, nom: str) -> list[str]:
-    """Raisons de rejet du récit du modèle (vide : accepté) : nombres absents des faits, vocabulaire interdit, « engrenage N »
-    seul, longueur hors consigne, moteur non cité, exergue absente."""
-    from core import controle_texte as ct
-    raisons = []
-    paras = [str(p) for p in (r.get("paragraphes") or []) if str(p).strip()]
-    texte = " ".join(paras)
-    ex = str(r.get("exergue") or "").strip()
-    if not paras:
-        return ["texte vide"]
-    if not ex:
-        raisons.append("exergue absente")
-    n_mots = mots(texte)
-    if not (MOTS_MIN <= n_mots <= MOTS_MAX):
-        raisons.append(f"longueur hors consigne : {n_mots} mots (600 à 900 attendus)")
-    if not (3 <= len(paras) <= 6):
-        raisons.append(f"{len(paras)} paragraphes (3 à 5 attendus)")
-    ok = ct.nombres_autorises(faits)
-    for morceau in paras + [ex]:
-        for t, v, d in ct.nombres_texte(morceau):
-            if not ct.autorise(v, d, ok):
-                raisons.append(f"nombre absent des faits « {t} »")
-        m = INTERDITS.search(morceau)
-        if m:
-            raisons.append(f"vocabulaire interdit « {m.group()} »")
-        for motif in ct.ORDRES:
-            if re.search(motif, morceau.lower()):
-                raisons.append(f"ordre de trading « {re.search(motif, morceau.lower()).group()} »")
-        if ENGRENAGE_SEUL.search(morceau):
-            raisons.append("« engrenage N » sans le nom du moteur")
-    if nom.lower() not in texte.lower():
-        raisons.append(f"le moteur n'est pas cité par son nom ({nom})")
-    return raisons[:8]
 
 
 def vocabulaire_interdit(r: dict) -> list[str]:
     """Mots interdits et formulations d'ordre dans un récit (sans le contrôle des nombres)."""
     from core import controle_texte as ct
     sortie = []
-    for morceau in [str(p) for p in (r.get("paragraphes") or [])] + [str(r.get("exergue") or "")]:
+    for morceau in [str(x) for x in (r.get("paragraphes") or [])] + [str(r.get("exergue") or "")] + [str(x) for x in r.get("a_surveiller") or []]:
         m = INTERDITS.search(morceau)
         if m:
             sortie.append(m.group())
@@ -798,18 +526,6 @@ def vocabulaire_interdit(r: dict) -> list[str]:
         if ENGRENAGE_SEUL.search(morceau):
             sortie.append("engrenage N")
     return sortie
-
-
-def prompt_recit(faits: dict, nom: str) -> str:
-    return ("Tu écris en français le chapitre « Le récit de la semaine » d'un documentaire hebdomadaire sur le marché des changes, "
-            f"consacré au moteur « {nom} », à partir des FAITS ci-dessous (calculés en Python). Ton de journaliste économique : "
-            "phrases complètes, la cause puis la conséquence, dans l'ordre chronologique quand c'est possible (« lundi… mercredi… "
-            "vendredi… »). 600 à 900 mots en 3 à 5 paragraphes, plus une phrase forte mise en exergue. Règles impératives (un texte "
-            "qui les enfreint est remplacé par le texte de secours) : AUCUN nombre absent des faits ; dates en JJ/MM ; chiffres avec "
-            "leur unité ; cite le moteur par son nom, jamais « engrenage » suivi d'un numéro ; aide à la décision seulement, jamais "
-            "« entrée », « stop », « objectif », « LONG » ni « SHORT », aucun ordre d'achat ou de vente, des conditions et des effets "
-            "probables seulement. " + nm.CONSIGNE_MODELE + "\nRéponds STRICTEMENT en JSON : {\"paragraphes\": [\"…\", \"…\", \"…\"], "
-            "\"exergue\": \"…\"}.\nFAITS :\n" + json.dumps(faits, ensure_ascii=False))
 
 
 # ------------------------------------------------------------------ cache des récits (un appel par jour et par moteur)
@@ -840,34 +556,6 @@ def doit_rediger_recit(entree: dict | None, semaine: str, maintenant: datetime, 
     if nouveaux:
         return True, f"fait fort nouveau : {nouveaux[0]}"
     return False, "déjà rédigé aujourd'hui, aucun fait fort nouveau"
-
-
-def rediger_recit(faits: dict, nom: str, llm=None, secours=None, etiquette: str = "documentaire") -> tuple[dict | None, dict]:
-    """Modèle principal, puis Groq si le principal échoue (quota épuisé, 429, 503…). -> (récit accepté ou None, journal)."""
-    from core.llm import definir_etiquette, libelle_modele, dernier_modele, extraire_json
-    p = prompt_recit(faits, nom)
-    essais, journal = [], {"tentatives": []}
-    if llm is not None:
-        essais.append(("modele", llm))
-    if secours is not None and getattr(secours, "disponible", lambda: False)():
-        essais.append(("groq", secours))
-    for qui, f in essais:
-        try:
-            if qui == "modele":
-                definir_etiquette(etiquette)
-                brut, par = f.appeler_llm(p), libelle_modele(dernier_modele()) or "modèle principal"
-            else:
-                brut, par = f.appeler(p), f"secours {f.nom}"
-            d = extraire_json(brut)
-            r = {"paragraphes": [str(x).strip() for x in (d or {}).get("paragraphes") or [] if str(x).strip()], "exergue": str((d or {}).get("exergue") or "").strip()}
-            rejets = controler_recit(r, faits, nom)
-            journal["tentatives"].append({"par": par, "rejets": rejets})
-            if not rejets:
-                r.update({"redige_par": par, "mots": mots(" ".join(r["paragraphes"]))})
-                return r, journal
-        except Exception as exc:  # noqa: BLE001 — quota épuisé (BudgetEpuise), 429, 503 : le suivant
-            journal["tentatives"].append({"par": qui, "erreur": f"{type(exc).__name__} : {str(exc)[:160]}"})
-    return None, journal
 
 
 # ------------------------------------------------------------------ calcul complet
@@ -933,8 +621,9 @@ def calculer(racine: Path, maintenant: datetime | None = None, h5=None, config: 
             rdv_tous = [e for x in (md.get("moteurs") or {}).values() for e in (x.get("agenda") or []) if not e.get("passe")]
             ch["risques"] = {"seuil": seuil_texte(thermos.get(n)), "rendez_vous": rdv,
                              "scenario_si": scenario_si(n, ch["indicateurs"], ch["graphiques"], rdv, sorted(rdv_tous, key=lambda e: (e["date"], e.get("heure") or "")))}
-            ch["recit"] = recit_python(ch, sem, theme_jours)
-            ch["exergue_python"] = ch["recit"]["exergue"]
+            ch["recit"] = None   # lot V15 : seulement un texte d'IA (jamais de faux récit en Python)
+            ch["faits"] = rd.faits_chapitre(ch, sem, theme_jours)
+            ch["faits_semaine"] = rd.faits_semaine(ch["faits"])
             bouges = sorted([i for i in ch["indicateurs"] if (i["variation_semaine"] or {}).get("valeur") is not None], key=lambda i: -i["ampleur"])
             ch["plus_bouge"] = ({"libelle": bouges[0]["libelle"], "texte": bouges[0]["texte"], "variation": bouges[0]["variation_semaine"]["texte"]} if bouges else None)
             zs = [p for p in ch["publications"] if p.get("z") is not None]
@@ -966,17 +655,29 @@ def calculer(racine: Path, maintenant: datetime | None = None, h5=None, config: 
          "sources": {"indicateurs": "dossiers.json (tuiles des 8 moteurs)", "graphiques": "historique_5ans.json (FRED et séries uniques)",
                      "publications": "archive des publications du site (ForexFactory)", "titres": "flux RSS collectés à chaque run, classés par moteur",
                      "theme_par_jour": "archive contexte/ du site", "effets": "matrice d'impact (règles Python)"},
-         "note": "Documentaire d'aide à la décision : des faits datés et sourcés, des conditions et des effets probables, jamais un ordre."}
+         "note": "Documentaire d'aide à la décision : des faits datés et sourcés, des conditions et des effets probables, jamais un ordre.",
+         "glossaire": nm.GLOSSAIRE}
+    try:   # lot V15 : faits pré-mâchés de la semaine en bref (chapitre 0) et du chapitre final
+        d["bref_faits"] = rd.faits_bref(d)
+        d["bref_faits_semaine"] = rd.faits_semaine(d["bref_faits"])
+        if not final.get("erreur"):
+            final["faits"] = rd.faits_final(d)
+            final["faits_semaine"] = rd.faits_semaine(final["faits"])
+    except Exception as exc:  # noqa: BLE001
+        log.warning("faits du chapitre 0 ou final : %s", exc)
+    d["bref_recit"], final["recit"] = None, None
     d["lecture_min"] = temps_lecture(d)
     return d
 
 
 def temps_lecture(d: dict) -> int:
-    total = 0
+    total = mots(" ".join((d.get("bref_recit") or {}).get("paragraphes") or []))
+    total += mots(" ".join(((d.get("final") or {}).get("recit") or {}).get("paragraphes") or []))
     for c in (d.get("chapitres") or {}).values():
-        total += mots(" ".join((c.get("recit") or {}).get("paragraphes") or []))
+        r = c.get("recit") or {}
+        total += mots(" ".join(r.get("paragraphes") or [])) if r else mots(" ".join(c.get("faits_semaine") or []))
         cp = c.get("comprendre") or {}
-        total += mots(" ".join([cp.get("pourquoi", ""), cp.get("piege", ""), *cp.get("indicateurs", [])]))
+        total += mots(" ".join([cp.get("une_phrase", ""), cp.get("comment", ""), cp.get("piege", "")]))
         total += sum(mots(i.get("ce_que_cest") or "") + mots(i.get("lecture_niveau") or "") for i in c.get("indicateurs") or [])
         total += mots((c.get("risques") or {}).get("scenario_si") or "")
     total += mots(((d.get("final") or {}).get("risque_principal") or {}).get("texte") or "")
@@ -1028,66 +729,104 @@ def chapitre_final(agenda: dict, dos: dict, sem: dict, chapitres: dict, docs: Pa
 
 
 # ------------------------------------------------------------------ rédaction, écriture et archive
+def _faits_du_chapitre(d: dict, k: str) -> dict | None:
+    if k == "0":
+        return {"nom": "La semaine en bref", "question": "Quelle humeur a dominé la semaine, et que dit chaque moteur ?", "faits": d.get("bref_faits") or []}
+    if k == "final":
+        return {"nom": "Ce qui peut bouger la semaine prochaine", "question": "Quels rendez-vous et quels risques la semaine prochaine ?",
+                "faits": (d.get("final") or {}).get("faits") or []}
+    ch = (d.get("chapitres") or {}).get(k) or {}
+    if ch.get("erreur") or not ch.get("faits"):
+        return None
+    return {"nom": ch["nom"], "question": ch.get("question"), "faits": ch["faits"]}
+
+
+def _forts(d: dict, k: str) -> list[str]:
+    ch = (d.get("chapitres") or {}).get(k)
+    return forts_du_moteur(ch) if ch and not ch.get("erreur") else []
+
+
+def _poser(d: dict, k: str, recit: dict | None) -> None:
+    if k == "0":
+        d["bref_recit"] = recit
+    elif k == "final":
+        d.setdefault("final", {})["recit"] = recit
+    else:
+        d["chapitres"][k]["recit"] = recit
+
+
 def rediger(d: dict, racine: Path, maintenant: datetime, llm=None, secours=None, fabrique=None) -> dict:
-    """Pour chaque moteur : texte du cache s'il est encore valable (contrôlé avec les faits du run), sinon rédaction si elle
-    est due (une par jour, fait fort nouveau, samedi). -> bilan {modele, groq, python, journal}."""
+    """Lot V15. Deux groupes (chapitres 0 à 4 ; 5 à 8 et final), rédigés une fois par jour après 08:15 UTC (nouvelle
+    tentative si un fait fort nouveau arrive ; version « semaine complète » le samedi) : Gemini (gemini-3.5-flash puis
+    gemini-3.5-flash-lite, un appel par groupe + un appel de correction), puis Groq chapitre par chapitre. Sinon : le dernier
+    récit d'IA de la semaine (repris, daté), ou l'encadré « Les faits de la semaine ».
+    -> bilan {modele, groq, repris, faits, journal} et ligne « Documentaire : N par le modèle, M par Groq, K récits repris,
+    L encadrés de faits »."""
     chemin = Path(racine) / CACHE_RECITS
     cache = _lire(chemin) or {}
+    if "ia" not in cache:   # ancien format (lot V13) : récits par moteur -> derniers récits d'IA de la semaine
+        cache = {"ia": {k: {**v, "a_surveiller": v.get("a_surveiller") or []} for k, v in cache.items()
+                        if isinstance(v, dict) and v.get("paragraphes") and v.get("redige_par") and v.get("redige_par") != "python"},
+                 "groupes": {}}
     sem = d["semaine"]
-    bilan = {"modele": [], "groq": [], "python": [], "journal": {}}
-    fabrique_faite = False
-    theme_jours = d["theme"]["jour_par_jour"]
-    for k, ch in d["chapitres"].items():
-        if ch.get("erreur"):
-            bilan["python"].append(k)
-            continue
-        faits = faits_recit(ch, {"du": d["du"], "au": d["au"], "jours": d["jours_couverts"], "statut": d["statut"], "fin_donnees": d["fin_donnees"]}, theme_jours)
-        entree = cache.get(k)
-        forts = forts_du_moteur(ch)
+    u = maintenant.astimezone(timezone.utc)
+    journal = {}
+    gemini, groq, cree = llm, secours, False
+    for g, ids in rd.GROUPES.items():
+        entree = (cache.get("groupes") or {}).get(g)
+        forts = sorted(x for k in ids for x in _forts(d, k))
         faire, motif = doit_rediger_recit(entree, sem, maintenant, forts)
-        retenu = None
-        if entree and entree.get("semaine") == sem and not faire and entree.get("paragraphes"):
-            # Lot V14 (V13.1) : le texte a passé le contrôle des nombres à sa rédaction, sur les faits de ce moment-là ;
-            # il n'est plus rejeté parce que les faits ont bougé depuis (avant : les récits Groq du matin retombaient en
-            # Python au fil des runs). Seul le vocabulaire est revérifié ; il est daté (« rédigé le JJ/MM à HH:MM »).
-            r = {"paragraphes": entree.get("paragraphes") or [], "exergue": entree.get("exergue") or ""}
-            if not vocabulaire_interdit(r):
-                retenu = {**r, "redige_par": entree.get("redige_par"), "mots": mots(" ".join(r["paragraphes"])),
-                          "redige_le": entree.get("redige_le")}
-        if faire:
-            if llm is None and secours is None and fabrique is not None and not fabrique_faite:
-                try:
-                    llm, secours = fabrique()
-                except Exception as exc:  # noqa: BLE001
-                    log.warning("documentaire : modèle non initialisé (%s)", exc)
-                fabrique_faite = True
-            if llm is not None or secours is not None:
-                r, journal = rediger_recit(faits, ch["nom"], llm, secours, etiquette=f"documentaire:c{k}")
-                bilan["journal"][k] = {"motif": motif, **journal}
-                u = maintenant.astimezone(timezone.utc)
-                if r:
-                    retenu = {**r, "redige_le": u.strftime("%Y-%m-%dT%H:%M+00:00")}
-                    cache[k] = {"semaine": sem, "jour": u.date().isoformat(), "forts": forts, "paragraphes": r["paragraphes"],
-                                "exergue": r["exergue"], "redige_par": r["redige_par"], "redige_le": retenu["redige_le"],
-                                "complet": maintenant.astimezone(PARIS).weekday() >= 5}
-                else:   # échec : on note la tentative du jour pour ne pas rappeler le modèle à chaque run
-                    meme = bool(entree and entree.get("semaine") == sem)
-                    cache[k] = {**(entree if meme else {"semaine": sem}), "jour": u.date().isoformat(), "forts": forts,
-                                "complet": (meme and (entree or {}).get("complet", False)) or maintenant.astimezone(PARIS).weekday() >= 5,
-                                "paragraphes": (entree or {}).get("paragraphes") if (entree or {}).get("semaine") == sem else None,
-                                "exergue": (entree or {}).get("exergue") if (entree or {}).get("semaine") == sem else None,
-                                "redige_par": (entree or {}).get("redige_par") if (entree or {}).get("semaine") == sem else None}
-        if retenu and retenu.get("paragraphes"):
-            ch["recit"] = {**retenu, "secours_python_mots": ch["recit"]["mots"]}
-            (bilan["groq"] if "groq" in str(retenu.get("redige_par")).lower() else bilan["modele"]).append(k)
+        if not faire:
+            journal[g] = {"motif": motif}
+            continue
+        if gemini is None and groq is None and fabrique is not None and not cree:
+            try:
+                gemini, groq = fabrique()
+            except Exception as exc:  # noqa: BLE001
+                log.warning("documentaire : modèles non initialisés (%s)", exc)
+            cree = True
+        faits = {k: f for k in ids if (f := _faits_du_chapitre(d, k))}
+        if not faits or (gemini is None and groq is None):
+            journal[g] = {"motif": motif, "erreur": "aucun modèle disponible"}
+            continue
+        acceptes, j = rd.rediger_groupe(faits, d.get("jours_couverts") or [], gemini, groq, etiquette=f"documentaire:{g}")
+        journal[g] = {"motif": motif, **j}
+        for k, r in acceptes.items():
+            cache.setdefault("ia", {})[k] = {**r, "semaine": sem, "redige_le": u.strftime("%Y-%m-%dT%H:%M+00:00")}
+        meme = bool(entree and entree.get("semaine") == sem)
+        cache.setdefault("groupes", {})[g] = {"semaine": sem, "jour": u.date().isoformat(), "forts": forts,
+                                              "complet": (meme and entree.get("complet", False)) or maintenant.astimezone(PARIS).weekday() >= 5}
+    try:   # le quota réservé au documentaire est rendu aux autres tâches une fois les tentatives du jour faites
+        reg = getattr(gemini, "registre", None)
+        if reg is not None and all((cache.get("groupes") or {}).get(g, {}).get("jour") == u.date().isoformat() for g in rd.GROUPES):
+            reg.marquer_fait("documentaire")
+    except Exception:  # noqa: BLE001
+        pass
+    bilan = {"modele": [], "groq": [], "repris": [], "faits": [], "journal": journal}
+    for k in [x for ids in rd.GROUPES.values() for x in ids]:
+        if k not in ("0", "final") and ((d["chapitres"].get(k) or {}).get("erreur")):
+            bilan["faits"].append(k)
+            continue
+        ia = (cache.get("ia") or {}).get(k)
+        if ia and ia.get("semaine") == sem and ia.get("paragraphes") and not vocabulaire_interdit(ia):
+            repris = str(ia.get("redige_le") or "")[:10] != u.date().isoformat()
+            r = {"paragraphes": ia["paragraphes"], "exergue": ia.get("exergue") or "", "a_surveiller": ia.get("a_surveiller") or [],
+                 "redige_par": ia.get("redige_par"), "redige_le": ia.get("redige_le"), "mots": rd.mots(" ".join(ia["paragraphes"])),
+                 "repris": repris}
+            if repris:
+                r["mention"] = f"Récit écrit le {ddm(ia.get('redige_le'))}, mis à jour au prochain passage du modèle."
+            _poser(d, k, r)
+            (bilan["repris"] if repris else bilan["groq"] if "groq" in str(ia.get("redige_par")).lower() else bilan["modele"]).append(k)
         else:
-            bilan["python"].append(k)
+            _poser(d, k, None)
+            bilan["faits"].append(k)
     try:
         chemin.parent.mkdir(parents=True, exist_ok=True)
         chemin.write_text(json.dumps(cache, ensure_ascii=False, indent=1), encoding="utf-8")
     except OSError as exc:
         log.warning("cache des récits non écrit : %s", exc)
-    d["redaction"] = {**bilan, "ligne": f"Documentaire : {len(bilan['modele'])} récits par le modèle, {len(bilan['groq'])} par Groq, {len(bilan['python'])} en Python"}
+    d["redaction"] = {**bilan, "ligne": f"Documentaire : {len(bilan['modele'])} par le modèle, {len(bilan['groq'])} par Groq, "
+                                        f"{len(bilan['repris'])} récits repris, {len(bilan['faits'])} encadrés de faits"}
     d["lecture_min"] = temps_lecture(d)
     return d
 

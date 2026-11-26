@@ -312,8 +312,13 @@ def effet_case(devise: str, n: int, case: dict | None) -> dict:
         raison = RAISON_NON_MESURE.get((devise, n)) or (case.get("raison") if etat == "nd" else None) or "aucune règle de la matrice ne relie ce moteur à cette devise"
         return {"effet": "non mesuré", "valeur": None, "pourquoi": _raison_claire(pourquoi or raison), "raison_non_mesure": _raison_claire(raison)}
     eff = "soutien" if v > 0 else "pression" if v < 0 else "neutre"
+    from core import phrases_devises   # lot V15 : la règle brute devient une phrase (la règle reste dans « Règle de calcul »)
+    try:
+        phrase = phrases_devises.phrases_case(devise, regles) if regles and eff != "neutre" else None
+    except Exception:  # noqa: BLE001
+        phrase = None
     return {"effet": eff, "valeur": v, "pourquoi": _raison_claire(pourquoi or "sous les seuils de la matrice"), "raison_non_mesure": None,
-            "date": max((r.get("date") for r in regles if r.get("date")), default=None)}
+            "pourquoi_phrase": phrase, "date": max((r.get("date") for r in regles if r.get("date")), default=None)}
 
 
 # ------------------------------------------------------------------ 5. état, incohérence, introduction de secours

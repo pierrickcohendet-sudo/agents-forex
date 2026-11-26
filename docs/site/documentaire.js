@@ -24,6 +24,38 @@ const CLE_POS = sem => `fxdesk-doc-position-${sem}`;
 /* Options des graphiques du documentaire : thème courant (fond, axes) et pas de logo (attribution en légende). */
 const sansLogo = () => ({ layout: { ...optionsTheme().layout, attributionLogo: false }, handleScroll: false, handleScale: false });
 
+/* Lot V15 : glossaire. Chaque mot du glossaire est souligné en pointillé à sa première apparition dans un bloc de texte ;
+   la définition s'affiche dans une bulle au survol ou au toucher (élément focalisable). */
+let GLOSS = {};
+const reGloss = () => Object.keys(GLOSS).length ? new RegExp(`(^|[^\\wÀ-ÿ])(${Object.keys(GLOSS).sort((a, b) => b.length - a.length)
+  .map(m => m.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})(s?)(?=[^\\wÀ-ÿ]|$)`, "gi") : null;
+function gloss(html) {
+  const re = reGloss(); if (!re) return html;
+  const vus = new Set();
+  return html.replace(re, (tout, avant, mot, s) => {
+    const cle = Object.keys(GLOSS).find(k => k.toLowerCase() === mot.toLowerCase());
+    if (!cle || vus.has(cle)) return tout;
+    vus.add(cle);
+    return `${avant}<span class="gl" tabindex="0" data-def="${esc(GLOSS[cle])}">${mot}${s}</span>`;
+  });
+}
+
+function recitHtml(r, faits, court = false) {
+  if (r && (r.paragraphes || []).length) {
+    const paras = r.paragraphes.map((p, i) => `<p class="${i === 0 && !court ? "drop" : ""}">${gloss(nbsp(esc(p)))}</p>`);
+    if (r.exergue && paras.length > 1) paras.splice(Math.min(2, paras.length - 1), 0, `<p class="pull">${nbsp(esc(r.exergue))}</p>`);
+    const surv = (r.a_surveiller || []).length ? `<div class="surv"><b>À surveiller</b><ul>${r.a_surveiller.map(x => `<li>${gloss(nbsp(esc(x)))}</li>`).join("")}</ul></div>` : "";
+    const qui = String(r.redige_par || "une IA");
+    const quand = r.redige_le ? ` le ${r.redige_le.slice(8, 10)}/${r.redige_le.slice(5, 7)} à ${r.redige_le.slice(11, 16)} UTC` : "";
+    return `<div class="prose">${paras.join("")}</div>${surv}
+      ${r.repris ? `<span class="par repris">${esc(r.mention || "Récit repris d'un jour précédent.")}</span>` : ""}
+      <span class="par">Rédigé par ${esc(qui)}${quand} à partir des faits calculés en Python ; nombres contrôlés (${r.mots || "n/d"} mots).</span>`;
+  }
+  const l = faits || [];
+  return `<div class="faits"><span class="eyebrow">Les faits de la semaine</span>${l.length ? `<ul>${l.map(x => `<li>${gloss(nbsp(esc(x)))}</li>`).join("")}</ul>` : "<p>n/d</p>"}
+    <span class="small">Le récit sera écrit au prochain passage du modèle.</span></div>`;
+}
+
 export function rendreDocumentaire(hote, D, options = {}) {
   hote.innerHTML = "";
   if (!D || !D.chapitres) {
@@ -45,8 +77,10 @@ export function rendreDocumentaire(hote, D, options = {}) {
     ${pos && pos.chap ? `<button type="button" class="btn reprendre" id="dzReprendre">Reprendre là où j'en étais (${esc(pos.titre || pos.chap)})</button>` : ""}</header>`);
 
   // ---- chapitre 0 : la semaine en bref
+  GLOSS = D.glossaire || {};
   const tj = D.theme?.jour_par_jour || [];
   art.insertAdjacentHTML("beforeend", `<section class="chap" id="c0" data-t="La semaine en bref"><div class="chap-h"><span class="num">0</span><div><h2>La semaine en bref</h2><p>Le thème, son évolution jour par jour, puis ce que dit chaque moteur en une ligne</p></div></div>
+    <div class="sub">${recitHtml(D.bref_recit, D.bref_faits_semaine, true)}</div>
     <div class="box"><span class="eyebrow">Thème de la semaine</span><b style="font-family:var(--f-display);font-size:34px;font-weight:500;line-height:1.1">${esc(D.theme?.titre || "n/d")}</b>
       <p>${D.theme?.alignes ?? "n/d"} moteurs sur ${D.theme?.evaluables ?? "n/d"} vont dans le même sens. ${esc(String(D.theme?.explication || "").replace(/^Moteurs orientés : /, "Les moteurs orientés : "))}</p>
       ${tj.length ? `<div class="tj">${tj.map(t => `<span><b>${esc(jourCourt(t.date))}</b> · ${esc(t.titre || "n/d")} · ${t.alignes ?? "n/d"} moteurs alignés${t.direction ? " · " + esc(t.direction) : ""}</span>`).join("")}</div>` : '<p class="small">Thème jour par jour : archive contexte/ absente pour cette semaine.</p>'}</div>
@@ -56,8 +90,11 @@ export function rendreDocumentaire(hote, D, options = {}) {
   // ---- un chapitre par moteur
   for (const c of chapitres) art.appendChild(chapitre(c, D));
 
-  // ---- chapitre final
+  // ---- chapitre final, puis glossaire
   art.appendChild(chapitreFinal(D));
+  const g = Object.entries(GLOSS);
+  if (g.length) art.insertAdjacentHTML("beforeend", `<details class="gloss card pad"><summary><b>Glossaire</b> <span class="small">${g.length} mots expliqués simplement</span></summary>
+    <dl>${g.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl></details>`);
   art.insertAdjacentHTML("beforeend", `<p class="small">Documentaire de la ${esc(D.titre_semaine.toLowerCase())} · sources : ${esc(Object.values(D.sources || {}).join(" ; "))} · ${esc(D.note || "")}</p>`);
 
   // ---- sommaire et progression
@@ -123,14 +160,9 @@ function chapitre(c, D) {
     s.innerHTML = `<div class="chap-h"><span class="num">${c.numero}</span><div><h2>${esc(c.nom)}</h2></div></div><div class="erreur">${esc(c.erreur)}</div>${comprendre(L, c)}`;
     return s;
   }
-  const r = c.recit || {};
-  const paras = (r.paragraphes || []).map((p, i) => `<p class="${i === 0 ? "drop" : ""}">${nbsp(esc(p))}</p>`);
-  if (r.exergue && paras.length > 1) paras.splice(Math.min(2, paras.length - 1), 0, `<p class="pull">${nbsp(esc(r.exergue))}</p>`);
-  const qui = String(r.redige_par || "python");
   s.innerHTML = `<div class="chap-h"><span class="num">${c.numero}</span><div><h2>${esc(c.nom)}</h2><p>${esc(c.question)}</p></div></div>
     <div class="badges"><span class="stars" title="importance pour le change">${"★".repeat(L.importance || 0)}${"☆".repeat(5 - (L.importance || 0))}</span><span class="small">importance pour le change</span>${pillEtat(c.etat)}${pillDir(c.etat)}</div>
-    <div class="sub"><h3>Le récit de la semaine</h3><div class="prose">${paras.join("")}</div>
-      <span class="par">${qui === "python" ? `Texte construit en Python à partir des faits de la semaine (${r.mots || "n/d"} mots)` : `Rédigé par ${esc(qui)}${r.redige_le ? ` le ${r.redige_le.slice(8, 10)}/${r.redige_le.slice(5, 7)} à ${r.redige_le.slice(11, 16)} UTC` : ""} à partir des faits calculés en Python, nombres contrôlés à la rédaction (${r.mots || "n/d"} mots)`}</span></div>
+    <div class="sub"><h3>Le récit de la semaine</h3>${recitHtml(c.recit, c.faits_semaine)}</div>
     ${comprendre(L, c)}
     ${graphiques(c)}
     ${indicateurs(c)}
@@ -143,12 +175,16 @@ function chapitre(c, D) {
 }
 
 function comprendre(L, c) {
-  return `<div class="sub"><h3>Comprendre ce moteur</h3><div class="learn">
-    <div><b class="t">Pourquoi il compte</b><span>${esc(L.pourquoi || "")}</span></div>
-    <div><b class="t">Ses indicateurs principaux</b><ul>${(L.indicateurs || []).map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>
-    <div><b class="t">Comment il fait bouger les devises</b><div class="chain">${(L.chaine || []).map((x, i, a) => `<span class="${i === a.length - 1 ? "end" : ""}">${esc(x)}</span>`).join("<i>→</i>")}</div><span>${esc(c.canal || "")}</span></div>
-    <div><b class="t">Confluences avec les marchés</b><div class="conf">${(L.confluences || []).map(x => `<div><b>${esc(x[0])}</b><em class="${x[1] === "▲" ? "pos" : x[1] === "▼" ? "neg" : ""}">${esc(x[1])}</em><span>${esc(x[2])}</span></div>`).join("")}</div></div>
-  </div><div class="note"><b>Le piège à éviter :</b> ${esc(L.piege || "")}</div></div>`;
+  const liste = v => Array.isArray(v) ? `<ul>${v.map(x => `<li>${gloss(esc(x))}</li>`).join("")}</ul>` : `<p>${gloss(esc(v || ""))}</p>`;
+  return `<div class="sub"><h3>Comprendre ce moteur</h3><div class="learn15">
+    <p class="une"><b>En une phrase :</b> ${gloss(esc(L.une_phrase || ""))}</p>
+    <p><b>Comment ça marche :</b> ${gloss(esc(L.comment || ""))}</p>
+    <details><summary>Ce qu'on regarde, un exemple, ce que ça fait aux devises, le piège</summary>
+      <div class="plus"><div><b class="t">Ce qu'on regarde</b>${liste(L.regarde)}</div>
+        <div><b class="t">Un exemple</b>${liste(L.exemple)}</div>
+        <div><b class="t">Ce que ça fait aux devises</b>${liste(L.effets)}</div>
+        <div class="note"><b>Le piège :</b> ${gloss(esc(L.piege || ""))}</div></div></details>
+  </div></div>`;
 }
 
 function graphiques(c) {
@@ -165,9 +201,9 @@ function indicateurs(c) {
   if (!l.length) return `<div class="sub"><h3>Les indicateurs à jour, expliqués</h3><p class="small">${nd("aucun chiffre clé publié pour ce moteur")} aucun chiffre clé publié pour ce moteur.</p></div>`;
   return `<div class="sub"><h3>Les indicateurs à jour, expliqués</h3><div class="card pad ind">${l.map(x => `<div><div class="nm"><b>${esc(x.libelle)}</b><small>${esc(x.source || "")}</small></div>
     <div class="val"><b>${x.texte && x.texte !== "n/d" ? esc(x.texte) : nd(x.raison)}</b><small>${esc(x.variation_semaine?.texte || x.variation_semaine?.raison || "")}</small><small>${esc(x.variation_4s || "")}</small><small>${x.date ? esc(ddm(String(x.date).slice(0, 10))) : ""}</small>
-      ${x.percentile_5a != null ? `<div class="pc" title="percentile sur 5 ans : ${x.percentile_5a}"><i style="left:${x.percentile_5a}%"></i></div>` : ""}</div>
+      ${x.percentile_5a != null ? `<div class="pc" title="position sur 5 ans : du plus bas (à gauche) au plus haut (à droite)"><i style="left:${x.percentile_5a}%"></i></div>` : ""}</div>
     ${(x.points || []).length > 2 ? spark(x.points, 120, 34, "var(--accent)", true) : "<span></span>"}
-    <div class="exp"><b style="color:var(--ink);font-weight:600">Ce que c'est :</b> ${esc(x.ce_que_cest || "définition à compléter")}${x.lecture_niveau ? " " + esc(x.lecture_niveau) : ""}${x.lecture_jour && x.lecture_jour !== x.texte ? ` <i>${esc(x.lecture_jour)}</i>` : ""}</div></div>`).join("")}</div></div>`;
+    <div class="exp"><b style="color:var(--ink);font-weight:600">Ce que c'est :</b> ${gloss(esc(x.ce_que_cest || "définition à compléter"))}${x.lecture_niveau ? " " + esc(x.lecture_niveau) : ""}${x.lecture_jour && x.lecture_jour !== x.texte ? ` <i>${esc(x.lecture_jour)}</i>` : ""}</div></div>`).join("")}</div></div>`;
 }
 
 function surprises(c, D) {
@@ -199,7 +235,8 @@ function devises(c) {
   const vus = l.filter(d => d.effet === "soutien" || d.effet === "pression").concat(l.filter(d => d.effet !== "soutien" && d.effet !== "pression"));
   return `<div class="sub"><h3>Les effets sur les devises</h3><div class="dv">${vus.map(d => `<div class="dc ${d.effet === "soutien" ? "p" : d.effet === "pression" ? "c" : ""}"><div class="top"><b>${d.devise}</b>${effetPill(d.effet)}</div>
     ${d.changement ? `<span class="chg ${d.changement.change ? "oui" : ""}">Depuis lundi : ${esc(d.changement.texte)}</span>` : ""}
-    <span class="k">Pourquoi</span><span>${esc(d.pourquoi || d.raison_non_mesure || "n/d")}</span>
+    <span class="k">Pourquoi</span><span>${gloss(esc(d.pourquoi_phrase || d.raison_non_mesure || d.pourquoi || "n/d"))}</span>
+    ${d.pourquoi_phrase && d.pourquoi ? `<details class="regle"><summary>Règle de calcul</summary><span class="small">${esc(d.pourquoi)}</span></details>` : ""}
     ${d.effet !== "non mesuré" ? `<span class="k">Comment</span><span>${esc(d.comment || "")}</span>` : ""}
     ${(d.reactions || []).length ? `<span class="k">Réaction possible du pays</span><span>${d.reactions.slice(0, 2).map(r => `<b>${esc(r.acteur)}</b> : ${esc(r.levier)}, ${esc(r.declencheur)} · ${esc(r.date)}`).join("<br>")}</span>` : ""}
     ${d.prochain_rdv ? `<span class="small">Prochain rendez-vous : ${esc(jourCourt(d.prochain_rdv.date))} ${esc(d.prochain_rdv.heure || "")} · ${esc(d.prochain_rdv.evenement)}</span>` : ""}</div>`).join("")}</div></div>`;
@@ -222,6 +259,7 @@ function chapitreFinal(D) {
   s.innerHTML = `<div class="chap-h"><span class="num">→</span><div><h2>Ce qui peut bouger la semaine prochaine</h2><p>Publications moyennes et fortes du ${esc(ddm(F.du))} au ${esc(ddm(F.au))}, heures de Paris${F.agenda_couvre ? "" : " · " + esc(F.raison_agenda || "")}</p></div></div>
     <div class="next">${(F.calendrier || []).map(j => `<div class="day"><header>${esc(j.jour)}</header>${(j.ferie || []).map(f => `<div class="fe">${esc(f)}</div>`).join("")}
       ${j.evenements.length ? j.evenements.map(e => `<div class="e ${e.impact === "fort" ? "f" : ""}"><span class="small">${esc(e.heure || "")} · ${e.devise}</span><b>${esc(e.evenement)}</b>${e.consensus ? `<span class="small">attendu ${esc(frTxt(e.consensus))}</span>` : ""}</div>`).join("") : '<div class="e"><span class="muted">Rien de moyen ou fort</span></div>'}</div>`).join("")}</div>
+    <div class="sub">${recitHtml(F.recit, F.faits_semaine, true)}</div>
     <div class="box"><span class="eyebrow">Le risque principal</span><p>${nbsp(esc(RP.texte || "n/d"))}</p><span class="small" style="opacity:.7">${RP.redige_par === "python" ? "Choisi et rédigé en Python : le seuil le plus proche d'être franchi et le rendez-vous fort le plus proche." : "Choisi en Python, rédigé par " + esc(RP.redige_par)}</span></div>`;
   return s;
 }

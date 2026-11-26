@@ -132,3 +132,26 @@
   .dz .sr{grid-template-columns:40px minmax(0,1fr) 46px}.dz .sr .small{display:none}
 }
 @media (prefers-reduced-motion:reduce){.dz .toc .bar i{transition:none}}
+
+/* Lot V15 : récit d'IA, encadré des faits, « Comprendre » à 6 rubriques, glossaire */
+.dz .surv{margin-top:14px;padding:14px 16px;border-radius:12px;background:var(--accent-soft)}
+.dz .surv b{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.dz .surv ul{margin:6px 0 0;padding-left:18px;font-size:15.5px;line-height:1.6}
+.dz .par.repris{display:block;color:var(--warn);font-weight:600;margin-top:8px}
+.dz .faits{padding:16px 18px;border-radius:12px;border:1px dashed var(--line-2);background:var(--surface);display:flex;flex-direction:column;gap:8px}
+.dz .faits ul{margin:0;padding-left:20px;font-size:15.5px;line-height:1.65;display:flex;flex-direction:column;gap:6px}
+.dz .learn15{display:flex;flex-direction:column;gap:10px;font-size:16px;line-height:1.65;max-width:72ch}
+.dz .learn15 p{margin:0}
+.dz .learn15 .une{font-family:var(--f-display);font-size:19px;line-height:1.45}
+.dz .learn15 details summary{cursor:pointer;color:var(--accent);font-weight:600;font-size:14px}
+.dz .learn15 .plus{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:10px;font-size:14.5px}
+.dz .learn15 .plus ul{margin:4px 0 0;padding-left:18px}
+.dz .learn15 .t{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.dz details.regle summary{cursor:pointer;font-size:12px;color:var(--muted)}
+.dz .gl{text-decoration:underline dotted color-mix(in srgb,var(--accent) 70%,transparent);text-underline-offset:3px;cursor:help;position:relative}
+.dz .gl:hover::after,.dz .gl:focus::after{content:attr(data-def);position:absolute;left:0;top:calc(100% + 6px);z-index:30;width:min(300px,80vw);padding:10px 12px;border-radius:10px;background:var(--ink);color:var(--surface);font:500 13px/1.45 var(--f-body);box-shadow:var(--shadow);white-space:normal}
+.dz details.gloss summary{cursor:pointer}
+.dz details.gloss dl{display:grid;grid-template-columns:minmax(120px,180px) minmax(0,1fr);gap:8px 16px;margin:12px 0 0;font-size:14.5px}
+.dz details.gloss dt{font-weight:700}
+.dz details.gloss dd{margin:0;color:var(--ink-2)}
+@media (max-width:640px){.dz details.gloss dl{grid-template-columns:minmax(0,1fr)}.dz details.gloss dd{margin-bottom:6px}}
