@@ -1,5 +1,5 @@
 {
- "genere_le": "2026-11-25T21:18:57+00:00",
+ "genere_le": "2026-11-26T02:41:33+00:00",
  "fuseau": "Europe/Paris",
  "debut": "2026-11-23",
  "fin": "2026-12-06",
@@ -7,7 +7,7 @@
   "debut": "2026-11-23",
   "fin": "2026-11-29"
  },
- "aujourdhui": "2026-11-25",
+ "aujourdhui": "2026-11-26",
  "jours": [
   {
    "date": "2026-11-23",
@@ -1273,9 +1273,9 @@
       "mesure": "force de la devise lue sur AUD/USD, séance suivante, en %",
       "cote": {
        "au_dessus": {
-        "n": 1,
-        "mediane": -0.327,
-        "wilson": 0.0,
+        "n": 2,
+        "mediane": -0.076,
+        "wilson": 12.1,
         "faible": true
        },
        "au_dessous": {
@@ -1343,9 +1343,9 @@
       "mesure": "force de la devise lue sur AUD/USD, séance suivante, en %",
       "cote": {
        "au_dessus": {
-        "n": 1,
-        "mediane": -0.327,
-        "wilson": 0.0,
+        "n": 2,
+        "mediane": -0.076,
+        "wilson": 12.1,
         "faible": true
        },
        "au_dessous": {
@@ -1409,8 +1409,26 @@
      "verifie_le": "2026-11-25T20:16",
      "engrenage": 3,
      "simulateur": null,
-     "reaction": null,
-     "raison_reaction": "pas d'historique des publications passées pour cet évènement (ALFRED ne couvre que les États-Unis ; archive du site commencée le 24/10/2026)",
+     "reaction": {
+      "mesure": "force de la devise lue sur AUD/USD, séance suivante, en %",
+      "cote": {
+       "au_dessus": {
+        "n": 1,
+        "mediane": 0.175,
+        "wilson": 27.0,
+        "faible": true
+       },
+       "au_dessous": {
+        "n": 0,
+        "mediane": null,
+        "wilson": null,
+        "faible": true
+       }
+      },
+      "source": "archive des publications du site (depuis le 24/10/2026) et cours sur 5 ans",
+      "lien": "#scenarios",
+      "lecture": "réel au-dessus / au-dessous du consensus (ou du précédent sans consensus)"
+     },
      "statuts": {
       "consensus": "estimation",
       "publie": "confirmé",
@@ -1529,33 +1547,6 @@
       "base_z": "registre",
       "raison_z": null
      }
-    },
-    {
-     "iso_utc": "2026-11-25T05:00+00:00",
-     "date_paris": "2026-11-25",
-     "heure_paris": "journée",
-     "heure_connue": false,
-     "devise": "USD",
-     "evenement": "Mises en chantier et permis (Census)",
-     "evenement_en": "New Residential Construction",
-     "traduit": true,
-     "type": "Chiffre",
-     "impact": "faible",
-     "points": "●○○",
-     "precedent": null,
-     "consensus": null,
-     "publie": null,
-     "source": "FRED releases/dates (calendrier des publications)",
-     "sources": [
-      "FRED releases/dates (calendrier des publications)"
-     ],
-     "sources_champs": {},
-     "verifie_le": "2026-11-25",
-     "engrenage": null,
-     "simulateur": null,
-     "raison_heure": "FRED donne la date, pas l'heure (ForexFactory la donne la semaine de la publication)",
-     "raison_consensus": "consensus publié par ForexFactory la semaine de la publication",
-     "statuts": {}
     },
     {
      "iso_utc": "2026-11-25T07:00+00:00",
@@ -1726,9 +1717,6 @@
      "verifie_le": "2026-11-25T20:16",
      "engrenage": null,
      "simulateur": null,
-     "confirme_par": [
-      "FRED releases/dates : Personal Income and Outlays"
-     ],
      "reaction": null,
      "raison_reaction": "pas d'historique des publications passées pour cet évènement (ALFRED ne couvre que les États-Unis ; archive du site commencée le 24/10/2026)",
      "statuts": {
@@ -1781,9 +1769,6 @@
      "verifie_le": "2026-11-25T20:16",
      "engrenage": 3,
      "simulateur": "pib_us",
-     "confirme_par": [
-      "FRED releases/dates : Gross Domestic Product"
-     ],
      "reaction": {
       "mesure": "force de l'USD (panier), séance suivante, en %",
       "cote": {
@@ -1904,9 +1889,6 @@
      "engrenage": 3,
      "simulateur": null,
      "revision": "202K",
-     "confirme_par": [
-      "FRED releases/dates : Unemployment Insurance Weekly Claims Report"
-     ],
      "revision_detail": "202K",
      "statuts": {
       "consensus": "estimation",
@@ -2143,7 +2125,8 @@
      "publie": null,
      "source": "ForexFactory, page « mois » (extraction de page, déjà lue pour le tableau macro)",
      "sources": [
-      "ForexFactory, page « mois » (extraction de page, déjà lue pour le tableau macro)"
+      "ForexFactory, page « mois » (extraction de page, déjà lue pour le tableau macro)",
+      "ForexFactory, flux public JSON de la semaine"
      ],
      "sources_champs": {},
      "verifie_le": "2026-11-25T20:16",
@@ -2181,9 +2164,6 @@
      "engrenage": null,
      "simulateur": null,
      "revision": "614K",
-     "confirme_par": [
-      "FRED releases/dates : New Residential Sales"
-     ],
      "revision_detail": "614K",
      "statuts": {
       "consensus": "estimation",
@@ -2252,32 +2232,6 @@
       "base_z": "3 publications précédentes de cet indicateur",
       "raison_z": null
      }
-    },
-    {
-     "iso_utc": "2026-11-25T16:30+00:00",
-     "date_paris": "2026-11-25",
-     "heure_paris": "17:30",
-     "heure_connue": true,
-     "devise": "USD",
-     "evenement": "Adjudication du Trésor US : note 7 ans",
-     "evenement_en": "Treasury Note 7-Year auction",
-     "traduit": true,
-     "type": "Adjudication",
-     "impact": "faible",
-     "points": "●○○",
-     "precedent": null,
-     "consensus": null,
-     "publie": null,
-     "source": "TreasuryDirect (adjudications à venir, API officielle)",
-     "sources": [
-      "TreasuryDirect (adjudications à venir, API officielle)"
-     ],
-     "sources_champs": {},
-     "verifie_le": "2026-11-25",
-     "engrenage": 4,
-     "simulateur": null,
-     "statuts": {},
-     "raison_consensus": "sans objet (pas un chiffre)"
     },
     {
      "iso_utc": "2026-11-25T17:00+00:00",
@@ -2515,6 +2469,32 @@
       "consensus": "estimation",
       "precedent": "confirmé"
      }
+    },
+    {
+     "iso_utc": "2026-11-26T09:15+00:00",
+     "date_paris": "2026-11-26",
+     "heure_paris": "10:15",
+     "heure_connue": true,
+     "devise": "EUR",
+     "evenement": "Euro Summit",
+     "evenement_en": "Euro Summit",
+     "traduit": false,
+     "type": "Chiffre",
+     "impact": "faible",
+     "points": "●○○",
+     "precedent": null,
+     "consensus": null,
+     "publie": null,
+     "source": "ForexFactory, flux public JSON de la semaine",
+     "sources": [
+      "ForexFactory, flux public JSON de la semaine"
+     ],
+     "sources_champs": {},
+     "verifie_le": "2026-11-26",
+     "engrenage": null,
+     "simulateur": null,
+     "statuts": {},
+     "raison_consensus": "pas de consensus publié"
     },
     {
      "iso_utc": "2026-11-26T10:30+00:00",
@@ -6122,13 +6102,13 @@
    "n_forts": 5
   }
  ],
- "n_evenements": 170,
+ "n_evenements": 169,
  "comptes": {
   "Réunion BC": 0,
   "Conférence": 0,
   "Discours": 6,
   "Grand rendez-vous": 1,
-  "Adjudication": 1,
+  "Adjudication": 0,
   "Chiffre": 162
  },
  "n_forts": 14,
@@ -6147,12 +6127,12 @@
    "type_taux": "fourchette cible",
    "taux_secondaire": "taux effectif 3.88%",
    "raison_taux": null,
-   "date_taux": "2026-11-24",
+   "date_taux": "2026-11-25",
    "source_taux": "FRED (DFEDTARL / DFEDTARU)",
    "reference_badge": {
     "valeur": "4.00%",
     "source": "FRED (DFEDTARU, borne haute de la fourchette cible)",
-    "date": "2026-11-24"
+    "date": "2026-11-25"
    },
    "variation_pb": null,
    "date_variation": null,
@@ -6202,7 +6182,7 @@
    "type_taux": "dépôt",
    "taux_secondaire": "refinancement 2.65% (registre macro)",
    "raison_taux": null,
-   "date_taux": "2026-11-24",
+   "date_taux": "2026-11-25",
    "source_taux": "FRED (ECBDFR, taux de la facilité de dépôt de la BCE)",
    "reference_badge": {
     "valeur": "2.65%",
@@ -6828,6 +6808,7 @@
   "Construction Work Done q/q",
   "Corporate Profits q/q",
   "ECB Monetary Policy Meeting Accounts",
+  "Euro Summit",
   "FPC Meeting Minutes",
   "FPC Statement",
   "French Final Private Payrolls q/q",
@@ -6850,12 +6831,12 @@
   },
   "semaine": {
    "present": true,
-   "verifie_le": "2026-11-25"
+   "verifie_le": "2026-11-26"
   },
   "fred": {
-   "dates": 473,
+   "dates": 455,
    "erreurs": [],
-   "verifie_le": "2026-11-25"
+   "verifie_le": "2026-11-26"
   },
   "officiels": {
    "USD": {

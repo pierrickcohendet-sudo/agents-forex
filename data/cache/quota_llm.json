@@ -9,7 +9,7 @@
   "gemini-3.8-flash": {
    "appels": 1,
    "epuise_jusqu_a": "2026-11-25T07:59:59+00:00",
-   "pannes": 12
+   "pannes": 17
   },
   "gemini-3.5-flash-lite": {
    "appels": 1,
@@ -27,18 +27,32 @@
  "etiquettes": {
   "engrenages": {
    "appels": 1,
-   "echecs": 0,
-   "ok": true
+   "echecs": 2,
+   "ok": true,
+   "types": {
+    "delai": 1,
+    "503": 1
+   },
+   "dernier_echec": "503"
   },
   "analyses:USD-EUR-GBP": {
    "appels": 1,
-   "echecs": 0,
-   "ok": true
+   "echecs": 2,
+   "ok": true,
+   "types": {
+    "delai": 1,
+    "503": 1
+   },
+   "dernier_echec": "503"
   },
   "analyses:JPY-CHF-CAD": {
    "appels": 1,
-   "echecs": 0,
-   "ok": true
+   "echecs": 1,
+   "ok": true,
+   "types": {
+    "delai": 1
+   },
+   "dernier_echec": "delai"
   },
   "analyses:AUD-NZD-CNY": {
    "appels": 1,
@@ -193,21 +207,22 @@
   }
  },
  "echecs": {
-  "503": 15,
+  "503": 17,
   "json_invalide": 1,
-  "429": 1
+  "429": 1,
+  "delai": 3
  },
  "faits": [
   "devises",
   "rapport"
  ],
- "pannes": 15,
+ "pannes": 20,
  "pannes_avant_correctif": 0,
  "dernier_run": {
-  "id": "2026-11-25T10:19:02.008129+00:00",
-  "envois": 1,
-  "503": 1,
+  "id": "2026-11-26T02:28:02.874037+00:00",
+  "envois": 5,
+  "503": 2,
   "recues": 0,
-  "mode": "complément"
+  "mode": "complet"
  }
 }
