@@ -4,7 +4,7 @@
   "type_rapport": "quotidien",
   "version_schema": "1.0",
   "modele_llm": "gemini-3.5-flash",
-  "genere_le": "2026-11-26T20:19:54+00:00",
+  "genere_le": "2026-11-26T21:19:40+00:00",
   "appels_llm": [
    {
     "heure": "08:19",
@@ -297,40 +297,6 @@
    }
   },
   "disjoncteur": [
-   {
-    "heure": "08:43",
-    "actif": true,
-    "seuil_echecs": 3,
-    "ouvert": true,
-    "appels_total": 24,
-    "replis_json_modele_suivant": 4,
-    "modeles": [
-     {
-      "modele": "gemini-3.5-flash",
-      "ouvert": true,
-      "cause": "3 échecs consécutifs — 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:",
-      "ouvert_a_l_appel": 5,
-      "echecs_consecutifs": 3,
-      "ignores": 10
-     },
-     {
-      "modele": "gemini-3.8-flash",
-      "ouvert": true,
-      "cause": "3 échecs consécutifs — 503 Server Error: Service Unavailable for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:",
-      "ouvert_a_l_appel": 8,
-      "echecs_consecutifs": 3,
-      "ignores": 8
-     },
-     {
-      "modele": "gemini-3.5-flash-lite",
-      "ouvert": false,
-      "cause": null,
-      "ouvert_a_l_appel": null,
-      "echecs_consecutifs": 0,
-      "ignores": 0
-     }
-    ]
-   },
    {
     "heure": "09:25",
     "actif": true,
@@ -673,6 +639,40 @@
    },
    {
     "heure": "20:20",
+    "actif": true,
+    "seuil_echecs": 3,
+    "ouvert": false,
+    "appels_total": 3,
+    "replis_json_modele_suivant": 0,
+    "modeles": [
+     {
+      "modele": "gemini-3.5-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.8-flash",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     },
+     {
+      "modele": "gemini-3.5-flash-lite",
+      "ouvert": false,
+      "cause": null,
+      "ouvert_a_l_appel": null,
+      "echecs_consecutifs": 0,
+      "ignores": 0
+     }
+    ]
+   },
+   {
+    "heure": "21:19",
     "actif": true,
     "seuil_echecs": 3,
     "ouvert": false,
@@ -1475,7 +1475,7 @@
     "libelle": "Flash 3.5"
    },
    "version": "quotidienne",
-   "rafraichi_le": "2026-11-26T20:19:54+00:00"
+   "rafraichi_le": "2026-11-26T21:19:40+00:00"
   },
   "classement_devises": [],
   "devises_indisponibles": [
