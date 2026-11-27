@@ -1,9 +1,8 @@
 {
  "version_schema": 1,
- "genere_le": "2026-11-27T09:43:18+00:00",
+ "genere_le": "2026-11-27T10:24:08+00:00",
  "debut_historique": "2021-09-26",
  "erreurs_collecte": [
-  "EUR_taux_depot (FRED (ECBDFR, taux de la facilité de dépôt de la BCE)) : 500 Server Error: Internal Server Error for url: https://api.stlouisfed.org/fred/series/observations?series_id=ECBDFR&api_key=*",
   "EIA : HTTPSConnectionPool(host='api.eia.gov', port=443): Read timed out. (read timeout=60)"
  ],
  "engrenages": {
@@ -65,7 +64,7 @@
     {
      "date": "2026-11-27",
      "biais": "neutre",
-     "score_usd": null,
+     "score_usd": 95,
      "ecart": null
     }
    ],
@@ -165,6 +164,99 @@
         [
          "2026-11-25",
          88
+        ]
+       ]
+      },
+      {
+       "nom": "GBP",
+       "points": [
+        [
+         "2026-10-23",
+         70
+        ],
+        [
+         "2026-10-26",
+         58
+        ],
+        [
+         "2026-10-27",
+         54
+        ],
+        [
+         "2026-10-28",
+         50
+        ],
+        [
+         "2026-10-29",
+         68
+        ],
+        [
+         "2026-10-30",
+         68
+        ],
+        [
+         "2026-10-31",
+         58
+        ],
+        [
+         "2026-11-02",
+         73
+        ],
+        [
+         "2026-11-03",
+         58
+        ],
+        [
+         "2026-11-04",
+         84
+        ],
+        [
+         "2026-11-05",
+         82
+        ],
+        [
+         "2026-11-06",
+         74
+        ],
+        [
+         "2026-11-09",
+         64
+        ],
+        [
+         "2026-11-10",
+         78
+        ],
+        [
+         "2026-11-11",
+         62
+        ],
+        [
+         "2026-11-12",
+         52
+        ],
+        [
+         "2026-11-13",
+         52
+        ],
+        [
+         "2026-11-18",
+         52
+        ],
+        [
+         "2026-11-19",
+         39
+        ],
+        [
+         "2026-11-20",
+         64
+        ],
+        [
+         "2026-11-21",
+         64
+        ],
+        [
+         "2026-11-25",
+         52
         ]
        ]
       },
@@ -415,13 +507,23 @@
      "type": "barres",
      "titre": "Classement des 9 devises aujourd'hui",
      "unite": "0-100",
-     "barres": [],
+     "barres": [
+      {
+       "nom": "USD",
+       "valeur": 95
+      },
+      {
+       "nom": "GBP",
+       "valeur": 52
+      },
+      {
+       "nom": "EUR",
+       "valeur": 15
+      }
+     ],
      "source": "calcul Python (scores de confluence)",
      "note": null,
      "absentes": [
-      "USD",
-      "EUR",
-      "GBP",
       "JPY",
       "CHF",
       "CAD",
@@ -429,7 +531,7 @@
       "NZD",
       "CNY"
      ],
-     "raison": "valeurs indisponibles"
+     "raison": null
     }
    ],
    "notes": [
@@ -447,14 +549,14 @@
     {
      "id": "score_usd",
      "libelle": "Score USD",
-     "valeur": null,
-     "texte": null,
+     "valeur": 95,
+     "texte": "95",
      "unite": "score",
      "date": "2026-11-27",
      "frequence": null,
      "age_jours": 0,
      "source": "calcul Python (score de confluence 0-100)",
-     "raison": "donnée indisponible",
+     "raison": null,
      "variation": {
       "valeur": 4,
       "unite": "pts",
@@ -798,14 +900,14 @@
     {
      "id": "ecart_max",
      "libelle": "Écart meilleur − moins bon score",
-     "valeur": null,
-     "texte": null,
+     "valeur": 80,
+     "texte": "80",
      "unite": "score",
      "date": "2026-11-27",
      "frequence": null,
      "age_jours": 0,
-     "source": null,
-     "raison": "scores indisponibles",
+     "source": "calcul Python (USD − EUR)",
+     "raison": null,
      "variation": {
       "valeur": 4,
       "unite": "pts",
@@ -1686,17 +1788,18 @@
      "devise": "EUR",
      "cellules": {
       "taux_directeur": {
-       "valeur": 2.65,
+       "valeur": 2.5,
        "unite": "%",
-       "date": "2026-10-29",
-       "source": "registre macro (ForexFactory)",
-       "frequence": "mensuel",
+       "date": "2026-11-26",
+       "source": "FRED (ECBDFR, taux de la facilité de dépôt de la BCE)",
+       "frequence": "quotidien",
        "raison": null,
-       "percentile_5a": null,
-       "n_5a": 0,
        "var_1s": 0.0,
        "var_4s": 0.0,
-       "raison_percentile": "dernière donnée OCDE au 2026-01 : trop ancienne pour un percentile"
+       "percentile_5a": 61,
+       "n_5a": 262,
+       "raison_percentile": null,
+       "note": "ForexFactory publie le taux de refinancement principal (2.65%), 15 pb au-dessus du taux de dépôt qui pilote le marché"
       },
       "taux_2a": {
        "valeur": 3.06,
@@ -1712,7 +1815,7 @@
        "raison_percentile": null
       },
       "ecart_2a_directeur": {
-       "valeur": 41.0,
+       "valeur": 56.0,
        "raison": null,
        "source": "calcul : taux 2 ans − taux directeur du registre",
        "percentile_5a": null,
@@ -1724,7 +1827,7 @@
        "lecture": "le marché intègre des hausses"
       },
       "taux_reel": {
-       "valeur": 0.05,
+       "valeur": -0.1,
        "raison": null,
        "source": "calcul : taux directeur − CPI core a/a (registre)",
        "percentile_5a": null,
@@ -5577,7 +5680,7 @@
       },
       {
        "nom": "EUR",
-       "valeur": 2.65
+       "valeur": 2.5
       },
       {
        "nom": "GBP",
@@ -6439,14 +6542,14 @@
     },
     {
      "id": "bce",
-     "libelle": "BCE, taux de refinancement (registre)",
-     "valeur": 2.65,
-     "texte": "2,65 %",
+     "libelle": "BCE, taux de dépôt",
+     "valeur": 2.5,
+     "texte": "2,50 %",
      "unite": "%",
-     "date": "2026-10-29",
-     "frequence": "mensuel",
-     "age_jours": 29,
-     "source": "registre macro (ForexFactory)",
+     "date": "2026-11-26",
+     "frequence": "quotidien",
+     "age_jours": 1,
+     "source": "FRED (ECBDFR, taux de la facilité de dépôt de la BCE)",
      "raison": null,
      "variation": {
       "valeur": 0.0,
@@ -6454,16 +6557,141 @@
       "periode": "4 semaines",
       "texte": "0 pb sur 4 semaines"
      },
-     "percentile_5a": null,
-     "n_5a": 0,
+     "percentile_5a": 61,
+     "n_5a": 262,
      "percentile_autre": null,
-     "raison_percentile": "dernière donnée OCDE au 2026-01 : trop ancienne pour un percentile",
+     "raison_percentile": null,
      "courbe": {
-      "points": [],
+      "points": [
+       [
+        "2026-10-27",
+        2.5
+       ],
+       [
+        "2026-10-28",
+        2.5
+       ],
+       [
+        "2026-10-29",
+        2.5
+       ],
+       [
+        "2026-10-30",
+        2.5
+       ],
+       [
+        "2026-10-31",
+        2.5
+       ],
+       [
+        "2026-11-01",
+        2.5
+       ],
+       [
+        "2026-11-02",
+        2.5
+       ],
+       [
+        "2026-11-03",
+        2.5
+       ],
+       [
+        "2026-11-04",
+        2.5
+       ],
+       [
+        "2026-11-05",
+        2.5
+       ],
+       [
+        "2026-11-06",
+        2.5
+       ],
+       [
+        "2026-11-07",
+        2.5
+       ],
+       [
+        "2026-11-08",
+        2.5
+       ],
+       [
+        "2026-11-09",
+        2.5
+       ],
+       [
+        "2026-11-10",
+        2.5
+       ],
+       [
+        "2026-11-11",
+        2.5
+       ],
+       [
+        "2026-11-12",
+        2.5
+       ],
+       [
+        "2026-11-13",
+        2.5
+       ],
+       [
+        "2026-11-14",
+        2.5
+       ],
+       [
+        "2026-11-15",
+        2.5
+       ],
+       [
+        "2026-11-16",
+        2.5
+       ],
+       [
+        "2026-11-17",
+        2.5
+       ],
+       [
+        "2026-11-18",
+        2.5
+       ],
+       [
+        "2026-11-19",
+        2.5
+       ],
+       [
+        "2026-11-20",
+        2.5
+       ],
+       [
+        "2026-11-21",
+        2.5
+       ],
+       [
+        "2026-11-22",
+        2.5
+       ],
+       [
+        "2026-11-23",
+        2.5
+       ],
+       [
+        "2026-11-24",
+        2.5
+       ],
+       [
+        "2026-11-25",
+        2.5
+       ],
+       [
+        "2026-11-26",
+        2.5
+       ]
+      ],
       "periode": "30 jours",
-      "raison": "taux fixé par décision : pas de série quotidienne pour une mini-courbe"
+      "raison": null
      },
-     "lecture": null
+     "lecture": "ForexFactory publie le taux de refinancement principal (2.65%), 15 pb au-dessus du taux de dépôt qui pilote le marché"
     },
     {
      "id": "eur2a",
@@ -12041,7 +12269,7 @@
      "raison": null
     }
    ],
-   "actualites_maj": "2026-11-27T09:43+00:00",
+   "actualites_maj": "2026-11-27T10:24+00:00",
    "actualites_nb_titres_lus": 77,
    "notes": [
     "Dette et solde publics : FMI (annuel, avec 1 à 3 ans de retard) ; EUR = Allemagne. Pas de série gratuite pour CHF et NZD.",
@@ -18221,6 +18449,22 @@
      "lien": "https://www.cnbc.com/2026/11/27/sap-job-cuts-ai-restructuring.html"
     },
     {
+     "titre": "Defense giant Rheinmetall embraces ‘new normal’ of caution after military contract setback; stock rises",
+     "canal": "refuge",
+     "canaux": [
+      "refuge"
+     ],
+     "mecanisme": "conflit armé : fuite vers les valeurs refuges",
+     "devises": [
+      "USD",
+      "JPY",
+      "CHF"
+     ],
+     "source": "cnbc_world",
+     "date": "2026-11-27",
+     "lien": "https://www.cnbc.com/2026/11/27/rheinmetall-stock-cmd-guidance-sales.html"
+    },
+    {
      "titre": "The great aluminum squeeze: London supply crunch deepens as warehouse stocks slide",
      "canal": "refuge",
      "canaux": [
@@ -18252,39 +18496,6 @@
      "source": "cnbc_world",
      "date": "2026-11-26",
      "lien": "https://www.cnbc.com/2026/11/26/us-tariffs-hike-trade-agreement.html"
-    },
-    {
-     "titre": "Trump, NATO chief caution Russia as attacks on Ukraine’s energy infrastructure intensify",
-     "canal": "refuge",
-     "canaux": [
-      "refuge"
-     ],
-     "mecanisme": "conflit armé : fuite vers les valeurs refuges",
-     "devises": [
-      "USD",
-      "JPY",
-      "CHF"
-     ],
-     "source": "cnbc_world",
-     "date": "2026-11-26",
-     "lien": "https://www.cnbc.com/2026/11/26/trump-nato-rutte-russia-ukraine-war.html"
-    },
-    {
-     "titre": "How Trump’s latest tariff moves hand India an edge over rival Asian exporters",
-     "canal": "commerce",
-     "canaux": [
-      "commerce"
-     ],
-     "mecanisme": "tensions commerciales : volumes d'échanges, chaînes d'approvisionnement",
-     "devises": [
-      "CNY",
-      "AUD",
-      "CAD",
-      "EUR"
-     ],
-     "source": "cnbc_world",
-     "date": "2026-11-26",
-     "lien": "https://www.cnbc.com/2026/11/26/trump-us-tariff-india-trade.html"
     },
     {
      "titre": "Spanish inflation comes off the boil in November, offering some respite for the ECB",
@@ -19647,7 +19858,7 @@
       },
       {
        "nom": "Commerce",
-       "valeur": 5
+       "valeur": 4
       },
       {
        "nom": "Sanctions",
@@ -20104,8 +20315,8 @@
     {
      "id": "canal_commer",
      "libelle": "Titres : commerce",
-     "valeur": 5,
-     "texte": "5",
+     "valeur": 4,
+     "texte": "4",
      "unite": "nombre",
      "date": "2026-11-27",
      "frequence": null,
@@ -20281,7 +20492,7 @@
        ],
        [
         "2026-11-27",
-        5
+        4
        ]
       ],
       "periode": "depuis le début de l'archive quotidienne",
@@ -40816,7 +41027,7 @@
     "conviction": 2,
     "conviction_niveau": "moyen",
     "regle": "dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (3 accords, 2 désaccords)",
-    "raison_couleur": "Rouge (Dollar haussier · Risk off) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (3 accords, 2 désaccords). Chiffre du jour : Directions dollar des engrenages 2 à 8 : 3 haussières, 1 baissière, 3 neutres ; risque de l'engrenage 5 : risk_off"
+    "raison_couleur": "Rouge (Dollar haussier · Risk off) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (3 accords, 2 désaccords). Chiffre du jour : Biais global neutre ; classement : USD 95, GBP 52, EUR 15"
    },
    "coherence": {
     "alignes": 3,
@@ -40917,7 +41128,7 @@
      "conviction": 2,
      "conviction_niveau": "moyen",
      "regle": "dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (3 accords, 2 désaccords)",
-     "raison_couleur": "Rouge (Dollar haussier · Risk off) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (3 accords, 2 désaccords). Chiffre du jour : Directions dollar des engrenages 2 à 8 : 3 haussières, 1 baissière, 3 neutres ; risque de l'engrenage 5 : risk_off"
+     "raison_couleur": "Rouge (Dollar haussier · Risk off) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (3 accords, 2 désaccords). Chiffre du jour : Biais global neutre ; classement : USD 95, GBP 52, EUR 15"
     }
    },
    {
@@ -41338,14 +41549,14 @@
     "titre": "Géopolitique",
     "chiffre": {
      "libelle": "Événements retenus",
-     "valeur": 15.0,
-     "texte": "15",
+     "valeur": 14.0,
+     "texte": "14",
      "unite": "",
      "date": "2026-11-27",
      "source": "fil d'actualité classé par canal (calcul Python)",
      "raison": null
     },
-    "ligne": "Canaux : refuge (conflits) 7, commerce 5, énergie 3, politique intérieure 1.",
+    "ligne": "Canaux : refuge (conflits) 7, commerce 4, énergie 3, politique intérieure 1.",
     "courbe": {
      "points": [],
      "periode": "30 jours",
@@ -41361,7 +41572,7 @@
      "conviction": 2,
      "conviction_niveau": "moyen",
      "regle": "dollar : case USD de la matrice d'impact (Soutien : titres du jour au canal « refuge (conflits) » ≥ 3 titres → +1 pour USD)",
-     "raison_couleur": "Vert (Dollar haussier) : dollar : case USD de la matrice d'impact (Soutien : titres du jour au canal « refuge (conflits) » ≥ 3 titres → +1 pour USD). Chiffre du jour : Titres du jour par canal de transmission : Énergie 3, Commerce 5, Refuge (conflits) 7, Politique intérieure 1"
+     "raison_couleur": "Vert (Dollar haussier) : dollar : case USD de la matrice d'impact (Soutien : titres du jour au canal « refuge (conflits) » ≥ 3 titres → +1 pour USD). Chiffre du jour : Titres du jour par canal de transmission : Énergie 3, Commerce 4, Refuge (conflits) 7, Politique intérieure 1"
     }
    },
    {
@@ -41575,7 +41786,7 @@
      "a_retenir": "Direction calculée : Dollar haussier · Risk off.",
      "a_retenir_source": "calcul Python",
      "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
-     "raison_couleur": "Rouge (Dollar haussier · Risk off) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (3 accords, 2 désaccords). Chiffre du jour : Directions dollar des engrenages 2 à 8 : 3 haussières, 1 baissière, 3 neutres ; risque de l'engrenage 5 : risk_off"
+     "raison_couleur": "Rouge (Dollar haussier · Risk off) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (3 accords, 2 désaccords). Chiffre du jour : Biais global neutre ; classement : USD 95, GBP 52, EUR 15"
     },
     {
      "numero": 1,
@@ -41600,7 +41811,7 @@
      "a_retenir": "Dollar haussier · Risk off. Règle Python : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (3 accords, 2 désaccords).",
      "a_retenir_source": "calcul Python",
      "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
-     "raison_couleur": "Rouge (Dollar haussier · Risk off) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (3 accords, 2 désaccords). Chiffre du jour : Directions dollar des engrenages 2 à 8 : 3 haussières, 1 baissière, 3 neutres ; risque de l'engrenage 5 : risk_off"
+     "raison_couleur": "Rouge (Dollar haussier · Risk off) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (3 accords, 2 désaccords). Chiffre du jour : Biais global neutre ; classement : USD 95, GBP 52, EUR 15"
     },
     {
      "numero": 2,
@@ -41709,14 +41920,14 @@
      "titre": "Géopolitique",
      "chiffre": {
       "libelle": "Événements retenus",
-      "valeur": 15.0,
-      "texte": "15",
+      "valeur": 14.0,
+      "texte": "14",
       "unite": "",
       "date": "2026-11-27",
       "source": "fil d'actualité classé par canal (calcul Python)",
       "raison": null
      },
-     "ligne": "Canaux : refuge (conflits) 7, commerce 5, énergie 3, politique intérieure 1.",
+     "ligne": "Canaux : refuge (conflits) 7, commerce 4, énergie 3, politique intérieure 1.",
      "verdict": {
       "libelle": "Dollar haussier",
       "classe": "up",
@@ -41726,7 +41937,7 @@
      "a_retenir": "Dollar haussier. Règle Python : dollar : case USD de la matrice d'impact (Soutien : titres du jour au canal « refuge (conflits) » ≥ 3 titres → +1 pour USD).",
      "a_retenir_source": "calcul Python",
      "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
-     "raison_couleur": "Vert (Dollar haussier) : dollar : case USD de la matrice d'impact (Soutien : titres du jour au canal « refuge (conflits) » ≥ 3 titres → +1 pour USD). Chiffre du jour : Titres du jour par canal de transmission : Énergie 3, Commerce 5, Refuge (conflits) 7, Politique intérieure 1"
+     "raison_couleur": "Vert (Dollar haussier) : dollar : case USD de la matrice d'impact (Soutien : titres du jour au canal « refuge (conflits) » ≥ 3 titres → +1 pour USD). Chiffre du jour : Titres du jour par canal de transmission : Énergie 3, Commerce 4, Refuge (conflits) 7, Politique intérieure 1"
     },
     {
      "numero": 7,
@@ -44196,7 +44407,7 @@
      "classe": "up"
     },
     "neutralise": null,
-    "note": "seuils haut 3. Canaux : refuge (conflits) 7, commerce 5, énergie 3, politique intérieure 1.",
+    "note": "seuils haut 3. Canaux : refuge (conflits) 7, commerce 4, énergie 3, politique intérieure 1.",
     "indicateur": null
    },
    {
@@ -45924,8 +46135,8 @@
       },
       {
        "date": "2026-11-27",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "dn",
+       "libelle": "Dollar haussier · Risk off"
       }
      ]
     },
@@ -46005,8 +46216,8 @@
       },
       {
        "date": "2026-11-27",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "dn",
+       "libelle": "Dollar baissier"
       }
      ]
     },
@@ -46086,8 +46297,8 @@
       },
       {
        "date": "2026-11-27",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "up",
+       "libelle": "Dollar haussier"
       }
      ]
     },
@@ -46167,8 +46378,8 @@
       },
       {
        "date": "2026-11-27",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "nd",
+       "libelle": "Dollar neutre"
       }
      ]
     },
@@ -46248,8 +46459,8 @@
       },
       {
        "date": "2026-11-27",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "dn",
+       "libelle": "Dollar haussier · Risk off"
       }
      ]
     },
@@ -46329,8 +46540,8 @@
       },
       {
        "date": "2026-11-27",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "up",
+       "libelle": "Dollar haussier"
       }
      ]
     },
@@ -46410,8 +46621,8 @@
       },
       {
        "date": "2026-11-27",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "up",
+       "libelle": "Dollar neutre · Risk on"
       }
      ]
     },
@@ -46491,8 +46702,8 @@
       },
       {
        "date": "2026-11-27",
-       "classe": null,
-       "libelle": "pas de rapport ce jour-là"
+       "classe": "nd",
+       "libelle": "Dollar neutre"
       }
      ]
     }
@@ -46541,10 +46752,10 @@
     "chiffres": [
      {
       "libelle": "Score USD",
-      "texte": "n/d",
+      "texte": "95",
       "date": "2026-11-27",
       "source": "calcul Python (score de confluence 0-100)",
-      "raison": "donnée indisponible",
+      "raison": null,
       "variation": "+4 pts sur 4 semaines",
       "percentile_5a": null,
       "rang": "rang 5 ans n/d : scores archivés depuis août 2026 seulement"
@@ -46571,10 +46782,10 @@
      },
      {
       "libelle": "Écart meilleur − moins bon score",
-      "texte": "n/d",
+      "texte": "80",
       "date": "2026-11-27",
-      "source": null,
-      "raison": "scores indisponibles",
+      "source": "calcul Python (USD − EUR)",
+      "raison": null,
       "variation": "+4 pts sur 4 semaines",
       "percentile_5a": null,
       "rang": "rang 5 ans n/d : scores archivés depuis août 2026 seulement"
@@ -51039,7 +51250,7 @@
       "classe": "up"
      },
      "neutralise": null,
-     "note": "seuils haut 3. Canaux : refuge (conflits) 7, commerce 5, énergie 3, politique intérieure 1.",
+     "note": "seuils haut 3. Canaux : refuge (conflits) 7, commerce 4, énergie 3, politique intérieure 1.",
      "indicateur": null
     },
     "chiffres": [
@@ -51055,7 +51266,7 @@
      },
      {
       "libelle": "Titres : commerce",
-      "texte": "5",
+      "texte": "4",
       "date": "2026-11-27",
       "source": "flux RSS du jour, classement par mots-clés (Python)",
       "raison": null,
@@ -51492,7 +51703,7 @@
     "lecture": {
      "texte": null,
      "source": "calcul Python",
-     "phrase_python": "Dollar haussier. seuils haut 3. Canaux : refuge (conflits) 7, commerce 5, énergie 3, politique intérieure 1.",
+     "phrase_python": "Dollar haussier. seuils haut 3. Canaux : refuge (conflits) 7, commerce 4, énergie 3, politique intérieure 1.",
      "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
      "redige_par": null,
      "redige_le": null,
