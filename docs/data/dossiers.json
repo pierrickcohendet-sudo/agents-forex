@@ -1,10 +1,8 @@
 {
  "version_schema": 1,
- "genere_le": "2026-11-27T16:22:19+00:00",
+ "genere_le": "2026-11-27T17:21:18+00:00",
  "debut_historique": "2021-09-26",
- "erreurs_collecte": [
-  "EIA : HTTPSConnectionPool(host='api.eia.gov', port=443): Read timed out. (read timeout=60)"
- ],
+ "erreurs_collecte": [],
  "engrenages": {
   "1": {
    "numero": 1,
@@ -12415,7 +12413,7 @@
      "raison": null
     }
    ],
-   "actualites_maj": "2026-11-27T16:22+00:00",
+   "actualites_maj": "2026-11-27T17:21+00:00",
    "actualites_nb_titres_lus": 77,
    "notes": [
     "Dette et solde publics : FMI (annuel, avec 1 à 3 ans de retard) ; EUR = Allemagne. Pas de série gratuite pour CHF et NZD.",
@@ -40378,26 +40376,40 @@
    "instruments": [
     {
      "id": "eia_stocks",
-     "libelle": "Stocks de brut US",
+     "libelle": "Stocks de brut US (hors réserve stratégique)",
      "cellule": {
-      "valeur": null,
-      "raison": "EIA indisponible aujourd'hui",
-      "source": null,
-      "percentile_5a": null,
-      "var_1s": null,
-      "var_4s": null
+      "valeur": 418.9,
+      "unite": "M barils",
+      "date": "2026-11-20",
+      "source": "EIA (WCESTUS1, stocks de brut hors réserve stratégique)",
+      "frequence": "quotidien",
+      "raison": null,
+      "var_1s": 0.27,
+      "var_4s": 2.02,
+      "percentile_5a": 23,
+      "n_5a": 261,
+      "raison_percentile": null,
+      "ecart_moyenne_5a": -12.5,
+      "ecart_moyenne_5a_pct": -2.9,
+      "moyenne_5a": 431.4,
+      "note": "moyenne des 5 mêmes semaines des 5 années précédentes"
      }
     },
     {
      "id": "eia_production",
      "libelle": "Production de brut US",
      "cellule": {
-      "valeur": null,
-      "raison": "EIA indisponible aujourd'hui",
-      "source": null,
-      "percentile_5a": null,
-      "var_1s": null,
-      "var_4s": null
+      "valeur": 14065.0,
+      "unite": "milliers b/j",
+      "date": "2026-11-20",
+      "source": "EIA (WCRFPUS2, production de brut US)",
+      "frequence": "quotidien",
+      "raison": null,
+      "var_1s": 0.24,
+      "var_4s": 0.52,
+      "percentile_5a": 100,
+      "n_5a": 261,
+      "raison_percentile": null
      }
     },
     {
@@ -40529,12 +40541,548 @@
    "graphiques": [
     {
      "type": "serie",
-     "titre": "Stocks de brut US contre moyenne 5 ans, 26 semaines",
+     "titre": "Stocks de brut US contre moyenne 5 ans, 52 semaines",
      "unite": "M barils",
-     "courbes": [],
-     "source": "EIA",
+     "courbes": [
+      {
+       "nom": "Stocks",
+       "points": [
+        [
+         "2025-11-21",
+         426.9
+        ],
+        [
+         "2025-11-28",
+         427.5
+        ],
+        [
+         "2025-12-05",
+         425.7
+        ],
+        [
+         "2025-12-12",
+         424.4
+        ],
+        [
+         "2025-12-19",
+         424.8
+        ],
+        [
+         "2025-12-26",
+         422.9
+        ],
+        [
+         "2026-01-02",
+         419.1
+        ],
+        [
+         "2026-01-09",
+         422.4
+        ],
+        [
+         "2026-01-16",
+         426.0
+        ],
+        [
+         "2026-01-23",
+         423.8
+        ],
+        [
+         "2026-01-30",
+         420.3
+        ],
+        [
+         "2026-02-06",
+         428.8
+        ],
+        [
+         "2026-02-13",
+         419.8
+        ],
+        [
+         "2026-02-20",
+         435.8
+        ],
+        [
+         "2026-02-27",
+         439.3
+        ],
+        [
+         "2026-03-06",
+         443.1
+        ],
+        [
+         "2026-03-13",
+         449.3
+        ],
+        [
+         "2026-03-20",
+         456.2
+        ],
+        [
+         "2026-03-27",
+         461.6
+        ],
+        [
+         "2026-04-03",
+         464.7
+        ],
+        [
+         "2026-04-10",
+         463.8
+        ],
+        [
+         "2026-04-17",
+         465.7
+        ],
+        [
+         "2026-04-24",
+         459.5
+        ],
+        [
+         "2026-05-01",
+         457.2
+        ],
+        [
+         "2026-05-08",
+         452.9
+        ],
+        [
+         "2026-05-15",
+         445.0
+        ],
+        [
+         "2026-05-22",
+         441.7
+        ],
+        [
+         "2026-05-29",
+         433.7
+        ],
+        [
+         "2026-06-05",
+         426.5
+        ],
+        [
+         "2026-06-12",
+         418.2
+        ],
+        [
+         "2026-06-19",
+         412.1
+        ],
+        [
+         "2026-06-26",
+         408.4
+        ],
+        [
+         "2026-07-03",
+         411.4
+        ],
+        [
+         "2026-07-10",
+         409.7
+        ],
+        [
+         "2026-07-17",
+         411.7
+        ],
+        [
+         "2026-07-24",
+         404.5
+        ],
+        [
+         "2026-07-31",
+         407.0
+        ],
+        [
+         "2026-08-07",
+         424.4
+        ],
+        [
+         "2026-08-14",
+         428.8
+        ],
+        [
+         "2026-08-21",
+         428.9
+        ],
+        [
+         "2026-08-28",
+         424.5
+        ],
+        [
+         "2026-09-04",
+         424.1
+        ],
+        [
+         "2026-09-11",
+         423.4
+        ],
+        [
+         "2026-09-18",
+         426.4
+        ],
+        [
+         "2026-09-25",
+         427.3
+        ],
+        [
+         "2026-10-02",
+         424.1
+        ],
+        [
+         "2026-10-09",
+         415.6
+        ],
+        [
+         "2026-10-16",
+         412.5
+        ],
+        [
+         "2026-10-23",
+         410.6
+        ],
+        [
+         "2026-10-30",
+         409.8
+        ],
+        [
+         "2026-11-06",
+         414.4
+        ],
+        [
+         "2026-11-13",
+         417.8
+        ],
+        [
+         "2026-11-20",
+         418.9
+        ]
+       ]
+      },
+      {
+       "nom": "Moyenne 5 ans (même semaine)",
+       "points": [
+        [
+         "2025-11-21",
+         432.6
+        ],
+        [
+         "2025-11-28",
+         440.6
+        ],
+        [
+         "2025-12-05",
+         443.7
+        ],
+        [
+         "2025-12-12",
+         441.3
+        ],
+        [
+         "2025-12-19",
+         438.4
+        ],
+        [
+         "2025-12-26",
+         435.7
+        ],
+        [
+         "2026-01-02",
+         436.4
+        ],
+        [
+         "2026-01-09",
+         438.2
+        ],
+        [
+         "2026-01-16",
+         434.7
+        ],
+        [
+         "2026-01-23",
+         436.1
+        ],
+        [
+         "2026-01-30",
+         437.1
+        ],
+        [
+         "2026-02-06",
+         442.4
+        ],
+        [
+         "2026-02-13",
+         446.7
+        ],
+        [
+         "2026-02-20",
+         451.1
+        ],
+        [
+         "2026-02-27",
+         454.2
+        ],
+        [
+         "2026-03-06",
+         455.8
+        ],
+        [
+         "2026-03-13",
+         455.9
+        ],
+        [
+         "2026-03-20",
+         453.5
+        ],
+        [
+         "2026-03-27",
+         454.4
+        ],
+        [
+         "2026-04-03",
+         456.9
+        ],
+        [
+         "2026-04-10",
+         455.1
+        ],
+        [
+         "2026-04-17",
+         453.0
+        ],
+        [
+         "2026-04-24",
+         452.4
+        ],
+        [
+         "2026-05-01",
+         453.9
+        ],
+        [
+         "2026-05-08",
+         454.7
+        ],
+        [
+         "2026-05-15",
+         452.3
+        ],
+        [
+         "2026-05-22",
+         449.7
+        ],
+        [
+         "2026-05-29",
+         448.4
+        ],
+        [
+         "2026-06-05",
+         448.9
+        ],
+        [
+         "2026-06-12",
+         443.7
+        ],
+        [
+         "2026-06-19",
+         439.5
+        ],
+        [
+         "2026-06-26",
+         437.8
+        ],
+        [
+         "2026-07-03",
+         438.8
+        ],
+        [
+         "2026-07-10",
+         437.2
+        ],
+        [
+         "2026-07-17",
+         434.0
+        ],
+        [
+         "2026-07-24",
+         433.1
+        ],
+        [
+         "2026-07-31",
+         433.9
+        ],
+        [
+         "2026-08-07",
+         431.5
+        ],
+        [
+         "2026-08-14",
+         426.9
+        ],
+        [
+         "2026-08-21",
+         422.0
+        ],
+        [
+         "2026-08-28",
+         421.3
+        ],
+        [
+         "2026-09-04",
+         422.3
+        ],
+        [
+         "2026-09-11",
+         419.2
+        ],
+        [
+         "2026-09-18",
+         418.6
+        ],
+        [
+         "2026-09-25",
+         419.5
+        ],
+        [
+         "2026-10-02",
+         426.7
+        ],
+        [
+         "2026-10-09",
+         425.6
+        ],
+        [
+         "2026-10-16",
+         428.1
+        ],
+        [
+         "2026-10-23",
+         426.9
+        ],
+        [
+         "2026-10-30",
+         432.1
+        ],
+        [
+         "2026-11-06",
+         433.0
+        ],
+        [
+         "2026-11-13",
+         433.6
+        ],
+        [
+         "2026-11-20",
+         431.4
+        ]
+       ]
+      }
+     ],
+     "source": "EIA (WCESTUS1)",
      "base_100": false,
-     "raison": "séries indisponibles"
+     "raison": null,
+     "annotations": {
+      "courbe": "Stocks",
+      "periodes": {
+       "30": [
+        {
+         "type": "bas",
+         "date": "2026-10-30",
+         "valeur": 409.8,
+         "texte": "Plus bas 409,80 M barils",
+         "detail": "Stocks : plus bas sur 30 j : 409,80 M barils le 30/10/2026",
+         "source": "EIA (WCESTUS1)"
+        },
+        {
+         "type": "dernier",
+         "date": "2026-11-20",
+         "valeur": 418.9,
+         "texte": "418,90 M barils au 20/11",
+         "detail": "Stocks : dernière valeur 418,90 M barils le 20/11/2026 (plus haut de la période)",
+         "source": "EIA (WCESTUS1)"
+        }
+       ],
+       "90": [
+        {
+         "type": "haut",
+         "date": "2026-09-25",
+         "valeur": 427.3,
+         "texte": "Plus haut 427,30 M barils",
+         "detail": "Stocks : plus haut sur 90 j : 427,30 M barils le 25/09/2026",
+         "source": "EIA (WCESTUS1)"
+        },
+        {
+         "type": "bas",
+         "date": "2026-10-30",
+         "valeur": 409.8,
+         "texte": "Plus bas 409,80 M barils",
+         "detail": "Stocks : plus bas sur 90 j : 409,80 M barils le 30/10/2026",
+         "source": "EIA (WCESTUS1)"
+        },
+        {
+         "type": "dernier",
+         "date": "2026-11-20",
+         "valeur": 418.9,
+         "texte": "418,90 M barils au 20/11",
+         "detail": "Stocks : dernière valeur 418,90 M barils le 20/11/2026",
+         "source": "EIA (WCESTUS1)"
+        }
+       ],
+       "366": [
+        {
+         "type": "haut",
+         "date": "2026-04-17",
+         "valeur": 465.7,
+         "texte": "Plus haut 465,70 M barils",
+         "detail": "Stocks : plus haut sur 1 an : 465,70 M barils le 17/04/2026",
+         "source": "EIA (WCESTUS1)"
+        },
+        {
+         "type": "bas",
+         "date": "2026-07-24",
+         "valeur": 404.5,
+         "texte": "Plus bas 404,50 M barils",
+         "detail": "Stocks : plus bas sur 1 an : 404,50 M barils le 24/07/2026",
+         "source": "EIA (WCESTUS1)"
+        },
+        {
+         "type": "dernier",
+         "date": "2026-11-20",
+         "valeur": 418.9,
+         "texte": "418,90 M barils au 20/11",
+         "detail": "Stocks : dernière valeur 418,90 M barils le 20/11/2026",
+         "source": "EIA (WCESTUS1)"
+        }
+       ],
+       "tout": [
+        {
+         "type": "haut",
+         "date": "2026-04-17",
+         "valeur": 465.7,
+         "texte": "Plus haut 465,70 M barils",
+         "detail": "Stocks : plus haut sur la série : 465,70 M barils le 17/04/2026",
+         "source": "EIA (WCESTUS1)"
+        },
+        {
+         "type": "bas",
+         "date": "2026-07-24",
+         "valeur": 404.5,
+         "texte": "Plus bas 404,50 M barils",
+         "detail": "Stocks : plus bas sur la série : 404,50 M barils le 24/07/2026",
+         "source": "EIA (WCESTUS1)"
+        },
+        {
+         "type": "dernier",
+         "date": "2026-11-20",
+         "valeur": 418.9,
+         "texte": "418,90 M barils au 20/11",
+         "detail": "Stocks : dernière valeur 418,90 M barils le 20/11/2026",
+         "source": "EIA (WCESTUS1)"
+        }
+       ]
+      }
+     }
     },
     {
      "type": "barres",
@@ -40597,47 +41145,324 @@
    ],
    "consequences": {
     "moteur": {
-     "libelle": "moteur",
-     "raison": "historique 5 ans indisponible"
+     "libelle": "stocks de brut US contre la moyenne saisonnière 5 ans",
+     "source": "EIA (WCESTUS1), calcul Python",
+     "unite": "pts",
+     "date": "2026-11-20",
+     "variation_1m": 0.74,
+     "debut": "2021-11-27"
     },
-    "lignes": [],
-    "note": "Corrélation n'est pas causalité : ces chiffres décrivent le passé récent (5 ans), ils ne prévoient rien."
+    "lignes": [
+     {
+      "sensibilite": 0.17,
+      "n_mois": 23,
+      "si_hausse": {
+       "mediane": -0.89,
+       "n": 5,
+       "raison": null
+      },
+      "si_baisse": {
+       "mediane": null,
+       "n": 4,
+       "raison": "moins de 5 cas (4)"
+      },
+      "fiabilite": {
+       "part": null,
+       "n": 9,
+       "raison": "échantillon insuffisant (9 cas, minimum 20)"
+      },
+      "sigma_moteur": 2.96,
+      "actif": "CAD",
+      "unite": "%",
+      "aujourdhui": {
+       "lecture": "Neutre",
+       "raison": "moteur calme : +0,74 sur 1 mois, dans ±1 écart−type (±2,96)"
+      }
+     },
+     {
+      "sensibilite": -0.12,
+      "n_mois": 23,
+      "si_hausse": {
+       "mediane": -0.57,
+       "n": 5,
+       "raison": null
+      },
+      "si_baisse": {
+       "mediane": null,
+       "n": 4,
+       "raison": "moins de 5 cas (4)"
+      },
+      "fiabilite": {
+       "part": null,
+       "n": 9,
+       "raison": "échantillon insuffisant (9 cas, minimum 20)"
+      },
+      "sigma_moteur": 2.96,
+      "actif": "USD",
+      "unite": "%",
+      "aujourdhui": {
+       "lecture": "Neutre",
+       "raison": "moteur calme : +0,74 sur 1 mois, dans ±1 écart−type (±2,96)"
+      }
+     },
+     {
+      "sensibilite": 0.16,
+      "n_mois": 23,
+      "si_hausse": {
+       "mediane": 0.64,
+       "n": 5,
+       "raison": null
+      },
+      "si_baisse": {
+       "mediane": null,
+       "n": 4,
+       "raison": "moins de 5 cas (4)"
+      },
+      "fiabilite": {
+       "part": null,
+       "n": 9,
+       "raison": "échantillon insuffisant (9 cas, minimum 20)"
+      },
+      "sigma_moteur": 2.96,
+      "actif": "JPY",
+      "unite": "%",
+      "aujourdhui": {
+       "lecture": "Neutre",
+       "raison": "moteur calme : +0,74 sur 1 mois, dans ±1 écart−type (±2,96)"
+      }
+     },
+     {
+      "sensibilite": 0.37,
+      "n_mois": 23,
+      "si_hausse": {
+       "mediane": -1.37,
+       "n": 5,
+       "raison": null
+      },
+      "si_baisse": {
+       "mediane": null,
+       "n": 4,
+       "raison": "moins de 5 cas (4)"
+      },
+      "fiabilite": {
+       "part": null,
+       "n": 9,
+       "raison": "échantillon insuffisant (9 cas, minimum 20)"
+      },
+      "sigma_moteur": 2.96,
+      "actif": "Brent",
+      "unite": "%",
+      "aujourdhui": {
+       "lecture": "Neutre",
+       "raison": "moteur calme : +0,74 sur 1 mois, dans ±1 écart−type (±2,96)"
+      }
+     },
+     {
+      "sensibilite": -0.04,
+      "n_mois": 23,
+      "si_hausse": {
+       "mediane": 1.22,
+       "n": 5,
+       "raison": null
+      },
+      "si_baisse": {
+       "mediane": null,
+       "n": 4,
+       "raison": "moins de 5 cas (4)"
+      },
+      "fiabilite": {
+       "part": null,
+       "n": 9,
+       "sans_sens": true,
+       "raison": "pas de sens attendu (sensibilité nulle ou non calculable)"
+      },
+      "sigma_moteur": 2.96,
+      "actif": "S&P 500",
+      "unite": "%",
+      "aujourdhui": {
+       "lecture": "Neutre",
+       "raison": "moteur calme : +0,74 sur 1 mois, dans ±1 écart−type (±2,96)"
+      }
+     },
+     {
+      "sensibilite": 0.4,
+      "n_mois": 23,
+      "si_hausse": {
+       "mediane": 1.52,
+       "n": 5,
+       "raison": null
+      },
+      "si_baisse": {
+       "mediane": null,
+       "n": 4,
+       "raison": "moins de 5 cas (4)"
+      },
+      "fiabilite": {
+       "part": null,
+       "n": 9,
+       "raison": "échantillon insuffisant (9 cas, minimum 20)"
+      },
+      "sigma_moteur": 2.96,
+      "actif": "Or (proxy)",
+      "unite": "%",
+      "aujourdhui": {
+       "lecture": "Neutre",
+       "raison": "moteur calme : +0,74 sur 1 mois, dans ±1 écart−type (±2,96)"
+      }
+     }
+    ],
+    "note": "Corrélation n'est pas causalité : ces chiffres décrivent le passé récent (5 ans), ils ne prévoient rien.",
+    "methode": "Épisodes : variation du moteur sur 1 mois d'au moins 1 écart-type (calculé sur 5 ans), espacés d'au moins 30 jours ; mouvement médian de l'actif sur le mois suivant. Devises : force de la devise (hausse = la devise s'apprécie) ; marchés : hausse du prix ou du taux. Moins de 20 cas : échantillon insuffisant."
    },
    "tuiles": [
     {
      "id": "stocks",
      "libelle": "Stocks de brut US",
-     "valeur": null,
-     "texte": null,
+     "valeur": 418.9,
+     "texte": "418,9 M",
      "unite": "M barils",
-     "date": null,
-     "frequence": null,
-     "age_jours": null,
-     "source": null,
-     "raison": "EIA indisponible aujourd'hui",
-     "variation": null,
-     "percentile_5a": null,
-     "n_5a": null,
+     "date": "2026-11-20",
+     "frequence": "quotidien",
+     "age_jours": 7,
+     "source": "EIA (WCESTUS1, stocks de brut hors réserve stratégique)",
+     "raison": null,
+     "variation": {
+      "valeur": 2.02,
+      "unite": "%",
+      "periode": "4 semaines",
+      "texte": "+2,02 % sur 4 semaines"
+     },
+     "percentile_5a": 23,
+     "n_5a": 261,
      "percentile_autre": null,
      "raison_percentile": null,
      "courbe": {
-      "points": [],
+      "points": [
+       [
+        "2026-05-22",
+        441.7
+       ],
+       [
+        "2026-05-29",
+        433.7
+       ],
+       [
+        "2026-06-05",
+        426.5
+       ],
+       [
+        "2026-06-12",
+        418.2
+       ],
+       [
+        "2026-06-19",
+        412.1
+       ],
+       [
+        "2026-06-26",
+        408.4
+       ],
+       [
+        "2026-07-03",
+        411.4
+       ],
+       [
+        "2026-07-10",
+        409.7
+       ],
+       [
+        "2026-07-17",
+        411.7
+       ],
+       [
+        "2026-07-24",
+        404.5
+       ],
+       [
+        "2026-07-31",
+        407.0
+       ],
+       [
+        "2026-08-07",
+        424.4
+       ],
+       [
+        "2026-08-14",
+        428.8
+       ],
+       [
+        "2026-08-21",
+        428.9
+       ],
+       [
+        "2026-08-28",
+        424.5
+       ],
+       [
+        "2026-09-04",
+        424.1
+       ],
+       [
+        "2026-09-11",
+        423.4
+       ],
+       [
+        "2026-09-18",
+        426.4
+       ],
+       [
+        "2026-09-25",
+        427.3
+       ],
+       [
+        "2026-10-02",
+        424.1
+       ],
+       [
+        "2026-10-09",
+        415.6
+       ],
+       [
+        "2026-10-16",
+        412.5
+       ],
+       [
+        "2026-10-23",
+        410.6
+       ],
+       [
+        "2026-10-30",
+        409.8
+       ],
+       [
+        "2026-11-06",
+        414.4
+       ],
+       [
+        "2026-11-13",
+        417.8
+       ],
+       [
+        "2026-11-20",
+        418.9
+       ]
+      ],
       "periode": "26 semaines",
-      "raison": "pas d'historique pour une mini-courbe"
+      "raison": null
      },
-     "lecture": null
+     "lecture": "moyenne des 5 mêmes semaines des 5 années précédentes"
     },
     {
      "id": "ecart_stocks",
      "libelle": "Stocks : écart à la moyenne 5 ans",
-     "valeur": null,
-     "texte": null,
+     "valeur": -12.5,
+     "texte": "−12,5 M",
      "unite": "M barils",
-     "date": null,
+     "date": "2026-11-20",
      "frequence": null,
-     "age_jours": null,
-     "source": null,
-     "raison": "moins de 4 années comparables",
+     "age_jours": 7,
+     "source": "EIA (WCESTUS1, stocks de brut hors réserve stratégique)",
+     "raison": null,
      "variation": null,
      "percentile_5a": null,
      "n_5a": null,
@@ -40648,28 +41473,142 @@
       "periode": "30 jours",
       "raison": "voir le graphique"
      },
-     "lecture": null
+     "lecture": "−2,9 % par rapport à la moyenne des mêmes semaines"
     },
     {
      "id": "production",
      "libelle": "Production de brut US",
-     "valeur": null,
-     "texte": null,
+     "valeur": 14065.0,
+     "texte": "14 065 k b/j",
      "unite": "milliers b/j",
-     "date": null,
-     "frequence": null,
-     "age_jours": null,
-     "source": null,
-     "raison": "EIA indisponible aujourd'hui",
-     "variation": null,
-     "percentile_5a": null,
-     "n_5a": null,
+     "date": "2026-11-20",
+     "frequence": "quotidien",
+     "age_jours": 7,
+     "source": "EIA (WCRFPUS2, production de brut US)",
+     "raison": null,
+     "variation": {
+      "valeur": 0.52,
+      "unite": "%",
+      "periode": "4 semaines",
+      "texte": "+0,52 % sur 4 semaines"
+     },
+     "percentile_5a": 100,
+     "n_5a": 261,
      "percentile_autre": null,
      "raison_percentile": null,
      "courbe": {
-      "points": [],
+      "points": [
+       [
+        "2026-05-22",
+        13715.0
+       ],
+       [
+        "2026-05-29",
+        13707.0
+       ],
+       [
+        "2026-06-05",
+        13799.0
+       ],
+       [
+        "2026-06-12",
+        13806.0
+       ],
+       [
+        "2026-06-19",
+        13819.0
+       ],
+       [
+        "2026-06-26",
+        13810.0
+       ],
+       [
+        "2026-07-03",
+        13860.0
+       ],
+       [
+        "2026-07-10",
+        13861.0
+       ],
+       [
+        "2026-07-17",
+        13798.0
+       ],
+       [
+        "2026-07-24",
+        13796.0
+       ],
+       [
+        "2026-07-31",
+        13804.0
+       ],
+       [
+        "2026-08-07",
+        13805.0
+       ],
+       [
+        "2026-08-14",
+        13830.0
+       ],
+       [
+        "2026-08-21",
+        13843.0
+       ],
+       [
+        "2026-08-28",
+        13862.0
+       ],
+       [
+        "2026-09-04",
+        13947.0
+       ],
+       [
+        "2026-09-11",
+        13944.0
+       ],
+       [
+        "2026-09-18",
+        13939.0
+       ],
+       [
+        "2026-09-25",
+        13955.0
+       ],
+       [
+        "2026-10-02",
+        13979.0
+       ],
+       [
+        "2026-10-09",
+        13679.0
+       ],
+       [
+        "2026-10-16",
+        13269.0
+       ],
+       [
+        "2026-10-23",
+        13992.0
+       ],
+       [
+        "2026-10-30",
+        14003.0
+       ],
+       [
+        "2026-11-06",
+        14013.0
+       ],
+       [
+        "2026-11-13",
+        14032.0
+       ],
+       [
+        "2026-11-20",
+        14065.0
+       ]
+      ],
       "periode": "26 semaines",
-      "raison": "pas d'historique pour une mini-courbe"
+      "raison": null
      },
      "lecture": null
     },
@@ -41898,19 +42837,128 @@
     "titre": "Offre et demande",
     "chiffre": {
      "libelle": "Stocks de brut US",
-     "valeur": null,
-     "texte": null,
+     "valeur": 418.906,
+     "texte": "418,9 M",
      "unite": "M barils",
-     "date": null,
+     "date": "2026-11-20",
      "source": "EIA (WCESTUS1, hors réserve stratégique)",
-     "raison": "stocks EIA indisponibles"
+     "raison": null
     },
-    "ligne": "Brent à 91,80 $.",
+    "ligne": "Stocks +1,1 M de barils sur la semaine, Brent à 91,80 $.",
     "courbe": {
-     "points": [],
+     "points": [
+      [
+       "2026-05-22",
+       441.686
+      ],
+      [
+       "2026-05-29",
+       433.712
+      ],
+      [
+       "2026-06-05",
+       426.485
+      ],
+      [
+       "2026-06-12",
+       418.222
+      ],
+      [
+       "2026-06-19",
+       412.134
+      ],
+      [
+       "2026-06-26",
+       408.359
+      ],
+      [
+       "2026-07-03",
+       411.357
+      ],
+      [
+       "2026-07-10",
+       409.665
+      ],
+      [
+       "2026-07-17",
+       411.675
+      ],
+      [
+       "2026-07-24",
+       404.508
+      ],
+      [
+       "2026-07-31",
+       406.987
+      ],
+      [
+       "2026-08-07",
+       424.41
+      ],
+      [
+       "2026-08-14",
+       428.815
+      ],
+      [
+       "2026-08-21",
+       428.91
+      ],
+      [
+       "2026-08-28",
+       424.46
+      ],
+      [
+       "2026-09-04",
+       424.069
+      ],
+      [
+       "2026-09-11",
+       423.429
+      ],
+      [
+       "2026-09-18",
+       426.398
+      ],
+      [
+       "2026-09-25",
+       427.32
+      ],
+      [
+       "2026-10-02",
+       424.134
+      ],
+      [
+       "2026-10-09",
+       415.577
+      ],
+      [
+       "2026-10-16",
+       412.517
+      ],
+      [
+       "2026-10-23",
+       410.625
+      ],
+      [
+       "2026-10-30",
+       409.76
+      ],
+      [
+       "2026-11-06",
+       414.417
+      ],
+      [
+       "2026-11-13",
+       417.797
+      ],
+      [
+       "2026-11-20",
+       418.906
+      ]
+     ],
      "periode": "26 semaines",
      "source": "EIA (WCESTUS1)",
-     "raison": "historique insuffisant pour une mini-courbe"
+     "raison": null
     },
     "direction": {
      "dollar": "neutre",
@@ -42132,14 +43180,14 @@
      "titre": "Offre et demande",
      "chiffre": {
       "libelle": "Stocks de brut US",
-      "valeur": null,
-      "texte": null,
+      "valeur": 418.906,
+      "texte": "418,9 M",
       "unite": "M barils",
-      "date": null,
+      "date": "2026-11-20",
       "source": "EIA (WCESTUS1, hors réserve stratégique)",
-      "raison": "stocks EIA indisponibles"
+      "raison": null
      },
-     "ligne": "Brent à 91,80 $.",
+     "ligne": "Stocks +1,1 M de barils sur la semaine, Brent à 91,80 $.",
      "verdict": {
       "libelle": "Dollar neutre",
       "classe": "nd",
@@ -44372,6 +45420,11 @@
     "FRED (DCOILBRENTEU)",
     "2026-11-24",
     null
+   ],
+   "stocks_ecart_pct": [
+    -2.9,
+    "EIA (WCESTUS1, stocks de brut hors réserve stratégique)",
+    "2026-11-20"
    ]
   },
   "legende": "▲▲ soutien fort (+2) · ▲ soutien (+1) · · neutre : règle évaluée, non déclenchée · hachures : n/d, donnée absente · gris très clair : sans règle · ▼ pression (−1) · ▼▼ pression forte (−2). Chaque case applique une règle écrite dans config.yaml au chiffre du jour ; bilan = somme des 8 cases (soutenue ≥ 3, sous pression ≤ -3). Aide à la lecture, jamais une recommandation d'achat ou de vente."
@@ -44654,7 +45707,7 @@
      "classe": "nd"
     },
     "neutralise": null,
-    "note": "seuils ±10,00 %. Brent à 91,80 $.",
+    "note": "seuils ±10,00 %. Stocks +1,1 M de barils sur la semaine, Brent à 91,80 $.",
     "indicateur": null
    }
   ],
@@ -52868,39 +53921,39 @@
       "classe": "nd"
      },
      "neutralise": null,
-     "note": "seuils ±10,00 %. Brent à 91,80 $.",
+     "note": "seuils ±10,00 %. Stocks +1,1 M de barils sur la semaine, Brent à 91,80 $.",
      "indicateur": null
     },
     "chiffres": [
      {
       "libelle": "Stocks de brut US",
-      "texte": "n/d",
-      "date": null,
-      "source": null,
-      "raison": "EIA indisponible aujourd'hui",
-      "variation": null,
-      "percentile_5a": null,
-      "rang": "rang 5 ans n/d : pas d’historique de 5 ans"
+      "texte": "418,9 M",
+      "date": "2026-11-20",
+      "source": "EIA (WCESTUS1, stocks de brut hors réserve stratégique)",
+      "raison": null,
+      "variation": "+2,02 % sur 4 semaines",
+      "percentile_5a": 23,
+      "rang": "23e percentile sur 5 ans"
      },
      {
       "libelle": "Stocks : écart à la moyenne 5 ans",
-      "texte": "n/d",
-      "date": null,
-      "source": null,
-      "raison": "moins de 4 années comparables",
+      "texte": "−12,5 M",
+      "date": "2026-11-20",
+      "source": "EIA (WCESTUS1, stocks de brut hors réserve stratégique)",
+      "raison": null,
       "variation": null,
       "percentile_5a": null,
       "rang": "rang 5 ans n/d : écart à la moyenne saisonnière : pas de percentile"
      },
      {
       "libelle": "Production de brut US",
-      "texte": "n/d",
-      "date": null,
-      "source": null,
-      "raison": "EIA indisponible aujourd'hui",
-      "variation": null,
-      "percentile_5a": null,
-      "rang": "rang 5 ans n/d : pas d’historique de 5 ans"
+      "texte": "14 065 k b/j",
+      "date": "2026-11-20",
+      "source": "EIA (WCRFPUS2, production de brut US)",
+      "raison": null,
+      "variation": "+0,52 % sur 4 semaines",
+      "percentile_5a": 100,
+      "rang": "100e percentile sur 5 ans"
      },
      {
       "libelle": "Pétrole WTI",
@@ -53746,7 +54799,7 @@
       "engrenage": 8,
       "libelle": "stocks de brut US contre la moyenne 5 ans de la même semaine ≤ −5,00 %",
       "description": "Commerce et flux : CAD +1",
-      "valeur_actuelle": null,
+      "valeur_actuelle": -2.9,
       "unite": "%",
       "bilans": [
        {
@@ -53828,7 +54881,7 @@
       "engrenage": 8,
       "libelle": "stocks de brut US contre la moyenne 5 ans de la même semaine ≥ 5,00 %",
       "description": "Commerce et flux : CAD −1",
-      "valeur_actuelle": null,
+      "valeur_actuelle": -2.9,
       "unite": "%",
       "bilans": [
        {
@@ -54140,7 +55193,7 @@
     "lecture": {
      "texte": "Le WTI s'établit à 82,24 $ le 2026-11-24 en forte baisse de −8,1 % sur 7 jours, et les stocks de brut US progressent à 417,8 M barils au 2026-11-13.",
      "source": "modèle",
-     "phrase_python": "Dollar neutre. seuils ±10,00 %. Brent à 91,80 $.",
+     "phrase_python": "Dollar neutre. seuils ±10,00 %. Stocks +1,1 M de barils sur la semaine, Brent à 91,80 $.",
      "texte_indisponible": null,
      "redige_par": "Flash-Lite 3.5",
      "redige_le": "2026-11-27T11:22:14+00:00",

@@ -1,5 +1,5 @@
 {
- "genere_le": "2026-11-27T16:22:37+00:00",
+ "genere_le": "2026-11-27T17:21:33+00:00",
  "aujourdhui": "2026-11-27",
  "sources": [
   {
@@ -106,13 +106,13 @@
    "statut_libelle": "Officielle",
    "frequence": "hebdomadaire",
    "retard_jours": 5,
-   "derniere_donnee": null,
+   "derniere_donnee": "2026-11-20",
    "recupere_le": "2026-11-27",
    "fraicheur": {
-    "etat": "rouge",
-    "age_jours": null,
+    "etat": "vert",
+    "age_jours": 7,
     "normal_jours": 12,
-    "texte": "aucune date de donnée"
+    "texte": "7 jours (normal : 12 au plus)"
    },
    "motifs": [
     "EIA"
@@ -586,13 +586,7 @@
    "remplacement": "Supprimée : apport nul pour l'analyse."
   }
  ],
- "alertes": [
-  {
-   "id": "eia",
-   "nom": "EIA (département de l'Énergie)",
-   "texte": "aucune date de donnée"
-  }
- ],
+ "alertes": [],
  "certificats": {
   "vix": {
    "libelle": "VIX",
@@ -919,7 +913,22 @@
   },
   "eia_stocks": {
    "libelle": "Stocks de brut US (EIA)",
-   "raison": "série absente de l'historique collecté"
+   "valeur": 418906.0,
+   "unite": "milliers de barils",
+   "source": "EIA (WCESTUS1, stocks de brut hors réserve stratégique)",
+   "serie": "eia_stocks",
+   "calendrier": "EIA : rapport hebdomadaire le mercredi (semaine close le vendredi précédent).",
+   "date_valeur": "2026-11-20",
+   "recupere_le": "2026-11-27",
+   "statut": "Officielle",
+   "controle": "✓",
+   "controle_detail": "même valeur dans tous les modules (source canonique unique, contrôle du run)",
+   "fraicheur": {
+    "etat": "vert",
+    "age_jours": 7,
+    "normal_jours": 12,
+    "texte": "7 jours (normal : 12 au plus)"
+   }
   }
  },
  "alertes_indicateurs": [],
