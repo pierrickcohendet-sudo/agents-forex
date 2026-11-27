@@ -1,6 +1,6 @@
 {
  "version_schema": 1,
- "genere_le": "2026-11-27T10:24:08+00:00",
+ "genere_le": "2026-11-27T11:25:36+00:00",
  "debut_historique": "2021-09-26",
  "erreurs_collecte": [
   "EIA : HTTPSConnectionPool(host='api.eia.gov', port=443): Read timed out. (read timeout=60)"
@@ -12,7 +12,7 @@
    "indicateurs": [
     {
      "libelle": "Régime de risque (biais calculé)",
-     "texte": "Neutre",
+     "texte": "Risk Off",
      "detail": "régime de risque global (engrenage 5), sans attribution devise par devise",
      "source": "calcul Python"
     },
@@ -63,9 +63,9 @@
     },
     {
      "date": "2026-11-27",
-     "biais": "neutre",
+     "biais": "risk_off",
      "score_usd": 95,
-     "ecart": null
+     "ecart": -26
     }
    ],
    "graphiques": [
@@ -164,99 +164,196 @@
         [
          "2026-11-25",
          88
+        ],
+        [
+         "2026-11-27",
+         95
         ]
        ]
       },
       {
-       "nom": "GBP",
+       "nom": "CNY",
        "points": [
         [
          "2026-10-23",
-         70
+         40
         ],
         [
          "2026-10-26",
-         58
+         36
         ],
         [
          "2026-10-27",
-         54
+         58
         ],
         [
          "2026-10-28",
-         50
+         60
         ],
         [
          "2026-10-29",
-         68
+         48
         ],
         [
          "2026-10-30",
-         68
+         53
         ],
         [
          "2026-10-31",
-         58
+         46
         ],
         [
          "2026-11-02",
-         73
+         50
         ],
         [
          "2026-11-03",
-         58
+         50
         ],
         [
          "2026-11-04",
-         84
+         65
         ],
         [
          "2026-11-05",
-         82
+         66
         ],
         [
          "2026-11-06",
-         74
+         60
         ],
         [
          "2026-11-09",
-         64
+         26
         ],
         [
          "2026-11-10",
-         78
-        ],
-        [
-         "2026-11-11",
-         62
+         57
         ],
         [
          "2026-11-12",
-         52
+         43
         ],
         [
          "2026-11-13",
-         52
+         48
+        ],
+        [
+         "2026-11-16",
+         30
         ],
         [
          "2026-11-18",
-         52
+         40
         ],
         [
          "2026-11-19",
-         39
+         30
         ],
         [
          "2026-11-20",
-         64
+         39
         ],
         [
          "2026-11-21",
-         64
+         39
+        ],
+        [
+         "2026-11-24",
+         45
         ],
         [
          "2026-11-25",
-         52
+         34
+        ]
+       ]
+      },
+      {
+       "nom": "CAD",
+       "points": [
+        [
+         "2026-10-23",
+         24
+        ],
+        [
+         "2026-10-26",
+         30
+        ],
+        [
+         "2026-10-27",
+         30
+        ],
+        [
+         "2026-10-28",
+         30
+        ],
+        [
+         "2026-10-29",
+         40
+        ],
+        [
+         "2026-10-30",
+         55
+        ],
+        [
+         "2026-10-31",
+         49
+        ],
+        [
+         "2026-11-03",
+         39
+        ],
+        [
+         "2026-11-04",
+         24
+        ],
+        [
+         "2026-11-05",
+         50
+        ],
+        [
+         "2026-11-06",
+         38
+        ],
+        [
+         "2026-11-09",
+         44
+        ],
+        [
+         "2026-11-10",
+         22
+        ],
+        [
+         "2026-11-11",
+         42
+        ],
+        [
+         "2026-11-12",
+         32
+        ],
+        [
+         "2026-11-13",
+         38
+        ],
+        [
+         "2026-11-18",
+         22
+        ],
+        [
+         "2026-11-19",
+         26
+        ],
+        [
+         "2026-11-20",
+         32
+        ],
+        [
+         "2026-11-21",
+         32
+        ],
+        [
+         "2026-11-25",
+         32
         ]
        ]
       },
@@ -350,6 +447,10 @@
         [
          "2026-11-25",
          8
+        ],
+        [
+         "2026-11-27",
+         15
         ]
        ]
       }
@@ -388,10 +489,10 @@
         },
         {
          "type": "dernier",
-         "date": "2026-11-25",
-         "valeur": 88.0,
-         "texte": "88 au 25/11",
-         "detail": "USD : dernière valeur 88 le 25/11/2026",
+         "date": "2026-11-27",
+         "valeur": 95.0,
+         "texte": "95 au 27/11",
+         "detail": "USD : dernière valeur 95 le 27/11/2026",
          "source": "rapports archivés (data/rapports)"
         }
        ],
@@ -423,10 +524,10 @@
         },
         {
          "type": "dernier",
-         "date": "2026-11-25",
-         "valeur": 88.0,
-         "texte": "88 au 25/11",
-         "detail": "USD : dernière valeur 88 le 25/11/2026",
+         "date": "2026-11-27",
+         "valeur": 95.0,
+         "texte": "95 au 27/11",
+         "detail": "USD : dernière valeur 95 le 27/11/2026",
          "source": "rapports archivés (data/rapports)"
         }
        ],
@@ -458,10 +559,10 @@
         },
         {
          "type": "dernier",
-         "date": "2026-11-25",
-         "valeur": 88.0,
-         "texte": "88 au 25/11",
-         "detail": "USD : dernière valeur 88 le 25/11/2026",
+         "date": "2026-11-27",
+         "valeur": 95.0,
+         "texte": "95 au 27/11",
+         "detail": "USD : dernière valeur 95 le 27/11/2026",
          "source": "rapports archivés (data/rapports)"
         }
        ],
@@ -493,10 +594,10 @@
         },
         {
          "type": "dernier",
-         "date": "2026-11-25",
-         "valeur": 88.0,
-         "texte": "88 au 25/11",
-         "detail": "USD : dernière valeur 88 le 25/11/2026",
+         "date": "2026-11-27",
+         "valeur": 95.0,
+         "texte": "95 au 27/11",
+         "detail": "USD : dernière valeur 95 le 27/11/2026",
          "source": "rapports archivés (data/rapports)"
         }
        ]
@@ -513,24 +614,41 @@
        "valeur": 95
       },
       {
+       "nom": "CNY",
+       "valeur": 69
+      },
+      {
        "nom": "GBP",
        "valeur": 52
       },
       {
+       "nom": "AUD",
+       "valeur": 49
+      },
+      {
+       "nom": "JPY",
+       "valeur": 42
+      },
+      {
+       "nom": "CHF",
+       "valeur": 34
+      },
+      {
+       "nom": "NZD",
+       "valeur": 32
+      },
+      {
        "nom": "EUR",
        "valeur": 15
+      },
+      {
+       "nom": "CAD",
+       "valeur": 12
       }
      ],
      "source": "calcul Python (scores de confluence)",
      "note": null,
-     "absentes": [
-      "JPY",
-      "CHF",
-      "CAD",
-      "AUD",
-      "NZD",
-      "CNY"
-     ],
+     "absentes": [],
      "raison": null
     }
    ],
@@ -558,10 +676,10 @@
      "source": "calcul Python (score de confluence 0-100)",
      "raison": null,
      "variation": {
-      "valeur": 4,
+      "valeur": 17,
       "unite": "pts",
       "periode": "4 semaines",
-      "texte": "+4 pts sur 4 semaines"
+      "texte": "+17 pts sur 4 semaines"
      },
      "percentile_5a": null,
      "n_5a": null,
@@ -656,6 +774,10 @@
        [
         "2026-11-25",
         88
+       ],
+       [
+        "2026-11-27",
+        95
        ]
       ],
       "periode": "30 jours (rapports archivés)",
@@ -666,14 +788,14 @@
     {
      "id": "score_cad",
      "libelle": "Score CAD",
-     "valeur": null,
-     "texte": null,
+     "valeur": 12,
+     "texte": "12",
      "unite": "score",
      "date": "2026-11-27",
      "frequence": null,
      "age_jours": 0,
      "source": "calcul Python (score de confluence 0-100)",
-     "raison": "donnée indisponible",
+     "raison": null,
      "variation": {
       "valeur": 2,
       "unite": "pts",
@@ -779,14 +901,14 @@
     {
      "id": "score_aud",
      "libelle": "Score AUD",
-     "valeur": null,
-     "texte": null,
+     "valeur": 49,
+     "texte": "49",
      "unite": "score",
      "date": "2026-11-27",
      "frequence": null,
      "age_jours": 0,
      "source": "calcul Python (score de confluence 0-100)",
-     "raison": "donnée indisponible",
+     "raison": null,
      "variation": {
       "valeur": -24,
       "unite": "pts",
@@ -900,19 +1022,19 @@
     {
      "id": "ecart_max",
      "libelle": "Écart meilleur − moins bon score",
-     "valeur": 80,
-     "texte": "80",
+     "valeur": 83,
+     "texte": "83",
      "unite": "score",
      "date": "2026-11-27",
      "frequence": null,
      "age_jours": 0,
-     "source": "calcul Python (USD − EUR)",
+     "source": "calcul Python (USD − CAD)",
      "raison": null,
      "variation": {
-      "valeur": 4,
+      "valeur": 32,
       "unite": "pts",
       "periode": "4 semaines",
-      "texte": "+4 pts sur 4 semaines"
+      "texte": "+32 pts sur 4 semaines"
      },
      "percentile_5a": null,
      "n_5a": null,
@@ -1014,6 +1136,10 @@
        ],
        [
         "2026-11-25",
+        80
+       ],
+       [
+        "2026-11-27",
         80
        ]
       ],
@@ -1397,14 +1523,14 @@
     {
      "id": "duree_theme",
      "libelle": "Régime actuel depuis",
-     "valeur": 0,
-     "texte": "< 1 sem.",
+     "valeur": null,
+     "texte": null,
      "unite": "semaines",
      "date": "2026-11-27",
      "frequence": null,
      "age_jours": 0,
      "source": "rapports archivés (biais calculé)",
-     "raison": null,
+     "raison": "biais du jour indisponible",
      "variation": null,
      "percentile_5a": null,
      "n_5a": null,
@@ -1415,7 +1541,7 @@
       "periode": "30 jours",
       "raison": "non applicable"
      },
-     "lecture": "régime neutre sans interruption depuis le rapport du 2026-11-26"
+     "lecture": null
     },
     {
      "id": "vix",
@@ -12269,7 +12395,7 @@
      "raison": null
     }
    ],
-   "actualites_maj": "2026-11-27T10:24+00:00",
+   "actualites_maj": "2026-11-27T11:25+00:00",
    "actualites_nb_titres_lus": 77,
    "notes": [
     "Dette et solde publics : FMI (annuel, avec 1 à 3 ans de retard) ; EUR = Allemagne. Pas de série gratuite pour CHF et NZD.",
@@ -41014,10 +41140,10 @@
    "titre": "Aversion au risque, dollar soutenu",
    "titre_impose": false,
    "texte_python": null,
-   "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
+   "texte_indisponible": null,
    "phrases_retirees": 0,
-   "texte": null,
-   "texte_redige_par": null,
+   "texte": "Les signaux macroéconomiques sont actuellement mixtes, reflétant l'absence de direction dominante claire avec un biais global neutre et un score USD à 95 contre EUR à 15.",
+   "texte_redige_par": "Flash-Lite 3.5",
    "direction": {
     "dollar": "haussier",
     "risque": "risk_off",
@@ -41027,7 +41153,7 @@
     "conviction": 2,
     "conviction_niveau": "moyen",
     "regle": "dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (3 accords, 2 désaccords)",
-    "raison_couleur": "Rouge (Dollar haussier · Risk off) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (3 accords, 2 désaccords). Chiffre du jour : Biais global neutre ; classement : USD 95, GBP 52, EUR 15"
+    "raison_couleur": "Rouge (Dollar haussier · Risk off) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (3 accords, 2 désaccords). Chiffre du jour : Biais global risk_off ; classement : USD 95, CNY 69, GBP 52, AUD 49, JPY 42, CHF 34, NZD 32, EUR 15, CAD 12"
    },
    "coherence": {
     "alignes": 3,
@@ -41128,7 +41254,7 @@
      "conviction": 2,
      "conviction_niveau": "moyen",
      "regle": "dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (3 accords, 2 désaccords)",
-     "raison_couleur": "Rouge (Dollar haussier · Risk off) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (3 accords, 2 désaccords). Chiffre du jour : Biais global neutre ; classement : USD 95, GBP 52, EUR 15"
+     "raison_couleur": "Rouge (Dollar haussier · Risk off) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (3 accords, 2 désaccords). Chiffre du jour : Biais global risk_off ; classement : USD 95, CNY 69, GBP 52, AUD 49, JPY 42, CHF 34, NZD 32, EUR 15, CAD 12"
     }
    },
    {
@@ -41783,10 +41909,10 @@
       "conviction": 2,
       "conviction_niveau": "moyen"
      },
-     "a_retenir": "Direction calculée : Dollar haussier · Risk off.",
-     "a_retenir_source": "calcul Python",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
-     "raison_couleur": "Rouge (Dollar haussier · Risk off) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (3 accords, 2 désaccords). Chiffre du jour : Biais global neutre ; classement : USD 95, GBP 52, EUR 15"
+     "a_retenir": "Les signaux macroéconomiques sont actuellement mixtes, reflétant l'absence de direction dominante claire avec un biais global neutre et un score USD à 95 contre EUR à 15.",
+     "a_retenir_source": "modèle",
+     "texte_indisponible": null,
+     "raison_couleur": "Rouge (Dollar haussier · Risk off) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (3 accords, 2 désaccords). Chiffre du jour : Biais global risk_off ; classement : USD 95, CNY 69, GBP 52, AUD 49, JPY 42, CHF 34, NZD 32, EUR 15, CAD 12"
     },
     {
      "numero": 1,
@@ -41808,10 +41934,10 @@
       "conviction": 2,
       "conviction_niveau": "moyen"
      },
-     "a_retenir": "Dollar haussier · Risk off. Règle Python : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (3 accords, 2 désaccords).",
-     "a_retenir_source": "calcul Python",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
-     "raison_couleur": "Rouge (Dollar haussier · Risk off) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (3 accords, 2 désaccords). Chiffre du jour : Biais global neutre ; classement : USD 95, GBP 52, EUR 15"
+     "a_retenir": "Les signaux macroéconomiques sont actuellement mixtes, reflétant l'absence de direction dominante claire avec un biais global neutre et un score USD à 95 contre EUR à 15.",
+     "a_retenir_source": "modèle",
+     "texte_indisponible": null,
+     "raison_couleur": "Rouge (Dollar haussier · Risk off) : dollar : majorité des directions dollar des engrenages 2 à 8 (égalité : neutre) ; risque : engrenage 5 (VIX), à défaut engrenage 7 (devises risque contre refuge) ; conviction = accord des engrenages 2, 3, 5, 7 avec le thème (3 accords, 2 désaccords). Chiffre du jour : Biais global risk_off ; classement : USD 95, CNY 69, GBP 52, AUD 49, JPY 42, CHF 34, NZD 32, EUR 15, CAD 12"
     },
     {
      "numero": 2,
@@ -41833,9 +41959,9 @@
       "conviction": 2,
       "conviction_niveau": "moyen"
      },
-     "a_retenir": "Dollar baissier. Règle Python : dollar : variation hebdomadaire du 2 ans US (≥ +10 pb haussier, ≤ -10 pb baissier).",
-     "a_retenir_source": "calcul Python",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
+     "a_retenir": "Le taux directeur USD s'établit à 3,88% le 2026-11-24, tandis que le rendement du 2 ans US recule à 4,61 % le 25/11 contre 4,80 % le 18/11 soit −19 pb sur 7 jours.",
+     "a_retenir_source": "modèle",
+     "texte_indisponible": null,
      "raison_couleur": "Rouge (Dollar baissier) : dollar : variation hebdomadaire du 2 ans US (≥ +10 pb haussier, ≤ -10 pb baissier). Chiffre du jour : USD taux directeur 3.88% le 2026-11-24 (baisse, précédent 4.00%)"
     },
     {
@@ -41858,9 +41984,9 @@
       "conviction": 1,
       "conviction_niveau": "faible"
      },
-     "a_retenir": "Dollar haussier. Règle Python : dollar : indice de surprise 30 j de l'USD (≥ +0,3 haussier, ≤ -0,3 baissier).",
-     "a_retenir_source": "calcul Python",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
+     "a_retenir": "L'indice de surprise macro à 30 jours est contrasté avec USD à +1,12 et NZD à −1,18, montrant des dynamiques de surprises économiques divergentes.",
+     "a_retenir_source": "modèle",
+     "texte_indisponible": null,
      "raison_couleur": "Vert (Dollar haussier) : dollar : indice de surprise 30 j de l'USD (≥ +0,3 haussier, ≤ -0,3 baissier). Chiffre du jour : Indice de surprise 30 j : USD +1.12, EUR -0.14, GBP +0.10, JPY -0.47, CHF +0.45, CAD -0.48, AUD +0.33, NZD -1.18, CNY -0.57"
     },
     {
@@ -41883,9 +42009,9 @@
       "conviction": 1,
       "conviction_niveau": "faible"
      },
-     "a_retenir": "Dollar neutre. Règle Python : dollar : case USD de la matrice d'impact (Neutre : prime de terme 10 ans US, variation sur 4 semaines (prime de risque budgétaire) : −5 pb, aucun effet sur USD).",
-     "a_retenir_source": "calcul Python",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
+     "a_retenir": "Le rendement du 10 ans US s'affiche à 4,85 % en recul de −20 pb sur 4 semaines, avec une dette publique sur PIB à 121,2 % en 2026-04.",
+     "a_retenir_source": "modèle",
+     "texte_indisponible": null,
      "raison_couleur": "Gris (Dollar neutre) : dollar : case USD de la matrice d'impact (Neutre : prime de terme 10 ans US, variation sur 4 semaines (prime de risque budgétaire) : −5 pb, aucun effet sur USD). Chiffre du jour : USD : 10 ans 4.85 % (-20 pb sur 4 semaines), prime de terme 10 ans 0.89 %, dette / PIB 121.2 % (2026-04)"
     },
     {
@@ -41909,9 +42035,9 @@
       "conviction": 2,
       "conviction_niveau": "moyen"
      },
-     "a_retenir": "Dollar haussier · Risk off. Règle Python : risque : VIX (≥ 25 ou +25 % sur 7 j : risk off ; ≤ 14 sans hausse : risk on) ; dollar : indice dollar large Fed sur 7 j (±0,5 %).",
-     "a_retenir_source": "calcul Python",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
+     "a_retenir": "Le VIX s'établit à 26,36 le 2026-11-24 en hausse de +3,5 % sur 7 jours, tandis que l'indice or (proxy) — NASDAQ QGLDI recule à 2159,92 soit −3,93 % sur 7 jours.",
+     "a_retenir_source": "modèle",
+     "texte_indisponible": null,
      "raison_couleur": "Rouge (Dollar haussier · Risk off) : risque : VIX (≥ 25 ou +25 % sur 7 j : risk off ; ≤ 14 sans hausse : risk on) ; dollar : indice dollar large Fed sur 7 j (±0,5 %). Chiffre du jour : VIX 26.36 le 2026-11-24 (+3.5 % sur 7 j)"
     },
     {
@@ -41934,9 +42060,9 @@
       "conviction": 2,
       "conviction_niveau": "moyen"
      },
-     "a_retenir": "Dollar haussier. Règle Python : dollar : case USD de la matrice d'impact (Soutien : titres du jour au canal « refuge (conflits) » ≥ 3 titres → +1 pour USD).",
-     "a_retenir_source": "calcul Python",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
+     "a_retenir": "Le fil d'actualité enregistre 7 titres classés dans le canal refuge (conflits), incluant des tensions géopolitiques au Koweït.",
+     "a_retenir_source": "modèle",
+     "texte_indisponible": null,
      "raison_couleur": "Vert (Dollar haussier) : dollar : case USD de la matrice d'impact (Soutien : titres du jour au canal « refuge (conflits) » ≥ 3 titres → +1 pour USD). Chiffre du jour : Titres du jour par canal de transmission : Énergie 3, Commerce 4, Refuge (conflits) 7, Politique intérieure 1"
     },
     {
@@ -41959,9 +42085,9 @@
       "conviction": 3,
       "conviction_niveau": "eleve"
      },
-     "a_retenir": "Dollar neutre · Risk on. Règle Python : dollar : indice USD synthétique sur 5 j (±0,3 %) ; risque : devises risque vs refuge sur 5 j (±0,3 pt) ; COT : positionnement décrit, extrêmes signalés (pas de direction tirée du COT seul).",
-     "a_retenir_source": "calcul Python",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
+     "a_retenir": "L'indice USD synthétique recule de −0,26 % sur 5 jours avec un RSI à 62,1, alors que l'écart de performance entre devises de risque et refuges progresse de +0,67 pt.",
+     "a_retenir_source": "modèle",
+     "texte_indisponible": null,
      "raison_couleur": "Vert (Dollar neutre · Risk on) : dollar : indice USD synthétique sur 5 j (±0,3 %) ; risque : devises risque vs refuge sur 5 j (±0,3 pt) ; COT : positionnement décrit, extrêmes signalés (pas de direction tirée du COT seul). Chiffre du jour : Indice USD synthétique -0.26 % sur 5 j, RSI 62.1, tendance de fond haussier"
     },
     {
@@ -41984,9 +42110,9 @@
       "conviction": 2,
       "conviction_niveau": "moyen"
      },
-     "a_retenir": "Dollar neutre. Règle Python : dollar : case USD de la matrice d'impact (Sans règle : aucune règle de cet engrenage ne concerne USD).",
-     "a_retenir_source": "calcul Python",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
+     "a_retenir": "Le WTI s'établit à 82,24 $ le 2026-11-24 en forte baisse de −8,1 % sur 7 jours, et les stocks de brut US progressent à 417,8 M barils au 2026-11-13.",
+     "a_retenir_source": "modèle",
+     "texte_indisponible": null,
      "raison_couleur": "Gris (Dollar neutre) : dollar : case USD de la matrice d'impact (Sans règle : aucune règle de cet engrenage ne concerne USD). Chiffre du jour : WTI 82.24 $ le 2026-11-24 (-8.1 % sur 7 j)"
     }
    ],
@@ -41998,7 +42124,28 @@
     "Hachures : aucune direction déterminée"
    ]
   },
-  "chaines": [],
+  "chaines": [
+   {
+    "titre": "Transmission de la volatilité et du risk-off sur le dollar",
+    "maillons": [
+     {
+      "engrenage": 5,
+      "texte": "La hausse du VIX à 26,36 déclenche un climat d'aversion au risque sur les marchés.",
+      "non_sourcee": false
+     },
+     {
+      "engrenage": 6,
+      "texte": "Les tensions géopolitiques avec 7 titres dans le canal refuge renforcent la demande de sécurité.",
+      "non_sourcee": false
+     },
+     {
+      "engrenage": 1,
+      "texte": "Ce contexte consolide le biais global et le profil haussier du dollar comme valeur refuge.",
+      "non_sourcee": false
+     }
+    ]
+   }
+  ],
   "conflits": [
    {
     "engrenages": [
@@ -42006,7 +42153,15 @@
      2
     ],
     "texte": "Thème macro (haussier) contre Politique monétaire (baissier) sur le dollar",
-    "origine": "calcul Python"
+    "origine": "modèle"
+   },
+   {
+    "engrenages": [
+     5,
+     7
+    ],
+    "texte": "Interconnexions de marchés (risk_off) contre Price action et flux (risk_on) sur le risque global",
+    "origine": "modèle"
    },
    {
     "engrenages": [
@@ -42039,18 +42194,10 @@
     ],
     "texte": "Politique monétaire (baissier) contre Géopolitique (haussier) sur le dollar",
     "origine": "calcul Python"
-   },
-   {
-    "engrenages": [
-     5,
-     7
-    ],
-    "texte": "Interconnexions de marchés (risk_off) contre Price action et flux (risk_on) sur le risque global",
-    "origine": "calcul Python"
    }
   ],
-  "statut_texte": "indisponible",
-  "redige_par": null
+  "statut_texte": "ok",
+  "redige_par": "Flash-Lite 3.5"
  },
  "matrice_impact": {
   "lignes": [
@@ -44212,9 +44359,9 @@
    "cases_total": 72,
    "compte_matrice": "34 actives, 5 n/d, 21 sans règle",
    "explication": "Moteurs orientés : Banques centrales et taux (Dollar baissier) ; Chiffres économiques (Dollar haussier) ; Liens entre marchés (Dollar haussier · Risk off) ; Géopolitique (Dollar haussier) ; Prix et positionnement (Dollar neutre · Risk on). Les autres restent dans leur couloir neutre.",
-   "texte": null,
-   "texte_source": "calcul Python",
-   "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
+   "texte": "Les signaux macroéconomiques sont actuellement mixtes, reflétant l'absence de direction dominante claire avec un biais global neutre et un score USD à 95 contre EUR à 15.",
+   "texte_source": "modèle",
+   "texte_indisponible": null,
    "date_rapport": "2026-11-27"
   },
   "thermometres": [
@@ -46756,37 +46903,37 @@
       "date": "2026-11-27",
       "source": "calcul Python (score de confluence 0-100)",
       "raison": null,
-      "variation": "+4 pts sur 4 semaines",
+      "variation": "+17 pts sur 4 semaines",
       "percentile_5a": null,
       "rang": "rang 5 ans n/d : scores archivés depuis août 2026 seulement"
      },
      {
       "libelle": "Score CAD",
-      "texte": "n/d",
+      "texte": "12",
       "date": "2026-11-27",
       "source": "calcul Python (score de confluence 0-100)",
-      "raison": "donnée indisponible",
+      "raison": null,
       "variation": "+2 pts sur 4 semaines",
       "percentile_5a": null,
       "rang": "rang 5 ans n/d : scores archivés depuis août 2026 seulement"
      },
      {
       "libelle": "Score AUD",
-      "texte": "n/d",
+      "texte": "49",
       "date": "2026-11-27",
       "source": "calcul Python (score de confluence 0-100)",
-      "raison": "donnée indisponible",
+      "raison": null,
       "variation": "−24 pts sur 4 semaines",
       "percentile_5a": null,
       "rang": "rang 5 ans n/d : scores archivés depuis août 2026 seulement"
      },
      {
       "libelle": "Écart meilleur − moins bon score",
-      "texte": "80",
+      "texte": "83",
       "date": "2026-11-27",
-      "source": "calcul Python (USD − EUR)",
+      "source": "calcul Python (USD − CAD)",
       "raison": null,
-      "variation": "+4 pts sur 4 semaines",
+      "variation": "+32 pts sur 4 semaines",
       "percentile_5a": null,
       "rang": "rang 5 ans n/d : scores archivés depuis août 2026 seulement"
      }
@@ -46809,12 +46956,12 @@
      "raison": "pas d'indicateur du simulateur pour ce moteur (thème : synthèse des autres)"
     },
     "lecture": {
-     "texte": null,
-     "source": "calcul Python",
+     "texte": "Les signaux macroéconomiques sont actuellement mixtes, reflétant l'absence de direction dominante claire avec un biais global neutre et un score USD à 95 contre EUR à 15.",
+     "source": "modèle",
      "phrase_python": "Dollar haussier · Risk off. Seuil de thème établi : 3 alignés.",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
-     "redige_par": null,
-     "redige_le": null,
+     "texte_indisponible": null,
+     "redige_par": "Flash-Lite 3.5",
+     "redige_le": "2026-11-27T11:22:14+00:00",
      "redige_avant_recalcul": false
     }
    },
@@ -47971,12 +48118,12 @@
      "source": "simulateur d'impact (docs/data/impact.json), 5 ans"
     },
     "lecture": {
-     "texte": null,
-     "source": "calcul Python",
+     "texte": "Le taux directeur USD s'établit à 3,88% le 2026-11-24, tandis que le rendement du 2 ans US recule à 4,61 % le 25/11 contre 4,80 % le 18/11 soit −19 pb sur 7 jours.",
+     "source": "modèle",
      "phrase_python": "Dollar baissier. seuils ±10 pb. Fed à 3,88 % effectif, 2 ans −19 pb sur 7 jours.",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
-     "redige_par": null,
-     "redige_le": null,
+     "texte_indisponible": null,
+     "redige_par": "Flash-Lite 3.5",
+     "redige_le": "2026-11-27T11:22:14+00:00",
      "redige_avant_recalcul": false
     }
    },
@@ -48234,12 +48381,12 @@
      "source": "simulateur d'impact (docs/data/impact.json), 5 ans"
     },
     "lecture": {
-     "texte": null,
-     "source": "calcul Python",
+     "texte": "L'indice de surprise macro à 30 jours est contrasté avec USD à +1,12 et NZD à −1,18, montrant des dynamiques de surprises économiques divergentes.",
+     "source": "modèle",
      "phrase_python": "Dollar haussier. seuils ±0,30. Plus fortes surprises ailleurs : NZD −1,18, CNY −0,57.",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
-     "redige_par": null,
-     "redige_le": null,
+     "texte_indisponible": null,
+     "redige_par": "Flash-Lite 3.5",
+     "redige_le": "2026-11-27T11:22:14+00:00",
      "redige_avant_recalcul": false
     }
    },
@@ -49435,12 +49582,12 @@
      "source": "simulateur d'impact (docs/data/impact.json), 5 ans"
     },
     "lecture": {
-     "texte": null,
-     "source": "calcul Python",
+     "texte": "Le rendement du 10 ans US s'affiche à 4,85 % en recul de −20 pb sur 4 semaines, avec une dette publique sur PIB à 121,2 % en 2026-04.",
+     "source": "modèle",
      "phrase_python": "Dollar neutre. seuils haut 20 pb. 10 ans US 4,85 %, dette fédérale / PIB 121,2 % (2026-04).",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
-     "redige_par": null,
-     "redige_le": null,
+     "texte_indisponible": null,
+     "redige_par": "Flash-Lite 3.5",
+     "redige_le": "2026-11-27T11:22:14+00:00",
      "redige_avant_recalcul": false
     }
    },
@@ -51209,12 +51356,12 @@
      "source": "simulateur d'impact (docs/data/impact.json), 5 ans"
     },
     "lecture": {
-     "texte": null,
-     "source": "calcul Python",
+     "texte": "Le VIX s'établit à 26,36 le 2026-11-24 en hausse de +3,5 % sur 7 jours, tandis que l'indice or (proxy) — NASDAQ QGLDI recule à 2159,92 soit −3,93 % sur 7 jours.",
+     "source": "modèle",
      "phrase_python": "Dollar haussier · Risk off. seuils bas 14,00 / haut 25,00. Indice dollar +0,77 % sur 7 jours, VIX à 26,4.",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
-     "redige_par": null,
-     "redige_le": null,
+     "texte_indisponible": null,
+     "redige_par": "Flash-Lite 3.5",
+     "redige_le": "2026-11-27T11:22:14+00:00",
      "redige_avant_recalcul": false
     }
    },
@@ -51701,12 +51848,12 @@
      "source": "simulateur d'impact (docs/data/impact.json), 5 ans"
     },
     "lecture": {
-     "texte": null,
-     "source": "calcul Python",
+     "texte": "Le fil d'actualité enregistre 7 titres classés dans le canal refuge (conflits), incluant des tensions géopolitiques au Koweït.",
+     "source": "modèle",
      "phrase_python": "Dollar haussier. seuils haut 3. Canaux : refuge (conflits) 7, commerce 4, énergie 3, politique intérieure 1.",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
-     "redige_par": null,
-     "redige_le": null,
+     "texte_indisponible": null,
+     "redige_par": "Flash-Lite 3.5",
+     "redige_le": "2026-11-27T11:22:14+00:00",
      "redige_avant_recalcul": false
     }
    },
@@ -52644,12 +52791,12 @@
      "source": "simulateur d'impact (docs/data/impact.json), 5 ans"
     },
     "lecture": {
-     "texte": null,
-     "source": "calcul Python",
+     "texte": "L'indice USD synthétique recule de −0,26 % sur 5 jours avec un RSI à 62,1, alors que l'écart de performance entre devises de risque et refuges progresse de +0,67 pt.",
+     "source": "modèle",
      "phrase_python": "Dollar neutre · Risk on. seuils ±0,30 %. RSI USD 62,1, −0,26 % sur 5 jours ; COT extrême : EUR (vendeur), JPY (acheteur), CHF (acheteur) et 2 autres.",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
-     "redige_par": null,
-     "redige_le": null,
+     "texte_indisponible": null,
+     "redige_par": "Flash-Lite 3.5",
+     "redige_le": "2026-11-27T11:22:14+00:00",
      "redige_avant_recalcul": false
     }
    },
@@ -53955,12 +54102,12 @@
      "source": "simulateur d'impact (docs/data/impact.json), 5 ans"
     },
     "lecture": {
-     "texte": null,
-     "source": "calcul Python",
+     "texte": "Le WTI s'établit à 82,24 $ le 2026-11-24 en forte baisse de −8,1 % sur 7 jours, et les stocks de brut US progressent à 417,8 M barils au 2026-11-13.",
+     "source": "modèle",
      "phrase_python": "Dollar neutre. seuils ±10,00 %. Brent à 91,80 $.",
-     "texte_indisponible": "Texte indisponible : réponse du modèle inexploitable",
-     "redige_par": null,
-     "redige_le": null,
+     "texte_indisponible": null,
+     "redige_par": "Flash-Lite 3.5",
+     "redige_le": "2026-11-27T11:22:14+00:00",
      "redige_avant_recalcul": false
     }
    }
