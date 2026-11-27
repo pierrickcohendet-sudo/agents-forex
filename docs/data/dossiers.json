@@ -1,6 +1,6 @@
 {
  "version_schema": 1,
- "genere_le": "2026-11-27T11:25:36+00:00",
+ "genere_le": "2026-11-27T12:31:26+00:00",
  "debut_historique": "2021-09-26",
  "erreurs_collecte": [
   "EIA : HTTPSConnectionPool(host='api.eia.gov', port=443): Read timed out. (read timeout=60)"
@@ -265,6 +265,10 @@
         [
          "2026-11-25",
          34
+        ],
+        [
+         "2026-11-27",
+         69
         ]
        ]
       },
@@ -354,6 +358,10 @@
         [
          "2026-11-25",
          32
+        ],
+        [
+         "2026-11-27",
+         12
         ]
        ]
       },
@@ -797,10 +805,10 @@
      "source": "calcul Python (score de confluence 0-100)",
      "raison": null,
      "variation": {
-      "valeur": 2,
+      "valeur": -43,
       "unite": "pts",
       "periode": "4 semaines",
-      "texte": "+2 pts sur 4 semaines"
+      "texte": "−43 pts sur 4 semaines"
      },
      "percentile_5a": null,
      "n_5a": null,
@@ -891,6 +899,10 @@
        [
         "2026-11-25",
         32
+       ],
+       [
+        "2026-11-27",
+        12
        ]
       ],
       "periode": "30 jours (rapports archivés)",
@@ -1012,6 +1024,10 @@
        [
         "2026-11-25",
         42
+       ],
+       [
+        "2026-11-27",
+        49
        ]
       ],
       "periode": "30 jours (rapports archivés)",
@@ -1031,10 +1047,10 @@
      "source": "calcul Python (USD − CAD)",
      "raison": null,
      "variation": {
-      "valeur": 32,
+      "valeur": 35,
       "unite": "pts",
       "periode": "4 semaines",
-      "texte": "+32 pts sur 4 semaines"
+      "texte": "+35 pts sur 4 semaines"
      },
      "percentile_5a": null,
      "n_5a": null,
@@ -1140,7 +1156,7 @@
        ],
        [
         "2026-11-27",
-        80
+        83
        ]
       ],
       "periode": "30 jours (rapports archivés)",
@@ -1523,14 +1539,14 @@
     {
      "id": "duree_theme",
      "libelle": "Régime actuel depuis",
-     "valeur": null,
-     "texte": null,
+     "valeur": 0,
+     "texte": "< 1 sem.",
      "unite": "semaines",
      "date": "2026-11-27",
      "frequence": null,
      "age_jours": 0,
      "source": "rapports archivés (biais calculé)",
-     "raison": "biais du jour indisponible",
+     "raison": null,
      "variation": null,
      "percentile_5a": null,
      "n_5a": null,
@@ -1541,7 +1557,7 @@
       "periode": "30 jours",
       "raison": "non applicable"
      },
-     "lecture": null
+     "lecture": "régime risk_off sans interruption depuis le rapport du 2026-11-27"
     },
     {
      "id": "vix",
@@ -1928,27 +1944,27 @@
        "note": "ForexFactory publie le taux de refinancement principal (2.65%), 15 pb au-dessus du taux de dépôt qui pilote le marché"
       },
       "taux_2a": {
-       "valeur": 3.06,
+       "valeur": 3.08,
        "unite": "%",
-       "date": "2026-11-26",
+       "date": "2026-11-27",
        "source": "Bundesbank (Allemagne 2 ans)",
        "frequence": "quotidien",
        "raison": null,
-       "var_1s": -8.0,
-       "var_4s": -2.0,
-       "percentile_5a": 92,
-       "n_5a": 262,
+       "var_1s": 0.0,
+       "var_4s": 2.0,
+       "percentile_5a": 94,
+       "n_5a": 261,
        "raison_percentile": null
       },
       "ecart_2a_directeur": {
-       "valeur": 56.0,
+       "valeur": 58.0,
        "raison": null,
        "source": "calcul : taux 2 ans − taux directeur du registre",
        "percentile_5a": null,
-       "var_1s": -8.0,
-       "var_4s": -2.0,
+       "var_1s": 0.0,
+       "var_4s": 2.0,
        "unite": "pb",
-       "date": "2026-11-26",
+       "date": "2026-11-27",
        "raison_percentile": "pas d'historique quotidien du taux directeur",
        "lecture": "le marché intègre des hausses"
       },
@@ -1964,29 +1980,29 @@
        "raison_percentile": "historique de l'inflation core trop court dans le registre"
       },
       "pente_2_10": {
-       "valeur": 26.0,
+       "valeur": 28.0,
        "unite": "pb",
-       "date": "2026-11-26",
+       "date": "2026-11-27",
        "source": "calcul : 10 ans − 2 ans",
        "frequence": "quotidien",
        "raison": null,
-       "var_1s": -5.0,
-       "var_4s": -8.0,
-       "percentile_5a": 42,
-       "n_5a": 262,
+       "var_1s": -3.0,
+       "var_4s": -6.0,
+       "percentile_5a": 43,
+       "n_5a": 261,
        "raison_percentile": null
       },
       "ecart_2a_us": {
-       "valeur": -155.0,
+       "valeur": -153.0,
        "unite": "pb",
-       "date": "2026-11-26",
+       "date": "2026-11-27",
        "source": "calcul : 2 ans local − 2 ans US (DGS2)",
        "frequence": "quotidien",
        "raison": null,
-       "var_1s": 7.0,
-       "var_4s": -2.0,
-       "percentile_5a": 75,
-       "n_5a": 262,
+       "var_1s": 2.0,
+       "var_4s": -3.0,
+       "percentile_5a": 77,
+       "n_5a": 261,
        "raison_percentile": null,
        "serie_1an": [
         [
@@ -2116,10 +2132,6 @@
         [
          "2026-07-03",
          -163.0
-        ],
-        [
-         "2026-07-08",
-         -155.0
         ],
         [
          "2026-07-09",
@@ -2524,6 +2536,10 @@
         [
          "2026-11-26",
          -155.0
+        ],
+        [
+         "2026-11-27",
+         -153.0
         ]
        ]
       },
@@ -4206,10 +4222,6 @@
          -163.0
         ],
         [
-         "2026-07-08",
-         -155.0
-        ],
-        [
          "2026-07-09",
          -150.0
         ],
@@ -4612,6 +4624,10 @@
         [
          "2026-11-26",
          -155.0
+        ],
+        [
+         "2026-11-27",
+         -153.0
         ]
        ]
       },
@@ -5680,10 +5696,10 @@
         },
         {
          "type": "dernier",
-         "date": "2026-11-26",
-         "valeur": -155.0,
-         "texte": "−155 pb au 26/11",
-         "detail": "EUR : dernière valeur −155 pb le 26/11/2026",
+         "date": "2026-11-27",
+         "valeur": -153.0,
+         "texte": "−153 pb au 27/11",
+         "detail": "EUR : dernière valeur −153 pb le 27/11/2026",
          "source": "calcul : 2 ans local − 2 ans US (DGS2)"
         }
        ],
@@ -5715,10 +5731,10 @@
         },
         {
          "type": "dernier",
-         "date": "2026-11-26",
-         "valeur": -155.0,
-         "texte": "−155 pb au 26/11",
-         "detail": "EUR : dernière valeur −155 pb le 26/11/2026",
+         "date": "2026-11-27",
+         "valeur": -153.0,
+         "texte": "−153 pb au 27/11",
+         "detail": "EUR : dernière valeur −153 pb le 27/11/2026",
          "source": "calcul : 2 ans local − 2 ans US (DGS2)"
         }
        ],
@@ -5750,10 +5766,10 @@
         },
         {
          "type": "dernier",
-         "date": "2026-11-26",
-         "valeur": -155.0,
-         "texte": "−155 pb au 26/11",
-         "detail": "EUR : dernière valeur −155 pb le 26/11/2026",
+         "date": "2026-11-27",
+         "valeur": -153.0,
+         "texte": "−153 pb au 27/11",
+         "detail": "EUR : dernière valeur −153 pb le 27/11/2026",
          "source": "calcul : 2 ans local − 2 ans US (DGS2)"
         }
        ],
@@ -5785,10 +5801,10 @@
         },
         {
          "type": "dernier",
-         "date": "2026-11-26",
-         "valeur": -155.0,
-         "texte": "−155 pb au 26/11",
-         "detail": "EUR : dernière valeur −155 pb le 26/11/2026",
+         "date": "2026-11-27",
+         "valeur": -153.0,
+         "texte": "−153 pb au 27/11",
+         "detail": "EUR : dernière valeur −153 pb le 27/11/2026",
          "source": "calcul : 2 ans local − 2 ans US (DGS2)"
         }
        ]
@@ -6822,30 +6838,26 @@
     {
      "id": "eur2a",
      "libelle": "Rendement 2 ans allemand",
-     "valeur": 3.06,
-     "texte": "3,06 %",
+     "valeur": 3.08,
+     "texte": "3,08 %",
      "unite": "%",
-     "date": "2026-11-26",
+     "date": "2026-11-27",
      "frequence": "quotidien",
-     "age_jours": 1,
+     "age_jours": 0,
      "source": "Bundesbank (Allemagne 2 ans)",
      "raison": null,
      "variation": {
-      "valeur": -2.0,
+      "valeur": 2.0,
       "unite": "pb",
       "periode": "4 semaines",
-      "texte": "−2 pb sur 4 semaines"
+      "texte": "+2 pb sur 4 semaines"
      },
-     "percentile_5a": 92,
-     "n_5a": 262,
+     "percentile_5a": 94,
+     "n_5a": 261,
      "percentile_autre": null,
      "raison_percentile": null,
      "courbe": {
       "points": [
-       [
-        "2026-10-27",
-        3.07
-       ],
        [
         "2026-10-28",
         3.08
@@ -6933,6 +6945,10 @@
        [
         "2026-11-26",
         3.06
+       ],
+       [
+        "2026-11-27",
+        3.08
        ]
       ],
       "periode": "30 jours",
@@ -9196,16 +9212,16 @@
        "alerte": "dernière année disponible : 2024"
       },
       "taux_10a": {
-       "valeur": 3.32,
+       "valeur": 3.36,
        "unite": "%",
-       "date": "2026-11-26",
+       "date": "2026-11-27",
        "source": "Bundesbank (Allemagne 10 ans)",
        "frequence": "quotidien",
        "raison": null,
-       "var_1s": -13.0,
-       "var_4s": -10.0,
+       "var_1s": -3.0,
+       "var_4s": -4.0,
        "percentile_5a": 96,
-       "n_5a": 262,
+       "n_5a": 261,
        "raison_percentile": null
       },
       "prime_terme": {
@@ -10226,10 +10242,6 @@
          3.02
         ],
         [
-         "2026-07-08",
-         3.16
-        ],
-        [
          "2026-07-09",
          3.17
         ],
@@ -10632,6 +10644,10 @@
         [
          "2026-11-26",
          3.32
+        ],
+        [
+         "2026-11-27",
+         3.36
         ]
        ]
       },
@@ -12395,7 +12411,7 @@
      "raison": null
     }
    ],
-   "actualites_maj": "2026-11-27T11:25+00:00",
+   "actualites_maj": "2026-11-27T12:31+00:00",
    "actualites_nb_titres_lus": 77,
    "notes": [
     "Dette et solde publics : FMI (annuel, avec 1 à 3 ans de retard) ; EUR = Allemagne. Pas de série gratuite pour CHF et NZD.",
@@ -12897,30 +12913,26 @@
     {
      "id": "dix_eur",
      "libelle": "10 ans Allemagne",
-     "valeur": 3.32,
-     "texte": "3,32 %",
+     "valeur": 3.36,
+     "texte": "3,36 %",
      "unite": "%",
-     "date": "2026-11-26",
+     "date": "2026-11-27",
      "frequence": "quotidien",
-     "age_jours": 1,
+     "age_jours": 0,
      "source": "Bundesbank (Allemagne 10 ans)",
      "raison": null,
      "variation": {
-      "valeur": -10.0,
+      "valeur": -4.0,
       "unite": "pb",
       "periode": "4 semaines",
-      "texte": "−10 pb sur 4 semaines"
+      "texte": "−4 pb sur 4 semaines"
      },
      "percentile_5a": 96,
-     "n_5a": 262,
+     "n_5a": 261,
      "percentile_autre": null,
      "raison_percentile": null,
      "courbe": {
       "points": [
-       [
-        "2026-10-27",
-        3.42
-       ],
        [
         "2026-10-28",
         3.43
@@ -13008,6 +13020,10 @@
        [
         "2026-11-26",
         3.32
+       ],
+       [
+        "2026-11-27",
+        3.36
        ]
       ],
       "periode": "30 jours",
@@ -42353,7 +42369,7 @@
       "valeur": 0,
       "libelle": "Neutre",
       "regles": [],
-      "raison": "écart de taux 2 ans face aux États-Unis, variation sur 4 semaines : −2 pb, sous les seuils",
+      "raison": "écart de taux 2 ans face aux États-Unis, variation sur 4 semaines : −3 pb, sous les seuils",
       "bornee": false,
       "etat": "neutre"
      },
@@ -44144,9 +44160,9 @@
    ],
    "ecart_2a_us_var_4s": {
     "EUR": [
-     -2.0,
+     -3.0,
      "calcul : 2 ans local − 2 ans US (DGS2)",
-     "2026-11-26"
+     "2026-11-27"
     ],
     "JPY": [
      -15.4,
@@ -45423,6 +45439,26 @@
     "distance_texte": "30 pts"
    },
    {
+    "id": "ecart_2a_us_var_4s-EUR",
+    "engrenage": 2,
+    "devise": "EUR",
+    "libelle": "écart de taux 2 ans face aux États-Unis, variation sur 4 semaines — EUR",
+    "effet_haut": "EUR +1 (règle 2)",
+    "effet_bas": "EUR −1 (règle 2)",
+    "valeur": -3.0,
+    "texte_valeur": "−3 pb",
+    "unite": "pb",
+    "date": "2026-11-27",
+    "source": "calcul : 2 ans local − 2 ans US (DGS2)",
+    "seuil_bas": -15,
+    "seuil_haut": 15,
+    "etat": "non",
+    "distance": 12.0,
+    "distance_pct": 40.0,
+    "cote": "bas",
+    "distance_texte": "12 pb"
+   },
+   {
     "id": "surprise_30j-GBP",
     "engrenage": 3,
     "devise": "GBP",
@@ -45461,26 +45497,6 @@
     "distance_pct": 41.2,
     "cote": "bas",
     "distance_texte": "1,65 %"
-   },
-   {
-    "id": "ecart_2a_us_var_4s-EUR",
-    "engrenage": 2,
-    "devise": "EUR",
-    "libelle": "écart de taux 2 ans face aux États-Unis, variation sur 4 semaines — EUR",
-    "effet_haut": "EUR +1 (règle 2)",
-    "effet_bas": "EUR −1 (règle 2)",
-    "valeur": -2.0,
-    "texte_valeur": "−2 pb",
-    "unite": "pb",
-    "date": "2026-11-26",
-    "source": "calcul : 2 ans local − 2 ans US (DGS2)",
-    "seuil_bas": -15,
-    "seuil_haut": 15,
-    "etat": "non",
-    "distance": 13.0,
-    "distance_pct": 43.3,
-    "cote": "bas",
-    "distance_texte": "13 pb"
    },
    {
     "id": "thermometre-4",
@@ -46913,7 +46929,7 @@
       "date": "2026-11-27",
       "source": "calcul Python (score de confluence 0-100)",
       "raison": null,
-      "variation": "+2 pts sur 4 semaines",
+      "variation": "−43 pts sur 4 semaines",
       "percentile_5a": null,
       "rang": "rang 5 ans n/d : scores archivés depuis août 2026 seulement"
      },
@@ -46933,7 +46949,7 @@
       "date": "2026-11-27",
       "source": "calcul Python (USD − CAD)",
       "raison": null,
-      "variation": "+32 pts sur 4 semaines",
+      "variation": "+35 pts sur 4 semaines",
       "percentile_5a": null,
       "rang": "rang 5 ans n/d : scores archivés depuis août 2026 seulement"
      }
@@ -47699,9 +47715,9 @@
      {
       "libelle": "écart de taux 2 ans face aux États-Unis, variation sur 4 semaines — EUR",
       "etat": "non",
-      "distance": "13 pb",
-      "valeur": "−2 pb",
-      "date": "2026-11-26",
+      "distance": "12 pb",
+      "valeur": "−3 pb",
+      "date": "2026-11-27",
       "source": "calcul : 2 ans local − 2 ans US (DGS2)",
       "neutralise": null
      }
@@ -48458,11 +48474,11 @@
      },
      {
       "libelle": "10 ans Allemagne",
-      "texte": "3,32 %",
-      "date": "2026-11-26",
+      "texte": "3,36 %",
+      "date": "2026-11-27",
       "source": "Bundesbank (Allemagne 10 ans)",
       "raison": null,
-      "variation": "−10 pb sur 4 semaines",
+      "variation": "−4 pb sur 4 semaines",
       "percentile_5a": 96,
       "rang": "96e percentile sur 5 ans"
      }
