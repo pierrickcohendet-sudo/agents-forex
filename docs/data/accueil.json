@@ -1,6 +1,6 @@
 {
- "genere_le": "2026-11-27T21:19:30+00:00",
- "date_rapport": "2026-11-27",
+ "genere_le": "2026-11-28T02:21:06+00:00",
+ "date_rapport": "2026-11-28",
  "theme": {
   "titre": "Aversion au risque, dollar soutenu",
   "titre_impose": false,
@@ -12,23 +12,11 @@
   "alignes": 3,
   "evaluables": 7,
   "compte_matrice": "34 actives, 5 n/d, 21 sans règle",
-  "explication": "Moteurs orientés : Banques centrales et taux (Dollar baissier) ; Chiffres économiques (Dollar haussier) ; Liens entre marchés (Dollar haussier · Risk off) ; Géopolitique (Dollar haussier) ; Prix et positionnement (Dollar neutre · Risk on). Les autres restent dans leur couloir neutre.",
-  "texte": "Les signaux macroéconomiques sont actuellement mixtes, reflétant l'absence de direction dominante claire avec un biais global neutre et un score USD à 95 contre EUR à 15.",
+  "explication": "Moteurs orientés : Chiffres économiques (Dollar haussier) ; Liens entre marchés (Dollar haussier · Risk off) ; Géopolitique (Dollar haussier) ; Prix et positionnement (Dollar baissier · Risk on). Les autres restent dans leur couloir neutre.",
+  "texte": "Les signaux macroéconomiques du jour sont mixtes, partagés entre des pressions haussières sur le dollar et un sentiment de marché encore contrasté. Cette configuration reflète des dynamiques divergentes entre la politique monétaire et le positionnement des flux.",
   "texte_source": "modèle"
  },
  "au_bord": [
-  {
-   "id": "couverture-us10a",
-   "engrenage": 4,
-   "devise": null,
-   "libelle": "10 ans US, variation sur 4 semaines",
-   "texte_valeur": "−20 pb",
-   "distance_texte": "0 pb",
-   "phrase": "10 ans US, variation sur 4 semaines à −20 pb : 0 pb du seuil bas (−20 pb), soit 0,3 % du couloir neutre",
-   "etat": "proche",
-   "date": "2026-11-25",
-   "source": "Trésor américain (courbe des taux quotidienne, treasury.gov) ; FRED (DGS10) en secours"
-  },
   {
    "id": "surprise_30j-CAD",
    "engrenage": 3,
@@ -38,7 +26,7 @@
    "distance_texte": "0,02",
    "phrase": "indice de surprise macro 30 jours — CAD à −0,48 : 0,02 du seuil bas (−0,50), soit 2,0 % du couloir neutre",
    "etat": "proche",
-   "date": "2026-11-27",
+   "date": "2026-11-28",
    "source": "calcul Python (registre macro, 30 j)"
   },
   {
@@ -52,6 +40,18 @@
    "etat": "proche",
    "date": "2026-11-17",
    "source": "CFTC (COT legacy, positions nettes non commerciales)"
+  },
+  {
+   "id": "surprise_30j-CHF",
+   "engrenage": 3,
+   "devise": "CHF",
+   "libelle": "indice de surprise macro 30 jours — CHF",
+   "texte_valeur": "+0,45",
+   "distance_texte": "0,05",
+   "phrase": "indice de surprise macro 30 jours — CHF à +0,45 : 0,05 du seuil haut (+0,50), soit 5,0 % du couloir neutre",
+   "etat": "proche",
+   "date": "2026-11-28",
+   "source": "calcul Python (registre macro, 30 j)"
   }
  ],
  "franchis": 27,
@@ -70,6 +70,21 @@
    "publie": null,
    "badge": null,
    "engrenage": null
+  },
+  {
+   "iso_utc": "2026-11-30T01:05+00:00",
+   "date_paris": "2026-11-30",
+   "heure_paris": "02:05",
+   "devise": "JPY",
+   "evenement": "Discours de Ueda, gouverneur de la BoJ",
+   "type": "Discours",
+   "impact": "fort",
+   "points": "●●●",
+   "precedent": null,
+   "consensus": null,
+   "publie": null,
+   "badge": null,
+   "engrenage": 2
   }
  ],
  "raison_evenements": null,
@@ -187,7 +202,7 @@
   "sources": 17,
   "vertes": 17,
   "alertes": [],
-  "calcule_le": "2026-11-27T21:19:30+00:00"
+  "calcule_le": "2026-11-28T02:21:06+00:00"
  },
  "note": "Tableau de bord du jour : faits datés et lectures historiques, jamais un ordre d'achat ou de vente."
 }
