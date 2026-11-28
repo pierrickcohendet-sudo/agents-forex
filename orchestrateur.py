@@ -816,9 +816,12 @@ def mode_moteurs(config: dict) -> int:
     """Passage « --moteurs » (cron du week-end 08:15 UTC) : régénère seulement les dossiers des 8 moteurs si la version du
     jour est en rédaction Python, puis publie. Aucune autre collecte, aucun autre appel au modèle."""
     log.info("=== Dossiers des 8 moteurs seuls (--moteurs) ===")
+    # Lot V16.2 : le week-end, la lecture ForexFactory due (base du matin, soir des prévisions de la semaine suivante,
+    # créneau manqué) est faite ici aussi ; sans lecture due, aucune requête
+    lu = etape("lecture ForexFactory (si due)", _lecture_ff, config, defaut=False)
     d = etape("dossiers des 8 moteurs (moteurs_dossiers.json)", _dossiers_moteurs, config, None, defaut=None)
     doc = etape("documentaire hebdomadaire (documentaire.json)", _documentaire, config, None, defaut=None)
-    if (d or doc) and config.get("publication_web", {}).get("actif", True):
+    if (d or doc or lu) and config.get("publication_web", {}).get("actif", True):
         etape("git push (dossiers des moteurs)", publication_web.pousser_git, config["publication_web"], RACINE,
               "dossiers des 8 moteurs et documentaire de la semaine")
     return 0
@@ -834,20 +837,29 @@ def _historique_5ans():
         return None
 
 
+def _lecture_ff(config: dict) -> bool:
+    """Lecture ForexFactory si une lecture planifiée est due (et reprise de l'historique), puis agenda, thermomètres et
+    séance recalculés. -> True si la page a été lue."""
+    tableau = etape("tableau macro (lecture planifiée)", tableau_macro.mettre_a_jour, config, RACINE, RACINE / "config.yaml",
+                    avec_notion=False, defaut=None)
+    ff = (tableau or {}).get("ff") or {}
+    _ecrire_resume_run(f"page « mois » : {ff.get('statut') or 'n/d'} ({ff.get('note') or ''})"
+                       + (f" ; historique : {ff['historique']}" if ff.get("historique") else ""), titre="Lecture ForexFactory")
+    if ff.get("statut") != "frais":
+        log.info("Lecture ForexFactory : rien de nouveau (%s)", ff.get("note"))
+        return False
+    etape("mises à jour en séance", seance.rafraichir, RACINE, config, _charger_rapport_existant(RACINE / config["chemins"]["donnees"] / "rapports"),
+          defaut={})
+    return True
+
+
 def mode_lecture(config: dict) -> int:
     """Passage « --lecture » (lot V14, A1.5) : la lecture ForexFactory planifiée 5 à 10 min après les publications fortes
     du jour (data/cache/ff_planning.json), puis le réel de l'agenda, les thermomètres et la séance recalculés, et publication.
     Aucun appel au modèle ; si aucune lecture n'est due, rien n'est publié."""
     log.info("=== Lecture ForexFactory planifiée (--lecture) ===")
-    tableau = etape("tableau macro (lecture planifiée)", tableau_macro.mettre_a_jour, config, RACINE, RACINE / "config.yaml",
-                    avec_notion=False, defaut=None)
-    ff = (tableau or {}).get("ff") or {}
-    _ecrire_resume_run(f"page « mois » : {ff.get('statut') or 'n/d'} ({ff.get('note') or ''})", titre="Lecture ForexFactory")
-    if ff.get("statut") != "frais":
-        log.info("Lecture ForexFactory : rien de nouveau (%s)", ff.get("note"))
+    if not _lecture_ff(config):
         return 0
-    etape("mises à jour en séance", seance.rafraichir, RACINE, config, _charger_rapport_existant(RACINE / config["chemins"]["donnees"] / "rapports"),
-          defaut={})
     if config.get("publication_web", {}).get("actif", True):
         etape("git push (lecture ForexFactory)", publication_web.pousser_git, config["publication_web"], RACINE,
               "lecture ForexFactory : réels de l'agenda")

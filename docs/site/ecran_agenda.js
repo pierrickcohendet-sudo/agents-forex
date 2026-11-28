@@ -92,6 +92,7 @@ export async function ecranAgenda(section, parametre) {
       <div class="ag-row"><span class="ag-lbl">Impact</span><span id="agImp" class="ag-devs">${IMPS.map(i => `<button type="button" class="ag-ch" data-i="${i}" aria-pressed="true">${imp(i)}${i}</button>`).join("")}</span>
         <span class="ag-lbl" style="margin-left:10px">Devises</span><span id="agDev" class="ag-devs" title="Double-clic : cette devise seule">${DEVS.map(d => `<button type="button" class="ag-ch" data-d="${d}" aria-pressed="true">${d}</button>`).join("")}</span></div>
     </div>
+    <div class="ag-prev" id="agPrev" hidden></div>
     <div class="ag-now" id="agNow" aria-live="polite"></div>
     <div class="card ag-tblwrap"><table class="ag-tbl"><thead><tr><th>Heure</th><th>Devise</th><th>Impact</th><th>Publication</th><th class="n">Réel</th><th class="n">Prévision</th><th class="n">Précédent</th><th></th></tr></thead><tbody id="agTb"></tbody></table></div>
     <p class="ag-note" id="agNote"></p>
@@ -103,6 +104,8 @@ export async function ecranAgenda(section, parametre) {
   const a = await donnees("agenda");
   if (!a) { q("#agTb").innerHTML = '<tr><td colspan="8" class="ag-empty">Agenda indisponible (agenda.json absent : prochain run).</td></tr>'; return; }
   const EV = lignes(a);
+  const P = a.previsions || {};   // lot V16.2 : fraîcheur des prévisions (page « mois » ForexFactory)
+  if (P.texte) { const b = q("#agPrev"); b.hidden = false; b.classList.toggle("alerte", !!P.alerte); b.textContent = P.texte + (P.alerte ? ". Le lien ↗ de chaque ligne donne la prévision en direct sur ForexFactory." : "."); }
   let memo = {};
   try { memo = JSON.parse(localStorage.getItem(CLE) || "{}") || {}; } catch (e) { memo = {}; }
   const st = { p: "sem", imp: new Set(memo.imp || IMPS), dev: new Set(memo.dev || DEVS), passe: memo.passe !== false, ouvert: null };

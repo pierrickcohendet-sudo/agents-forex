@@ -389,6 +389,7 @@ class BoutEnBout(unittest.TestCase):
 
     def test_collecte_ff_non_relancee_dans_le_meme_creneau(self):
         sc = FauxScraping(self.html)
+        self.config["tableau_macro"]["forexfactory"]["reprise_historique"] = False   # reprise testée à part (test_v162)
         for heure in (10, 11):
             tm.mettre_a_jour(self.config, self.tmp, None, client_scraping=sc, client_notion=self.notion,
                              maintenant=self.maintenant.replace(hour=heure))

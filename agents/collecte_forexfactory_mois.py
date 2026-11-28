@@ -74,14 +74,16 @@ def nom_mois(decalage: int, maintenant: datetime) -> str:
 
 
 def _lire_budget(chemin: Path, jour: str) -> dict:
+    """Budget du jour ; garde aussi les requêtes de la VEILLE (lot V16.2 : un créneau de la veille manqué est rattrapé)."""
     try:
         brut = json.loads(chemin.read_text(encoding="utf-8"))
-        if brut.get("date") == jour:
-            return {"horodatages": list(brut.get("horodatages", [])),
-                    "ciblees": dict(brut.get("ciblees", {}))}
     except (OSError, json.JSONDecodeError):
-        pass
-    return {"horodatages": [], "ciblees": {}}
+        brut = {}
+    if brut.get("date") == jour:
+        return {"horodatages": list(brut.get("horodatages", [])), "ciblees": dict(brut.get("ciblees", {})),
+                "veille": dict(brut.get("veille") or {})}
+    veille = {"date": brut.get("date"), "horodatages": list(brut.get("horodatages", []))} if brut.get("date") else {}
+    return {"horodatages": [], "ciblees": {}, "veille": veille}
 
 
 def _ecrire_budget(chemin: Path, jour: str, budget: dict) -> None:
@@ -143,18 +145,25 @@ def collecter(cfg_tm: dict, client, dossier_cache: str | Path, maintenant: datet
     premier = not budget["horodatages"]
     # Lot V14 (A1.5) : lectures planifiées 5 à 10 min après les publications fortes du jour (core/ff_planning.py) ;
     # sans plan pour ce jour, repli sur les créneaux fixes de config.yaml et les mises à jour ciblées.
+    plan = None
     try:
         from core import ff_planning
-        prevus = ff_planning.creneaux(Path(dossier_cache), maintenant.date())
-    except Exception:  # noqa: BLE001
-        prevus = None
-    if prevus is not None:
-        cfg_ff["creneaux_utc"] = prevus
+        jours_plan = ff_planning.lire(Path(dossier_cache)).get("jours") or {}
+        from datetime import timedelta as _td
+        plan_jour = jours_plan.get(maintenant.date().isoformat())
+        plan_veille = jours_plan.get((maintenant.date() - _td(days=1)).isoformat())
+        if plan_jour is not None or plan_veille is not None:
+            veille = budget.get("veille") or {}
+            faites_veille = veille.get("horodatages", []) if veille.get("date") == (maintenant.date() - _td(days=1)).isoformat() else []
+            plan = ff_planning.lecture_due(plan_jour, plan_veille, budget["horodatages"], faites_veille, maintenant, plafond)
+    except Exception:  # noqa: BLE001 — repli sur les créneaux fixes de config.yaml
+        plan = None
+    if plan is not None:
+        due, raison = plan
         cibles_fn = None
-    due, raison = collecte_due(budget["horodatages"], cfg_ff, maintenant)
-    if prevus is not None:
-        raison = f"lecture planifiée : {raison}" if prevus else "aucune lecture planifiée aujourd'hui (pas de publication forte)"
-    declencheur = "creneau" if prevus is None else "planning"
+    else:
+        due, raison = collecte_due(budget["horodatages"], cfg_ff, maintenant)
+    declencheur = "creneau" if plan is None else "planning"
     if not due and len(budget["horodatages"]) < plafond and cibles_fn is not None:
         cibles = cibles_fn(budget["ciblees"])
         if cibles:

@@ -764,7 +764,7 @@ def mettre_a_jour(config: dict, racine: str | Path, chemin_config: str | Path | 
             # Lot V14 (A1.3) : reprise unique de l'historique (12 derniers mois), 2 pages au plus par jour (compte tenu
             # dans ff_historique.json), dans le plafond commun ; reprise au run suivant si elle est interrompue. Seulement
             # avec le planning des lectures (2 requêtes y sont réservées tant que la reprise n'est pas finie).
-            if ff.get("declencheur") == "planning":
+            if cfg_tm["forexfactory"].get("reprise_historique", True):   # lot V16.2 : chaque jour, planning ou non
                 from core import ff_historique
                 rep_h = ff_historique.reprendre(cfg_tm, client_scraping, donnees / "cache", maintenant)
                 resultat["ff"]["historique"] = {"lus": rep_h["lus"], "echecs": rep_h["echecs"], "avancement":

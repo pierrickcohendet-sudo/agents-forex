@@ -53,32 +53,28 @@ def doublon(runs: list[dict], run_id: str | int | None, maintenant: datetime, ec
 
 
 CRON_MOTEURS = "15 8 * * 0,6"   # samedi et dimanche, après la remise à zéro du quota Gemini
-CRON_LECTURES = "7,37 * * * 0-5"   # lot V14 : lectures ForexFactory planifiées (ne fait rien si aucune n'est due)
+CRON_LECTURES = "7,37 * * * *"   # lot V14 : lectures ForexFactory planifiées (ne fait rien si aucune n'est due)
 
 
 def lecture_due(planning: dict | None, budget: dict | None, maintenant: datetime, plafond: int = 6) -> tuple[bool, str]:
-    """Fonction pure (lot V14, A1.5). Une lecture planifiée est due si son heure est passée, qu'aucune requête
-    ForexFactory n'a eu lieu depuis, et que le plafond du jour n'est pas atteint (même règle que
-    agents/collecte_forexfactory_mois.collecte_due)."""
-    jour = maintenant.date().isoformat()
-    plan = ((planning or {}).get("jours") or {}).get(jour)
-    if not plan or not plan.get("lectures"):
-        return False, "aucune lecture ForexFactory planifiée aujourd'hui"
-    faites = [x for x in ((budget or {}).get("horodatages") or [])] if (budget or {}).get("date") == jour else []
-    if len(faites) >= plafond:
-        return False, f"plafond de {plafond} lectures atteint"
-    passees = []
-    for x in plan["lectures"]:
-        h, m = (int(v) for v in x["heure_utc"].split(":"))
-        c = maintenant.replace(hour=h, minute=m, second=0, microsecond=0)
-        if c <= maintenant:
-            passees.append((c, x))
-    if not passees:
-        return False, "prochaine lecture planifiée : " + plan["lectures"][0]["heure_utc"] + " UTC"
-    c, x = max(passees, key=lambda p: p[0])
-    if any((_date(f) or datetime.min.replace(tzinfo=timezone.utc)) >= c for f in faites):
-        return False, f"lecture de {x['heure_utc']} UTC déjà faite"
-    return True, f"lecture planifiée de {x['heure_utc']} UTC ({x.get('motif')})"
+    """Lot V16.2 : même règle que la collecte (core/ff_planning.lecture_due) — un créneau passé et non couvert est honoré
+    par le premier run qui suit, veille comprise ; jamais au-delà du plafond."""
+    import sys as _sys
+    racine = str(Path(__file__).resolve().parents[1])
+    if racine not in _sys.path:
+        _sys.path.insert(0, racine)
+    from core import ff_planning
+    jours = (planning or {}).get("jours") or {}
+    j, v = maintenant.date().isoformat(), (maintenant.date() - timedelta(days=1)).isoformat()
+    b = budget or {}
+    if b.get("date") == j:
+        faites, veille = b.get("horodatages") or [], b.get("veille") or {}
+        faites_veille = veille.get("horodatages") or [] if veille.get("date") == v else []
+    elif b.get("date") == v:
+        faites, faites_veille = [], b.get("horodatages") or []
+    else:
+        faites, faites_veille = [], []
+    return ff_planning.lecture_due(jours.get(j), jours.get(v), faites, faites_veille, maintenant, plafond)
 
 
 def decider(evt: str, cron: str, entrees: dict, rapport_existe: bool, runs: list[dict] | None = None,

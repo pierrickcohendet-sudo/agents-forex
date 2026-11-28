@@ -467,6 +467,25 @@ def nommer_feries(ag: Agenda) -> None:
         d["nom_ferie"] = nom or f"Jour férié ({', '.join(cibles)})"
 
 
+RETARD_PREVISIONS_H = 24
+
+
+def fraicheur_previsions(maj: str | None, maintenant: datetime) -> dict:
+    """Lot V16.2 : date de la dernière lecture de la page « mois » ForexFactory (prévisions et précédents) ; alerte au-delà
+    de 24 h (les 27 et 28/11, aucune lecture : les 100 publications du 30/11 au 04/12 sont restées sans prévision)."""
+    if not maj:
+        return {"maj": None, "retard_h": None, "alerte": True, "texte": "Prévisions : page « mois » ForexFactory jamais lue"}
+    try:
+        t = datetime.fromisoformat(str(maj))
+        t = t if t.tzinfo else t.replace(tzinfo=timezone.utc)
+    except ValueError:
+        return {"maj": maj, "retard_h": None, "alerte": True, "texte": f"Prévisions : date de lecture illisible ({maj})"}
+    h = round((maintenant - t).total_seconds() / 3600, 1)
+    p = t.astimezone(fuseau_paris())
+    return {"maj": t.isoformat(timespec="minutes"), "retard_h": h, "alerte": h > RETARD_PREVISIONS_H,
+            "texte": f"Prévisions mises à jour le {p:%d/%m} à {p:%H:%M}" + (f" : plus de {RETARD_PREVISIONS_H} h sans lecture" if h > RETARD_PREVISIONS_H else "")}
+
+
 def texte_precedent(precedent, revision) -> str | None:
     """« précédent 49,3, révisé 49,5 » : ForexFactory donne dans « previous » la valeur publiée à l'origine et dans
     « revision » la valeur révisée (vérifié sur 22 cas sur 23 du calendrier du 25/11 : « previous » = réel publié le mois
@@ -948,6 +967,7 @@ def calculer(ff_brut: str | None, glissants: list[dict] | None, registre: dict |
                                       for d, c in (cfg.get("reunions") or {}).items()}},
             "raison_vide": None if evts else "aucune source de calendrier disponible",
             "rapprochements_ff": rapprochements,
+            "previsions": fraicheur_previsions(verifs.get("mois"), maintenant),
             "ff": {"avec_lien": sum(1 for e in evts if e.get("ff_url")), "sans_lien": sum(1 for e in evts if not e.get("ff_url")),
                    "format_lien": "https://www.forexfactory.com/calendar?day=<mois><jour>.<année>#detail=<identifiant>",
                    "historique": ff_historique.etat(historique_ff or {}, maintenant.date())},
@@ -1139,7 +1159,7 @@ def ecrire(racine: str | Path, registre: dict | None, config: dict, h5=None, tec
                            impact=_lire_json(docs / "impact.json"),
                            archive=_lire_json(racine / "data" / "archives" / "publications.json"),
                            series=_series_principales(h5, technique) if h5 is not None else {}, macro=macro,
-                           verifs={"mois": (mois.get("maj") or "")[:16] or None, "semaine": semaine.get("date")},
+                           verifs={"mois": mois.get("maj") or None, "semaine": semaine.get("date")},
                            tresor=tresor, revisions=revisions,
                            archive_surprises=ff_historique.fusionner_archives(_lire_json(cache / "publications_archive.json") or {},
                                                                               ff_historique.lire(cache)),

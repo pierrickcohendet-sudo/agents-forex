@@ -186,7 +186,10 @@ def ecrire(racine: str | Path, config: dict, maintenant: datetime | None = None)
                            if not s.get("retiree")}
             except (OSError, ValueError):
                 sources = {}
+        prev = (docs.get("agenda") or {}).get("previsions") or {}
         donnees = {"genere_le": maintenant.isoformat(timespec="seconds"), "blocs": calculer(docs, sources, maintenant),
+                   # lot V16.2 : prévisions de l'agenda (page « mois » ForexFactory) ; rouge au-delà de 24 h sans lecture
+                   "previsions_forexfactory": {**prev, "etat": "rouge" if prev.get("alerte") else "vert"},
                    "regle": "chaque série est jugée sur la date de sa dernière observation et sa fréquence normale (jours "
                             "ouvrés) ; vert : dans la fréquence ; orange : au-delà ; rouge : plus de 5 jours ouvrés au-delà. "
                             "Un bloc prend la couleur de sa série la plus en retard."}

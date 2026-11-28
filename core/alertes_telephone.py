@@ -54,6 +54,12 @@ def messages(dossiers: dict | None, agenda: dict | None, maintenant: datetime) -
                            "lignes": {cle: f"{e.get('evenement')} : publié {e.get('publie')} contre {e.get('consensus')} attendu "
                                            f"({(e.get('ecart') or {}).get('texte') or ''})"},
                            "priorite": "high", "tags": "warning"})
+    prev = (agenda or {}).get("previsions") or {}
+    if prev.get("alerte"):   # lot V16.2 : page « mois » ForexFactory non lue depuis plus de 24 h
+        cle = f"previsions:{jour}"
+        sortie.append({"cles": [cle], "titre": "Agenda : prévisions ForexFactory anciennes",
+                       "lignes": {cle: prev.get("texte") or "page « mois » non lue depuis plus de 24 h"},
+                       "priorite": "default", "tags": "hourglass"})
     a_venir = {}
     for e in evts:
         t = _ts(e.get("iso_utc"))

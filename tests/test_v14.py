@@ -196,17 +196,18 @@ def test_planning_sept_minutes_apres_les_publications_fortes():
                  _e("2026-11-27T00:30+00:00", dev="AUD")])
     p = plan.planifier(a, date(2026, 11, 26))
     heures = [x["heure_utc"] for x in p["lectures"]]
-    assert heures == ["07:07", "09:07", "13:42"]             # 13:30 et 13:35 : une seule lecture, après la dernière
-    assert "forte" in p["lectures"][0]["motif"] and "moyenne" in p["lectures"][1]["motif"]
+    # V16.2 : 06:00 garantie ; 13:30 et 13:35 : une seule lecture, après la dernière
+    assert heures == ["06:00", "07:07", "09:07", "13:42"]
+    assert "forte" in p["lectures"][1]["motif"] and "moyenne" in p["lectures"][2]["motif"]
 
 
 def test_planning_sous_le_plafond_avec_reserve_pour_l_historique():
     evts = [_e(f"2026-11-26T{h:02d}:00+00:00") for h in range(0, 22, 2)]   # 11 groupes forts
     evts += [_e("2026-11-26T14:00+00:00", nom=f"N{i}") for i in range(3)]    # le groupe de 14:00 compte 4 publications
     p = plan.planifier(_agenda(evts), date(2026, 11, 26), plafond=6, reserve=2)
-    assert len(p["lectures"]) == 4 and "14:07" in [x["heure_utc"] for x in p["lectures"]]
+    assert len(p["lectures"]) == 4 and "14:07" in [x["heure_utc"] for x in p["lectures"]]   # 06:00 garantie + 3 fortes
     assert len(plan.planifier(_agenda(evts), date(2026, 11, 26), plafond=6, reserve=0)["lectures"]) == 6
-    assert plan.planifier(_agenda([]), date(2026, 11, 28))["lectures"] == []
+    assert [x["heure_utc"] for x in plan.planifier(_agenda([]), date(2026, 11, 28))["lectures"]] == ["06:00", "19:00"]
 
 
 def test_plan_du_jour_fige_et_plan_de_demain(tmp_path):
@@ -215,8 +216,8 @@ def test_plan_du_jour_fige_et_plan_de_demain(tmp_path):
     a2 = {"jours": [{"date": "2026-11-26", "evenements": [_e("2026-11-26T15:00+00:00")]},
                     {"date": "2026-11-27", "evenements": [_e("2026-11-27T13:30+00:00")]}]}
     plan.mettre_a_jour(tmp_path, a2, datetime(2026, 11, 26, 18, 0, tzinfo=timezone.utc))
-    assert plan.creneaux(tmp_path, date(2026, 11, 26)) == ["13:37"]   # le plan du jour ne bouge plus
-    assert plan.creneaux(tmp_path, date(2026, 11, 27)) == ["13:37"]
+    assert plan.creneaux(tmp_path, date(2026, 11, 26)) == ["06:00", "13:37"]   # le plan du jour ne bouge plus
+    assert plan.creneaux(tmp_path, date(2026, 11, 27)) == ["06:00", "13:37", "19:00"]
     assert plan.creneaux(tmp_path, date(2026, 11, 30)) is None
 
 
@@ -225,11 +226,13 @@ def test_collecte_suit_le_planning(tmp_path):
     cfg = {"forexfactory": {**CONFIG["tableau_macro"]["forexfactory"]}}
     client = ClientSimule({"this": []})
     r = ffm.collecter(cfg, client, tmp_path, datetime(2026, 11, 26, 8, 15, tzinfo=timezone.utc))
-    assert r["statut"] == "non_due" and not client.urls                        # 08:15 n'est plus un créneau fixe
-    r = ffm.collecter(cfg, client, tmp_path, datetime(2026, 11, 26, 13, 40, tzinfo=timezone.utc))
-    assert r["statut"] == "frais" and r["declencheur"] == "planning" and len(client.urls) == 1
-    r = ffm.collecter(cfg, client, tmp_path, datetime(2026, 11, 26, 14, 15, tzinfo=timezone.utc))
+    assert r["statut"] == "frais" and len(client.urls) == 1                     # V16.2 : la lecture de base de 06:00, rattrapée
+    r = ffm.collecter(cfg, client, tmp_path, datetime(2026, 11, 26, 9, 15, tzinfo=timezone.utc))
     assert r["statut"] == "non_due" and len(client.urls) == 1
+    r = ffm.collecter(cfg, client, tmp_path, datetime(2026, 11, 26, 13, 40, tzinfo=timezone.utc))
+    assert r["statut"] == "frais" and r["declencheur"] == "planning" and len(client.urls) == 2
+    r = ffm.collecter(cfg, client, tmp_path, datetime(2026, 11, 26, 14, 15, tzinfo=timezone.utc))
+    assert r["statut"] == "non_due" and len(client.urls) == 2
 
 
 def test_decider_lecture_planifiee():
@@ -239,7 +242,9 @@ def test_decider_lecture_planifiee():
     assert ok
     assert not decider_mode.lecture_due(p, {"date": "2026-11-26", "horodatages": ["2026-11-26T13:37:40+00:00"]},
                                         m + timedelta(minutes=1))[0]
-    assert not decider_mode.lecture_due(p, {}, datetime(2026, 11, 26, 13, 7, tzinfo=timezone.utc))[0]
+    # V16.2 : la lecture garantie de 06:00 faite à 06:30, rien n'est dû à 13:07
+    assert not decider_mode.lecture_due(p, {"date": "2026-11-26", "horodatages": ["2026-11-26T06:30:00+00:00"]},
+                                        datetime(2026, 11, 26, 13, 7, tzinfo=timezone.utc))[0]
     assert not decider_mode.lecture_due(p, {"date": "2026-11-26", "horodatages": ["x"] * 6}, m)[0]
     assert decider_mode.decider("schedule", decider_mode.CRON_LECTURES, {}, True, [], None, m, (True, "due"))[0] == "lecture"
     assert decider_mode.decider("schedule", decider_mode.CRON_LECTURES, {}, False, [], None, m, (False, "rien"))[0] == "rien"
